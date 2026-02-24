@@ -582,7 +582,7 @@ CHARACTER* M34CryWolf1st::CreateCryWolf1stMonster(int iType, int PosX, int PosY,
     {
     case MONSTER_HAMMER_SCOUT:
     {
-        OpenMonsterModel(MONSTER_MODEL_SCOUT);
+        LOG_CALL(OpenMonsterModel, MONSTER_MODEL_SCOUT);
         c = CreateCharacter(Key, MODEL_SCOUT, PosX, PosY);
         c->Object.Scale = 1.2f;
         c->Weapon[0].Type = -1;
@@ -591,7 +591,7 @@ CHARACTER* M34CryWolf1st::CreateCryWolf1stMonster(int iType, int PosX, int PosY,
     break;
     case MONSTER_LANCE_SCOUT:
     {
-        OpenMonsterModel(MONSTER_MODEL_SOLAM);
+        LOG_CALL(OpenMonsterModel, MONSTER_MODEL_SOLAM);
         c = CreateCharacter(Key, MODEL_SOLAM, PosX, PosY);
         c->Object.Scale = 1.2f;
         c->Weapon[0].Type = -1;
@@ -600,7 +600,7 @@ CHARACTER* M34CryWolf1st::CreateCryWolf1stMonster(int iType, int PosX, int PosY,
     break;
     case MONSTER_BOW_SCOUT:
     {
-        OpenMonsterModel(MONSTER_MODEL_VALAM);
+        LOG_CALL(OpenMonsterModel, MONSTER_MODEL_VALAM);
         c = CreateCharacter(Key, MODEL_VALAM, PosX, PosY);
         c->Object.Scale = 1.2f;
         c->Weapon[0].Type = -1;
@@ -613,7 +613,7 @@ CHARACTER* M34CryWolf1st::CreateCryWolf1stMonster(int iType, int PosX, int PosY,
     break;
     case MONSTER_WEREWOLF:
     {
-        OpenMonsterModel(MONSTER_MODEL_WEREWOLF_HERO);
+        LOG_CALL(OpenMonsterModel, MONSTER_MODEL_WEREWOLF_HERO);
         c = CreateCharacter(Key, MODEL_WEREWOLF_HERO, PosX, PosY);
         c->Object.Scale = 1.25f;
         c->Object.SubType = 0;
@@ -625,7 +625,7 @@ CHARACTER* M34CryWolf1st::CreateCryWolf1stMonster(int iType, int PosX, int PosY,
     break;
     case MONSTER_SCOUTHERO:
     {
-        OpenMonsterModel(MONSTER_MODEL_SCOUT);
+        LOG_CALL(OpenMonsterModel, MONSTER_MODEL_SCOUT);
         c = CreateCharacter(Key, MODEL_SCOUT, PosX, PosY);
         c->Object.Scale = 1.6f;
         c->Weapon[0].Type = -1;
@@ -634,7 +634,7 @@ CHARACTER* M34CryWolf1st::CreateCryWolf1stMonster(int iType, int PosX, int PosY,
     break;
     case MONSTER_WEREWOLFHERO:
     {
-        OpenMonsterModel(MONSTER_MODEL_WEREWOLF_HERO);
+        LOG_CALL(OpenMonsterModel, MONSTER_MODEL_WEREWOLF_HERO);
         c = CreateCharacter(Key, MODEL_WEREWOLF_HERO, PosX, PosY);
         c->Object.Scale = 1.65f;
         c->Object.SubType = 1;
@@ -647,7 +647,7 @@ CHARACTER* M34CryWolf1st::CreateCryWolf1stMonster(int iType, int PosX, int PosY,
     case MONSTER_VALAM:
     case MONSTER_BALRAM:
     {
-        OpenMonsterModel(MONSTER_MODEL_BALRAM);
+        LOG_CALL(OpenMonsterModel, MONSTER_MODEL_BALRAM);
         c = CreateCharacter(Key, MODEL_BALRAM, PosX, PosY);
         c->Object.Scale = 1.25f;
         c->Weapon[0].Type = -1;
@@ -657,7 +657,7 @@ CHARACTER* M34CryWolf1st::CreateCryWolf1stMonster(int iType, int PosX, int PosY,
     case MONSTER_SOLAM:
     case MONSTER_SORAM:
     {
-        OpenMonsterModel(MONSTER_MODEL_SORAM);
+        LOG_CALL(OpenMonsterModel, MONSTER_MODEL_SORAM);
         c = CreateCharacter(Key, MODEL_SORAM, PosX, PosY);
         c->Object.Scale = 1.3f;
         c->Weapon[0].Type = -1;
@@ -666,7 +666,7 @@ CHARACTER* M34CryWolf1st::CreateCryWolf1stMonster(int iType, int PosX, int PosY,
     break;
     case MONSTER_BALGASS:
     {
-        OpenMonsterModel(MONSTER_MODEL_BALGASS);
+        LOG_CALL(OpenMonsterModel, MONSTER_MODEL_BALGASS);
         c = CreateCharacter(Key, MODEL_BALGASS, PosX, PosY);
         c->Object.Scale = 2.f;
         c->Weapon[0].Type = -1;
@@ -677,7 +677,7 @@ CHARACTER* M34CryWolf1st::CreateCryWolf1stMonster(int iType, int PosX, int PosY,
     break;
     case MONSTER_DEATH_SPIRIT:
     {
-        OpenMonsterModel(MONSTER_MODEL_DEATH_SPIRIT);
+        LOG_CALL(OpenMonsterModel, MONSTER_MODEL_DEATH_SPIRIT);
         c = CreateCharacter(Key, MODEL_DEATH_SPIRIT, PosX, PosY);
         c->Object.Scale = 1.25f;
         c->Weapon[0].Type = -1;
@@ -690,7 +690,7 @@ CHARACTER* M34CryWolf1st::CreateCryWolf1stMonster(int iType, int PosX, int PosY,
     case MONSTER_DARK_ELF:
     case MONSTER_DARKELF:
     {
-        OpenMonsterModel(MONSTER_MODEL_DARK_ELF_1);
+        LOG_CALL(OpenMonsterModel, MONSTER_MODEL_DARK_ELF_1);
         c = CreateCharacter(Key, MODEL_DARK_ELF_1, PosX, PosY);
         c->Object.Scale = 1.5f;
         c->Weapon[0].Type = -1;
@@ -700,7 +700,7 @@ CHARACTER* M34CryWolf1st::CreateCryWolf1stMonster(int iType, int PosX, int PosY,
     break;
     case MONSTER_BALLISTA:
     {
-        OpenMonsterModel(MONSTER_MODEL_BALLISTA);
+        LOG_CALL(OpenMonsterModel, MONSTER_MODEL_BALLISTA);
         c = CreateCharacter(Key, MODEL_BALLISTA, PosX, PosY, 180);
         c->Object.Scale = 1.0f;
         c->Weapon[0].Type = -1;

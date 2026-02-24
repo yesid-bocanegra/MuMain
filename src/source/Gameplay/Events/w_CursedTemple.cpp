@@ -163,7 +163,7 @@ CHARACTER* CursedTemple::CreateCharacters(EMonsterType iType, int iPosX, int iPo
     {
     case MONSTER_STONE_STATUE:
     {
-        OpenNpc(MODEL_CURSEDTEMPLE_STATUE);
+        LOG_CALL(OpenNpc, MODEL_CURSEDTEMPLE_STATUE);
         pCharacter = CreateCharacter(iKey, MODEL_CURSEDTEMPLE_STATUE, iPosX, iPosY);
         pCharacter->Object.EnableShadow = false;
         pCharacter->Object.m_bRenderShadow = false;
@@ -173,21 +173,21 @@ CHARACTER* CursedTemple::CreateCharacters(EMonsterType iType, int iPosX, int iPo
     break;
     case MONSTER_MU_ALLIES_GENERAL:
     {
-        OpenNpc(MODEL_CURSEDTEMPLE_ALLIED_NPC);
+        LOG_CALL(OpenNpc, MODEL_CURSEDTEMPLE_ALLIED_NPC);
         pCharacter = CreateCharacter(iKey, MODEL_CURSEDTEMPLE_ALLIED_NPC, iPosX, iPosY);
         pCharacter->Object.Scale = 1.2f;
     }
     break;
     case MONSTER_ILLUSION_ELDER:
     {
-        OpenNpc(MODEL_CURSEDTEMPLE_ILLUSION_NPC);
+        LOG_CALL(OpenNpc, MODEL_CURSEDTEMPLE_ILLUSION_NPC);
         pCharacter = CreateCharacter(iKey, MODEL_CURSEDTEMPLE_ILLUSION_NPC, iPosX, iPosY);
         pCharacter->Object.Scale = 1.2f;
     }
     break;
     case MONSTER_ALLIANCE_ITEM_STORAGE:
     {
-        OpenNpc(MODEL_CURSEDTEMPLE_ALLIED_BASKET);
+        LOG_CALL(OpenNpc, MODEL_CURSEDTEMPLE_ALLIED_BASKET);
         pCharacter = CreateCharacter(iKey, MODEL_CURSEDTEMPLE_ALLIED_BASKET, iPosX, iPosY);
         pCharacter->Object.Scale = 1.8f;
         pCharacter->Object.m_fEdgeScale = 1.03f;
@@ -196,7 +196,7 @@ CHARACTER* CursedTemple::CreateCharacters(EMonsterType iType, int iPosX, int iPo
     break;
     case MONSTER_ILLUSION_ITEM_STORAGE:
     {
-        OpenNpc(MODEL_CURSEDTEMPLE_ILLUSION__BASKET);
+        LOG_CALL(OpenNpc, MODEL_CURSEDTEMPLE_ILLUSION__BASKET);
         pCharacter = CreateCharacter(iKey, MODEL_CURSEDTEMPLE_ILLUSION__BASKET, iPosX, iPosY);
 
         pCharacter->Object.Scale = 1.5f;
@@ -206,7 +206,7 @@ CHARACTER* CursedTemple::CreateCharacters(EMonsterType iType, int iPosX, int iPo
     break;
     case MONSTER_MIRAGE:
     {
-        OpenNpc(MODEL_CURSEDTEMPLE_ENTER_NPC);
+        LOG_CALL(OpenNpc, MODEL_CURSEDTEMPLE_ENTER_NPC);
         pCharacter = CreateCharacter(iKey, MODEL_CURSEDTEMPLE_ENTER_NPC, iPosX, iPosY);
         pCharacter->Object.Scale = 0.95f;
     }
@@ -218,7 +218,7 @@ CHARACTER* CursedTemple::CreateCharacters(EMonsterType iType, int iPosX, int iPo
     case MONSTER_ILLUSION_SORCERER_SPIRIT5_LIGHTNING:
     case MONSTER_ILLUSION_SORCERER_SPIRIT6_LIGHTNING:
     {
-        OpenMonsterModel(MONSTER_MODEL_ILLUSION_SORCERER_SPIRIT_LIGHTNING);
+        LOG_CALL(OpenMonsterModel, MONSTER_MODEL_ILLUSION_SORCERER_SPIRIT_LIGHTNING);
         pCharacter = CreateCharacter(iKey, MODEL_ILLUSION_SORCERER_SPIRIT_LIGHTNING, iPosX, iPosY);
         pCharacter->Object.Scale = 1.0f;
         pCharacter->Weapon[0].Type = -1;
@@ -232,7 +232,7 @@ CHARACTER* CursedTemple::CreateCharacters(EMonsterType iType, int iPosX, int iPo
     case MONSTER_ILLUSION_SORCERER_SPIRIT5_ICE:
     case MONSTER_ILLUSION_SORCERER_SPIRIT6_ICE:
     {
-        OpenMonsterModel(MONSTER_MODEL_ILLUSION_SORCERER_SPIRIT_ICE);
+        LOG_CALL(OpenMonsterModel, MONSTER_MODEL_ILLUSION_SORCERER_SPIRIT_ICE);
         pCharacter = CreateCharacter(iKey, MODEL_ILLUSION_SORCERER_SPIRIT_ICE, iPosX, iPosY);
         pCharacter->Object.Scale = 1.0f;
         pCharacter->Weapon[0].Type = -1;
@@ -246,7 +246,7 @@ CHARACTER* CursedTemple::CreateCharacters(EMonsterType iType, int iPosX, int iPo
     case MONSTER_ILLUSION_SORCERER_SPIRIT5_POISON:
     case MONSTER_ILLUSION_SORCERER_SPIRIT6_POISON:
     {
-        OpenMonsterModel(MONSTER_MODEL_ILLUSION_SORCERER_SPIRIT_POISON);
+        LOG_CALL(OpenMonsterModel, MONSTER_MODEL_ILLUSION_SORCERER_SPIRIT_POISON);
         pCharacter = CreateCharacter(iKey, MODEL_ILLUSION_SORCERER_SPIRIT_POISON, iPosX, iPosY);
         pCharacter->Object.Scale = 1.0f;
         pCharacter->Weapon[0].Type = -1;

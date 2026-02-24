@@ -77,7 +77,7 @@ CHARACTER* GMEmpireGuardian2::CreateMonster(int iType, int PosX, int PosY, int K
     {
     case MONSTER_HAMMERIZE:
     {
-        OpenMonsterModel(MONSTER_MODEL_HAMMERIZE);
+        LOG_CALL(OpenMonsterModel, MONSTER_MODEL_HAMMERIZE);
         pCharacter = CreateCharacter(Key, MODEL_HAMMERIZE, PosX, PosY);
 
         pCharacter->Object.Scale = 1.3f;
@@ -87,7 +87,7 @@ CHARACTER* GMEmpireGuardian2::CreateMonster(int iType, int PosX, int PosY, int K
     break;
     case MONSTER_ATICLES_HEAD:
     {
-        OpenMonsterModel(MONSTER_MODEL_ATICLES_HEAD);
+        LOG_CALL(OpenMonsterModel, MONSTER_MODEL_ATICLES_HEAD);
         pCharacter = CreateCharacter(Key, MODEL_ATICLES_HEAD, PosX, PosY);
 
         pCharacter->Object.Scale = 1.35f;
@@ -95,7 +95,7 @@ CHARACTER* GMEmpireGuardian2::CreateMonster(int iType, int PosX, int PosY, int K
     break;
     case MONSTER_DARK_GHOST:
     {
-        OpenMonsterModel(MONSTER_MODEL_DARK_GHOST);
+        LOG_CALL(OpenMonsterModel, MONSTER_MODEL_DARK_GHOST);
         pCharacter = CreateCharacter(Key, MODEL_DARK_GHOST, PosX, PosY);
 
         OBJECT* pObject = &pCharacter->Object;

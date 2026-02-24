@@ -169,11 +169,11 @@ bool OpenSMDFile(wchar_t* FileName, int Type, bool Flip)
     if (FileName == NULL) return false;
     if ((SMDFile = _wfopen(FileName, L"rb")) == NULL)
     {
+        g_ErrorReport.Write(L"OpenSMDFile failed: %ls\r\n", FileName);
 #ifdef _DEBUG
         extern HWND g_hWnd;
         wchar_t Text[1024];
         mu_swprintf(Text, L"%ls - File not exist..\r\n", FileName);
-        g_ErrorReport.Write(Text);
         MessageBox(g_hWnd, Text, NULL, MB_OK);
 #endif
         return false;

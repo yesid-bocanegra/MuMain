@@ -274,7 +274,7 @@ CHARACTER* CNewYearsDayEvent::CreateMonster(int iType, int iPosX, int iPosY, int
     {
     case MONSTER_POUCH_OF_BLESSING:
     {
-        OpenMonsterModel(MONSTER_MODEL_POUCH_OF_BLESSING);
+        LOG_CALL(OpenMonsterModel, MONSTER_MODEL_POUCH_OF_BLESSING);
         pCharacter = CreateCharacter(iKey, MODEL_POUCH_OF_BLESSING, iPosX, iPosY);
         if (pCharacter != nullptr)
         {
@@ -454,7 +454,7 @@ CHARACTER* C09SummerEvent::CreateMonster(int iType, int iPosX, int iPosY, int iK
 
     if (iType == MONSTER_FIRE_FLAME_GHOST)
     {
-        OpenMonsterModel(MONSTER_MODEL_FIRE_FLAME_GHOST);
+        LOG_CALL(OpenMonsterModel, MONSTER_MODEL_FIRE_FLAME_GHOST);
         pCharacter = CreateCharacter(iKey, MODEL_FIRE_FLAME_GHOST, iPosX, iPosY);
         if (pCharacter != nullptr)
         {

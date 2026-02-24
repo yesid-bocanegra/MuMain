@@ -403,7 +403,7 @@ CHARACTER* SEASON3A::CGM3rdChangeUp::CreateBalgasBarrackMonster(int iType, int P
     case MONSTER_BALRAM_TRAINEE:
     case MONSTER_BALRAM_TRAINEE_SOLDIER:
     {
-        OpenMonsterModel(MONSTER_MODEL_BALRAM);
+        LOG_CALL(OpenMonsterModel, MONSTER_MODEL_BALRAM);
         c = CreateCharacter(Key, MODEL_BALRAM, PosX, PosY);
         c->Object.Scale = 1.25f;
         c->Weapon[0].Type = -1;
@@ -412,7 +412,7 @@ CHARACTER* SEASON3A::CGM3rdChangeUp::CreateBalgasBarrackMonster(int iType, int P
     break;
     case MONSTER_DEATH_SPIRIT_TRAINEE_SOLDIER:
     {
-        OpenMonsterModel(MONSTER_MODEL_DEATH_SPIRIT);
+        LOG_CALL(OpenMonsterModel, MONSTER_MODEL_DEATH_SPIRIT);
         c = CreateCharacter(Key, MODEL_DEATH_SPIRIT, PosX, PosY);
         c->Object.Scale = 1.25f;
         c->Weapon[0].Type = -1;
@@ -425,7 +425,7 @@ CHARACTER* SEASON3A::CGM3rdChangeUp::CreateBalgasBarrackMonster(int iType, int P
     case MONSTER_SORAM_TRAINEE:
     case MONSTER_SORAM_TRAINEE_SOLDIER:
     {
-        OpenMonsterModel(MONSTER_MODEL_SORAM);
+        LOG_CALL(OpenMonsterModel, MONSTER_MODEL_SORAM);
         c = CreateCharacter(Key, MODEL_SORAM, PosX, PosY);
         c->Object.Scale = 1.3f;
         c->Weapon[0].Type = -1;
@@ -436,7 +436,7 @@ CHARACTER* SEASON3A::CGM3rdChangeUp::CreateBalgasBarrackMonster(int iType, int P
     {
         m_nDarkElfAppearance = true;
 
-        OpenMonsterModel(MONSTER_MODEL_DARK_ELF);
+        LOG_CALL(OpenMonsterModel, MONSTER_MODEL_DARK_ELF);
         c = CreateCharacter(Key, MODEL_DARK_ELF, PosX, PosY);
         //			c->Object.Scale = 1.5f;
         c->Object.Scale = 1.7f;

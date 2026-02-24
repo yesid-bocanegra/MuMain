@@ -58,12 +58,12 @@ CHARACTER* CGMSantaTown::CreateMonster(int iType, int PosX, int PosY, int Key)
     switch (iType)
     {
     case 465:
-        OpenNpc(MODEL_XMAS2008_SANTA_NPC);
+        LOG_CALL(OpenNpc, MODEL_XMAS2008_SANTA_NPC);
         pCharacter = CreateCharacter(Key, MODEL_XMAS2008_SANTA_NPC, PosX, PosY);
         pCharacter->Object.Scale = 1.7f;
         break;
     case 467:
-        OpenNpc(MODEL_XMAS2008_SNOWMAN_NPC);
+        LOG_CALL(OpenNpc, MODEL_XMAS2008_SNOWMAN_NPC);
         pCharacter = CreateCharacter(Key, MODEL_XMAS2008_SNOWMAN_NPC, PosX, PosY);
         pCharacter->Object.Scale = 1.3f;
         break;

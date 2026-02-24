@@ -666,7 +666,7 @@ CHARACTER* M39Kanturu3rd::CreateKanturu3rdMonster(int iType, int PosX, int PosY,
     {
     case MONSTER_NIGHTMARE:
     {
-        OpenMonsterModel(MONSTER_MODEL_DARK_SKULL_SOLDIER_5);
+        LOG_CALL(OpenMonsterModel, MONSTER_MODEL_DARK_SKULL_SOLDIER_5);
         c = CreateCharacter(Key, MODEL_DARK_SKULL_SOLDIER_5, PosX, PosY);
         c->Object.Scale = 1.6f;
         c->Weapon[0].Type = -1;
@@ -706,7 +706,7 @@ CHARACTER* M39Kanturu3rd::CreateKanturu3rdMonster(int iType, int PosX, int PosY,
     break;
     case MONSTER_MAYA_HAND_LEFT:
     {
-        OpenMonsterModel(MONSTER_MODEL_MAYA_HAND_LEFT);
+        LOG_CALL(OpenMonsterModel, MONSTER_MODEL_MAYA_HAND_LEFT);
         c = CreateCharacter(Key, MODEL_MAYA_HAND_LEFT, PosX, PosY);
         c->Object.Scale = 2.28f;
         c->Weapon[0].Type = -1;
@@ -739,7 +739,7 @@ CHARACTER* M39Kanturu3rd::CreateKanturu3rdMonster(int iType, int PosX, int PosY,
     break;
     case MONSTER_MAYA_HAND_RIGHT:
     {
-        OpenMonsterModel(MONSTER_MODEL_MAYA_HAND_RIGHT);
+        LOG_CALL(OpenMonsterModel, MONSTER_MODEL_MAYA_HAND_RIGHT);
         c = CreateCharacter(Key, MODEL_MAYA_HAND_RIGHT, PosX, PosY);
         c->Object.Scale = 2.28f;
         c->Weapon[0].Type = -1;
@@ -772,7 +772,7 @@ CHARACTER* M39Kanturu3rd::CreateKanturu3rdMonster(int iType, int PosX, int PosY,
     break;
     case MONSTER_MAYA:
     {
-        OpenMonsterModel(MONSTER_MODEL_BULL_FIGHTER); // shouldn't that be MONSTER_MODEL_MAYA?
+        LOG_CALL(OpenMonsterModel, MONSTER_MODEL_BULL_FIGHTER); // shouldn't that be MONSTER_MODEL_MAYA?
         c = CreateCharacter(Key, MODEL_MAYA, PosX, PosY);
         c->Object.Scale = 0.2f;
         c->Weapon[0].Type = -1;

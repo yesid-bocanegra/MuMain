@@ -2312,8 +2312,6 @@ void DeleteMonsters()
 
 void OpenMonsterModel(EMonsterModelType Type)
 {
-    g_ErrorReport.Write(L"OpenMonsterModel(%d)\r\n", Type);
-
     int Index = MODEL_MONSTER01 + Type;
 
     BMD* b = &Models[Index];

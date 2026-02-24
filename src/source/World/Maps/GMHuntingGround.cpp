@@ -197,7 +197,7 @@ CHARACTER* M31HuntingGround::CreateHuntingGroundMonster(int iType, int PosX, int
     {
     case MONSTER_LIZARD_WARRIOR:
     {
-        OpenMonsterModel(MONSTER_MODEL_LIZARD_WARRIOR);   //  81
+        LOG_CALL(OpenMonsterModel, MONSTER_MODEL_LIZARD_WARRIOR);   //  81
         pCharacter = CreateCharacter(Key, MODEL_LIZARD_WARRIOR, PosX, PosY);
         pCharacter->Object.Scale = 1.2f;
         pCharacter->Weapon[0].Type = -1;
@@ -209,7 +209,7 @@ CHARACTER* M31HuntingGround::CreateHuntingGroundMonster(int iType, int PosX, int
     break;
     case MONSTER_FIRE_GOLEM:
     {
-        OpenMonsterModel(MONSTER_MODEL_FIRE_GOLEM);   //  82
+        LOG_CALL(OpenMonsterModel, MONSTER_MODEL_FIRE_GOLEM);   //  82
         pCharacter = CreateCharacter(Key, MODEL_FIRE_GOLEM, PosX, PosY);
         pCharacter->Object.Scale = 1.8f;
         pCharacter->Weapon[0].Type = -1;
@@ -223,7 +223,7 @@ CHARACTER* M31HuntingGround::CreateHuntingGroundMonster(int iType, int PosX, int
     break;
     case MONSTER_QUEEN_BEE:
     {
-        OpenMonsterModel(MONSTER_MODEL_QUEEN_BEE);	//	83
+        LOG_CALL(OpenMonsterModel, MONSTER_MODEL_QUEEN_BEE);	//	83
         pCharacter = CreateCharacter(Key, MODEL_QUEEN_BEE, PosX, PosY);
         pCharacter->Object.Scale = 1.4f;
         pCharacter->Weapon[0].Type = -1;
@@ -235,7 +235,7 @@ CHARACTER* M31HuntingGround::CreateHuntingGroundMonster(int iType, int PosX, int
     case MONSTER_GIGAS_GOLEM:
     case MONSTER_POISON_GOLEM:
     {
-        OpenMonsterModel(MONSTER_MODEL_POISON_GOLEM);	// 84
+        LOG_CALL(OpenMonsterModel, MONSTER_MODEL_POISON_GOLEM);	// 84
         pCharacter = CreateCharacter(Key, MODEL_POISON_GOLEM, PosX, PosY);
         pCharacter->Object.Scale = 1.4f;
         pCharacter->Weapon[0].Type = -1;
@@ -251,7 +251,7 @@ CHARACTER* M31HuntingGround::CreateHuntingGroundMonster(int iType, int PosX, int
     case MONSTER_AXE_HERO:
     case MONSTER_AXE_WARRIOR:
     {
-        OpenMonsterModel(MONSTER_MODEL_AXE_HERO);	//85
+        LOG_CALL(OpenMonsterModel, MONSTER_MODEL_AXE_HERO);	//85
         pCharacter = CreateCharacter(Key, MODEL_AXE_HERO, PosX, PosY);
         pCharacter->Object.Scale = 0.7f;
         pCharacter->Weapon[0].Type = -1;
@@ -263,7 +263,7 @@ CHARACTER* M31HuntingGround::CreateHuntingGroundMonster(int iType, int PosX, int
     break;
     case MONSTER_EROHIM:
     {
-        OpenMonsterModel(MONSTER_MODEL_EROHIM);	//87
+        LOG_CALL(OpenMonsterModel, MONSTER_MODEL_EROHIM);	//87
         pCharacter = CreateCharacter(Key, MODEL_EROHIM, PosX, PosY);
         pCharacter->Object.Scale = 2.f;
         pCharacter->Weapon[0].Type = -1;

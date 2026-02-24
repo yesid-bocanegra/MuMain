@@ -634,7 +634,7 @@ int CreateBigMon(OBJECT* o)
     {
         LastBigMonCreation = WorldTime;
         o->Live = true;
-        OpenMonsterModel(MONSTER_MODEL_BAHAMUT);
+        LOG_CALL(OpenMonsterModel, MONSTER_MODEL_BAHAMUT);
         o->Type = MODEL_BAHAMUT;
         o->Scale = 2.5f + (float)(rand() % 3 + 6) * 0.05f;
         o->Alpha = 1.f;
@@ -786,7 +786,7 @@ CHARACTER* CreateHellasMonster(EMonsterType Type, int PositionX, int PositionY, 
     case MONSTER_DEATH_ANGEL_5:
     case MONSTER_DEATH_ANGEL_6:
     case MONSTER_DEATH_ANGEL_7:
-        OpenMonsterModel(MONSTER_MODEL_DEATH_ANGEL);
+        LOG_CALL(OpenMonsterModel, MONSTER_MODEL_DEATH_ANGEL);
         c = CreateCharacter(Key, MODEL_DEATH_ANGEL, PositionX, PositionY);
         c->Weapon[0].Type = -1;
         c->Weapon[0].Level = 0;
@@ -802,7 +802,7 @@ CHARACTER* CreateHellasMonster(EMonsterType Type, int PositionX, int PositionY, 
     case MONSTER_DEATH_CENTURION_5:
     case MONSTER_DEATH_CENTURION_6:
     case MONSTER_DEATH_CENTURION_7:
-        OpenMonsterModel(MONSTER_MODEL_DEATH_CENTURION);
+        LOG_CALL(OpenMonsterModel, MONSTER_MODEL_DEATH_CENTURION);
         c = CreateCharacter(Key, MODEL_DEATH_CENTURION, PositionX, PositionY);
         c->Weapon[0].Type = MODEL_DRAGON_SPEAR;
         c->Weapon[0].Level = 7;
@@ -819,7 +819,7 @@ CHARACTER* CreateHellasMonster(EMonsterType Type, int PositionX, int PositionY, 
     case MONSTER_BLOOD_SOLDIER_5:
     case MONSTER_BLOOD_SOLDIER_6:
     case MONSTER_BLOOD_SOLDIER_7:
-        OpenMonsterModel(MONSTER_MODEL_BLOOD_SOLDIER);
+        LOG_CALL(OpenMonsterModel, MONSTER_MODEL_BLOOD_SOLDIER);
         c = CreateCharacter(Key, MODEL_BLOOD_SOLDIER, PositionX, PositionY);
         c->Weapon[0].Type = -1;
         c->Weapon[0].Level = 0;
@@ -834,7 +834,7 @@ CHARACTER* CreateHellasMonster(EMonsterType Type, int PositionX, int PositionY, 
     case MONSTER_AEGIS_5:
     case MONSTER_AEGIS_6:
     case MONSTER_AEGIS_7:
-        OpenMonsterModel(MONSTER_MODEL_AEGIS);
+        LOG_CALL(OpenMonsterModel, MONSTER_MODEL_AEGIS);
         c = CreateCharacter(Key, MODEL_AEGIS, PositionX, PositionY);
         c->Weapon[0].Type = -1;
         c->Weapon[0].Level = 0;
@@ -850,7 +850,7 @@ CHARACTER* CreateHellasMonster(EMonsterType Type, int PositionX, int PositionY, 
     case MONSTER_ROGUE_CENTURION_5:
     case MONSTER_ROGUE_CENTURION_6:
     case MONSTER_ROGUE_CENTURION_7:
-        OpenMonsterModel(MONSTER_MODEL_DEATH_CENTURION);
+        LOG_CALL(OpenMonsterModel, MONSTER_MODEL_DEATH_CENTURION);
         c = CreateCharacter(Key, MODEL_DEATH_CENTURION, PositionX, PositionY);
         c->Weapon[0].Type = MODEL_DRAGON_SPEAR;
         c->Weapon[0].Level = 7;
@@ -866,7 +866,7 @@ CHARACTER* CreateHellasMonster(EMonsterType Type, int PositionX, int PositionY, 
     case MONSTER_NECRON_5:
     case MONSTER_NECRON_6:
     case MONSTER_NECRON_7:
-        OpenMonsterModel(MONSTER_MODEL_NECRON);
+        LOG_CALL(OpenMonsterModel, MONSTER_MODEL_NECRON);
         c = CreateCharacter(Key, MODEL_NECRON, PositionX, PositionY);
         c->Weapon[0].Type = -1;
         c->Weapon[0].Level = 7;
@@ -882,7 +882,7 @@ CHARACTER* CreateHellasMonster(EMonsterType Type, int PositionX, int PositionY, 
     case MONSTER_SCHRIKER_5:
     case MONSTER_SCHRIKER_6:
     case MONSTER_SCHRIKER_7:
-        OpenMonsterModel(MONSTER_MODEL_SHRIKER);
+        LOG_CALL(OpenMonsterModel, MONSTER_MODEL_SHRIKER);
         c = CreateCharacter(Key, MODEL_SHRIKER, PositionX, PositionY);
         c->Weapon[0].Type = MODEL_DOUBLE_BLADE;
         c->Weapon[0].Level = 0;
@@ -898,7 +898,7 @@ CHARACTER* CreateHellasMonster(EMonsterType Type, int PositionX, int PositionY, 
     case MONSTER_ILLUSION_OF_KUNDUN_4:
     case MONSTER_ILLUSION_OF_KUNDUN_5:
     case MONSTER_ILLUSION_OF_KUNDUN_6:
-        OpenMonsterModel(MONSTER_MODEL_SHRIKER);
+        LOG_CALL(OpenMonsterModel, MONSTER_MODEL_SHRIKER);
         c = CreateCharacter(Key, MODEL_SHRIKER, PositionX, PositionY);
         c->Weapon[0].Type = MODEL_DOUBLE_BLADE;
         c->Weapon[0].Level = 0;
@@ -911,7 +911,7 @@ CHARACTER* CreateHellasMonster(EMonsterType Type, int PositionX, int PositionY, 
         break;
 
     case MONSTER_ILLUSION_OF_KUNDUN_7:
-        OpenMonsterModel(MONSTER_MODEL_ILLUSION_OF_KUNDUN);
+        LOG_CALL(OpenMonsterModel, MONSTER_MODEL_ILLUSION_OF_KUNDUN);
         c = CreateCharacter(Key, MODEL_ILLUSION_OF_KUNDUN, PositionX, PositionY);
         c->Weapon[1].Type = MODEL_STAFF_OF_KUNDUN;
         c->Weapon[1].Level = 0;

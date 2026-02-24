@@ -51,5 +51,15 @@ public:
 
 extern CErrorReport g_ErrorReport;
 
+// Stringify helper: LOG_CALL(OpenMonsterModel, MONSTER_MODEL_DRAGON)
+// writes "OpenMonsterModel(MONSTER_MODEL_DRAGON)" to MuError.log,
+// then calls OpenMonsterModel(MONSTER_MODEL_DRAGON).
+// Falls back to numeric output for computed arguments — use the
+// direct function call with manual logging in those rare cases.
+#define LOG_CALL(func, arg) do { \
+    g_ErrorReport.Write(L"%ls(%ls)\r\n", L#func, L#arg); \
+    func(arg); \
+} while (0)
+
 void GetSystemInfo(ER_SystemInfo* si);
 
