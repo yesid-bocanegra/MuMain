@@ -34,20 +34,20 @@ bool& EnableMainRender = g_sceneInit.GetEnableMainRender();
 //=============================================================================
 // Scene Common Utilities
 //=============================================================================
-#include "../ZzzInterface.h"
-#include "../ZzzInventory.h"
-#include "../ZzzTexture.h"
-#include "../ZzzOpenglUtil.h"
-#include "../ZzzObject.h"
-#include "../ZzzInfomation.h"
-#include "../ZzzOpenData.h"
-#include "../UIManager.h"
-#include "../DSPlaySound.h"
-#include "../Local.h"
-#include "../GlobalText.h"
-#include "../PersonalShopTitleImp.h"
-#include "../CComGem.h"
-#include "../UIMng.h"
+#include "ZzzInterface.h"
+#include "ZzzInventory.h"
+#include "ZzzTexture.h"
+#include "ZzzOpenglUtil.h"
+#include "ZzzObject.h"
+#include "ZzzInfomation.h"
+#include "ZzzOpenData.h"
+#include "UIManager.h"
+#include "DSPlaySound.h"
+#include "Local.h"
+#include "GlobalText.h"
+#include "PersonalShopTitleImp.h"
+#include "CComGem.h"
+#include "UIMng.h"
 
 // External variable declarations (defined in ZzzScene.cpp or other files)
 extern wchar_t AbuseFilter[][20];

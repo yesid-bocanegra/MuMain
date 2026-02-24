@@ -18,7 +18,7 @@
 #include "CSQuest.h"
 #include "UIControls.h"
 #include "UIMapName.h"	// rozy
-#include "./Time/Timer.h"
+#include "Core/Timer.h"
 #include "UIMng.h"
 #include "LoadingScene.h"
 #include "CDirection.h"
@@ -27,7 +27,7 @@
 #include <chrono>
 #include <thread>
 
-#include "Camera/CameraUtility.h"
+#include "Core/CameraUtility.h"
 #include "Scenes/SceneManager.h"
 
 extern CUITextInputBox* g_pSingleTextInputBox;

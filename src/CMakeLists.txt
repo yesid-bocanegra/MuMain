@@ -101,22 +101,9 @@ endif()
 # Editor mode option (for admin builds)
 option(ENABLE_EDITOR "Enable editor features for admin builds" OFF)
 
-# Collect all C++ source files under source/
-file(GLOB_RECURSE MU_MAIN_SOURCES
-  CONFIGURE_DEPENDS
-        "source/*.cpp"
-)
-
-# Add MuEditor sources when editor is enabled
-if(ENABLE_EDITOR)
-  file(GLOB_RECURSE MU_EDITOR_SOURCES
-    CONFIGURE_DEPENDS
-    "MuEditor/*.cpp"
-  )
-  list(APPEND MU_MAIN_SOURCES ${MU_EDITOR_SOURCES})
-endif()
-
+# ============================================================
 # ImGui static library (required when editor is enabled)
+# ============================================================
 if(ENABLE_EDITOR)
   add_library(imgui STATIC
     "${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/imgui/imgui.cpp"
@@ -132,14 +119,141 @@ if(ENABLE_EDITOR)
     "${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/imgui/backends"
   )
 
-  # <-- Force C++20 for ImGui here
   target_compile_features(imgui PUBLIC cxx_std_20)
 endif()
 
-add_executable(Main ${MU_MAIN_SOURCES})
+# ============================================================
+# Common settings shared across all module library targets.
+# INTERFACE library propagates include dirs, definitions, and
+# C++20 to every target that links against it.
+# ============================================================
+set(MU_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/source")
 
-# <-- Force C++20 for Main here
-target_compile_features(Main PUBLIC cxx_std_20)
+add_library(MUCommon INTERFACE)
+target_compile_features(MUCommon INTERFACE cxx_std_20)
+
+target_include_directories(MUCommon INTERFACE
+  "${MU_SOURCE_DIR}"
+  "${MU_SOURCE_DIR}/Main"
+  "${MU_SOURCE_DIR}/Core"
+  "${MU_SOURCE_DIR}/Protocol"
+  "${MU_SOURCE_DIR}/Network"
+  "${MU_SOURCE_DIR}/Data"
+  "${MU_SOURCE_DIR}/World"
+  "${MU_SOURCE_DIR}/Gameplay"
+  "${MU_SOURCE_DIR}/UI/Framework"
+  "${MU_SOURCE_DIR}/UI/Windows"
+  "${MU_SOURCE_DIR}/UI/Events"
+  "${MU_SOURCE_DIR}/UI/Legacy"
+  "${MU_SOURCE_DIR}/Audio"
+  "${MU_SOURCE_DIR}/RenderFX"
+  "${MU_SOURCE_DIR}/ThirdParty"
+  "${MU_SOURCE_DIR}/Resources/Windows"
+  "${MU_SOURCE_DIR}/Platform"
+  "${MU_SOURCE_DIR}/Scenes"
+  "${MU_SOURCE_DIR}/Dotnet"
+  "${MU_SOURCE_DIR}/GameShop"
+  "${MU_SOURCE_DIR}/Translation"
+  "${CMAKE_CURRENT_SOURCE_DIR}/dependencies/include"
+  "${CMAKE_CURRENT_SOURCE_DIR}/dependencies/netcore/includes"
+  $<$<BOOL:${ENABLE_EDITOR}>:${CMAKE_CURRENT_SOURCE_DIR}/MuEditor>
+)
+
+target_compile_definitions(MUCommon INTERFACE
+  _LANGUAGE_FOREIGN
+  _LANGUAGE_ENG
+  UNICODE
+  $<$<EQUAL:${CMAKE_SIZEOF_VOID_P},4>:_USE_32BIT_TIME_T>
+  $<$<CONFIG:Debug>:_DEBUG;_FOREIGN_DEBUG>
+  $<$<CONFIG:Release>:NDEBUG;_FOREIGN_NDEBUG;LDS_PATCH_GLOBAL_100520>
+  $<$<BOOL:${ENABLE_EDITOR}>:_EDITOR>
+)
+
+# ============================================================
+# Independent library targets (enforced dependency boundaries)
+# ============================================================
+
+# Foundation — no game dependencies
+file(GLOB MU_CORE_SOURCES CONFIGURE_DEPENDS "${MU_SOURCE_DIR}/Core/*.cpp")
+add_library(MUCore STATIC ${MU_CORE_SOURCES})
+target_link_libraries(MUCore PUBLIC MUCommon)
+target_precompile_headers(MUCore PRIVATE "${MU_SOURCE_DIR}/Main/stdafx.h")
+
+# Crypto / packet encoding — depends on Core only
+file(GLOB MU_PROTOCOL_SOURCES CONFIGURE_DEPENDS "${MU_SOURCE_DIR}/Protocol/*.cpp")
+add_library(MUProtocol STATIC ${MU_PROTOCOL_SOURCES})
+target_link_libraries(MUProtocol PRIVATE MUCore)
+target_precompile_headers(MUProtocol REUSE_FROM MUCore)
+
+# Data loading, localization, game data — depends on Core only
+file(GLOB MU_DATA_SOURCES CONFIGURE_DEPENDS "${MU_SOURCE_DIR}/Data/*.cpp")
+add_library(MUData STATIC ${MU_DATA_SOURCES})
+target_link_libraries(MUData PRIVATE MUCore)
+target_precompile_headers(MUData REUSE_FROM MUCore)
+
+# Effects, models, textures, OpenGL — depends on Core only
+file(GLOB MU_RENDERFX_SOURCES CONFIGURE_DEPENDS "${MU_SOURCE_DIR}/RenderFX/*.cpp")
+add_library(MURenderFX STATIC ${MU_RENDERFX_SOURCES})
+target_link_libraries(MURenderFX PRIVATE MUCore)
+target_precompile_headers(MURenderFX REUSE_FROM MUCore)
+
+# Sound system — depends on Core only
+file(GLOB MU_AUDIO_SOURCES CONFIGURE_DEPENDS "${MU_SOURCE_DIR}/Audio/*.cpp")
+add_library(MUAudio STATIC ${MU_AUDIO_SOURCES})
+target_link_libraries(MUAudio PRIVATE MUCore)
+target_precompile_headers(MUAudio REUSE_FROM MUCore)
+
+# External code (regkey, xstreambuf, UIControls)
+file(GLOB MU_THIRDPARTY_SOURCES CONFIGURE_DEPENDS "${MU_SOURCE_DIR}/ThirdParty/*.cpp")
+add_library(MUThirdParty STATIC ${MU_THIRDPARTY_SOURCES})
+target_link_libraries(MUThirdParty PRIVATE MUCommon)
+target_precompile_headers(MUThirdParty REUSE_FROM MUCore)
+
+# Platform abstraction (empty now, populated by Phase 0 SDL3 migration)
+file(GLOB MU_PLATFORM_SOURCES CONFIGURE_DEPENDS "${MU_SOURCE_DIR}/Platform/*.cpp")
+if(MU_PLATFORM_SOURCES)
+  add_library(MUPlatform STATIC ${MU_PLATFORM_SOURCES})
+  target_link_libraries(MUPlatform PRIVATE MUCore)
+  target_precompile_headers(MUPlatform REUSE_FROM MUCore)
+else()
+  # Empty directory — create INTERFACE placeholder until Phase 0 adds files
+  add_library(MUPlatform INTERFACE)
+endif()
+
+# ============================================================
+# Coupled library target (honest about mutual dependencies)
+# Network ↔ UI, Gameplay → RenderFX, etc. stay together until
+# decoupled during the SDL3 migration phases.
+# ============================================================
+file(GLOB_RECURSE MU_GAME_SOURCES CONFIGURE_DEPENDS
+  "${MU_SOURCE_DIR}/Network/*.cpp"
+  "${MU_SOURCE_DIR}/World/*.cpp"
+  "${MU_SOURCE_DIR}/Gameplay/*.cpp"
+  "${MU_SOURCE_DIR}/UI/*.cpp"
+  "${MU_SOURCE_DIR}/Scenes/*.cpp"
+  "${MU_SOURCE_DIR}/Dotnet/*.cpp"
+  "${MU_SOURCE_DIR}/GameShop/*.cpp"
+  "${MU_SOURCE_DIR}/Translation/*.cpp"
+)
+add_library(MUGame STATIC ${MU_GAME_SOURCES})
+target_link_libraries(MUGame PUBLIC
+  MUCore MUProtocol MUData MURenderFX MUAudio MUPlatform MUThirdParty
+)
+target_precompile_headers(MUGame REUSE_FROM MUCore)
+
+# Editor sources compiled as part of MUGame when enabled
+if(ENABLE_EDITOR)
+  file(GLOB_RECURSE MU_EDITOR_SOURCES CONFIGURE_DEPENDS "MuEditor/*.cpp")
+  target_sources(MUGame PRIVATE ${MU_EDITOR_SOURCES})
+endif()
+
+# ============================================================
+# Main executable — entry point only
+# ============================================================
+file(GLOB MU_MAIN_ENTRY_SOURCES CONFIGURE_DEPENDS "${MU_SOURCE_DIR}/Main/*.cpp")
+add_executable(Main ${MU_MAIN_ENTRY_SOURCES})
+target_link_libraries(Main PRIVATE MUGame)
+target_precompile_headers(Main REUSE_FROM MUCore)
 
 if (NOT MSVC)
   set(MU_MAIN_MAP_FILE "${CMAKE_CURRENT_BINARY_DIR}/Main.map")
@@ -147,29 +261,19 @@ if (NOT MSVC)
 endif()
 
 if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
-  # Build as a Windows GUI application (no console window) and let CMake
-  # add the default system libraries like kernel32, user32, gdi32, etc.
   set(ASSETS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/bin")
-  message(STATUS "=== DEBUG: CMAKE_CURRENT_SOURCE_DIR = ${CMAKE_CURRENT_SOURCE_DIR}")
-  message(STATUS "=== DEBUG: CMAKE_CURRENT_BINARY_DIR = ${CMAKE_CURRENT_BINARY_DIR}")
-  message(STATUS "=== DEBUG: CMAKE_BINARY_DIR = ${CMAKE_BINARY_DIR}")
-  message(STATUS "=== DEBUG: Assets directory: ${ASSETS_DIR}")
-  message(STATUS "=== DEBUG: Executable will be at: $<TARGET_FILE:Main>")
-  message(STATUS "=== DEBUG: Executable directory: $<TARGET_FILE_DIR:Main>")
   set_target_properties(Main PROPERTIES
     WIN32_EXECUTABLE TRUE
   )
 
   enable_language(RC)
   target_sources(Main PRIVATE
-    "${CMAKE_CURRENT_SOURCE_DIR}/source/resource.rc"
+    "${CMAKE_CURRENT_SOURCE_DIR}/source/Resources/Windows/resource.rc"
   )
 
-  # Copy assets directory next to executable (portable, IDE-agnostic solution)
   add_custom_command(
     TARGET Main
     POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E echo "=== DEBUG: Copying assets from ${ASSETS_DIR} to $<TARGET_FILE_DIR:Main>"
     COMMAND ${CMAKE_COMMAND} -E copy_directory
             "${ASSETS_DIR}"
             "$<TARGET_FILE_DIR:Main>"
@@ -177,9 +281,6 @@ if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
   )
 endif()
 
-# Skeleton Linux-native linkage. This intentionally depends only on
-# ubiquitous system libraries so we can focus on getting the project to
-# compile; more platform-specific adjustments will follow as we iterate.
 if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
   target_link_libraries(Main PRIVATE
     pthread
@@ -187,25 +288,6 @@ if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
     m
   )
 endif()
-
-target_include_directories(Main PRIVATE
-  "${CMAKE_CURRENT_SOURCE_DIR}/source"
-  "${CMAKE_CURRENT_SOURCE_DIR}/dependencies/include"
-  "${CMAKE_CURRENT_SOURCE_DIR}/dependencies/netcore/includes"
-  $<$<BOOL:${ENABLE_EDITOR}>:${CMAKE_CURRENT_SOURCE_DIR}/MuEditor>
-)
-
-# Basic compile definitions, roughly mirroring the original MSVC project
-# (fine-tuning per configuration can be done later if needed.)
-target_compile_definitions(Main PRIVATE
-  _LANGUAGE_FOREIGN
-  _LANGUAGE_ENG
-  UNICODE
-  $<$<EQUAL:${CMAKE_SIZEOF_VOID_P},4>:_USE_32BIT_TIME_T>  # Use 32-bit time_t only for 32-bit builds
-  $<$<CONFIG:Debug>:_DEBUG;_FOREIGN_DEBUG>
-  $<$<CONFIG:Release>:NDEBUG;_FOREIGN_NDEBUG;LDS_PATCH_GLOBAL_100520>
-  $<$<BOOL:${ENABLE_EDITOR}>:_EDITOR>  # Editor features for admin builds
-)
 
 if (MSVC)
   target_compile_definitions(Main PRIVATE
