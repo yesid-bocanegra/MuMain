@@ -139,10 +139,29 @@ target_include_directories(MUCommon INTERFACE
   "${MU_SOURCE_DIR}/Protocol"
   "${MU_SOURCE_DIR}/Network"
   "${MU_SOURCE_DIR}/Data"
+  "${MU_SOURCE_DIR}/Data/Items"
+  "${MU_SOURCE_DIR}/Data/Skills"
   "${MU_SOURCE_DIR}/World"
+  "${MU_SOURCE_DIR}/World/Maps"
   "${MU_SOURCE_DIR}/Gameplay"
+  "${MU_SOURCE_DIR}/Gameplay/Characters"
+  "${MU_SOURCE_DIR}/Gameplay/Items"
+  "${MU_SOURCE_DIR}/Gameplay/Pets"
+  "${MU_SOURCE_DIR}/Gameplay/Events"
+  "${MU_SOURCE_DIR}/Gameplay/Buffs"
+  "${MU_SOURCE_DIR}/Gameplay/Skills"
+  "${MU_SOURCE_DIR}/Gameplay/Social"
+  "${MU_SOURCE_DIR}/Gameplay/NPCs"
   "${MU_SOURCE_DIR}/UI/Framework"
   "${MU_SOURCE_DIR}/UI/Windows"
+  "${MU_SOURCE_DIR}/UI/Windows/Events"
+  "${MU_SOURCE_DIR}/UI/Windows/Inventory"
+  "${MU_SOURCE_DIR}/UI/Windows/HUD"
+  "${MU_SOURCE_DIR}/UI/Windows/Commerce"
+  "${MU_SOURCE_DIR}/UI/Windows/Social"
+  "${MU_SOURCE_DIR}/UI/Windows/Castle"
+  "${MU_SOURCE_DIR}/UI/Windows/Character"
+  "${MU_SOURCE_DIR}/UI/Windows/Quest"
   "${MU_SOURCE_DIR}/UI/Events"
   "${MU_SOURCE_DIR}/UI/Legacy"
   "${MU_SOURCE_DIR}/Audio"
@@ -186,7 +205,7 @@ target_link_libraries(MUProtocol PRIVATE MUCore)
 target_precompile_headers(MUProtocol REUSE_FROM MUCore)
 
 # Data loading, localization, game data — depends on Core only
-file(GLOB MU_DATA_SOURCES CONFIGURE_DEPENDS "${MU_SOURCE_DIR}/Data/*.cpp")
+file(GLOB_RECURSE MU_DATA_SOURCES CONFIGURE_DEPENDS "${MU_SOURCE_DIR}/Data/*.cpp")
 add_library(MUData STATIC ${MU_DATA_SOURCES})
 target_link_libraries(MUData PRIVATE MUCore)
 target_precompile_headers(MUData REUSE_FROM MUCore)
