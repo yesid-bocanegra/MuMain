@@ -7,7 +7,7 @@
 #ifdef USE_REFACTORED_SCENES
 #include "Scenes/SceneCommon.h"
 #include "Scenes/SceneManager.h"
-#include "Camera/CameraUtility.h"
+#include "Core/CameraUtility.h"
 #endif
 
 extern EGameScene SceneFlag;

@@ -2,16 +2,16 @@
 // File: LoadingScene.cpp
 //*****************************************************************************
 
-#include "../stdafx.h"
+#include "stdafx.h"
 
 #include "LoadingScene.h"
 
-#include "../Input.h"
-#include "../UIMng.h"
-#include "../ZzzOpenglUtil.h"
-#include "../ZzzTexture.h"
+#include "Input.h"
+#include "UIMng.h"
+#include "ZzzOpenglUtil.h"
+#include "ZzzTexture.h"
 #include "SceneCore.h"
-#include "../ZzzInterface.h"
+#include "ZzzInterface.h"
 #include "SceneCommon.h"
 
 
