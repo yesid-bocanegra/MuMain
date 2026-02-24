@@ -189,6 +189,22 @@ target_compile_definitions(MUCommon INTERFACE
 )
 
 # ============================================================
+# Compiler warning configuration
+# ============================================================
+if(MSVC)
+  target_compile_options(MUCommon INTERFACE
+    /W4
+    /WX
+  )
+else()
+  target_compile_options(MUCommon INTERFACE
+    -Wall
+    -Wextra
+    -Werror
+  )
+endif()
+
+# ============================================================
 # Independent library targets (enforced dependency boundaries)
 # ============================================================
 

@@ -6,6 +6,50 @@ on:
       - main
 
 jobs:
+  quality:
+    name: Code Quality Gates
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install quality tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang-format cppcheck
+
+      - name: clang-format — check changed C++ files
+        run: |
+          CHANGED=$(git diff --name-only origin/${{ github.base_ref }}...HEAD -- '*.cpp' '*.h' '*.hpp' || true)
+          if [ -z "$CHANGED" ]; then
+            echo "No C++ files changed."
+            exit 0
+          fi
+          echo "Checking formatting on:"
+          echo "$CHANGED"
+          echo "$CHANGED" | xargs clang-format --dry-run --Werror
+
+      - name: cppcheck — static analysis on changed C++ files
+        run: |
+          CHANGED=$(git diff --name-only origin/${{ github.base_ref }}...HEAD -- '*.cpp' '*.h' '*.hpp' | grep -v ThirdParty/ || true)
+          if [ -z "$CHANGED" ]; then
+            echo "No C++ files changed."
+            exit 0
+          fi
+          echo "Running cppcheck on:"
+          echo "$CHANGED"
+          echo "$CHANGED" | xargs cppcheck \
+            --error-exitcode=1 \
+            --enable=warning,performance,portability \
+            --std=c++20 \
+            --suppress=missingInclude \
+            --suppress=unmatchedSuppression \
+            --suppress=unusedFunction \
+            --inline-suppr
+
   build-mingw:
     runs-on: ubuntu-latest
 
