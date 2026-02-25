@@ -39,3 +39,6 @@ build-mingw/
 **/imgui.ini
 
 **/*.log
+
+# Semantic release (transient)
+node_modules/
