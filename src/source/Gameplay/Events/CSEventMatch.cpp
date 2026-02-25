@@ -24,14 +24,12 @@ namespace
 {
 constexpr std::chrono::seconds kMatchCountdownDuration{30};
 
-template <std::size_t N>
-void ClearWideBuffer(wchar_t (&buffer)[N])
+template <std::size_t N> void ClearWideBuffer(wchar_t (&buffer)[N])
 {
     std::fill(std::begin(buffer), std::end(buffer), L'\0');
 }
 
-template <std::size_t N, typename... Args>
-void WriteWide(wchar_t (&buffer)[N], const wchar_t* format, Args... args)
+template <std::size_t N, typename... Args> void WriteWide(wchar_t (&buffer)[N], const wchar_t* format, Args... args)
 {
     if (format == nullptr)
     {
@@ -42,8 +40,7 @@ void WriteWide(wchar_t (&buffer)[N], const wchar_t* format, Args... args)
     std::swprintf(buffer, static_cast<std::size_t>(N), format, args...);
 }
 
-template <std::size_t N, typename... Args>
-void AppendWide(wchar_t (&buffer)[N], const wchar_t* format, Args... args)
+template <std::size_t N, typename... Args> void AppendWide(wchar_t (&buffer)[N], const wchar_t* format, Args... args)
 {
     if (format == nullptr)
     {
@@ -72,16 +69,19 @@ void CSBaseMatch::clearMatchInfo(void)
 
 bool CSBaseMatch::getEqualMonster(int addV)
 {
-    if (m_iKillMonster <= (m_iMaxKillMonster + addV)) return  true;
+    if (m_iKillMonster <= (m_iMaxKillMonster + addV))
+        return true;
 
     return false;
 }
 
 void CSBaseMatch::StartMatchCountDown(int iType)
 {
-    if (m_iMatchCountDownType >= TYPE_MATCH_DOPPELGANGER_ENTER_CLOSE && m_iMatchCountDownType <= TYPE_MATCH_DOPPELGANGER_CLOSE)
+    if (m_iMatchCountDownType >= TYPE_MATCH_DOPPELGANGER_ENTER_CLOSE &&
+        m_iMatchCountDownType <= TYPE_MATCH_DOPPELGANGER_CLOSE)
     {
-        if (!(iType >= TYPE_MATCH_DOPPELGANGER_ENTER_CLOSE && iType <= TYPE_MATCH_DOPPELGANGER_CLOSE) && iType != TYPE_MATCH_NONE)
+        if (!(iType >= TYPE_MATCH_DOPPELGANGER_ENTER_CLOSE && iType <= TYPE_MATCH_DOPPELGANGER_CLOSE) &&
+            iType != TYPE_MATCH_NONE)
         {
             return;
         }
@@ -89,7 +89,8 @@ void CSBaseMatch::StartMatchCountDown(int iType)
     m_iMatchCountDownType = static_cast<MATCH_TYPE>(iType);
     m_matchCountDownStart = MatchClock::now();
 }
-void CSBaseMatch::SetMatchInfo(const std::uint8_t byType, const int iMaxTime, const int iTime, const int iMaxMonster, const int iKillMonster)
+void CSBaseMatch::SetMatchInfo(const std::uint8_t byType, const int iMaxTime, const int iTime, const int iMaxMonster,
+                               const int iKillMonster)
 {
     m_byMatchType = byType;
     m_iMatchTimeMax = iMaxTime;
@@ -141,13 +142,14 @@ void CSBaseMatch::RenderTime(void)
         }
         WriteWide(lpszStr, GlobalText[textNum], GlobalText[1147], remainingSeconds);
     }
-    else if (m_iMatchCountDownType == TYPE_MATCH_CURSEDTEMPLE_ENTER_CLOSE
-        || m_iMatchCountDownType == TYPE_MATCH_CURSEDTEMPLE_GAME_START)
+    else if (m_iMatchCountDownType == TYPE_MATCH_CURSEDTEMPLE_ENTER_CLOSE ||
+             m_iMatchCountDownType == TYPE_MATCH_CURSEDTEMPLE_GAME_START)
     {
         int textNum = (m_iMatchCountDownType == TYPE_MATCH_CURSEDTEMPLE_GAME_START) ? 2386 : 2384;
         WriteWide(lpszStr, GlobalText[textNum], remainingSeconds);
     }
-    else if (m_iMatchCountDownType >= TYPE_MATCH_DOPPELGANGER_ENTER_CLOSE && m_iMatchCountDownType <= TYPE_MATCH_DOPPELGANGER_CLOSE)
+    else if (m_iMatchCountDownType >= TYPE_MATCH_DOPPELGANGER_ENTER_CLOSE &&
+             m_iMatchCountDownType <= TYPE_MATCH_DOPPELGANGER_CLOSE)
     {
         const int textNum = 2860 + m_iMatchCountDownType - TYPE_MATCH_DOPPELGANGER_ENTER_CLOSE;
         WriteWide(lpszStr, GlobalText[textNum], remainingSeconds);
@@ -192,7 +194,8 @@ void CSBaseMatch::SetPosition(int ix, int iy)
     m_PosResult.y = iy;
 }
 
-void CSDevilSquareMatch::SetMatchResult(const int iNumDevilRank, const int iMyRank, const MatchResult* pMatchResult, const int Success)
+void CSDevilSquareMatch::SetMatchResult(const int iNumDevilRank, const int iMyRank, const MatchResult* pMatchResult,
+                                        const int Success)
 {
     if (iNumDevilRank >= 200)
     {
@@ -220,7 +223,9 @@ void CSDevilSquareMatch::SetMatchGameCommand(const LPPRECEIVE_MATCH_GAME_STATE d
 
 void CSDevilSquareMatch::RenderMatchResult(void)
 {
-    int xPos[6] = { m_PosResult.x, };
+    int xPos[6] = {
+        m_PosResult.x,
+    };
     xPos[1] = xPos[0] + 15;
     xPos[2] = xPos[1] + 15;
     xPos[3] = xPos[2] + 60;
@@ -231,7 +236,7 @@ void CSDevilSquareMatch::RenderMatchResult(void)
 
     g_pRenderText->SetBgColor(0);
 
-    wchar_t lpszStr[256] { 0 };
+    wchar_t lpszStr[256]{0};
 
     g_pRenderText->SetTextColor(255, 255, 255, 255);
     g_pRenderText->RenderText(xPos[2], yPos, GlobalText[647]);
@@ -294,7 +299,7 @@ void CSDevilSquareMatch::RenderMatchResult(void)
         int myIndex = m_iMyResult - 1; // Convert to zero-based index
         MatchResult* myResult = &m_MatchResult[myIndex];
 
-        yPos = yStartPos + 16 * 10; // Fixed position for the special section
+        yPos = yStartPos + 16 * 10;                    // Fixed position for the special section
         g_pRenderText->SetTextColor(200, 120, 0, 255); // Special color
 
         // "My Ranking" label
@@ -329,7 +334,8 @@ void CCursedTempleMatch::SetMatchGameCommand(const LPPRECEIVE_MATCH_GAME_STATE d
     return;
 }
 
-void CCursedTempleMatch::SetMatchResult(const int iNumDevilRank, const int iMyRank, const MatchResult* pMatchResult, const int Success)
+void CCursedTempleMatch::SetMatchResult(const int iNumDevilRank, const int iMyRank, const MatchResult* pMatchResult,
+                                        const int Success)
 {
     return;
 }

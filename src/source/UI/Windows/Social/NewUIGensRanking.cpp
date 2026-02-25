@@ -6,7 +6,6 @@
 #include "NewUIGensRanking.h"
 #include "NewUISystem.h"
 
-
 using namespace SEASON3B;
 
 #define TEMP_MAX_TEXT_LENGTH 1024
@@ -124,16 +123,20 @@ void CNewUIGensRanking::RenderFrame()
     RenderMark(m_Pos.x + 13 + (85 - 50) * 0.5f, m_Pos.y + 60 + (88 - 69) * 0.5f, m_byGensInfluence);
     RenderInfoFrame(m_Pos.x + 13, m_Pos.y + 250, 168, 140);
 
-    RenderImage(IMAGE_RANKBACK_TEXTBOX, m_Pos.x + 13, m_Pos.y + GENSRANKBACK_HEIGHT + 60 + 3, GENSRANKTEXTBACK_WIDTH, GENSRANKTEXTBACK_HEIGHT);
-    RenderImage(IMAGE_RANKBACK_TEXTBOX, m_Pos.x + 13, m_Pos.y + GENSRANKBACK_HEIGHT + GENSRANKTEXTBACK_HEIGHT + 60 + 6, GENSRANKTEXTBACK_WIDTH, GENSRANKTEXTBACK_HEIGHT);
+    RenderImage(IMAGE_RANKBACK_TEXTBOX, m_Pos.x + 13, m_Pos.y + GENSRANKBACK_HEIGHT + 60 + 3, GENSRANKTEXTBACK_WIDTH,
+                GENSRANKTEXTBACK_HEIGHT);
+    RenderImage(IMAGE_RANKBACK_TEXTBOX, m_Pos.x + 13, m_Pos.y + GENSRANKBACK_HEIGHT + GENSRANKTEXTBACK_HEIGHT + 60 + 6,
+                GENSRANKTEXTBACK_WIDTH, GENSRANKTEXTBACK_HEIGHT);
 }
 
-void CNewUIGensRanking::RenderInfoFrame(int iPosX, int iPosY, int iWidth, int iHeight, int iTitleWidth, int iTitleHeight)
+void CNewUIGensRanking::RenderInfoFrame(int iPosX, int iPosY, int iWidth, int iHeight, int iTitleWidth,
+                                        int iTitleHeight)
 {
     EnableAlphaTest();
     glColor4f(0.f, 0.f, 0.f, 0.6f);
     RenderColor(float(iPosX + 3), float(iPosY + 2), float(iTitleWidth - 8), float(iTitleHeight));
-    RenderColor(float(iPosX + 3), float(iPosY + 2 + iTitleHeight), float(iWidth - 7), float(iHeight - iTitleHeight - 7));
+    RenderColor(float(iPosX + 3), float(iPosY + 2 + iTitleHeight), float(iWidth - 7),
+                float(iHeight - iTitleHeight - 7));
     EndRenderColor();
 
     RenderImage(IMAGE_GENSINFO_TOP_LEFT, iPosX, iPosY, 14, 14);
@@ -145,7 +148,8 @@ void CNewUIGensRanking::RenderInfoFrame(int iPosX, int iPosY, int iWidth, int iH
     RenderImage(IMAGE_GENSINFO_TOP_PIXEL, iPosX + 6, iPosY, iTitleWidth - 12, 14);
     RenderImage(IMAGE_GENSINFO_RIGHT_PIXEL, iPosX + iTitleWidth - 14, iPosY + 6, 14, iTitleHeight - 6);
     RenderImage(IMAGE_GENSINFO_TOP_PIXEL, iPosX + iTitleWidth - 5, iPosY + iTitleHeight, iWidth - iTitleWidth - 6, 14);
-    RenderImage(IMAGE_GENSINFO_RIGHT_PIXEL, iPosX + iWidth - 14, iPosY + iTitleHeight + 6, 14, iHeight - iTitleHeight - 14);
+    RenderImage(IMAGE_GENSINFO_RIGHT_PIXEL, iPosX + iWidth - 14, iPosY + iTitleHeight + 6, 14,
+                iHeight - iTitleHeight - 14);
     RenderImage(IMAGE_GENSINFO_BOTTOM_PIXEL, iPosX + 6, iPosY + iHeight - 14, iWidth - 12, 14);
     RenderImage(IMAGE_GENSINFO_LEFT_PIXEL, iPosX, iPosY + 6, 14, iHeight - 14);
 }
@@ -211,7 +215,8 @@ void CNewUIGensRanking::RenderTexts()
     if (GetNextContribution() > 0)
     {
         mu_swprintf(_szTempText, GlobalText[3097], GetNextContribution());
-        _TextLineCnt = ::DivideStringByPixel(&_szText[0][0], NUM_LINE_CMB, MAX_TEXT_LENGTH, _szTempText, 140, true, '#');
+        _TextLineCnt =
+            ::DivideStringByPixel(&_szText[0][0], NUM_LINE_CMB, MAX_TEXT_LENGTH, _szTempText, 140, true, '#');
         for (int j = 0; j < _TextLineCnt; ++j)
             g_pRenderText->RenderText(_x + 20, _y + (j * _fHeight) + 20, _szText[j], _fWidth, 0, RT3_SORT_LEFT);
     }
@@ -312,7 +317,7 @@ bool CNewUIGensRanking::UpdateKeyEvent()
 
 bool CNewUIGensRanking::BtnProcess()
 {
-    POINT pClose = { GetPos().x + 169, GetPos().y + 7 };
+    POINT pClose = {GetPos().x + 169, GetPos().y + 7};
 
     if (SEASON3B::IsPress(VK_LBUTTON) && CheckMouseIn(pClose.x, pClose.y, 13, 12))
     {
@@ -347,7 +352,7 @@ void CNewUIGensRanking::OpenningProcess()
 
 void CNewUIGensRanking::ClosingProcess()
 {
-    //n/a
+    // n/a
 }
 
 void CNewUIGensRanking::LoadImages()
@@ -450,7 +455,9 @@ wchar_t* CNewUIGensRanking::GetGensTeamName()
 
 void CNewUIGensRanking::SetTitleName()
 {
-    wchar_t _szTempText[256] = { 0, };
+    wchar_t _szTempText[256] = {
+        0,
+    };
     mu_swprintf(_szTempText, GlobalText[3104]);
     ::DivideStringByPixel(&m_szTitleName[0][0], TITLENAME_END, MAX_TITLELENGTH, _szTempText, 240, true, '#');
 }
@@ -463,7 +470,8 @@ wchar_t* CNewUIGensRanking::GetTitleName(BYTE _index)
         return m_szTitleName[TITLENAME_END - 1];
 }
 
-void CNewUIGensRanking::RanderMark(float x, float y, GENS_TYPE gensType, BYTE rankIndex, IMAGE_AREA imageArea, float yOffset)
+void CNewUIGensRanking::RanderMark(float x, float y, GENS_TYPE gensType, BYTE rankIndex, IMAGE_AREA imageArea,
+                                   float yOffset)
 {
     if (gensType == GENSTYPE_NONE)
     {
@@ -511,4 +519,4 @@ int CNewUIGensRanking::GetImageIndex(BYTE rankIndex)
 
     return TITLENAME_END - rankIndex;
 }
-#endif //PBG_ADD_GENSRANKING
+#endif // PBG_ADD_GENSRANKING

@@ -3,7 +3,7 @@
 
 #include "stdafx.h"
 #include "ZzzOpenglUtil.h"
-#include "ZzzInfomation.h" 
+#include "ZzzInfomation.h"
 #include "ZzzBMD.h"
 #include "ZzzObject.h"
 #include "ZzzCharacter.h"
@@ -22,33 +22,37 @@ BMD* Models;
 BMD* ModelsDump;
 
 vec4_t BoneQuaternion[MAX_BONES];
-short  BoundingVertices[MAX_BONES];
+short BoundingVertices[MAX_BONES];
 vec3_t BoundingMin[MAX_BONES];
 vec3_t BoundingMax[MAX_BONES];
 
-float  BoneTransform[MAX_BONES][3][4];
+float BoneTransform[MAX_BONES][3][4];
 
 vec3_t VertexTransform[MAX_MESH][MAX_VERTICES];
 vec3_t NormalTransform[MAX_MESH][MAX_VERTICES];
-float  IntensityTransform[MAX_MESH][MAX_VERTICES];
+float IntensityTransform[MAX_MESH][MAX_VERTICES];
 vec3_t LightTransform[MAX_MESH][MAX_VERTICES];
 
 vec3_t RenderArrayVertices[MAX_VERTICES * 3];
 vec4_t RenderArrayColors[MAX_VERTICES * 3];
 vec2_t RenderArrayTexCoords[MAX_VERTICES * 3];
 
-bool  StopMotion = false;
+bool StopMotion = false;
 float ParentMatrix[3][4];
 
-static vec3_t LightVector = { 0.f, -0.1f, -0.8f };
-static vec3_t LightVector2 = { 0.f, -0.5f, -0.8f };
+static vec3_t LightVector = {0.f, -0.1f, -0.8f};
+static vec3_t LightVector2 = {0.f, -0.5f, -0.8f};
 
-void BMD::Animation(float(*BoneMatrix)[3][4], float AnimationFrame, float PriorFrame, unsigned short PriorAction, vec3_t Angle, vec3_t HeadAngle, bool Parent, bool Translate)
+void BMD::Animation(float (*BoneMatrix)[3][4], float AnimationFrame, float PriorFrame, unsigned short PriorAction,
+                    vec3_t Angle, vec3_t HeadAngle, bool Parent, bool Translate)
 {
-    if (NumActions <= 0) return;
+    if (NumActions <= 0)
+        return;
 
-    if (PriorAction >= NumActions) PriorAction = 0;
-    if (CurrentAction >= NumActions)CurrentAction = 0;
+    if (PriorAction >= NumActions)
+        PriorAction = 0;
+    if (CurrentAction >= NumActions)
+        CurrentAction = 0;
     VectorCopy(Angle, BodyAngle);
 
     CurrentAnimation = AnimationFrame;
@@ -134,7 +138,7 @@ void BMD::Animation(float(*BoneMatrix)[3][4], float AnimationFrame, float PriorF
                 AngleMatrix(BodyAngle, ParentMatrix);
                 if (Translate)
                 {
-                    for (auto & y : ParentMatrix)
+                    for (auto& y : ParentMatrix)
                     {
                         for (int x = 0; x < 3; ++x)
                         {
@@ -162,7 +166,8 @@ extern int EditFlag;
 bool HighLight = true;
 float BoneScale = 1.f;
 
-void BMD::Transform(float(*BoneMatrix)[3][4], vec3_t BoundingBoxMin, vec3_t BoundingBoxMax, OBB_t* OBB, bool Translate, float _Scale)
+void BMD::Transform(float (*BoneMatrix)[3][4], vec3_t BoundingBoxMin, vec3_t BoundingBoxMax, OBB_t* OBB, bool Translate,
+                    float _Scale)
 {
     vec3_t LightPosition;
 
@@ -236,8 +241,10 @@ void BMD::Transform(float(*BoneMatrix)[3][4], vec3_t BoundingBoxMin, vec3_t Boun
             {
                 for (int k = 0; k < 3; k++)
                 {
-                    if (vp[k] < BoundingMin[k]) BoundingMin[k] = vp[k];
-                    if (vp[k] > BoundingMax[k]) BoundingMax[k] = vp[k];
+                    if (vp[k] < BoundingMin[k])
+                        BoundingMin[k] = vp[k];
+                    if (vp[k] > BoundingMax[k])
+                        BoundingMax[k] = vp[k];
                 }
             }
             if (Translate)
@@ -254,7 +261,8 @@ void BMD::Transform(float(*BoneMatrix)[3][4], vec3_t BoundingBoxMin, vec3_t Boun
                 float Luminosity;
                 Luminosity = DotProduct(tn, LightPosition) * 0.8f + 0.4f;
 
-                if (Luminosity < 0.2f) Luminosity = 0.2f;
+                if (Luminosity < 0.2f)
+                    Luminosity = 0.2f;
                 IntensityTransform[i][j] = Luminosity;
             }
         }
@@ -273,8 +281,9 @@ void BMD::Transform(float(*BoneMatrix)[3][4], vec3_t BoundingBoxMin, vec3_t Boun
         OBB->YAxis[1] = (BoundingBoxMax[1] - BoundingBoxMin[1]);
         OBB->ZAxis[2] = (BoundingBoxMax[2] - BoundingBoxMin[2]);
     }
-    fTransformedSize = std::max<float>(std::max<float>(BoundingMax[0] - BoundingMin[0], BoundingMax[1] - BoundingMin[1]),
-        BoundingMax[2] - BoundingMin[2]);
+    fTransformedSize =
+        std::max<float>(std::max<float>(BoundingMax[0] - BoundingMin[0], BoundingMax[1] - BoundingMin[1]),
+                        BoundingMax[2] - BoundingMin[2]);
     VectorAdd(OBB->StartPos, BodyOrigin, OBB->StartPos);
     OBB->XAxis[1] = 0.f;
     OBB->XAxis[2] = 0.f;
@@ -297,7 +306,7 @@ void BMD::TransformByObjectBone(vec3_t vResultPosition, OBJECT* pObject, int iBo
         return;
     }
 
-    float(*TransformMatrix)[4];
+    float (*TransformMatrix)[4];
     if (pObject->BoneTransform != nullptr)
     {
         TransformMatrix = pObject->BoneTransform[iBoneNumber];
@@ -322,7 +331,8 @@ void BMD::TransformByObjectBone(vec3_t vResultPosition, OBJECT* pObject, int iBo
     VectorAdd(vTemp, pObject->Position, vResultPosition);
 }
 
-void BMD::TransformByBoneMatrix(vec3_t vResultPosition, float(*BoneMatrix)[4], vec3_t vWorldPosition, vec3_t vRelativePosition)
+void BMD::TransformByBoneMatrix(vec3_t vResultPosition, float (*BoneMatrix)[4], vec3_t vWorldPosition,
+                                vec3_t vRelativePosition)
 {
     if (BoneMatrix == nullptr)
     {
@@ -352,7 +362,7 @@ void BMD::TransformByBoneMatrix(vec3_t vResultPosition, float(*BoneMatrix)[4], v
     }
 }
 
-void BMD::TransformPosition(float(*Matrix)[4], vec3_t Position, vec3_t WorldPosition, bool Translate)
+void BMD::TransformPosition(float (*Matrix)[4], vec3_t Position, vec3_t WorldPosition, bool Translate)
 {
     if (Translate)
     {
@@ -365,7 +375,7 @@ void BMD::TransformPosition(float(*Matrix)[4], vec3_t Position, vec3_t WorldPosi
         VectorTransform(Position, Matrix, WorldPosition);
 }
 
-void BMD::RotationPosition(float(*Matrix)[4], vec3_t Position, vec3_t WorldPosition)
+void BMD::RotationPosition(float (*Matrix)[4], vec3_t Position, vec3_t WorldPosition)
 {
     vec3_t p;
     VectorRotate(Position, Matrix, p);
@@ -379,11 +389,13 @@ void BMD::RotationPosition(float(*Matrix)[4], vec3_t Position, vec3_t WorldPosit
     }
 }
 
-bool BMD::PlayAnimation(float* AnimationFrame, float* PriorAnimationFrame, unsigned short* PriorAction, float Speed, vec3_t Origin, vec3_t Angle)
+bool BMD::PlayAnimation(float* AnimationFrame, float* PriorAnimationFrame, unsigned short* PriorAction, float Speed,
+                        vec3_t Origin, vec3_t Angle)
 {
     bool Loop = true;
 
-    if (AnimationFrame == nullptr || PriorAnimationFrame == nullptr || PriorAction == nullptr || (NumActions > 0 && CurrentAction >= NumActions))
+    if (AnimationFrame == nullptr || PriorAnimationFrame == nullptr || PriorAction == nullptr ||
+        (NumActions > 0 && CurrentAction >= NumActions))
     {
         return Loop;
     }
@@ -448,17 +460,23 @@ bool BMD::PlayAnimation(float* AnimationFrame, float* PriorAnimationFrame, unsig
 
     return Loop;
 }
-void BMD::AnimationTransformWithAttachHighModel_usingGlobalTM(OBJECT* oHighHierarchyModel, BMD* bmdHighHierarchyModel, int iBoneNumberHighHierarchyModel, vec3_t& vOutPosHighHiearachyModelBone, vec3_t* arrOutSetfAllBonePositions, bool bApplyTMtoVertices)
+void BMD::AnimationTransformWithAttachHighModel_usingGlobalTM(OBJECT* oHighHierarchyModel, BMD* bmdHighHierarchyModel,
+                                                              int iBoneNumberHighHierarchyModel,
+                                                              vec3_t& vOutPosHighHiearachyModelBone,
+                                                              vec3_t* arrOutSetfAllBonePositions,
+                                                              bool bApplyTMtoVertices)
 {
-    if (NumBones < 1) return;
-    if (NumBones > MAX_BONES) return;
+    if (NumBones < 1)
+        return;
+    if (NumBones > MAX_BONES)
+        return;
 
     vec34_t* arrBonesTMLocal;
 
-    vec34_t		tmBoneHierarchicalObject;
+    vec34_t tmBoneHierarchicalObject;
 
-    vec3_t		Temp, v3Position;
-    OBB_t		OBB;
+    vec3_t Temp, v3Position;
+    OBB_t OBB;
 
     arrBonesTMLocal = new vec34_t[NumBones];
     Vector(0.0f, 0.0f, 0.0f, Temp);
@@ -466,7 +484,8 @@ void BMD::AnimationTransformWithAttachHighModel_usingGlobalTM(OBJECT* oHighHiera
     memset(arrBonesTMLocal, 0, sizeof(vec34_t) * NumBones);
     memset(tmBoneHierarchicalObject, 0, sizeof(vec34_t));
 
-    memcpy(tmBoneHierarchicalObject, oHighHierarchyModel->BoneTransform[iBoneNumberHighHierarchyModel], sizeof(vec34_t));
+    memcpy(tmBoneHierarchicalObject, oHighHierarchyModel->BoneTransform[iBoneNumberHighHierarchyModel],
+           sizeof(vec34_t));
     BodyScale = oHighHierarchyModel->Scale;
 
     tmBoneHierarchicalObject[0][3] = tmBoneHierarchicalObject[0][3] * BodyScale;
@@ -476,7 +495,7 @@ void BMD::AnimationTransformWithAttachHighModel_usingGlobalTM(OBJECT* oHighHiera
     if (nullptr != vOutPosHighHiearachyModelBone)
     {
         Vector(tmBoneHierarchicalObject[0][3], tmBoneHierarchicalObject[1][3], tmBoneHierarchicalObject[2][3],
-            vOutPosHighHiearachyModelBone);
+               vOutPosHighHiearachyModelBone);
     }
 
     VectorCopy(oHighHierarchyModel->Position, v3Position);
@@ -490,10 +509,8 @@ void BMD::AnimationTransformWithAttachHighModel_usingGlobalTM(OBJECT* oHighHiera
         BoneTransform[i_][1][3] = BoneTransform[i_][1][3] + v3Position[1];
         BoneTransform[i_][2][3] = BoneTransform[i_][2][3] + v3Position[2];
 
-        Vector(BoneTransform[i_][0][3],
-            BoneTransform[i_][1][3],
-            BoneTransform[i_][2][3],
-            arrOutSetfAllBonePositions[i_]);
+        Vector(BoneTransform[i_][0][3], BoneTransform[i_][1][3], BoneTransform[i_][2][3],
+               arrOutSetfAllBonePositions[i_]);
     }
 
     if (true == bApplyTMtoVertices)
@@ -504,15 +521,20 @@ void BMD::AnimationTransformWithAttachHighModel_usingGlobalTM(OBJECT* oHighHiera
     delete[] arrBonesTMLocal;
 }
 
-void BMD::AnimationTransformWithAttachHighModel(OBJECT* oHighHierarchyModel, BMD* bmdHighHierarchyModel, int iBoneNumberHighHierarchyModel, vec3_t& vOutPosHighHiearachyModelBone, vec3_t* arrOutSetfAllBonePositions)
+void BMD::AnimationTransformWithAttachHighModel(OBJECT* oHighHierarchyModel, BMD* bmdHighHierarchyModel,
+                                                int iBoneNumberHighHierarchyModel,
+                                                vec3_t& vOutPosHighHiearachyModelBone,
+                                                vec3_t* arrOutSetfAllBonePositions)
 {
-    if (NumBones < 1) return;
-    if (NumBones > MAX_BONES) return;
+    if (NumBones < 1)
+        return;
+    if (NumBones > MAX_BONES)
+        return;
 
     vec34_t* arrBonesTMLocal;
     vec34_t* arrBonesTMLocalResult;
-    vec34_t		tmBoneHierarchicalObject;
-    vec3_t		Temp, v3Position;
+    vec34_t tmBoneHierarchicalObject;
+    vec3_t Temp, v3Position;
 
     arrBonesTMLocal = new vec34_t[NumBones];
     Vector(0.0f, 0.0f, 0.0f, Temp);
@@ -524,7 +546,8 @@ void BMD::AnimationTransformWithAttachHighModel(OBJECT* oHighHierarchyModel, BMD
 
     memset(tmBoneHierarchicalObject, 0, sizeof(vec34_t));
 
-    memcpy(tmBoneHierarchicalObject, oHighHierarchyModel->BoneTransform[iBoneNumberHighHierarchyModel], sizeof(vec34_t));
+    memcpy(tmBoneHierarchicalObject, oHighHierarchyModel->BoneTransform[iBoneNumberHighHierarchyModel],
+           sizeof(vec34_t));
 
     BodyScale = oHighHierarchyModel->Scale;
 
@@ -535,7 +558,7 @@ void BMD::AnimationTransformWithAttachHighModel(OBJECT* oHighHierarchyModel, BMD
     if (nullptr != vOutPosHighHiearachyModelBone)
     {
         Vector(tmBoneHierarchicalObject[0][3], tmBoneHierarchicalObject[1][3], tmBoneHierarchicalObject[2][3],
-            vOutPosHighHiearachyModelBone);
+               vOutPosHighHiearachyModelBone);
     }
 
     VectorCopy(oHighHierarchyModel->Position, v3Position);
@@ -548,7 +571,8 @@ void BMD::AnimationTransformWithAttachHighModel(OBJECT* oHighHierarchyModel, BMD
         arrBonesTMLocalResult[i_][1][3] = arrBonesTMLocalResult[i_][1][3] + v3Position[1];
         arrBonesTMLocalResult[i_][2][3] = arrBonesTMLocalResult[i_][2][3] + v3Position[2];
 
-        Vector(arrBonesTMLocalResult[i_][0][3], arrBonesTMLocalResult[i_][1][3], arrBonesTMLocalResult[i_][2][3], arrOutSetfAllBonePositions[i_]);
+        Vector(arrBonesTMLocalResult[i_][0][3], arrBonesTMLocalResult[i_][1][3], arrBonesTMLocalResult[i_][2][3],
+               arrOutSetfAllBonePositions[i_]);
     }
 
     delete[] arrBonesTMLocalResult;
@@ -557,42 +581,44 @@ void BMD::AnimationTransformWithAttachHighModel(OBJECT* oHighHierarchyModel, BMD
 
 void BMD::AnimationTransformOnlySelf(vec3_t* arrOutSetfAllBonePositions, const OBJECT* oSelf)
 {
-    if (NumBones < 1) return;
-    if (NumBones > MAX_BONES) return;
+    if (NumBones < 1)
+        return;
+    if (NumBones > MAX_BONES)
+        return;
 
     vec34_t* arrBonesTMLocal;
 
-    vec3_t		Temp;
+    vec3_t Temp;
 
     arrBonesTMLocal = new vec34_t[NumBones];
     Vector(0.0f, 0.0f, 0.0f, Temp);
 
     memset(arrBonesTMLocal, 0, sizeof(vec34_t) * NumBones);
 
-    Animation(arrBonesTMLocal, oSelf->AnimationFrame, oSelf->PriorAnimationFrame, oSelf->PriorAction, (const_cast<OBJECT*>(oSelf))->Angle, Temp, false, true);
+    Animation(arrBonesTMLocal, oSelf->AnimationFrame, oSelf->PriorAnimationFrame, oSelf->PriorAction,
+              (const_cast<OBJECT*>(oSelf))->Angle, Temp, false, true);
 
     for (int i_ = 0; i_ < NumBones; ++i_)
     {
-        Vector(arrBonesTMLocal[i_][0][3], arrBonesTMLocal[i_][1][3], arrBonesTMLocal[i_][2][3], arrOutSetfAllBonePositions[i_]);
+        Vector(arrBonesTMLocal[i_][0][3], arrBonesTMLocal[i_][1][3], arrBonesTMLocal[i_][2][3],
+               arrOutSetfAllBonePositions[i_]);
     }
     delete[] arrBonesTMLocal;
 }
 
-void BMD::AnimationTransformOnlySelf(vec3_t* arrOutSetfAllBonePositions,
-    const vec3_t& v3Angle,
-    const vec3_t& v3Position,
-    const float& fScale,
-    OBJECT* oRefAnimation,
-    const float fFrameArea,
-    const float fWeight)
+void BMD::AnimationTransformOnlySelf(vec3_t* arrOutSetfAllBonePositions, const vec3_t& v3Angle,
+                                     const vec3_t& v3Position, const float& fScale, OBJECT* oRefAnimation,
+                                     const float fFrameArea, const float fWeight)
 {
-    if (NumBones < 1) return;
-    if (NumBones > MAX_BONES) return;
+    if (NumBones < 1)
+        return;
+    if (NumBones > MAX_BONES)
+        return;
 
     vec34_t* arrBonesTMLocal;
-    vec3_t		v3RootAngle, v3RootPosition;
-    float		fRootScale;
-    vec3_t		Temp;
+    vec3_t v3RootAngle, v3RootPosition;
+    float fRootScale;
+    vec3_t Temp;
 
     fRootScale = const_cast<float&>(fScale);
 
@@ -615,9 +641,9 @@ void BMD::AnimationTransformOnlySelf(vec3_t* arrOutSetfAllBonePositions,
     }
     else
     {
-        float			fAnimationFrame = oRefAnimation->AnimationFrame,
-            fPiriorAnimationFrame = oRefAnimation->PriorAnimationFrame;
-        unsigned short	iPiriorAction = oRefAnimation->PriorAction;
+        float fAnimationFrame = oRefAnimation->AnimationFrame,
+              fPiriorAnimationFrame = oRefAnimation->PriorAnimationFrame;
+        unsigned short iPiriorAction = oRefAnimation->PriorAction;
 
         if (fWeight >= 0.0f && fFrameArea > 0.0f)
         {
@@ -626,32 +652,27 @@ void BMD::AnimationTransformOnlySelf(vec3_t* arrOutSetfAllBonePositions,
             LInterpolationF(fAnimationFrame, fAnimationFrameStart, fAnimationFrameEnd, fWeight);
         }
 
-        Animation(arrBonesTMLocal,
-            fAnimationFrame,
-            fPiriorAnimationFrame,
-            iPiriorAction,
-            v3RootAngle, Temp, false, true);
+        Animation(arrBonesTMLocal, fAnimationFrame, fPiriorAnimationFrame, iPiriorAction, v3RootAngle, Temp, false,
+                  true);
     }
 
-    vec3_t	v3RelatePos;
+    vec3_t v3RelatePos;
     Vector(1.0f, 1.0f, 1.0f, v3RelatePos);
     for (int i_ = 0; i_ < NumBones; ++i_)
     {
-        Vector(arrBonesTMLocal[i_][0][3],
-            arrBonesTMLocal[i_][1][3],
-            arrBonesTMLocal[i_][2][3],
-            arrOutSetfAllBonePositions[i_]);
+        Vector(arrBonesTMLocal[i_][0][3], arrBonesTMLocal[i_][1][3], arrBonesTMLocal[i_][2][3],
+               arrOutSetfAllBonePositions[i_]);
     }
 
     delete[] arrBonesTMLocal;
 }
 
-vec3_t		g_vright;		// needs to be set to viewer's right in order for chrome to work
-int			g_smodels_total = 1;				// cookie
-float		g_chrome[MAX_VERTICES][2];	// texture coords for surface normals
-int			g_chromeage[MAX_BONES];	// last time chrome vectors were updated
-vec3_t		g_chromeup[MAX_BONES];		// chrome vector "up" in bone reference frames
-vec3_t		g_chromeright[MAX_BONES];	// chrome vector "right" in bone reference frames
+vec3_t g_vright;                 // needs to be set to viewer's right in order for chrome to work
+int g_smodels_total = 1;         // cookie
+float g_chrome[MAX_VERTICES][2]; // texture coords for surface normals
+int g_chromeage[MAX_BONES];      // last time chrome vectors were updated
+vec3_t g_chromeup[MAX_BONES];    // chrome vector "up" in bone reference frames
+vec3_t g_chromeright[MAX_BONES]; // chrome vector "right" in bone reference frames
 
 void BMD::Chrome(float* pchrome, int bone, vec3_t normal)
 {
@@ -660,9 +681,9 @@ void BMD::Chrome(float* pchrome, int bone, vec3_t normal)
     float n;
 
     {
-        vec3_t chromeupvec;		
+        vec3_t chromeupvec;
         vec3_t chromerightvec;
-        vec3_t tmp;			
+        vec3_t tmp;
         VectorScale(BodyOrigin, -1, tmp);
         VectorNormalize(tmp);
         CrossProduct(tmp, g_vright, chromeupvec);
@@ -687,8 +708,10 @@ void BMD::Lighting(float* pLight, Light_t* lp, vec3_t Position, vec3_t Normal)
     float Length = sqrtf(Light[0] * Light[0] + Light[1] * Light[1] + Light[2] * Light[2]);
 
     float LightCos = (DotProduct(Normal, Light) / Length) * 0.8f + 0.3f;
-    if (Length > lp->Range) LightCos -= (Length - lp->Range) * 0.01f;
-    if (LightCos < 0.f) LightCos = 0.f;
+    if (Length > lp->Range)
+        LightCos -= (Length - lp->Range) * 0.01f;
+    if (LightCos < 0.f)
+        LightCos = 0.f;
     pLight[0] += LightCos * lp->Color[0];
     pLight[1] += LightCos * lp->Color[1];
     pLight[2] += LightCos * lp->Color[2];
@@ -698,9 +721,9 @@ void BMD::Lighting(float* pLight, Light_t* lp, vec3_t Position, vec3_t Normal)
 // light map
 ///////////////////////////////////////////////////////////////////////////////
 
-#define AXIS_X  0
-#define AXIS_Y  1
-#define AXIS_Z  2
+#define AXIS_X 0
+#define AXIS_Y 1
+#define AXIS_Z 2
 
 float SubPixel = 16.f;
 
@@ -714,9 +737,11 @@ void SmoothBitmap(int Width, int Height, unsigned char* Buffer)
             int Index = (i * Width + j) * 3;
             for (int k = 0; k < 3; k++)
             {
-                Buffer[Index] = (Buffer[Index - RowStride - 3] + Buffer[Index - RowStride] + Buffer[Index - RowStride + 3] +
-                    Buffer[Index - 3] + Buffer[Index + 3] +
-                    Buffer[Index + RowStride - 3] + Buffer[Index + RowStride] + Buffer[Index + RowStride + 3]) / 8;
+                Buffer[Index] =
+                    (Buffer[Index - RowStride - 3] + Buffer[Index - RowStride] + Buffer[Index - RowStride + 3] +
+                     Buffer[Index - 3] + Buffer[Index + 3] + Buffer[Index + RowStride - 3] + Buffer[Index + RowStride] +
+                     Buffer[Index + RowStride + 3]) /
+                    8;
                 Index++;
             }
         }
@@ -732,7 +757,8 @@ bool BMD::CollisionDetectLineToMesh(vec3_t Position, vec3_t Target, bool Collisi
 
         for (j = 0; j < m->NumTriangles; j++)
         {
-            if (i == Mesh && j == Triangle) continue;
+            if (i == Mesh && j == Triangle)
+                continue;
             Triangle_t* tp = &m->Triangles[j];
             float* vp1 = VertexTransform[i][tp->VertexIndex[0]];
             float* vp2 = VertexTransform[i][tp->VertexIndex[1]];
@@ -741,14 +767,17 @@ bool BMD::CollisionDetectLineToMesh(vec3_t Position, vec3_t Target, bool Collisi
 
             vec3_t Normal;
             FaceNormalize(vp1, vp2, vp3, Normal);
-            bool success = CollisionDetectLineToFace(Position, Target, tp->Polygon, vp1, vp2, vp3, vp4, Normal, Collision);
-            if (success == true) return true;
+            bool success =
+                CollisionDetectLineToFace(Position, Target, tp->Polygon, vp1, vp2, vp3, vp4, Normal, Collision);
+            if (success == true)
+                return true;
         }
     }
     return false;
 }
 
-void BMD::CreateLightMapSurface(Light_t* lp, Mesh_t* m, int i, int j, int MapWidth, int MapHeight, int MapWidthMax, int MapHeightMax, vec3_t BoundingMin, vec3_t BoundingMax, int Axis)
+void BMD::CreateLightMapSurface(Light_t* lp, Mesh_t* m, int i, int j, int MapWidth, int MapHeight, int MapWidthMax,
+                                int MapHeightMax, vec3_t BoundingMin, vec3_t BoundingMax, int Axis)
 {
     int k, l;
     Triangle_t* tp = &m->Triangles[j];
@@ -777,22 +806,28 @@ void BMD::CreateLightMapSurface(Light_t* lp, Mesh_t* m, int i, int j, int MapWid
             case AXIS_Z:
                 p[0] = BoundingMin[0] + l * SubPixel;
                 p[1] = BoundingMin[1] + k * SubPixel;
-                if (p[0] >= BoundingMax[0]) p[0] = BoundingMax[0];
-                if (p[1] >= BoundingMax[1]) p[1] = BoundingMax[1];
+                if (p[0] >= BoundingMax[0])
+                    p[0] = BoundingMax[0];
+                if (p[1] >= BoundingMax[1])
+                    p[1] = BoundingMax[1];
                 p[2] = (np[0] * p[0] + np[1] * p[1] + d) / -np[2];
                 break;
             case AXIS_Y:
                 p[0] = BoundingMin[0] + (float)l * SubPixel;
                 p[2] = BoundingMin[2] + (float)k * SubPixel;
-                if (p[0] >= BoundingMax[0]) p[0] = BoundingMax[0];
-                if (p[2] >= BoundingMax[2]) p[2] = BoundingMax[2];
+                if (p[0] >= BoundingMax[0])
+                    p[0] = BoundingMax[0];
+                if (p[2] >= BoundingMax[2])
+                    p[2] = BoundingMax[2];
                 p[1] = (np[0] * p[0] + np[2] * p[2] + d) / -np[1];
                 break;
             case AXIS_X:
                 p[2] = BoundingMin[2] + l * SubPixel;
                 p[1] = BoundingMin[1] + k * SubPixel;
-                if (p[2] >= BoundingMax[2]) p[2] = BoundingMax[2];
-                if (p[1] >= BoundingMax[1]) p[1] = BoundingMax[1];
+                if (p[2] >= BoundingMax[2])
+                    p[2] = BoundingMax[2];
+                if (p[1] >= BoundingMax[1])
+                    p[1] = BoundingMax[1];
                 p[0] = (np[2] * p[2] + np[1] * p[1] + d) / -np[0];
                 break;
             }
@@ -812,7 +847,8 @@ void BMD::CreateLightMapSurface(Light_t* lp, Mesh_t* m, int i, int j, int MapWid
                 {
                     int color = Bitmap[c];
                     color += (unsigned char)(Light[c] * 255.f);
-                    if (color > 255) color = 255;
+                    if (color > 255)
+                        color = 255;
                     Bitmap[c] = color;
                 }
             }
@@ -820,13 +856,12 @@ void BMD::CreateLightMapSurface(Light_t* lp, Mesh_t* m, int i, int j, int MapWid
     }
 }
 
-void BMD::CreateLightMaps()
-{
-}
+void BMD::CreateLightMaps() {}
 
 void BMD::BindLightMaps()
 {
-    if (LightMapEnable == true) return;
+    if (LightMapEnable == true)
+        return;
 
     for (int i = 0; i < NumLightMaps; i++)
     {
@@ -850,7 +885,8 @@ void BMD::BindLightMaps()
 
 void BMD::ReleaseLightMaps()
 {
-    if (LightMapEnable == false) return;
+    if (LightMapEnable == false)
+        return;
     for (int i = 0; i < NumLightMaps; i++)
     {
         Bitmap_t* lmp = &LightMaps[i];
@@ -941,12 +977,15 @@ void BMD::EndRenderCoinHeap(int coinCount)
     glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-void BMD::RenderMesh(int meshIndex, int renderFlags, float alpha, int blendMeshIndex, float blendMeshAlpha, float blendMeshTextureCoordU, float blendMeshTextureCoordV, int explicitTextureIndex)
+void BMD::RenderMesh(int meshIndex, int renderFlags, float alpha, int blendMeshIndex, float blendMeshAlpha,
+                     float blendMeshTextureCoordU, float blendMeshTextureCoordV, int explicitTextureIndex)
 {
-    if (meshIndex >= NumMeshs || meshIndex < 0) return;
+    if (meshIndex >= NumMeshs || meshIndex < 0)
+        return;
 
     Mesh_t* m = &Meshs[meshIndex];
-    if (m->NumTriangles == 0) return;
+    if (m->NumTriangles == 0)
+        return;
 
     float wave = static_cast<long>(WorldTime) % 10000 * 0.0001f;
 
@@ -987,8 +1026,8 @@ void BMD::RenderMesh(int meshIndex, int renderFlags, float alpha, int blendMeshI
         }
     }
 
-    if ((meshIndex == blendMeshIndex || meshIndex == streamMesh)
-        && (blendMeshTextureCoordU != 0.f || blendMeshTextureCoordV != 0.f))
+    if ((meshIndex == blendMeshIndex || meshIndex == streamMesh) &&
+        (blendMeshTextureCoordU != 0.f || blendMeshTextureCoordV != 0.f))
     {
         EnableWave = true;
     }
@@ -1040,20 +1079,16 @@ void BMD::RenderMesh(int meshIndex, int renderFlags, float alpha, int blendMeshI
             glColor4f(BodyLight[0], BodyLight[1], BodyLight[2], alpha);
         }
     }
-    else if ((renderFlags & RENDER_CHROME) == RENDER_CHROME ||
-        (renderFlags & RENDER_CHROME2) == RENDER_CHROME2 ||
-        (renderFlags & RENDER_CHROME3) == RENDER_CHROME3 ||
-        (renderFlags & RENDER_CHROME4) == RENDER_CHROME4 ||
-        (renderFlags & RENDER_CHROME5) == RENDER_CHROME5 ||
-        (renderFlags & RENDER_CHROME6) == RENDER_CHROME6 ||
-        (renderFlags & RENDER_CHROME7) == RENDER_CHROME7 ||
-        (renderFlags & RENDER_METAL) == RENDER_METAL ||
-        (renderFlags & RENDER_OIL) == RENDER_OIL
-        )
+    else if ((renderFlags & RENDER_CHROME) == RENDER_CHROME || (renderFlags & RENDER_CHROME2) == RENDER_CHROME2 ||
+             (renderFlags & RENDER_CHROME3) == RENDER_CHROME3 || (renderFlags & RENDER_CHROME4) == RENDER_CHROME4 ||
+             (renderFlags & RENDER_CHROME5) == RENDER_CHROME5 || (renderFlags & RENDER_CHROME6) == RENDER_CHROME6 ||
+             (renderFlags & RENDER_CHROME7) == RENDER_CHROME7 || (renderFlags & RENDER_METAL) == RENDER_METAL ||
+             (renderFlags & RENDER_OIL) == RENDER_OIL)
     {
         if (m->m_csTScript != nullptr)
         {
-            if (m->m_csTScript->getNoneBlendMesh()) return;
+            if (m->m_csTScript->getNoneBlendMesh())
+                return;
         }
 
         if (m->NoneBlendMesh)
@@ -1071,10 +1106,11 @@ void BMD::RenderMesh(int meshIndex, int renderFlags, float alpha, int blendMeshI
 
         float Wave2 = (int)WorldTime % 5000 * 0.00024f - 0.4f;
 
-        vec3_t L = { (float)(cos(WorldTime * 0.001f)), (float)(sin(WorldTime * 0.002f)), 1.f };
+        vec3_t L = {(float)(cos(WorldTime * 0.001f)), (float)(sin(WorldTime * 0.002f)), 1.f};
         for (int j = 0; j < m->NumNormals; j++)
         {
-            if (j > MAX_VERTICES) break;
+            if (j >= MAX_VERTICES)
+                break;
             const auto normal = NormalTransform[meshIndex][j];
 
             if ((renderFlags & RENDER_CHROME2) == RENDER_CHROME2)
@@ -1128,12 +1164,9 @@ void BMD::RenderMesh(int meshIndex, int renderFlags, float alpha, int blendMeshI
             }
         }
 
-        if ((renderFlags & RENDER_CHROME3) == RENDER_CHROME3
-            || (renderFlags & RENDER_CHROME4) == RENDER_CHROME4
-            || (renderFlags & RENDER_CHROME5) == RENDER_CHROME5
-            || (renderFlags & RENDER_CHROME7) == RENDER_CHROME7
-            || (renderFlags & RENDER_BRIGHT) == RENDER_BRIGHT
-            )
+        if ((renderFlags & RENDER_CHROME3) == RENDER_CHROME3 || (renderFlags & RENDER_CHROME4) == RENDER_CHROME4 ||
+            (renderFlags & RENDER_CHROME5) == RENDER_CHROME5 || (renderFlags & RENDER_CHROME7) == RENDER_CHROME7 ||
+            (renderFlags & RENDER_BRIGHT) == RENDER_BRIGHT)
         {
             if (alpha < 0.99f)
             {
@@ -1208,10 +1241,8 @@ void BMD::RenderMesh(int meshIndex, int renderFlags, float alpha, int blendMeshI
             DisableDepthTest();
         }
 
-        glColor3f(BodyLight[0] * blendMeshAlpha, 
-            BodyLight[1] * blendMeshAlpha,
-            BodyLight[2] * blendMeshAlpha);
-        //glColor3f(BlendMeshLight,BlendMeshLight,BlendMeshLight);
+        glColor3f(BodyLight[0] * blendMeshAlpha, BodyLight[1] * blendMeshAlpha, BodyLight[2] * blendMeshAlpha);
+        // glColor3f(BlendMeshLight,BlendMeshLight,BlendMeshLight);
         enableLight = false;
     }
     else if ((renderFlags & RENDER_TEXTURE) == RENDER_TEXTURE)
@@ -1270,13 +1301,12 @@ void BMD::RenderMesh(int meshIndex, int renderFlags, float alpha, int blendMeshI
         }
     }
 
-    bool enableColor = (enableLight && finalRenderFlags == RENDER_TEXTURE)
-        || finalRenderFlags == RENDER_CHROME
-        || finalRenderFlags == RENDER_CHROME4
-        || finalRenderFlags == RENDER_OIL;
+    bool enableColor = (enableLight && finalRenderFlags == RENDER_TEXTURE) || finalRenderFlags == RENDER_CHROME ||
+                       finalRenderFlags == RENDER_CHROME4 || finalRenderFlags == RENDER_OIL;
 
     glEnableClientState(GL_VERTEX_ARRAY);
-    if (enableColor) glEnableClientState(GL_COLOR_ARRAY);
+    if (enableColor)
+        glEnableClientState(GL_COLOR_ARRAY);
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
     auto vertices = RenderArrayVertices;
@@ -1303,40 +1333,42 @@ void BMD::RenderMesh(int meshIndex, int renderFlags, float alpha, int blendMeshI
             int normalIndex = triangle->NormalIndex[k];
             switch (finalRenderFlags)
             {
-                case RENDER_TEXTURE:
+            case RENDER_TEXTURE:
+            {
+                if (EnableWave)
                 {
-                    if (EnableWave)
-                    {
-                        texCoords[target_vertex_index][0] += blendMeshTextureCoordU;
-                        texCoords[target_vertex_index][1] += blendMeshTextureCoordV;
-                    }
+                    texCoords[target_vertex_index][0] += blendMeshTextureCoordU;
+                    texCoords[target_vertex_index][1] += blendMeshTextureCoordV;
+                }
 
-                    if (enableLight)
-                    {
-                        auto light = LightTransform[meshIndex][normalIndex];
-                        Vector4(light[0], light[1], light[2], alpha, colors[target_vertex_index]);
-                    }
+                if (enableLight)
+                {
+                    auto light = LightTransform[meshIndex][normalIndex];
+                    Vector4(light[0], light[1], light[2], alpha, colors[target_vertex_index]);
+                }
 
-                    break;
-                }
-                case RENDER_CHROME:
-                {
-                    texCoords[target_vertex_index][0] = g_chrome[normalIndex][0];
-                    texCoords[target_vertex_index][1] = g_chrome[normalIndex][1];
-                    break;
-                }
-                case RENDER_CHROME4:
-                {
-                    texCoords[target_vertex_index][0] = g_chrome[normalIndex][0] + blendMeshTextureCoordU;
-                    texCoords[target_vertex_index][1] = g_chrome[normalIndex][1] + blendMeshTextureCoordV;
-                    break;
-                }
-                case RENDER_OIL:
-                {
-                    texCoords[target_vertex_index][0] = g_chrome[normalIndex][0] * texCoords[target_vertex_index][0] + blendMeshTextureCoordU;
-                    texCoords[target_vertex_index][1] = g_chrome[normalIndex][1] * texCoords[target_vertex_index][1] + blendMeshTextureCoordV;
-                    break;
-                }
+                break;
+            }
+            case RENDER_CHROME:
+            {
+                texCoords[target_vertex_index][0] = g_chrome[normalIndex][0];
+                texCoords[target_vertex_index][1] = g_chrome[normalIndex][1];
+                break;
+            }
+            case RENDER_CHROME4:
+            {
+                texCoords[target_vertex_index][0] = g_chrome[normalIndex][0] + blendMeshTextureCoordU;
+                texCoords[target_vertex_index][1] = g_chrome[normalIndex][1] + blendMeshTextureCoordV;
+                break;
+            }
+            case RENDER_OIL:
+            {
+                texCoords[target_vertex_index][0] =
+                    g_chrome[normalIndex][0] * texCoords[target_vertex_index][0] + blendMeshTextureCoordU;
+                texCoords[target_vertex_index][1] =
+                    g_chrome[normalIndex][1] * texCoords[target_vertex_index][1] + blendMeshTextureCoordV;
+                break;
+            }
             }
 
             if ((renderFlags & RENDER_SHADOWMAP) == RENDER_SHADOWMAP)
@@ -1362,22 +1394,28 @@ void BMD::RenderMesh(int meshIndex, int renderFlags, float alpha, int blendMeshI
     }
 
     glVertexPointer(3, GL_FLOAT, 0, vertices);
-    if (enableColor) glColorPointer(4, GL_FLOAT, 0, colors);
+    if (enableColor)
+        glColorPointer(4, GL_FLOAT, 0, colors);
     glTexCoordPointer(2, GL_FLOAT, 0, texCoords);
 
     glDrawArrays(GL_TRIANGLES, 0, m->NumTriangles * 3);
 
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-    if (enableColor) glDisableClientState(GL_COLOR_ARRAY);
+    if (enableColor)
+        glDisableClientState(GL_COLOR_ARRAY);
     glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-void BMD::RenderMeshAlternative(int iRndExtFlag, int iParam, int i, int RenderFlag, float Alpha, int BlendMesh, float BlendMeshLight, float BlendMeshTexCoordU, float BlendMeshTexCoordV, int MeshTexture)
+void BMD::RenderMeshAlternative(int iRndExtFlag, int iParam, int i, int RenderFlag, float Alpha, int BlendMesh,
+                                float BlendMeshLight, float BlendMeshTexCoordU, float BlendMeshTexCoordV,
+                                int MeshTexture)
 {
-    if (i >= NumMeshs || i < 0) return;
+    if (i >= NumMeshs || i < 0)
+        return;
 
     Mesh_t* m = &Meshs[i];
-    if (m->NumTriangles == 0) return;
+    if (m->NumTriangles == 0)
+        return;
     float Wave = (int)WorldTime % 10000 * 0.0001f;
 
     int Texture = IndexTexture[m->Texture];
@@ -1403,8 +1441,8 @@ void BMD::RenderMeshAlternative(int iRndExtFlag, int iParam, int i, int RenderFl
     bool EnableLight = LightEnable;
     if (i == StreamMesh)
     {
-        //vec3_t Light;
-        //Vector(1.f,1.f,1.f,Light);
+        // vec3_t Light;
+        // Vector(1.f,1.f,1.f,Light);
         glColor3fv(BodyLight);
         EnableLight = false;
     }
@@ -1443,19 +1481,15 @@ void BMD::RenderMeshAlternative(int iRndExtFlag, int iParam, int i, int RenderFl
             glColor4f(BodyLight[0], BodyLight[1], BodyLight[2], Alpha);
         }
     }
-    else if ((RenderFlag & RENDER_CHROME) == RENDER_CHROME ||
-        (RenderFlag & RENDER_CHROME2) == RENDER_CHROME2 ||
-        (RenderFlag & RENDER_CHROME3) == RENDER_CHROME3 ||
-        (RenderFlag & RENDER_CHROME4) == RENDER_CHROME4 ||
-        (RenderFlag & RENDER_CHROME5) == RENDER_CHROME5 ||
-        (RenderFlag & RENDER_CHROME7) == RENDER_CHROME7 ||
-        (RenderFlag & RENDER_METAL) == RENDER_METAL ||
-        (RenderFlag & RENDER_OIL) == RENDER_OIL
-        )
+    else if ((RenderFlag & RENDER_CHROME) == RENDER_CHROME || (RenderFlag & RENDER_CHROME2) == RENDER_CHROME2 ||
+             (RenderFlag & RENDER_CHROME3) == RENDER_CHROME3 || (RenderFlag & RENDER_CHROME4) == RENDER_CHROME4 ||
+             (RenderFlag & RENDER_CHROME5) == RENDER_CHROME5 || (RenderFlag & RENDER_CHROME7) == RENDER_CHROME7 ||
+             (RenderFlag & RENDER_METAL) == RENDER_METAL || (RenderFlag & RENDER_OIL) == RENDER_OIL)
     {
         if (m->m_csTScript != nullptr)
         {
-            if (m->m_csTScript->getNoneBlendMesh()) return;
+            if (m->m_csTScript->getNoneBlendMesh())
+                return;
         }
         if (m->NoneBlendMesh)
             return;
@@ -1466,10 +1500,11 @@ void BMD::RenderMeshAlternative(int iRndExtFlag, int iParam, int i, int RenderFl
         }
         float Wave2 = (int)WorldTime % 5000 * 0.00024f - 0.4f;
 
-        vec3_t L = { (float)(cos(WorldTime * 0.001f)), (float)(sin(WorldTime * 0.002f)), 1.f };
+        vec3_t L = {(float)(cos(WorldTime * 0.001f)), (float)(sin(WorldTime * 0.002f)), 1.f};
         for (int j = 0; j < m->NumNormals; j++)
         {
-            if (j > MAX_VERTICES) break;
+            if (j >= MAX_VERTICES)
+                break;
             float* Normal = NormalTransform[i][j];
 
             if ((RenderFlag & RENDER_CHROME2) == RENDER_CHROME2)
@@ -1520,15 +1555,14 @@ void BMD::RenderMeshAlternative(int iRndExtFlag, int iParam, int i, int RenderFl
             }
         }
 
-        if ((RenderFlag & RENDER_CHROME3) == RENDER_CHROME3
-            || (RenderFlag & RENDER_CHROME4) == RENDER_CHROME4
-            || (RenderFlag & RENDER_CHROME5) == RENDER_CHROME5
-            || (RenderFlag & RENDER_CHROME7) == RENDER_CHROME7
-            )
+        if ((RenderFlag & RENDER_CHROME3) == RENDER_CHROME3 || (RenderFlag & RENDER_CHROME4) == RENDER_CHROME4 ||
+            (RenderFlag & RENDER_CHROME5) == RENDER_CHROME5 || (RenderFlag & RENDER_CHROME7) == RENDER_CHROME7)
         {
             if (Alpha < 0.99f)
             {
-                BodyLight[0] *= Alpha; BodyLight[1] *= Alpha; BodyLight[2] *= Alpha;
+                BodyLight[0] *= Alpha;
+                BodyLight[1] *= Alpha;
+                BodyLight[2] *= Alpha;
             }
             EnableAlphaBlend();
         }
@@ -1536,7 +1570,9 @@ void BMD::RenderMeshAlternative(int iRndExtFlag, int iParam, int i, int RenderFl
         {
             if (Alpha < 0.99f)
             {
-                BodyLight[0] *= Alpha; BodyLight[1] *= Alpha; BodyLight[2] *= Alpha;
+                BodyLight[0] *= Alpha;
+                BodyLight[1] *= Alpha;
+                BodyLight[2] *= Alpha;
             }
             EnableAlphaBlend();
         }
@@ -1592,7 +1628,7 @@ void BMD::RenderMeshAlternative(int iRndExtFlag, int iParam, int i, int RenderFl
         }
 
         glColor3f(BodyLight[0] * BlendMeshLight, BodyLight[1] * BlendMeshLight, BodyLight[2] * BlendMeshLight);
-        //glColor3f(BlendMeshLight,BlendMeshLight,BlendMeshLight);
+        // glColor3f(BlendMeshLight,BlendMeshLight,BlendMeshLight);
         EnableLight = false;
     }
     else if ((RenderFlag & RENDER_TEXTURE) == RENDER_TEXTURE)
@@ -1709,10 +1745,12 @@ void BMD::RenderMeshAlternative(int iRndExtFlag, int iParam, int i, int RenderFl
 
 void BMD::RenderMeshEffect(int i, int iType, int iSubType, vec3_t Angle, VOID* obj)
 {
-    if (i >= NumMeshs || i < 0) return;
+    if (i >= NumMeshs || i < 0)
+        return;
 
     Mesh_t* m = &Meshs[i];
-    if (m->NumTriangles <= 0) return;
+    if (m->NumTriangles <= 0)
+        return;
 
     vec3_t angle, Light;
     int iEffectCount = 0;
@@ -1818,10 +1856,12 @@ void BMD::RenderMeshEffect(int i, int iType, int iSubType, vec3_t Angle, VOID* o
             case MODEL_GOLEM_STONE:
                 if (rand_fps_check(45) && iEffectCount < 20)
                 {
-                    if (iSubType == 0) {	//. 불골렘
+                    if (iSubType == 0)
+                    { //. 불골렘
                         CreateEffect(MODEL_GOLEM_STONE, VertexTransform[i][vi], angle, Light);
                     }
-                    else if (iSubType == 1) {	//. 독골렘
+                    else if (iSubType == 1)
+                    { //. 독골렘
                         CreateEffect(MODEL_BIG_STONE_PART1, VertexTransform[i][vi], angle, Light, 2);
                         CreateEffect(MODEL_BIG_STONE_PART2, VertexTransform[i][vi], angle, Light, 2);
                     }
@@ -1845,6 +1885,7 @@ void BMD::RenderMeshEffect(int i, int iType, int iSubType, vec3_t Angle, VOID* o
                     Vector(1.f, 0.8f, 0.2f, Light);
                     if ((j % 22) == 0)
                     {
+                        // cppcheck-suppress dangerousTypeCast
                         auto* o = (OBJECT*)obj;
 
                         angle[0] = -(float)(rand() % 90);
@@ -1866,9 +1907,11 @@ void BMD::RenderMeshEffect(int i, int iType, int iSubType, vec3_t Angle, VOID* o
     }
 }
 
-void BMD::RenderBody(int Flag, float Alpha, int BlendMesh, float BlendMeshLight, float BlendMeshTexCoordU, float BlendMeshTexCoordV, int HiddenMesh, int Texture)
+void BMD::RenderBody(int Flag, float Alpha, int BlendMesh, float BlendMeshLight, float BlendMeshTexCoordU,
+                     float BlendMeshTexCoordV, int HiddenMesh, int Texture)
 {
-    if (NumMeshs == 0) return;
+    if (NumMeshs == 0)
+        return;
 
     int iBlendMesh = BlendMesh;
     BeginRender(Alpha);
@@ -1903,7 +1946,8 @@ void BMD::RenderBody(int Flag, float Alpha, int BlendMesh, float BlendMeshLight,
                     else
                         glColor4f(0.f, 0.f, 0.f, Alpha);
 
-                    RenderMesh(i, RENDER_COLOR | RENDER_SHADOWMAP, Alpha, iBlendMesh, BlendMeshLight, BlendMeshTexCoordU, BlendMeshTexCoordV);
+                    RenderMesh(i, RENDER_COLOR | RENDER_SHADOWMAP, Alpha, iBlendMesh, BlendMeshLight,
+                               BlendMeshTexCoordU, BlendMeshTexCoordV);
                     glColor3f(1.f, 1.f, 1.f);
                 }
                 else if (shadowType == SHADOW_RENDER_TEXTURE)
@@ -1914,7 +1958,8 @@ void BMD::RenderBody(int Flag, float Alpha, int BlendMesh, float BlendMeshLight,
                     else
                         glColor4f(0.f, 0.f, 0.f, Alpha);
 
-                    RenderMesh(i, RENDER_TEXTURE | RENDER_SHADOWMAP, Alpha, iBlendMesh, BlendMeshLight, BlendMeshTexCoordU, BlendMeshTexCoordV);
+                    RenderMesh(i, RENDER_TEXTURE | RENDER_SHADOWMAP, Alpha, iBlendMesh, BlendMeshLight,
+                               BlendMeshTexCoordU, BlendMeshTexCoordV);
                     glColor3f(1.f, 1.f, 1.f);
                 }
             }
@@ -1930,9 +1975,11 @@ void BMD::RenderBody(int Flag, float Alpha, int BlendMesh, float BlendMeshLight,
     EndRender();
 }
 
-void BMD::RenderBodyAlternative(int iRndExtFlag, int iParam, int Flag, float Alpha, int BlendMesh, float BlendMeshLight, float BlendMeshTexCoordU, float BlendMeshTexCoordV, int HiddenMesh, int Texture)
+void BMD::RenderBodyAlternative(int iRndExtFlag, int iParam, int Flag, float Alpha, int BlendMesh, float BlendMeshLight,
+                                float BlendMeshTexCoordU, float BlendMeshTexCoordV, int HiddenMesh, int Texture)
 {
-    if (NumMeshs == 0) return;
+    if (NumMeshs == 0)
+        return;
 
     BeginRender(Alpha);
     if (!LightEnable)
@@ -1946,18 +1993,22 @@ void BMD::RenderBodyAlternative(int iRndExtFlag, int iParam, int Flag, float Alp
     {
         if (i != HiddenMesh)
         {
-            RenderMeshAlternative(iRndExtFlag, iParam, i, Flag, Alpha, BlendMesh, BlendMeshLight, BlendMeshTexCoordU, BlendMeshTexCoordV, Texture);
+            RenderMeshAlternative(iRndExtFlag, iParam, i, Flag, Alpha, BlendMesh, BlendMeshLight, BlendMeshTexCoordU,
+                                  BlendMeshTexCoordV, Texture);
         }
     }
     EndRender();
 }
 
-void BMD::RenderMeshTranslate(int i, int RenderFlag, float Alpha, int BlendMesh, float BlendMeshLight, float BlendMeshTexCoordU, float BlendMeshTexCoordV, int MeshTexture)
+void BMD::RenderMeshTranslate(int i, int RenderFlag, float Alpha, int BlendMesh, float BlendMeshLight,
+                              float BlendMeshTexCoordU, float BlendMeshTexCoordV, int MeshTexture)
 {
-    if (i >= NumMeshs || i < 0) return;
+    if (i >= NumMeshs || i < 0)
+        return;
 
     Mesh_t* m = &Meshs[i];
-    if (m->NumTriangles == 0) return;
+    if (m->NumTriangles == 0)
+        return;
     float Wave = (int)WorldTime % 10000 * 0.0001f;
 
     int Texture = IndexTexture[m->Texture];
@@ -1965,7 +2016,8 @@ void BMD::RenderMeshTranslate(int i, int RenderFlag, float Alpha, int BlendMesh,
         return;
     if (Texture == BITMAP_SKIN)
     {
-        if (HideSkin) return;
+        if (HideSkin)
+            return;
         Texture = BITMAP_SKIN + Skin;
     }
     else if (Texture == BITMAP_WATER)
@@ -1992,8 +2044,8 @@ void BMD::RenderMeshTranslate(int i, int RenderFlag, float Alpha, int BlendMesh,
     bool EnableLight = LightEnable;
     if (i == StreamMesh)
     {
-        //vec3_t Light;
-        //Vector(1.f,1.f,1.f,Light);
+        // vec3_t Light;
+        // Vector(1.f,1.f,1.f,Light);
         glColor3fv(BodyLight);
         EnableLight = false;
     }
@@ -2018,15 +2070,13 @@ void BMD::RenderMeshTranslate(int i, int RenderFlag, float Alpha, int BlendMesh,
         DisableTexture();
         glColor3fv(BodyLight);
     }
-    else if ((RenderFlag & RENDER_CHROME) == RENDER_CHROME
-        || (RenderFlag & RENDER_METAL) == RENDER_METAL
-        || (RenderFlag & RENDER_CHROME2) == RENDER_CHROME2
-        || (RenderFlag & RENDER_CHROME6) == RENDER_CHROME6
-        )
+    else if ((RenderFlag & RENDER_CHROME) == RENDER_CHROME || (RenderFlag & RENDER_METAL) == RENDER_METAL ||
+             (RenderFlag & RENDER_CHROME2) == RENDER_CHROME2 || (RenderFlag & RENDER_CHROME6) == RENDER_CHROME6)
     {
         if (m->m_csTScript != nullptr)
         {
-            if (m->m_csTScript->getNoneBlendMesh()) return;
+            if (m->m_csTScript->getNoneBlendMesh())
+                return;
         }
         if (m->NoneBlendMesh)
             return;
@@ -2037,7 +2087,8 @@ void BMD::RenderMeshTranslate(int i, int RenderFlag, float Alpha, int BlendMesh,
         for (int j = 0; j < m->NumNormals; j++)
         {
             //			Normal_t *np = &m->Normals[j];
-            if (j > MAX_VERTICES) break;
+            if (j >= MAX_VERTICES)
+                break;
             float* Normal = NormalTransform[i][j];
 
             if ((RenderFlag & RENDER_CHROME2) == RENDER_CHROME2)
@@ -2091,7 +2142,7 @@ void BMD::RenderMeshTranslate(int i, int RenderFlag, float Alpha, int BlendMesh,
         else
             EnableAlphaBlend();
         glColor3f(BodyLight[0] * BlendMeshLight, BodyLight[1] * BlendMeshLight, BodyLight[2] * BlendMeshLight);
-        //glColor3f(BlendMeshLight,BlendMeshLight,BlendMeshLight);
+        // glColor3f(BlendMeshLight,BlendMeshLight,BlendMeshLight);
         EnableLight = false;
     }
     else if ((RenderFlag & RENDER_TEXTURE) == RENDER_TEXTURE)
@@ -2134,7 +2185,7 @@ void BMD::RenderMeshTranslate(int i, int RenderFlag, float Alpha, int BlendMesh,
     glBegin(GL_TRIANGLES);
     for (int j = 0; j < m->NumTriangles; j++)
     {
-        vec3_t  pos;
+        vec3_t pos;
         Triangle_t* tp = &m->Triangles[j];
         for (int k = 0; k < tp->Polygon; k++)
         {
@@ -2183,9 +2234,11 @@ void BMD::RenderMeshTranslate(int i, int RenderFlag, float Alpha, int BlendMesh,
     glEnd();
 }
 
-void BMD::RenderBodyTranslate(int Flag, float Alpha, int BlendMesh, float BlendMeshLight, float BlendMeshTexCoordU, float BlendMeshTexCoordV, int HiddenMesh, int Texture)
+void BMD::RenderBodyTranslate(int Flag, float Alpha, int BlendMesh, float BlendMeshLight, float BlendMeshTexCoordU,
+                              float BlendMeshTexCoordV, int HiddenMesh, int Texture)
 {
-    if (NumMeshs == 0) return;
+    if (NumMeshs == 0)
+        return;
 
     BeginRender(Alpha);
     if (!LightEnable)
@@ -2199,7 +2252,8 @@ void BMD::RenderBodyTranslate(int Flag, float Alpha, int BlendMesh, float BlendM
     {
         if (i != HiddenMesh)
         {
-            RenderMeshTranslate(i, Flag, Alpha, BlendMesh, BlendMeshLight, BlendMeshTexCoordU, BlendMeshTexCoordV, Texture);
+            RenderMeshTranslate(i, Flag, Alpha, BlendMesh, BlendMeshLight, BlendMeshTexCoordU, BlendMeshTexCoordV,
+                                Texture);
         }
     }
     EndRender();
@@ -2214,8 +2268,8 @@ __forceinline void CalcShadowPosition(vec3_t* position, const vec3_t origin, con
     // The result is the relative coordinate of the vertex to the origin.
     VectorSubtract(result, origin, result)
 
-    // scale the shadow in the x direction
-    result[0] += result[2] * (result[0] + sx) / (result[2] - sy);
+        // scale the shadow in the x direction
+        result[0] += result[2] * (result[0] + sx) / (result[2] - sy);
 
     // Add the origin again, to get the absolute coordinate of the vertex again
     VectorAdd(result, origin, result);
@@ -2227,7 +2281,8 @@ __forceinline void CalcShadowPosition(vec3_t* position, const vec3_t origin, con
     VectorCopy(result, *position);
 }
 
-__forceinline void GetClothShadowPosition(vec3_t* target, CPhysicsCloth* pCloth, const int index, const vec3_t origin, const float sx, const float sy)
+__forceinline void GetClothShadowPosition(vec3_t* target, CPhysicsCloth* pCloth, const int index, const vec3_t origin,
+                                          const float sx, const float sy)
 {
     pCloth->GetPosition(index, target);
     CalcShadowPosition(target, origin, sx, sy);
@@ -2237,13 +2292,13 @@ void BMD::AddClothesShadowTriangles(void* pClothes, const int clothesCount, cons
 {
     auto vertices = RenderArrayVertices;
     int target_vertex_index = -1;
-    
+
     for (int i = 0; i < clothesCount; i++)
     {
         auto* const pCloth = &static_cast<CPhysicsCloth*>(pClothes)[i];
         auto const columns = pCloth->GetVerticalCount();
         auto const rows = pCloth->GetHorizontalCount();
-        
+
         for (int col = 0; col < columns - 1; ++col)
         {
             for (int row = 0; row < rows - 1; ++row)
@@ -2292,7 +2347,8 @@ void BMD::AddClothesShadowTriangles(void* pClothes, const int clothesCount, cons
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
-void BMD::AddMeshShadowTriangles(const int blendMesh, const int hiddenMesh, const int startMesh, const int endMesh, const float sx, const float sy) const
+void BMD::AddMeshShadowTriangles(const int blendMesh, const int hiddenMesh, const int startMesh, const int endMesh,
+                                 const float sx, const float sy) const
 {
     auto vertices = RenderArrayVertices;
     int target_vertex_index = -1;
@@ -2319,7 +2375,7 @@ void BMD::AddMeshShadowTriangles(const int blendMesh, const int hiddenMesh, cons
                 target_vertex_index++;
 
                 VectorCopy(VertexTransform[i][source_vertex_index], vertices[target_vertex_index]);
-                
+
                 CalcShadowPosition(&vertices[target_vertex_index], BodyOrigin, sx, sy);
             }
         }
@@ -2336,7 +2392,8 @@ void BMD::AddMeshShadowTriangles(const int blendMesh, const int hiddenMesh, cons
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
-void BMD::RenderBodyShadow(const int blendMesh, const int hiddenMesh, const int startMeshNumber, const int endMeshNumber, void* pClothes, const int clothesCount)
+void BMD::RenderBodyShadow(const int blendMesh, const int hiddenMesh, const int startMeshNumber,
+                           const int endMeshNumber, void* pClothes, const int clothesCount)
 {
     if (!g_pOption->GetRenderAllEffects())
     {
@@ -2410,40 +2467,64 @@ void BMD::RenderObjectBoundingBox()
 
             glBegin(GL_QUADS);
             glColor3f(0.2f, 0.2f, 0.2f);
-            glTexCoord2f(1.0F, 1.0F); glVertex3fv(BoundingVertices[7]);
-            glTexCoord2f(1.0F, 0.0F); glVertex3fv(BoundingVertices[6]);
-            glTexCoord2f(0.0F, 0.0F); glVertex3fv(BoundingVertices[4]);
-            glTexCoord2f(0.0F, 1.0F); glVertex3fv(BoundingVertices[5]);
+            glTexCoord2f(1.0F, 1.0F);
+            glVertex3fv(BoundingVertices[7]);
+            glTexCoord2f(1.0F, 0.0F);
+            glVertex3fv(BoundingVertices[6]);
+            glTexCoord2f(0.0F, 0.0F);
+            glVertex3fv(BoundingVertices[4]);
+            glTexCoord2f(0.0F, 1.0F);
+            glVertex3fv(BoundingVertices[5]);
 
             glColor3f(0.2f, 0.2f, 0.2f);
-            glTexCoord2f(0.0F, 1.0F); glVertex3fv(BoundingVertices[0]);
-            glTexCoord2f(1.0F, 1.0F); glVertex3fv(BoundingVertices[2]);
-            glTexCoord2f(1.0F, 0.0F); glVertex3fv(BoundingVertices[3]);
-            glTexCoord2f(0.0F, 0.0F); glVertex3fv(BoundingVertices[1]);
+            glTexCoord2f(0.0F, 1.0F);
+            glVertex3fv(BoundingVertices[0]);
+            glTexCoord2f(1.0F, 1.0F);
+            glVertex3fv(BoundingVertices[2]);
+            glTexCoord2f(1.0F, 0.0F);
+            glVertex3fv(BoundingVertices[3]);
+            glTexCoord2f(0.0F, 0.0F);
+            glVertex3fv(BoundingVertices[1]);
 
             glColor3f(0.6f, 0.6f, 0.6f);
-            glTexCoord2f(1.0F, 1.0F); glVertex3fv(BoundingVertices[7]);
-            glTexCoord2f(1.0F, 0.0F); glVertex3fv(BoundingVertices[3]);
-            glTexCoord2f(0.0F, 0.0F); glVertex3fv(BoundingVertices[2]);
-            glTexCoord2f(0.0F, 1.0F); glVertex3fv(BoundingVertices[6]);
+            glTexCoord2f(1.0F, 1.0F);
+            glVertex3fv(BoundingVertices[7]);
+            glTexCoord2f(1.0F, 0.0F);
+            glVertex3fv(BoundingVertices[3]);
+            glTexCoord2f(0.0F, 0.0F);
+            glVertex3fv(BoundingVertices[2]);
+            glTexCoord2f(0.0F, 1.0F);
+            glVertex3fv(BoundingVertices[6]);
 
             glColor3f(0.6f, 0.6f, 0.6f);
-            glTexCoord2f(0.0F, 1.0F); glVertex3fv(BoundingVertices[0]);
-            glTexCoord2f(1.0F, 1.0F); glVertex3fv(BoundingVertices[1]);
-            glTexCoord2f(1.0F, 0.0F); glVertex3fv(BoundingVertices[5]);
-            glTexCoord2f(0.0F, 0.0F); glVertex3fv(BoundingVertices[4]);
+            glTexCoord2f(0.0F, 1.0F);
+            glVertex3fv(BoundingVertices[0]);
+            glTexCoord2f(1.0F, 1.0F);
+            glVertex3fv(BoundingVertices[1]);
+            glTexCoord2f(1.0F, 0.0F);
+            glVertex3fv(BoundingVertices[5]);
+            glTexCoord2f(0.0F, 0.0F);
+            glVertex3fv(BoundingVertices[4]);
 
             glColor3f(0.4f, 0.4f, 0.4f);
-            glTexCoord2f(1.0F, 1.0F); glVertex3fv(BoundingVertices[7]);
-            glTexCoord2f(1.0F, 0.0F); glVertex3fv(BoundingVertices[5]);
-            glTexCoord2f(0.0F, 0.0F); glVertex3fv(BoundingVertices[1]);
-            glTexCoord2f(0.0F, 1.0F); glVertex3fv(BoundingVertices[3]);
+            glTexCoord2f(1.0F, 1.0F);
+            glVertex3fv(BoundingVertices[7]);
+            glTexCoord2f(1.0F, 0.0F);
+            glVertex3fv(BoundingVertices[5]);
+            glTexCoord2f(0.0F, 0.0F);
+            glVertex3fv(BoundingVertices[1]);
+            glTexCoord2f(0.0F, 1.0F);
+            glVertex3fv(BoundingVertices[3]);
 
             glColor3f(0.4f, 0.4f, 0.4f);
-            glTexCoord2f(0.0F, 1.0F); glVertex3fv(BoundingVertices[0]);
-            glTexCoord2f(1.0F, 1.0F); glVertex3fv(BoundingVertices[4]);
-            glTexCoord2f(1.0F, 0.0F); glVertex3fv(BoundingVertices[6]);
-            glTexCoord2f(0.0F, 0.0F); glVertex3fv(BoundingVertices[2]);
+            glTexCoord2f(0.0F, 1.0F);
+            glVertex3fv(BoundingVertices[0]);
+            glTexCoord2f(1.0F, 1.0F);
+            glVertex3fv(BoundingVertices[4]);
+            glTexCoord2f(1.0F, 0.0F);
+            glVertex3fv(BoundingVertices[6]);
+            glTexCoord2f(0.0F, 0.0F);
+            glVertex3fv(BoundingVertices[2]);
             glEnd();
         }
     }
@@ -2451,7 +2532,7 @@ void BMD::RenderObjectBoundingBox()
     DisableAlphaBlend();
 }
 
-void BMD::RenderBone(float(*BoneMatrix)[3][4])
+void BMD::RenderBone(float (*BoneMatrix)[3][4])
 {
     DisableTexture();
     glDepthFunc(GL_ALWAYS);
@@ -2478,13 +2559,13 @@ void BMD::RenderBone(float(*BoneMatrix)[3][4])
                 VectorTransform(Position[0], BoneMatrix[Parent], BoneVertices[0]);
                 VectorTransform(Position[1], BoneMatrix[Parent], BoneVertices[1]);
                 VectorTransform(Position[2], BoneMatrix[i], BoneVertices[2]);
-                for (auto & BoneVertice : BoneVertices)
+                for (auto& BoneVertice : BoneVertices)
                 {
                     VectorMA(BodyOrigin, BodyScale, BoneVertice, BoneVertice);
                 }
                 glBegin(GL_LINES);
                 glVertex3fv(BoneVertices[0]);
-                glVertex3fv(BoneVertices[1]); 
+                glVertex3fv(BoneVertices[1]);
                 glVertex3fv(BoneVertices[1]);
                 glVertex3fv(BoneVertices[2]);
                 glVertex3fv(BoneVertices[2]);
@@ -2511,22 +2592,28 @@ void BMD::Release()
                     BoneMatrix_t* bm = &b->BoneMatrixes[j];
                     if (bm)
                     {
-                        if (bm->Position) {
-							delete[] bm->Position;
-							bm->Position = nullptr;
+                        if (bm->Position)
+                        {
+                            delete[] bm->Position;
+                            bm->Position = nullptr;
                         }
-                        if (bm->Rotation) {
-							delete[] bm->Rotation;
-							bm->Rotation = nullptr;
+                        if (bm->Rotation)
+                        {
+                            delete[] bm->Rotation;
+                            bm->Rotation = nullptr;
                         }
-						if (bm->Quaternion) {
-							delete[] bm->Quaternion;
-							bm->Quaternion = nullptr;
-
+                        if (bm->Quaternion)
+                        {
+                            delete[] bm->Quaternion;
+                            bm->Quaternion = nullptr;
                         }
                     }
                 }
-                if (b->BoneMatrixes) { delete[] b->BoneMatrixes; b->BoneMatrixes = nullptr; }
+                if (b->BoneMatrixes)
+                {
+                    delete[] b->BoneMatrixes;
+                    b->BoneMatrixes = nullptr;
+                }
             }
         }
     }
@@ -2550,10 +2637,26 @@ void BMD::Release()
         {
             Mesh_t* m = &Meshs[i];
 
-            if (m->Vertices) { delete[] m->Vertices; m->Vertices = nullptr; }
-            if (m->Normals) { delete[] m->Normals; m->Normals = nullptr; }
-            if (m->TexCoords) { delete[] m->TexCoords; m->TexCoords = nullptr; }
-            if (m->Triangles) { delete[] m->Triangles; m->Triangles = nullptr; }
+            if (m->Vertices)
+            {
+                delete[] m->Vertices;
+                m->Vertices = nullptr;
+            }
+            if (m->Normals)
+            {
+                delete[] m->Normals;
+                m->Normals = nullptr;
+            }
+            if (m->TexCoords)
+            {
+                delete[] m->TexCoords;
+                m->TexCoords = nullptr;
+            }
+            if (m->Triangles)
+            {
+                delete[] m->Triangles;
+                m->Triangles = nullptr;
+            }
 
             if (m->m_csTScript)
             {
@@ -2572,11 +2675,31 @@ void BMD::Release()
         }
     }
 
-    if (Meshs) { delete[] Meshs; Meshs = nullptr; }
-    if (Bones) { delete[] Bones; Bones = nullptr; }
-    if (Actions) { delete[] Actions; Actions = nullptr; }
-    if (Textures) { delete[] Textures; Textures = nullptr; }
-    if (IndexTexture) { delete[] IndexTexture; IndexTexture = nullptr; }
+    if (Meshs)
+    {
+        delete[] Meshs;
+        Meshs = nullptr;
+    }
+    if (Bones)
+    {
+        delete[] Bones;
+        Bones = nullptr;
+    }
+    if (Actions)
+    {
+        delete[] Actions;
+        Actions = nullptr;
+    }
+    if (Textures)
+    {
+        delete[] Textures;
+        Textures = nullptr;
+    }
+    if (IndexTexture)
+    {
+        delete[] IndexTexture;
+        IndexTexture = nullptr;
+    }
 
     NumBones = 0;
     NumActions = 0;
@@ -2613,7 +2736,8 @@ void BMD::FindNearTriangle()
 
 void BMD::FindTriangleForEdge(int iMesh, int iTri1, int iIndex11)
 {
-    if (iMesh >= NumMeshs || iMesh < 0) return;
+    if (iMesh >= NumMeshs || iMesh < 0)
+        return;
 
     Mesh_t* m = &Meshs[iMesh];
     Triangle_t* pTriangle = m->Triangles;
@@ -2648,37 +2772,46 @@ void BMD::FindTriangleForEdge(int iMesh, int iTri1, int iIndex11)
         }
     }
 }
-//#endif //USE_SHADOWVOLUME
+// #endif //USE_SHADOWVOLUME
 
-
-class BMDReader {
+class BMDReader
+{
 public:
     BMDReader(unsigned char* data, size_t size) : data(data), size(size), ptr(0) {}
 
-    void Skip(size_t bytes) { ptr += bytes; }
+    void Skip(size_t bytes)
+    {
+        ptr += bytes;
+    }
 
-    template <typename T>
-    T Read() {
+    template <typename T> T Read()
+    {
         T value;
         memcpy(&value, data + ptr, sizeof(T));
         ptr += sizeof(T);
         return value;
     }
 
-    void ReadBytes(void* dst, size_t count) {
+    void ReadBytes(void* dst, size_t count)
+    {
         memcpy(dst, data + ptr, count);
         ptr += count;
     }
 
-    size_t Tell() const { return ptr; }
-    unsigned char* GetPointer() const { return data + ptr; }
+    size_t Tell() const
+    {
+        return ptr;
+    }
+    unsigned char* GetPointer() const
+    {
+        return data + ptr;
+    }
 
 private:
     unsigned char* data;
     size_t size;
     size_t ptr;
 };
-
 
 bool BMD::Open2(const wchar_t* DirName, const wchar_t* ModelFileName, bool bReAlloc)
 {
@@ -2704,7 +2837,7 @@ bool BMD::Open2(const wchar_t* DirName, const wchar_t* ModelFileName, bool bReAl
     int dataSize = ftell(fp);
     fseek(fp, 0, SEEK_SET);
 
-    std::unique_ptr<unsigned char[]> fileData(new(std::nothrow) unsigned char[dataSize]);
+    std::unique_ptr<unsigned char[]> fileData(new (std::nothrow) unsigned char[dataSize]);
     if (!fileData)
     {
         fclose(fp);
@@ -2725,20 +2858,20 @@ bool BMD::Open2(const wchar_t* DirName, const wchar_t* ModelFileName, bool bReAl
 
     int ptr = 3;
     Version = fileData[ptr++];
-    
 
     std::unique_ptr<unsigned char[]> decryptedData;
     if (Version == 0xC)
     {
         //// wprintf(L"[Open2] Version: %d\n", Version);
-        long encSize = *(long*)(fileData.get() + ptr); ptr += sizeof(long);
+        long encSize = *(long*)(fileData.get() + ptr);
+        ptr += sizeof(long);
         unsigned char* encData = fileData.get() + ptr;
         //// wprintf(L"[Open2] Encrypted Size: %ld\n", encSize);
 
         long decSize = MapFileDecrypt(nullptr, encData, encSize);
         //// wprintf(L"[Open2] Decrypted Size: %ld\n", decSize);
 
-        decryptedData.reset(new(std::nothrow) unsigned char[decSize]);
+        decryptedData.reset(new (std::nothrow) unsigned char[decSize]);
         if (!decryptedData)
         {
             m_bCompletedAlloc = false;
@@ -2751,7 +2884,7 @@ bool BMD::Open2(const wchar_t* DirName, const wchar_t* ModelFileName, bool bReAl
     else if (Version == 0xE)
     {
         wprintf(L"[Open2] Version: %d\n, not yet supported. File: %.64s\n", Version, ModelPath);
-        // FIXME FOR NEW MAPS 
+        // FIXME FOR NEW MAPS
         // DECRYPT KEY: webzen#@!01webzen#@!01webzen#@!0
     }
     else if (Version == 0xA)
@@ -2761,15 +2894,15 @@ bool BMD::Open2(const wchar_t* DirName, const wchar_t* ModelFileName, bool bReAl
     }
     else
     {
-        wprintf(L"[Open2] Unknown BMD version: %ld\n in %.64s\n", Version, ModelPath);
+        wprintf(L"[Open2] Unknown BMD version: %d\n in %.64s\n", static_cast<int>(Version), ModelPath);
         m_bCompletedAlloc = false;
         return false;
     }
 
-
     unsigned char* data = decryptedData ? decryptedData.get() : fileData.get();
 
-    memcpy(Name, data + ptr, 32); ptr += 32;
+    memcpy(Name, data + ptr, 32);
+    ptr += 32;
 
     const char* ext = strrchr(Name, '.');
     if (!ext || (_stricmp(ext, ".smd") != 0))
@@ -2777,22 +2910,29 @@ bool BMD::Open2(const wchar_t* DirName, const wchar_t* ModelFileName, bool bReAl
         // wprintf(L"[Open2] WARNING: Invalid file extension: %.64hs in %.64s\n", Name, ModelPath);
     }
 
-    NumMeshs = *(short*)(data + ptr); ptr += sizeof(short);
-    NumBones = *(short*)(data + ptr); ptr += sizeof(short);
-    NumActions = *(short*)(data + ptr); ptr += sizeof(short);
+    // cppcheck-suppress dangerousTypeCast
+    NumMeshs = *(short*)(data + ptr);
+    ptr += sizeof(short);
+    // cppcheck-suppress dangerousTypeCast
+    NumBones = *(short*)(data + ptr);
+    ptr += sizeof(short);
+    // cppcheck-suppress dangerousTypeCast
+    NumActions = *(short*)(data + ptr);
+    ptr += sizeof(short);
 
     assert(NumBones <= MAX_BONES && "Bones 200");
-    //// wprintf(L"[Open2] Model: %.32hs | Meshes: %d | Bones: %d | Actions: %d\n", Name, NumMeshs, NumBones, NumActions);
+    //// wprintf(L"[Open2] Model: %.32hs | Meshes: %d | Bones: %d | Actions: %d\n", Name, NumMeshs, NumBones,
+    /// NumActions);
 
     const int meshCount = NumMeshs > 0 ? NumMeshs : 1;
     const int boneCount = NumBones > 0 ? NumBones : 1;
     const int actionCount = NumActions > 0 ? NumActions : 1;
 
-    Meshs = new(std::nothrow) Mesh_t[meshCount]();
-    Bones = new(std::nothrow) Bone_t[boneCount]();
-    Actions = new(std::nothrow) Action_t[actionCount]();
-    Textures = new(std::nothrow) Texture_t[meshCount]();
-    IndexTexture = new(std::nothrow) GLuint[meshCount]();
+    Meshs = new (std::nothrow) Mesh_t[meshCount]();
+    Bones = new (std::nothrow) Bone_t[boneCount]();
+    Actions = new (std::nothrow) Action_t[actionCount]();
+    Textures = new (std::nothrow) Texture_t[meshCount]();
+    IndexTexture = new (std::nothrow) GLuint[meshCount]();
 
     if (!Meshs || !Bones || !Actions || !Textures || !IndexTexture)
     {
@@ -2804,23 +2944,37 @@ bool BMD::Open2(const wchar_t* DirName, const wchar_t* ModelFileName, bool bReAl
     for (int i = 0; i < NumMeshs; ++i)
     {
         Mesh_t& m = Meshs[i];
-        m.NumVertices = *(short*)(data + ptr); ptr += sizeof(short);
-        m.NumNormals = *(short*)(data + ptr); ptr += sizeof(short);
-        m.NumTexCoords = *(short*)(data + ptr); ptr += sizeof(short);
-        m.NumTriangles = *(short*)(data + ptr); ptr += sizeof(short);
-        m.Texture = *(short*)(data + ptr); ptr += sizeof(short);
+        // cppcheck-suppress dangerousTypeCast
+        m.NumVertices = *(short*)(data + ptr);
+        ptr += sizeof(short);
+        // cppcheck-suppress dangerousTypeCast
+        m.NumNormals = *(short*)(data + ptr);
+        ptr += sizeof(short);
+        // cppcheck-suppress dangerousTypeCast
+        m.NumTexCoords = *(short*)(data + ptr);
+        ptr += sizeof(short);
+        // cppcheck-suppress dangerousTypeCast
+        m.NumTriangles = *(short*)(data + ptr);
+        ptr += sizeof(short);
+        // cppcheck-suppress dangerousTypeCast
+        m.Texture = *(short*)(data + ptr);
+        ptr += sizeof(short);
         m.NoneBlendMesh = false;
 
-        //// wprintf(L"[Open2] Mesh[%d] V:%d N:%d T:%d Tri:%d Tex:%d\n", i, m.NumVertices, m.NumNormals, m.NumTexCoords, m.NumTriangles, m.Texture);
+        //// wprintf(L"[Open2] Mesh[%d] V:%d N:%d T:%d Tri:%d Tex:%d\n", i, m.NumVertices, m.NumNormals, m.NumTexCoords,
+        /// m.NumTriangles, m.Texture);
 
         m.Vertices = new Vertex_t[m.NumVertices];
         m.Normals = new Normal_t[m.NumNormals];
         m.TexCoords = new TexCoord_t[m.NumTexCoords];
         m.Triangles = new Triangle_t[m.NumTriangles];
 
-        memcpy(m.Vertices, data + ptr, m.NumVertices * sizeof(Vertex_t));  ptr += m.NumVertices * sizeof(Vertex_t);
-        memcpy(m.Normals, data + ptr, m.NumNormals * sizeof(Normal_t));   ptr += m.NumNormals * sizeof(Normal_t);
-        memcpy(m.TexCoords, data + ptr, m.NumTexCoords * sizeof(TexCoord_t)); ptr += m.NumTexCoords * sizeof(TexCoord_t);
+        memcpy(m.Vertices, data + ptr, m.NumVertices * sizeof(Vertex_t));
+        ptr += m.NumVertices * sizeof(Vertex_t);
+        memcpy(m.Normals, data + ptr, m.NumNormals * sizeof(Normal_t));
+        ptr += m.NumNormals * sizeof(Normal_t);
+        memcpy(m.TexCoords, data + ptr, m.NumTexCoords * sizeof(TexCoord_t));
+        ptr += m.NumTexCoords * sizeof(TexCoord_t);
 
         for (int j = 0; j < m.NumTriangles; ++j)
         {
@@ -2828,7 +2982,8 @@ bool BMD::Open2(const wchar_t* DirName, const wchar_t* ModelFileName, bool bReAl
             ptr += sizeof(Triangle_t2);
         }
 
-        memcpy(Textures[i].FileName, data + ptr, 32); ptr += 32;
+        memcpy(Textures[i].FileName, data + ptr, 32);
+        ptr += 32;
 
         TextureScriptParsing script;
         if (script.parsingTScriptA(Textures[i].FileName))
@@ -2846,8 +3001,12 @@ bool BMD::Open2(const wchar_t* DirName, const wchar_t* ModelFileName, bool bReAl
     {
         Action_t& a = Actions[i];
         a.Loop = false;
-        a.NumAnimationKeys = *(short*)(data + ptr); ptr += sizeof(short);
-        a.LockPositions = *(bool*)(data + ptr);  ptr += sizeof(bool);
+        // cppcheck-suppress dangerousTypeCast
+        a.NumAnimationKeys = *(short*)(data + ptr);
+        ptr += sizeof(short);
+        // cppcheck-suppress dangerousTypeCast
+        a.LockPositions = *(bool*)(data + ptr);
+        ptr += sizeof(bool);
 
         //// wprintf(L"[Open2] Action[%d] Keys: %d Lock: %d\n", i, a.NumAnimationKeys, a.LockPositions);
 
@@ -2866,12 +3025,16 @@ bool BMD::Open2(const wchar_t* DirName, const wchar_t* ModelFileName, bool bReAl
     for (int i = 0; i < NumBones; ++i)
     {
         Bone_t& b = Bones[i];
-        b.Dummy = *(char*)(data + ptr); ptr += sizeof(char);
+        b.Dummy = *(char*)(data + ptr);
+        ptr += sizeof(char);
 
         if (!b.Dummy)
         {
-            memcpy(b.Name, data + ptr, 32); ptr += 32;
-            b.Parent = *(short*)(data + ptr); ptr += sizeof(short);
+            memcpy(b.Name, data + ptr, 32);
+            ptr += 32;
+            // cppcheck-suppress dangerousTypeCast
+            b.Parent = *(short*)(data + ptr);
+            ptr += sizeof(short);
 
             //// wprintf(L"[Open2] Bone[%d] Name: %.32hs Parent: %d\n", i, b.Name, b.Parent);
 
@@ -2888,12 +3051,13 @@ bool BMD::Open2(const wchar_t* DirName, const wchar_t* ModelFileName, bool bReAl
                     bm.Rotation = new vec3_t[numKeys];
                     bm.Quaternion = new vec4_t[numKeys];
 
-                    memcpy(bm.Position, data + ptr, sizeof(vec3_t) * numKeys); ptr += sizeof(vec3_t) * numKeys;
-                    memcpy(bm.Rotation, data + ptr, sizeof(vec3_t) * numKeys); ptr += sizeof(vec3_t) * numKeys;
+                    memcpy(bm.Position, data + ptr, sizeof(vec3_t) * numKeys);
+                    ptr += sizeof(vec3_t) * numKeys;
+                    memcpy(bm.Rotation, data + ptr, sizeof(vec3_t) * numKeys);
+                    ptr += sizeof(vec3_t) * numKeys;
 
                     for (int k = 0; k < numKeys; ++k)
                         AngleQuaternion(bm.Rotation[k], bm.Quaternion[k]);
-
                 }
                 else
                 {
@@ -2910,14 +3074,14 @@ bool BMD::Open2(const wchar_t* DirName, const wchar_t* ModelFileName, bool bReAl
     return true;
 }
 
-
 bool BMD::Save2(wchar_t* DirName, wchar_t* ModelFileName)
 {
     wchar_t ModelName[64];
     wcscpy(ModelName, DirName);
     wcscat(ModelName, ModelFileName);
     FILE* fp = _wfopen(ModelName, L"wb");
-    if (fp == nullptr) return false;
+    if (fp == nullptr)
+        return false;
     putc('B', fp);
     putc('M', fp);
     putc('D', fp);
@@ -2926,52 +3090,74 @@ bool BMD::Save2(wchar_t* DirName, wchar_t* ModelFileName)
 
     auto* pbyBuffer = new BYTE[1024 * 1024];
     BYTE* pbyCur = pbyBuffer;
-    memcpy(pbyCur, Name, 32); pbyCur += 32;
-    memcpy(pbyCur, &NumMeshs, 2); pbyCur += 2;
-    memcpy(pbyCur, &NumBones, 2); pbyCur += 2;
-    memcpy(pbyCur, &NumActions, 2); pbyCur += 2;
+    memcpy(pbyCur, Name, 32);
+    pbyCur += 32;
+    memcpy(pbyCur, &NumMeshs, 2);
+    pbyCur += 2;
+    memcpy(pbyCur, &NumBones, 2);
+    pbyCur += 2;
+    memcpy(pbyCur, &NumActions, 2);
+    pbyCur += 2;
 
     int i;
     for (i = 0; i < NumMeshs; i++)
     {
         Mesh_t* m = &Meshs[i];
-        memcpy(pbyCur, &m->NumVertices, 2); pbyCur += 2;
-        memcpy(pbyCur, &m->NumNormals, 2); pbyCur += 2;
-        memcpy(pbyCur, &m->NumTexCoords, 2); pbyCur += 2;
-        memcpy(pbyCur, &m->NumTriangles, 2); pbyCur += 2;
-        memcpy(pbyCur, &m->Texture, 2); pbyCur += 2;
-        memcpy(pbyCur, m->Vertices, m->NumVertices * sizeof(Vertex_t)); pbyCur += m->NumVertices * sizeof(Vertex_t);
-        memcpy(pbyCur, m->Normals, m->NumNormals * sizeof(Normal_t)); pbyCur += m->NumNormals * sizeof(Normal_t);
-        memcpy(pbyCur, m->TexCoords, m->NumTexCoords * sizeof(TexCoord_t)); pbyCur += m->NumTexCoords * sizeof(TexCoord_t);
+        memcpy(pbyCur, &m->NumVertices, 2);
+        pbyCur += 2;
+        memcpy(pbyCur, &m->NumNormals, 2);
+        pbyCur += 2;
+        memcpy(pbyCur, &m->NumTexCoords, 2);
+        pbyCur += 2;
+        memcpy(pbyCur, &m->NumTriangles, 2);
+        pbyCur += 2;
+        memcpy(pbyCur, &m->Texture, 2);
+        pbyCur += 2;
+        memcpy(pbyCur, m->Vertices, m->NumVertices * sizeof(Vertex_t));
+        pbyCur += m->NumVertices * sizeof(Vertex_t);
+        memcpy(pbyCur, m->Normals, m->NumNormals * sizeof(Normal_t));
+        pbyCur += m->NumNormals * sizeof(Normal_t);
+        memcpy(pbyCur, m->TexCoords, m->NumTexCoords * sizeof(TexCoord_t));
+        pbyCur += m->NumTexCoords * sizeof(TexCoord_t);
         for (int j = 0; j < m->NumTriangles; j++)
         {
-            memcpy(pbyCur, &m->Triangles[j], sizeof(Triangle_t2)); pbyCur += sizeof(Triangle_t2);
+            memcpy(pbyCur, &m->Triangles[j], sizeof(Triangle_t2));
+            pbyCur += sizeof(Triangle_t2);
         }
-        memcpy(pbyCur, Textures[i].FileName, 32); pbyCur += 32;
+        memcpy(pbyCur, Textures[i].FileName, 32);
+        pbyCur += 32;
     }
     for (i = 0; i < NumActions; i++)
     {
         Action_t* a = &Actions[i];
-        memcpy(pbyCur, &a->NumAnimationKeys, 2); pbyCur += 2;
-        memcpy(pbyCur, &a->LockPositions, 1); pbyCur += 1;
+        memcpy(pbyCur, &a->NumAnimationKeys, 2);
+        pbyCur += 2;
+        memcpy(pbyCur, &a->LockPositions, 1);
+        pbyCur += 1;
         if (a->LockPositions)
         {
-            memcpy(pbyCur, a->Positions, a->NumAnimationKeys * sizeof(vec3_t)); pbyCur += a->NumAnimationKeys * sizeof(vec3_t);
+            memcpy(pbyCur, a->Positions, a->NumAnimationKeys * sizeof(vec3_t));
+            pbyCur += a->NumAnimationKeys * sizeof(vec3_t);
         }
     }
     for (i = 0; i < NumBones; i++)
     {
         Bone_t* b = &Bones[i];
-        memcpy(pbyCur, &b->Dummy, 1); pbyCur += 1;
+        memcpy(pbyCur, &b->Dummy, 1);
+        pbyCur += 1;
         if (!b->Dummy)
         {
-            memcpy(pbyCur, b->Name, 32); pbyCur += 32;
-            memcpy(pbyCur, &b->Parent, 2); pbyCur += 2;
+            memcpy(pbyCur, b->Name, 32);
+            pbyCur += 32;
+            memcpy(pbyCur, &b->Parent, 2);
+            pbyCur += 2;
             for (int j = 0; j < NumActions; j++)
             {
                 BoneMatrix_t* bm = &b->BoneMatrixes[j];
-                memcpy(pbyCur, bm->Position, Actions[j].NumAnimationKeys * sizeof(vec3_t)); pbyCur += Actions[j].NumAnimationKeys * sizeof(vec3_t);
-                memcpy(pbyCur, bm->Rotation, Actions[j].NumAnimationKeys * sizeof(vec3_t)); pbyCur += Actions[j].NumAnimationKeys * sizeof(vec3_t);
+                memcpy(pbyCur, bm->Position, Actions[j].NumAnimationKeys * sizeof(vec3_t));
+                pbyCur += Actions[j].NumAnimationKeys * sizeof(vec3_t);
+                memcpy(pbyCur, bm->Rotation, Actions[j].NumAnimationKeys * sizeof(vec3_t));
+                pbyCur += Actions[j].NumAnimationKeys * sizeof(vec3_t);
             }
         }
     }
@@ -3027,8 +3213,10 @@ void BMD::CreateBoundingBox()
             Vertex_t* v = &m->Vertices[j];
             for (int k = 0; k < 3; k++)
             {
-                if (v->Position[k] < BoundingMin[v->Node][k]) BoundingMin[v->Node][k] = v->Position[k];
-                if (v->Position[k] > BoundingMax[v->Node][k]) BoundingMax[v->Node][k] = v->Position[k];
+                if (v->Position[k] < BoundingMin[v->Node][k])
+                    BoundingMin[v->Node][k] = v->Position[k];
+                if (v->Position[k] > BoundingMax[v->Node][k])
+                    BoundingMax[v->Node][k] = v->Position[k];
             }
             BoundingVertices[v->Node]++;
         }
@@ -3056,7 +3244,7 @@ BMD::~BMD()
     Release();
 }
 
-void BMD::InterpolationTrans(float(*Mat1)[4], float(*TransMat2)[4], float _Scale)
+void BMD::InterpolationTrans(float (*Mat1)[4], float (*TransMat2)[4], float _Scale)
 {
     TransMat2[0][3] = TransMat2[0][3] - (TransMat2[0][3] - Mat1[0][3]) * (1 - _Scale);
     TransMat2[1][3] = TransMat2[1][3] - (TransMat2[1][3] - Mat1[1][3]) * (1 - _Scale);

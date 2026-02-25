@@ -1,4 +1,4 @@
-#define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
+#define WIN32_LEAN_AND_MEAN // Exclude rarely-used stuff from Windows headers
 
 #include "stdafx.h"
 
@@ -73,7 +73,7 @@ CConsoleWindow::CConsoleWindow()
     m_bActiveCloseButton = false;
     m_started = false;
 
-    m_LimitTimer.SetTimer(12000);	//. 12ÃÊ
+    m_LimitTimer.SetTimer(12000); //. 12ï¿½ï¿½
 }
 CConsoleWindow::~CConsoleWindow() {}
 
@@ -87,16 +87,13 @@ bool CConsoleWindow::Open(const std::wstring& title)
     if (FALSE == ::AllocConsole())
         return false;
 
-    freopen("CONIN$", "r", stdin);
-    freopen("CONOUT$", "w", stdout);
-    freopen("CONOUT$", "w", stderr);
+    (void)freopen("CONIN$", "r", stdin);
+    (void)freopen("CONOUT$", "w", stdout);
+    (void)freopen("CONOUT$", "w", stderr);
 
-    ::SetConsoleMode(GetStdHandle(STD_INPUT_HANDLE),
-        ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT | ENABLE_PROCESSED_INPUT);
-    ::SetConsoleMode(GetStdHandle(STD_OUTPUT_HANDLE),
-        ENABLE_PROCESSED_OUTPUT | ENABLE_WRAP_AT_EOL_OUTPUT);
-    ::SetConsoleMode(GetStdHandle(STD_ERROR_HANDLE),
-        ENABLE_PROCESSED_OUTPUT | ENABLE_WRAP_AT_EOL_OUTPUT);
+    ::SetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT | ENABLE_PROCESSED_INPUT);
+    ::SetConsoleMode(GetStdHandle(STD_OUTPUT_HANDLE), ENABLE_PROCESSED_OUTPUT | ENABLE_WRAP_AT_EOL_OUTPUT);
+    ::SetConsoleMode(GetStdHandle(STD_ERROR_HANDLE), ENABLE_PROCESSED_OUTPUT | ENABLE_WRAP_AT_EOL_OUTPUT);
 
     while (!GetWndHandle())
     {
@@ -130,16 +127,24 @@ bool CConsoleWindow::SetTitle(const std::wstring& title)
 }
 const std::wstring& CConsoleWindow::GetTitle()
 {
-    wchar_t szConsoleTile[1024] = { 0, };
+    wchar_t szConsoleTile[1024] = {
+        0,
+    };
     ::GetConsoleTitle(szConsoleTile, 1024);
 
     static std::wstring s_title = szConsoleTile;
     return s_title;
 }
 
-HWND CConsoleWindow::GetWndHandle() { return m_hWnd; }
+HWND CConsoleWindow::GetWndHandle()
+{
+    return m_hWnd;
+}
 
-bool CConsoleWindow::IsVisible() { return GetWndHandle() && ::IsWindowVisible(GetWndHandle()) ? true : false; }
+bool CConsoleWindow::IsVisible()
+{
+    return GetWndHandle() && ::IsWindowVisible(GetWndHandle()) ? true : false;
+}
 void CConsoleWindow::Show(bool bShow)
 {
     if (m_hWnd)
@@ -165,7 +170,7 @@ void CConsoleWindow::ClearScreen()
     // http://support.microsoft.com/default.aspx?scid=KB;EN-US;q99261&
     /***************************************/
 
-    COORD coordScreen = { 0, 0 };
+    COORD coordScreen = {0, 0};
 
     DWORD cCharsWritten;
     CONSOLE_SCREEN_BUFFER_INFO csbi; /* to get buffer info */
@@ -183,7 +188,8 @@ void CConsoleWindow::ClearScreen()
     ::GetConsoleScreenBufferInfo(::GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
 
     /* now set the buffer's attributes accordingly */
-    ::FillConsoleOutputAttribute(::GetStdHandle(STD_OUTPUT_HANDLE), csbi.wAttributes, dwConSize, coordScreen, &cCharsWritten);
+    ::FillConsoleOutputAttribute(::GetStdHandle(STD_OUTPUT_HANDLE), csbi.wAttributes, dwConSize, coordScreen,
+                                 &cCharsWritten);
 
     /* put the cursor at (0, 0) */
     ::SetConsoleCursorPosition(::GetStdHandle(STD_OUTPUT_HANDLE), coordScreen);
@@ -223,14 +229,18 @@ void CConsoleWindow::ActivateCloseButton(bool bActive)
     {
         // disable the [x] button if we found our console
         HMENU hMenu = ::GetSystemMenu(m_hWnd, FALSE);
-        if (hMenu != NULL) {
+        if (hMenu != NULL)
+        {
             ::RemoveMenu(hMenu, SC_CLOSE, MF_BYCOMMAND);
             ::DrawMenuBar(m_hWnd);
             m_bActiveCloseButton = false;
         }
     }
 }
-bool CConsoleWindow::IsActiveCloseButton() const { return m_bActiveCloseButton; }
+bool CConsoleWindow::IsActiveCloseButton() const
+{
+    return m_bActiveCloseButton;
+}
 
 bool CConsoleWindow::SaveScreenBuffer(const std::wstring& filename)
 {
@@ -245,8 +255,8 @@ bool CConsoleWindow::SaveScreenBuffer(const std::wstring& filename)
 
     auto* pbyCharBuffer = new CHAR_INFO[BufferSize.X * BufferSize.Y];
 
-    COORD StartPointToWrite = { 0, 0 };
-    SMALL_RECT RectToRead = { 0, 0, BufferSize.X, BufferSize.Y };
+    COORD StartPointToWrite = {0, 0};
+    SMALL_RECT RectToRead = {0, 0, BufferSize.X, BufferSize.Y};
     if (ReadConsoleOutput(GetStdHandle(STD_OUTPUT_HANDLE), pbyCharBuffer, BufferSize, StartPointToWrite, &RectToRead))
     {
     }
@@ -290,10 +300,11 @@ BOOL CALLBACK CConsoleWindow::EnumChildProc(HWND hWnd, LPARAM lParam)
 {
     auto* pConsoleWnd = (CConsoleWindow*)(lParam);
     DWORD dwProcessId = 0;
-    if (GetWindowThreadProcessId(hWnd, &dwProcessId) == GetCurrentThreadId()
-        && dwProcessId == GetCurrentProcessId())
+    if (GetWindowThreadProcessId(hWnd, &dwProcessId) == GetCurrentThreadId() && dwProcessId == GetCurrentProcessId())
     {
-        wchar_t szClassName[512] = { 0, };
+        wchar_t szClassName[512] = {
+            0,
+        };
         GetClassName(hWnd, szClassName, 512);
         if (0 == wcscmp(szClassName, L"ConsoleWindowClass"))
         {

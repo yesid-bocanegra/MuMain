@@ -26,8 +26,8 @@
 #include "CharacterManager.h"
 #include "SkillManager.h"
 
-CLASS_ATTRIBUTE     ClassAttribute[MAX_CLASS];
-MONSTER_SCRIPT      MonsterScript[MAX_MONSTER];
+CLASS_ATTRIBUTE ClassAttribute[MAX_CLASS];
+MONSTER_SCRIPT MonsterScript[MAX_MONSTER];
 GATE_ATTRIBUTE* GateAttribute = NULL;
 SKILL_ATTRIBUTE* SkillAttribute = NULL;
 ITEM_ATTRIBUTE* ItemAttribute = NULL;
@@ -35,9 +35,9 @@ CHARACTER_MACHINE* CharacterMachine = NULL;
 CHARACTER_ATTRIBUTE* CharacterAttribute = NULL;
 
 #ifdef STATE_LIMIT_TIME
-static  int     g_iWorldStateTime = 0;
-static  DWORD   g_dwWorldStateBack = 0;
-#endif// STATE_LIMIT_TIME
+static int g_iWorldStateTime = 0;
+static DWORD g_dwWorldStateBack = 0;
+#endif // STATE_LIMIT_TIME
 
 CGlobalTextW GlobalText;
 
@@ -59,8 +59,8 @@ void SaveTextFile(wchar_t* FileName)
 
 wchar_t AbuseFilter[MAX_FILTERS][20];
 wchar_t AbuseNameFilter[MAX_NAMEFILTERS][20];
-int  AbuseFilterNumber = 0;
-int  AbuseNameFilterNumber = 0;
+int AbuseFilterNumber = 0;
+int AbuseNameFilterNumber = 0;
 
 void OpenFilterFile(const wchar_t* FileName)
 {
@@ -228,15 +228,20 @@ void OpenNpcScript(wchar_t* FileName)
     while (true)
     {
         Token = (*GetToken)();
-        if (Token == END) break;
-        if (Token == NAME && strcmp("end", TokenString) == NULL) break;
+        if (Token == END)
+            break;
+        if (Token == NAME && strcmp("end", TokenString) == NULL)
+            break;
         if (Token == NUMBER)
         {
             int Type, x, y, Dir;
             Type = (int)TokenNumber;
-            Token = (*GetToken)(); x = (int)TokenNumber;
-            Token = (*GetToken)(); y = (int)TokenNumber;
-            Token = (*GetToken)(); Dir = (int)TokenNumber;
+            Token = (*GetToken)();
+            x = (int)TokenNumber;
+            Token = (*GetToken)();
+            y = (int)TokenNumber;
+            Token = (*GetToken)();
+            Dir = (int)TokenNumber;
         }
     }
     fclose(SMDFile);
@@ -328,13 +333,14 @@ void PrintItem(wchar_t* FileName)
 {
     FILE* fp = _wfopen(FileName, L"wt");
     fwprintf(fp, L"                이름  최소공격력 최대공격력 방어력 방어율 필요힘 필요민첩 필요에너지\n");
-    //fwprintf(fp,"                이름    카오스성공확률\n");
+    // fwprintf(fp,"                이름    카오스성공확률\n");
     bool Excellent = true;
     for (int i = 0; i < 16 * MAX_ITEM_INDEX; i++)
     {
         if ((i & 0x1FF) == 0)
         {
-            fwprintf(fp, L"------------------------------------------------------------------------------------------------------\n");
+            fwprintf(fp, L"--------------------------------------------------------------------------------------------"
+                         L"----------\n");
         }
         ITEM_ATTRIBUTE* p = &ItemAttribute[i];
         if (p->Name[0] != NULL)
@@ -430,11 +436,15 @@ void PrintItem(wchar_t* FileName)
                 ItemValue(&ip, 0);
 
                 if (j == 0)
-                    fwprintf(fp, L"%20s %8d %8d %8d %8d %8d %8d %8d %8d %8d\n", p->Name, DamageMin, DamageMax, Defense, SuccessfulBlocking, RequireStrength, RequireDexterity, RequireEnergy, p->WeaponSpeed, ItemValue(&ip));
-                //fwprintf(fp,"%20s %4d%%",p->Name, iRate);
+                    fwprintf(fp, L"%20s %8d %8d %8d %8d %8d %8d %8d %8d %8d\n", p->Name, DamageMin, DamageMax, Defense,
+                             SuccessfulBlocking, RequireStrength, RequireDexterity, RequireEnergy, p->WeaponSpeed,
+                             static_cast<int>(ItemValue(&ip)));
+                // fwprintf(fp,"%20s %4d%%",p->Name, iRate);
                 else
-                    fwprintf(fp, L"%17s +%d %8d %8d %8d %8d %8d %8d %8d %8d %8d\n", L"", Level, DamageMin, DamageMax, Defense, SuccessfulBlocking, RequireStrength, RequireDexterity, RequireEnergy, p->WeaponSpeed, ItemValue(&ip));
-                //fwprintf(fp,"%4d%%<+%d>",iRate,Level);
+                    fwprintf(fp, L"%17s +%d %8d %8d %8d %8d %8d %8d %8d %8d %8d\n", L"", Level, DamageMin, DamageMax,
+                             Defense, SuccessfulBlocking, RequireStrength, RequireDexterity, RequireEnergy,
+                             p->WeaponSpeed, static_cast<int>(ItemValue(&ip)));
+                // fwprintf(fp,"%4d%%<+%d>",iRate,Level);
             }
             fwprintf(fp, L"\n");
         }
@@ -447,9 +457,15 @@ ActionSkillType GetSkillByBook(int Type)
     auto SkillIndex = Type - ITEM_SCROLL_OF_METEORITE;
     switch (SkillIndex)
     {
-    case 17: SkillIndex = AT_SKILL_DECAY; break;
-    case 18: SkillIndex = AT_SKILL_ICE_STORM; break;
-    case 19: SkillIndex = AT_SKILL_NOVA;   break;
+    case 17:
+        SkillIndex = AT_SKILL_DECAY;
+        break;
+    case 18:
+        SkillIndex = AT_SKILL_ICE_STORM;
+        break;
+    case 19:
+        SkillIndex = AT_SKILL_NOVA;
+        break;
     }
 
     return static_cast<ActionSkillType>(SkillIndex);
@@ -457,7 +473,8 @@ ActionSkillType GetSkillByBook(int Type)
 
 bool IsCepterItem(int iType)
 {
-    if ((iType >= ITEM_BATTLE_SCEPTER && iType <= ITEM_SHINING_SCEPTER) || iType == ITEM_ABSOLUTE_SCEPTER || iType == ITEM_STRYKER_SCEPTER)
+    if ((iType >= ITEM_BATTLE_SCEPTER && iType <= ITEM_SHINING_SCEPTER) || iType == ITEM_ABSOLUTE_SCEPTER ||
+        iType == ITEM_STRYKER_SCEPTER)
     {
         return true;
     }
@@ -471,17 +488,13 @@ void ItemConvert(ITEM* ip, BYTE Attribute1, BYTE Attribute2, BYTE ancientDiscrim
 
 bool IsWing(ITEM* ip)
 {
-    return (ip->Type >= ITEM_WINGS_OF_SPIRITS && ip->Type <= ITEM_WINGS_OF_DARKNESS)
-        || (ip->Type >= ITEM_WING_OF_STORM && ip->Type <= ITEM_CAPE_OF_EMPEROR)
-        || (ip->Type >= ITEM_WINGS_OF_DESPAIR && ip->Type <= ITEM_WING_OF_DIMENSION)
-        || ip->Type == ITEM_DIVINE_SWORD_OF_ARCHANGEL
-        || ip->Type == ITEM_DIVINE_CB_OF_ARCHANGEL
-        || ip->Type == ITEM_DIVINE_STAFF_OF_ARCHANGEL
-        || ip->Type == ITEM_DIVINE_SCEPTER_OF_ARCHANGEL
-        || ip->Type == ITEM_CAPE_OF_LORD
-        || (ITEM_WING + 130 <= ip->Type && ip->Type <= ITEM_WING + 134)
-        || (ip->Type >= ITEM_CAPE_OF_FIGHTER && ip->Type <= ITEM_CAPE_OF_OVERRULE)
-        || (ip->Type == ITEM_WING + 135);
+    return (ip->Type >= ITEM_WINGS_OF_SPIRITS && ip->Type <= ITEM_WINGS_OF_DARKNESS) ||
+           (ip->Type >= ITEM_WING_OF_STORM && ip->Type <= ITEM_CAPE_OF_EMPEROR) ||
+           (ip->Type >= ITEM_WINGS_OF_DESPAIR && ip->Type <= ITEM_WING_OF_DIMENSION) ||
+           ip->Type == ITEM_DIVINE_SWORD_OF_ARCHANGEL || ip->Type == ITEM_DIVINE_CB_OF_ARCHANGEL ||
+           ip->Type == ITEM_DIVINE_STAFF_OF_ARCHANGEL || ip->Type == ITEM_DIVINE_SCEPTER_OF_ARCHANGEL ||
+           ip->Type == ITEM_CAPE_OF_LORD || (ITEM_WING + 130 <= ip->Type && ip->Type <= ITEM_WING + 134) ||
+           (ip->Type >= ITEM_CAPE_OF_FIGHTER && ip->Type <= ITEM_CAPE_OF_OVERRULE) || (ip->Type == ITEM_WING + 135);
 }
 
 int GetDropLevel(ITEM_ATTRIBUTE* p)
@@ -489,7 +502,7 @@ int GetDropLevel(ITEM_ATTRIBUTE* p)
     return p->Level + 30;
 }
 
-int GetExcellentAddValue(ITEM *ip)
+int GetExcellentAddValue(ITEM* ip)
 {
     if (ip->Type == ITEM_CHAOS_DRAGON_AXE)
     {
@@ -511,7 +524,7 @@ int GetExcellentAddValue(ITEM *ip)
 
 void CalcDamageMin(ITEM* ip, ITEM_ATTRIBUTE* p, int excelAddValue)
 {
-    //ITEM_ATTRIBUTE* p = &ItemAttribute[ip->Type];
+    // ITEM_ATTRIBUTE* p = &ItemAttribute[ip->Type];
     if (p->DamageMin <= 0)
     {
         return;
@@ -519,7 +532,6 @@ void CalcDamageMin(ITEM* ip, ITEM_ATTRIBUTE* p, int excelAddValue)
 
     if (IsWing(ip))
     {
-        
     }
     if (ip->ExcellentFlags > 0) // TODO: For wings, too?
     {
@@ -626,7 +638,7 @@ void CalcSuccessfulBlocking(ITEM* ip, ITEM_ATTRIBUTE* p)
         if (p->Level)
             ip->SuccessfulBlocking += p->SuccessfulBlocking * 25 / p->Level + 5;
     }
-    ip->SuccessfulBlocking += (std::min<int>(9, p->Level) * 3);	// ~ +9
+    ip->SuccessfulBlocking += (std::min<int>(9, p->Level) * 3); // ~ +9
     if (p->Level - 9 > 0)
     {
         ip->SuccessfulBlocking += p->Level - 6;
@@ -637,8 +649,8 @@ void CalcDefense(ITEM* ip, ITEM_ATTRIBUTE* p)
 {
     if (p->MagicDefense > 0)
     {
-        ip->MagicDefense += (std::min<int>(9, p->Level) * 3);	// ~ +9
-        if(p->Level - 9 > 0)
+        ip->MagicDefense += (std::min<int>(9, p->Level) * 3); // ~ +9
+        if (p->Level - 9 > 0)
         {
             ip->MagicDefense += p->Level - 6;
         }
@@ -682,24 +694,23 @@ void CalcDefense(ITEM* ip, ITEM_ATTRIBUTE* p)
 
     if ((ip->Type >= ITEM_WINGS_OF_SPIRITS && ip->Type <= ITEM_WINGS_OF_DARKNESS) || ip->Type == ITEM_WINGS_OF_DESPAIR)
     {
-        ip->Defense += (std::min<int>(9, ip->Level) * 2);	// ~ +9
+        ip->Defense += (std::min<int>(9, ip->Level) * 2); // ~ +9
     }
-    else if (ip->Type == ITEM_CAPE_OF_LORD
-        || ip->Type == ITEM_CAPE_OF_FIGHTER)
+    else if (ip->Type == ITEM_CAPE_OF_LORD || ip->Type == ITEM_CAPE_OF_FIGHTER)
     {
-        ip->Defense += (std::min<int>(9, ip->Level) * 2);	// ~ +9
+        ip->Defense += (std::min<int>(9, ip->Level) * 2); // ~ +9
     }
-    else if ((ip->Type >= ITEM_WING_OF_STORM && ip->Type <= ITEM_CAPE_OF_EMPEROR) || ip->Type == ITEM_WING_OF_DIMENSION
-        || (ip->Type == ITEM_CAPE_OF_OVERRULE))
+    else if ((ip->Type >= ITEM_WING_OF_STORM && ip->Type <= ITEM_CAPE_OF_EMPEROR) ||
+             ip->Type == ITEM_WING_OF_DIMENSION || (ip->Type == ITEM_CAPE_OF_OVERRULE))
     {
-        ip->Defense += (std::min<int>(9, ip->Level) * 4);	// ~ +9
+        ip->Defense += (std::min<int>(9, ip->Level) * 4); // ~ +9
     }
     else
     {
-        ip->Defense += (std::min<int>(9, ip->Level) * 3);	// ~ +9
+        ip->Defense += (std::min<int>(9, ip->Level) * 3); // ~ +9
     }
-    if ((ip->Type >= ITEM_WING_OF_STORM && ip->Type <= ITEM_CAPE_OF_EMPEROR) || ip->Type == ITEM_WING_OF_DIMENSION
-        || ip->Type == ITEM_CAPE_OF_OVERRULE)
+    if ((ip->Type >= ITEM_WING_OF_STORM && ip->Type <= ITEM_CAPE_OF_EMPEROR) || ip->Type == ITEM_WING_OF_DIMENSION ||
+        ip->Type == ITEM_CAPE_OF_OVERRULE)
     {
         if (ip->Level - 9 > 0)
         {
@@ -737,19 +748,16 @@ void CalcRequirements(ITEM* ip, ITEM_ATTRIBUTE* p)
         addValue = 5;
     }
 
-    if (p->RequireLevel
-        && ((ip->Type >= ITEM_SWORD && ip->Type < ITEM_WING)
-        || (ip->Type == ITEM_HORN_OF_FENRIR)
-        || (ip->Type >= ITEM_ORB_OF_TWISTING_SLASH && ip->Type <= ITEM_CAPE_OF_EMPEROR)
-        || (ip->Type >= ITEM_WING_OF_DIMENSION && ip->Type < ITEM_CAPE_OF_EMPEROR)
-        && (ip->Type != ITEM_CAPE_OF_FIGHTER)))
+    if (p->RequireLevel &&
+        ((ip->Type >= ITEM_SWORD && ip->Type < ITEM_WING) || (ip->Type == ITEM_HORN_OF_FENRIR) ||
+         (ip->Type >= ITEM_ORB_OF_TWISTING_SLASH && ip->Type <= ITEM_CAPE_OF_EMPEROR) ||
+         (ip->Type >= ITEM_WING_OF_DIMENSION && ip->Type < ITEM_CAPE_OF_EMPEROR) && (ip->Type != ITEM_CAPE_OF_FIGHTER)))
     {
         ip->RequireLevel = p->RequireLevel;
     }
-    else if (p->RequireLevel && ((ip->Type >= ITEM_WING && ip->Type <= ITEM_ORB_OF_TWISTING_SLASH)
-        || (ip->Type >= ITEM_WING_OF_CURSE && ip->Type <= ITEM_WINGS_OF_DESPAIR)
-        || (ip->Type == ITEM_CAPE_OF_FIGHTER)
-        || ip->Type >= ITEM_HELPER))
+    else if (p->RequireLevel && ((ip->Type >= ITEM_WING && ip->Type <= ITEM_ORB_OF_TWISTING_SLASH) ||
+                                 (ip->Type >= ITEM_WING_OF_CURSE && ip->Type <= ITEM_WINGS_OF_DESPAIR) ||
+                                 (ip->Type == ITEM_CAPE_OF_FIGHTER) || ip->Type >= ITEM_HELPER))
     {
         ip->RequireLevel = p->RequireLevel + ip->Level * addValue;
     }
@@ -758,15 +766,18 @@ void CalcRequirements(ITEM* ip, ITEM_ATTRIBUTE* p)
 
     if (p->RequireStrength)
         ip->RequireStrength = 20 + (p->RequireStrength) * (ItemLevel + ip->Level * 3) * 3 / 100;
-    else	ip->RequireStrength = 0;
+    else
+        ip->RequireStrength = 0;
 
     if (p->RequireDexterity)
         ip->RequireDexterity = 20 + (p->RequireDexterity) * (ItemLevel + ip->Level * 3) * 3 / 100;
-    else	ip->RequireDexterity = 0;
+    else
+        ip->RequireDexterity = 0;
 
     if (p->RequireVitality)
         ip->RequireVitality = 20 + (p->RequireVitality) * (ItemLevel + ip->Level * 3) * 3 / 100;
-    else	ip->RequireVitality = 0;
+    else
+        ip->RequireVitality = 0;
 
     if (p->RequireEnergy)
     {
@@ -777,14 +788,14 @@ void CalcRequirements(ITEM* ip, ITEM_ATTRIBUTE* p)
         else
 
             if ((p->RequireLevel > 0) && (ip->Type >= ITEM_ETC && ip->Type < ITEM_ETC + MAX_ITEM_INDEX))
-            {
-                ip->RequireEnergy = 20 + (p->RequireEnergy) * (p->RequireLevel) * 4 / 100;
-            }
-            else
+        {
+            ip->RequireEnergy = 20 + (p->RequireEnergy) * (p->RequireLevel) * 4 / 100;
+        }
+        else
 
-            {
-                ip->RequireEnergy = 20 + (p->RequireEnergy) * (ItemLevel + ip->Level * 3) * 4 / 100;
-            }
+        {
+            ip->RequireEnergy = 20 + (p->RequireEnergy) * (ItemLevel + ip->Level * 3) * 4 / 100;
+        }
     }
     else
     {
@@ -793,7 +804,8 @@ void CalcRequirements(ITEM* ip, ITEM_ATTRIBUTE* p)
 
     if (p->RequireCharisma)
         ip->RequireCharisma = 20 + (p->RequireCharisma) * (ItemLevel + ip->Level * 3) * 3 / 100;
-    else	ip->RequireCharisma = 0;
+    else
+        ip->RequireCharisma = 0;
 
     if (ip->Type == ITEM_ORB_OF_SUMMONING)
     {
@@ -801,14 +813,30 @@ void CalcRequirements(ITEM* ip, ITEM_ATTRIBUTE* p)
 
         switch (ip->Level)
         {
-        case 0:Energy = 30; break;
-        case 1:Energy = 60; break;
-        case 2:Energy = 90; break;
-        case 3:Energy = 130; break;
-        case 4:Energy = 170; break;
-        case 5:Energy = 210; break;
-        case 6:Energy = 300; break;
-        case 7:Energy = 500; break;
+        case 0:
+            Energy = 30;
+            break;
+        case 1:
+            Energy = 60;
+            break;
+        case 2:
+            Energy = 90;
+            break;
+        case 3:
+            Energy = 130;
+            break;
+        case 4:
+            Energy = 170;
+            break;
+        case 5:
+            Energy = 210;
+            break;
+        case 6:
+            Energy = 300;
+            break;
+        case 7:
+            Energy = 500;
+            break;
         }
         ip->RequireEnergy = Energy;
     }
@@ -833,20 +861,11 @@ void CalcRequirements(ITEM* ip, ITEM_ATTRIBUTE* p)
         (ip->Type >= ITEM_DRAGON_KNIGHT_ARMOR && ip->Type <= ITEM_SUNLIGHT_ARMOR) ||
         (ip->Type >= ITEM_DRAGON_KNIGHT_PANTS && ip->Type <= ITEM_SUNLIGHT_PANTS) ||
         (ip->Type >= ITEM_DRAGON_KNIGHT_GLOVES && ip->Type <= ITEM_SUNLIGHT_GLOVES) ||
-        (ip->Type >= ITEM_DRAGON_KNIGHT_BOOTS && ip->Type <= ITEM_SUNLIGHT_BOOTS) ||
-        ip->Type == ITEM_BONE_BLADE ||
-        ip->Type == ITEM_EXPLOSION_BLADE ||
-        ip->Type == ITEM_GRAND_VIPER_STAFF ||
-        ip->Type == ITEM_SYLPH_WIND_BOW ||
-        ip->Type == ITEM_SOLEIL_SCEPTER
-        || ITEM_STORM_BLITZ_STICK == ip->Type
-        || ITEM_AURA_HELM == ip->Type
-        || ITEM_AURA_ARMOR == ip->Type
-        || ITEM_AURA_PANTS == ip->Type
-        || ITEM_AURA_GLOVES == ip->Type
-        || ITEM_AURA_BOOTS == ip->Type
-        || Check_LuckyItem(ip->Type)
-        )
+        (ip->Type >= ITEM_DRAGON_KNIGHT_BOOTS && ip->Type <= ITEM_SUNLIGHT_BOOTS) || ip->Type == ITEM_BONE_BLADE ||
+        ip->Type == ITEM_EXPLOSION_BLADE || ip->Type == ITEM_GRAND_VIPER_STAFF || ip->Type == ITEM_SYLPH_WIND_BOW ||
+        ip->Type == ITEM_SOLEIL_SCEPTER || ITEM_STORM_BLITZ_STICK == ip->Type || ITEM_AURA_HELM == ip->Type ||
+        ITEM_AURA_ARMOR == ip->Type || ITEM_AURA_PANTS == ip->Type || ITEM_AURA_GLOVES == ip->Type ||
+        ITEM_AURA_BOOTS == ip->Type || Check_LuckyItem(ip->Type))
     {
         isExcellent = false;
     }
@@ -864,133 +883,156 @@ void CalcWingOptions(ITEM* ip)
         if (ip->ExcellentFlags & 0x01)
         {
             ip->SpecialValue[ip->SpecialNum] = 50 + ip->Level * 5;
-            ip->Special[ip->SpecialNum] = AT_IMPROVE_HP_MAX; ip->SpecialNum++;
+            ip->Special[ip->SpecialNum] = AT_IMPROVE_HP_MAX;
+            ip->SpecialNum++;
         }
         if ((ip->ExcellentFlags >> 1) & 0x01)
         {
             ip->SpecialValue[ip->SpecialNum] = 50 + ip->Level * 5;
-            ip->Special[ip->SpecialNum] = AT_IMPROVE_MP_MAX; ip->SpecialNum++;
+            ip->Special[ip->SpecialNum] = AT_IMPROVE_MP_MAX;
+            ip->SpecialNum++;
         }
         if ((ip->ExcellentFlags >> 2) & 0x01)
         {
             ip->SpecialValue[ip->SpecialNum] = 3;
-            ip->Special[ip->SpecialNum] = AT_ONE_PERCENT_DAMAGE; ip->SpecialNum++;
+            ip->Special[ip->SpecialNum] = AT_ONE_PERCENT_DAMAGE;
+            ip->SpecialNum++;
         }
         if ((ip->ExcellentFlags >> 3) & 0x01)
         {
             ip->SpecialValue[ip->SpecialNum] = 50;
-            ip->Special[ip->SpecialNum] = AT_IMPROVE_AG_MAX; ip->SpecialNum++;
+            ip->Special[ip->SpecialNum] = AT_IMPROVE_AG_MAX;
+            ip->SpecialNum++;
         }
         if ((ip->ExcellentFlags >> 4) & 0x01)
         {
             ip->SpecialValue[ip->SpecialNum] = 5;
-            ip->Special[ip->SpecialNum] = AT_IMPROVE_ATTACK_SPEED; ip->SpecialNum++;
+            ip->Special[ip->SpecialNum] = AT_IMPROVE_ATTACK_SPEED;
+            ip->SpecialNum++;
         }
     }
-    else if (ip->Type == ITEM_CAPE_OF_LORD
-        || ip->Type == ITEM_CAPE_OF_FIGHTER)
+    else if (ip->Type == ITEM_CAPE_OF_LORD || ip->Type == ITEM_CAPE_OF_FIGHTER)
     {
         if (ip->ExcellentFlags & 0x01)
         {
             ip->SpecialValue[ip->SpecialNum] = 50 + ip->Level * 5;
-            ip->Special[ip->SpecialNum] = AT_IMPROVE_HP_MAX; ip->SpecialNum++;
+            ip->Special[ip->SpecialNum] = AT_IMPROVE_HP_MAX;
+            ip->SpecialNum++;
         }
 
         if ((ip->ExcellentFlags >> 1) & 0x01)
         {
             ip->SpecialValue[ip->SpecialNum] = 50 + ip->Level * 5;
-            ip->Special[ip->SpecialNum] = AT_IMPROVE_MP_MAX; ip->SpecialNum++;
+            ip->Special[ip->SpecialNum] = AT_IMPROVE_MP_MAX;
+            ip->SpecialNum++;
         }
 
         if ((ip->ExcellentFlags >> 2) & 0x01)
         {
             ip->SpecialValue[ip->SpecialNum] = 3;
-            ip->Special[ip->SpecialNum] = AT_ONE_PERCENT_DAMAGE; ip->SpecialNum++;
+            ip->Special[ip->SpecialNum] = AT_ONE_PERCENT_DAMAGE;
+            ip->SpecialNum++;
         }
 
-        if ((ip->ExcellentFlags >> 3) & 0x01
-            && (ip->Type != ITEM_CAPE_OF_FIGHTER)
-        )
+        if ((ip->ExcellentFlags >> 3) & 0x01 && (ip->Type != ITEM_CAPE_OF_FIGHTER))
         {
             ip->SpecialValue[ip->SpecialNum] = 10 + ip->Level * 5;
-            ip->Special[ip->SpecialNum] = AT_SET_OPTION_IMPROVE_CHARISMA; ip->SpecialNum++;
+            ip->Special[ip->SpecialNum] = AT_SET_OPTION_IMPROVE_CHARISMA;
+            ip->SpecialNum++;
         }
     }
-    else if ((ip->Type >= ITEM_WING_OF_STORM && ip->Type <= ITEM_CAPE_OF_EMPEROR) || ip->Type == ITEM_WING_OF_DIMENSION
-        || (ip->Type == ITEM_CAPE_OF_OVERRULE))
+    else if ((ip->Type >= ITEM_WING_OF_STORM && ip->Type <= ITEM_CAPE_OF_EMPEROR) ||
+             ip->Type == ITEM_WING_OF_DIMENSION || (ip->Type == ITEM_CAPE_OF_OVERRULE))
     {
         if (ip->ExcellentFlags & 0x01)
         {
             ip->SpecialValue[ip->SpecialNum] = 5;
-            ip->Special[ip->SpecialNum] = AT_ONE_PERCENT_DAMAGE; ip->SpecialNum++;
+            ip->Special[ip->SpecialNum] = AT_ONE_PERCENT_DAMAGE;
+            ip->SpecialNum++;
         }
         if ((ip->ExcellentFlags >> 1) & 0x01)
         {
             ip->SpecialValue[ip->SpecialNum] = 5;
-            ip->Special[ip->SpecialNum] = AT_DAMAGE_REFLECTION; ip->SpecialNum++;
+            ip->Special[ip->SpecialNum] = AT_DAMAGE_REFLECTION;
+            ip->SpecialNum++;
         }
         if ((ip->ExcellentFlags >> 2) & 0x01)
         {
             ip->SpecialValue[ip->SpecialNum] = 5;
-            ip->Special[ip->SpecialNum] = AT_RECOVER_FULL_LIFE; ip->SpecialNum++;
+            ip->Special[ip->SpecialNum] = AT_RECOVER_FULL_LIFE;
+            ip->SpecialNum++;
         }
         if ((ip->ExcellentFlags >> 3) & 0x01)
         {
             ip->SpecialValue[ip->SpecialNum] = 5;
-            ip->Special[ip->SpecialNum] = AT_RECOVER_FULL_MANA; ip->SpecialNum++;
+            ip->Special[ip->SpecialNum] = AT_RECOVER_FULL_MANA;
+            ip->SpecialNum++;
         }
     }
 }
 
 void CalcExcellentOptions(ITEM* ip)
 {
-    if ((ip->Type >= ITEM_SHIELD && ip->Type < ITEM_BOOTS + MAX_ITEM_INDEX) || (ip->Type >= ITEM_RING_OF_ICE && ip->Type <= ITEM_RING_OF_POISON) || (ip->Type >= ITEM_RING_OF_FIRE && ip->Type <= ITEM_RING_OF_MAGIC))
+    if ((ip->Type >= ITEM_SHIELD && ip->Type < ITEM_BOOTS + MAX_ITEM_INDEX) ||
+        (ip->Type >= ITEM_RING_OF_ICE && ip->Type <= ITEM_RING_OF_POISON) ||
+        (ip->Type >= ITEM_RING_OF_FIRE && ip->Type <= ITEM_RING_OF_MAGIC))
     {
         // todo: add enum for these flags
         if ((ip->ExcellentFlags >> 5) & 1)
         {
-            ip->Special[ip->SpecialNum] = AT_IMPROVE_LIFE; ip->SpecialNum++;
+            ip->Special[ip->SpecialNum] = AT_IMPROVE_LIFE;
+            ip->SpecialNum++;
         }
         if ((ip->ExcellentFlags >> 4) & 1)
         {
-            ip->Special[ip->SpecialNum] = AT_IMPROVE_MANA; ip->SpecialNum++;
+            ip->Special[ip->SpecialNum] = AT_IMPROVE_MANA;
+            ip->SpecialNum++;
         }
         if ((ip->ExcellentFlags >> 3) & 1)
         {
-            ip->Special[ip->SpecialNum] = AT_DECREASE_DAMAGE; ip->SpecialNum++;
+            ip->Special[ip->SpecialNum] = AT_DECREASE_DAMAGE;
+            ip->SpecialNum++;
         }
         if ((ip->ExcellentFlags >> 2) & 1)
         {
-            ip->Special[ip->SpecialNum] = AT_REFLECTION_DAMAGE; ip->SpecialNum++;
+            ip->Special[ip->SpecialNum] = AT_REFLECTION_DAMAGE;
+            ip->SpecialNum++;
         }
         if ((ip->ExcellentFlags >> 1) & 1)
         {
-            ip->Special[ip->SpecialNum] = AT_IMPROVE_BLOCKING_PERCENT; ip->SpecialNum++;
+            ip->Special[ip->SpecialNum] = AT_IMPROVE_BLOCKING_PERCENT;
+            ip->SpecialNum++;
         }
         if ((ip->ExcellentFlags) & 1)
         {
-            ip->Special[ip->SpecialNum] = AT_IMPROVE_GAIN_GOLD; ip->SpecialNum++;
+            ip->Special[ip->SpecialNum] = AT_IMPROVE_GAIN_GOLD;
+            ip->SpecialNum++;
         }
     }
-    if ((ip->Type >= ITEM_SWORD && ip->Type < ITEM_STAFF + MAX_ITEM_INDEX) || (ip->Type >= ITEM_PENDANT_OF_LIGHTING && ip->Type <= ITEM_PENDANT_OF_FIRE) || (ip->Type >= ITEM_PENDANT_OF_ICE && ip->Type <= ITEM_PENDANT_OF_ABILITY))
+    if ((ip->Type >= ITEM_SWORD && ip->Type < ITEM_STAFF + MAX_ITEM_INDEX) ||
+        (ip->Type >= ITEM_PENDANT_OF_LIGHTING && ip->Type <= ITEM_PENDANT_OF_FIRE) ||
+        (ip->Type >= ITEM_PENDANT_OF_ICE && ip->Type <= ITEM_PENDANT_OF_ABILITY))
     {
         if ((ip->ExcellentFlags >> 5) & 1)
         {
-            ip->Special[ip->SpecialNum] = AT_EXCELLENT_DAMAGE; ip->SpecialNum++;
+            ip->Special[ip->SpecialNum] = AT_EXCELLENT_DAMAGE;
+            ip->SpecialNum++;
         }
         if ((ip->Type >= ITEM_STAFF && ip->Type < ITEM_STAFF + MAX_ITEM_INDEX) ||
-            (ip->Type == ITEM_PENDANT_OF_LIGHTING)
-            || (ip->Type == ITEM_PENDANT_OF_ICE || ip->Type == ITEM_PENDANT_OF_WATER))
+            (ip->Type == ITEM_PENDANT_OF_LIGHTING) ||
+            (ip->Type == ITEM_PENDANT_OF_ICE || ip->Type == ITEM_PENDANT_OF_WATER))
         {
             if ((ip->ExcellentFlags >> 4) & 1)
             {
                 ip->SpecialValue[ip->SpecialNum] = CharacterAttribute->Level / 20;
-                ip->Special[ip->SpecialNum] = AT_IMPROVE_MAGIC_LEVEL; ip->SpecialNum++;
+                ip->Special[ip->SpecialNum] = AT_IMPROVE_MAGIC_LEVEL;
+                ip->SpecialNum++;
             }
             if ((ip->ExcellentFlags >> 3) & 1)
             {
                 ip->SpecialValue[ip->SpecialNum] = 2;
-                ip->Special[ip->SpecialNum] = AT_IMPROVE_MAGIC_PERCENT; ip->SpecialNum++;
+                ip->Special[ip->SpecialNum] = AT_IMPROVE_MAGIC_PERCENT;
+                ip->SpecialNum++;
             }
         }
         else
@@ -998,26 +1040,31 @@ void CalcExcellentOptions(ITEM* ip)
             if ((ip->ExcellentFlags >> 4) & 1)
             {
                 ip->SpecialValue[ip->SpecialNum] = CharacterAttribute->Level / 20;
-                ip->Special[ip->SpecialNum] = AT_IMPROVE_DAMAGE_LEVEL; ip->SpecialNum++;
+                ip->Special[ip->SpecialNum] = AT_IMPROVE_DAMAGE_LEVEL;
+                ip->SpecialNum++;
             }
             if ((ip->ExcellentFlags >> 3) & 1)
             {
                 ip->SpecialValue[ip->SpecialNum] = 2;
-                ip->Special[ip->SpecialNum] = AT_IMPROVE_DAMAGE_PERCENT; ip->SpecialNum++;
+                ip->Special[ip->SpecialNum] = AT_IMPROVE_DAMAGE_PERCENT;
+                ip->SpecialNum++;
             }
         }
         if ((ip->ExcellentFlags >> 2) & 1)
         {
             ip->SpecialValue[ip->SpecialNum] = 7;
-            ip->Special[ip->SpecialNum] = AT_IMPROVE_ATTACK_SPEED; ip->SpecialNum++;
+            ip->Special[ip->SpecialNum] = AT_IMPROVE_ATTACK_SPEED;
+            ip->SpecialNum++;
         }
         if ((ip->ExcellentFlags >> 1) & 1)
         {
-            ip->Special[ip->SpecialNum] = AT_IMPROVE_GAIN_LIFE; ip->SpecialNum++;
+            ip->Special[ip->SpecialNum] = AT_IMPROVE_GAIN_LIFE;
+            ip->SpecialNum++;
         }
         if ((ip->ExcellentFlags) & 1)
         {
-            ip->Special[ip->SpecialNum] = AT_IMPROVE_GAIN_MANA; ip->SpecialNum++;
+            ip->Special[ip->SpecialNum] = AT_IMPROVE_GAIN_MANA;
+            ip->SpecialNum++;
         }
     }
     if (ip->Type == ITEM_WIZARDS_RING)
@@ -1026,36 +1073,45 @@ void CalcExcellentOptions(ITEM* ip)
         {
         case 0:
             ip->SpecialValue[ip->SpecialNum] = 10;
-            ip->Special[ip->SpecialNum] = AT_IMPROVE_MAGIC_PERCENT; ip->SpecialNum++;
+            ip->Special[ip->SpecialNum] = AT_IMPROVE_MAGIC_PERCENT;
+            ip->SpecialNum++;
             ip->SpecialValue[ip->SpecialNum] = 10;
-            ip->Special[ip->SpecialNum] = AT_IMPROVE_DAMAGE_PERCENT; ip->SpecialNum++;
+            ip->Special[ip->SpecialNum] = AT_IMPROVE_DAMAGE_PERCENT;
+            ip->SpecialNum++;
             ip->SpecialValue[ip->SpecialNum] = 10;
-            ip->Special[ip->SpecialNum] = AT_IMPROVE_ATTACK_SPEED; ip->SpecialNum++;
+            ip->Special[ip->SpecialNum] = AT_IMPROVE_ATTACK_SPEED;
+            ip->SpecialNum++;
             break;
         case 3:
             ip->SpecialValue[ip->SpecialNum] = 10;
-            ip->Special[ip->SpecialNum] = AT_IMPROVE_MAGIC_PERCENT; ip->SpecialNum++;
+            ip->Special[ip->SpecialNum] = AT_IMPROVE_MAGIC_PERCENT;
+            ip->SpecialNum++;
             ip->SpecialValue[ip->SpecialNum] = 10;
-            ip->Special[ip->SpecialNum] = AT_IMPROVE_DAMAGE_PERCENT; ip->SpecialNum++;
+            ip->Special[ip->SpecialNum] = AT_IMPROVE_DAMAGE_PERCENT;
+            ip->SpecialNum++;
             ip->SpecialValue[ip->SpecialNum] = 10;
-            ip->Special[ip->SpecialNum] = AT_IMPROVE_ATTACK_SPEED; ip->SpecialNum++;
+            ip->Special[ip->SpecialNum] = AT_IMPROVE_ATTACK_SPEED;
+            ip->SpecialNum++;
             break;
         }
     }
     if (ip->Type == ITEM_HELPER + 107)
     {
         ip->SpecialValue[ip->SpecialNum] = 15;
-        ip->Special[ip->SpecialNum] = AT_IMPROVE_MAGIC_PERCENT; ip->SpecialNum++;
+        ip->Special[ip->SpecialNum] = AT_IMPROVE_MAGIC_PERCENT;
+        ip->SpecialNum++;
         ip->SpecialValue[ip->SpecialNum] = 15;
-        ip->Special[ip->SpecialNum] = AT_IMPROVE_DAMAGE_PERCENT; ip->SpecialNum++;
+        ip->Special[ip->SpecialNum] = AT_IMPROVE_DAMAGE_PERCENT;
+        ip->SpecialNum++;
         ip->SpecialValue[ip->SpecialNum] = 10;
-        ip->Special[ip->SpecialNum] = AT_IMPROVE_ATTACK_SPEED; ip->SpecialNum++;
+        ip->Special[ip->SpecialNum] = AT_IMPROVE_ATTACK_SPEED;
+        ip->SpecialNum++;
     }
 }
 
 void CalcPartType(ITEM* ip)
 {
-    //part
+    // part
     if (ip->Type >= ITEM_BOW && ip->Type < ITEM_CROSSBOW || ip->Type == ITEM_CELESTIAL_BOW)
         ip->Part = EQUIPMENT_WEAPON_LEFT;
     if (ip->Type >= ITEM_BOOK_OF_SAHAMUTT && ip->Type <= ITEM_STAFF + 29)
@@ -1082,9 +1138,8 @@ void CalcPartType(ITEM* ip)
         ip->Part = EQUIPMENT_WEAPON_LEFT;
     else if (ip->Type >= ITEM_HELPER && ip->Type < ITEM_RING_OF_ICE)
         ip->Part = EQUIPMENT_HELPER;
-    else if ((ip->Type >= ITEM_RING_OF_ICE && ip->Type < ITEM_PENDANT_OF_LIGHTING) || (ip->Type == ITEM_WIZARDS_RING && ip->Level == 0)
-        || (ip->Type == ITEM_WIZARDS_RING && ip->Level == 3)
-    )
+    else if ((ip->Type >= ITEM_RING_OF_ICE && ip->Type < ITEM_PENDANT_OF_LIGHTING) ||
+             (ip->Type == ITEM_WIZARDS_RING && ip->Level == 0) || (ip->Type == ITEM_WIZARDS_RING && ip->Level == 3))
         ip->Part = EQUIPMENT_RING_RIGHT;
     else if (ip->Type >= ITEM_RING_OF_FIRE && ip->Type <= ITEM_RING_OF_MAGIC)
         ip->Part = EQUIPMENT_RING_RIGHT;
@@ -1101,7 +1156,7 @@ void CalcPartType(ITEM* ip)
 void SetItemAttributes(ITEM* ip)
 {
     int excelAddValue = GetExcellentAddValue(ip);
-    
+
     ITEM_ATTRIBUTE* p = &ItemAttribute[ip->Type];
     ip->TwoHand = p->TwoHand;
     ip->WeaponSpeed = p->WeaponSpeed;
@@ -1143,19 +1198,19 @@ void SetItemAttributes(ITEM* ip)
                 ip->SpecialNum++;
             }
         }
-        if ((ip->Type >= ITEM_WING && ip->Type <= ITEM_WINGS_OF_DARKNESS) || (ip->Type >= ITEM_WING_OF_CURSE && ip->Type <= ITEM_WINGS_OF_DESPAIR))
+        if ((ip->Type >= ITEM_WING && ip->Type <= ITEM_WINGS_OF_DARKNESS) ||
+            (ip->Type >= ITEM_WING_OF_CURSE && ip->Type <= ITEM_WINGS_OF_DESPAIR))
         {
             ip->Special[ip->SpecialNum] = AT_LUCK;
             ip->SpecialNum++;
         }
-        if (ip->Type == ITEM_CAPE_OF_LORD
-            || ip->Type == ITEM_CAPE_OF_FIGHTER)
+        if (ip->Type == ITEM_CAPE_OF_LORD || ip->Type == ITEM_CAPE_OF_FIGHTER)
         {
             ip->Special[ip->SpecialNum] = AT_LUCK;
             ip->SpecialNum++;
         }
-        if ((ip->Type >= ITEM_WING_OF_STORM && ip->Type <= ITEM_CAPE_OF_EMPEROR) || ip->Type == ITEM_WING_OF_DIMENSION
-            || (ip->Type == ITEM_CAPE_OF_OVERRULE))
+        if ((ip->Type >= ITEM_WING_OF_STORM && ip->Type <= ITEM_CAPE_OF_EMPEROR) ||
+            ip->Type == ITEM_WING_OF_DIMENSION || (ip->Type == ITEM_CAPE_OF_OVERRULE))
         {
             ip->Special[ip->SpecialNum] = AT_LUCK;
             ip->SpecialNum++;
@@ -1170,17 +1225,20 @@ void SetItemAttributes(ITEM* ip)
             if (Option3 & 0x01)
             {
                 ip->SpecialValue[ip->SpecialNum] = 5;
-                ip->Special[ip->SpecialNum] = AT_DAMAGE_ABSORB; ip->SpecialNum++;
+                ip->Special[ip->SpecialNum] = AT_DAMAGE_ABSORB;
+                ip->SpecialNum++;
             }
             if ((Option3 >> 1) & 0x01)
             {
                 ip->SpecialValue[ip->SpecialNum] = 50;
-                ip->Special[ip->SpecialNum] = AT_IMPROVE_AG_MAX; ip->SpecialNum++;
+                ip->Special[ip->SpecialNum] = AT_IMPROVE_AG_MAX;
+                ip->SpecialNum++;
             }
             if ((Option3 >> 2) & 0x01)
             {
                 ip->SpecialValue[ip->SpecialNum] = 5;
-                ip->Special[ip->SpecialNum] = AT_IMPROVE_ATTACK_SPEED; ip->SpecialNum++;
+                ip->Special[ip->SpecialNum] = AT_IMPROVE_ATTACK_SPEED;
+                ip->SpecialNum++;
             }
         }
         else
@@ -1190,7 +1248,8 @@ void SetItemAttributes(ITEM* ip)
                 if (ip->Type != ITEM_BOLT && ip->Type != ITEM_ARROWS)
                 {
                     ip->SpecialValue[ip->SpecialNum] = Option3 * 4;
-                    ip->Special[ip->SpecialNum] = AT_IMPROVE_DAMAGE; ip->SpecialNum++;
+                    ip->Special[ip->SpecialNum] = AT_IMPROVE_DAMAGE;
+                    ip->SpecialNum++;
                     ip->RequireStrength += Option3 * 5;
                 }
             }
@@ -1207,59 +1266,70 @@ void SetItemAttributes(ITEM* ip)
             if (ip->Type >= ITEM_SHIELD && ip->Type < ITEM_SHIELD + MAX_ITEM_INDEX)
             {
                 ip->SpecialValue[ip->SpecialNum] = Option3 * 5;
-                ip->Special[ip->SpecialNum] = AT_IMPROVE_BLOCKING; ip->SpecialNum++;
+                ip->Special[ip->SpecialNum] = AT_IMPROVE_BLOCKING;
+                ip->SpecialNum++;
                 ip->RequireStrength += Option3 * 5;
             }
             if (ip->Type >= ITEM_HELM && ip->Type < ITEM_BOOTS + MAX_ITEM_INDEX)
             {
                 ip->SpecialValue[ip->SpecialNum] = Option3 * 4;
-                ip->Special[ip->SpecialNum] = AT_IMPROVE_DEFENSE; ip->SpecialNum++;
+                ip->Special[ip->SpecialNum] = AT_IMPROVE_DEFENSE;
+                ip->SpecialNum++;
                 ip->RequireStrength += Option3 * 5;
             }
-            if (ip->Type >= ITEM_RING_OF_ICE && ip->Type < ITEM_HELPER + MAX_ITEM_INDEX && ip->Type != ITEM_CAPE_OF_LORD)
+            if (ip->Type >= ITEM_RING_OF_ICE && ip->Type < ITEM_HELPER + MAX_ITEM_INDEX &&
+                ip->Type != ITEM_CAPE_OF_LORD)
             {
                 if (ip->Type == ITEM_RING_OF_MAGIC)
                 {
                     ip->SpecialValue[ip->SpecialNum] = Option3;
-                    ip->Special[ip->SpecialNum] = AT_IMPROVE_MAX_MANA; ip->SpecialNum++;
+                    ip->Special[ip->SpecialNum] = AT_IMPROVE_MAX_MANA;
+                    ip->SpecialNum++;
                 }
                 else if (ip->Type == ITEM_PENDANT_OF_ABILITY)
                 {
                     ip->SpecialValue[ip->SpecialNum] = Option3;
-                    ip->Special[ip->SpecialNum] = AT_IMPROVE_MAX_AG; ip->SpecialNum++;
+                    ip->Special[ip->SpecialNum] = AT_IMPROVE_MAX_AG;
+                    ip->SpecialNum++;
                 }
                 else
                 {
                     ip->SpecialValue[ip->SpecialNum] = Option3;
-                    ip->Special[ip->SpecialNum] = AT_LIFE_REGENERATION; ip->SpecialNum++;
+                    ip->Special[ip->SpecialNum] = AT_LIFE_REGENERATION;
+                    ip->SpecialNum++;
                 }
             }
             if (ip->Type == ITEM_WING)
             {
                 ip->SpecialValue[ip->SpecialNum] = Option3;
-                ip->Special[ip->SpecialNum] = AT_LIFE_REGENERATION; ip->SpecialNum++;
+                ip->Special[ip->SpecialNum] = AT_LIFE_REGENERATION;
+                ip->SpecialNum++;
             }
             else if (ip->Type == ITEM_WINGS_OF_HEAVEN || ip->Type == ITEM_WING_OF_CURSE)
             {
                 ip->SpecialValue[ip->SpecialNum] = Option3 * 4;
-                ip->Special[ip->SpecialNum] = AT_IMPROVE_MAGIC; ip->SpecialNum++;
+                ip->Special[ip->SpecialNum] = AT_IMPROVE_MAGIC;
+                ip->SpecialNum++;
             }
             else if (ip->Type == ITEM_WINGS_OF_SATAN)
             {
                 ip->SpecialValue[ip->SpecialNum] = Option3 * 4;
-                ip->Special[ip->SpecialNum] = AT_IMPROVE_DAMAGE; ip->SpecialNum++;
+                ip->Special[ip->SpecialNum] = AT_IMPROVE_DAMAGE;
+                ip->SpecialNum++;
             }
             else if (ip->Type == ITEM_WINGS_OF_SPIRITS)
             {
                 if (ip->OptionType == 2)
                 {
                     ip->SpecialValue[ip->SpecialNum] = Option3;
-                    ip->Special[ip->SpecialNum] = AT_LIFE_REGENERATION; ip->SpecialNum++;
+                    ip->Special[ip->SpecialNum] = AT_LIFE_REGENERATION;
+                    ip->SpecialNum++;
                 }
                 if (ip->OptionType == 0)
                 {
                     ip->SpecialValue[ip->SpecialNum] = Option3 * 4;
-                    ip->Special[ip->SpecialNum] = AT_IMPROVE_DAMAGE; ip->SpecialNum++;
+                    ip->Special[ip->SpecialNum] = AT_IMPROVE_DAMAGE;
+                    ip->SpecialNum++;
                 }
             }
             else if (ip->Type == ITEM_WINGS_OF_SOUL)
@@ -1267,12 +1337,14 @@ void SetItemAttributes(ITEM* ip)
                 if (ip->OptionType == 0)
                 {
                     ip->SpecialValue[ip->SpecialNum] = Option3;
-                    ip->Special[ip->SpecialNum] = AT_LIFE_REGENERATION; ip->SpecialNum++;
+                    ip->Special[ip->SpecialNum] = AT_LIFE_REGENERATION;
+                    ip->SpecialNum++;
                 }
                 if (ip->OptionType == 2)
                 {
                     ip->SpecialValue[ip->SpecialNum] = Option3 * 4;
-                    ip->Special[ip->SpecialNum] = AT_IMPROVE_MAGIC; ip->SpecialNum++;
+                    ip->Special[ip->SpecialNum] = AT_IMPROVE_MAGIC;
+                    ip->SpecialNum++;
                 }
             }
             else if (ip->Type == ITEM_WINGS_OF_DRAGON)
@@ -1280,12 +1352,14 @@ void SetItemAttributes(ITEM* ip)
                 if (ip->OptionType == 2)
                 {
                     ip->SpecialValue[ip->SpecialNum] = Option3 * 4;
-                    ip->Special[ip->SpecialNum] = AT_IMPROVE_DAMAGE; ip->SpecialNum++;
+                    ip->Special[ip->SpecialNum] = AT_IMPROVE_DAMAGE;
+                    ip->SpecialNum++;
                 }
                 if (ip->OptionType == 0)
                 {
                     ip->SpecialValue[ip->SpecialNum] = Option3;
-                    ip->Special[ip->SpecialNum] = AT_LIFE_REGENERATION; ip->SpecialNum++;
+                    ip->Special[ip->SpecialNum] = AT_LIFE_REGENERATION;
+                    ip->SpecialNum++;
                 }
             }
             else if (ip->Type == ITEM_WINGS_OF_DARKNESS)
@@ -1293,30 +1367,35 @@ void SetItemAttributes(ITEM* ip)
                 if (ip->OptionType == 2)
                 {
                     ip->SpecialValue[ip->SpecialNum] = Option3 * 4;
-                    ip->Special[ip->SpecialNum] = AT_IMPROVE_DAMAGE; ip->SpecialNum++;
+                    ip->Special[ip->SpecialNum] = AT_IMPROVE_DAMAGE;
+                    ip->SpecialNum++;
                 }
                 if (ip->OptionType == 0)
                 {
                     ip->SpecialValue[ip->SpecialNum] = Option3 * 4;
-                    ip->Special[ip->SpecialNum] = AT_IMPROVE_MAGIC; ip->SpecialNum++;
+                    ip->Special[ip->SpecialNum] = AT_IMPROVE_MAGIC;
+                    ip->SpecialNum++;
                 }
             }
             else if (ip->Type == ITEM_CAPE_OF_LORD)
             {
                 ip->SpecialValue[ip->SpecialNum] = Option3 * 4;
-                ip->Special[ip->SpecialNum] = AT_IMPROVE_DAMAGE; ip->SpecialNum++;
+                ip->Special[ip->SpecialNum] = AT_IMPROVE_DAMAGE;
+                ip->SpecialNum++;
             }
             else if (ip->Type == ITEM_CAPE_OF_FIGHTER)
             {
                 if (ip->OptionType == 2)
                 {
                     ip->SpecialValue[ip->SpecialNum] = Option3 * 4;
-                    ip->Special[ip->SpecialNum] = AT_IMPROVE_DAMAGE; ip->SpecialNum++;
+                    ip->Special[ip->SpecialNum] = AT_IMPROVE_DAMAGE;
+                    ip->SpecialNum++;
                 }
                 if (ip->OptionType == 0)
                 {
                     ip->SpecialValue[ip->SpecialNum] = Option3;
-                    ip->Special[ip->SpecialNum] = AT_LIFE_REGENERATION; ip->SpecialNum++;
+                    ip->Special[ip->SpecialNum] = AT_LIFE_REGENERATION;
+                    ip->SpecialNum++;
                 }
             }
             else if (ip->Type == ITEM_WINGS_OF_DESPAIR)
@@ -1339,17 +1418,20 @@ void SetItemAttributes(ITEM* ip)
                 if (ip->OptionType == 0)
                 {
                     ip->SpecialValue[ip->SpecialNum] = Option3;
-                    ip->Special[ip->SpecialNum] = AT_LIFE_REGENERATION; ip->SpecialNum++;
+                    ip->Special[ip->SpecialNum] = AT_LIFE_REGENERATION;
+                    ip->SpecialNum++;
                 }
                 else if (ip->OptionType == 2)
                 {
                     ip->SpecialValue[ip->SpecialNum] = Option3 * 4;
-                    ip->Special[ip->SpecialNum] = AT_IMPROVE_DEFENSE; ip->SpecialNum++;
+                    ip->Special[ip->SpecialNum] = AT_IMPROVE_DEFENSE;
+                    ip->SpecialNum++;
                 }
                 else if (ip->OptionType == 3)
                 {
                     ip->SpecialValue[ip->SpecialNum] = Option3 * 4;
-                    ip->Special[ip->SpecialNum] = AT_IMPROVE_DAMAGE; ip->SpecialNum++;
+                    ip->Special[ip->SpecialNum] = AT_IMPROVE_DAMAGE;
+                    ip->SpecialNum++;
                 }
             }
             else if (ip->Type == ITEM_WING_OF_ETERNAL)
@@ -1357,17 +1439,20 @@ void SetItemAttributes(ITEM* ip)
                 if (ip->OptionType == 0)
                 {
                     ip->SpecialValue[ip->SpecialNum] = Option3;
-                    ip->Special[ip->SpecialNum] = AT_LIFE_REGENERATION; ip->SpecialNum++;
+                    ip->Special[ip->SpecialNum] = AT_LIFE_REGENERATION;
+                    ip->SpecialNum++;
                 }
                 else if (ip->OptionType == 2)
                 {
                     ip->SpecialValue[ip->SpecialNum] = Option3 * 4;
-                    ip->Special[ip->SpecialNum] = AT_IMPROVE_DEFENSE; ip->SpecialNum++;
+                    ip->Special[ip->SpecialNum] = AT_IMPROVE_DEFENSE;
+                    ip->SpecialNum++;
                 }
                 else if (ip->OptionType == 3)
                 {
                     ip->SpecialValue[ip->SpecialNum] = Option3 * 4;
-                    ip->Special[ip->SpecialNum] = AT_IMPROVE_MAGIC; ip->SpecialNum++;
+                    ip->Special[ip->SpecialNum] = AT_IMPROVE_MAGIC;
+                    ip->SpecialNum++;
                 }
             }
             else if (ip->Type == ITEM_WING_OF_ILLUSION)
@@ -1375,17 +1460,20 @@ void SetItemAttributes(ITEM* ip)
                 if (ip->OptionType == 0)
                 {
                     ip->SpecialValue[ip->SpecialNum] = Option3;
-                    ip->Special[ip->SpecialNum] = AT_LIFE_REGENERATION; ip->SpecialNum++;
+                    ip->Special[ip->SpecialNum] = AT_LIFE_REGENERATION;
+                    ip->SpecialNum++;
                 }
                 else if (ip->OptionType == 2)
                 {
                     ip->SpecialValue[ip->SpecialNum] = Option3 * 4;
-                    ip->Special[ip->SpecialNum] = AT_IMPROVE_DEFENSE; ip->SpecialNum++;
+                    ip->Special[ip->SpecialNum] = AT_IMPROVE_DEFENSE;
+                    ip->SpecialNum++;
                 }
                 else if (ip->OptionType == 3)
                 {
                     ip->SpecialValue[ip->SpecialNum] = Option3 * 4;
-                    ip->Special[ip->SpecialNum] = AT_IMPROVE_DAMAGE; ip->SpecialNum++;
+                    ip->Special[ip->SpecialNum] = AT_IMPROVE_DAMAGE;
+                    ip->SpecialNum++;
                 }
             }
             else if (ip->Type == ITEM_WING_OF_RUIN)
@@ -1393,17 +1481,20 @@ void SetItemAttributes(ITEM* ip)
                 if (ip->OptionType == 0)
                 {
                     ip->SpecialValue[ip->SpecialNum] = Option3;
-                    ip->Special[ip->SpecialNum] = AT_LIFE_REGENERATION; ip->SpecialNum++;
+                    ip->Special[ip->SpecialNum] = AT_LIFE_REGENERATION;
+                    ip->SpecialNum++;
                 }
                 else if (ip->OptionType == 2)
                 {
                     ip->SpecialValue[ip->SpecialNum] = Option3 * 4;
-                    ip->Special[ip->SpecialNum] = AT_IMPROVE_MAGIC; ip->SpecialNum++;
+                    ip->Special[ip->SpecialNum] = AT_IMPROVE_MAGIC;
+                    ip->SpecialNum++;
                 }
                 else if (ip->OptionType == 3)
                 {
                     ip->SpecialValue[ip->SpecialNum] = Option3 * 4;
-                    ip->Special[ip->SpecialNum] = AT_IMPROVE_DAMAGE; ip->SpecialNum++;
+                    ip->Special[ip->SpecialNum] = AT_IMPROVE_DAMAGE;
+                    ip->SpecialNum++;
                 }
             }
             else if (ip->Type == ITEM_CAPE_OF_EMPEROR || ip->Type == ITEM_CAPE_OF_OVERRULE)
@@ -1411,17 +1502,20 @@ void SetItemAttributes(ITEM* ip)
                 if (ip->OptionType == 0)
                 {
                     ip->SpecialValue[ip->SpecialNum] = Option3;
-                    ip->Special[ip->SpecialNum] = AT_LIFE_REGENERATION; ip->SpecialNum++;
+                    ip->Special[ip->SpecialNum] = AT_LIFE_REGENERATION;
+                    ip->SpecialNum++;
                 }
                 else if (ip->OptionType == 2)
                 {
                     ip->SpecialValue[ip->SpecialNum] = Option3 * 4;
-                    ip->Special[ip->SpecialNum] = AT_IMPROVE_DEFENSE; ip->SpecialNum++;
+                    ip->Special[ip->SpecialNum] = AT_IMPROVE_DEFENSE;
+                    ip->SpecialNum++;
                 }
                 else if (ip->OptionType == 3)
                 {
                     ip->SpecialValue[ip->SpecialNum] = Option3 * 4;
-                    ip->Special[ip->SpecialNum] = AT_IMPROVE_DAMAGE; ip->SpecialNum++;
+                    ip->Special[ip->SpecialNum] = AT_IMPROVE_DAMAGE;
+                    ip->SpecialNum++;
                 }
             }
             else if (ip->Type == ITEM_WING_OF_DIMENSION)
@@ -1429,17 +1523,20 @@ void SetItemAttributes(ITEM* ip)
                 if (ip->OptionType == 0)
                 {
                     ip->SpecialValue[ip->SpecialNum] = Option3;
-                    ip->Special[ip->SpecialNum] = AT_LIFE_REGENERATION; ip->SpecialNum++;
+                    ip->Special[ip->SpecialNum] = AT_LIFE_REGENERATION;
+                    ip->SpecialNum++;
                 }
                 else if (ip->OptionType == 2)
                 {
                     ip->SpecialValue[ip->SpecialNum] = Option3 * 4;
-                    ip->Special[ip->SpecialNum] = AT_IMPROVE_CURSE; ip->SpecialNum++;
+                    ip->Special[ip->SpecialNum] = AT_IMPROVE_CURSE;
+                    ip->SpecialNum++;
                 }
                 else if (ip->OptionType == 3)
                 {
                     ip->SpecialValue[ip->SpecialNum] = Option3 * 4;
-                    ip->Special[ip->SpecialNum] = AT_IMPROVE_MAGIC; ip->SpecialNum++;
+                    ip->Special[ip->SpecialNum] = AT_IMPROVE_MAGIC;
+                    ip->SpecialNum++;
                 }
             }
         }
@@ -1456,7 +1553,8 @@ void SetItemAttributes(ITEM* ip)
 
 int64_t ItemValue(ITEM* ip, int goldType)
 {
-    if (ip->Type == -1) return 0;
+    if (ip->Type == -1)
+        return 0;
 
     ITEM_ATTRIBUTE* p = &ItemAttribute[ip->Type];
 
@@ -1514,21 +1612,21 @@ int64_t ItemValue(ITEM* ip, int goldType)
 
         switch (Level)
         {
-        case    0:
+        case 0:
             sellMoney = 100;
             break;
-        case    1:
+        case 1:
             sellMoney = 1400;
             break;
-        case    2:
+        case 2:
             sellMoney = 2200;
             break;
-        case    3:
+        case 3:
             sellMoney = 3000;
             break;
         }
         if (p->Durability > 0)
-            Gold = (sellMoney * ip->Durability / p->Durability);//+(170*(Level*2));
+            Gold = (sellMoney * ip->Durability / p->Durability); //+(170*(Level*2));
     }
     else if (ip->Type == ITEM_ARROWS)
     {
@@ -1536,21 +1634,21 @@ int64_t ItemValue(ITEM* ip, int goldType)
 
         switch (Level)
         {
-        case    0:
+        case 0:
             sellMoney = 70;
             break;
-        case    1:
+        case 1:
             sellMoney = 1200;
             break;
-        case    2:
+        case 2:
             sellMoney = 2000;
             break;
-        case    3:
+        case 3:
             sellMoney = 2800;
             break;
         }
         if (p->Durability > 0)
-            Gold = (sellMoney * ip->Durability / p->Durability);//+(80*(Level*2));
+            Gold = (sellMoney * ip->Durability / p->Durability); //+(80*(Level*2));
     }
     else if (COMGEM::isCompiledGem(ip))
     {
@@ -1597,8 +1695,12 @@ int64_t ItemValue(ITEM* ip, int goldType)
     {
         switch (Level)
         {
-        case 0: Gold = 180000;  break;
-        case 1: Gold = 7500000; break;
+        case 0:
+            Gold = 180000;
+            break;
+        case 1:
+            Gold = 7500000;
+            break;
         }
     }
     else if (ip->Type == ITEM_HORN_OF_DINORANT)
@@ -1624,14 +1726,30 @@ int64_t ItemValue(ITEM* ip, int goldType)
     {
         switch (Level)
         {
-        case 1: Gold = 10000; break;
-        case 2: Gold = 50000; break;
-        case 3: Gold = 100000; break;
-        case 4: Gold = 300000; break;
-        case 5: Gold = 500000; break;
-        case 6: Gold = 800000; break;
-        case 7: Gold = 1000000; break;
-        case 8: Gold = 1200000; break;
+        case 1:
+            Gold = 10000;
+            break;
+        case 2:
+            Gold = 50000;
+            break;
+        case 3:
+            Gold = 100000;
+            break;
+        case 4:
+            Gold = 300000;
+            break;
+        case 5:
+            Gold = 500000;
+            break;
+        case 6:
+            Gold = 800000;
+            break;
+        case 7:
+            Gold = 1000000;
+            break;
+        case 8:
+            Gold = 1200000;
+            break;
         default:
             Gold = 0;
         }
@@ -1669,7 +1787,8 @@ int64_t ItemValue(ITEM* ip, int goldType)
     {
         Gold = 10000 * 3;
     }
-    else if (ITEM_SUSPICIOUS_SCRAP_OF_PAPER == ip->Type || ITEM_FIRST_SECROMICON_FRAGMENT <= ip->Type && ip->Type <= ITEM_SIXTH_SECROMICON_FRAGMENT)
+    else if (ITEM_SUSPICIOUS_SCRAP_OF_PAPER == ip->Type ||
+             ITEM_FIRST_SECROMICON_FRAGMENT <= ip->Type && ip->Type <= ITEM_SIXTH_SECROMICON_FRAGMENT)
     {
         Gold = (long long)((long long)ip->Durability * 10000) * 3;
     }
@@ -1692,36 +1811,50 @@ int64_t ItemValue(ITEM* ip, int goldType)
     }
     else if (ip->Type == ITEM_DEVILS_EYE)
     {
-        int iValue[8] = { 30000, 10000, 50000, 100000, 300000, 500000, 800000, 1000000 };
+        int iValue[8] = {30000, 10000, 50000, 100000, 300000, 500000, 800000, 1000000};
         Gold = iValue[std::min<int>(std::max<int>(0, Level), 7)];
     }
     else if (ip->Type == ITEM_DEVILS_KEY)
     {
-        int iValue[8] = { 30000, 15000, 75000, 150000, 450000, 750000, 1200000, 1500000 };
+        int iValue[8] = {30000, 15000, 75000, 150000, 450000, 750000, 1200000, 1500000};
         Gold = iValue[std::min<int>(std::max<int>(0, Level), 7)];
     }
     else if (ip->Type == ITEM_DEVILS_INVITATION)
     {
-        int iValue[8] = { 120000, 60000, 84000, 120000, 180000, 240000, 300000, 180000 };
+        int iValue[8] = {120000, 60000, 84000, 120000, 180000, 240000, 300000, 180000};
         Gold = iValue[std::min<int>(std::max<int>(0, Level), 7)];
     }
-    else if (ip->Type == ITEM_OLD_SCROLL || ip->Type == ITEM_ILLUSION_SORCERER_COVENANT || ip->Type == ITEM_SCROLL_OF_BLOOD)
+    else if (ip->Type == ITEM_OLD_SCROLL || ip->Type == ITEM_ILLUSION_SORCERER_COVENANT ||
+             ip->Type == ITEM_SCROLL_OF_BLOOD)
     {
         switch (Level)
         {
-        case 1: Gold = 500000; break;
-        case 2: Gold = 600000; break;
-        case 3: Gold = 800000; break;
-        case 4: Gold = 1000000; break;
-        case 5: Gold = 1200000; break;
-        case 6: Gold = 1400000; break;
+        case 1:
+            Gold = 500000;
+            break;
+        case 2:
+            Gold = 600000;
+            break;
+        case 3:
+            Gold = 800000;
+            break;
+        case 4:
+            Gold = 1000000;
+            break;
+        case 5:
+            Gold = 1200000;
+            break;
+        case 6:
+            Gold = 1400000;
+            break;
         default:
             Gold = 3000 * 3;
         }
     }
-    else if (ip->Type == ITEM_SCROLL_OF_EMPEROR_RING_OF_HONOR || ip->Type == ITEM_BROKEN_SWORD_DARK_STONE || ip->Type == ITEM_TEAR_OF_ELF || ip->Type == ITEM_SOUL_SHARD_OF_WIZARD
-        || ip->Type == ITEM_FLAME_OF_DEATH_BEAM_KNIGHT || ip->Type == ITEM_HORN_OF_HELL_MAINE || ip->Type == ITEM_FEATHER_OF_DARK_PHOENIX || ip->Type == ITEM_EYE_OF_ABYSSAL
-        )
+    else if (ip->Type == ITEM_SCROLL_OF_EMPEROR_RING_OF_HONOR || ip->Type == ITEM_BROKEN_SWORD_DARK_STONE ||
+             ip->Type == ITEM_TEAR_OF_ELF || ip->Type == ITEM_SOUL_SHARD_OF_WIZARD ||
+             ip->Type == ITEM_FLAME_OF_DEATH_BEAM_KNIGHT || ip->Type == ITEM_HORN_OF_HELL_MAINE ||
+             ip->Type == ITEM_FEATHER_OF_DARK_PHOENIX || ip->Type == ITEM_EYE_OF_ABYSSAL)
     {
         Gold = 9000;
     }
@@ -1757,24 +1890,36 @@ int64_t ItemValue(ITEM* ip, int goldType)
     {
         switch (Level)
         {
-        case 0: Gold = (long long)900000 * ip->Durability; break;
-        case 1: Gold = (long long)450000 * ip->Durability; break;
+        case 0:
+            Gold = (long long)900000 * ip->Durability;
+            break;
+        case 1:
+            Gold = (long long)450000 * ip->Durability;
+            break;
         }
     }
     else if (ip->Type == ITEM_HELPER + 7)
     {
         switch (Level)
         {
-        case 0: Gold = 1500000; break;
-        case 1: Gold = 1200000; break;
+        case 0:
+            Gold = 1500000;
+            break;
+        case 1:
+            Gold = 1200000;
+            break;
         }
     }
     else if (ip->Type == ITEM_LIFE_STONE_ITEM)
     {
         switch (Level)
         {
-        case 0: Gold = 100000; break;
-        case 1: Gold = 2400000; break;
+        case 0:
+            Gold = 100000;
+            break;
+        case 1:
+            Gold = 2400000;
+            break;
         }
     }
     else if (ip->Type >= ITEM_SMALL_SHIELD_POTION && ip->Type <= ITEM_LARGE_SHIELD_POTION)
@@ -1814,7 +1959,8 @@ int64_t ItemValue(ITEM* ip, int goldType)
         Gold = 100 * 3;
         Gold *= ip->Durability;
     }
-    else if (ip->Type == ITEM_GOLDEN_CHERRY_BLOSSOM_BRANCH || ip->Type == ITEM_CHERRY_BLOSSOM_WINE || ip->Type == ITEM_CHERRY_BLOSSOM_RICE_CAKE || ip->Type == ITEM_CHERRY_BLOSSOM_FLOWER_PETAL)
+    else if (ip->Type == ITEM_GOLDEN_CHERRY_BLOSSOM_BRANCH || ip->Type == ITEM_CHERRY_BLOSSOM_WINE ||
+             ip->Type == ITEM_CHERRY_BLOSSOM_RICE_CAKE || ip->Type == ITEM_CHERRY_BLOSSOM_FLOWER_PETAL)
     {
         Gold = 300;
         Gold *= ip->Durability;
@@ -1860,14 +2006,18 @@ int64_t ItemValue(ITEM* ip, int goldType)
     {
         switch (Level)
         {
-        case 0: Gold = 10000000 * 3; break;
-        case 1: Gold = 5000000 * 3;  break;
+        case 0:
+            Gold = 10000000 * 3;
+            break;
+        case 1:
+            Gold = 5000000 * 3;
+            break;
         }
     }
-    else if (((Type == 12 && (ip->Type > ITEM_WINGS_OF_DARKNESS
-        && !(ip->Type >= ITEM_WING_OF_STORM && ip->Type <= ITEM_WING_OF_DIMENSION)
-        && (ip->Type != ITEM_CAPE_OF_OVERRULE)
-        )) || Type == 13 || Type == 15))
+    else if (((Type == 12 && (ip->Type > ITEM_WINGS_OF_DARKNESS &&
+                              !(ip->Type >= ITEM_WING_OF_STORM && ip->Type <= ITEM_WING_OF_DIMENSION) &&
+                              (ip->Type != ITEM_CAPE_OF_OVERRULE))) ||
+              Type == 13 || Type == 15))
     {
         Gold = (long long)100 + Level2 * Level2 * Level2;
 
@@ -1889,20 +2039,43 @@ int64_t ItemValue(ITEM* ip, int goldType)
     {
         switch (Level)
         {
-        case 5:Level2 += 4; break;
-        case 6:Level2 += 10; break;
-        case 7:Level2 += 25; break;
-        case 8:Level2 += 45; break;
-        case 9:Level2 += 65; break;
-        case 10:Level2 += 95; break;
-        case 11:Level2 += 135; break;
-        case 12:Level2 += 185; break;
-        case 13:Level2 += 245; break;
-        case 14:Level2 += 305; break;
-        case 15:Level2 += 365; break;
+        case 5:
+            Level2 += 4;
+            break;
+        case 6:
+            Level2 += 10;
+            break;
+        case 7:
+            Level2 += 25;
+            break;
+        case 8:
+            Level2 += 45;
+            break;
+        case 9:
+            Level2 += 65;
+            break;
+        case 10:
+            Level2 += 95;
+            break;
+        case 11:
+            Level2 += 135;
+            break;
+        case 12:
+            Level2 += 185;
+            break;
+        case 13:
+            Level2 += 245;
+            break;
+        case 14:
+            Level2 += 305;
+            break;
+        case 15:
+            Level2 += 365;
+            break;
         }
-        if ((Type == 12 && ip->Type <= ITEM_WINGS_OF_DARKNESS) || ip->Type == ITEM_CAPE_OF_LORD || (ip->Type >= ITEM_WING_OF_STORM && ip->Type <= ITEM_WING_OF_DIMENSION)
-            || (ip->Type == ITEM_CAPE_OF_OVERRULE))
+        if ((Type == 12 && ip->Type <= ITEM_WINGS_OF_DARKNESS) || ip->Type == ITEM_CAPE_OF_LORD ||
+            (ip->Type >= ITEM_WING_OF_STORM && ip->Type <= ITEM_WING_OF_DIMENSION) ||
+            (ip->Type == ITEM_CAPE_OF_OVERRULE))
         {
             Gold = (long long)(40000000 + ((40 + Level2) * Level2 * Level2 * 11));
         }
@@ -1953,9 +2126,8 @@ int64_t ItemValue(ITEM* ip, int goldType)
             case AT_LIFE_REGENERATION:
                 if ((Type == 12 && ip->Type <= ITEM_WINGS_OF_DARKNESS)
 
-                    || (ip->Type >= ITEM_WING_OF_STORM && ip->Type <= ITEM_WING_OF_DIMENSION)
-                    || (ip->Type >= ITEM_CAPE_OF_FIGHTER && ip->Type <= ITEM_CAPE_OF_OVERRULE)
-                    )    //  날개.
+                    || (ip->Type >= ITEM_WING_OF_STORM && ip->Type <= ITEM_WING_OF_DIMENSION) ||
+                    (ip->Type >= ITEM_CAPE_OF_FIGHTER && ip->Type <= ITEM_CAPE_OF_OVERRULE)) //  날개.
                 {
                     int iOption = ip->SpecialValue[i];
                     if (AT_LIFE_REGENERATION == ip->Special[i])
@@ -1964,30 +2136,54 @@ int64_t ItemValue(ITEM* ip, int goldType)
                     }
                     switch (iOption)
                     {
-                    case 4:Gold += (int64_t)((double)Gold * 6 / 10); break;
-                    case 8:Gold += (int64_t)((double)Gold * 14 / 10); break;
-                    case 12:Gold += (int64_t)((double)Gold * 28 / 10); break;
-                    case 16:Gold += (int64_t)((double)Gold * 56 / 10); break;
+                    case 4:
+                        Gold += (int64_t)((double)Gold * 6 / 10);
+                        break;
+                    case 8:
+                        Gold += (int64_t)((double)Gold * 14 / 10);
+                        break;
+                    case 12:
+                        Gold += (int64_t)((double)Gold * 28 / 10);
+                        break;
+                    case 16:
+                        Gold += (int64_t)((double)Gold * 56 / 10);
+                        break;
                     }
                 }
                 else
                 {
                     switch (ip->SpecialValue[i])
                     {
-                    case 4:Gold += (int64_t)((double)Gold * 6 / 10); break;
-                    case 8:Gold += (int64_t)((double)Gold * 14 / 10); break;
-                    case 12:Gold += (int64_t)((double)Gold * 28 / 10); break;
-                    case 16:Gold += (int64_t)((double)Gold * 56 / 10); break;
+                    case 4:
+                        Gold += (int64_t)((double)Gold * 6 / 10);
+                        break;
+                    case 8:
+                        Gold += (int64_t)((double)Gold * 14 / 10);
+                        break;
+                    case 12:
+                        Gold += (int64_t)((double)Gold * 28 / 10);
+                        break;
+                    case 16:
+                        Gold += (int64_t)((double)Gold * 56 / 10);
+                        break;
                     }
                 }
                 break;
             case AT_IMPROVE_BLOCKING:
                 switch (ip->SpecialValue[i])
                 {
-                case 5:Gold += (int64_t)((double)Gold * 6 / 10); break;
-                case 10:Gold += (int64_t)((double)Gold * 14 / 10); break;
-                case 15:Gold += (int64_t)((double)Gold * 28 / 10); break;
-                case 20:Gold += (int64_t)((double)Gold * 56 / 10); break;
+                case 5:
+                    Gold += (int64_t)((double)Gold * 6 / 10);
+                    break;
+                case 10:
+                    Gold += (int64_t)((double)Gold * 14 / 10);
+                    break;
+                case 15:
+                    Gold += (int64_t)((double)Gold * 28 / 10);
+                    break;
+                case 20:
+                    Gold += (int64_t)((double)Gold * 56 / 10);
+                    break;
                 }
                 break;
             case AT_LUCK:
@@ -2063,7 +2259,8 @@ int64_t ItemValue(ITEM* ip, int goldType)
         Gold = (long long)ip->Durability * 50;
     }
 
-    if (ip->Type == ITEM_HELPER + 71 || ip->Type == ITEM_HELPER + 72 || ip->Type == ITEM_HELPER + 73 || ip->Type == ITEM_HELPER + 74 || ip->Type == ITEM_HELPER + 75)
+    if (ip->Type == ITEM_HELPER + 71 || ip->Type == ITEM_HELPER + 72 || ip->Type == ITEM_HELPER + 73 ||
+        ip->Type == ITEM_HELPER + 74 || ip->Type == ITEM_HELPER + 75)
     {
         Gold = 2000000;
     }
@@ -2128,13 +2325,19 @@ int64_t ItemValue(ITEM* ip, int goldType)
 
     switch (ip->Type)
     {
-    case ITEM_POTION + 112:	goto EXIT_CALCULATE;
+    case ITEM_POTION + 112:
+        goto EXIT_CALCULATE;
         // MODEL_POTION+113
-    case ITEM_POTION + 113:	goto EXIT_CALCULATE;
-    case ITEM_POTION + 121:	goto EXIT_CALCULATE;
-    case ITEM_POTION + 122:	goto EXIT_CALCULATE;
-    case ITEM_POTION + 123:	goto EXIT_CALCULATE;
-    case ITEM_POTION + 124:	goto EXIT_CALCULATE;
+    case ITEM_POTION + 113:
+        goto EXIT_CALCULATE;
+    case ITEM_POTION + 121:
+        goto EXIT_CALCULATE;
+    case ITEM_POTION + 122:
+        goto EXIT_CALCULATE;
+    case ITEM_POTION + 123:
+        goto EXIT_CALCULATE;
+    case ITEM_POTION + 124:
+        goto EXIT_CALCULATE;
     case ITEM_WING + 130:
     case ITEM_WING + 131:
     case ITEM_WING + 132:
@@ -2181,7 +2384,7 @@ int64_t ItemValue(ITEM* ip, int goldType)
     if (goldType == 1 && !(ip->Type >= ITEM_SPLINTER_OF_ARMOR && ip->Type <= ITEM_HORN_OF_FENRIR))
     {
         //        wchar_t Text[100];
-                //int repairGold = ConvertRepairGold(Gold,ip->Durability, p->Durability, ip->Type, Text);
+        // int repairGold = ConvertRepairGold(Gold,ip->Durability, p->Durability, ip->Type, Text);
         DWORD maxDurability = CalcMaxDurability(ip, p, Level);
         float persent = 1.f - ((float)ip->Durability / (float)maxDurability);
         auto repairGold = (DWORD)(Gold * 0.6f * persent);
@@ -2201,14 +2404,16 @@ EXIT_CALCULATE:
     {
         Gold = (Gold / 10) * 10;
     }
-    if (Check_LuckyItem(ip->Type))	Gold = 0;
+    if (Check_LuckyItem(ip->Type))
+        Gold = 0;
 
     return (int64_t)Gold;
 }
 
 bool IsRequireEquipItem(ITEM* pItem)
 {
-    if (pItem == NULL) {
+    if (pItem == NULL)
+    {
         return false;
     }
 
@@ -2216,11 +2421,13 @@ bool IsRequireEquipItem(ITEM* pItem)
 
     bool bEquipable = false;
 
-    if (pItemAttr->RequireClass[gCharacterManager.GetBaseClass(Hero->Class)]) {
+    if (pItemAttr->RequireClass[gCharacterManager.GetBaseClass(Hero->Class)])
+    {
         bEquipable = true;
     }
-    else if (gCharacterManager.GetBaseClass(Hero->Class) == CLASS_DARK && pItemAttr->RequireClass[CLASS_WIZARD]
-        && pItemAttr->RequireClass[CLASS_KNIGHT]) {
+    else if (gCharacterManager.GetBaseClass(Hero->Class) == CLASS_DARK && pItemAttr->RequireClass[CLASS_WIZARD] &&
+             pItemAttr->RequireClass[CLASS_KNIGHT])
+    {
         bEquipable = true;
     }
 
@@ -2275,7 +2482,8 @@ bool IsRequireEquipItem(ITEM* pItem)
     {
         PET_INFO* pPetInfo = giPetManager::GetPetInfo(pItem);
         WORD wRequireCharisma = static_cast<WORD>((185 + pPetInfo->m_wLevel * 15) & 0xFFFF);
-        if (wRequireCharisma > wCharisma) {
+        if (wRequireCharisma > wCharisma)
+        {
             return false;
         }
     }
@@ -2285,7 +2493,8 @@ bool IsRequireEquipItem(ITEM* pItem)
 
 void PlusSpecial(WORD* Value, int Special, ITEM* Item)
 {
-    if (Item->Type == -1) {
+    if (Item->Type == -1)
+    {
         return;
     }
 
@@ -2301,7 +2510,8 @@ void PlusSpecial(WORD* Value, int Special, ITEM* Item)
 
 void PlusSpecialPercent(WORD* Value, int Special, ITEM* Item, WORD Percent)
 {
-    if (Item->Type == -1) return;
+    if (Item->Type == -1)
+        return;
 
     if (IsRequireEquipItem(Item))
     {
@@ -2315,7 +2525,8 @@ void PlusSpecialPercent(WORD* Value, int Special, ITEM* Item, WORD Percent)
 
 void PlusSpecialPercent2(WORD* Value, int Special, ITEM* Item)
 {
-    if (Item->Type == -1) return;
+    if (Item->Type == -1)
+        return;
 
     if (IsRequireEquipItem(Item))
     {
@@ -2329,7 +2540,8 @@ void PlusSpecialPercent2(WORD* Value, int Special, ITEM* Item)
 
 WORD ItemDefense(ITEM* Item)
 {
-    if (Item->Type == -1) return 0;
+    if (Item->Type == -1)
+        return 0;
     WORD Defense = Item->Defense;
     PlusSpecial(&Defense, AT_IMPROVE_DEFENSE, Item);
     return Defense;
@@ -2337,17 +2549,19 @@ WORD ItemDefense(ITEM* Item)
 
 WORD ItemMagicDefense(ITEM* Item)
 {
-    if (Item->Type == -1) return 0;
+    if (Item->Type == -1)
+        return 0;
     WORD MagicDefense = Item->MagicDefense;
-    //PlusSpecial(&MagicDefense,PLUS_MAGIC_DEFENSE,Item);
+    // PlusSpecial(&MagicDefense,PLUS_MAGIC_DEFENSE,Item);
     return MagicDefense;
 }
 
 WORD ItemWalkSpeed(ITEM* Item)
 {
-    if (Item->Type == -1) return 0;
+    if (Item->Type == -1)
+        return 0;
     WORD WalkSpeed = Item->WalkSpeed;
-    //PlusSpecial(&WalkSpeed,PLUS_WALK_SPEED,Item);
+    // PlusSpecial(&WalkSpeed,PLUS_WALK_SPEED,Item);
     return WalkSpeed;
 }
 
@@ -2368,17 +2582,19 @@ void OpenMonsterScript(wchar_t* FileName)
     while (true)
     {
         SMDToken token = GetToken();
-        if (token == END) break;
-        if (token == NAME && strcmp("end", TokenString) == NULL) break;
+        if (token == END)
+            break;
+        if (token == NAME && strcmp("end", TokenString) == NULL)
+            break;
         MONSTER_SCRIPT* m = &MonsterScript[EditMonsterNumber++];
         m->Type = static_cast<int>(TokenNumber);
         token = GetToken();
         token = GetToken();
 
         CMultiLanguage::ConvertFromUtf8(m->Name, TokenString, MAX_MONSTER_NAME);
-        
-        //Token = (*GetToken)();m->Level = (int)TokenNumber;
-        //for(int i=0;i<23;i++) Token = (*GetToken)();
+
+        // Token = (*GetToken)();m->Level = (int)TokenNumber;
+        // for(int i=0;i<23;i++) Token = (*GetToken)();
     }
     fclose(SMDFile);
 }
@@ -2409,7 +2625,8 @@ void MonsterConvert(MONSTER* m, int Level)
     m->Attribute.SuccessfulBlocking = c->SuccessfulBlocking / 2 + c->SuccessfulBlocking / 2 * (m->Level) / 9;
 }
 
-void CreateClassAttribute(int Class, int Strength, int Dexterity, int Vitality, int Energy, int Life, int Mana, int LevelLife, int LevelMana, int VitalityToLife, int EnergyToMana)
+void CreateClassAttribute(int Class, int Strength, int Dexterity, int Vitality, int Energy, int Life, int Mana,
+                          int LevelLife, int LevelMana, int VitalityToLife, int EnergyToMana)
 {
     CLASS_ATTRIBUTE* c = &ClassAttribute[Class];
     c->Strength = Strength;
@@ -2433,7 +2650,7 @@ void CreateClassAttributes()
     CreateClassAttribute(3, 30, 30, 30, 30, 120, 80, 1, 1, 2, 2);
     CreateClassAttribute(4, 30, 30, 30, 30, 120, 80, 1, 1, 2, 2);
     CreateClassAttribute(5, 50, 50, 50, 30, 110, 30, 110, 30, 6, 3);
-    CreateClassAttribute(6, 32, 27, 25, 20, 100, 40,	 /*사용안함 => */1, 3, 1, 1);
+    CreateClassAttribute(6, 32, 27, 25, 20, 100, 40, /*사용안함 => */ 1, 3, 1, 1);
 }
 
 float CalcDurabilityPercent(BYTE dur, BYTE maxDur, int Level, int excellentFlags, int ancientDiscriminator)
@@ -2460,26 +2677,24 @@ float CalcDurabilityPercent(BYTE dur, BYTE maxDur, int Level, int excellentFlags
         maxDurability += 15;
     }
 
-    float   durP = 1.f - (dur / (float)maxDurability);
+    float durP = 1.f - (dur / (float)maxDurability);
 
     if (durP > 0.8f)
     {
-        return  0.5f;
+        return 0.5f;
+    }
+    else if (durP > 0.7f)
+    {
+        return 0.3f;
+    }
+    else if (durP > 0.5f)
+    {
+        return 0.2f;
     }
     else
-        if (durP > 0.7f)
-        {
-            return  0.3f;
-        }
-        else
-            if (durP > 0.5f)
-            {
-                return  0.2f;
-            }
-            else
-            {
-                return  0.f;
-            }
+    {
+        return 0.f;
+    }
     return 0.f;
 }
 
@@ -2538,7 +2753,7 @@ void CHARACTER_MACHINE::InputEnemyAttribute(MONSTER* e)
 
 void CHARACTER_MACHINE::CalculateDamage()
 {
-    WORD    DamageMin, DamageMax;
+    WORD DamageMin, DamageMax;
 
     ITEM* Right = &Equipment[EQUIPMENT_WEAPON_RIGHT];
     ITEM* Left = &Equipment[EQUIPMENT_WEAPON_LEFT];
@@ -2553,7 +2768,8 @@ void CHARACTER_MACHINE::CalculateDamage()
 
     int CharacterClass = gCharacterManager.GetBaseClass(Character.Class);
 
-    if (((gCharacterManager.GetEquipedBowType(Left) == BOWTYPE_BOW) && (Left->Durability != 0)) || ((gCharacterManager.GetEquipedBowType(Right) == BOWTYPE_CROSSBOW) && (Right->Durability != 0)))
+    if (((gCharacterManager.GetEquipedBowType(Left) == BOWTYPE_BOW) && (Left->Durability != 0)) ||
+        ((gCharacterManager.GetEquipedBowType(Right) == BOWTYPE_CROSSBOW) && (Right->Durability != 0)))
     {
         Character.AttackDamageMinRight = Dexterity / 7 + Strength / 14;
         Character.AttackDamageMaxRight = Dexterity / 4 + Strength / 8;
@@ -2576,7 +2792,8 @@ void CHARACTER_MACHINE::CalculateDamage()
             int minValue = 7;
             int maxValue = 4;
 
-            minValue = 6; maxValue = 4;
+            minValue = 6;
+            maxValue = 4;
 
             Character.AttackDamageMinRight = Strength / minValue;
             Character.AttackDamageMaxRight = Strength / maxValue;
@@ -2587,11 +2804,13 @@ void CHARACTER_MACHINE::CalculateDamage()
 
         case CLASS_DARK:
         {
-            int minValue[2] = { 7, 10 };
-            int maxValue[2] = { 4, 5 };
+            int minValue[2] = {7, 10};
+            int maxValue[2] = {4, 5};
 
-            minValue[0] = 6; minValue[1] = 12;
-            maxValue[0] = 4; maxValue[1] = 9;
+            minValue[0] = 6;
+            minValue[1] = 12;
+            maxValue[0] = 4;
+            maxValue[1] = 9;
 
             Character.AttackDamageMinRight = (Strength / minValue[0]) + Energy / minValue[1];
             Character.AttackDamageMaxRight = (Strength / maxValue[0]) + Energy / maxValue[1];
@@ -2633,9 +2852,12 @@ void CHARACTER_MACHINE::CalculateDamage()
 
         if (p->Durability != 0)
         {
-            float   percent = CalcDurabilityPercent(Equipment[EQUIPMENT_WING].Durability, p->Durability, Equipment[EQUIPMENT_WING].Level, 0, 0);//Equipment[EQUIPMENT_WING].Option1);
+            float percent =
+                CalcDurabilityPercent(Equipment[EQUIPMENT_WING].Durability, p->Durability,
+                                      Equipment[EQUIPMENT_WING].Level, 0, 0); // Equipment[EQUIPMENT_WING].Option1);
 
-            DamageMin = 0; DamageMax = 0;
+            DamageMin = 0;
+            DamageMax = 0;
             PlusSpecial(&DamageMin, AT_IMPROVE_DAMAGE, &Equipment[EQUIPMENT_WING]);
             PlusSpecial(&DamageMax, AT_IMPROVE_DAMAGE, &Equipment[EQUIPMENT_WING]);
 
@@ -2652,7 +2874,8 @@ void CHARACTER_MACHINE::CalculateDamage()
     if (Right->Type != -1 && Right->Durability != 0)
     {
         ITEM_ATTRIBUTE* p = &ItemAttribute[Right->Type];
-        float   percent = CalcDurabilityPercent(Right->Durability, p->Durability, Right->Level, Right->ExcellentFlags, Right->AncientDiscriminator);
+        float percent = CalcDurabilityPercent(Right->Durability, p->Durability, Right->Level, Right->ExcellentFlags,
+                                              Right->AncientDiscriminator);
 
         DamageMin = Right->DamageMin;
         DamageMax = Right->DamageMax;
@@ -2683,7 +2906,8 @@ void CHARACTER_MACHINE::CalculateDamage()
     if (Left->Type != -1 && Left->Durability != 0)
     {
         ITEM_ATTRIBUTE* p = &ItemAttribute[Left->Type];
-        float   percent = CalcDurabilityPercent(Left->Durability, p->Durability, Left->Level, Left->ExcellentFlags, Left->AncientDiscriminator);
+        float percent = CalcDurabilityPercent(Left->Durability, p->Durability, Left->Level, Left->ExcellentFlags,
+                                              Left->AncientDiscriminator);
 
         DamageMin = Left->DamageMin;
         DamageMax = Left->DamageMax;
@@ -2738,8 +2962,7 @@ void CHARACTER_MACHINE::CalculateDamage()
         PlusSpecialPercent(&Character.AttackDamageMaxLeft, AT_IMPROVE_DAMAGE_PERCENT, LRing, LRing->SpecialValue[1]);
     }
 
-    WORD    Damage = 0;
-
+    WORD Damage = 0;
 
     g_csItemOption.PlusSpecial(&Damage, AT_SET_OPTION_IMPROVE_ATTACK_MIN);
     Character.AttackDamageMinLeft += Damage;
@@ -2764,7 +2987,8 @@ void CHARACTER_MACHINE::CalculateDamage()
     Character.AttackDamageMinLeft += Damage;
     Character.AttackDamageMaxLeft += Damage;
 
-    if ((Right->Type >= ITEM_BOW && Right->Type < ITEM_BOW + MAX_ITEM_INDEX) && (Left->Type >= ITEM_BOW && Left->Type < ITEM_BOW + MAX_ITEM_INDEX))
+    if ((Right->Type >= ITEM_BOW && Right->Type < ITEM_BOW + MAX_ITEM_INDEX) &&
+        (Left->Type >= ITEM_BOW && Left->Type < ITEM_BOW + MAX_ITEM_INDEX))
     {
         int LLevel = Left->Level;
         int RLevel = Right->Level;
@@ -2774,12 +2998,11 @@ void CHARACTER_MACHINE::CalculateDamage()
             Character.AttackDamageMinRight += (WORD)(Character.AttackDamageMinRight * ((LLevel * 2 + 1) * 0.01f) + 1);
             Character.AttackDamageMaxRight += (WORD)(Character.AttackDamageMaxRight * ((LLevel * 2 + 1) * 0.01f) + 1);
         }
-        else
-            if (Right->Type == ITEM_ARROWS && RLevel >= 1)
-            {
-                Character.AttackDamageMinLeft += (WORD)(Character.AttackDamageMinLeft * ((RLevel * 2 + 1) * 0.01f) + 1);
-                Character.AttackDamageMaxLeft += (WORD)(Character.AttackDamageMaxLeft * ((RLevel * 2 + 1) * 0.01f) + 1);
-            }
+        else if (Right->Type == ITEM_ARROWS && RLevel >= 1)
+        {
+            Character.AttackDamageMinLeft += (WORD)(Character.AttackDamageMinLeft * ((RLevel * 2 + 1) * 0.01f) + 1);
+            Character.AttackDamageMaxLeft += (WORD)(Character.AttackDamageMaxLeft * ((RLevel * 2 + 1) * 0.01f) + 1);
+        }
     }
     if (g_isCharacterBuff((&Hero->Object), eBuff_EliteScroll3))
     {
@@ -2809,7 +3032,7 @@ void CHARACTER_MACHINE::CalculateDamage()
     Character.AttackDamageMaxRight += g_SocketItemMgr.m_StatusBonus.m_iAttackDamageMaxBonus;
     Character.AttackDamageMinLeft += g_SocketItemMgr.m_StatusBonus.m_iAttackDamageMinBonus;
     Character.AttackDamageMaxLeft += g_SocketItemMgr.m_StatusBonus.m_iAttackDamageMaxBonus;
-    if (g_isCharacterBuff((&Hero->Object), eBuff_BlessingOfXmax))	//크리스마스의 축복
+    if (g_isCharacterBuff((&Hero->Object), eBuff_BlessingOfXmax)) // 크리스마스의 축복
     {
         int _Temp = 0;
         _Temp = Character.Level / 3 + 45;
@@ -2820,7 +3043,7 @@ void CHARACTER_MACHINE::CalculateDamage()
         Character.AttackDamageMaxLeft += _Temp;
     }
 
-    if (g_isCharacterBuff((&Hero->Object), eBuff_StrengthOfSanta))	//산타의 강화
+    if (g_isCharacterBuff((&Hero->Object), eBuff_StrengthOfSanta)) // 산타의 강화
     {
         int _Temp = 30;
 
@@ -2856,16 +3079,16 @@ void CHARACTER_MACHINE::CalculateMagicDamage()
     ITEM* Amulet = &Equipment[EQUIPMENT_AMULET];
     ITEM* RRing = &Equipment[EQUIPMENT_RING_RIGHT];
     ITEM* LRing = &Equipment[EQUIPMENT_RING_LEFT];
-    float   percent;
-    WORD    DamageMin = 0;
-    WORD    DamageMax = 0;
+    float percent;
+    WORD DamageMin = 0;
+    WORD DamageMax = 0;
 
     // 날개
     if (Equipment[EQUIPMENT_WING].Type != -1)
     {
         ITEM_ATTRIBUTE* p = &ItemAttribute[Equipment[EQUIPMENT_WING].Type];
         ITEM* ipWing = &Equipment[EQUIPMENT_WING];
-        percent = CalcDurabilityPercent(ipWing->Durability, p->Durability, ipWing->Level, 0);//ipWing->Option1);
+        percent = CalcDurabilityPercent(ipWing->Durability, p->Durability, ipWing->Level, 0); // ipWing->Option1);
 
         DamageMin = 0;
         DamageMax = 0;
@@ -2882,15 +3105,14 @@ void CHARACTER_MACHINE::CalculateMagicDamage()
     if (Right->Type != -1 && Right->Durability != 0)
     {
         ITEM_ATTRIBUTE* p = &ItemAttribute[Right->Type];
-        percent = CalcDurabilityPercent(Right->Durability, p->Durability, Right->Level, Right->ExcellentFlags, Right->AncientDiscriminator);
-        DamageMin = 0; DamageMax = 0;
+        percent = CalcDurabilityPercent(Right->Durability, p->Durability, Right->Level, Right->ExcellentFlags,
+                                        Right->AncientDiscriminator);
+        DamageMin = 0;
+        DamageMax = 0;
 
-        if (Right->Type == ITEM_DARK_REIGN_BLADE
-            || Right->Type == ITEM_RUNE_BLADE
-            || Right->Type == ITEM_EXPLOSION_BLADE
-            || Right->Type == ITEM_SWORD_DANCER
-            || Right->Type == ITEM_IMPERIAL_SWORD
-            )
+        if (Right->Type == ITEM_DARK_REIGN_BLADE || Right->Type == ITEM_RUNE_BLADE ||
+            Right->Type == ITEM_EXPLOSION_BLADE || Right->Type == ITEM_SWORD_DANCER ||
+            Right->Type == ITEM_IMPERIAL_SWORD)
         {
             PlusSpecial(&DamageMin, AT_IMPROVE_DAMAGE, Right);
             PlusSpecial(&DamageMax, AT_IMPROVE_DAMAGE, Right);
@@ -2916,8 +3138,10 @@ void CHARACTER_MACHINE::CalculateMagicDamage()
         if (CLASS_SUMMONER != gCharacterManager.GetBaseClass(Character.Class))
         {
             ITEM_ATTRIBUTE* p = &ItemAttribute[Left->Type];
-            percent = CalcDurabilityPercent(Left->Durability, p->Durability, Left->Level, Left->ExcellentFlags, Left->AncientDiscriminator);
-            DamageMin = 0; DamageMax = 0;
+            percent = CalcDurabilityPercent(Left->Durability, p->Durability, Left->Level, Left->ExcellentFlags,
+                                            Left->AncientDiscriminator);
+            DamageMin = 0;
+            DamageMax = 0;
 
             if (Left->Type >= ITEM_SWORD && Left->Type < ITEM_SHIELD)
             {
@@ -2951,8 +3175,10 @@ void CHARACTER_MACHINE::CalculateMagicDamage()
         if (CLASS_SUMMONER != gCharacterManager.GetBaseClass(Character.Class))
         {
             ITEM_ATTRIBUTE* p = &ItemAttribute[Left->Type];
-            percent = CalcDurabilityPercent(Left->Durability, p->Durability, Left->Level, Left->ExcellentFlags, Left->AncientDiscriminator);
-            DamageMin = 0; DamageMax = 0;
+            percent = CalcDurabilityPercent(Left->Durability, p->Durability, Left->Level, Left->ExcellentFlags,
+                                            Left->AncientDiscriminator);
+            DamageMin = 0;
+            DamageMax = 0;
 
             if (Right->Type == ITEM_IMPERIAL_SWORD)
             {
@@ -2965,8 +3191,7 @@ void CHARACTER_MACHINE::CalculateMagicDamage()
                 PlusSpecial(&DamageMax, AT_IMPROVE_MAGIC, Right);
             }
 
-            if (gCharacterManager.GetBaseClass(Character.Class) != CLASS_DARK
-                )
+            if (gCharacterManager.GetBaseClass(Character.Class) != CLASS_DARK)
             {
                 Character.MagicDamageMin += DamageMin - (WORD)(DamageMin * percent);
                 Character.MagicDamageMax += DamageMax - (WORD)(DamageMax * percent);
@@ -3061,8 +3286,7 @@ void CHARACTER_MACHINE::CalculateCurseDamage()
         ::PlusSpecial(&wDamageMin, AT_IMPROVE_CURSE, pEquipWing);
         ::PlusSpecial(&wDamageMax, AT_IMPROVE_CURSE, pEquipWing);
 
-        float fPercent = ::CalcDurabilityPercent(pEquipWing->Durability,
-            pAttribute->Durability, pEquipWing->Level, 0);
+        float fPercent = ::CalcDurabilityPercent(pEquipWing->Durability, pAttribute->Durability, pEquipWing->Level, 0);
         wDamageMin -= WORD(wDamageMin * fPercent);
         wDamageMax -= WORD(wDamageMax * fPercent);
 
@@ -3080,9 +3304,8 @@ void CHARACTER_MACHINE::CalculateCurseDamage()
         ::PlusSpecial(&wDamageMin, AT_IMPROVE_CURSE, pEquipLeft);
         ::PlusSpecial(&wDamageMax, AT_IMPROVE_CURSE, pEquipLeft);
 
-        float fPercent = CalcDurabilityPercent(pEquipLeft->Durability,
-            pAttribute->Durability, pEquipLeft->Level, pEquipLeft->ExcellentFlags,
-            pEquipLeft->AncientDiscriminator);
+        float fPercent = CalcDurabilityPercent(pEquipLeft->Durability, pAttribute->Durability, pEquipLeft->Level,
+                                               pEquipLeft->ExcellentFlags, pEquipLeft->AncientDiscriminator);
 
         Character.CurseDamageMin += wDamageMin - WORD(wDamageMin * fPercent);
         Character.CurseDamageMax += wDamageMax - WORD(wDamageMax * fPercent);
@@ -3110,7 +3333,8 @@ void CHARACTER_MACHINE::CalculateAttackRating()
 
     if (gCharacterManager.GetBaseClass(Character.Class) == CLASS_DARK_LORD)
     {
-        Character.AttackRating = static_cast<WORD>(((Character.Level * 5) + (Dexterity * 5) / 2) + (Strength / 6) + (Charisma / 10) & 0xFFFF);
+        Character.AttackRating = static_cast<WORD>(
+            ((Character.Level * 5) + (Dexterity * 5) / 2) + (Strength / 6) + (Charisma / 10) & 0xFFFF);
     }
     else if (gCharacterManager.GetBaseClass(Character.Class) == CLASS_RAGEFIGHTER)
     {
@@ -3118,7 +3342,8 @@ void CHARACTER_MACHINE::CalculateAttackRating()
     }
     else
     {
-        Character.AttackRating = static_cast<WORD>((((Character.Level * 5) + (Dexterity * 3) / 2) + (Strength / 4)) & 0xFFFF);
+        Character.AttackRating =
+            static_cast<WORD>((((Character.Level * 5) + (Dexterity * 3) / 2) + (Strength / 4)) & 0xFFFF);
     }
 
     g_csItemOption.PlusSpecial(&Character.AttackRating, AT_SET_OPTION_IMPROVE_ATTACKING_PERCENT);
@@ -3220,7 +3445,8 @@ void CHARACTER_MACHINE::CalculateSuccessfulBlocking()
     if (Left->Type != -1 && Left->Durability != 0)
     {
         ITEM_ATTRIBUTE* p = &ItemAttribute[Left->Type];
-        float percent = CalcDurabilityPercent(Left->Durability, p->Durability, Left->Level, Left->ExcellentFlags, Left->AncientDiscriminator);
+        float percent = CalcDurabilityPercent(Left->Durability, p->Durability, Left->Level, Left->ExcellentFlags,
+                                              Left->AncientDiscriminator);
 
         WORD SuccessBlocking = Left->SuccessfulBlocking - (WORD)(Left->SuccessfulBlocking * percent);
 
@@ -3240,7 +3466,8 @@ void CHARACTER_MACHINE::CalculateSuccessfulBlocking()
     PlusSpecialPercent(&Character.SuccessfulBlocking, AT_IMPROVE_BLOCKING_PERCENT, &Equipment[EQUIPMENT_GLOVES], 10);
     PlusSpecialPercent(&Character.SuccessfulBlocking, AT_IMPROVE_BLOCKING_PERCENT, &Equipment[EQUIPMENT_BOOTS], 10);
     PlusSpecialPercent(&Character.SuccessfulBlocking, AT_IMPROVE_BLOCKING_PERCENT, &Equipment[EQUIPMENT_RING_LEFT], 10);
-    PlusSpecialPercent(&Character.SuccessfulBlocking, AT_IMPROVE_BLOCKING_PERCENT, &Equipment[EQUIPMENT_RING_RIGHT], 10);
+    PlusSpecialPercent(&Character.SuccessfulBlocking, AT_IMPROVE_BLOCKING_PERCENT, &Equipment[EQUIPMENT_RING_RIGHT],
+                       10);
 
     Character.SuccessfulBlocking *= g_SocketItemMgr.m_StatusBonus.m_fDefenceRateBonus;
 }
@@ -3279,7 +3506,7 @@ void CHARACTER_MACHINE::CalculateDefense()
         Character.Defense = Dexterity / 5;
     }
 
-    WORD    Defense = 0;
+    WORD Defense = 0;
     for (int i = EQUIPMENT_WEAPON_LEFT; i <= EQUIPMENT_WING; ++i)
     {
         if (Equipment[i].Durability != 0)
@@ -3290,11 +3517,13 @@ void CHARACTER_MACHINE::CalculateDefense()
             float percent;
             if (i == EQUIPMENT_WING)
             {
-                percent = CalcDurabilityPercent(Equipment[i].Durability, p->Durability, Equipment[i].Level, 0);//Equipment[i].Option1);
+                percent = CalcDurabilityPercent(Equipment[i].Durability, p->Durability, Equipment[i].Level,
+                                                0); // Equipment[i].Option1);
             }
             else
             {
-                percent = CalcDurabilityPercent(Equipment[i].Durability, p->Durability, Equipment[i].Level, Equipment[i].ExcellentFlags, Equipment[i].AncientDiscriminator);
+                percent = CalcDurabilityPercent(Equipment[i].Durability, p->Durability, Equipment[i].Level,
+                                                Equipment[i].ExcellentFlags, Equipment[i].AncientDiscriminator);
             }
 
             defense -= (WORD)(defense * percent);
@@ -3359,7 +3588,8 @@ void CHARACTER_MACHINE::CalculateDefense()
     g_csItemOption.PlusSpecialLevel(&Character.Defense, Dexterity, AT_SET_OPTION_IMPROVE_DEFENCE_3);
     g_csItemOption.PlusSpecialLevel(&Character.Defense, Vitality, AT_SET_OPTION_IMPROVE_DEFENCE_4);
 
-    if (Equipment[EQUIPMENT_WEAPON_LEFT].Type >= ITEM_SHIELD && Equipment[EQUIPMENT_WEAPON_LEFT].Type < ITEM_SHIELD + MAX_ITEM_INDEX)
+    if (Equipment[EQUIPMENT_WEAPON_LEFT].Type >= ITEM_SHIELD &&
+        Equipment[EQUIPMENT_WEAPON_LEFT].Type < ITEM_SHIELD + MAX_ITEM_INDEX)
     {
         g_csItemOption.PlusSpecialPercent(&Character.Defense, AT_SET_OPTION_IMPROVE_SHIELD_DEFENCE);
     }
@@ -3374,7 +3604,8 @@ void CHARACTER_MACHINE::CalculateDefense()
 
     if (Equipment[EQUIPMENT_WEAPON_LEFT].Type != -1 && Equipment[EQUIPMENT_WEAPON_LEFT].Durability != 0)
     {
-        Character.Defense += Equipment[EQUIPMENT_WEAPON_LEFT].Defense * g_SocketItemMgr.m_StatusBonus.m_iShieldDefenceBonus * 0.01f;
+        Character.Defense +=
+            Equipment[EQUIPMENT_WEAPON_LEFT].Defense * g_SocketItemMgr.m_StatusBonus.m_iShieldDefenceBonus * 0.01f;
     }
 }
 
@@ -3423,23 +3654,8 @@ void CHARACTER_MACHINE::CalulateMasterLevelNextExperience()
     int64_t iBaseExperience = 0;
 
     int64_t iData_Master =
-        (
-            (
-                (int64_t)9 + (int64_t)iTotalLevel
-                )
-            * (int64_t)iTotalLevel
-            * (int64_t)iTotalLevel
-            * (int64_t)10
-            )
-        +
-        (
-            (
-                (int64_t)9 + (int64_t)iTOverLevel
-                )
-            * (int64_t)iTOverLevel
-            * (int64_t)iTOverLevel
-            * (int64_t)1000
-            );
+        (((int64_t)9 + (int64_t)iTotalLevel) * (int64_t)iTotalLevel * (int64_t)iTotalLevel * (int64_t)10) +
+        (((int64_t)9 + (int64_t)iTOverLevel) * (int64_t)iTOverLevel * (int64_t)iTOverLevel * (int64_t)1000);
 
     Master_Level_Data.lNext_MasterLevel_Experince = (iData_Master - (int64_t)3892250000) / (int64_t)2;
 }
@@ -3450,11 +3666,11 @@ bool CHARACTER_MACHINE::IsZeroDurability()
     {
         if (Equipment[i].Durability == 0)
         {
-            return  true;
+            return true;
         }
     }
 
-    return  false;
+    return false;
 }
 
 void CHARACTER_MACHINE::CalculateBasicState()
@@ -3487,7 +3703,8 @@ void CHARACTER_MACHINE::CalculateBasicState()
     if (g_isCharacterBuff((&Hero->Object), eBuff_Hp_up_Ourforces))
     {
         WORD _AddStat = 0;
-        if (Character.Energy >= 132) {
+        if (Character.Energy >= 132)
+        {
             _AddStat = (WORD)(30 + (WORD)((Character.Energy - 132) / 10));
         }
         if (_AddStat > 200)
@@ -3498,7 +3715,9 @@ void CHARACTER_MACHINE::CalculateBasicState()
     }
 }
 
-void CHARACTER_MACHINE::getAllAddStateOnlyExValues(int& iAddStrengthExValues, int& iAddDexterityExValues, int& iAddVitalityExValues, int& iAddEnergyExValues, int& iAddCharismaExValues)
+void CHARACTER_MACHINE::getAllAddStateOnlyExValues(int& iAddStrengthExValues, int& iAddDexterityExValues,
+                                                   int& iAddVitalityExValues, int& iAddEnergyExValues,
+                                                   int& iAddCharismaExValues)
 {
     if (g_isCharacterBuff((&Hero->Object), eBuff_SecretPotion1))
     {
@@ -3547,13 +3766,16 @@ void CHARACTER_MACHINE::CalculateAll()
 
     CalculateBasicState();
 
-    WORD wAddStrength = 0, wAddDexterity = 0, wAddEnergy = 0, wAddVitality = 0, wStrengthResult = 0, wDexterityResult = 0, wEnergyResult = 0, wVitalityResult = 0, wAddCharisma = 0, wCharismaResult = 0;
+    WORD wAddStrength = 0, wAddDexterity = 0, wAddEnergy = 0, wAddVitality = 0, wStrengthResult = 0,
+         wDexterityResult = 0, wEnergyResult = 0, wVitalityResult = 0, wAddCharisma = 0, wCharismaResult = 0;
 
     g_csItemOption.getAllAddStateOnlyAddValue(&wAddStrength, &wAddDexterity, &wAddEnergy, &wAddVitality, &wAddCharisma);
 
-    int iAddStrengthByExValues = 0, iAddDexterityByExValues = 0, iAddEnergyByExValues = 0, iAddVitalityByExValues = 0, iAddCharismaExValues = 0;
+    int iAddStrengthByExValues = 0, iAddDexterityByExValues = 0, iAddEnergyByExValues = 0, iAddVitalityByExValues = 0,
+        iAddCharismaExValues = 0;
 
-    getAllAddStateOnlyExValues(iAddStrengthByExValues, iAddDexterityByExValues, iAddVitalityByExValues, iAddEnergyByExValues, iAddCharismaExValues);
+    getAllAddStateOnlyExValues(iAddStrengthByExValues, iAddDexterityByExValues, iAddVitalityByExValues,
+                               iAddEnergyByExValues, iAddCharismaExValues);
 
     wAddStrength += iAddStrengthByExValues;
     wAddDexterity += iAddDexterityByExValues;
@@ -3567,12 +3789,15 @@ void CHARACTER_MACHINE::CalculateAll()
 
     wCharismaResult = CharacterMachine->Character.Charisma + wAddCharisma;
 
-    g_csItemOption.getAllAddOptionStatesbyCompare(&Character.AddStrength, &Character.AddDexterity, &Character.AddEnergy, &Character.AddVitality, &Character.AddCharisma, wStrengthResult, wDexterityResult, wEnergyResult, wVitalityResult, wCharismaResult);
+    g_csItemOption.getAllAddOptionStatesbyCompare(&Character.AddStrength, &Character.AddDexterity, &Character.AddEnergy,
+                                                  &Character.AddVitality, &Character.AddCharisma, wStrengthResult,
+                                                  wDexterityResult, wEnergyResult, wVitalityResult, wCharismaResult);
     g_csItemOption.CheckItemSetOptions();
 
     if ((CharacterMachine->Equipment[EQUIPMENT_WING].Type + MODEL_ITEM) == MODEL_CAPE_OF_LORD)
     {
-        PlusSpecial(&Character.AddCharisma, AT_SET_OPTION_IMPROVE_CHARISMA, &CharacterMachine->Equipment[EQUIPMENT_WING]);
+        PlusSpecial(&Character.AddCharisma, AT_SET_OPTION_IMPROVE_CHARISMA,
+                    &CharacterMachine->Equipment[EQUIPMENT_WING]);
     }
 
     CalculateBasicState();
@@ -3584,7 +3809,7 @@ void CHARACTER_MACHINE::CalculateAll()
     CalculateDefense();
     CalculateMagicDefense();
     CalculateWalkSpeed();
-    //CalculateNextExperince();
+    // CalculateNextExperince();
     CalculateSuccessfulBlockingPK();
     CalculateAttackRatingPK();
 

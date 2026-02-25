@@ -35,8 +35,8 @@ enum ITEMSETOPTION
 
 struct sItemAct
 {
-    int		s_nItemIndex;
-    bool	s_bType[eITEM_END];
+    int s_nItemIndex;
+    bool s_bType[eITEM_END];
 };
 
 enum SKILL_TOOLTIP_RENDER_POINT
@@ -55,8 +55,8 @@ enum SKILL_TOOLTIP_RENDER_POINT
 
 // 세율정보
 
-extern int		g_nTaxRate;
-extern int		g_nChaosTaxRate;
+extern int g_nTaxRate;
+extern int g_nChaosTaxRate;
 
 extern const int iMaxLevel;
 
@@ -64,15 +64,15 @@ extern const int iMaxLevel;
 // guild
 ///////////////////////////////////////////////////////////////////////////////
 
-extern wchar_t         g_GuildNotice[3][128];
+extern wchar_t g_GuildNotice[3][128];
 extern GUILD_LIST_t GuildList[MAX_GUILDS];
-extern int          g_nGuildMemberCount;
-extern int          GuildListPage;
-extern MARK_t		GuildMark[MAX_MARKS];
-extern int			SelectMarkColor;
-extern int			GuildPlayerKey;
-extern int			GuildNumber;
-extern int			GuildTotalScore;
+extern int g_nGuildMemberCount;
+extern int GuildListPage;
+extern MARK_t GuildMark[MAX_MARKS];
+extern int SelectMarkColor;
+extern int GuildPlayerKey;
+extern int GuildNumber;
+extern int GuildTotalScore;
 
 extern int AllRepairGold;
 
@@ -89,8 +89,8 @@ extern SIZE Size[50];
 ///////////////////////////////////////////////////////////////////////////////
 
 extern PARTY_t Party[MAX_PARTYS];
-extern int     PartyKey;
-extern int     PartyNumber;
+extern int PartyKey;
+extern int PartyNumber;
 
 ///////////////////////////////////////////////////////////////////////////////
 // inventory
@@ -99,7 +99,7 @@ extern int     PartyNumber;
 extern ITEM Inventory[MAX_INVENTORY];
 extern ITEM InventoryExt[MAX_INVENTORY_EXT];
 extern ITEM ShopInventory[MAX_SHOP_INVENTORY];
-extern int  InventoryType;
+extern int InventoryType;
 extern ITEM g_PersonalShopInven[MAX_PERSONALSHOP_INVEN];
 extern ITEM g_PersonalShopBackup[MAX_PERSONALSHOP_INVEN];
 extern bool g_bEnablePersonalShop;
@@ -110,38 +110,38 @@ extern wchar_t g_szPersonalShopTitle[MAX_SHOPTITLE + 1];
 extern CHARACTER g_PersonalShopSeller;
 
 extern bool EnableRenderInventory;
-extern int  g_bEventChipDialogEnable;
-extern int  g_shEventChipCount;
+extern int g_bEventChipDialogEnable;
+extern int g_shEventChipCount;
 extern short g_shMutoNumber[3];
 extern bool g_bServerDivisionAccept;
 extern wchar_t g_strGiftName[64];
 
 extern bool RepairShop;
-extern int  RepairEnable;
+extern int RepairEnable;
 extern int AskYesOrNo;
 extern char OkYesOrNo;
 
-extern int  SommonTable[];
-extern int  StorageGoldFlag;
+extern int SommonTable[];
+extern int StorageGoldFlag;
 extern ITEM* SrcInventory;
-extern int  SrcInventoryIndex;
-extern int  DstInventoryIndex;
-extern int  CheckSkill;
+extern int SrcInventoryIndex;
+extern int DstInventoryIndex;
+extern int CheckSkill;
 extern ITEM* CheckInventory;
 extern ITEM* CheckInvenParent;
 extern BYTE BuyItem[4];
-extern int  EnableUse;
+extern int EnableUse;
 extern bool EquipmentItem;
 extern BYTE g_byItemUseType;
-extern wchar_t	g_lpszKeyPadInput[2][MAX_KEYPADINPUT + 1];
+extern wchar_t g_lpszKeyPadInput[2][MAX_KEYPADINPUT + 1];
 
 #ifdef ASG_ADD_GENS_SYSTEM
 bool IsStrifeMap(int nMapIndex);
-#endif	// ASG_ADD_GENS_SYSTEM
+#endif // ASG_ADD_GENS_SYSTEM
 void CreateShiny(OBJECT* o);
 void ClearInventory();
 bool CheckEmptyInventory(ITEM* Inv, int InvWidth, int InvHeight);
-#ifdef  AUTO_CHANGE_ITEM
+#ifdef AUTO_CHANGE_ITEM
 void AutoEquipmentChange(int sx, int sy, ITEM* Inv, int InvWidth, int InvHeight);
 #endif // AUTO_CHANGE_ITEM
 
@@ -154,7 +154,8 @@ int64_t CalcSelfRepairCost(int64_t ItemValue, int Durability, int MaxDurability,
 int64_t ConvertRepairGold(int64_t Gold, int Durability, int MaxDurability, short Type, wchar_t* Text);
 void RepairAllGold(void);
 WORD CalcMaxDurability(const ITEM* ip, ITEM_ATTRIBUTE* p, int Level);
-void RenderTipTextList(const int sx, const int sy, int TextNum, int Tab, int iSort = RT3_SORT_CENTER, int iRenderPoint = STRP_NONE, BOOL bUseBG = TRUE);
+void RenderTipTextList(const int sx, const int sy, int TextNum, int Tab, int iSort = RT3_SORT_CENTER,
+                       int iRenderPoint = STRP_NONE, BOOL bUseBG = TRUE);
 
 void SendRequestUse(int Index, int Target);
 bool SendRequestEquipmentItem(STORAGE_TYPE iSrcType, int iSrcIndex, ITEM* pItem, STORAGE_TYPE iDstType, int iDstIndex);
@@ -173,8 +174,10 @@ void CreateGuildMark(int nMarkIndex, bool blend = true);
 void RenderGuildColor(float x, float y, int SizeX, int SizeY, int Index);
 void CreateCastleMark(int Type, BYTE* buffer = NULL, bool blend = true);
 
-void RenderItem3D(float sx, float sy, float Width, float Height, int Type, int Level, int excellentFlags, int ancientDiscriminator, bool PickUp = false);
-void RenderObjectScreen(int Type, int ItemLevel, int excellentFlags, int ancientDiscriminator, vec3_t Target, int Select, bool PickUp);
+void RenderItem3D(float sx, float sy, float Width, float Height, int Type, int Level, int excellentFlags,
+                  int ancientDiscriminator, bool PickUp = false);
+void RenderObjectScreen(int Type, int ItemLevel, int excellentFlags, int ancientDiscriminator, vec3_t Target,
+                        int Select, bool PickUp);
 bool GetAttackDamage(int* iMinDamage, int* iMaxDamage);
 void GetItemName(int iType, int iLevel, wchar_t* Text);
 std::wstring GetItemDisplayName(ITEM* pItem);
@@ -202,7 +205,8 @@ bool IsMoneyItem(ITEM* pItem);
 
 void ComputeItemInfo(int iHelpItem);
 void RenderHelpCategory(int iColumnType, int Pos_x, int Pos_y);
-void RenderHelpLine(int iColumnType, const wchar_t* pPrintStyle, int& TabSpace, const wchar_t* pGapText = NULL, int Pos_y = 0, int iType = 0);
+void RenderHelpLine(int iColumnType, const wchar_t* pPrintStyle, int& TabSpace, const wchar_t* pGapText = NULL,
+                    int Pos_y = 0, int iType = 0);
 void RenderItemName(int i, OBJECT* o, ITEM* ip, bool Sort);
 
 BYTE CaculateFreeTicketLevel(int iType);

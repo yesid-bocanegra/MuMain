@@ -6,6 +6,7 @@
 
 using namespace SEASON3B;
 
+// cppcheck-suppress uninitMemberVar
 CNewUIScrollBar::CNewUIScrollBar()
 {
     memset(&m_ptPos, 0, sizeof(POINT));
@@ -163,16 +164,19 @@ bool CNewUIScrollBar::Render()
 
     for (int i = 0; i < m_iScrollBarMiddleNum; i++)
     {
-        RenderImage(IMAGE_SCROLL_MIDDLE, m_ptPos.x,
-            m_ptPos.y + SCROLLBAR_TOP_HEIGHT + (i * SCROLLBAR_MIDDLE_HEIGHT), SCROLLBAR_TOP_WIDTH, SCROLLBAR_MIDDLE_HEIGHT);
+        RenderImage(IMAGE_SCROLL_MIDDLE, m_ptPos.x, m_ptPos.y + SCROLLBAR_TOP_HEIGHT + (i * SCROLLBAR_MIDDLE_HEIGHT),
+                    SCROLLBAR_TOP_WIDTH, SCROLLBAR_MIDDLE_HEIGHT);
     }
 
     if (m_iScrollBarMiddleRemainderPixel > 0)
     {
-        RenderImage(IMAGE_SCROLL_MIDDLE, m_ptPos.x, m_ptPos.y + SCROLLBAR_TOP_HEIGHT + (m_iScrollBarMiddleNum * SCROLLBAR_MIDDLE_HEIGHT), SCROLLBAR_TOP_WIDTH, m_iScrollBarMiddleRemainderPixel);
+        RenderImage(IMAGE_SCROLL_MIDDLE, m_ptPos.x,
+                    m_ptPos.y + SCROLLBAR_TOP_HEIGHT + (m_iScrollBarMiddleNum * SCROLLBAR_MIDDLE_HEIGHT),
+                    SCROLLBAR_TOP_WIDTH, m_iScrollBarMiddleRemainderPixel);
     }
 
-    RenderImage(IMAGE_SCROLL_BOTTOM, m_ptPos.x, m_ptPos.y + m_iHeight - SCROLLBAR_TOP_HEIGHT, SCROLLBAR_TOP_WIDTH, SCROLLBAR_TOP_HEIGHT);
+    RenderImage(IMAGE_SCROLL_BOTTOM, m_ptPos.x, m_ptPos.y + m_iHeight - SCROLLBAR_TOP_HEIGHT, SCROLLBAR_TOP_WIDTH,
+                SCROLLBAR_TOP_HEIGHT);
 
     if (m_bScrollBtnActive == true)
     {
@@ -180,13 +184,11 @@ bool CNewUIScrollBar::Render()
         {
             glColor4f(0.7f, 0.7f, 0.7f, 1.0f);
         }
-        RenderImage(IMAGE_SCROLLBAR_ON, m_ptScrollBtnPos.x, m_ptScrollBtnPos.y,
-            SCROLLBTN_WIDTH, SCROLLBTN_HEIGHT);
+        RenderImage(IMAGE_SCROLLBAR_ON, m_ptScrollBtnPos.x, m_ptScrollBtnPos.y, SCROLLBTN_WIDTH, SCROLLBTN_HEIGHT);
     }
     else
     {
-        RenderImage(IMAGE_SCROLLBAR_OFF, m_ptScrollBtnPos.x, m_ptScrollBtnPos.y,
-            SCROLLBTN_WIDTH, SCROLLBTN_HEIGHT);
+        RenderImage(IMAGE_SCROLLBAR_OFF, m_ptScrollBtnPos.x, m_ptScrollBtnPos.y, SCROLLBTN_WIDTH, SCROLLBTN_HEIGHT);
     }
     DisableAlphaBlend();
     return true;

@@ -82,8 +82,7 @@ bool ItemDataLoader::Load(wchar_t* fileName)
     return success;
 }
 
-template<typename TFileFormat>
-bool ItemDataLoader::LoadFormat(FILE* fp, const wchar_t* formatName)
+template <typename TFileFormat> bool ItemDataLoader::LoadFormat(FILE* fp, const wchar_t* formatName)
 {
     const int Size = sizeof(TFileFormat);
 

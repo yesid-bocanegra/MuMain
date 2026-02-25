@@ -10,13 +10,13 @@
 #include "ZzzEffect.h"
 #include "DSPlaySound.h"
 
-
 using namespace SEASON3B;
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
+// cppcheck-suppress uninitMemberVar
 SEASON3B::CNewUICatapultWindow::CCatapultGroupButton::CCatapultGroupButton()
 {
     m_pButton = NULL;
@@ -312,7 +312,7 @@ void SEASON3B::CNewUICatapultWindow::RenderButtons()
 
 void SEASON3B::CNewUICatapultWindow::RenderOutlineUpper(float fPos_x, float fPos_y, float fWidth, float fHeight)
 {
-    POINT ptOrigin = { (long)fPos_x, (long)fPos_y };
+    POINT ptOrigin = {(long)fPos_x, (long)fPos_y};
     float fBoxWidth = fWidth;
 
     RenderImage(IMAGE_CATAPULT_TABLE_TOP_LEFT, ptOrigin.x + 12, ptOrigin.y - 4, 14, 14);
@@ -322,7 +322,7 @@ void SEASON3B::CNewUICatapultWindow::RenderOutlineUpper(float fPos_x, float fPos
 
 void SEASON3B::CNewUICatapultWindow::RenderOutlineLower(float fPos_x, float fPos_y, float fWidth, float fHeight)
 {
-    POINT ptOrigin = { (long)fPos_x, (long)fPos_y };
+    POINT ptOrigin = {(long)fPos_x, (long)fPos_y};
     float fBoxWidth = fWidth;
     float fBoxHeight = fHeight;
 
@@ -427,7 +427,7 @@ void SEASON3B::CNewUICatapultWindow::DoFireFixStartPosition(int iType, int iPosi
         break;
     }
 
-    vec3_t vLight = { 1.f, 0.3f, 0.1f };
+    vec3_t vLight = {1.f, 0.3f, 0.1f};
     CreateEffect(BITMAP_SHOCK_WAVE, vTargetPos, Hero->Object.Angle, vLight, 6);
 
     PlayBuffer(SOUND_BC_CATAPULT_ATTACK);
@@ -499,7 +499,7 @@ void SEASON3B::CNewUICatapultWindow::UnloadImages()
 
 bool SEASON3B::CNewUICatapultWindow::BtnProcess()
 {
-    POINT ptExitBtn1 = { m_Pos.x + 169, m_Pos.y + 7 };
+    POINT ptExitBtn1 = {m_Pos.x + 169, m_Pos.y + 7};
 
     if (SEASON3B::IsPress(VK_LBUTTON) && CheckMouseIn(ptExitBtn1.x, ptExitBtn1.y, 13, 12))
     {

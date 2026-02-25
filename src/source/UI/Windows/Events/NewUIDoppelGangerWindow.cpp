@@ -132,7 +132,7 @@ bool CNewUIDoppelGangerWindow::Render()
 
     RenderFrame();
 
-    POINT ptOrigin = { m_Pos.x, m_Pos.y + 50 };
+    POINT ptOrigin = {m_Pos.x, m_Pos.y + 50};
     wchar_t szText[256];
 
     g_pRenderText->SetFont(g_hFont);
@@ -194,7 +194,7 @@ void CNewUIDoppelGangerWindow::Render3D()
 
 void CNewUIDoppelGangerWindow::RenderItem3D()
 {
-    POINT ptOrigin = { m_Pos.x, m_Pos.y + 50 };
+    POINT ptOrigin = {m_Pos.x, m_Pos.y + 50};
 
     int nItemType = (14 * MAX_ITEM_INDEX) + 111;
     int nItemLevel = 0;
@@ -247,7 +247,9 @@ void CNewUIDoppelGangerWindow::RenderFrame()
     RenderImage(IMAGE_DOPPELGANGERWINDOW_RIGHT, m_Pos.x + INVENTORY_WIDTH - 21, m_Pos.y + 64, 21.f, 320.f);
     RenderImage(IMAGE_DOPPELGANGERWINDOW_BOTTOM, m_Pos.x, m_Pos.y + INVENTORY_HEIGHT - 45, 190.f, 45.f);
 
-    wchar_t szText[256] = { 0, };
+    wchar_t szText[256] = {
+        0,
+    };
     float fPos_x = m_Pos.x + 15.0f, fPos_y = m_Pos.y;
     float fLine_y = 13.0f;
 
@@ -261,7 +263,7 @@ void CNewUIDoppelGangerWindow::RenderFrame()
 
 bool CNewUIDoppelGangerWindow::BtnProcess()
 {
-    POINT ptExitBtn1 = { m_Pos.x + 169, m_Pos.y + 7 };
+    POINT ptExitBtn1 = {m_Pos.x + 169, m_Pos.y + 7};
 
     if (SEASON3B::IsPress(VK_LBUTTON) && CheckMouseIn(ptExitBtn1.x, ptExitBtn1.y, 13, 12))
     {

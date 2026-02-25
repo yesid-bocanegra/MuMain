@@ -28,31 +28,32 @@ using namespace SEASON3B;
 
 namespace
 {
-    const int EnterLevelCount = 5;
-    const int EnterMinLevel[EnterLevelCount] = { 220, 271, 321, 351, 381 };
-    const int EnterMaxLevel[EnterLevelCount] = { 270, 320, 350, 380, 400 };
+const int EnterLevelCount = 5;
+const int EnterMinLevel[EnterLevelCount] = {220, 271, 321, 351, 381};
+const int EnterMaxLevel[EnterLevelCount] = {270, 320, 350, 380, 400};
 
-    void DrawText(wchar_t* text, int textposx, int textposy, DWORD textcolor, DWORD textbackcolor, int textsort, float fontboxwidth, bool isbold)
+void DrawText(wchar_t* text, int textposx, int textposy, DWORD textcolor, DWORD textbackcolor, int textsort,
+              float fontboxwidth, bool isbold)
+{
+    if (isbold)
     {
-        if (isbold)
-        {
-            g_pRenderText->SetFont(g_hFontBold);
-        }
-        else
-        {
-            g_pRenderText->SetFont(g_hFont);
-        }
-
-        DWORD backuptextcolor = g_pRenderText->GetTextColor();
-        DWORD backuptextbackcolor = g_pRenderText->GetBgColor();
-
-        g_pRenderText->SetTextColor(textcolor);
-        g_pRenderText->SetBgColor(textbackcolor);
-        g_pRenderText->RenderText(textposx, textposy, text, fontboxwidth, 0, textsort);
-        g_pRenderText->SetTextColor(backuptextcolor);
-        g_pRenderText->SetBgColor(backuptextbackcolor);
+        g_pRenderText->SetFont(g_hFontBold);
     }
+    else
+    {
+        g_pRenderText->SetFont(g_hFont);
+    }
+
+    DWORD backuptextcolor = g_pRenderText->GetTextColor();
+    DWORD backuptextbackcolor = g_pRenderText->GetBgColor();
+
+    g_pRenderText->SetTextColor(textcolor);
+    g_pRenderText->SetBgColor(textbackcolor);
+    g_pRenderText->RenderText(textposx, textposy, text, fontboxwidth, 0, textsort);
+    g_pRenderText->SetTextColor(backuptextcolor);
+    g_pRenderText->SetBgColor(backuptextbackcolor);
 }
+} // namespace
 
 bool SEASON3B::CNewUICursedTempleEnter::Create(CNewUIManager* pNewUIMng, int x, int y)
 {
@@ -81,9 +82,7 @@ SEASON3B::CNewUICursedTempleEnter::~CNewUICursedTempleEnter()
     Destroy();
 }
 
-void SEASON3B::CNewUICursedTempleEnter::Initialize()
-{
-}
+void SEASON3B::CNewUICursedTempleEnter::Initialize() {}
 
 void SEASON3B::CNewUICursedTempleEnter::Destroy()
 {
@@ -98,15 +97,18 @@ void SEASON3B::CNewUICursedTempleEnter::SetButtonInfo()
 {
     float x;
     x = m_Pos.x + (((CURSEDTEMPLE_ENTER_WINDOW_WIDTH / 2) - MSGBOX_BTN_WIDTH) / 2);
-    m_Button[CURSEDTEMPLEENTER_OPEN].ChangeButtonImgState(true, CNewUIMessageBoxMng::IMAGE_MSGBOX_BTN_EMPTY_VERY_SMALL, true);
+    m_Button[CURSEDTEMPLEENTER_OPEN].ChangeButtonImgState(true, CNewUIMessageBoxMng::IMAGE_MSGBOX_BTN_EMPTY_VERY_SMALL,
+                                                          true);
 
     m_Button[CURSEDTEMPLEENTER_OPEN].ChangeButtonInfo(x, m_Pos.y + 203, 54, 23);
 
     // 2147 "입장하기"
     m_Button[CURSEDTEMPLEENTER_OPEN].ChangeText(GlobalText[2147]);
 
-    x = m_Pos.x + (CURSEDTEMPLE_ENTER_WINDOW_WIDTH / 2) + (((CURSEDTEMPLE_ENTER_WINDOW_WIDTH / 2) - MSGBOX_BTN_WIDTH) / 2);
-    m_Button[CURSEDTEMPLEENTER_EXIT].ChangeButtonImgState(true, CNewUIMessageBoxMng::IMAGE_MSGBOX_BTN_EMPTY_VERY_SMALL, true);
+    x = m_Pos.x + (CURSEDTEMPLE_ENTER_WINDOW_WIDTH / 2) +
+        (((CURSEDTEMPLE_ENTER_WINDOW_WIDTH / 2) - MSGBOX_BTN_WIDTH) / 2);
+    m_Button[CURSEDTEMPLEENTER_EXIT].ChangeButtonImgState(true, CNewUIMessageBoxMng::IMAGE_MSGBOX_BTN_EMPTY_VERY_SMALL,
+                                                          true);
 
     m_Button[CURSEDTEMPLEENTER_EXIT].ChangeButtonInfo(x, m_Pos.y + 203, 54, 23);
     // 1002 "닫기"
@@ -139,7 +141,8 @@ bool SEASON3B::CNewUICursedTempleEnter::CheckEnterItem(ITEM* p, int enterlevel)
 {
     if (p->Type == ITEM_HELPER + 61)
     {
-        if (!CheckEnterLevel(enterlevel)) return false;
+        if (!CheckEnterLevel(enterlevel))
+            return false;
     }
     else
     {
@@ -152,7 +155,8 @@ bool SEASON3B::CNewUICursedTempleEnter::CheckEnterItem(ITEM* p, int enterlevel)
             return false;
     }
 
-    if (p->Durability < 1) return false;
+    if (p->Durability < 1)
+        return false;
 
     return true;
 }
@@ -161,18 +165,21 @@ bool SEASON3B::CNewUICursedTempleEnter::CheckInventory(BYTE& itempos, int enterl
 {
     int pos = 0;
 
-    if (enterlevel == -1) {
+    if (enterlevel == -1)
+    {
         return false;
     }
 
     pos = g_pMyInventory->GetInventoryCtrl()->FindItemIndex(ITEM_SCROLL_OF_BLOOD, enterlevel);
-    if (pos != -1) {
+    if (pos != -1)
+    {
         itempos = pos;
         return true;
     }
 
     pos = g_pMyInventory->GetInventoryCtrl()->FindItemIndex(ITEM_HELPER + 61, -1);
-    if (pos != -1) {
+    if (pos != -1)
+    {
         itempos = pos;
         return true;
     }
@@ -183,7 +190,7 @@ bool SEASON3B::CNewUICursedTempleEnter::UpdateMouseEvent()
 {
     if (m_Button[CURSEDTEMPLEENTER_OPEN].UpdateMouseEvent())
     {
-        int  EnterLevel = -1;
+        int EnterLevel = -1;
         bool Result = false;
 
         // CheckHeroLevl
@@ -241,7 +248,8 @@ void SEASON3B::CNewUICursedTempleEnter::RenderText()
     memset(&Text, 0, sizeof(wchar_t));
 
     mu_swprintf(Text, GlobalText[2358]);
-    DrawText(Text, m_Pos.x, m_Pos.y + 13, 0xFF49B0FF, 0x00000000, RT3_SORT_CENTER, CURSEDTEMPLE_ENTER_WINDOW_WIDTH, true);
+    DrawText(Text, m_Pos.x, m_Pos.y + 13, 0xFF49B0FF, 0x00000000, RT3_SORT_CENTER, CURSEDTEMPLE_ENTER_WINDOW_WIDTH,
+             true);
 
     int enterlevel = -1;
 
@@ -250,7 +258,8 @@ void SEASON3B::CNewUICursedTempleEnter::RenderText()
         memset(&Text, 0, sizeof(Text));
 
         mu_swprintf(Text, GlobalText[2370], enterlevel);
-        DrawText(Text, m_Pos.x + 3, m_Pos.y + 42, 0xffffffff, 0x00000000, RT3_SORT_CENTER, CURSEDTEMPLE_ENTER_WINDOW_WIDTH - 10, false);
+        DrawText(Text, m_Pos.x + 3, m_Pos.y + 42, 0xffffffff, 0x00000000, RT3_SORT_CENTER,
+                 CURSEDTEMPLE_ENTER_WINDOW_WIDTH - 10, false);
 
         for (int i = 0; i < EnterLevelCount + 1; ++i)
         {
@@ -269,25 +278,29 @@ void SEASON3B::CNewUICursedTempleEnter::RenderText()
             {
                 DisableAlphaBlend();
                 mu_swprintf(Text, L"%ls %ls", Text, GlobalText[2412]);
-                DrawText(Text, m_Pos.x + 3, m_Pos.y + 67 + (i * 15), 0xffffffff, 0xff0000ff, RT3_SORT_CENTER, CURSEDTEMPLE_ENTER_WINDOW_WIDTH - 10, false);
+                DrawText(Text, m_Pos.x + 3, m_Pos.y + 67 + (i * 15), 0xffffffff, 0xff0000ff, RT3_SORT_CENTER,
+                         CURSEDTEMPLE_ENTER_WINDOW_WIDTH - 10, false);
                 EnableAlphaTest();
             }
             else
             {
                 mu_swprintf(Text, L"%ls %ls", Text, GlobalText[2413]);
-                DrawText(Text, m_Pos.x + 3, m_Pos.y + 67 + (i * 15), 0xffffffff, 0x00000000, RT3_SORT_CENTER, CURSEDTEMPLE_ENTER_WINDOW_WIDTH - 10, false);
+                DrawText(Text, m_Pos.x + 3, m_Pos.y + 67 + (i * 15), 0xffffffff, 0x00000000, RT3_SORT_CENTER,
+                         CURSEDTEMPLE_ENTER_WINDOW_WIDTH - 10, false);
             }
         }
 
         memset(&Text, 0, sizeof(char));
         mu_swprintf(Text, GlobalText[2373], m_EnterCount);
-        DrawText(Text, m_Pos.x + 3, m_Pos.y + 70 + ((EnterLevelCount + 1) * 15), 0xff0000ff, 0x00000000, RT3_SORT_CENTER, CURSEDTEMPLE_ENTER_WINDOW_WIDTH - 10, false);
+        DrawText(Text, m_Pos.x + 3, m_Pos.y + 70 + ((EnterLevelCount + 1) * 15), 0xff0000ff, 0x00000000,
+                 RT3_SORT_CENTER, CURSEDTEMPLE_ENTER_WINDOW_WIDTH - 10, false);
     }
     else
     {
         memset(&Text, 0, sizeof(char));
         mu_swprintf(Text, GlobalText[2366]);
-        DrawText(Text, m_Pos.x, m_Pos.y + 52, 0xff0000ff, 0x00000000, RT3_SORT_CENTER, CURSEDTEMPLE_ENTER_WINDOW_WIDTH, false);
+        DrawText(Text, m_Pos.x, m_Pos.y + 52, 0xff0000ff, 0x00000000, RT3_SORT_CENTER, CURSEDTEMPLE_ENTER_WINDOW_WIDTH,
+                 false);
     }
 }
 
@@ -295,23 +308,35 @@ void SEASON3B::CNewUICursedTempleEnter::RenderFrame()
 {
     float x, y, width, height;
 
-    x = GetPos().x; y = GetPos().y + 2.f, width = CURSEDTEMPLE_ENTER_WINDOW_WIDTH - MSGBOX_BACK_BLANK_WIDTH; height = CURSEDTEMPLE_ENTER_WINDOW_HEIGHT - MSGBOX_BACK_BLANK_HEIGHT;
+    x = GetPos().x;
+    y = GetPos().y + 2.f, width = CURSEDTEMPLE_ENTER_WINDOW_WIDTH - MSGBOX_BACK_BLANK_WIDTH;
+    height = CURSEDTEMPLE_ENTER_WINDOW_HEIGHT - MSGBOX_BACK_BLANK_HEIGHT;
     RenderImage(CNewUIMessageBoxMng::IMAGE_MSGBOX_BACK, x, y, width, height);
 
-    x = GetPos().x; y = GetPos().y, width = MSGBOX_WIDTH; height = MSGBOX_TOP_HEIGHT;
+    x = GetPos().x;
+    y = GetPos().y, width = MSGBOX_WIDTH;
+    height = MSGBOX_TOP_HEIGHT;
     RenderImage(CNewUIMessageBoxMng::IMAGE_MSGBOX_TOP_TITLEBAR, x, y, width, height);
 
-    x = GetPos().x; y += MSGBOX_TOP_HEIGHT; width = MSGBOX_WIDTH; height = MSGBOX_MIDDLE_HEIGHT;
+    x = GetPos().x;
+    y += MSGBOX_TOP_HEIGHT;
+    width = MSGBOX_WIDTH;
+    height = MSGBOX_MIDDLE_HEIGHT;
     for (int i = 0; i < 9; ++i)
     {
         RenderImage(CNewUIMessageBoxMng::IMAGE_MSGBOX_MIDDLE, x, y, width, height);
         y += height;
     }
 
-    x = GetPos().x; width = MSGBOX_WIDTH; height = MSGBOX_BOTTOM_HEIGHT;
+    x = GetPos().x;
+    width = MSGBOX_WIDTH;
+    height = MSGBOX_BOTTOM_HEIGHT;
     RenderImage(CNewUIMessageBoxMng::IMAGE_MSGBOX_BOTTOM, x, y, width, height);
 
-    x = GetPos().x; y = GetPos().y + CURSEDTEMPLE_ENTER_WINDOW_HEIGHT - 77; width = MSGBOX_LINE_WIDTH; height = MSGBOX_LINE_HEIGHT;
+    x = GetPos().x;
+    y = GetPos().y + CURSEDTEMPLE_ENTER_WINDOW_HEIGHT - 77;
+    width = MSGBOX_LINE_WIDTH;
+    height = MSGBOX_LINE_HEIGHT;
     RenderImage(CNewUIMessageBoxMng::IMAGE_MSGBOX_LINE, x, y, width, height);
 }
 
@@ -338,7 +363,7 @@ void SEASON3B::CNewUICursedTempleEnter::RenderButtons()
     }
 }
 
-//ServerMessage
+// ServerMessage
 void SEASON3B::CNewUICursedTempleEnter::SetCursedTempleEnterInfo(const BYTE* cursedtempleinfo)
 {
     m_EnterTime = static_cast<int>(cursedtempleinfo[0]);

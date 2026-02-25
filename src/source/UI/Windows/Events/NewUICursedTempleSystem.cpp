@@ -27,213 +27,213 @@
 
 extern int TextNum;
 extern wchar_t TextList[50][100];
-extern int  TextListColor[50];
+extern int TextListColor[50];
 
 using namespace SEASON3B;
 
 namespace
 {
-    const int HolyItemNpc = 380;
-    const int AlliedNpc = 381;
-    const int IllusionNpc = 382;
-    const int AlliedHolyItemBoxNpc = 383;
-    const int IllusionHolyItemBoxNpc = 384;
+const int HolyItemNpc = 380;
+const int AlliedNpc = 381;
+const int IllusionNpc = 382;
+const int AlliedHolyItemBoxNpc = 383;
+const int IllusionHolyItemBoxNpc = 384;
 
-    const int	AXIS_X = 0;
-    const int	AXIS_Y = 1;
-    const float PROGRESSTIME = 10000.0f;
+const int AXIS_X = 0;
+const int AXIS_Y = 1;
+const float PROGRESSTIME = 10000.0f;
 
-    //#ifdef _DEBUG
-    const float posX[7] =
+// #ifdef _DEBUG
+const float posX[7] = {
+    146.0f, 192.0f, 200.0f, 138.0f, 128.0f, 210.0f, 170.0f,
+};
+
+const float posY[7] = {
+    42.0f, 128.0f, 116.0f, 54.0f, 126.0f, 44.0f, 84.0f,
+};
+// #endif //_DEBUG
+
+float MiniMapPos(float pointX, float pointY, float scale, int aXis)
+{
+    float minmapframeposX = 464.f, minmapframeposY = 299.f;
+
+    if (aXis == AXIS_X)
     {
-        146.0f, 192.0f, 200.0f, 138.0f, 128.0f, 210.0f, 170.0f,
-    };
-
-    const float posY[7] =
+        float ridY = posY[6] - pointY;
+        return ((pointX - ridY) / scale) + minmapframeposX;
+    }
+    else
     {
-        42.0f, 128.0f, 116.0f, 54.0f, 126.0f, 44.0f, 84.0f,
-    };
-    //#endif //_DEBUG
+        float ridX = posX[6] - pointX;
+        return (((125 - (pointY + ridX))) / scale) + minmapframeposY;
+    }
+}
 
-    float MiniMapPos(float pointX, float pointY, float scale, int aXis)
+bool CreateCursedTempleSkillEffect(CHARACTER* c, int skillindex, int SubType)
+{
+    if (!c)
+        return false;
+
+    OBJECT* o = &c->Object;
+    BMD* b = &Models[o->Type];
+
+    vec3_t vRelativePos, vtaWorldPos, vLight, vAngle;
+
+    switch (skillindex)
     {
-        float minmapframeposX = 464.f, minmapframeposY = 299.f;
+    case AT_SKILL_CURSED_TEMPLE_PRODECTION:
+    {
+        DeleteEffect(MODEL_CURSEDTEMPLE_PRODECTION_SKILL, o);
 
-        if (aXis == AXIS_X)
+        if (o->Live && !SearchEffect(MODEL_CURSEDTEMPLE_PRODECTION_SKILL, o))
         {
-            float ridY = posY[6] - pointY;
-            return ((pointX - ridY) / scale) + minmapframeposX;
-        }
-        else
-        {
-            float ridX = posX[6] - pointX;
-            return (((125 - (pointY + ridX))) / scale) + minmapframeposY;
+            Vector(0.3f, 0.3f, 0.8f, o->Light);
+            CreateEffect(MODEL_CURSEDTEMPLE_PRODECTION_SKILL, o->Position, o->Angle, o->Light, 0, o);
+            CreateEffect(MODEL_SHIELD_CRASH, o->Position, o->Angle, o->Light, 1, o);
+            CreateEffect(BITMAP_SHOCK_WAVE, o->Position, o->Angle, o->Light, 10, o);
         }
     }
-
-    bool CreateCursedTempleSkillEffect(CHARACTER* c, int skillindex, int SubType)
+        return true;
+    case AT_SKILL_CURSED_TEMPLE_RESTRAINT:
     {
-        if (!c) return false;
+        DeleteEffect(MODEL_CURSEDTEMPLE_RESTRAINT_SKILL, o);
 
-        OBJECT* o = &c->Object;
-        BMD* b = &Models[o->Type];
-
-        vec3_t vRelativePos, vtaWorldPos, vLight, vAngle;
-
-        switch (skillindex)
+        if (o->Live && !SearchEffect(MODEL_CURSEDTEMPLE_RESTRAINT_SKILL, o))
         {
-        case AT_SKILL_CURSED_TEMPLE_PRODECTION:
-        {
-            DeleteEffect(MODEL_CURSEDTEMPLE_PRODECTION_SKILL, o);
+            Vector(0.4f, 1.f, 0.8f, vLight);
+            CreateEffect(BITMAP_SHOCK_WAVE, o->Position, o->Angle, vLight, 5);
+            CreateEffect(MODEL_SHIELD_CRASH, o->Position, o->Angle, vLight, 1, o);
 
-            if (o->Live && !SearchEffect(MODEL_CURSEDTEMPLE_PRODECTION_SKILL, o))
+            for (int i = 1; i < 40; i++)
             {
-                Vector(0.3f, 0.3f, 0.8f, o->Light);
-                CreateEffect(MODEL_CURSEDTEMPLE_PRODECTION_SKILL, o->Position, o->Angle, o->Light, 0, o);
-                CreateEffect(MODEL_SHIELD_CRASH, o->Position, o->Angle, o->Light, 1, o);
-                CreateEffect(BITMAP_SHOCK_WAVE, o->Position, o->Angle, o->Light, 10, o);
+                vec3_t Position, Angle, Light;
+                VectorCopy(o->Position, Position);
+                Vector(0.f, 0.f, i * (90.f / 4.f), Angle);
+                Vector(0.6f, 1.f, 0.8f, Light);
+
+                Position[0] += cosf(Q_PI / 180.f * 10.0f * i) * (float)(rand() % 240 + 140);
+                Position[1] += sinf(Q_PI / 180.f * 10.0f * i) * (float)(rand() % 240 + 140);
+                Position[2] += rand() % 200 + 100;
+
+                Vector(0.f, 0.f, 0.f, vRelativePos);
+                VectorCopy(o->Position, b->BodyOrigin);
+
+                b->TransformPosition(o->BoneTransform[rand() % 50], vRelativePos, vtaWorldPos, true);
+
+                Vector(0.7f, 1.f, 0.4f, Light);
+
+                if (rand() % 2 == 1)
+                {
+                    CreateJoint(BITMAP_JOINT_ENERGY, Position, vtaWorldPos, Angle, 44, o, 15.f, -1, 0, 0, -1, Light);
+                }
             }
         }
+    }
         return true;
-        case AT_SKILL_CURSED_TEMPLE_RESTRAINT:
+    case AT_SKILL_CURSED_TEMPLE_SUBLIMATION:
+    {
+        if (SubType == 0)
         {
-            DeleteEffect(MODEL_CURSEDTEMPLE_RESTRAINT_SKILL, o);
+            Vector(300.f, 0.f, 0.f, vAngle);
 
-            if (o->Live && !SearchEffect(MODEL_CURSEDTEMPLE_RESTRAINT_SKILL, o))
+            Vector(0.8f, 0.3f, 0.3f, vLight);
+            CreateEffect(MODEL_SKILL_INFERNO, o->Position, o->Angle, vLight, 8, o, 10, 0);
+
+            Vector(0.8f, 0.3f, 0.3f, vLight);
+            CreateEffect(MODEL_SHIELD_CRASH, o->Position, o->Angle, vLight, 2, o);
+
+            Vector(0.3f, 0.3f, 0.8f, vLight);
+            CreateEffect(BITMAP_SHOCK_WAVE, o->Position, o->Angle, vLight, 5, o);
+
+            Vector(150.f, 0.f, 0.f, vRelativePos);
+            Vector(0.8f, 0.3f, 0.3f, vLight);
+            VectorCopy(o->Position, b->BodyOrigin);
+
+            b->TransformPosition(o->BoneTransform[20], vRelativePos, vtaWorldPos, true);
+            CreateParticle(BITMAP_CURSEDTEMPLE_EFFECT_MASKER, vtaWorldPos, o->Angle, vLight, 0, 1.5f);
+
+            for (int i = 1; i < 40; i++)
             {
-                Vector(0.4f, 1.f, 0.8f, vLight);
-                CreateEffect(BITMAP_SHOCK_WAVE, o->Position, o->Angle, vLight, 5);
-                CreateEffect(MODEL_SHIELD_CRASH, o->Position, o->Angle, vLight, 1, o);
+                vec3_t Position, Angle, Light;
+                VectorCopy(o->Position, Position);
+                Vector(0.f, 0.f, 0.f, Angle);
 
-                for (int i = 1; i < 40; i++)
+                Position[0] += cosf(Q_PI / 180.f * 10.0f * i) * (float)(rand() % 50 + 20);
+                Position[1] += sinf(Q_PI / 180.f * 10.0f * i) * (float)(rand() % 50 + 20);
+                Position[2] -= 120.f;
+
+                if (rand() % 3 == 1)
                 {
-                    vec3_t Position, Angle, Light;
-                    VectorCopy(o->Position, Position);
-                    Vector(0.f, 0.f, i * (90.f / 4.f), Angle);
-                    Vector(0.6f, 1.f, 0.8f, Light);
-
-                    Position[0] += cosf(Q_PI / 180.f * 10.0f * i) * (float)(rand() % 240 + 140);
-                    Position[1] += sinf(Q_PI / 180.f * 10.0f * i) * (float)(rand() % 240 + 140);
-                    Position[2] += rand() % 200 + 100;
-
-                    Vector(0.f, 0.f, 0.f, vRelativePos);
-                    VectorCopy(o->Position, b->BodyOrigin);
-
-                    b->TransformPosition(o->BoneTransform[rand() % 50], vRelativePos, vtaWorldPos, true);
-
-                    Vector(0.7f, 1.f, 0.4f, Light);
-
                     if (rand() % 2 == 1)
                     {
-                        CreateJoint(BITMAP_JOINT_ENERGY, Position, vtaWorldPos, Angle, 44, o, 15.f, -1, 0, 0, -1, Light);
+                        Vector(0.3f, 0.3f, 0.8f, Light);
                     }
-                }
-            }
-        }
-        return true;
-        case AT_SKILL_CURSED_TEMPLE_SUBLIMATION:
-        {
-            if (SubType == 0)
-            {
-                Vector(300.f, 0.f, 0.f, vAngle);
-
-                Vector(0.8f, 0.3f, 0.3f, vLight);
-                CreateEffect(MODEL_SKILL_INFERNO, o->Position, o->Angle, vLight, 8, o, 10, 0);
-
-                Vector(0.8f, 0.3f, 0.3f, vLight);
-                CreateEffect(MODEL_SHIELD_CRASH, o->Position, o->Angle, vLight, 2, o);
-
-                Vector(0.3f, 0.3f, 0.8f, vLight);
-                CreateEffect(BITMAP_SHOCK_WAVE, o->Position, o->Angle, vLight, 5, o);
-
-                Vector(150.f, 0.f, 0.f, vRelativePos);
-                Vector(0.8f, 0.3f, 0.3f, vLight);
-                VectorCopy(o->Position, b->BodyOrigin);
-
-                b->TransformPosition(o->BoneTransform[20], vRelativePos, vtaWorldPos, true);
-                CreateParticle(BITMAP_CURSEDTEMPLE_EFFECT_MASKER, vtaWorldPos, o->Angle, vLight, 0, 1.5f);
-
-                for (int i = 1; i < 40; i++)
-                {
-                    vec3_t Position, Angle, Light;
-                    VectorCopy(o->Position, Position);
-                    Vector(0.f, 0.f, 0.f, Angle);
-
-                    Position[0] += cosf(Q_PI / 180.f * 10.0f * i) * (float)(rand() % 50 + 20);
-                    Position[1] += sinf(Q_PI / 180.f * 10.0f * i) * (float)(rand() % 50 + 20);
-                    Position[2] -= 120.f;
-
-                    if (rand() % 3 == 1)
+                    else
                     {
-                        if (rand() % 2 == 1)
-                        {
-                            Vector(0.3f, 0.3f, 0.8f, Light);
-                        }
-                        else
-                        {
-                            Vector(1.f, 0.5f, 0.5f, Light);
-                        }
-                        CreateParticle(BITMAP_EFFECT, Position, Angle, Light, 2);
+                        Vector(1.f, 0.5f, 0.5f, Light);
                     }
+                    CreateParticle(BITMAP_EFFECT, Position, Angle, Light, 2);
                 }
             }
-            else
-            {
-                Vector(150.f, 0.f, 0.f, vRelativePos);
-                Vector(300.f, 0.f, 0.f, vAngle);
-
-                Vector(0.8f, 0.3f, 0.3f, vLight);
-                CreateEffect(MODEL_SKILL_INFERNO, o->Position, o->Angle, vLight, 8, o, 10, 0);
-
-                Vector(0.8f, 0.3f, 0.3f, vLight);
-                CreateEffect(MODEL_SHIELD_CRASH, o->Position, o->Angle, vLight, 2, o);
-
-                Vector(0.3f, 0.3f, 0.8f, vLight);
-                CreateEffect(BITMAP_SHOCK_WAVE, o->Position, o->Angle, vLight, 5, o);
-
-                VectorCopy(o->Position, b->BodyOrigin);
-
-                Vector(0.6f, 0.0f, 0.0f, vLight);
-                b->TransformPosition(o->BoneTransform[31], vRelativePos, vtaWorldPos, true);
-                CreateEffect(MODEL_FENRIR_THUNDER, vtaWorldPos, o->Angle, vLight, 2, o);
-                CreateEffect(MODEL_FENRIR_THUNDER, vtaWorldPos, o->Angle, vLight, 2, o);
-                CreateEffect(MODEL_FENRIR_THUNDER, vtaWorldPos, o->Angle, vLight, 2, o);
-                CreateParticle(BITMAP_CLUD64, vtaWorldPos, o->Angle, vLight, 4, 1.f);
-
-                b->TransformPosition(o->BoneTransform[40], vRelativePos, vtaWorldPos, true);
-                CreateEffect(MODEL_FENRIR_THUNDER, vtaWorldPos, o->Angle, vLight, 2, o);
-                CreateEffect(MODEL_FENRIR_THUNDER, vtaWorldPos, o->Angle, vLight, 2, o);
-                CreateEffect(MODEL_FENRIR_THUNDER, vtaWorldPos, o->Angle, vLight, 2, o);
-                CreateEffect(MODEL_FENRIR_THUNDER, vtaWorldPos, o->Angle, vLight, 2, o);
-                CreateParticle(BITMAP_CLUD64, vtaWorldPos, o->Angle, vLight, 4, 1.f);
-            }
-        }
-        return true;
-        }
-        return false;
-    }
-
-    void DrawText(wchar_t* text, int textposx, int textposy, DWORD textcolor, DWORD textbackcolor, int textsort, float fontboxwidth, bool isbold)
-    {
-        if (isbold)
-        {
-            g_pRenderText->SetFont(g_hFontBold);
         }
         else
         {
-            g_pRenderText->SetFont(g_hFont);
+            Vector(150.f, 0.f, 0.f, vRelativePos);
+            Vector(300.f, 0.f, 0.f, vAngle);
+
+            Vector(0.8f, 0.3f, 0.3f, vLight);
+            CreateEffect(MODEL_SKILL_INFERNO, o->Position, o->Angle, vLight, 8, o, 10, 0);
+
+            Vector(0.8f, 0.3f, 0.3f, vLight);
+            CreateEffect(MODEL_SHIELD_CRASH, o->Position, o->Angle, vLight, 2, o);
+
+            Vector(0.3f, 0.3f, 0.8f, vLight);
+            CreateEffect(BITMAP_SHOCK_WAVE, o->Position, o->Angle, vLight, 5, o);
+
+            VectorCopy(o->Position, b->BodyOrigin);
+
+            Vector(0.6f, 0.0f, 0.0f, vLight);
+            b->TransformPosition(o->BoneTransform[31], vRelativePos, vtaWorldPos, true);
+            CreateEffect(MODEL_FENRIR_THUNDER, vtaWorldPos, o->Angle, vLight, 2, o);
+            CreateEffect(MODEL_FENRIR_THUNDER, vtaWorldPos, o->Angle, vLight, 2, o);
+            CreateEffect(MODEL_FENRIR_THUNDER, vtaWorldPos, o->Angle, vLight, 2, o);
+            CreateParticle(BITMAP_CLUD64, vtaWorldPos, o->Angle, vLight, 4, 1.f);
+
+            b->TransformPosition(o->BoneTransform[40], vRelativePos, vtaWorldPos, true);
+            CreateEffect(MODEL_FENRIR_THUNDER, vtaWorldPos, o->Angle, vLight, 2, o);
+            CreateEffect(MODEL_FENRIR_THUNDER, vtaWorldPos, o->Angle, vLight, 2, o);
+            CreateEffect(MODEL_FENRIR_THUNDER, vtaWorldPos, o->Angle, vLight, 2, o);
+            CreateEffect(MODEL_FENRIR_THUNDER, vtaWorldPos, o->Angle, vLight, 2, o);
+            CreateParticle(BITMAP_CLUD64, vtaWorldPos, o->Angle, vLight, 4, 1.f);
         }
-
-        DWORD backuptextcolor = g_pRenderText->GetTextColor();
-        DWORD backuptextbackcolor = g_pRenderText->GetBgColor();
-
-        g_pRenderText->SetTextColor(textcolor);
-        g_pRenderText->SetBgColor(textbackcolor);
-        g_pRenderText->RenderText(textposx, textposy, text, fontboxwidth, 0, textsort);
-        g_pRenderText->SetTextColor(backuptextcolor);
-        g_pRenderText->SetBgColor(backuptextbackcolor);
     }
-};
+        return true;
+    }
+    return false;
+}
+
+void DrawText(wchar_t* text, int textposx, int textposy, DWORD textcolor, DWORD textbackcolor, int textsort,
+              float fontboxwidth, bool isbold)
+{
+    if (isbold)
+    {
+        g_pRenderText->SetFont(g_hFontBold);
+    }
+    else
+    {
+        g_pRenderText->SetFont(g_hFont);
+    }
+
+    DWORD backuptextcolor = g_pRenderText->GetTextColor();
+    DWORD backuptextbackcolor = g_pRenderText->GetBgColor();
+
+    g_pRenderText->SetTextColor(textcolor);
+    g_pRenderText->SetBgColor(textbackcolor);
+    g_pRenderText->RenderText(textposx, textposy, text, fontboxwidth, 0, textsort);
+    g_pRenderText->SetTextColor(backuptextcolor);
+    g_pRenderText->SetBgColor(backuptextbackcolor);
+}
+}; // namespace
 
 bool SEASON3B::CNewUICursedTempleSystem::Create(CNewUIManager* pNewUIMng, int x, int y)
 {
@@ -282,32 +282,40 @@ void SEASON3B::CNewUICursedTempleSystem::Destroy()
 
 void SEASON3B::CNewUICursedTempleSystem::LoadImages()
 {
-    //minimap
+    // minimap
     LoadBitmap(L"Interface\\newui_ctminmapframe.tga", IMAGE_CURSEDTEMPLESYSTEM_MINIMAPFRAME, GL_LINEAR);
     LoadBitmap(L"Interface\\newui_ctminmap.jpg", IMAGE_CURSEDTEMPLESYSTEM_MINIMAP, GL_LINEAR);
     LoadBitmap(L"Interface\\newui_Bt_clearness_illusion.jpg", IMAGE_CURSEDTEMPLESYSTEM_MINIMAPALPBTN, GL_LINEAR);
 
-    //minimapicon
-    LoadBitmap(L"Interface\\newui_ctminmap_Relic.tga", IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_HOLYITEM_PC, GL_LINEAR, GL_CLAMP_TO_EDGE);
-    LoadBitmap(L"Interface\\newui_ctminmap_TeamA_box.tga", IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ILLUSION_HOLYITEM, GL_LINEAR, GL_CLAMP_TO_EDGE);
-    LoadBitmap(L"Interface\\newui_ctminmap_TeamA_member.tga", IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ILLUSION_PC, GL_LINEAR, GL_CLAMP_TO_EDGE);
-    LoadBitmap(L"Interface\\newui_ctminmap_TeamA_npc.tga", IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ILLUSION_NPC, GL_LINEAR, GL_CLAMP_TO_EDGE);
-    LoadBitmap(L"Interface\\newui_ctminmap_TeamB_box.tga", IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ALLIED_HOLYITEM, GL_LINEAR, GL_CLAMP_TO_EDGE);
-    LoadBitmap(L"Interface\\newui_ctminmap_TeamB_member.tga", IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ALLIED_PC, GL_LINEAR, GL_CLAMP_TO_EDGE);
-    LoadBitmap(L"Interface\\newui_ctminmap_TeamB_npc.tga", IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ALLIED_NPC, GL_LINEAR, GL_CLAMP_TO_EDGE);
-    LoadBitmap(L"Interface\\newui_ctminmap_Hero.tga", IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_HERO, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    // minimapicon
+    LoadBitmap(L"Interface\\newui_ctminmap_Relic.tga", IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_HOLYITEM_PC, GL_LINEAR,
+               GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\newui_ctminmap_TeamA_box.tga", IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ILLUSION_HOLYITEM,
+               GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\newui_ctminmap_TeamA_member.tga", IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ILLUSION_PC,
+               GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\newui_ctminmap_TeamA_npc.tga", IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ILLUSION_NPC, GL_LINEAR,
+               GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\newui_ctminmap_TeamB_box.tga", IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ALLIED_HOLYITEM,
+               GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\newui_ctminmap_TeamB_member.tga", IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ALLIED_PC, GL_LINEAR,
+               GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\newui_ctminmap_TeamB_npc.tga", IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ALLIED_NPC, GL_LINEAR,
+               GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\newui_ctminmap_Hero.tga", IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_HERO, GL_LINEAR,
+               GL_CLAMP_TO_EDGE);
 
-    //skill
+    // skill
     LoadBitmap(L"Interface\\newui_ctskillframe.tga", IMAGE_CURSEDTEMPLESYSTEM_SKILLFRAME, GL_LINEAR);
     LoadBitmap(L"Interface\\newui_ctskillup.jpg", IMAGE_CURSEDTEMPLESYSTEM_SKILLUPBT, GL_LINEAR);
     LoadBitmap(L"Interface\\newui_ctskilldown.jpg", IMAGE_CURSEDTEMPLESYSTEM_SKILLDOWNBT, GL_LINEAR);
 
-    //gametime
+    // gametime
     LoadBitmap(L"Interface\\newui_ctgametimeframe.tga", IMAGE_CURSEDTEMPLESYSTEM_GAMETIME, GL_LINEAR);
 
     wchar_t buff[100];
 
-    //score
+    // score
     for (int i = 0; i < 10; ++i)
     {
         mu_swprintf(buff, L"Interface\\newui_ctscorealliednum%d.tga", i);
@@ -325,7 +333,7 @@ void SEASON3B::CNewUICursedTempleSystem::LoadImages()
     LoadBitmap(L"Interface\\newui_ctscoreleft.tga", IMAGE_CURSEDTEMPLESYSTEM_SCORE_LEFT, GL_LINEAR);
     LoadBitmap(L"Interface\\newui_ctscoreright.tga", IMAGE_CURSEDTEMPLESYSTEM_SCORE_RIGHT, GL_LINEAR);
 
-    //prorogress, npctalk
+    // prorogress, npctalk
     LoadBitmap(L"Interface\\newui_msgbox_top.tga", IMAGE_CURSEDTEMPLESYSTEM_TOP, GL_LINEAR);
     LoadBitmap(L"Interface\\newui_msgbox_middle.tga", IMAGE_CURSEDTEMPLESYSTEM_MIDDLE, GL_LINEAR);
     LoadBitmap(L"Interface\\newui_msgbox_bottom.tga", IMAGE_CURSEDTEMPLESYSTEM_BOTTOM, GL_LINEAR);
@@ -338,14 +346,14 @@ void SEASON3B::CNewUICursedTempleSystem::LoadImages()
 
 void SEASON3B::CNewUICursedTempleSystem::UnloadImages()
 {
-    //prorogress, npctalk
+    // prorogress, npctalk
     DeleteBitmap(IMAGE_CURSEDTEMPLESYSTEM_BTN);
     DeleteBitmap(IMAGE_CURSEDTEMPLESYSTEM_BACK);
     DeleteBitmap(IMAGE_CURSEDTEMPLESYSTEM_BOTTOM);
     DeleteBitmap(IMAGE_CURSEDTEMPLESYSTEM_MIDDLE);
     DeleteBitmap(IMAGE_CURSEDTEMPLESYSTEM_TOP);
 
-    //score
+    // score
     DeleteBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_RIGHT);
     DeleteBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_LEFT);
     DeleteBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_ILLUSION_GAAIL);
@@ -362,15 +370,15 @@ void SEASON3B::CNewUICursedTempleSystem::UnloadImages()
         DeleteBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_ALLIED_NUMBER + j);
     }
 
-    //gametiem
+    // gametiem
     DeleteBitmap(IMAGE_CURSEDTEMPLESYSTEM_GAMETIME);
 
-    //skill
+    // skill
     DeleteBitmap(IMAGE_CURSEDTEMPLESYSTEM_SKILLDOWNBT);
     DeleteBitmap(IMAGE_CURSEDTEMPLESYSTEM_SKILLUPBT);
     DeleteBitmap(IMAGE_CURSEDTEMPLESYSTEM_SKILLFRAME);
 
-    //minmapicon
+    // minmapicon
     DeleteBitmap(IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_HERO);
     DeleteBitmap(IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ALLIED_NPC);
     DeleteBitmap(IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ALLIED_PC);
@@ -380,7 +388,7 @@ void SEASON3B::CNewUICursedTempleSystem::UnloadImages()
     DeleteBitmap(IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ILLUSION_HOLYITEM);
     DeleteBitmap(IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_HOLYITEM_PC);
 
-    //minimap
+    // minimap
     DeleteBitmap(IMAGE_CURSEDTEMPLESYSTEM_MINIMAPALPBTN);
     DeleteBitmap(IMAGE_CURSEDTEMPLESYSTEM_MINIMAP);
     DeleteBitmap(IMAGE_CURSEDTEMPLESYSTEM_MINIMAPFRAME);
@@ -510,13 +518,12 @@ bool SEASON3B::CNewUICursedTempleSystem::CheckInventoryHolyItem(CHARACTER* c)
 
 bool SEASON3B::CNewUICursedTempleSystem::CheckTalkProgressNpc(DWORD npcindex, DWORD npckey)
 {
-    std::list<DWORD>				progressnpcindexlist;
+    std::list<DWORD> progressnpcindexlist;
     progressnpcindexlist.push_back(HolyItemNpc);
     progressnpcindexlist.push_back(AlliedHolyItemBoxNpc);
     progressnpcindexlist.push_back(IllusionHolyItemBoxNpc);
 
-    for (auto iter = progressnpcindexlist.begin();
-         iter != progressnpcindexlist.end();)
+    for (auto iter = progressnpcindexlist.begin(); iter != progressnpcindexlist.end();)
     {
         auto curiter = iter;
         ++iter;
@@ -526,8 +533,8 @@ bool SEASON3B::CNewUICursedTempleSystem::CheckTalkProgressNpc(DWORD npcindex, DW
         {
             if (progressnpcindex == AlliedHolyItemBoxNpc || progressnpcindex == IllusionHolyItemBoxNpc)
             {
-                if (!(progressnpcindex == AlliedHolyItemBoxNpc && SEASON3A::eTeam_Allied == m_MyTeam)
-                    && !(progressnpcindex == IllusionHolyItemBoxNpc && SEASON3A::eTeam_Illusion == m_MyTeam))
+                if (!(progressnpcindex == AlliedHolyItemBoxNpc && SEASON3A::eTeam_Allied == m_MyTeam) &&
+                    !(progressnpcindex == IllusionHolyItemBoxNpc && SEASON3A::eTeam_Illusion == m_MyTeam))
                 {
                     return false;
                 }
@@ -535,7 +542,8 @@ bool SEASON3B::CNewUICursedTempleSystem::CheckTalkProgressNpc(DWORD npcindex, DW
                 if (CheckInventoryHolyItem(Hero))
                 {
                     SEASON3B::CCursedTempleProgressMsgBox* pMsgBox = NULL;
-                    SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CCursedTempleHolicItemSaveLayout), &pMsgBox);
+                    SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CCursedTempleHolicItemSaveLayout),
+                                               &pMsgBox);
                     if (pMsgBox)
                     {
                         pMsgBox->SetNpcIndex(npckey);
@@ -582,13 +590,17 @@ bool SEASON3B::CNewUICursedTempleSystem::CheckHeroSkillType(int operatortype)
 {
     if (operatortype == 0)
     {
-        if (Hero->m_CursedTempleCurSkill >= AT_SKILL_CURSED_TEMPLE_SUBLIMATION) return false;
-        else return true;
+        if (Hero->m_CursedTempleCurSkill >= AT_SKILL_CURSED_TEMPLE_SUBLIMATION)
+            return false;
+        else
+            return true;
     }
     else
     {
-        if (Hero->m_CursedTempleCurSkill <= AT_SKILL_CURSED_TEMPLE_PRODECTION) return false;
-        else return true;
+        if (Hero->m_CursedTempleCurSkill <= AT_SKILL_CURSED_TEMPLE_PRODECTION)
+            return false;
+        else
+            return true;
     }
 }
 
@@ -606,7 +618,8 @@ bool SEASON3B::CNewUICursedTempleSystem::CheckDragonRender()
 
 bool SEASON3B::CNewUICursedTempleSystem::IsCursedTempleSkillKey(DWORD selectcharacterindex)
 {
-    if (Hero->m_CursedTempleCurSkillPacket) return false;
+    if (Hero->m_CursedTempleCurSkillPacket)
+        return false;
 
     return SEASON3B::IsRepeat(VK_SHIFT);
 }
@@ -666,7 +679,8 @@ bool SEASON3B::CNewUICursedTempleSystem::UpdateKeyEvent()
 
 void SEASON3B::CNewUICursedTempleSystem::UpdateScore()
 {
-    if (!m_IsScoreEffect) return;
+    if (!m_IsScoreEffect)
+        return;
 
     switch (m_ScoreEffectState)
     {
@@ -704,7 +718,8 @@ void SEASON3B::CNewUICursedTempleSystem::UpdateScore()
 
 void SEASON3B::CNewUICursedTempleSystem::UpdateTutorialStep()
 {
-    if (!m_IsTutorialStep) return;
+    if (!m_IsTutorialStep)
+        return;
 
     DWORD curTime = timeGetTime();
     if (curTime - m_TutorialStepTime >= 10000)
@@ -762,17 +777,22 @@ void SEASON3B::CNewUICursedTempleSystem::RenderSkill()
     glColor4f(1.f, 1.f, 1.f, m_Alph);
     RenderNumber(x + 77.f, y + 8.f, m_SkillPoint, 1.f);
 
-    x = 512.f + 50; y = 201.f;
+    x = 512.f + 50;
+    y = 201.f;
     m_Button[CURSEDTEMPLERESULT_SKILLUP].SetPos(x, y);
     m_Button[CURSEDTEMPLERESULT_SKILLUP].ChangeAlpha(m_Alph);
     m_Button[CURSEDTEMPLERESULT_SKILLUP].Render();
 
-    x = 512.f + 50; y = 203.f + 11;
+    x = 512.f + 50;
+    y = 203.f + 11;
     m_Button[CURSEDTEMPLERESULT_SKILLDOWN].SetPos(x, y);
     m_Button[CURSEDTEMPLERESULT_SKILLDOWN].ChangeAlpha(m_Alph);
     m_Button[CURSEDTEMPLERESULT_SKILLDOWN].Render();
 
-    x = 512.f + 28; y = 258.f - 55.f; Width = 18; Height = 24;
+    x = 512.f + 28;
+    y = 258.f - 55.f;
+    Width = 18;
+    Height = 24;
     if (CheckMouseIn(x, y, Width, Height))
     {
         TextNum = 0;
@@ -788,17 +808,24 @@ void SEASON3B::CNewUICursedTempleSystem::RenderSkill()
         SKILL_ATTRIBUTE* p = &SkillAttribute[CursedTempleCurSkillType];
         wcscpy(skillname, p->Name);
         mu_swprintf(TextList[TextNum], L"%ls", skillname);
-        TextListColor[TextNum] = TEXT_COLOR_BLUE; TextNum++;
+        TextListColor[TextNum] = TEXT_COLOR_BLUE;
+        TextNum++;
 
-        mu_swprintf(TextList[TextNum], L"\n"); TextNum++;
+        mu_swprintf(TextList[TextNum], L"\n");
+        TextNum++;
 
-        mu_swprintf(TextList[TextNum], L"%ls", GlobalText[2379 + (CursedTempleCurSkillType - AT_SKILL_CURSED_TEMPLE_PRODECTION)]);
-        TextListColor[TextNum] = TEXT_COLOR_DARKBLUE; TextNum++;
+        mu_swprintf(TextList[TextNum], L"%ls",
+                    GlobalText[2379 + (CursedTempleCurSkillType - AT_SKILL_CURSED_TEMPLE_PRODECTION)]);
+        TextListColor[TextNum] = TEXT_COLOR_DARKBLUE;
+        TextNum++;
 
         RenderTipTextList(x, y - 20, TextNum, 0);
     }
 
-    x = 512.f + 28 + 55; y = 258.f - 55.f; Width = 18; Height = 24;
+    x = 512.f + 28 + 55;
+    y = 258.f - 55.f;
+    Width = 18;
+    Height = 24;
     if (CheckMouseIn(x, y, Width, Height))
     {
         TextNum = 0;
@@ -815,7 +842,10 @@ void SEASON3B::CNewUICursedTempleSystem::RenderSkill()
         RenderTipTextList(x, y - 20, TextNum, 0);
     }
 
-    x = 512.f + 28 + 77; y = 258.f - 55.f; Width = 18; Height = 24;
+    x = 512.f + 28 + 77;
+    y = 258.f - 55.f;
+    Width = 18;
+    Height = 24;
     if (CheckMouseIn(x, y, Width, Height))
     {
         TextNum = 0;
@@ -843,10 +873,16 @@ void SEASON3B::CNewUICursedTempleSystem::RenderGameTime()
     EnableAlphaTest();
     glColor4f(1.f, 1.f, 1.f, m_Alph);
 
-    x = 506.f; y = 393.f; Width = 134.f; Height = 37.f;
+    x = 506.f;
+    y = 393.f;
+    Width = 134.f;
+    Height = 37.f;
     RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_GAMETIME, x, y, Width, Height, 0.f, 0.f, Width / 256.f, Height / 64.f);
 
-    x = 507.5f + (134.f / 2); y = 407.5f; Width = 3.f; Height = 9.0f;
+    x = 507.5f + (134.f / 2);
+    y = 407.5f;
+    Width = 3.f;
+    Height = 9.0f;
     glColor4f(1.f, 0.6f, 0.3f, m_Alph);
     RenderBitmap(BITMAP_INTERFACE_EX + 44, x, y, Width, Height, 0.f, 0.f, Width / 4.f, Height / 16.f);
 
@@ -854,12 +890,14 @@ void SEASON3B::CNewUICursedTempleSystem::RenderGameTime()
     int second = m_EventMapTime % 60;
 
     glColor4f(0.f, 0.f, 0.f, m_Alph);
-    x = 507.5f + (134.f / 2); y = 404.5f;
+    x = 507.5f + (134.f / 2);
+    y = 404.5f;
     RenderNumber(x - 15.f, y, minute, 1.1f);
     RenderNumber(x + 20.f, y, second, 1.1f);
 
     glColor4f(1.f, 0.6f, 0.3f, m_Alph);
-    x = 507.5f + (134.f / 2); y = 404.5f;
+    x = 507.5f + (134.f / 2);
+    y = 404.5f;
     RenderNumber(x - 15.f, y, minute, 1.1f);
     RenderNumber(x + 20.f, y, second, 1.1f);
 
@@ -877,40 +915,50 @@ void SEASON3B::CNewUICursedTempleSystem::RenderMiniMap()
 
     glColor4f(1.f, 1.f, 1.f, m_Alph);
 
-    x = 512.f; y = 232.f - 53.f; Width = 128.f; Height = 53.f;
+    x = 512.f;
+    y = 232.f - 53.f;
+    Width = 128.f;
+    Height = 53.f;
     RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SKILLFRAME, x, y, Width, Height, 0.f, 0.f, Width / 128.f, Height / 64.f);
 
-    x = 512.f; y = 263.f; Width = 128.f; Height = 128.f;
+    x = 512.f;
+    y = 263.f;
+    Width = 128.f;
+    Height = 128.f;
     RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_MINIMAP, x, y, Width, Height, 0.f, 0.f, 1.f, 1.f);
 
-    x = 512.f; y = 232.f; Width = 128.f; Height = 165.f;
+    x = 512.f;
+    y = 232.f;
+    Width = 128.f;
+    Height = 165.f;
     RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_MINIMAPFRAME, x, y, Width, Height, 0.f, 0.f, Width / 128.f, Height / 256.f);
 
     float npc_x = MiniMapPos(138, 44, m_Scale, AXIS_X);
     float npc_y = MiniMapPos(138, 44, m_Scale, AXIS_Y);
-    RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ALLIED_NPC,
-        npc_x, npc_y, 9.0f, 9.0f, 0.f, 0.f, 9.f / 16.f, 9.f / 16.f);
+    RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ALLIED_NPC, npc_x, npc_y, 9.0f, 9.0f, 0.f, 0.f, 9.f / 16.f,
+                 9.f / 16.f);
 
     npc_x = MiniMapPos(138, 58, m_Scale, AXIS_X);
     npc_y = MiniMapPos(138, 58, m_Scale, AXIS_Y);
-    RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ALLIED_HOLYITEM,
-        npc_x, npc_y, 9.0f, 8.0f, 0.f, 0.f, 9.f / 16.f, 8.f / 8.f);
+    RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ALLIED_HOLYITEM, npc_x, npc_y, 9.0f, 8.0f, 0.f, 0.f, 9.f / 16.f,
+                 8.f / 8.f);
 
     npc_x = MiniMapPos(192, 113, m_Scale, AXIS_X);
     npc_y = MiniMapPos(192, 113, m_Scale, AXIS_Y);
-    RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ILLUSION_HOLYITEM,
-        npc_x, npc_y, 9.0f, 8.0f, 0.f, 0.f, 9.f / 16.f, 8.f / 8.f);
+    RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ILLUSION_HOLYITEM, npc_x, npc_y, 9.0f, 8.0f, 0.f, 0.f, 9.f / 16.f,
+                 8.f / 8.f);
 
     npc_x = MiniMapPos(193, 126, m_Scale, AXIS_X);
     npc_y = MiniMapPos(193, 126, m_Scale, AXIS_Y);
-    RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ILLUSION_NPC,
-        npc_x, npc_y, 9.0f, 9.0f, 0.f, 0.f, 9.f / 16.f, 9.f / 16.f);
+    RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ILLUSION_NPC, npc_x, npc_y, 9.0f, 9.0f, 0.f, 0.f, 9.f / 16.f,
+                 9.f / 16.f);
 
     for (int k = 0; k < m_CursedTempleMyTeamCount; ++k)
     {
         PMSG_CURSED_TAMPLE_PARTY_POS* p = &m_CursedTempleMyTeam[k];
 
-        if (p->wPartyUserIndex == 0xffff) continue;
+        if (p->wPartyUserIndex == 0xffff)
+            continue;
 
         if (p->wPartyUserIndex != Hero->Key && p->wPartyUserIndex != m_HolyItemPlayerIndex)
         {
@@ -919,13 +967,13 @@ void SEASON3B::CNewUICursedTempleSystem::RenderMiniMap()
 
             if (m_MyTeam == SEASON3A::eTeam_Allied)
             {
-                RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ALLIED_PC,
-                    pcX - 3.f, pcY - 3.f, 7.0f, 7.0f, 0.f, 0.f, 7.f / 8.f, 7.f / 8.f);
+                RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ALLIED_PC, pcX - 3.f, pcY - 3.f, 7.0f, 7.0f, 0.f, 0.f,
+                             7.f / 8.f, 7.f / 8.f);
             }
             else
             {
-                RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ILLUSION_PC,
-                    pcX - 3.f, pcY - 3.f, 7.0f, 7.0f, 0.f, 0.f, 7.f / 8.f, 7.f / 8.f);
+                RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_ILLUSION_PC, pcX - 3.f, pcY - 3.f, 7.0f, 7.0f, 0.f,
+                             0.f, 7.f / 8.f, 7.f / 8.f);
             }
         }
     }
@@ -935,8 +983,8 @@ void SEASON3B::CNewUICursedTempleSystem::RenderMiniMap()
     {
         float holypcX = MiniMapPos(m_HolyItemPlayerPosX, m_HolyItemPlayerPosY, m_Scale, AXIS_X);
         float holypcY = MiniMapPos(m_HolyItemPlayerPosX, m_HolyItemPlayerPosY, m_Scale, AXIS_Y);
-        RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_HOLYITEM_PC,
-            holypcX - 5.f, holypcY - 5.f, 14.0f, 14.0f, 0.f, 0.f, 14.f / 16.f, 14.f / 16.f);
+        RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_HOLYITEM_PC, holypcX - 5.f, holypcY - 5.f, 14.0f, 14.0f, 0.f,
+                     0.f, 14.f / 16.f, 14.f / 16.f);
     }
 
     m_Button[CURSEDTEMPLERESULT_ALPH].ChangeAlpha(m_Alph);
@@ -949,8 +997,8 @@ void SEASON3B::CNewUICursedTempleSystem::RenderMiniMap()
     y = (Hero->PositionY);
     float hero_x = MiniMapPos(x, y, m_Scale, AXIS_X);
     float hero_y = MiniMapPos(x, y, m_Scale, AXIS_Y);
-    RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_HERO,
-        hero_x - 4, hero_y - 4, 11.0f, 11.0f, 0.f, 0.f, 11.f / 16.f, 11.f / 16.f);
+    RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_MINIMAPICON_HERO, hero_x - 4, hero_y - 4, 11.0f, 11.0f, 0.f, 0.f, 11.f / 16.f,
+                 11.f / 16.f);
 
     // 알파 값
     RenderNumber2D(517.f + 15.f, 246.f, static_cast<int>(m_Alph * 100), 8, 8);
@@ -979,7 +1027,8 @@ void SEASON3B::CNewUICursedTempleSystem::RenderMiniMap()
 
 void SEASON3B::CNewUICursedTempleSystem::RenderScore()
 {
-    if (!m_IsScoreEffect) return;
+    if (!m_IsScoreEffect)
+        return;
 
     ::EnableAlphaTest();
     ::glColor4f(1.0f, 1.0f, 1.0f, m_ScoreEffectAlph);
@@ -987,41 +1036,45 @@ void SEASON3B::CNewUICursedTempleSystem::RenderScore()
     // 뮤연합군 점수
     if (m_AlliedPoint / 10 != 0)
     {
-        RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_ALLIED_NUMBER + (m_AlliedPoint / 10),
-            196, 160.f, 56.0f, 66.0f, 0.f, 0.f, 56.f / 64.f, 66.f / 128.f);
-        RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_ALLIED_NUMBER + (m_AlliedPoint % 10),
-            253, 160.f, 56.0f, 66.0f, 0.f, 0.f, 56.f / 64.f, 66.f / 128.f);
+        RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_ALLIED_NUMBER + (m_AlliedPoint / 10), 196, 160.f, 56.0f, 66.0f, 0.f,
+                     0.f, 56.f / 64.f, 66.f / 128.f);
+        RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_ALLIED_NUMBER + (m_AlliedPoint % 10), 253, 160.f, 56.0f, 66.0f, 0.f,
+                     0.f, 56.f / 64.f, 66.f / 128.f);
     }
     else
     {
-        RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_ALLIED_NUMBER + (m_AlliedPoint % 10),
-            224, 160.f, 56.0f, 66.0f, 0.f, 0.f, 56.f / 64.f, 66.f / 128.f);
+        RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_ALLIED_NUMBER + (m_AlliedPoint % 10), 224, 160.f, 56.0f, 66.0f, 0.f,
+                     0.f, 56.f / 64.f, 66.f / 128.f);
     }
 
     // :
-    RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_VS1 + (m_IllusionPoint / 10),
-        310, 168.f, 20.0f, 45.0f, 0.f, 0.f, 20.f / 32.f, 45.f / 64.f);
+    RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_VS1 + (m_IllusionPoint / 10), 310, 168.f, 20.0f, 45.0f, 0.f, 0.f,
+                 20.f / 32.f, 45.f / 64.f);
 
     // 환영교단 점수
     if (m_IllusionPoint / 10 != 0)
     {
-        RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_ILLUSION_NUMBER + (m_IllusionPoint / 10),
-            331, 160.f, 56.0f, 66.0f, 0.f, 0.f, 56.f / 64.f, 66.f / 128.f);
-        RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_ILLUSION_NUMBER + (m_IllusionPoint % 10),
-            388, 160.f, 56.0f, 66.0f, 0.f, 0.f, 56.f / 64.f, 66.f / 128.f);
+        RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_ILLUSION_NUMBER + (m_IllusionPoint / 10), 331, 160.f, 56.0f, 66.0f,
+                     0.f, 0.f, 56.f / 64.f, 66.f / 128.f);
+        RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_ILLUSION_NUMBER + (m_IllusionPoint % 10), 388, 160.f, 56.0f, 66.0f,
+                     0.f, 0.f, 56.f / 64.f, 66.f / 128.f);
     }
     else
     {
-        RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_ILLUSION_NUMBER + (m_IllusionPoint % 10),
-            358, 160.f, 56.0f, 66.0f, 0.f, 0.f, 56.f / 64.f, 66.f / 128.f);
+        RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_ILLUSION_NUMBER + (m_IllusionPoint % 10), 358, 160.f, 56.0f, 66.0f,
+                     0.f, 0.f, 56.f / 64.f, 66.f / 128.f);
     }
 
-    RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_ALLIED_GAAIL, 232.f, 115.f, 40.0f, 36.0f, 0.f, 0.f, 40.f / 64.f, 36.f / 64.f);
+    RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_ALLIED_GAAIL, 232.f, 115.f, 40.0f, 36.0f, 0.f, 0.f, 40.f / 64.f,
+                 36.f / 64.f);
     RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_VS0, 292.f, 123.f, 49.0f, 27.0f, 0.f, 0.f, 49.f / 64.f, 27.f / 32.f);
-    RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_ILLUSION_GAAIL, 367.f, 115.f, 40.0f, 36.0f, 0.f, 0.f, 40.f / 64.f, 36.f / 64.f);
+    RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_ILLUSION_GAAIL, 367.f, 115.f, 40.0f, 36.0f, 0.f, 0.f, 40.f / 64.f,
+                 36.f / 64.f);
 
-    RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_LEFT, 133.f, 115.f, 67.0f, 125.0f, 0.f, 0.f, 67.f / 128.f, 125.f / 128.f);
-    RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_RIGHT, 445.f, 115.f, 67.0f, 125.0f, 0.f, 0.f, 67.f / 128.f, 125.f / 128.f);
+    RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_LEFT, 133.f, 115.f, 67.0f, 125.0f, 0.f, 0.f, 67.f / 128.f,
+                 125.f / 128.f);
+    RenderBitmap(IMAGE_CURSEDTEMPLESYSTEM_SCORE_RIGHT, 445.f, 115.f, 67.0f, 125.0f, 0.f, 0.f, 67.f / 128.f,
+                 125.f / 128.f);
 
     ::glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     ::DisableAlphaBlend();
@@ -1029,7 +1082,8 @@ void SEASON3B::CNewUICursedTempleSystem::RenderScore()
 
 void SEASON3B::CNewUICursedTempleSystem::RenderTutorialStep()
 {
-    if (!m_IsTutorialStep) return;
+    if (!m_IsTutorialStep)
+        return;
 
     TextNum = 0;
     ZeroMemory(TextListColor, 20 * sizeof(int));
@@ -1041,41 +1095,56 @@ void SEASON3B::CNewUICursedTempleSystem::RenderTutorialStep()
     if (m_TutorialStepState == 0)
     {
         wcscpy(TextList[TextNum], GlobalText[2400]);
-        TextListColor[TextNum] = 0xFF49B0FF; ++TextNum;
+        TextListColor[TextNum] = 0xFF49B0FF;
+        ++TextNum;
         mu_swprintf(TextList[TextNum], L"");
-        TextListColor[TextNum] = 0xFF000000; ++TextNum;
+        TextListColor[TextNum] = 0xFF000000;
+        ++TextNum;
         wcscpy(TextList[TextNum], GlobalText[2401]);
-        TextListColor[TextNum] = 0xFFffffff; ++TextNum;
+        TextListColor[TextNum] = 0xFFffffff;
+        ++TextNum;
         wcscpy(TextList[TextNum], GlobalText[2402]);
-        TextListColor[TextNum] = 0xFFffffff; ++TextNum;
+        TextListColor[TextNum] = 0xFFffffff;
+        ++TextNum;
         wcscpy(TextList[TextNum], GlobalText[2403]);
-        TextListColor[TextNum] = 0xFFffffff; ++TextNum;
+        TextListColor[TextNum] = 0xFFffffff;
+        ++TextNum;
     }
     else if (m_TutorialStepState == 1)
     {
         wcscpy(TextList[TextNum], GlobalText[2404]);
-        TextListColor[TextNum] = 0xFF49B0FF; ++TextNum;
+        TextListColor[TextNum] = 0xFF49B0FF;
+        ++TextNum;
         mu_swprintf(TextList[TextNum], L"");
-        TextListColor[TextNum] = 0xFF000000; ++TextNum;
+        TextListColor[TextNum] = 0xFF000000;
+        ++TextNum;
         wcscpy(TextList[TextNum], GlobalText[2405]);
-        TextListColor[TextNum] = 0xFFffffff; ++TextNum;
+        TextListColor[TextNum] = 0xFFffffff;
+        ++TextNum;
         wcscpy(TextList[TextNum], GlobalText[2406]);
-        TextListColor[TextNum] = 0xFFffffff; ++TextNum;
+        TextListColor[TextNum] = 0xFFffffff;
+        ++TextNum;
         wcscpy(TextList[TextNum], GlobalText[2407]);
-        TextListColor[TextNum] = 0xFFffffff; ++TextNum;
+        TextListColor[TextNum] = 0xFFffffff;
+        ++TextNum;
     }
     else if (m_TutorialStepState == 2)
     {
         wcscpy(TextList[TextNum], GlobalText[2408]);
-        TextListColor[TextNum] = 0xFF49B0FF; ++TextNum;
+        TextListColor[TextNum] = 0xFF49B0FF;
+        ++TextNum;
         mu_swprintf(TextList[TextNum], L"");
-        TextListColor[TextNum] = 0xFF000000; ++TextNum;
+        TextListColor[TextNum] = 0xFF000000;
+        ++TextNum;
         wcscpy(TextList[TextNum], GlobalText[2409]);
-        TextListColor[TextNum] = 0xFFffffff; ++TextNum;
+        TextListColor[TextNum] = 0xFFffffff;
+        ++TextNum;
         wcscpy(TextList[TextNum], GlobalText[2410]);
-        TextListColor[TextNum] = 0xFFffffff; ++TextNum;
+        TextListColor[TextNum] = 0xFFffffff;
+        ++TextNum;
         wcscpy(TextList[TextNum], GlobalText[2411]);
-        TextListColor[TextNum] = 0xFFffffff; ++TextNum;
+        TextListColor[TextNum] = 0xFFffffff;
+        ++TextNum;
     }
 
     ::EnableAlphaTest();
@@ -1099,9 +1168,8 @@ bool SEASON3B::CNewUICursedTempleSystem::Render()
         return true;
     }
 
-    if (!g_pCharacterInfoWindow->IsVisible() || !g_pMyInventory->IsVisible()
-        || !g_pGuildInfoWindow->IsVisible() || !g_pWindowMgr->IsVisible()
-        || !g_pPartyInfoWindow->IsVisible() || !g_pMyQuestInfoWindow->IsVisible())
+    if (!g_pCharacterInfoWindow->IsVisible() || !g_pMyInventory->IsVisible() || !g_pGuildInfoWindow->IsVisible() ||
+        !g_pWindowMgr->IsVisible() || !g_pPartyInfoWindow->IsVisible() || !g_pMyQuestInfoWindow->IsVisible())
     {
         RenderGameTime();
         RenderMiniMap();
@@ -1147,8 +1215,8 @@ void SEASON3B::CNewUICursedTempleSystem::SetCursedTempleSkill(CHARACTER* c, OBJE
 
     bool checktile = true;
 
-    if (CursedTempleCurSkillType == AT_SKILL_CURSED_TEMPLE_RESTRAINT
-        || CursedTempleCurSkillType == AT_SKILL_CURSED_TEMPLE_SUBLIMATION)
+    if (CursedTempleCurSkillType == AT_SKILL_CURSED_TEMPLE_RESTRAINT ||
+        CursedTempleCurSkillType == AT_SKILL_CURSED_TEMPLE_SUBLIMATION)
     {
         checktile = CheckTile(c, o, Distance);
     }
@@ -1157,8 +1225,8 @@ void SEASON3B::CNewUICursedTempleSystem::SetCursedTempleSkill(CHARACTER* c, OBJE
     {
         CHARACTER* tc = NULL;
 
-        if (CursedTempleCurSkillType == AT_SKILL_CURSED_TEMPLE_RESTRAINT
-            || CursedTempleCurSkillType == AT_SKILL_CURSED_TEMPLE_SUBLIMATION)
+        if (CursedTempleCurSkillType == AT_SKILL_CURSED_TEMPLE_RESTRAINT ||
+            CursedTempleCurSkillType == AT_SKILL_CURSED_TEMPLE_SUBLIMATION)
         {
             for (int i = 0; i < m_CursedTempleMyTeamCount; ++i)
             {
@@ -1193,11 +1261,12 @@ void SEASON3B::CNewUICursedTempleSystem::SetCursedTempleSkill(CHARACTER* c, OBJE
             return;
         }
 
-        SocketClient->ToGameServer()->SendIllusionTempleSkillRequest(CursedTempleCurSkillType, static_cast<BYTE>(tc->Key), Distance);
+        SocketClient->ToGameServer()->SendIllusionTempleSkillRequest(CursedTempleCurSkillType,
+                                                                     static_cast<BYTE>(tc->Key), Distance);
         Hero->m_CursedTempleCurSkillPacket = true;
         MouseRButtonPush = false;
 
-        //에니메이션 설정
+        // 에니메이션 설정
         switch (CursedTempleCurSkillType)
         {
         case AT_SKILL_CURSED_TEMPLE_PRODECTION:
@@ -1239,7 +1308,8 @@ void SEASON3B::CNewUICursedTempleSystem::ReceiveCursedTempRegisterSkill(const BY
 
     if (data->MagicResult == 0)
     {
-        if (sc == Hero) Hero->m_CursedTempleCurSkillPacket = false;
+        if (sc == Hero)
+            Hero->m_CursedTempleCurSkillPacket = false;
         return;
     }
 
@@ -1262,7 +1332,8 @@ void SEASON3B::CNewUICursedTempleSystem::ReceiveCursedTempRegisterSkill(const BY
         // _buffwani_
         g_CharacterRegisterBuff(tco, eBuff_CursedTempleProdection);
 
-        if (sc != Hero) SetAction(sco, PLAYER_ATTACK_REMOVAL);
+        if (sc != Hero)
+            SetAction(sco, PLAYER_ATTACK_REMOVAL);
 
         effectresult = CreateCursedTempleSkillEffect(tc, AT_SKILL_CURSED_TEMPLE_PRODECTION, 0);
     }
@@ -1275,7 +1346,8 @@ void SEASON3B::CNewUICursedTempleSystem::ReceiveCursedTempRegisterSkill(const BY
 
         g_CharacterRegisterBuff(tco, eDeBuff_CursedTempleRestraint);
 
-        if (sc != Hero) SetAction(sco, PLAYER_ATTACK_REMOVAL);
+        if (sc != Hero)
+            SetAction(sco, PLAYER_ATTACK_REMOVAL);
 
         sc->AttackTime = 1;
         sc->TargetCharacter = targetobjindex;
@@ -1287,7 +1359,8 @@ void SEASON3B::CNewUICursedTempleSystem::ReceiveCursedTempRegisterSkill(const BY
     break;
     case AT_SKILL_CURSED_TEMPLE_TELEPORT:
     {
-        if (sc != Hero) SetAction(sco, PLAYER_ATTACK_REMOVAL);
+        if (sc != Hero)
+            SetAction(sco, PLAYER_ATTACK_REMOVAL);
     }
     break;
     case AT_SKILL_CURSED_TEMPLE_SUBLIMATION:
@@ -1295,7 +1368,8 @@ void SEASON3B::CNewUICursedTempleSystem::ReceiveCursedTempRegisterSkill(const BY
         SetAction(tco, PLAYER_SHOCK);
         effectresult = CreateCursedTempleSkillEffect(tc, AT_SKILL_CURSED_TEMPLE_SUBLIMATION, 0);
 
-        if (sc != Hero) SetAction(sco, PLAYER_ATTACK_REMOVAL);
+        if (sc != Hero)
+            SetAction(sco, PLAYER_ATTACK_REMOVAL);
         effectresult = CreateCursedTempleSkillEffect(sc, AT_SKILL_CURSED_TEMPLE_SUBLIMATION, 1);
     }
     break;

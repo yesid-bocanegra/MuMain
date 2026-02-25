@@ -28,7 +28,7 @@ BOOL WZResult::IsSuccess() // OK
     return !this->m_dwErrorCode && !this->m_dwWindowErrorCode;
 }
 
-DWORD  WZResult::GetErrorCode() // OK
+DWORD WZResult::GetErrorCode() // OK
 {
     return this->m_dwErrorCode;
 }
@@ -38,7 +38,7 @@ wchar_t* WZResult::GetErrorMessage() // OK
     return this->m_szErrorMessage;
 }
 
-DWORD  WZResult::GetWindowErrorCode() // OK
+DWORD WZResult::GetWindowErrorCode() // OK
 {
     return this->m_dwWindowErrorCode;
 }
@@ -59,6 +59,7 @@ void WZResult::SetResult(DWORD dwErrorCode, DWORD dwWindowErrorCode, const TCHAR
     this->m_dwErrorCode = dwErrorCode;
     this->m_dwWindowErrorCode = dwWindowErrorCode;
     StringCchVPrintf(this->m_szErrorMessage, sizeof(this->m_szErrorMessage), szFormat, va);
+    va_end(va);
 }
 
 void WZResult::SetSuccessResult() // OK
@@ -88,6 +89,7 @@ WZResult WZResult::BuildResult(DWORD dwErrorCode, DWORD dwWindowErrorCode, const
     memset(Buffer, 0, sizeof(Buffer));
     StringCchVPrintf(Buffer, sizeof(Buffer), szFormat, args);
 
+    va_end(args);
     result.SetResult(dwErrorCode, dwWindowErrorCode, Buffer);
 
     return result;

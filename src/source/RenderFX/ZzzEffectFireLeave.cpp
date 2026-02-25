@@ -27,9 +27,9 @@
 float RainTarget = 0;
 float RainCurrent = 0.f;
 
-static  int RainSpeed = 30;
-static  int RainAngle = 0;
-static  int RainPosition = 0;
+static int RainSpeed = 30;
+static int RainAngle = 0;
+static int RainPosition = 0;
 
 void CreateBonfire(vec3_t Position, vec3_t Angle)
 {
@@ -88,8 +88,9 @@ void CheckSkull(OBJECT* o)
 {
     vec3_t Position;
     VectorCopy(Hero->Object.Position, Position);
-    if (Hero->Object.CurrentAction >= PLAYER_WALK_MALE && Hero->Object.CurrentAction <= PLAYER_RUN_RIDE_WEAPON
-        || (Hero->Object.CurrentAction == PLAYER_RAGE_UNI_RUN || Hero->Object.CurrentAction == PLAYER_RAGE_UNI_RUN_ONE_RIGHT))
+    if (Hero->Object.CurrentAction >= PLAYER_WALK_MALE && Hero->Object.CurrentAction <= PLAYER_RUN_RIDE_WEAPON ||
+        (Hero->Object.CurrentAction == PLAYER_RAGE_UNI_RUN ||
+         Hero->Object.CurrentAction == PLAYER_RAGE_UNI_RUN_ONE_RIGHT))
     {
         if (o->Direction[0] < 0.1f)
         {
@@ -113,9 +114,7 @@ void CheckSkull(OBJECT* o)
 
 bool CreateDevilSquareRain(PARTICLE* o, int Index)
 {
-    if (gMapManager.InDevilSquare() == false
-        && gMapManager.WorldActive != WD_34CRYWOLF_1ST
-        )
+    if (gMapManager.InDevilSquare() == false && gMapManager.WorldActive != WD_34CRYWOLF_1ST)
     {
         return false;
     }
@@ -129,20 +128,16 @@ bool CreateDevilSquareRain(PARTICLE* o, int Index)
         const float randomX = Random::RangeFloat(-800, 799);
         const float randomY = Random::RangeFloat(-500, 899);
         const float randomZ = Random::RangeFloat(300, 499);
-        Vector(Hero->Object.Position[0] + randomX,
-               Hero->Object.Position[1] + randomY,
-               Hero->Object.Position[2] + randomZ,
-               o->Position);
+        Vector(Hero->Object.Position[0] + randomX, Hero->Object.Position[1] + randomY,
+               Hero->Object.Position[2] + randomZ, o->Position);
     }
     else
     {
         const float randomX = Random::RangeFloat(-800, 799);
         const float randomY = Random::RangeFloat(1000, 1299) - RainPosition;
         const float randomZ = Random::RangeFloat(300, 499);
-        Vector(Hero->Object.Position[0] + randomX,
-               Hero->Object.Position[1] + randomY,
-               Hero->Object.Position[2] + randomZ,
-               o->Position);
+        Vector(Hero->Object.Position[0] + randomX, Hero->Object.Position[1] + randomY,
+               Hero->Object.Position[2] + randomZ, o->Position);
     }
 
     if (rand_fps_check(2))
@@ -165,7 +160,8 @@ bool CreateDevilSquareRain(PARTICLE* o, int Index)
 
 bool CreateChaosCastleRain(PARTICLE* o, int Index)
 {
-    if (gMapManager.InChaosCastle() == false) return false;
+    if (gMapManager.InChaosCastle() == false)
+        return false;
 
     o->Type = BITMAP_RAIN;
     o->TurningForce[0] = 1.f;
@@ -176,20 +172,16 @@ bool CreateChaosCastleRain(PARTICLE* o, int Index)
         const float randomX = Random::RangeFloat(-800, 799);
         const float randomY = Random::RangeFloat(-500, 899);
         const float randomZ = Random::RangeFloat(300, 499);
-        Vector(Hero->Object.Position[0] + randomX,
-               Hero->Object.Position[1] + randomY,
-               Hero->Object.Position[2] + randomZ,
-               o->Position);
+        Vector(Hero->Object.Position[0] + randomX, Hero->Object.Position[1] + randomY,
+               Hero->Object.Position[2] + randomZ, o->Position);
     }
     else
     {
         const float randomX = Random::RangeFloat(-800, 799);
         const float randomY = Random::RangeFloat(1000, 1299) - RainPosition;
         const float randomZ = Random::RangeFloat(300, 499);
-        Vector(Hero->Object.Position[0] + randomX,
-               Hero->Object.Position[1] + randomY,
-               Hero->Object.Position[2] + randomZ,
-               o->Position);
+        Vector(Hero->Object.Position[0] + randomX, Hero->Object.Position[1] + randomY,
+               Hero->Object.Position[2] + randomZ, o->Position);
     }
     if (rand_fps_check(2))
     {
@@ -210,14 +202,14 @@ bool CreateChaosCastleRain(PARTICLE* o, int Index)
 
 bool CreateLorenciaLeaf(PARTICLE* o)
 {
-    if (gMapManager.WorldActive != WD_0LORENCIA) return false;
+    if (gMapManager.WorldActive != WD_0LORENCIA)
+        return false;
 
     o->Type = BITMAP_LEAF1;
     vec3_t Position;
     Vector(Hero->Object.Position[0] + (Random::RangeFloat(-800, 799)),
-        Hero->Object.Position[1] + (Random::RangeFloat(-500, 899)),
-        Hero->Object.Position[2] + (Random::RangeFloat(50, 349)),
-        Position);
+           Hero->Object.Position[1] + (Random::RangeFloat(-500, 899)),
+           Hero->Object.Position[2] + (Random::RangeFloat(50, 349)), Position);
     VectorCopy(Position, o->Position);
     VectorCopy(Position, o->StartPosition);
     o->Velocity[0] = -Random::RangeFloat(64, 127) * 0.1f;
@@ -243,17 +235,16 @@ bool CreateHeavenRain(PARTICLE* o, int index)
         return false;
     }
 
-    if (gMapManager.WorldActive != WD_10HEAVEN) return false;
+    if (gMapManager.WorldActive != WD_10HEAVEN)
+        return false;
 
     int Rainly = RainCurrent * MAX_LEAVES / 100;
     if (index < Rainly)
     {
         o->Type = BITMAP_RAIN;
-        Vector(
-            Hero->Object.Position[0] + Random::RangeFloat(-800, 799),
-            Hero->Object.Position[1] + Random::RangeFloat(-500, 899),
-            Hero->Object.Position[2] + Random::RangeFloat(200, 399),
-            o->Position);
+        Vector(Hero->Object.Position[0] + Random::RangeFloat(-800, 799),
+               Hero->Object.Position[1] + Random::RangeFloat(-500, 899),
+               Hero->Object.Position[2] + Random::RangeFloat(200, 399), o->Position);
         Vector(-30.f, 0.f, 0.f, o->Angle);
         vec3_t Velocity;
         Vector(0.f, 0.f, -Random::RangeFloat(20, 43), Velocity);
@@ -266,7 +257,8 @@ bool CreateHeavenRain(PARTICLE* o, int index)
 
 bool CreateDeviasSnow(PARTICLE* o)
 {
-    if (gMapManager.WorldActive != WD_2DEVIAS) return false;
+    if (gMapManager.WorldActive != WD_2DEVIAS)
+        return false;
 
     o->Type = BITMAP_LEAF1;
     o->Scale = 5.f;
@@ -276,9 +268,8 @@ bool CreateDeviasSnow(PARTICLE* o)
         o->Scale = 10.f;
     }
     Vector(Hero->Object.Position[0] + Random::RangeFloat(-800, 799),
-        Hero->Object.Position[1] + Random::RangeFloat(-500, 899),
-        Hero->Object.Position[2] + Random::RangeFloat(200, 399),
-        o->Position);
+           Hero->Object.Position[1] + Random::RangeFloat(-500, 899),
+           Hero->Object.Position[2] + Random::RangeFloat(200, 399), o->Position);
     Vector(-30.f, 0.f, 0.f, o->Angle);
     vec3_t Velocity;
     Vector(0.f, 0.f, -Random::RangeFloat(8, 23), Velocity);
@@ -291,18 +282,19 @@ bool CreateDeviasSnow(PARTICLE* o)
 
 bool CreateAtlanseLeaf(PARTICLE* o)
 {
-    if (gMapManager.WorldActive != WD_3NORIA && gMapManager.WorldActive != WD_7ATLANSE) return false;
+    if (gMapManager.WorldActive != WD_3NORIA && gMapManager.WorldActive != WD_7ATLANSE)
+        return false;
 
     o->Type = BITMAP_LEAF1;
     vec3_t Position;
     Vector(Hero->Object.Position[0] + Random::RangeFloat(-800, 799),
-        Hero->Object.Position[1] + Random::RangeFloat(-500, 899),
-        Hero->Object.Position[2] + Random::RangeFloat(50, 349),
-        Position);
+           Hero->Object.Position[1] + Random::RangeFloat(-500, 899),
+           Hero->Object.Position[2] + Random::RangeFloat(50, 349), Position);
     VectorCopy(Position, o->Position);
     VectorCopy(Position, o->StartPosition);
     o->Velocity[0] = -Random::RangeFloat(64, 127) * 0.1f;
-    if (Position[1] < CameraPosition[1] + 400.f) o->Velocity[0] = -o->Velocity[0] + 3.2f;
+    if (Position[1] < CameraPosition[1] + 400.f)
+        o->Velocity[0] = -o->Velocity[0] + 3.2f;
     o->Velocity[1] = Random::RangeFloat(-16, 15) * 0.1f;
     o->Velocity[2] = Random::RangeFloat(-16, 15) * 0.1f;
     o->TurningForce[0] = Random::RangeFloat(-8, 7) * 0.1f;
@@ -314,9 +306,8 @@ bool CreateAtlanseLeaf(PARTICLE* o)
 
 bool MoveDevilSquareRain(PARTICLE* o)
 {
-    if (gMapManager.InDevilSquare() == false
-        && gMapManager.WorldActive != WD_34CRYWOLF_1ST
-        ) return false;
+    if (gMapManager.InDevilSquare() == false && gMapManager.WorldActive != WD_34CRYWOLF_1ST)
+        return false;
 
     //	if(o->Type != BITMAP_RAIN)
     if (gMapManager.WorldActive == WD_34CRYWOLF_1ST && weather != 1)
@@ -338,7 +329,8 @@ bool MoveDevilSquareRain(PARTICLE* o)
 
 bool MoveChaosCastleRain(PARTICLE* o)
 {
-    if (gMapManager.InChaosCastle() == false) return false;
+    if (gMapManager.InChaosCastle() == false)
+        return false;
 
     VectorAddScaled(o->Position, o->Velocity, o->Position, FPS_ANIMATION_FACTOR);
     float Height = RequestTerrainHeight(o->Position[0], o->Position[1]);
@@ -356,7 +348,8 @@ bool MoveChaosCastleRain(PARTICLE* o)
 
 bool MoveHeavenRain(PARTICLE* o)
 {
-    if (gMapManager.WorldActive != WD_0LORENCIA && gMapManager.WorldActive != WD_10HEAVEN) return false;
+    if (gMapManager.WorldActive != WD_0LORENCIA && gMapManager.WorldActive != WD_10HEAVEN)
+        return false;
 
     if (o->Type == BITMAP_RAIN)
     {
@@ -385,7 +378,8 @@ bool MoveHeavenRain(PARTICLE* o)
         vec3_t Range;
         VectorSubtract(o->StartPosition, o->Position, Range);
         float Length = Range[0] * Range[0] + Range[1] * Range[1] + Range[2] * Range[2];
-        if (Length >= 200000.f) o->Live = false;
+        if (Length >= 200000.f)
+            o->Live = false;
     }
 
     return true;
@@ -442,9 +436,8 @@ bool MoveLeaves()
     {
         if (weather == 1)
             iMaxLeaves = 60;
-        else
-            if (weather == 2)
-                iMaxLeaves = 50;
+        else if (weather == 2)
+            iMaxLeaves = 50;
     }
     if (RainCurrent > RainTarget)
         RainCurrent -= FPS_ANIMATION_FACTOR;
@@ -464,33 +457,56 @@ bool MoveLeaves()
             Vector(1.f, 1.f, 1.f, o->Light);
             o->Live = true;
 
-            if (CreateDevilSquareRain(o, i))continue;
-            if (CreateChaosCastleRain(o, i))continue;
-            if (CreateLorenciaLeaf(o))      continue;
-            if (CreateHeavenRain(o, i))     continue;
-            if (CreateDeviasSnow(o))        continue;
-            if (CreateAtlanseLeaf(o))       continue;
-            if (battleCastle::CreateFireSnuff(o)) continue;
-            if (M31HuntingGround::CreateMist(o)) continue;
-            if (M33Aida::CreateMist(o)) continue;
+            if (CreateDevilSquareRain(o, i))
+                continue;
+            if (CreateChaosCastleRain(o, i))
+                continue;
+            if (CreateLorenciaLeaf(o))
+                continue;
+            if (CreateHeavenRain(o, i))
+                continue;
+            if (CreateDeviasSnow(o))
+                continue;
+            if (CreateAtlanseLeaf(o))
+                continue;
+            if (battleCastle::CreateFireSnuff(o))
+                continue;
+            if (M31HuntingGround::CreateMist(o))
+                continue;
+            if (M33Aida::CreateMist(o))
+                continue;
             if (weather == 2)
-                if (M34CryWolf1st::CreateMist(o)) continue;
-            if (SEASON3A::CGM3rdChangeUp::Instance().CreateFireSnuff(o)) continue;
-            if (g_Raklion.CreateSnow(o)) continue;
-            if (g_SantaTown.CreateSnow(o)) continue;
-            if (g_PKField.CreateFireSpark(o)) continue;
-            if (g_DoppelGanger2.CreateFireSpark(o)) continue;
-            if (g_EmpireGuardian1.CreateRain(o)) continue;
-            if (g_EmpireGuardian2.CreateRain(o)) continue;
-            if (g_EmpireGuardian3.CreateRain(o)) continue;
-            if (g_UnitedMarketPlace.CreateRain(o)) continue;
+                if (M34CryWolf1st::CreateMist(o))
+                    continue;
+            if (SEASON3A::CGM3rdChangeUp::Instance().CreateFireSnuff(o))
+                continue;
+            if (g_Raklion.CreateSnow(o))
+                continue;
+            if (g_SantaTown.CreateSnow(o))
+                continue;
+            if (g_PKField.CreateFireSpark(o))
+                continue;
+            if (g_DoppelGanger2.CreateFireSpark(o))
+                continue;
+            if (g_EmpireGuardian1.CreateRain(o))
+                continue;
+            if (g_EmpireGuardian2.CreateRain(o))
+                continue;
+            if (g_EmpireGuardian3.CreateRain(o))
+                continue;
+            if (g_UnitedMarketPlace.CreateRain(o))
+                continue;
         }
         else
         {
-            if (MoveDevilSquareRain(o)) continue;
-            if (MoveChaosCastleRain(o)) continue;
-            if (MoveHeavenRain(o))      continue;
-            if (g_UnitedMarketPlace.MoveRain(o)) continue;
+            if (MoveDevilSquareRain(o))
+                continue;
+            if (MoveChaosCastleRain(o))
+                continue;
+            if (MoveHeavenRain(o))
+                continue;
+            if (g_UnitedMarketPlace.MoveRain(o))
+                continue;
             MoveEtcLeaf(o);
         }
     }
@@ -504,16 +520,10 @@ void RenderLeaves()
         return;
     }
 
-    if (gMapManager.WorldActive == WD_2DEVIAS || gMapManager.WorldActive == WD_7ATLANSE || gMapManager.WorldActive == WD_10HEAVEN
-        || IsIceCity()
-        || IsSantaTown()
-        || gMapManager.IsPKField()
-        || IsDoppelGanger2()
-        || gMapManager.IsEmpireGuardian1()
-        || gMapManager.IsEmpireGuardian2()
-        || gMapManager.IsEmpireGuardian3()
-        || IsUnitedMarketPlace()
-        )
+    if (gMapManager.WorldActive == WD_2DEVIAS || gMapManager.WorldActive == WD_7ATLANSE ||
+        gMapManager.WorldActive == WD_10HEAVEN || IsIceCity() || IsSantaTown() || gMapManager.IsPKField() ||
+        IsDoppelGanger2() || gMapManager.IsEmpireGuardian1() || gMapManager.IsEmpireGuardian2() ||
+        gMapManager.IsEmpireGuardian3() || IsUnitedMarketPlace())
         EnableAlphaBlend();
     else if (gMapManager.InChaosCastle() == true)
         EnableAlphaTest();
@@ -537,14 +547,12 @@ void RenderLeaves()
         iMaxLeaves = MAX_LEAVES;
 
     for (int i = 0; i < iMaxLeaves; i++)
-#else // DEVIAS_XMAS_EVENT
+#else  // DEVIAS_XMAS_EVENT
     for (int i = 0; i < MAX_LEAVES; i++)
 #endif // DEVIAS_XMAS_EVENT
     {
         PARTICLE* o = &Leaves[i];
-        if (o->Live
-            && Bitmaps.FindTexture(o->Type)
-            )
+        if (o->Live && Bitmaps.FindTexture(o->Type))
         {
             BindTexture(o->Type);
             if (gMapManager.WorldActive == WD_2DEVIAS || IsIceCity() || IsSantaTown())

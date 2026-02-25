@@ -109,7 +109,8 @@ int32_t CMultiLanguage::ConvertToUtf8(char* target, const wchar_t* source, int m
     {
         std::string tmp;
         tmp.resize(requiredBytesWithNull);
-        const int writtenWithNull = WideCharToMultiByte(CP_UTF8, 0, source, -1, tmp.data(), requiredBytesWithNull, nullptr, nullptr);
+        const int writtenWithNull =
+            WideCharToMultiByte(CP_UTF8, 0, source, -1, tmp.data(), requiredBytesWithNull, nullptr, nullptr);
         if (writtenWithNull <= 0)
         {
             target[0] = '\0';
@@ -145,7 +146,6 @@ int32_t CMultiLanguage::ConvertToUtf8(char* target, const wchar_t* source, int m
     // When source length is -1, WinAPI includes the null terminator in 'written'.
     return written > 0 ? (written - 1) : 0;
 }
-
 
 WPARAM CMultiLanguage::ConvertFulltoHalfWidthChar(DWORD wParam)
 {

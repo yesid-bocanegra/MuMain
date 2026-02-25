@@ -16,6 +16,7 @@
 
 CShopList::CShopList() // OK
 {
+    // cppcheck-suppress [noCopyConstructor, noOperatorEq]
     this->m_CategoryListPtr = new CShopCategoryList;
     this->m_PackageListPtr = new CShopPackageList;
     this->m_ProductListPtr = new CShopProductList;
@@ -47,7 +48,7 @@ WZResult CShopList::LoadCategroy(const wchar_t* szFilePath) // OK
         LastError = GetLastError();
     }
 
-    char buff[1024] = { 0 };
+    char buff[1024] = {0};
 
     if (ifs.is_open())
     {
@@ -99,7 +100,7 @@ WZResult CShopList::LoadPackage(const wchar_t* szFilePath) // OK
         LastError = GetLastError();
     }
 
-    char buff[1024] = { 0 };
+    char buff[1024] = {0};
 
     if (ifs.is_open())
     {
@@ -150,7 +151,7 @@ WZResult CShopList::LoadProduct(const wchar_t* szFilePath) // OK
         LastError = GetLastError();
     }
 
-    char buff[1024] = { 0 };
+    char buff[1024] = {0};
 
     if (ifs.is_open())
     {
@@ -209,7 +210,7 @@ FILE_ENCODE CShopList::IsFileEncodingUtf8(const wchar_t* szFilePath) // OK
         return FE_ANSI;
     }
 
-    char buff[16] = { 0 };
+    char buff[16] = {0};
 
     ifs.getline(buff, sizeof(buff));
 
@@ -248,7 +249,8 @@ std::wstring CShopList::GetDecodedString(const char* buffer, FILE_ENCODE encode)
         WideCharToMultiByte(0, 0, lpWideCharStr, -1, buff, cchWideChar, 0, 0);
 
         // todo: check if that's correct
-        result = (wchar_t*) buff;
+        // cppcheck-suppress dangerousTypeCast
+        result = (wchar_t*)buff;
 
         delete[] lpWideCharStr;
         delete[] buff;
@@ -262,6 +264,7 @@ std::wstring CShopList::GetDecodedString(const char* buffer, FILE_ENCODE encode)
         else
         {
             // todo: check if that's correct
+            // cppcheck-suppress dangerousTypeCast
             result = (wchar_t*)(buffer);
         }
     }

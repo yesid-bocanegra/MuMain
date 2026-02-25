@@ -9,6 +9,7 @@
 
 using namespace SEASON3B;
 
+// cppcheck-suppress uninitMemberVar
 SEASON3B::CNewUIQuickCommandWindow::CNewUIQuickCommandWindow()
 {
     m_pNewUIMng = NULL;
@@ -65,7 +66,7 @@ bool SEASON3B::CNewUIQuickCommandWindow::UpdateMouseEvent()
         return true;
     }
 
-    POINT pt = { m_Pos.x, m_Pos.y + 38 };
+    POINT pt = {m_Pos.x, m_Pos.y + 38};
 
     for (int i = 0; i < 5; ++i)
     {
@@ -170,9 +171,7 @@ bool SEASON3B::CNewUIQuickCommandWindow::Update()
     {
         CHARACTER* pCha = &CharactersClient[m_iSelectedCharacterIndex];
 
-        if (wcscmp(pCha->ID, m_strID) != 0
-            || pCha->Object.Live == false
-            || pCha->Object.Kind != KIND_PLAYER)
+        if (wcscmp(pCha->ID, m_strID) != 0 || pCha->Object.Live == false || pCha->Object.Kind != KIND_PLAYER)
         {
             CloseQuickCommand();
         }
@@ -217,7 +216,10 @@ void SEASON3B::CNewUIQuickCommandWindow::RenderFrame()
 {
     float x, y, width, height;
 
-    x = m_Pos.x; y = m_Pos.y; width = 112.f; height = 140;
+    x = m_Pos.x;
+    y = m_Pos.y;
+    width = 112.f;
+    height = 140;
 
     RenderImage(IMAGE_QUICKCOMMAND_BACK, x, y, width, height);
 
@@ -258,7 +260,7 @@ void SEASON3B::CNewUIQuickCommandWindow::RenderContents()
     g_pRenderText->SetFont(g_hFont);
     g_pRenderText->SetTextColor(255, 255, 255, 255);
 
-    int iGlobalText[] = { 943, 1124, 944, 948, 949 };
+    int iGlobalText[] = {943, 1124, 944, 948, 949};
     for (int i = 0; i < 5; ++i)
     {
         if (m_iSelectedIndex == i)

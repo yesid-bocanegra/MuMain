@@ -21,21 +21,16 @@
 #include "Scenes/SceneCommon.h"
 #include "Core/ErrorReport.h"
 
-#define	MW_OK		0
-#define	MW_CANCEL	1
-
-
+#define MW_OK 0
+#define MW_CANCEL 1
 
 extern int g_iChatInputType;
 extern CUITextInputBox* g_pSinglePasswdInputBox;
 
-CMsgWin::CMsgWin()
-{
-}
+// cppcheck-suppress uninitMemberVar
+CMsgWin::CMsgWin() {}
 
-CMsgWin::~CMsgWin()
-{
-}
+CMsgWin::~CMsgWin() {}
 
 void CMsgWin::Create()
 {
@@ -97,9 +92,8 @@ void CMsgWin::SetCtrlPosition()
         m_aBtn[MW_CANCEL].SetPosition(nBaseXPos + 264, nBtnYPos);
         if (m_nMsgCode == MESSAGE_DELETE_CHARACTER_RESIDENT)
             if (g_iChatInputType == 1)
-                g_pSinglePasswdInputBox->SetPosition(
-                    int((m_sprInput.GetXPos() + 10) / g_fScreenRate_x),
-                    int((m_sprInput.GetYPos() + 8) / g_fScreenRate_y));
+                g_pSinglePasswdInputBox->SetPosition(int((m_sprInput.GetXPos() + 10) / g_fScreenRate_x),
+                                                     int((m_sprInput.GetYPos() + 8) / g_fScreenRate_y));
         break;
     }
 }
@@ -230,8 +224,8 @@ void CMsgWin::RenderControls()
             nTextPosY = int((m_sprBack.GetYPos() + 38) / g_fScreenRate_y);
         else
             nTextPosY = int((m_sprBack.GetYPos() + 54) / g_fScreenRate_y);
-        g_pRenderText->RenderText(nTextPosX, nTextPosY, m_aszMsg[0],
-            m_sprBack.GetWidth() / g_fScreenRate_x, 0, RT3_SORT_CENTER);
+        g_pRenderText->RenderText(nTextPosX, nTextPosY, m_aszMsg[0], m_sprBack.GetWidth() / g_fScreenRate_x, 0,
+                                  RT3_SORT_CENTER);
     }
     else if (2 == m_nMsgLine)
     {
@@ -258,9 +252,8 @@ void CMsgWin::RenderControls()
         else if (g_iChatInputType == 0)
         {
             InputTextWidth = 100;
-            ::RenderInputText(
-                int((m_sprInput.GetXPos() + 10) / g_fScreenRate_x),
-                int((m_sprInput.GetYPos() + 8) / g_fScreenRate_y), 0, 0);
+            ::RenderInputText(int((m_sprInput.GetXPos() + 10) / g_fScreenRate_x),
+                              int((m_sprInput.GetYPos() + 8) / g_fScreenRate_y), 0, 0);
             InputTextWidth = 256;
         }
     }

@@ -35,8 +35,7 @@ namespace
 {
 constexpr std::size_t kBufferNameLength = 64;
 
-template<typename T>
-struct ComReleaser
+template <typename T> struct ComReleaser
 {
     void operator()(T* pointer) const noexcept
     {
@@ -47,19 +46,18 @@ struct ComReleaser
     }
 };
 
-template<typename T>
-using ComPtr = std::unique_ptr<T, ComReleaser<T>>;
+template <typename T> using ComPtr = std::unique_ptr<T, ComReleaser<T>>;
 
 struct SoundBufferEntry
 {
-    std::array<ComPtr<IDirectSoundBuffer>, MAX_CHANNEL> buffers {};
-    std::array<ComPtr<IDirectSound3DBuffer>, MAX_CHANNEL> buffers3D {};
-    std::array<OBJECT*, MAX_CHANNEL> attachedObjects {};
-    std::array<wchar_t, kBufferNameLength> name {};
+    std::array<ComPtr<IDirectSoundBuffer>, MAX_CHANNEL> buffers{};
+    std::array<ComPtr<IDirectSound3DBuffer>, MAX_CHANNEL> buffers3D{};
+    std::array<OBJECT*, MAX_CHANNEL> attachedObjects{};
+    std::array<wchar_t, kBufferNameLength> name{};
     int activeChannel = 0;
     int maxChannels = 0;
     bool enable3D = false;
-    std::vector<std::uint8_t> waveData {};
+    std::vector<std::uint8_t> waveData{};
     DWORD waveDataSize = 0;
 };
 
@@ -104,8 +102,8 @@ private:
     mutable std::mutex mutex_;
     ComPtr<IDirectSound> device_;
     ComPtr<IDirectSound3DListener> listener_;
-    std::array<SoundBufferEntry, MAX_BUFFER> entries_ {};
-    std::atomic<bool> comInitialized_ { false };
+    std::array<SoundBufferEntry, MAX_BUFFER> entries_{};
+    std::atomic<bool> comInitialized_{false};
     std::uint32_t bufferBytes_ = 0;
     bool enableSound_ = false;
     bool enable3DSound_ = false;
@@ -148,7 +146,7 @@ HRESULT DirectSoundManager::Initialize(HWND windowHandle)
         return hr;
     }
 
-    DSBUFFERDESC desc {};
+    DSBUFFERDESC desc{};
     desc.dwSize = sizeof(DSBUFFERDESC);
     desc.dwFlags = DSBCAPS_CTRL3D | DSBCAPS_PRIMARYBUFFER;
 
@@ -162,7 +160,7 @@ HRESULT DirectSoundManager::Initialize(HWND windowHandle)
     }
     ComPtr<IDirectSoundBuffer> primaryBuffer(rawPrimary);
 
-    WAVEFORMATEX format {};
+    WAVEFORMATEX format{};
     format.wFormatTag = WAVE_FORMAT_PCM;
     format.nChannels = 2;
     format.nSamplesPerSec = 22050;
@@ -423,7 +421,8 @@ HRESULT DirectSoundManager::RestoreBuffers(int bufferId, int channel)
         hr = CopyWaveDataToBuffer(entry, bufferId, channel);
         if (FAILED(hr))
         {
-            g_ErrorReport.Write(L"RestoreBuffers - CopyWaveDataToBuffer failed for %d channel %d (0x%08X)\r\n", bufferId, channel, hr);
+            g_ErrorReport.Write(L"RestoreBuffers - CopyWaveDataToBuffer failed for %d channel %d (0x%08X)\r\n",
+                                bufferId, channel, hr);
             return hr;
         }
     }
@@ -459,7 +458,7 @@ void DirectSoundManager::Update3DPositions()
     }
 
     std::lock_guard lock(mutex_);
-    vec3_t angle {};
+    vec3_t angle{};
     float rotation[3][4];
     Vector(0.f, 0.f, CameraAngle[2], angle);
     AngleMatrix(angle, rotation);
@@ -491,7 +490,8 @@ void DirectSoundManager::Update3DPositions()
     }
 }
 
-HRESULT DirectSoundManager::CreateStaticBuffer(SoundBufferEntry& entry, ESound bufferId, const wchar_t* filename, bool enable3D)
+HRESULT DirectSoundManager::CreateStaticBuffer(SoundBufferEntry& entry, ESound bufferId, const wchar_t* filename,
+                                               bool enable3D)
 {
     if (!device_)
     {
@@ -517,7 +517,7 @@ HRESULT DirectSoundManager::CreateStaticBuffer(SoundBufferEntry& entry, ESound b
         return hr;
     }
 
-    DSBUFFERDESC desc {};
+    DSBUFFERDESC desc{};
     desc.dwSize = sizeof(DSBUFFERDESC);
     desc.dwBufferBytes = dataSize;
     desc.lpwfxFormat = const_cast<WAVEFORMATEX*>(&format);
@@ -574,7 +574,8 @@ HRESULT DirectSoundManager::CreateStaticBuffer(SoundBufferEntry& entry, ESound b
         hr = device_->DuplicateSoundBuffer(entry.buffers[0].get(), &duplicate);
         if (FAILED(hr))
         {
-            g_ErrorReport.Write(L"CreateStaticBuffer - DuplicateSoundBuffer failed for %ls channel %d (0x%08X)\r\n", filename, channel, hr);
+            g_ErrorReport.Write(L"CreateStaticBuffer - DuplicateSoundBuffer failed for %ls channel %d (0x%08X)\r\n",
+                                filename, channel, hr);
             return hr;
         }
 
@@ -585,7 +586,8 @@ HRESULT DirectSoundManager::CreateStaticBuffer(SoundBufferEntry& entry, ESound b
             hr = entry.buffers[channel]->QueryInterface(IID_IDirectSound3DBuffer, reinterpret_cast<void**>(&raw3D));
             if (FAILED(hr))
             {
-                g_ErrorReport.Write(L"CreateStaticBuffer - QueryInterface 3D failed for %ls channel %d (0x%08X)\r\n", filename, channel, hr);
+                g_ErrorReport.Write(L"CreateStaticBuffer - QueryInterface 3D failed for %ls channel %d (0x%08X)\r\n",
+                                    filename, channel, hr);
                 return hr;
             }
 
@@ -615,7 +617,7 @@ HRESULT DirectSoundManager::CopyWaveDataToBuffer(SoundBufferEntry& entry, int bu
     DWORD part1Size = 0;
     DWORD part2Size = 0;
     HRESULT hr = buffer->Lock(0, entry.waveDataSize, reinterpret_cast<void**>(&part1), &part1Size,
-        reinterpret_cast<void**>(&part2), &part2Size, 0);
+                              reinterpret_cast<void**>(&part2), &part2Size, 0);
     if (FAILED(hr))
     {
         return hr;

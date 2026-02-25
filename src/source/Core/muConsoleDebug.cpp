@@ -3,7 +3,7 @@
 
 #include "stdafx.h"
 
-#include "muConsoleDebug.h"	// self
+#include "muConsoleDebug.h" // self
 
 #include <io.h>
 #include <fcntl.h>
@@ -37,7 +37,8 @@ CmuConsoleDebug::CmuConsoleDebug() : m_bInit(false)
         leaf::ShowConsole(true);
         m_bInit = true;
 
-        g_ErrorReport.Write(L"Mu Debug Console Window Init - completed(Handle:0x%00000008X)\r\n", leaf::GetConsoleWndHandle());
+        g_ErrorReport.Write(L"Mu Debug Console Window Init - completed(Handle:0x%00000008X)\r\n",
+                            leaf::GetConsoleWndHandle());
     }
 #endif
 }
@@ -45,9 +46,9 @@ CmuConsoleDebug::CmuConsoleDebug() : m_bInit(false)
 CmuConsoleDebug::~CmuConsoleDebug()
 {
 #ifndef _EDITOR
-    #ifdef CSK_LH_DEBUG_CONSOLE
-        leaf::CloseConsoleWindow();
-    #endif
+#ifdef CSK_LH_DEBUG_CONSOLE
+    leaf::CloseConsoleWindow();
+#endif
 #endif
 }
 
@@ -76,7 +77,6 @@ void CmuConsoleDebug::UpdateMainScene()
     }
 #endif
 }
-
 
 bool CmuConsoleDebug::CheckCommand(const std::wstring& strCommand)
 {
@@ -252,7 +252,7 @@ void CmuConsoleDebug::Write(int iType, const wchar_t* pStr, ...)
         }
 
         wchar_t szBuffer[256] = L"";
-        va_list	pArguments;
+        va_list pArguments;
 
         va_start(pArguments, pStr);
         vswprintf(szBuffer, pStr, pArguments);

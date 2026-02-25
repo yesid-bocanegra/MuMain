@@ -26,100 +26,98 @@ CCameraMove::~CCameraMove()
 
 namespace
 {
-    constexpr float kDefaultStartDistance = 10.0f;
-    constexpr float kMinMoveAccel = 0.1f;
-    constexpr float kMaxMoveAccel = 40.0f;
-    constexpr float kMinDistanceLevel = 5.0f;
-    constexpr float kMaxDistanceLevel = 20.0f;
-    constexpr float kReturnSpeed = 10.0f;
-    constexpr float kDistanceAdjustFactor = 0.005f;
-    constexpr float kDistanceSnapEpsilon = 0.2f;
-    constexpr float kTourBlendDistance = 300.0f;
-    constexpr float kTourMaxRotateSpeed = 1.0f;
-    constexpr float kMinTourAccel = 0.1f;
-    constexpr float kMaxTourAccel = 100.0f;
-    constexpr float kFullCircleDegrees = 360.0f;
-    constexpr float kWaypointRenderOffset = 50.0f;
-    constexpr float kWaypointRenderHalfSize = 10.0f;
-    constexpr float kTourCameraZPosition = -300.0f;
+constexpr float kDefaultStartDistance = 10.0f;
+constexpr float kMinMoveAccel = 0.1f;
+constexpr float kMaxMoveAccel = 40.0f;
+constexpr float kMinDistanceLevel = 5.0f;
+constexpr float kMaxDistanceLevel = 20.0f;
+constexpr float kReturnSpeed = 10.0f;
+constexpr float kDistanceAdjustFactor = 0.005f;
+constexpr float kDistanceSnapEpsilon = 0.2f;
+constexpr float kTourBlendDistance = 300.0f;
+constexpr float kTourMaxRotateSpeed = 1.0f;
+constexpr float kMinTourAccel = 0.1f;
+constexpr float kMaxTourAccel = 100.0f;
+constexpr float kFullCircleDegrees = 360.0f;
+constexpr float kWaypointRenderOffset = 50.0f;
+constexpr float kWaypointRenderHalfSize = 10.0f;
+constexpr float kTourCameraZPosition = -300.0f;
 
-    template <typename T>
-    constexpr const T& Clamp(const T& value, const T& minValue, const T& maxValue)
-    {
-        return std::max<T>(minValue, std::min<T>(value, maxValue));
-    }
-
-    template <std::size_t Size>
-    void CopyArray(const float (&source)[Size], float (&destination)[Size])
-    {
-        std::copy(source, source + Size, destination);
-    }
-
-    float NormalizeAngleDegrees(float angle)
-    {
-        angle = std::fmod(angle, kFullCircleDegrees);
-        if (angle < 0.0f)
-        {
-            angle += kFullCircleDegrees;
-        }
-        return angle;
-    }
-
-    float SignedAngleDelta(float fromDegrees, float toDegrees)
-    {
-        const float delta = NormalizeAngleDegrees(toDegrees) - NormalizeAngleDegrees(fromDegrees);
-        if (delta > 180.0f)
-        {
-            return delta - kFullCircleDegrees;
-        }
-        if (delta < -180.0f)
-        {
-            return delta + kFullCircleDegrees;
-        }
-        return delta;
-    }
-
-    struct CameraVector2
-    {
-        float x{0.0f};
-        float y{0.0f};
-
-        float Length() const
-        {
-            return std::sqrt(x * x + y * y);
-        }
-
-        CameraVector2 Normalized() const
-        {
-            const float length = Length();
-            if (length <= std::numeric_limits<float>::epsilon())
-            {
-                return {};
-            }
-            return {x / length, y / length};
-        }
-
-        CameraVector2 operator+(const CameraVector2& other) const
-        {
-            return {x + other.x, y + other.y};
-        }
-
-        CameraVector2 operator-(const CameraVector2& other) const
-        {
-            return {x - other.x, y - other.y};
-        }
-
-        CameraVector2 operator*(float scalar) const
-        {
-            return {x * scalar, y * scalar};
-        }
-    };
-
-    CameraVector2 BlendVectors(const CameraVector2& a, const CameraVector2& b, float alpha)
-    {
-        return {(a.x * (1.0f - alpha)) + (b.x * alpha), (a.y * (1.0f - alpha)) + (b.y * alpha)};
-    }
+template <typename T> constexpr const T& Clamp(const T& value, const T& minValue, const T& maxValue)
+{
+    return std::max<T>(minValue, std::min<T>(value, maxValue));
 }
+
+template <std::size_t Size> void CopyArray(const float (&source)[Size], float (&destination)[Size])
+{
+    std::copy(source, source + Size, destination);
+}
+
+float NormalizeAngleDegrees(float angle)
+{
+    angle = std::fmod(angle, kFullCircleDegrees);
+    if (angle < 0.0f)
+    {
+        angle += kFullCircleDegrees;
+    }
+    return angle;
+}
+
+float SignedAngleDelta(float fromDegrees, float toDegrees)
+{
+    const float delta = NormalizeAngleDegrees(toDegrees) - NormalizeAngleDegrees(fromDegrees);
+    if (delta > 180.0f)
+    {
+        return delta - kFullCircleDegrees;
+    }
+    if (delta < -180.0f)
+    {
+        return delta + kFullCircleDegrees;
+    }
+    return delta;
+}
+
+struct CameraVector2
+{
+    float x{0.0f};
+    float y{0.0f};
+
+    float Length() const
+    {
+        return std::sqrt(x * x + y * y);
+    }
+
+    CameraVector2 Normalized() const
+    {
+        const float length = Length();
+        if (length <= std::numeric_limits<float>::epsilon())
+        {
+            return {};
+        }
+        return {x / length, y / length};
+    }
+
+    CameraVector2 operator+(const CameraVector2& other) const
+    {
+        return {x + other.x, y + other.y};
+    }
+
+    CameraVector2 operator-(const CameraVector2& other) const
+    {
+        return {x - other.x, y - other.y};
+    }
+
+    CameraVector2 operator*(float scalar) const
+    {
+        return {x * scalar, y * scalar};
+    }
+};
+
+CameraVector2 BlendVectors(const CameraVector2& a, const CameraVector2& b, float alpha)
+{
+    return {(a.x * (1.0f - alpha)) + (b.x * alpha), (a.y * (1.0f - alpha)) + (b.y * alpha)};
+}
+} // namespace
 
 void CCameraMove::Init()
 {
@@ -240,11 +238,10 @@ void CCameraMove::RemoveWayPoint(int iGridX, int iGridY)
     const bool wasSelectedTile = GetSelectedTile() == static_cast<DWORD>(tileIndex);
 
     auto removalPredicate = [tileIndex](const std::unique_ptr<WAYPOINT>& waypoint)
-    {
-        return waypoint->iIndex == tileIndex;
-    };
+    { return waypoint->iIndex == tileIndex; };
 
-    m_listWayPoint.erase(std::remove_if(m_listWayPoint.begin(), m_listWayPoint.end(), removalPredicate), m_listWayPoint.end());
+    m_listWayPoint.erase(std::remove_if(m_listWayPoint.begin(), m_listWayPoint.end(), removalPredicate),
+                         m_listWayPoint.end());
 
     if (wasSelectedTile && m_listWayPoint.size() != originalSize)
     {
@@ -339,7 +336,8 @@ void CCameraMove::UpdateWayPoint()
             const float cameraMoveAccel = targetWaypoint->fCameraMoveAccel;
             if (m_iDelayCount >= targetWaypoint->iDelay)
             {
-                CameraVector2 toTarget{targetWaypoint->fCameraX - m_CurrentCameraPos[0], targetWaypoint->fCameraY - m_CurrentCameraPos[1]};
+                CameraVector2 toTarget{targetWaypoint->fCameraX - m_CurrentCameraPos[0],
+                                       targetWaypoint->fCameraY - m_CurrentCameraPos[1]};
                 const float remainingDistance = toTarget.Length();
 
                 if (remainingDistance <= cameraMoveAccel)
@@ -380,7 +378,8 @@ void CCameraMove::UpdateWayPoint()
 
         if (m_dwCurrentIndex == m_listWayPoint.size())
         {
-            CameraVector2 toStart{m_CameraStartPos[0] - m_CurrentCameraPos[0], m_CameraStartPos[1] - m_CurrentCameraPos[1]};
+            CameraVector2 toStart{m_CameraStartPos[0] - m_CurrentCameraPos[0],
+                                  m_CameraStartPos[1] - m_CurrentCameraPos[1]};
             const float remainingDistance = toStart.Length();
 
             if (remainingDistance <= kReturnSpeed)
@@ -453,10 +452,12 @@ void CCameraMove::StopCameraWalk(bool bDone)
 {
     if (m_dwCameraWalkState == CAMERAWALK_STATE_MOVE)
     {
-        if (bDone) {
+        if (bDone)
+        {
             m_dwCameraWalkState = CAMERAWALK_STATE_DONE;
         }
-        else {
+        else
+        {
             m_dwCameraWalkState = CAMERAWALK_STATE_READY;
         }
         m_iDelayCount = 0;
@@ -560,26 +561,18 @@ const CCameraMove::WAYPOINT* CCameraMove::GetWayPointByIndex(std::size_t index) 
 
 CCameraMove::WAYPOINT* CCameraMove::FindWayPointByTile(int tileIndex)
 {
-    auto iter = std::find_if(
-        m_listWayPoint.begin(),
-        m_listWayPoint.end(),
-        [tileIndex](const std::unique_ptr<WAYPOINT>& waypoint)
-        {
-            return waypoint->iIndex == tileIndex;
-        });
+    auto iter =
+        std::find_if(m_listWayPoint.begin(), m_listWayPoint.end(),
+                     [tileIndex](const std::unique_ptr<WAYPOINT>& waypoint) { return waypoint->iIndex == tileIndex; });
 
     return (iter != m_listWayPoint.end()) ? iter->get() : nullptr;
 }
 
 const CCameraMove::WAYPOINT* CCameraMove::FindWayPointByTile(int tileIndex) const
 {
-    auto iter = std::find_if(
-        m_listWayPoint.begin(),
-        m_listWayPoint.end(),
-        [tileIndex](const std::unique_ptr<WAYPOINT>& waypoint)
-        {
-            return waypoint->iIndex == tileIndex;
-        });
+    auto iter =
+        std::find_if(m_listWayPoint.begin(), m_listWayPoint.end(),
+                     [tileIndex](const std::unique_ptr<WAYPOINT>& waypoint) { return waypoint->iIndex == tileIndex; });
 
     return (iter != m_listWayPoint.end()) ? iter->get() : nullptr;
 }
@@ -627,7 +620,8 @@ BOOL CCameraMove::SetTourMode(BOOL bFlag, BOOL bRandomStart, int index)
     m_CameraStartPos[1] = m_CurrentCameraPos[1] = m_vTourCameraPos[1] = startWaypoint->fCameraY;
     m_CameraStartPos[2] = m_CurrentCameraPos[2] = m_vTourCameraPos[2] = startWaypoint->fCameraZ;
 
-    CameraVector2 toTarget{targetWaypoint->fCameraX - startWaypoint->fCameraX, targetWaypoint->fCameraY - startWaypoint->fCameraY};
+    CameraVector2 toTarget{targetWaypoint->fCameraX - startWaypoint->fCameraX,
+                           targetWaypoint->fCameraY - startWaypoint->fCameraY};
     const CameraVector2 forwardDir = toTarget.Normalized();
     m_fTargetTourCameraAngle = m_fTourCameraAngle = CreateAngle(0, 0, forwardDir.x, -forwardDir.y);
 
@@ -653,14 +647,9 @@ void CCameraMove::BackwardTour(float fSpeed)
 void CCameraMove::UpdateTourWayPoint()
 {
     const std::size_t waypointCount = m_listWayPoint.size();
-    const auto WrapForward = [waypointCount](std::size_t index)
-    {
-        return (index + 1 < waypointCount) ? index + 1 : 0;
-    };
+    const auto WrapForward = [waypointCount](std::size_t index) { return (index + 1 < waypointCount) ? index + 1 : 0; };
     const auto WrapBackward = [waypointCount](std::size_t index)
-    {
-        return (index == 0) ? waypointCount - 1 : index - 1;
-    };
+    { return (index == 0) ? waypointCount - 1 : index - 1; };
 
     while (true)
     {
@@ -682,19 +671,24 @@ void CCameraMove::UpdateTourWayPoint()
             return;
         }
 
-        float targetCameraAcc = Clamp(targetWaypoint->fCameraMoveAccel * static_cast<float>(FPS_ANIMATION_FACTOR), kMinTourAccel, kMaxTourAccel);
-        float originCameraAcc = Clamp(originWaypoint->fCameraMoveAccel * static_cast<float>(FPS_ANIMATION_FACTOR), kMinTourAccel, kMaxTourAccel);
+        float targetCameraAcc = Clamp(targetWaypoint->fCameraMoveAccel * static_cast<float>(FPS_ANIMATION_FACTOR),
+                                      kMinTourAccel, kMaxTourAccel);
+        float originCameraAcc = Clamp(originWaypoint->fCameraMoveAccel * static_cast<float>(FPS_ANIMATION_FACTOR),
+                                      kMinTourAccel, kMaxTourAccel);
 
         if (m_iDelayCount >= targetWaypoint->iDelay)
         {
-            CameraVector2 toTarget{targetWaypoint->fCameraX - m_CurrentCameraPos[0], targetWaypoint->fCameraY - m_CurrentCameraPos[1]};
-            CameraVector2 toOrigin{originWaypoint->fCameraX - m_CurrentCameraPos[0], originWaypoint->fCameraY - m_CurrentCameraPos[1]};
+            CameraVector2 toTarget{targetWaypoint->fCameraX - m_CurrentCameraPos[0],
+                                   targetWaypoint->fCameraY - m_CurrentCameraPos[1]};
+            CameraVector2 toOrigin{originWaypoint->fCameraX - m_CurrentCameraPos[0],
+                                   originWaypoint->fCameraY - m_CurrentCameraPos[1]};
             const float distanceToTarget = toTarget.Length();
             const float distanceToOrigin = toOrigin.Length();
             const CameraVector2 forwardDir = toTarget.Normalized();
-            const CameraVector2 reverseDir = (distanceToOrigin > std::numeric_limits<float>::epsilon())
-                ? CameraVector2{-toOrigin.x / distanceToOrigin, -toOrigin.y / distanceToOrigin}
-                : CameraVector2{};
+            const CameraVector2 reverseDir =
+                (distanceToOrigin > std::numeric_limits<float>::epsilon())
+                    ? CameraVector2{-toOrigin.x / distanceToOrigin, -toOrigin.y / distanceToOrigin}
+                    : CameraVector2{};
             CameraVector2 tourDir = forwardDir;
 
             if (distanceToTarget <= kTourBlendDistance)
@@ -702,7 +696,8 @@ void CCameraMove::UpdateTourWayPoint()
                 const std::size_t nextIndex = WrapForward(targetIndex);
                 if (const WAYPOINT* nextWaypoint = GetWayPointByIndex(nextIndex))
                 {
-                    CameraVector2 nextSegment{nextWaypoint->fCameraX - targetWaypoint->fCameraX, nextWaypoint->fCameraY - targetWaypoint->fCameraY};
+                    CameraVector2 nextSegment{nextWaypoint->fCameraX - targetWaypoint->fCameraX,
+                                              nextWaypoint->fCameraY - targetWaypoint->fCameraY};
                     const float nextDistance = nextSegment.Length();
                     if (nextDistance > std::numeric_limits<float>::epsilon())
                     {
@@ -717,7 +712,8 @@ void CCameraMove::UpdateTourWayPoint()
                 const std::size_t prevIndex = WrapBackward(originIndex);
                 if (const WAYPOINT* previousWaypoint = GetWayPointByIndex(prevIndex))
                 {
-                    CameraVector2 prevSegment{originWaypoint->fCameraX - previousWaypoint->fCameraX, originWaypoint->fCameraY - previousWaypoint->fCameraY};
+                    CameraVector2 prevSegment{originWaypoint->fCameraX - previousWaypoint->fCameraX,
+                                              originWaypoint->fCameraY - previousWaypoint->fCameraY};
                     const float prevDistance = prevSegment.Length();
                     if (prevDistance > std::numeric_limits<float>::epsilon())
                     {
@@ -800,9 +796,8 @@ void CCameraMove::UpdateTourWayPoint()
             const float totalBlendDistance = distanceToOrigin + distanceToTarget;
             if (totalBlendDistance > std::numeric_limits<float>::epsilon())
             {
-                m_fCurrentDistanceLevel =
-                    originWaypoint->fCameraDistanceLevel * distanceToTarget / totalBlendDistance +
-                    targetWaypoint->fCameraDistanceLevel * distanceToOrigin / totalBlendDistance;
+                m_fCurrentDistanceLevel = originWaypoint->fCameraDistanceLevel * distanceToTarget / totalBlendDistance +
+                                          targetWaypoint->fCameraDistanceLevel * distanceToOrigin / totalBlendDistance;
             }
             else
             {

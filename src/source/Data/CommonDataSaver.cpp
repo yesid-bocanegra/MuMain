@@ -54,7 +54,8 @@ bool CommonDataSaver::MatchesBackupPattern(const wchar_t* fileName, const WIN32_
 
     // Must end with ".bak"
     const std::wstring suffix = L".bak";
-    if (candidate.size() < suffix.size() || candidate.compare(candidate.size() - suffix.size(), suffix.size(), suffix) != 0)
+    if (candidate.size() < suffix.size() ||
+        candidate.compare(candidate.size() - suffix.size(), suffix.size(), suffix) != 0)
         return false;
 
     // Must have "_Y" somewhere after the number (helps avoid matching other random *.bak)
@@ -65,7 +66,8 @@ bool CommonDataSaver::MatchesBackupPattern(const wchar_t* fileName, const WIN32_
 }
 
 // --- helper: build backup name with number + local date/time
-bool CommonDataSaver::BuildBackupName(const wchar_t* fileName, int backupNumber, wchar_t* outBackupName, size_t outBackupNameChars)
+bool CommonDataSaver::BuildBackupName(const wchar_t* fileName, int backupNumber, wchar_t* outBackupName,
+                                      size_t outBackupNameChars)
 {
     if (!fileName || !outBackupName || outBackupNameChars == 0)
         return false;
@@ -78,22 +80,15 @@ bool CommonDataSaver::BuildBackupName(const wchar_t* fileName, int backupNumber,
 
     // Example:
     // "<dir><base>_N02_Y2026M01D25h00m45s03.bak"
-    int written = _snwprintf_s(
-        outBackupName,
-        outBackupNameChars,
-        _TRUNCATE,
-        L"%ls%ls_N%02d_Y%04dM%02dD%02dh%02dm%02ds%02d.bak",
-        dir.c_str(),
-        base.c_str(),
-        backupNumber,
-        st.wYear, st.wMonth, st.wDay,
-        st.wHour, st.wMinute, st.wSecond
-    );
+    int written = _snwprintf_s(outBackupName, outBackupNameChars, _TRUNCATE,
+                               L"%ls%ls_N%02d_Y%04dM%02dD%02dh%02dm%02ds%02d.bak", dir.c_str(), base.c_str(),
+                               backupNumber, st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond);
 
     return written > 0;
 }
 
-bool CommonDataSaver::BuildTempBackupName(const wchar_t* fileName, wchar_t* outTempBackupName, size_t outTempBackupNameChars)
+bool CommonDataSaver::BuildTempBackupName(const wchar_t* fileName, wchar_t* outTempBackupName,
+                                          size_t outTempBackupNameChars)
 {
     if (!fileName || !outTempBackupName || outTempBackupNameChars == 0)
         return false;
@@ -109,17 +104,10 @@ bool CommonDataSaver::BuildTempBackupName(const wchar_t* fileName, wchar_t* outT
 
     // Example:
     // "<dir><base>_TMP_Y2026_M01_D25_h00_m45_s03_1234_56.bak"
-    int written = _snwprintf_s(
-        outTempBackupName,
-        outTempBackupNameChars,
-        _TRUNCATE,
-        L"%ls%ls_TMP_Y%04d_M%02d_D%02d_h%02d_m%02d_s%02d_%lu_%lu.bak",
-        dir.c_str(),
-        base.c_str(),
-        st.wYear, st.wMonth, st.wDay,
-        st.wHour, st.wMinute, st.wSecond,
-        (unsigned long)pid, (unsigned long)tid
-    );
+    int written =
+        _snwprintf_s(outTempBackupName, outTempBackupNameChars, _TRUNCATE,
+                     L"%ls%ls_TMP_Y%04d_M%02d_D%02d_h%02d_m%02d_s%02d_%lu_%lu.bak", dir.c_str(), base.c_str(), st.wYear,
+                     st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond, (unsigned long)pid, (unsigned long)tid);
 
     return written > 0;
 }
@@ -133,7 +121,7 @@ void CommonDataSaver::EnsureMaxBackupsAfterSuccess(const wchar_t* fileName)
 
     struct BackupEntry
     {
-        std::wstring path;   // full path for DeleteFileW
+        std::wstring path; // full path for DeleteFileW
         FILETIME lastWrite{};
     };
 
@@ -153,7 +141,7 @@ void CommonDataSaver::EnsureMaxBackupsAfterSuccess(const wchar_t* fileName)
             continue;
 
         // Build full path for deletion
-        backups.push_back(BackupEntry{ dir + fd.cFileName, fd.ftLastWriteTime });
+        backups.push_back(BackupEntry{dir + fd.cFileName, fd.ftLastWriteTime});
 
     } while (FindNextFileW(hFind, &fd));
 
@@ -163,11 +151,8 @@ void CommonDataSaver::EnsureMaxBackupsAfterSuccess(const wchar_t* fileName)
     // Keep room for the new final one: <= MaxBackups - 1.
     while ((int)backups.size() > MaxBackups - 1)
     {
-        auto oldestIt = std::min_element(backups.begin(), backups.end(),
-            [](const BackupEntry& a, const BackupEntry& b)
-            {
-                return CompareFileTime(&a.lastWrite, &b.lastWrite) < 0;
-            });
+        auto oldestIt = std::min_element(backups.begin(), backups.end(), [](const BackupEntry& a, const BackupEntry& b)
+                                         { return CompareFileTime(&a.lastWrite, &b.lastWrite) < 0; });
 
         if (oldestIt == backups.end())
             break;

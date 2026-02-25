@@ -20,9 +20,7 @@
 
 using namespace SEASON3B;
 
-SEASON3B::CNewUIHotKey::CNewUIHotKey() : m_pNewUIMng(NULL), m_bStateGameOver(false)
-{
-}
+SEASON3B::CNewUIHotKey::CNewUIHotKey() : m_pNewUIMng(NULL), m_bStateGameOver(false) {}
 
 SEASON3B::CNewUIHotKey::~CNewUIHotKey()
 {
@@ -60,10 +58,8 @@ bool SEASON3B::CNewUIHotKey::UpdateMouseEvent()
 
     if (SelectedCharacter >= 0)
     {
-        if (SEASON3B::IsRepeat(VK_MENU) && SEASON3B::IsRelease(VK_RBUTTON)
-            && gMapManager.InChaosCastle() == false
-            && gMapManager.IsCursedTemple() == false
-            )
+        if (SEASON3B::IsRepeat(VK_MENU) && SEASON3B::IsRelease(VK_RBUTTON) && gMapManager.InChaosCastle() == false &&
+            gMapManager.IsCursedTemple() == false)
         {
             CHARACTER* pCha = &CharactersClient[SelectedCharacter];
 
@@ -72,10 +68,9 @@ bool SEASON3B::CNewUIHotKey::UpdateMouseEvent()
                 return false;
             }
 
-            if ((pCha->Object.SubType == MODEL_XMAS_EVENT_CHA_DEER)
-                || (pCha->Object.SubType == MODEL_XMAS_EVENT_CHA_SNOWMAN)
-                || (pCha->Object.SubType == MODEL_XMAS_EVENT_CHA_SSANTA)
-                )
+            if ((pCha->Object.SubType == MODEL_XMAS_EVENT_CHA_DEER) ||
+                (pCha->Object.SubType == MODEL_XMAS_EVENT_CHA_SNOWMAN) ||
+                (pCha->Object.SubType == MODEL_XMAS_EVENT_CHA_SSANTA))
             {
                 return false;
             }
@@ -226,8 +221,7 @@ bool SEASON3B::CNewUIHotKey::UpdateKeyEvent()
     }
     else if (SEASON3B::IsPress('A'))
     {
-        if (gCharacterManager.IsMasterLevel(Hero->Class) == true
-            && Hero->Class != CLASS_TEMPLENIGHT)
+        if (gCharacterManager.IsMasterLevel(Hero->Class) == true && Hero->Class != CLASS_TEMPLENIGHT)
         {
             g_pNewUISystem->Toggle(SEASON3B::INTERFACE_MASTER_LEVEL);
         }
@@ -359,14 +353,13 @@ bool SEASON3B::CNewUIHotKey::Render()
 
 bool SEASON3B::CNewUIHotKey::CanUpdateKeyEventRelatedMyInventory()
 {
-    if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_MIXINVENTORY)
-        || g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_TRADE)
-        || g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_STORAGE)
-        || g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_NPCSHOP)
-        || g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_MYSHOP_INVENTORY)
-        || g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_PURCHASESHOP_INVENTORY)
-        || g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_LUCKYITEMWND)
-        )
+    if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_MIXINVENTORY) ||
+        g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_TRADE) ||
+        g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_STORAGE) ||
+        g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_NPCSHOP) ||
+        g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_MYSHOP_INVENTORY) ||
+        g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_PURCHASESHOP_INVENTORY) ||
+        g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_LUCKYITEMWND))
     {
         return true;
     }
@@ -375,30 +368,29 @@ bool SEASON3B::CNewUIHotKey::CanUpdateKeyEventRelatedMyInventory()
 
 bool SEASON3B::CNewUIHotKey::CanUpdateKeyEvent()
 {
-    if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_KANTURU2ND_ENTERNPC)
-        || g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_CATAPULT)
-        || g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_NPCQUEST)
-        || g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_SENATUS)
-        || g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_GATEKEEPER)
-        || g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_GUARDSMAN)
-        || g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_GATESWITCH)
-        || g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_NPCGUILDMASTER)
-        || g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_BLOODCASTLE)
-        || g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_DEVILSQUARE)
-        || g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_CURSEDTEMPLE_NPC)
-        || g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_MASTER_LEVEL)
-        || g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_DUELWATCH)
-        || g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_DOPPELGANGER_NPC)
-        || g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_NPC_DIALOGUE)
-        || g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_QUEST_PROGRESS)
-        || g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_QUEST_PROGRESS_ETC)
-        || g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_GOLD_BOWMAN)
-        || g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_GOLD_BOWMAN_LENA)
-        || g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_LUCKYCOIN_REGISTRATION)
-        || g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_EXCHANGE_LUCKYCOIN)
-        || g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_EMPIREGUARDIAN_NPC)
-        || g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_UNITEDMARKETPLACE_NPC_JULIA)
-        )
+    if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_KANTURU2ND_ENTERNPC) ||
+        g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_CATAPULT) ||
+        g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_NPCQUEST) ||
+        g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_SENATUS) ||
+        g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_GATEKEEPER) ||
+        g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_GUARDSMAN) ||
+        g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_GATESWITCH) ||
+        g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_NPCGUILDMASTER) ||
+        g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_BLOODCASTLE) ||
+        g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_DEVILSQUARE) ||
+        g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_CURSEDTEMPLE_NPC) ||
+        g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_MASTER_LEVEL) ||
+        g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_DUELWATCH) ||
+        g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_DOPPELGANGER_NPC) ||
+        g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_NPC_DIALOGUE) ||
+        g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_QUEST_PROGRESS) ||
+        g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_QUEST_PROGRESS_ETC) ||
+        g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_GOLD_BOWMAN) ||
+        g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_GOLD_BOWMAN_LENA) ||
+        g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_LUCKYCOIN_REGISTRATION) ||
+        g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_EXCHANGE_LUCKYCOIN) ||
+        g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_EMPIREGUARDIAN_NPC) ||
+        g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_UNITEDMARKETPLACE_NPC_JULIA))
     {
         return false;
     }
@@ -428,12 +420,8 @@ bool SEASON3B::CNewUIHotKey::IsStateGameOver()
 
 bool SEASON3B::CNewUIHotKey::AutoGetItem()
 {
-    if (
-        CNewUIInventoryCtrl::GetPickedItem() == NULL
-        && SEASON3B::IsPress(VK_SPACE)
-        && g_pChatInputBox->HaveFocus() == false
-        && CheckMouseIn(0, 0, GetScreenWidth(), 429)
-        )
+    if (CNewUIInventoryCtrl::GetPickedItem() == NULL && SEASON3B::IsPress(VK_SPACE) &&
+        g_pChatInputBox->HaveFocus() == false && CheckMouseIn(0, 0, GetScreenWidth(), 429))
     {
         for (int i = 0; i < MAX_ITEMS; ++i)
         {

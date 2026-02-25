@@ -30,7 +30,7 @@
 #include "Local.h"
 #include "PersonalShopTitleImp.h"
 
-#include "UIMapName.h"		// rozy
+#include "UIMapName.h" // rozy
 #include "Core/CpuUsage.h"
 
 #include "Gameplay/MuHelper.h"
@@ -44,12 +44,9 @@
 #include "Core/Timer.h"
 #include "UIMng.h"
 
-
 #include "w_MapHeaders.h"
 
 #include "w_PetProcess.h"
-
-
 
 #include "NewUISystem.h"
 #include "Translation/i18n.h"
@@ -75,37 +72,35 @@ CMultiLanguage* pMultiLanguage = nullptr;
 extern DWORD g_dwTopWindow;
 
 CUIManager* g_pUIManager = nullptr;
-CUIMapName* g_pUIMapName = nullptr;		// rozy
+CUIMapName* g_pUIMapName = nullptr; // rozy
 
 float Time_Effect = 0;
 bool ashies = false;
 int weather = rand() % 3;
 
-HWND      g_hWnd = nullptr;
+HWND g_hWnd = nullptr;
 HINSTANCE g_hInst = nullptr;
-HDC       g_hDC = nullptr;
-HGLRC     g_hRC = nullptr;
-HFONT     g_hFont = nullptr;
-HFONT     g_hFontBold = nullptr;
-HFONT     g_hFontBig = nullptr;
-HFONT     g_hFixFont = nullptr;
+HDC g_hDC = nullptr;
+HGLRC g_hRC = nullptr;
+HFONT g_hFont = nullptr;
+HFONT g_hFontBold = nullptr;
+HFONT g_hFontBig = nullptr;
+HFONT g_hFixFont = nullptr;
 
-CTimer* g_pTimer = new CTimer();    // performance counter.
-bool      Destroy = false;
-bool      ActiveIME = false;
+CTimer* g_pTimer = new CTimer(); // performance counter.
+bool Destroy = false;
+bool ActiveIME = false;
 
 BYTE* RendomMemoryDump;
 ITEM_ATTRIBUTE* ItemAttRibuteMemoryDump;
 CHARACTER* CharacterMemoryDump;
 
-int       RandomTable[100];
+int RandomTable[100];
 
 CErrorReport g_ErrorReport;
 
 BOOL g_bMinimizedEnabled = FALSE;
 int g_iScreenSaverOldValue = 60 * 15;
-
-
 
 BOOL g_bUseWindowMode = TRUE;
 BOOL g_bUseFullscreenMode = FALSE;
@@ -115,21 +110,23 @@ char Mp3FileName[256];
 #pragma comment(lib, "wzAudio.lib")
 #include <wzAudio.h>
 
-
 void StopMusic()
 {
-    if (!m_MusicOnOff) return;
+    if (!m_MusicOnOff)
+        return;
 
     wzAudioStop();
 }
 
 void StopMp3(const char* Name, BOOL bEnforce)
 {
-    if (!m_MusicOnOff && !bEnforce) return;
+    if (!m_MusicOnOff && !bEnforce)
+        return;
 
     if (Mp3FileName[0] != NULL)
     {
-        if (strcmp(Name, Mp3FileName) == 0) {
+        if (strcmp(Name, Mp3FileName) == 0)
+        {
             wzAudioStop();
             Mp3FileName[0] = NULL;
         }
@@ -138,16 +135,18 @@ void StopMp3(const char* Name, BOOL bEnforce)
 
 void PlayMp3(const char* Name, BOOL bEnforce)
 {
-    if (Destroy) return;
-    if (!m_MusicOnOff && !bEnforce) return;
+    if (Destroy)
+        return;
+    if (!m_MusicOnOff && !bEnforce)
+        return;
 
     if (strcmp(Name, Mp3FileName) == 0)
     {
         return;
     }
-    
+
     wzAudioPlay(Name, 1);
-        strcpy(Mp3FileName, Name);
+    strcpy(Mp3FileName, Name);
 }
 
 bool IsEndMp3()
@@ -162,7 +161,7 @@ int GetMp3PlayPosition()
     return wzAudioGetStreamOffsetRange();
 }
 
-extern int  LogIn;
+extern int LogIn;
 extern wchar_t LogInID[];
 extern bool First;
 extern int FirstTime;
@@ -179,8 +178,8 @@ void CheckHack()
 
     auto attackSpeed = CharacterAttribute->AttackSpeed;
     auto magicSpeed = CharacterAttribute->MagicSpeed;
-    if (CharacterAttribute->Ability & ABILITY_FAST_ATTACK_SPEED
-        || CharacterAttribute->Ability & ABILITY_FAST_ATTACK_SPEED2)
+    if (CharacterAttribute->Ability & ABILITY_FAST_ATTACK_SPEED ||
+        CharacterAttribute->Ability & ABILITY_FAST_ATTACK_SPEED2)
     {
         attackSpeed -= 20;
         magicSpeed -= 20;
@@ -309,7 +308,8 @@ DWORD GetCheckSum(WORD wKey)
 
     wcscpy(lpszFile, L"data\\local\\Gameguard.csr");
 
-    HANDLE hFile = CreateFile(lpszFile, GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+    HANDLE hFile =
+        CreateFile(lpszFile, GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
     if (INVALID_HANDLE_VALUE == hFile)
     {
         return (0);
@@ -345,6 +345,7 @@ BOOL GetFileVersion(wchar_t* lpszFileName, WORD* pwVersion)
 
     VS_FIXEDFILEINFO* pffi;
     UINT uLen;
+    // cppcheck-suppress dangerousTypeCast
     if (!VerQueryValue(pbyData, L"\\", (LPVOID*)&pffi, &uLen))
     {
         delete[] pbyData;
@@ -418,13 +419,13 @@ void DestroyWindow()
 
 #ifdef DYNAMIC_FRUSTRUM
     DeleteAllFrustrum();
-#endif //DYNAMIC_FRUSTRUM
+#endif // DYNAMIC_FRUSTRUM
 
     SAFE_DELETE(g_pMercenaryInputBox);
     SAFE_DELETE(g_pSingleTextInputBox);
     SAFE_DELETE(g_pSinglePasswdInputBox);
 
-    SAFE_DELETE(g_pUIMapName);	// rozy
+    SAFE_DELETE(g_pUIMapName); // rozy
     SAFE_DELETE(g_pTimer);
     SAFE_DELETE(g_pUIManager);
 
@@ -489,7 +490,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         {
 #ifdef ACTIVE_FOCUS_OUT
             if (g_bUseWindowMode == FALSE)
-#endif	// ACTIVE_FOCUS_OUT
+#endif // ACTIVE_FOCUS_OUT
                 g_bWndActive = false;
 
             if (g_bUseWindowMode == FALSE && !g_HasInactiveFpsOverride)
@@ -502,7 +503,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             {
                 MouseLButton = false;
                 MouseLButtonPop = false;
-                //MouseLButtonPush = false;
+                // MouseLButtonPush = false;
                 MouseRButton = false;
                 MouseRButtonPop = false;
                 MouseRButtonPush = false;
@@ -528,8 +529,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         switch (wParam)
         {
         case HACK_TIMER:
-                CheckHack();
-                break;
+            CheckHack();
+            break;
         case WINDOWMINIMIZED_TIMER:
             PostMessage(g_hWnd, WM_CLOSE, 0, 0);
             break;
@@ -545,7 +546,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             break;
         }
         break;
-    case WM_RECEIVE_BUFFER: {
+    case WM_RECEIVE_BUFFER:
+    {
         auto Packet = std::unique_ptr<PacketInfo>(reinterpret_cast<PacketInfo*>(wParam));
         ProcessPacketCallback(Packet.release());
         break;
@@ -569,8 +571,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         HDC hDC = BeginPaint(hwnd, &ps);
         EndPaint(hwnd, &ps);
     }
-    return 0;
-    break;
+        return 0;
+        break;
     case WM_DESTROY:
     {
         Destroy = true;
@@ -581,7 +583,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         }
 
         DestroySound();
-        //DestroyWindow();
+        // DestroyWindow();
         KillGLWindow();
         PostQuitMessage(0);
     }
@@ -636,7 +638,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_LBUTTONUP:
         g_iNoMouseTime = 0;
         MouseLButtonPush = false;
-        if(MouseLButton) MouseLButtonPop = true;
+        if (MouseLButton)
+            MouseLButtonPop = true;
         MouseLButton = false;
         g_iMousePopPosition_x = MouseX;
         g_iMousePopPosition_y = MouseY;
@@ -645,14 +648,16 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_RBUTTONDOWN:
         g_iNoMouseTime = 0;
         MouseRButtonPop = false;
-        if (!MouseRButton) MouseRButtonPush = true;
+        if (!MouseRButton)
+            MouseRButtonPush = true;
         MouseRButton = true;
         SetCapture(g_hWnd);
         break;
     case WM_RBUTTONUP:
         g_iNoMouseTime = 0;
         MouseRButtonPush = false;
-        if (MouseRButton) MouseRButtonPop = true;
+        if (MouseRButton)
+            MouseRButtonPop = true;
         MouseRButton = false;
         ReleaseCapture();
         break;
@@ -663,14 +668,16 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_MBUTTONDOWN:
         g_iNoMouseTime = 0;
         MouseMButtonPop = false;
-        if (!MouseMButton) MouseMButtonPush = true;
+        if (!MouseMButton)
+            MouseMButtonPush = true;
         MouseMButton = true;
         SetCapture(g_hWnd);
         break;
     case WM_MBUTTONUP:
         g_iNoMouseTime = 0;
         MouseMButtonPush = false;
-        if (MouseMButton) MouseMButtonPop = true;
+        if (MouseMButton)
+            MouseMButtonPop = true;
         MouseMButton = false;
         ReleaseCapture();
         break;
@@ -717,7 +724,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     break;
     }
 
-    if (g_BuffSystem) {
+    if (g_BuffSystem)
+    {
         LRESULT result;
         TheBuffStateSystem().HandleWindowMessage(msg, wParam, lParam, result);
     }
@@ -729,19 +737,19 @@ wchar_t m_Username[11];
 wchar_t m_Password[21];
 wchar_t m_Version[11];
 wchar_t m_ExeVersion[11];
-int  m_SoundOnOff;
-int  m_MusicOnOff;
-int  m_Resolution;
-int	m_nColorDepth;
+int m_SoundOnOff;
+int m_MusicOnOff;
+int m_Resolution;
+int m_nColorDepth;
 int m_RememberMe;
-int	g_iRenderTextType = 0;
+int g_iRenderTextType = 0;
 
-wchar_t g_aszMLSelection[MAX_LANGUAGE_NAME_LENGTH] = { '\0' };
-
+wchar_t g_aszMLSelection[MAX_LANGUAGE_NAME_LENGTH] = {'\0'};
 
 BOOL Util_CheckOption(std::wstring lpszCommandLine, wchar_t cOption, std::wstring& lpszString)
 {
-    if (lpszCommandLine.empty()) {
+    if (lpszCommandLine.empty())
+    {
         return FALSE;
     }
 
@@ -776,7 +784,9 @@ BOOL Util_CheckOption(std::wstring lpszCommandLine, wchar_t cOption, std::wstrin
 wchar_t g_lpszCmdURL[50];
 BOOL GetConnectServerInfo(wchar_t* szCmdLine, wchar_t* lpszURL, WORD* pwPort)
 {
-    std::wstring lpszTemp = { 0, };
+    std::wstring lpszTemp = {
+        0,
+    };
 
     if (!Util_CheckOption(szCmdLine, L'u', lpszTemp))
     {
@@ -808,17 +818,17 @@ bool ExceptionCallback(_EXCEPTION_POINTERS* pExceptionInfo)
 }
 
 double CPU_AVG = 0.0;
-void RecordCpuUsage() 
+void RecordCpuUsage()
 {
     constexpr int max_recordings = 60;
-    double CPU_Recordings[max_recordings] = { 0.0 };
+    double CPU_Recordings[max_recordings] = {0.0};
     double currentAvg = 0.0;
     double sum = 0.0;
     int count = 0;
     int numFilled = 0;
     auto lastUpdateTime = std::chrono::steady_clock::now();
 
-    while (!Destroy) 
+    while (!Destroy)
     {
         double currentUsage = CpuUsage::Instance()->GetUsage();
 
@@ -856,7 +866,7 @@ void RecordCpuUsage()
 }
 
 // unlimited as default (same behavior as original)
-int g_MaxMessagePerCycle = -1; 
+int g_MaxMessagePerCycle = -1;
 
 void SetMaxMessagePerCycle(int messages)
 {
@@ -904,8 +914,7 @@ MSG MainLoop()
                     if (!wasF12Pressed)
                     {
                         g_MuEditorCore.ToggleEditor();
-                        fwprintf(stderr, L"[Editor] Toggled: %s\n",
-                            g_MuEditorCore.IsEnabled() ? L"ON" : L"OFF");
+                        fwprintf(stderr, L"[Editor] Toggled: %s\n", g_MuEditorCore.IsEnabled() ? L"ON" : L"OFF");
                         fflush(stderr);
                         wasF12Pressed = true;
                     }
@@ -947,7 +956,9 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLin
 
     wchar_t* lpszCommandLine = GetCommandLine();
     wchar_t lpszFile[MAX_PATH];
-    WORD wVersion[4] = { 0, };
+    WORD wVersion[4] = {
+        0,
+    };
     if (GetFileNameOfFilePath(lpszFile, lpszCommandLine))
     {
         if (GetFileVersion(lpszFile, wVersion))
@@ -965,9 +976,11 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLin
     g_ErrorReport.Write(L"\r\n");
     g_ErrorReport.WriteLogBegin();
     g_ErrorReport.AddSeparator();
-    g_ErrorReport.Write(L"Mu online %ls (%ls) executed. (%d.%d.%d.%d)\r\n", lpszExeVersion, L"Eng", wVersion[0], wVersion[1], wVersion[2], wVersion[3]);
+    g_ErrorReport.Write(L"Mu online %ls (%ls) executed. (%d.%d.%d.%d)\r\n", lpszExeVersion, L"Eng", wVersion[0],
+                        wVersion[1], wVersion[2], wVersion[3]);
 
-    g_ConsoleDebug->Write(MCD_NORMAL, L"Mu Online (Version: %d.%d.%d.%d)", wVersion[0], wVersion[1], wVersion[2], wVersion[3]);
+    g_ConsoleDebug->Write(MCD_NORMAL, L"Mu Online (Version: %d.%d.%d.%d)", wVersion[0], wVersion[1], wVersion[2],
+                          wVersion[3]);
 
     g_ErrorReport.WriteCurrentTime();
     ER_SystemInfo si;
@@ -976,7 +989,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLin
     g_ErrorReport.AddSeparator();
     g_ErrorReport.WriteSystemInfo(&si);
     g_ErrorReport.AddSeparator();
-    
+
     g_ErrorReport.Write(L"> To read config.ini.\r\n");
 
     // Load game settings from INI file first
@@ -997,7 +1010,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLin
         g_ServerPort = GameConfig::GetInstance().GetServerPort();
     }
 
-    //#ifdef _DEBUG
+    // #ifdef _DEBUG
 
     m_Username[0] = '\0';
     m_Password[0] = '\0';
@@ -1031,12 +1044,12 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLin
 
     if (m_RememberMe)
     {
-        GameConfig::GetInstance().DecryptCredentials(m_Username, m_Password, _countof(m_Username), _countof(m_Password));
+        GameConfig::GetInstance().DecryptCredentials(m_Username, m_Password, _countof(m_Username),
+                                                     _countof(m_Password));
     }
 
     g_fScreenRate_x = (float)WindowWidth / 640;
     g_fScreenRate_y = (float)WindowHeight / 480;
-
 
     pMultiLanguage = new CMultiLanguage(g_strSelectedML);
 
@@ -1047,22 +1060,30 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLin
     DEVMODE DevMode;
     DEVMODE* pDevmodes;
     int nModes = 0;
-    while (EnumDisplaySettings(nullptr, nModes, &DevMode)) nModes++;
+    while (EnumDisplaySettings(nullptr, nModes, &DevMode))
+        nModes++;
     pDevmodes = new DEVMODE[nModes + 1];
     nModes = 0;
-    while (EnumDisplaySettings(nullptr, nModes, &pDevmodes[nModes])) nModes++;
+    while (EnumDisplaySettings(nullptr, nModes, &pDevmodes[nModes]))
+        nModes++;
 
     DWORD dwBitsPerPel = 16;
     for (int n1 = 0; n1 < nModes; n1++)
     {
-        if (pDevmodes[n1].dmBitsPerPel == 16 && m_nColorDepth == 0) {
-            dwBitsPerPel = 16; break;
+        if (pDevmodes[n1].dmBitsPerPel == 16 && m_nColorDepth == 0)
+        {
+            dwBitsPerPel = 16;
+            break;
         }
-        if (pDevmodes[n1].dmBitsPerPel == 24 && m_nColorDepth == 1) {
-            dwBitsPerPel = 24; break;
+        if (pDevmodes[n1].dmBitsPerPel == 24 && m_nColorDepth == 1)
+        {
+            dwBitsPerPel = 24;
+            break;
         }
-        if (pDevmodes[n1].dmBitsPerPel == 32 && m_nColorDepth == 1) {
-            dwBitsPerPel = 32; break;
+        if (pDevmodes[n1].dmBitsPerPel == 32 && m_nColorDepth == 1)
+        {
+            dwBitsPerPel = 32;
+            break;
         }
     }
 
@@ -1070,9 +1091,11 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLin
     {
         for (int n2 = 0; n2 < nModes; n2++)
         {
-            if (pDevmodes[n2].dmPelsWidth == WindowWidth && pDevmodes[n2].dmPelsHeight == WindowHeight && pDevmodes[n2].dmBitsPerPel == dwBitsPerPel)
+            if (pDevmodes[n2].dmPelsWidth == WindowWidth && pDevmodes[n2].dmPelsHeight == WindowHeight &&
+                pDevmodes[n2].dmBitsPerPel == dwBitsPerPel)
             {
-                g_ErrorReport.Write(L"> Change display setting %dx%d.\r\n", pDevmodes[n2].dmPelsWidth, pDevmodes[n2].dmPelsHeight);
+                g_ErrorReport.Write(L"> Change display setting %dx%d.\r\n", pDevmodes[n2].dmPelsWidth,
+                                    pDevmodes[n2].dmPelsHeight);
                 ChangeDisplaySettings(&pDevmodes[n2], 0);
                 break;
             }
@@ -1107,27 +1130,19 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLin
 
     if (g_bUseWindowMode == TRUE)
     {
-        RECT rc = { 0, 0, WindowWidth, WindowHeight };
-        AdjustWindowRect(&rc, WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_BORDER | WS_CLIPCHILDREN, NULL);
-        g_hWnd = CreateWindow(
-            windowName, windowName,
-            WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_BORDER | WS_CLIPCHILDREN,
-            (GetSystemMetrics(SM_CXSCREEN) - rc.right) / 2,
-            (GetSystemMetrics(SM_CYSCREEN) - rc.bottom) / 2,
-            rc.right - rc.left,
-            rc.bottom - rc.top,
-            nullptr, nullptr, hInstance, nullptr);
+        RECT rc = {0, 0, WindowWidth, WindowHeight};
+        AdjustWindowRect(&rc, WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_BORDER | WS_CLIPCHILDREN,
+                         NULL);
+        g_hWnd = CreateWindow(windowName, windowName,
+                              WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_BORDER | WS_CLIPCHILDREN,
+                              (GetSystemMetrics(SM_CXSCREEN) - rc.right) / 2,
+                              (GetSystemMetrics(SM_CYSCREEN) - rc.bottom) / 2, rc.right - rc.left, rc.bottom - rc.top,
+                              nullptr, nullptr, hInstance, nullptr);
     }
     else
     {
-        g_hWnd = CreateWindowEx(
-            WS_EX_TOPMOST | WS_EX_APPWINDOW,
-            windowName, windowName,
-            WS_POPUP,
-            0, 0,
-            WindowWidth,
-            WindowHeight,
-            nullptr, nullptr, hInstance, nullptr);
+        g_hWnd = CreateWindowEx(WS_EX_TOPMOST | WS_EX_APPWINDOW, windowName, windowName, WS_POPUP, 0, 0, WindowWidth,
+                                WindowHeight, nullptr, nullptr, hInstance, nullptr);
     }
 
     g_ErrorReport.Write(L"> Start window success.\r\n");
@@ -1200,10 +1215,9 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLin
     // Initialize game translations (always available)
     {
         i18n::Translator& translator = i18n::Translator::GetInstance();
-        bool gameLoaded = translator.LoadTranslations(i18n::Domain::Game,
-            L"Translations\\en\\game.json");
-        if (!gameLoaded) gameLoaded = translator.LoadTranslations(i18n::Domain::Game,
-            L"bin\\Translations\\en\\game.json");
+        bool gameLoaded = translator.LoadTranslations(i18n::Domain::Game, L"Translations\\en\\game.json");
+        if (!gameLoaded)
+            gameLoaded = translator.LoadTranslations(i18n::Domain::Game, L"bin\\Translations\\en\\game.json");
         translator.SetLocale("en");
 
         if (gameLoaded)
@@ -1229,7 +1243,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLin
     }
 #endif
 
-    g_ErrorReport.WriteImeInfo( g_hWnd);
+    g_ErrorReport.WriteImeInfo(g_hWnd);
     g_ErrorReport.AddSeparator();
 
     InitVSync();
@@ -1248,10 +1262,14 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLin
     iFontSize = FontHeight - 1;
     nFixFontSize = nFixFontHeight - 1;
 
-    g_hFont = CreateFont(iFontSize, 0, 0, 0, FW_NORMAL, 0, 0, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, CLEARTYPE_NATURAL_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Tahoma");
-    g_hFontBold = CreateFont(iFontSize, 0, 0, 0, FW_SEMIBOLD, 0, 0, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, CLEARTYPE_NATURAL_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Tahoma");
-    g_hFontBig = CreateFont(iFontSize * 2, 0, 0, 0, FW_SEMIBOLD, 0, 0, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, CLEARTYPE_NATURAL_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Tahoma");
-    g_hFixFont = CreateFont(nFixFontSize, 0, 0, 0, FW_NORMAL, 0, 0, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, CLEARTYPE_NATURAL_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Tahoma");
+    g_hFont = CreateFont(iFontSize, 0, 0, 0, FW_NORMAL, 0, 0, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS,
+                         CLIP_DEFAULT_PRECIS, CLEARTYPE_NATURAL_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Tahoma");
+    g_hFontBold = CreateFont(iFontSize, 0, 0, 0, FW_SEMIBOLD, 0, 0, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS,
+                             CLIP_DEFAULT_PRECIS, CLEARTYPE_NATURAL_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Tahoma");
+    g_hFontBig = CreateFont(iFontSize * 2, 0, 0, 0, FW_SEMIBOLD, 0, 0, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS,
+                            CLIP_DEFAULT_PRECIS, CLEARTYPE_NATURAL_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Tahoma");
+    g_hFixFont = CreateFont(nFixFontSize, 0, 0, 0, FW_NORMAL, 0, 0, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS,
+                            CLIP_DEFAULT_PRECIS, CLEARTYPE_NATURAL_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Tahoma");
 
     setlocale(LC_ALL, "english");
 
@@ -1283,15 +1301,17 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLin
 
     srand((unsigned)time(nullptr));
 
-    for (int & i : RandomTable)
+    for (int& i : RandomTable)
         i = rand() % 360;
 
     RendomMemoryDump = new BYTE[rand() % 100 + 1];
-    GateAttribute = new GATE_ATTRIBUTE[MAX_GATES] { };
-    SkillAttribute = new SKILL_ATTRIBUTE[MAX_SKILLS] { };
-    ItemAttRibuteMemoryDump = new ITEM_ATTRIBUTE[MAX_ITEM + 1024] { };
+    GateAttribute = new GATE_ATTRIBUTE[MAX_GATES]{};
+    SkillAttribute = new SKILL_ATTRIBUTE[MAX_SKILLS]{};
+    ItemAttRibuteMemoryDump = new ITEM_ATTRIBUTE[MAX_ITEM + 1024]{};
+    // cppcheck-suppress dangerousTypeCast
     ItemAttribute = ((ITEM_ATTRIBUTE*)ItemAttRibuteMemoryDump) + rand() % 1024;
-    CharacterMemoryDump = new CHARACTER[MAX_CHARACTERS_CLIENT + 1 + 128] { };
+    CharacterMemoryDump = new CHARACTER[MAX_CHARACTERS_CLIENT + 1 + 128]{};
+    // cppcheck-suppress dangerousTypeCast
     CharactersClient = ((CHARACTER*)CharacterMemoryDump) + rand() % 128;
     CharacterMachine = new CHARACTER_MACHINE;
 
@@ -1312,7 +1332,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLin
     }
 
     g_pUIManager = new CUIManager;
-    g_pUIMapName = new CUIMapName;	// rozy
+    g_pUIMapName = new CUIMapName; // rozy
 
     g_BuffSystem = BuffStateSystem::Make();
 
@@ -1335,7 +1355,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLin
         g_pSinglePasswdInputBox->SetFont(g_hFont);
 
         g_bIMEBlock = FALSE;
-        HIMC  hIMC = ImmGetContext(g_hWnd);
+        HIMC hIMC = ImmGetContext(g_hWnd);
         ImmSetConversionStatus(hIMC, IME_CMODE_ALPHANUMERIC, IME_SMODE_NONE);
         ImmReleaseContext(g_hWnd, hIMC);
         SaveIMEStatus();

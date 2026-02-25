@@ -7,9 +7,8 @@
 #include "Input.h"
 #include "Button.h"
 
-CWin::CWin() : m_psprBg(NULL)
-{
-}
+// cppcheck-suppress uninitMemberVar
+CWin::CWin() : m_psprBg(NULL) {}
 
 CWin::~CWin()
 {
@@ -78,22 +77,20 @@ bool CWin::CursorInWin(int nArea)
         return false;
 
     CInput& rInput = CInput::Instance();
-    RECT rc = { 0, 0, 0, 0 };
+    RECT rc = {0, 0, 0, 0};
     NODE* position;
     CButton* pBtn;
 
     switch (nArea)
     {
     case WA_ALL:
-        ::SetRect(&rc, m_ptPos.x, m_ptPos.y, m_ptPos.x + m_Size.cx,
-            m_ptPos.y + m_Size.cy);
+        ::SetRect(&rc, m_ptPos.x, m_ptPos.y, m_ptPos.x + m_Size.cx, m_ptPos.y + m_Size.cy);
         if (::PtInRect(&rc, rInput.GetCursorPos()))
             return true;
         break;
 
     case WA_MOVE:
-        ::SetRect(&rc, m_ptPos.x, m_ptPos.y, m_ptPos.x + m_Size.cx,
-            m_ptPos.y + 26);
+        ::SetRect(&rc, m_ptPos.x, m_ptPos.y, m_ptPos.x + m_Size.cx, m_ptPos.y + 26);
         if (::PtInRect(&rc, rInput.GetCursorPos()))
             return true;
         break;

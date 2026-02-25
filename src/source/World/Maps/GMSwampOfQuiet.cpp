@@ -21,13 +21,9 @@
 
 using namespace SEASON3C;
 
-GMSwampOfQuiet::GMSwampOfQuiet()
-{
-}
+GMSwampOfQuiet::GMSwampOfQuiet() {}
 
-GMSwampOfQuiet::~GMSwampOfQuiet()
-{
-}
+GMSwampOfQuiet::~GMSwampOfQuiet() {}
 
 bool GMSwampOfQuiet::IsCurrentMap()
 {
@@ -237,8 +233,10 @@ bool GMSwampOfQuiet::RenderObject(OBJECT* pObject, BMD* pModel, bool ExtraMon)
                 pModel->RenderMesh(2, RENDER_TEXTURE, pObject->Alpha, pObject->BlendMesh, pObject->BlendMeshLight);
                 pModel->RenderMesh(4, RENDER_TEXTURE, pObject->Alpha, pObject->BlendMesh, pObject->BlendMeshLight);
                 pModel->RenderMesh(3, RENDER_TEXTURE, 0.7f, pObject->BlendMesh, pObject->BlendMeshLight);
-                pModel->RenderMesh(4, RENDER_TEXTURE | RENDER_BRIGHT, pObject->Alpha, 4, fLumi, 0, 0, BITMAP_SHADOW_PAWN_RED);
-                pModel->RenderMesh(4, RENDER_TEXTURE | RENDER_BRIGHT, pObject->Alpha, 4, fLumi, 0, 0, BITMAP_SHADOW_PAWN_RED);
+                pModel->RenderMesh(4, RENDER_TEXTURE | RENDER_BRIGHT, pObject->Alpha, 4, fLumi, 0, 0,
+                                   BITMAP_SHADOW_PAWN_RED);
+                pModel->RenderMesh(4, RENDER_TEXTURE | RENDER_BRIGHT, pObject->Alpha, 4, fLumi, 0, 0,
+                                   BITMAP_SHADOW_PAWN_RED);
                 break;
             case MODEL_SHADOW_KNIGHT:
                 pModel->RenderMesh(0, RENDER_TEXTURE, pObject->Alpha, pObject->BlendMesh, pObject->BlendMeshLight);
@@ -246,8 +244,10 @@ bool GMSwampOfQuiet::RenderObject(OBJECT* pObject, BMD* pModel, bool ExtraMon)
                 pModel->RenderMesh(2, RENDER_TEXTURE, pObject->Alpha, pObject->BlendMesh, pObject->BlendMeshLight);
                 pModel->RenderMesh(4, RENDER_TEXTURE, pObject->Alpha, pObject->BlendMesh, pObject->BlendMeshLight);
                 pModel->RenderMesh(3, RENDER_TEXTURE, 0.7f, pObject->BlendMesh, pObject->BlendMeshLight);
-                pModel->RenderMesh(4, RENDER_TEXTURE | RENDER_BRIGHT, pObject->Alpha, 4, fLumi, 0, 0, BITMAP_SHADOW_KINGHT_BLUE);
-                pModel->RenderMesh(4, RENDER_TEXTURE | RENDER_BRIGHT, pObject->Alpha, 4, fLumi, 0, 0, BITMAP_SHADOW_KINGHT_BLUE);
+                pModel->RenderMesh(4, RENDER_TEXTURE | RENDER_BRIGHT, pObject->Alpha, 4, fLumi, 0, 0,
+                                   BITMAP_SHADOW_KINGHT_BLUE);
+                pModel->RenderMesh(4, RENDER_TEXTURE | RENDER_BRIGHT, pObject->Alpha, 4, fLumi, 0, 0,
+                                   BITMAP_SHADOW_KINGHT_BLUE);
                 break;
             case MODEL_SHADOW_LOOK:
                 pModel->RenderMesh(0, RENDER_TEXTURE, pObject->Alpha, pObject->BlendMesh, pObject->BlendMeshLight);
@@ -255,8 +255,10 @@ bool GMSwampOfQuiet::RenderObject(OBJECT* pObject, BMD* pModel, bool ExtraMon)
                 pModel->RenderMesh(2, RENDER_TEXTURE, pObject->Alpha, pObject->BlendMesh, pObject->BlendMeshLight);
                 pModel->RenderMesh(3, RENDER_TEXTURE, pObject->Alpha, pObject->BlendMesh, pObject->BlendMeshLight);
                 pModel->RenderMesh(4, RENDER_TEXTURE, 0.7f, pObject->BlendMesh, pObject->BlendMeshLight);
-                pModel->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT, pObject->Alpha, 0, fLumi, 0, 0, BITMAP_SHADOW_ROOK_GREEN);
-                pModel->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT, pObject->Alpha, 0, fLumi, 0, 0, BITMAP_SHADOW_ROOK_GREEN);
+                pModel->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT, pObject->Alpha, 0, fLumi, 0, 0,
+                                   BITMAP_SHADOW_ROOK_GREEN);
+                pModel->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT, pObject->Alpha, 0, fLumi, 0, 0,
+                                   BITMAP_SHADOW_ROOK_GREEN);
                 break;
             }
         }
@@ -272,7 +274,8 @@ void GMSwampOfQuiet::RenderObjectAfterCharacter(OBJECT* pObject, BMD* pModel, bo
     if (!IsCurrentMap())
         return;
 
-    // 	if(pObject->Type == 2 || pObject->Type == 53 || pObject->Type == 55 || pObject->Type == 89 || pObject->Type == 125 || pObject->Type == 128)	// 폭포물1,2, 수로, 회오리, 빛
+    // 	if(pObject->Type == 2 || pObject->Type == 53 || pObject->Type == 55 || pObject->Type == 89 || pObject->Type ==
+    // 125 || pObject->Type == 128)	// 폭포물1,2, 수로, 회오리, 빛
     // 	{
     // 		pModel->RenderBody(RENDER_TEXTURE,pObject->Alpha,pObject->BlendMesh,pObject->BlendMeshLight,pObject->BlendMeshTexCoordU,pObject->BlendMeshTexCoordV,pObject->HiddenMesh);
     // 	}
@@ -425,7 +428,8 @@ bool GMSwampOfQuiet::MoveMonsterVisual(OBJECT* pObject, BMD* pModel)
         if (pObject->CurrentAction == MONSTER01_ATTACK2)
         {
             BMD* pModel = &Models[pObject->Type];
-            float fActionSpeed = pModel->Actions[pObject->CurrentAction].PlaySpeed * static_cast<float>(FPS_ANIMATION_FACTOR);
+            float fActionSpeed =
+                pModel->Actions[pObject->CurrentAction].PlaySpeed * static_cast<float>(FPS_ANIMATION_FACTOR);
             float Start_Frame = 7.2f;
             float End_Frame = Start_Frame + fActionSpeed;
             if (pObject->AnimationFrame >= Start_Frame && pObject->AnimationFrame < End_Frame)
@@ -441,7 +445,7 @@ bool GMSwampOfQuiet::MoveMonsterVisual(OBJECT* pObject, BMD* pModel)
                 CreateEffectFpsChecked(BITMAP_CRATER, vPosition, pObject->Angle, vLight, 2, NULL, -1, 0, 0, 0, 1.5f);
                 for (int iu = 0; iu < 20; iu++)
                 {
-                    //CreateEffect ( MODEL_BIG_STONE1, vPosition,pObject->Angle,pObject->Light,10);
+                    // CreateEffect ( MODEL_BIG_STONE1, vPosition,pObject->Angle,pObject->Light,10);
                     CreateEffectFpsChecked(MODEL_STONE2, vPosition, pObject->Angle, pObject->Light);
                 }
                 Vector(0.7f, 0.7f, 1.f, vLight);
@@ -476,8 +480,8 @@ bool GMSwampOfQuiet::MoveMonsterVisual(OBJECT* pObject, BMD* pModel)
                 vec3_t vSmokePosition;
                 for (int i = 0; i < 2; ++i)
                 {
-                    Vector(vPosition[0] + (rand() % 20 - 10) * 1.0f,
-                        vPosition[1] + (rand() % 20 - 10) * 1.0f, vPosition[2] + (rand() % 20 - 10) * 1.0f, vSmokePosition);
+                    Vector(vPosition[0] + (rand() % 20 - 10) * 1.0f, vPosition[1] + (rand() % 20 - 10) * 1.0f,
+                           vPosition[2] + (rand() % 20 - 10) * 1.0f, vSmokePosition);
                     CreateParticleFpsChecked(BITMAP_SMOKE, vSmokePosition, pObject->Angle, vLight, 51);
                 }
                 if (pObject->AnimationFrame < End_Frame)
@@ -491,7 +495,8 @@ bool GMSwampOfQuiet::MoveMonsterVisual(OBJECT* pObject, BMD* pModel)
                 AngleMatrix(pObject->Angle, matRotate);
                 VectorRotate(vPosition, matRotate, vLook);
                 VectorAdd(pObject->Position, vLook, vPosition);
-                CreateJointFpsChecked(BITMAP_JOINT_ENERGY, vPosition, pObject->Position, pObject->Angle, 46, pObject, 20.0f);
+                CreateJointFpsChecked(BITMAP_JOINT_ENERGY, vPosition, pObject->Position, pObject->Angle, 46, pObject,
+                                      20.0f);
             }
         }
         break;
@@ -499,12 +504,13 @@ bool GMSwampOfQuiet::MoveMonsterVisual(OBJECT* pObject, BMD* pModel)
         if (pObject->CurrentAction == MONSTER01_ATTACK1 || pObject->CurrentAction == MONSTER01_ATTACK2)
         {
             BMD* pModel = &Models[pObject->Type];
-            float fActionSpeed = pModel->Actions[pObject->CurrentAction].PlaySpeed * static_cast<float>(FPS_ANIMATION_FACTOR);
+            float fActionSpeed =
+                pModel->Actions[pObject->CurrentAction].PlaySpeed * static_cast<float>(FPS_ANIMATION_FACTOR);
             float Start_Frame = 5.5f;
             float End_Frame = Start_Frame + fActionSpeed;
             if (pObject->AnimationFrame >= Start_Frame && pObject->AnimationFrame < End_Frame)
             {
-                vec3_t vLook, vPosition, vLight, /*vFirePosition, */vLightFire;
+                vec3_t vLook, vPosition, vLight, /*vFirePosition, */ vLightFire;
                 float matRotate[3][4];
                 Vector(1.f, 1.f, 1.f, vLight);
                 Vector(1.0f, 0.2f, 0.0f, vLightFire);
@@ -522,7 +528,8 @@ bool GMSwampOfQuiet::MoveMonsterVisual(OBJECT* pObject, BMD* pModel)
                 }
 
                 Vector(0.5f, 0.1f, 0.0f, vLight);
-                CreateEffectFpsChecked(BITMAP_SHOCK_WAVE, vPosition, pObject->Angle, vLight, 12, NULL, -1, 0, 0, 0, 0.1f);
+                CreateEffectFpsChecked(BITMAP_SHOCK_WAVE, vPosition, pObject->Angle, vLight, 12, NULL, -1, 0, 0, 0,
+                                       0.1f);
             }
         }
         break;
@@ -533,7 +540,8 @@ bool GMSwampOfQuiet::MoveMonsterVisual(OBJECT* pObject, BMD* pModel)
         switch (pObject->CurrentAction)
         {
         case MONSTER01_WALK:
-            Vector(pObject->Position[0] + rand() % 200 - 100, pObject->Position[1] + rand() % 200 - 100, pObject->Position[2], vPos);
+            Vector(pObject->Position[0] + rand() % 200 - 100, pObject->Position[1] + rand() % 200 - 100,
+                   pObject->Position[2], vPos);
             CreateParticleFpsChecked(BITMAP_SMOKE + 1, vPos, pObject->Angle, pObject->Light);
             break;
 
@@ -545,7 +553,7 @@ bool GMSwampOfQuiet::MoveMonsterVisual(OBJECT* pObject, BMD* pModel)
                 VectorCopy(pObject->Angle, vAngle);
                 Vector(10.0f, 5.0f, 0.0f, vRel);
 
-                int temp[] = { 19, 31 };
+                int temp[] = {19, 31};
                 for (int i = 0; i < 2; i++)
                 {
                     pModel->TransformByObjectBone(vPos, pObject, temp[i], vRel);
@@ -553,18 +561,22 @@ bool GMSwampOfQuiet::MoveMonsterVisual(OBJECT* pObject, BMD* pModel)
                     Vector(0.0f, 1.0f, 0.5f, vColor);
                     for (int i = 0; i < 2; ++i)
                     {
-                        if (i == 1 && rand_fps_check(2)) continue;
+                        if (i == 1 && rand_fps_check(2))
+                            continue;
 
                         switch (rand() % 3)
                         {
                         case 0:
-                            CreateParticleFpsChecked(BITMAP_FIRE_HIK1_MONO, vPos, vAngle, vColor, 4, pObject->Scale, pObject);
+                            CreateParticleFpsChecked(BITMAP_FIRE_HIK1_MONO, vPos, vAngle, vColor, 4, pObject->Scale,
+                                                     pObject);
                             break;
                         case 1:
-                            CreateParticleFpsChecked(BITMAP_FIRE_HIK2_MONO, vPos, vAngle, vColor, 8, pObject->Scale, pObject);
+                            CreateParticleFpsChecked(BITMAP_FIRE_HIK2_MONO, vPos, vAngle, vColor, 8, pObject->Scale,
+                                                     pObject);
                             break;
                         case 2:
-                            CreateParticleFpsChecked(BITMAP_FIRE_HIK3_MONO, vPos, vAngle, vColor, 5, pObject->Scale, pObject);
+                            CreateParticleFpsChecked(BITMAP_FIRE_HIK3_MONO, vPos, vAngle, vColor, 5, pObject->Scale,
+                                                     pObject);
                             break;
                         }
                     }
@@ -581,12 +593,13 @@ bool GMSwampOfQuiet::MoveMonsterVisual(OBJECT* pObject, BMD* pModel)
         if (pObject->CurrentAction == MONSTER01_ATTACK1 || pObject->CurrentAction == MONSTER01_ATTACK2)
         {
             BMD* pModel = &Models[pObject->Type];
-            float fActionSpeed = pModel->Actions[pObject->CurrentAction].PlaySpeed * static_cast<float>(FPS_ANIMATION_FACTOR);
+            float fActionSpeed =
+                pModel->Actions[pObject->CurrentAction].PlaySpeed * static_cast<float>(FPS_ANIMATION_FACTOR);
             float Start_Frame = 5.5f;
             float End_Frame = Start_Frame + fActionSpeed;
             if (pObject->AnimationFrame >= Start_Frame && pObject->AnimationFrame < End_Frame)
             {
-                vec3_t vLook, vPosition, vLight, /*vFirePosition, */vLightFire;
+                vec3_t vLook, vPosition, vLight, /*vFirePosition, */ vLightFire;
                 float matRotate[3][4];
                 Vector(0.25f, 0.6f, 0.7f, vLight);
                 Vector(1.0f, 1.0f, 1.0f, vLightFire);
@@ -604,7 +617,8 @@ bool GMSwampOfQuiet::MoveMonsterVisual(OBJECT* pObject, BMD* pModel)
                 }
 
                 Vector(0.5f, 0.1f, 0.0f, vLight);
-                CreateEffectFpsChecked(BITMAP_SHOCK_WAVE, vPosition, pObject->Angle, vLight, 12, NULL, -1, 0, 0, 0, 0.1f);
+                CreateEffectFpsChecked(BITMAP_SHOCK_WAVE, vPosition, pObject->Angle, vLight, 12, NULL, -1, 0, 0, 0,
+                                       0.1f);
             }
         }
         break;
@@ -620,21 +634,25 @@ void GMSwampOfQuiet::MoveBlurEffect(CHARACTER* pCharacter, OBJECT* pObject, BMD*
     {
         float Start_Frame = 6.f;
         float End_Frame = 7.6f;
-        if ((pObject->AnimationFrame >= Start_Frame && pObject->AnimationFrame <= End_Frame && pObject->CurrentAction == MONSTER01_ATTACK1)
-            || (pObject->AnimationFrame >= Start_Frame && pObject->AnimationFrame <= End_Frame && pObject->CurrentAction == MONSTER01_ATTACK2))
+        if ((pObject->AnimationFrame >= Start_Frame && pObject->AnimationFrame <= End_Frame &&
+             pObject->CurrentAction == MONSTER01_ATTACK1) ||
+            (pObject->AnimationFrame >= Start_Frame && pObject->AnimationFrame <= End_Frame &&
+             pObject->CurrentAction == MONSTER01_ATTACK2))
         {
-            vec3_t  vLight;
+            vec3_t vLight;
             Vector(1.0f, 0.6f, 0.1f, vLight);
 
             vec3_t StartPos, StartRelative;
             vec3_t EndPos, EndRelative;
 
-            float fActionSpeed = pModel->Actions[pObject->CurrentAction].PlaySpeed * static_cast<float>(FPS_ANIMATION_FACTOR);
+            float fActionSpeed =
+                pModel->Actions[pObject->CurrentAction].PlaySpeed * static_cast<float>(FPS_ANIMATION_FACTOR);
             float fSpeedPerFrame = fActionSpeed / 10.f;
             float fAnimationFrame = pObject->AnimationFrame - fActionSpeed;
             for (int i = 0; i < 10; i++)
             {
-                pModel->Animation(BoneTransform, fAnimationFrame, pObject->PriorAnimationFrame, pObject->PriorAction, pObject->Angle, pObject->HeadAngle);
+                pModel->Animation(BoneTransform, fAnimationFrame, pObject->PriorAnimationFrame, pObject->PriorAction,
+                                  pObject->Angle, pObject->HeadAngle);
 
                 Vector(0.f, 0.f, 0.f, StartRelative);
                 Vector(0.f, 0.f, 0.f, EndRelative);
@@ -660,21 +678,25 @@ void GMSwampOfQuiet::MoveBlurEffect(CHARACTER* pCharacter, OBJECT* pObject, BMD*
     {
         float Start_Frame = 6.f;
         float End_Frame = 7.f;
-        if ((pObject->AnimationFrame >= Start_Frame && pObject->AnimationFrame <= End_Frame && pObject->CurrentAction == MONSTER01_ATTACK1)
-            || (pObject->AnimationFrame >= Start_Frame && pObject->AnimationFrame <= End_Frame && pObject->CurrentAction == MONSTER01_ATTACK2))
+        if ((pObject->AnimationFrame >= Start_Frame && pObject->AnimationFrame <= End_Frame &&
+             pObject->CurrentAction == MONSTER01_ATTACK1) ||
+            (pObject->AnimationFrame >= Start_Frame && pObject->AnimationFrame <= End_Frame &&
+             pObject->CurrentAction == MONSTER01_ATTACK2))
         {
-            vec3_t  vLight;
+            vec3_t vLight;
             Vector(2.0f, 0.0f, 0.0f, vLight);
 
             vec3_t StartPos, StartRelative;
             vec3_t EndPos, EndRelative;
 
-            float fActionSpeed = pModel->Actions[pObject->CurrentAction].PlaySpeed * static_cast<float>(FPS_ANIMATION_FACTOR);
+            float fActionSpeed =
+                pModel->Actions[pObject->CurrentAction].PlaySpeed * static_cast<float>(FPS_ANIMATION_FACTOR);
             float fSpeedPerFrame = fActionSpeed / 10.f;
             float fAnimationFrame = pObject->AnimationFrame - fActionSpeed;
             for (int i = 0; i < 10; i++)
             {
-                pModel->Animation(BoneTransform, fAnimationFrame, pObject->PriorAnimationFrame, pObject->PriorAction, pObject->Angle, pObject->HeadAngle);
+                pModel->Animation(BoneTransform, fAnimationFrame, pObject->PriorAnimationFrame, pObject->PriorAction,
+                                  pObject->Angle, pObject->HeadAngle);
 
                 Vector(0.f, 0.f, 0.f, StartRelative);
                 Vector(0.f, 0.f, 0.f, EndRelative);
@@ -700,21 +722,25 @@ void GMSwampOfQuiet::MoveBlurEffect(CHARACTER* pCharacter, OBJECT* pObject, BMD*
     {
         float Start_Frame = 5.f;
         float End_Frame = 10.f;
-        if ((pObject->AnimationFrame >= Start_Frame && pObject->AnimationFrame <= End_Frame && pObject->CurrentAction == MONSTER01_ATTACK1)
-            || (pObject->AnimationFrame >= Start_Frame && pObject->AnimationFrame <= End_Frame && pObject->CurrentAction == MONSTER01_ATTACK2))
+        if ((pObject->AnimationFrame >= Start_Frame && pObject->AnimationFrame <= End_Frame &&
+             pObject->CurrentAction == MONSTER01_ATTACK1) ||
+            (pObject->AnimationFrame >= Start_Frame && pObject->AnimationFrame <= End_Frame &&
+             pObject->CurrentAction == MONSTER01_ATTACK2))
         {
-            vec3_t  vLight;
+            vec3_t vLight;
             Vector(0.3f, 0.7f, 1.0f, vLight);
 
             vec3_t StartPos, StartRelative;
             vec3_t EndPos, EndRelative;
 
-            float fActionSpeed = pModel->Actions[pObject->CurrentAction].PlaySpeed * static_cast<float>(FPS_ANIMATION_FACTOR);
+            float fActionSpeed =
+                pModel->Actions[pObject->CurrentAction].PlaySpeed * static_cast<float>(FPS_ANIMATION_FACTOR);
             float fSpeedPerFrame = fActionSpeed / 10.f;
             float fAnimationFrame = pObject->AnimationFrame - fActionSpeed;
             for (int i = 0; i < 10; i++)
             {
-                pModel->Animation(BoneTransform, fAnimationFrame, pObject->PriorAnimationFrame, pObject->PriorAction, pObject->Angle, pObject->HeadAngle);
+                pModel->Animation(BoneTransform, fAnimationFrame, pObject->PriorAnimationFrame, pObject->PriorAction,
+                                  pObject->Angle, pObject->HeadAngle);
                 Vector(0.f, 0.f, 0.f, StartRelative);
                 Vector(0.f, 0.f, 0.f, EndRelative);
 
@@ -758,21 +784,25 @@ void GMSwampOfQuiet::MoveBlurEffect(CHARACTER* pCharacter, OBJECT* pObject, BMD*
     {
         float Start_Frame = 6.f;
         float End_Frame = 7.6f;
-        if ((pObject->AnimationFrame >= Start_Frame && pObject->AnimationFrame <= End_Frame && pObject->CurrentAction == MONSTER01_ATTACK1)
-            || (pObject->AnimationFrame >= Start_Frame && pObject->AnimationFrame <= End_Frame && pObject->CurrentAction == MONSTER01_ATTACK2))
+        if ((pObject->AnimationFrame >= Start_Frame && pObject->AnimationFrame <= End_Frame &&
+             pObject->CurrentAction == MONSTER01_ATTACK1) ||
+            (pObject->AnimationFrame >= Start_Frame && pObject->AnimationFrame <= End_Frame &&
+             pObject->CurrentAction == MONSTER01_ATTACK2))
         {
-            vec3_t  vLight;
+            vec3_t vLight;
             Vector(1.0f, 0.6f, 0.1f, vLight);
 
             vec3_t StartPos, StartRelative;
             vec3_t EndPos, EndRelative;
 
-            float fActionSpeed = pModel->Actions[pObject->CurrentAction].PlaySpeed * static_cast<float>(FPS_ANIMATION_FACTOR);
+            float fActionSpeed =
+                pModel->Actions[pObject->CurrentAction].PlaySpeed * static_cast<float>(FPS_ANIMATION_FACTOR);
             float fSpeedPerFrame = fActionSpeed / 10.f;
             float fAnimationFrame = pObject->AnimationFrame - fActionSpeed;
             for (int i = 0; i < 10; i++)
             {
-                pModel->Animation(BoneTransform, fAnimationFrame, pObject->PriorAnimationFrame, pObject->PriorAction, pObject->Angle, pObject->HeadAngle);
+                pModel->Animation(BoneTransform, fAnimationFrame, pObject->PriorAnimationFrame, pObject->PriorAction,
+                                  pObject->Angle, pObject->HeadAngle);
 
                 Vector(0.f, 0.f, 0.f, StartRelative);
                 Vector(0.f, 0.f, 0.f, EndRelative);
@@ -838,136 +868,139 @@ bool GMSwampOfQuiet::RenderMonsterVisual(CHARACTER* pCharacter, OBJECT* pObject,
     break;
     case MODEL_SHADOW_PAWN:
     {
-        int iBones[] = { 11, 15, 34, 21, 25, 39 };
+        int iBones[] = {11, 15, 34, 21, 25, 39};
         Vector(1.0f, 0.1f, 0.1f, vLight);
         for (int i = 0; i < 6; ++i)
         {
-            if (rand() % 6 > 0) continue;
+            if (rand() % 6 > 0)
+                continue;
             pModel->TransformByObjectBone(vPos, pObject, iBones[i]);
             CreateParticleFpsChecked(BITMAP_SMOKE, vPos, pObject->Angle, vLight, 50, 1.0f);
             CreateParticleFpsChecked(BITMAP_SMOKELINE1 + rand() % 3, vPos, pObject->Angle, vLight, 0, 1.0f);
         }
     }
-    if (pObject->CurrentAction == MONSTER01_DIE)
-    {
-        if (pObject->LifeTime == 100)
+        if (pObject->CurrentAction == MONSTER01_DIE)
         {
-            pObject->LifeTime = 90;
-            pObject->m_bRenderShadow = false;
+            if (pObject->LifeTime == 100)
+            {
+                pObject->LifeTime = 90;
+                pObject->m_bRenderShadow = false;
 
-            vec3_t vWorldPos, Light;
-            Vector(1.0f, 1.0f, 1.0f, Light);
+                vec3_t vWorldPos, Light;
+                Vector(1.0f, 1.0f, 1.0f, Light);
 
-            pModel->TransformByObjectBone(vWorldPos, pObject, 34);
-            CreateEffect(MODEL_SHADOW_PAWN_ANKLE_LEFT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
-            pModel->TransformByObjectBone(vWorldPos, pObject, 39);
-            CreateEffect(MODEL_SHADOW_PAWN_ANKLE_RIGHT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
-            pModel->TransformByObjectBone(vWorldPos, pObject, 0);
-            CreateEffect(MODEL_SHADOW_PAWN_BELT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
-            pModel->TransformByObjectBone(vWorldPos, pObject, 4);
-            CreateEffect(MODEL_SHADOW_PAWN_CHEST, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
-            pModel->TransformByObjectBone(vWorldPos, pObject, 6);
-            CreateEffect(MODEL_SHADOW_PAWN_HELMET, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
-            pModel->TransformByObjectBone(vWorldPos, pObject, 33);
-            CreateEffect(MODEL_SHADOW_PAWN_KNEE_LEFT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
-            pModel->TransformByObjectBone(vWorldPos, pObject, 38);
-            CreateEffect(MODEL_SHADOW_PAWN_KNEE_RIGHT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
-            pModel->TransformByObjectBone(vWorldPos, pObject, 13);
-            CreateEffect(MODEL_SHADOW_PAWN_WRIST_LEFT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
-            pModel->TransformByObjectBone(vWorldPos, pObject, 23);
-            CreateEffect(MODEL_SHADOW_PAWN_WRIST_RIGHT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
+                pModel->TransformByObjectBone(vWorldPos, pObject, 34);
+                CreateEffect(MODEL_SHADOW_PAWN_ANKLE_LEFT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
+                pModel->TransformByObjectBone(vWorldPos, pObject, 39);
+                CreateEffect(MODEL_SHADOW_PAWN_ANKLE_RIGHT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
+                pModel->TransformByObjectBone(vWorldPos, pObject, 0);
+                CreateEffect(MODEL_SHADOW_PAWN_BELT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
+                pModel->TransformByObjectBone(vWorldPos, pObject, 4);
+                CreateEffect(MODEL_SHADOW_PAWN_CHEST, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
+                pModel->TransformByObjectBone(vWorldPos, pObject, 6);
+                CreateEffect(MODEL_SHADOW_PAWN_HELMET, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
+                pModel->TransformByObjectBone(vWorldPos, pObject, 33);
+                CreateEffect(MODEL_SHADOW_PAWN_KNEE_LEFT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
+                pModel->TransformByObjectBone(vWorldPos, pObject, 38);
+                CreateEffect(MODEL_SHADOW_PAWN_KNEE_RIGHT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
+                pModel->TransformByObjectBone(vWorldPos, pObject, 13);
+                CreateEffect(MODEL_SHADOW_PAWN_WRIST_LEFT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
+                pModel->TransformByObjectBone(vWorldPos, pObject, 23);
+                CreateEffect(MODEL_SHADOW_PAWN_WRIST_RIGHT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
+            }
         }
-    }
-    break;
+        break;
     case MODEL_SHADOW_KNIGHT:
     {
-        int iBones[] = { 11, 15, 34, 21, 25, 39 };
+        int iBones[] = {11, 15, 34, 21, 25, 39};
         Vector(0.3f, 0.6f, 1.0f, vLight);
         for (int i = 0; i < 6; ++i)
         {
-            if (rand() % 6 > 0) continue;
+            if (rand() % 6 > 0)
+                continue;
             pModel->TransformByObjectBone(vPos, pObject, iBones[i]);
             CreateParticleFpsChecked(BITMAP_SMOKE, vPos, pObject->Angle, vLight, 50, 1.0f);
             CreateParticleFpsChecked(BITMAP_SMOKELINE1 + rand() % 3, vPos, pObject->Angle, vLight, 0, 1.0f);
         }
     }
-    if (pObject->CurrentAction == MONSTER01_DIE)
-    {
-        if (pObject->LifeTime == 100)
+        if (pObject->CurrentAction == MONSTER01_DIE)
         {
-            pObject->LifeTime = 90;
-            pObject->m_bRenderShadow = false;
+            if (pObject->LifeTime == 100)
+            {
+                pObject->LifeTime = 90;
+                pObject->m_bRenderShadow = false;
 
-            vec3_t vWorldPos, Light;
-            Vector(1.0f, 1.0f, 1.0f, Light);
+                vec3_t vWorldPos, Light;
+                Vector(1.0f, 1.0f, 1.0f, Light);
 
-            pModel->TransformByObjectBone(vWorldPos, pObject, 34);
-            CreateEffect(MODEL_SHADOW_KNIGHT_ANKLE_LEFT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
-            pModel->TransformByObjectBone(vWorldPos, pObject, 39);
-            CreateEffect(MODEL_SHADOW_KNIGHT_ANKLE_RIGHT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
-            pModel->TransformByObjectBone(vWorldPos, pObject, 0);
-            CreateEffect(MODEL_SHADOW_KNIGHT_BELT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
-            pModel->TransformByObjectBone(vWorldPos, pObject, 4);
-            CreateEffect(MODEL_SHADOW_KNIGHT_CHEST, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
-            pModel->TransformByObjectBone(vWorldPos, pObject, 6);
-            CreateEffect(MODEL_SHADOW_KNIGHT_HELMET, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
-            pModel->TransformByObjectBone(vWorldPos, pObject, 33);
-            CreateEffect(MODEL_SHADOW_KNIGHT_KNEE_LEFT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
-            pModel->TransformByObjectBone(vWorldPos, pObject, 38);
-            CreateEffect(MODEL_SHADOW_KNIGHT_KNEE_RIGHT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
-            pModel->TransformByObjectBone(vWorldPos, pObject, 13);
-            CreateEffect(MODEL_SHADOW_KNIGHT_WRIST_LEFT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
-            pModel->TransformByObjectBone(vWorldPos, pObject, 23);
-            CreateEffect(MODEL_SHADOW_KNIGHT_WRIST_RIGHT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
+                pModel->TransformByObjectBone(vWorldPos, pObject, 34);
+                CreateEffect(MODEL_SHADOW_KNIGHT_ANKLE_LEFT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
+                pModel->TransformByObjectBone(vWorldPos, pObject, 39);
+                CreateEffect(MODEL_SHADOW_KNIGHT_ANKLE_RIGHT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
+                pModel->TransformByObjectBone(vWorldPos, pObject, 0);
+                CreateEffect(MODEL_SHADOW_KNIGHT_BELT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
+                pModel->TransformByObjectBone(vWorldPos, pObject, 4);
+                CreateEffect(MODEL_SHADOW_KNIGHT_CHEST, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
+                pModel->TransformByObjectBone(vWorldPos, pObject, 6);
+                CreateEffect(MODEL_SHADOW_KNIGHT_HELMET, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
+                pModel->TransformByObjectBone(vWorldPos, pObject, 33);
+                CreateEffect(MODEL_SHADOW_KNIGHT_KNEE_LEFT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
+                pModel->TransformByObjectBone(vWorldPos, pObject, 38);
+                CreateEffect(MODEL_SHADOW_KNIGHT_KNEE_RIGHT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
+                pModel->TransformByObjectBone(vWorldPos, pObject, 13);
+                CreateEffect(MODEL_SHADOW_KNIGHT_WRIST_LEFT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
+                pModel->TransformByObjectBone(vWorldPos, pObject, 23);
+                CreateEffect(MODEL_SHADOW_KNIGHT_WRIST_RIGHT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
+            }
         }
-    }
-    break;
+        break;
     case MODEL_SHADOW_LOOK:
     {
-        int iBones[] = { 11, 15, 34, 21, 25, 39 };
+        int iBones[] = {11, 15, 34, 21, 25, 39};
         Vector(0.5f, 1.0f, 0.5f, vLight);
         for (int i = 0; i < 6; ++i)
         {
-            if (rand() % 6 > 0) continue;
+            if (rand() % 6 > 0)
+                continue;
             pModel->TransformByObjectBone(vPos, pObject, iBones[i]);
             CreateParticleFpsChecked(BITMAP_SMOKE, vPos, pObject->Angle, vLight, 50, 1.5f);
             CreateParticleFpsChecked(BITMAP_SMOKELINE1 + rand() % 3, vPos, pObject->Angle, vLight, 0, 1.1f);
         }
     }
-    if (pObject->CurrentAction == MONSTER01_DIE)
-    {
-        if (pObject->LifeTime == 100)
+        if (pObject->CurrentAction == MONSTER01_DIE)
         {
-            pObject->LifeTime = 90;
-            pObject->m_bRenderShadow = false;
+            if (pObject->LifeTime == 100)
+            {
+                pObject->LifeTime = 90;
+                pObject->m_bRenderShadow = false;
 
-            vec3_t vWorldPos, Light;
-            Vector(1.0f, 1.0f, 1.0f, Light);
+                vec3_t vWorldPos, Light;
+                Vector(1.0f, 1.0f, 1.0f, Light);
 
-            pModel->TransformByObjectBone(vWorldPos, pObject, 34);
-            CreateEffect(MODEL_SHADOW_ROOK_ANKLE_LEFT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
-            pModel->TransformByObjectBone(vWorldPos, pObject, 39);
-            CreateEffect(MODEL_SHADOW_ROOK_ANKLE_RIGHT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
-            pModel->TransformByObjectBone(vWorldPos, pObject, 0);
-            CreateEffect(MODEL_SHADOW_ROOK_BELT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
-            pModel->TransformByObjectBone(vWorldPos, pObject, 4);
-            CreateEffect(MODEL_SHADOW_ROOK_CHEST, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
-            pModel->TransformByObjectBone(vWorldPos, pObject, 6);
-            CreateEffect(MODEL_SHADOW_ROOK_HELMET, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
-            pModel->TransformByObjectBone(vWorldPos, pObject, 33);
-            CreateEffect(MODEL_SHADOW_ROOK_KNEE_LEFT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
-            pModel->TransformByObjectBone(vWorldPos, pObject, 38);
-            CreateEffect(MODEL_SHADOW_ROOK_KNEE_RIGHT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
-            pModel->TransformByObjectBone(vWorldPos, pObject, 12);
-            CreateEffect(MODEL_SHADOW_ROOK_WRIST_LEFT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
-            pModel->TransformByObjectBone(vWorldPos, pObject, 23);
-            CreateEffect(MODEL_SHADOW_ROOK_WRIST_RIGHT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
+                pModel->TransformByObjectBone(vWorldPos, pObject, 34);
+                CreateEffect(MODEL_SHADOW_ROOK_ANKLE_LEFT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
+                pModel->TransformByObjectBone(vWorldPos, pObject, 39);
+                CreateEffect(MODEL_SHADOW_ROOK_ANKLE_RIGHT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
+                pModel->TransformByObjectBone(vWorldPos, pObject, 0);
+                CreateEffect(MODEL_SHADOW_ROOK_BELT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
+                pModel->TransformByObjectBone(vWorldPos, pObject, 4);
+                CreateEffect(MODEL_SHADOW_ROOK_CHEST, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
+                pModel->TransformByObjectBone(vWorldPos, pObject, 6);
+                CreateEffect(MODEL_SHADOW_ROOK_HELMET, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
+                pModel->TransformByObjectBone(vWorldPos, pObject, 33);
+                CreateEffect(MODEL_SHADOW_ROOK_KNEE_LEFT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
+                pModel->TransformByObjectBone(vWorldPos, pObject, 38);
+                CreateEffect(MODEL_SHADOW_ROOK_KNEE_RIGHT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
+                pModel->TransformByObjectBone(vWorldPos, pObject, 12);
+                CreateEffect(MODEL_SHADOW_ROOK_WRIST_LEFT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
+                pModel->TransformByObjectBone(vWorldPos, pObject, 23);
+                CreateEffect(MODEL_SHADOW_ROOK_WRIST_RIGHT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
+            }
         }
-    }
-    break;
+        break;
     case MODEL_NAPIN:
     {
-        int iBones[] = { 7, 4, 5, 10, 22, 11, 23, 12, 24, 34, 39 };
+        int iBones[] = {7, 4, 5, 10, 22, 11, 23, 12, 24, 34, 39};
         vec3_t vLightFlare;
         float fScale;
         Vector(0.4f, 0.7f, 1.0f, vLight);
@@ -976,7 +1009,8 @@ bool GMSwampOfQuiet::RenderMonsterVisual(CHARACTER* pCharacter, OBJECT* pObject,
         {
             pModel->TransformByObjectBone(vPos, pObject, iBones[i]);
             CreateSprite(BITMAP_LIGHT, vPos, 2.2f, vLightFlare, pObject);
-            if (rand() % 3 > 0) continue;
+            if (rand() % 3 > 0)
+                continue;
             Vector((rand() % 30 - 15) * 1.0f, (rand() % 30 - 15) * 1.0f, (rand() % 30 - 15) * 1.0f, vRelative);
             pModel->TransformByObjectBone(vPos, pObject, iBones[i], vRelative);
             fScale = (float)(rand() % 80 + 32) * 0.01f * 1.0f;
@@ -986,7 +1020,7 @@ bool GMSwampOfQuiet::RenderMonsterVisual(CHARACTER* pCharacter, OBJECT* pObject,
     break;
     case MODEL_GHOST_NAPIN:
     {
-        int iBones[] = { 21, 37, 65, 66, 77, 78, 79 };
+        int iBones[] = {21, 37, 65, 66, 77, 78, 79};
         Vector(0.4f, 1.0f, 0.4f, vLight);
         for (int i = 0; i < 7; ++i)
         {
@@ -998,7 +1032,7 @@ bool GMSwampOfQuiet::RenderMonsterVisual(CHARACTER* pCharacter, OBJECT* pObject,
     break;
     case MODEL_BLAZE_NAPIN:
     {
-        int iBones[] = { 10, 61, 72, 21, 122, 116 };
+        int iBones[] = {10, 61, 72, 21, 122, 116};
         Vector(1.0f, 1.0f, 1.0f, vLight);
         vec3_t vLightFire;
         Vector(1.0f, 0.2f, 0.0f, vLightFire);
@@ -1057,8 +1091,10 @@ bool GMSwampOfQuiet::RenderMonsterVisual(CHARACTER* pCharacter, OBJECT* pObject,
 
         MoveEye(pObject, pModel, 34, 35);
         Vector(1.0f, 0.0f, 0.0f, vColor);
-        CreateJointFpsChecked(BITMAP_JOINT_ENERGY, vPos, pObject->Position, pObject->Angle, 55, pObject, 6.0f, -1, 0, 0, -1, vColor);
-        CreateJointFpsChecked(BITMAP_JOINT_ENERGY, vPos, pObject->Position, pObject->Angle, 56, pObject, 6.0f, -1, 0, 0, -1, vColor);
+        CreateJointFpsChecked(BITMAP_JOINT_ENERGY, vPos, pObject->Position, pObject->Angle, 55, pObject, 6.0f, -1, 0, 0,
+                              -1, vColor);
+        CreateJointFpsChecked(BITMAP_JOINT_ENERGY, vPos, pObject->Position, pObject->Angle, 56, pObject, 6.0f, -1, 0, 0,
+                              -1, vColor);
         Vector(1.0f, 1.0f, 1.0f, vColor);
         pModel->TransformByObjectBone(vPos, pObject, 34);
         vPos[1] -= 0.8f;
@@ -1082,8 +1118,10 @@ bool GMSwampOfQuiet::RenderMonsterVisual(CHARACTER* pCharacter, OBJECT* pObject,
         }
 
         Vector(0.1f, 0.6f, 0.3f, vColor);
-        CreateJointFpsChecked(BITMAP_JOINT_ENERGY, vPos, pObject->Position, pObject->Angle, 57, pObject, 10.0f, 67, 0, 0, 15, vColor); //57 - pk:node , ichaindex:maxtail
-        CreateJointFpsChecked(BITMAP_JOINT_ENERGY, vPos, pObject->Position, pObject->Angle, 57, pObject, 10.0f, 70, 0, 0, 15, vColor); //57 - pk:node , ichaindex:maxtail
+        CreateJointFpsChecked(BITMAP_JOINT_ENERGY, vPos, pObject->Position, pObject->Angle, 57, pObject, 10.0f, 67, 0,
+                              0, 15, vColor); // 57 - pk:node , ichaindex:maxtail
+        CreateJointFpsChecked(BITMAP_JOINT_ENERGY, vPos, pObject->Position, pObject->Angle, 57, pObject, 10.0f, 70, 0,
+                              0, 15, vColor); // 57 - pk:node , ichaindex:maxtail
 
         Vector(1.0f, 1.0f, 1.0f, vColor);
         pModel->TransformByObjectBone(vPos, pObject, 66);
@@ -1095,11 +1133,12 @@ bool GMSwampOfQuiet::RenderMonsterVisual(CHARACTER* pCharacter, OBJECT* pObject,
         pModel->TransformByObjectBone(vPos, pObject, 70);
         CreateSprite(BITMAP_LIGHT_RED, vPos, 0.4f, vColor, pObject);
 
-        int temp[] = { 5, 37, 52 };
+        int temp[] = {5, 37, 52};
         Vector(0.25f, 1.0f, 0.0f, vColor);
         for (int i = 0; i < 3; ++i)
         {
-            if (rand() % 6 > 0) continue;
+            if (rand() % 6 > 0)
+                continue;
             if (i % 5 == 0)
             {
                 pModel->TransformByObjectBone(vPos, pObject, temp[i]);
@@ -1143,7 +1182,7 @@ bool GMSwampOfQuiet::RenderMonsterVisual(CHARACTER* pCharacter, OBJECT* pObject,
     break;
     case MODEL_ICE_NAPIN:
     {
-        int iBones[] = { 10, 61, 72, 21, 122, 116 };
+        int iBones[] = {10, 61, 72, 21, 122, 116};
         Vector(1.0f, 1.0f, 1.0f, vLight);
         vec3_t vLightFire;
         Vector(1.0f, 1.0f, 1.0f, vLightFire);
@@ -1186,47 +1225,48 @@ bool GMSwampOfQuiet::RenderMonsterVisual(CHARACTER* pCharacter, OBJECT* pObject,
     break;
     case MODEL_SHADOW_MASTER:
     {
-        int iBones[] = { 11, 15, 34, 21, 25, 39 };
+        int iBones[] = {11, 15, 34, 21, 25, 39};
         Vector(1.0f, 1.0f, 1.f, vLight);
         for (int i = 0; i < 6; ++i)
         {
-            if (rand() % 6 > 0) continue;
+            if (rand() % 6 > 0)
+                continue;
             pModel->TransformByObjectBone(vPos, pObject, iBones[i]);
             CreateParticleFpsChecked(BITMAP_SMOKE, vPos, pObject->Angle, vLight, 50, 1.5f);
             CreateParticleFpsChecked(BITMAP_SMOKELINE1 + rand() % 3, vPos, pObject->Angle, vLight, 0, 1.1f);
         }
     }
-    if (pObject->CurrentAction == MONSTER01_DIE)
-    {
-        if (pObject->LifeTime == 100)
+        if (pObject->CurrentAction == MONSTER01_DIE)
         {
-            pObject->LifeTime = 90;
-            pObject->m_bRenderShadow = false;
+            if (pObject->LifeTime == 100)
+            {
+                pObject->LifeTime = 90;
+                pObject->m_bRenderShadow = false;
 
-            vec3_t vWorldPos, Light;
-            Vector(1.0f, 1.0f, 1.0f, Light);
+                vec3_t vWorldPos, Light;
+                Vector(1.0f, 1.0f, 1.0f, Light);
 
-            pModel->TransformByObjectBone(vWorldPos, pObject, 34);
-            CreateEffect(MODEL_EX01_SHADOW_MASTER_ANKLE_LEFT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
-            pModel->TransformByObjectBone(vWorldPos, pObject, 39);
-            CreateEffect(MODEL_EX01_SHADOW_MASTER_ANKLE_RIGHT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
-            pModel->TransformByObjectBone(vWorldPos, pObject, 0);
-            CreateEffect(MODEL_EX01_SHADOW_MASTER_BELT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
-            pModel->TransformByObjectBone(vWorldPos, pObject, 4);
-            CreateEffect(MODEL_EX01_SHADOW_MASTER_CHEST, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
-            pModel->TransformByObjectBone(vWorldPos, pObject, 6);
-            CreateEffect(MODEL_EX01_SHADOW_MASTER_HELMET, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
-            pModel->TransformByObjectBone(vWorldPos, pObject, 33);
-            CreateEffect(MODEL_EX01_SHADOW_MASTER_KNEE_LEFT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
-            pModel->TransformByObjectBone(vWorldPos, pObject, 38);
-            CreateEffect(MODEL_EX01_SHADOW_MASTER_KNEE_RIGHT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
-            pModel->TransformByObjectBone(vWorldPos, pObject, 12);
-            CreateEffect(MODEL_EX01_SHADOW_MASTER_WRIST_LEFT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
-            pModel->TransformByObjectBone(vWorldPos, pObject, 23);
-            CreateEffect(MODEL_EX01_SHADOW_MASTER_WRIST_RIGHT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
+                pModel->TransformByObjectBone(vWorldPos, pObject, 34);
+                CreateEffect(MODEL_EX01_SHADOW_MASTER_ANKLE_LEFT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
+                pModel->TransformByObjectBone(vWorldPos, pObject, 39);
+                CreateEffect(MODEL_EX01_SHADOW_MASTER_ANKLE_RIGHT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
+                pModel->TransformByObjectBone(vWorldPos, pObject, 0);
+                CreateEffect(MODEL_EX01_SHADOW_MASTER_BELT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
+                pModel->TransformByObjectBone(vWorldPos, pObject, 4);
+                CreateEffect(MODEL_EX01_SHADOW_MASTER_CHEST, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
+                pModel->TransformByObjectBone(vWorldPos, pObject, 6);
+                CreateEffect(MODEL_EX01_SHADOW_MASTER_HELMET, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
+                pModel->TransformByObjectBone(vWorldPos, pObject, 33);
+                CreateEffect(MODEL_EX01_SHADOW_MASTER_KNEE_LEFT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
+                pModel->TransformByObjectBone(vWorldPos, pObject, 38);
+                CreateEffect(MODEL_EX01_SHADOW_MASTER_KNEE_RIGHT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
+                pModel->TransformByObjectBone(vWorldPos, pObject, 12);
+                CreateEffect(MODEL_EX01_SHADOW_MASTER_WRIST_LEFT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
+                pModel->TransformByObjectBone(vWorldPos, pObject, 23);
+                CreateEffect(MODEL_EX01_SHADOW_MASTER_WRIST_RIGHT, vWorldPos, pObject->Angle, Light, 0, pObject, 0, 0);
+            }
         }
-    }
-    break;
+        break;
     }
 
     return false;
@@ -1242,7 +1282,8 @@ bool GMSwampOfQuiet::PlayMonsterSound(OBJECT* pObject)
     fDis_y = pObject->Position[1] - Hero->Object.Position[1];
     float fDistance = sqrtf(fDis_x * fDis_x + fDis_y * fDis_y);
 
-    if (fDistance > 500.0f) return true;
+    if (fDistance > 500.0f)
+        return true;
 
     switch (pObject->Type)
     {
@@ -1363,7 +1404,7 @@ bool GMSwampOfQuiet::PlayMonsterSound(OBJECT* pObject)
     case MODEL_MEDUSA:
     {
     }
-    return true;
+        return true;
     case MODEL_SAPI_QUEEN:
     case MODEL_WOLF_STATUS:
         if (pObject->CurrentAction == MONSTER01_ATTACK1 || pObject->CurrentAction == MONSTER01_ATTACK2)
@@ -1436,30 +1477,35 @@ bool GMSwampOfQuiet::SetCurrentActionMonster(CHARACTER* pCharacter, OBJECT* pObj
         {
             SetAction(pObject, MONSTER01_ATTACK2);
             pCharacter->MonsterSkill = -1;
-        } break;
+        }
+        break;
         case AT_SKILL_GAOTIC:
         {
             SetAction(pObject, MONSTER01_ATTACK2);
             pCharacter->MonsterSkill = -1;
-        } break;
+        }
+        break;
         case AT_SKILL_GIGANTIC_STORM:
         {
             SetAction(pObject, MONSTER01_ATTACK3);
             pCharacter->MonsterSkill = -1;
-        } break;
+        }
+        break;
         case AT_SKILL_EVIL_SPIRIT:
         {
             SetAction(pObject, MONSTER01_ATTACK1);
             pCharacter->MonsterSkill = -1;
-        } break;
+        }
+        break;
         default:
         {
             SetAction(pObject, MONSTER01_ATTACK1);
             pCharacter->MonsterSkill = -1;
-        } break;
+        }
+        break;
         }
     }
-    return true;
+        return true;
     case MODEL_SAPI_QUEEN:
     case MODEL_WOLF_STATUS:
     {
@@ -1475,7 +1521,7 @@ bool GMSwampOfQuiet::SetCurrentActionMonster(CHARACTER* pCharacter, OBJECT* pObj
         }
         return true;
     }
-    return true;
+        return true;
     case MODEL_ICE_NAPIN:
     {
         if (pCharacter->MonsterSkill == ATMON_SKILL_EX_ICENAPIN_ATTACKSKILL)
@@ -1490,7 +1536,7 @@ bool GMSwampOfQuiet::SetCurrentActionMonster(CHARACTER* pCharacter, OBJECT* pObj
         }
         return true;
     }
-    return true;
+        return true;
     case MODEL_SHADOW_MASTER:
     {
         if (pCharacter->MonsterSkill == ATMON_SKILL_EX_SHADOWMASTER_ATTACKSKILL)
@@ -1505,7 +1551,7 @@ bool GMSwampOfQuiet::SetCurrentActionMonster(CHARACTER* pCharacter, OBJECT* pObj
         }
         return true;
     }
-    return true;
+        return true;
     default:
         return false;
     }

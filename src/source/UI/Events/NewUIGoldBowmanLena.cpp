@@ -9,27 +9,26 @@
 
 namespace
 {
-    void RenderText(const wchar_t* text, int x, int y, int sx, int sy, DWORD color, DWORD backcolor, int sort)
-    {
-        g_pRenderText->SetFont(g_hFont);
+void RenderText(const wchar_t* text, int x, int y, int sx, int sy, DWORD color, DWORD backcolor, int sort)
+{
+    g_pRenderText->SetFont(g_hFont);
 
-        DWORD backuptextcolor = g_pRenderText->GetTextColor();
-        DWORD backuptextbackcolor = g_pRenderText->GetBgColor();
+    DWORD backuptextcolor = g_pRenderText->GetTextColor();
+    DWORD backuptextbackcolor = g_pRenderText->GetBgColor();
 
-        g_pRenderText->SetTextColor(color);
-        g_pRenderText->SetBgColor(backcolor);
-        g_pRenderText->RenderText(x, y, text, sx, sy, sort);
+    g_pRenderText->SetTextColor(color);
+    g_pRenderText->SetBgColor(backcolor);
+    g_pRenderText->RenderText(x, y, text, sx, sy, sort);
 
-        g_pRenderText->SetTextColor(backuptextcolor);
-        g_pRenderText->SetBgColor(backuptextbackcolor);
-    }
-};
+    g_pRenderText->SetTextColor(backuptextcolor);
+    g_pRenderText->SetBgColor(backuptextbackcolor);
+}
+}; // namespace
 
 using namespace SEASON3B;
 
-CNewUIGoldBowmanLena::CNewUIGoldBowmanLena()
-{
-}
+// cppcheck-suppress uninitMemberVar
+CNewUIGoldBowmanLena::CNewUIGoldBowmanLena() {}
 
 CNewUIGoldBowmanLena::~CNewUIGoldBowmanLena()
 {
@@ -38,7 +37,8 @@ CNewUIGoldBowmanLena::~CNewUIGoldBowmanLena()
 
 bool CNewUIGoldBowmanLena::Create(CNewUIManager* pNewUIMng, int x, int y)
 {
-    if (NULL == pNewUIMng) {
+    if (NULL == pNewUIMng)
+    {
         return false;
     }
 
@@ -58,7 +58,7 @@ bool CNewUIGoldBowmanLena::Create(CNewUIManager* pNewUIMng, int x, int y)
     // Exit Button
     m_BtnExit.ChangeButtonImgState(true, IMAGE_GBL_BTN_EXIT, false);
     m_BtnExit.ChangeButtonInfo(m_Pos.x + 13, m_Pos.y + 392, 36, 29);
-    m_BtnExit.ChangeToolTipText(GlobalText[1002], true);	// 1002 "닫기"
+    m_BtnExit.ChangeToolTipText(GlobalText[1002], true); // 1002 "닫기"
 
     Show(false);
 
@@ -94,9 +94,7 @@ void CNewUIGoldBowmanLena::UnloadImages()
     DeleteBitmap(IMAGE_GBL_BACK);
 }
 
-void CNewUIGoldBowmanLena::OpeningProcess()
-{
-}
+void CNewUIGoldBowmanLena::OpeningProcess() {}
 
 void CNewUIGoldBowmanLena::ClosingProcess()
 {
@@ -107,51 +105,60 @@ void CNewUIGoldBowmanLena::ClosingProcess()
 
 bool CNewUIGoldBowmanLena::UpdateMouseEvent()
 {
-    if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_GOLD_BOWMAN_LENA) == false) {
+    if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_GOLD_BOWMAN_LENA) == false)
+    {
         return true;
     }
 
-    if (m_BtnRegister.UpdateMouseEvent()) {
+    if (m_BtnRegister.UpdateMouseEvent())
+    {
         int registerItem = g_pMyInventory->GetInventoryCtrl()->GetItemCount(ITEM_POTION + 21, 0);
 
-        if (registerItem != 0) {
+        if (registerItem != 0)
+        {
             int index = g_pMyInventory->GetInventoryCtrl()->FindItemIndex(ITEM_POTION + 21, 0);
 
-            if (index != -1) {
+            if (index != -1)
+            {
                 SocketClient->ToGameServer()->SendEventChipRegistrationRequest(0, index);
             }
         }
     }
 
-    POINT ptExitBtn1 = { m_Pos.x + 169, m_Pos.y + 7 };
+    POINT ptExitBtn1 = {m_Pos.x + 169, m_Pos.y + 7};
 
-    if (SEASON3B::IsPress(VK_LBUTTON) && CheckMouseIn(ptExitBtn1.x, ptExitBtn1.y, 13, 12)) {
+    if (SEASON3B::IsPress(VK_LBUTTON) && CheckMouseIn(ptExitBtn1.x, ptExitBtn1.y, 13, 12))
+    {
         g_pNewUISystem->Hide(SEASON3B::INTERFACE_GOLD_BOWMAN_LENA);
         return false;
     }
 
-    if (m_BtnExit.UpdateMouseEvent()) {
+    if (m_BtnExit.UpdateMouseEvent())
+    {
         g_pNewUISystem->Hide(SEASON3B::INTERFACE_GOLD_BOWMAN_LENA);
         return false;
     }
 
     if (CheckMouseIn(m_Pos.x, m_Pos.y, INVENTORY_WIDTH, INVENTORY_HEIGHT))
     {
-        if (SEASON3B::IsPress(VK_RBUTTON)) {
+        if (SEASON3B::IsPress(VK_RBUTTON))
+        {
             MouseRButton = false;
             MouseRButtonPop = false;
             MouseRButtonPush = false;
             return false;
         }
 
-        if (SEASON3B::IsNone(VK_LBUTTON) == false) {
+        if (SEASON3B::IsNone(VK_LBUTTON) == false)
+        {
             return false;
         }
         return false;
     }
     else
     {
-        if (SEASON3B::IsNone(VK_LBUTTON) == false) {
+        if (SEASON3B::IsNone(VK_LBUTTON) == false)
+        {
             return false;
         }
         return false;
@@ -161,11 +168,13 @@ bool CNewUIGoldBowmanLena::UpdateMouseEvent()
 
 bool CNewUIGoldBowmanLena::UpdateKeyEvent()
 {
-    if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_GOLD_BOWMAN_LENA) == false) {
+    if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_GOLD_BOWMAN_LENA) == false)
+    {
         return true;
     }
 
-    if (SEASON3B::IsPress(VK_ESCAPE) == true) {
+    if (SEASON3B::IsPress(VK_ESCAPE) == true)
+    {
         g_pNewUISystem->Hide(SEASON3B::INTERFACE_GOLD_BOWMAN_LENA);
         return false;
     }
@@ -213,7 +222,8 @@ void CNewUIGoldBowmanLena::RenderTexts()
 
     wchar_t Text[100];
     memset(&Text, 0, sizeof(wchar_t) * 100);
-    for (int i = 0; i < 3; ++i) {
+    for (int i = 0; i < 3; ++i)
+    {
         memset(&Text, 0, sizeof(wchar_t) * 100);
         mu_swprintf(Text, GlobalText[700 + i]);
         RenderText(Text, m_Pos.x, m_Pos.y + 100 + (i * 15), 190, 0, 0xFFFFFFFF, 0x00000000, RT3_SORT_CENTER);
@@ -237,7 +247,8 @@ void CNewUIGoldBowmanLena::RenderTexts()
     mu_swprintf(Text, L"    X    %d", g_shEventChipCount);
     RenderText(Text, m_Pos.x + 5, m_Pos.y + 245, 190, 0, 0xFFFFFFFF, 0x00000000, RT3_SORT_CENTER);
 
-    for (int j = 0; j < 2; ++j) {
+    for (int j = 0; j < 2; ++j)
+    {
         memset(&Text, 0, sizeof(wchar_t) * 100);
         mu_swprintf(Text, GlobalText[703 + j]);
         RenderText(Text, m_Pos.x, m_Pos.y + 350 + (j * 15), 190, 0, 0xFFFA47D6, 0x00000000, RT3_SORT_CENTER);
@@ -250,7 +261,7 @@ void CNewUIGoldBowmanLena::RendeerButton()
     m_BtnExit.Render();
 }
 
-float CNewUIGoldBowmanLena::GetLayerDepth()	// 3.4f
+float CNewUIGoldBowmanLena::GetLayerDepth() // 3.4f
 {
     return 3.4f;
 }

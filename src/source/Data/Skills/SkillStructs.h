@@ -22,7 +22,7 @@
 // Used for backward compatibility with old BMD files
 typedef struct
 {
-    char Name[32];  // Legacy format used 32 bytes
+    char Name[32]; // Legacy format used 32 bytes
     SKILL_ATTRIBUTE_FIELDS
 } SKILL_ATTRIBUTE_FILE_LEGACY;
 
@@ -50,18 +50,18 @@ typedef struct
 #define COPY_SKILL_FIELD(name, type, arraySize, width) (dest).name = (source).name;
 
 // Macro to copy all non-name fields from source to dest
-#define COPY_SKILL_ATTRIBUTE_FIELDS(dest, source) \
-    do { \
-        SKILL_FIELDS_SIMPLE(COPY_SKILL_FIELD) \
-        memcpy((dest).RequireDutyClass, (source).RequireDutyClass, sizeof((source).RequireDutyClass)); \
-        memcpy((dest).RequireClass, (source).RequireClass, sizeof((source).RequireClass)); \
-        SKILL_FIELDS_AFTER_ARRAYS(COPY_SKILL_FIELD) \
-    } while(0)
+#define COPY_SKILL_ATTRIBUTE_FIELDS(dest, source)                                                                      \
+    do                                                                                                                 \
+    {                                                                                                                  \
+        SKILL_FIELDS_SIMPLE(COPY_SKILL_FIELD)                                                                          \
+        memcpy((dest).RequireDutyClass, (source).RequireDutyClass, sizeof((source).RequireDutyClass));                 \
+        memcpy((dest).RequireClass, (source).RequireClass, sizeof((source).RequireClass));                             \
+        SKILL_FIELDS_AFTER_ARRAYS(COPY_SKILL_FIELD)                                                                    \
+    } while (0)
 
 // Helper template to copy from file structure to runtime structure
 // Requires: #include "MultiLanguage.h"
-template<typename TSource>
-inline void CopySkillAttributeFromSource(SKILL_ATTRIBUTE& dest, const TSource& source)
+template <typename TSource> inline void CopySkillAttributeFromSource(SKILL_ATTRIBUTE& dest, const TSource& source)
 {
     CMultiLanguage::ConvertFromUtf8(dest.Name, source.Name, MAX_SKILL_NAME);
     COPY_SKILL_ATTRIBUTE_FIELDS(dest, source);
@@ -69,8 +69,7 @@ inline void CopySkillAttributeFromSource(SKILL_ATTRIBUTE& dest, const TSource& s
 
 // Helper template to copy from runtime structure to file structure
 // Requires: #include "MultiLanguage.h"
-template<typename TDest>
-inline void CopySkillAttributeToDestination(TDest& dest, const SKILL_ATTRIBUTE& source)
+template <typename TDest> inline void CopySkillAttributeToDestination(TDest& dest, const SKILL_ATTRIBUTE& source)
 {
     CMultiLanguage::ConvertToUtf8(dest.Name, source.Name, sizeof(dest.Name));
     COPY_SKILL_ATTRIBUTE_FIELDS(dest, source);

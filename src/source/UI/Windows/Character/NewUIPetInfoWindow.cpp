@@ -72,7 +72,7 @@ void CNewUIPetInfoWindow::InitButtons()
     // Exit Button
     m_BtnExit.ChangeButtonImgState(true, IMAGE_PETINFO_BTN_EXIT, false);
     m_BtnExit.ChangeButtonInfo(m_Pos.x + 13, m_Pos.y + 392, 36, 29);
-    m_BtnExit.ChangeToolTipText(GlobalText[1002], true);	// 1002 "�ݱ�"
+    m_BtnExit.ChangeToolTipText(GlobalText[1002], true); // 1002 "�ݱ�"
 }
 
 void CNewUIPetInfoWindow::SetPos(int x, int y)
@@ -125,8 +125,10 @@ bool CNewUIPetInfoWindow::Render()
     RenderImage(IMAGE_PETINFO_BACK, m_Pos.x, m_Pos.y, float(PETINFOWINDOW_WIDTH), float(PETINFOWINDOW_HEIGHT));
     RenderImage(IMAGE_PETINFO_TOP, m_Pos.x, m_Pos.y, float(PETINFOWINDOW_WIDTH), 64.f);
     RenderImage(IMAGE_PETINFO_LEFT, m_Pos.x, m_Pos.y + 64.f, 21.f, float(PETINFOWINDOW_HEIGHT) - 64.f - 45.f);
-    RenderImage(IMAGE_PETINFO_RIGHT, m_Pos.x + float(PETINFOWINDOW_WIDTH) - 21.f, m_Pos.y + 64.f, 21.f, float(PETINFOWINDOW_HEIGHT) - 64.f - 45.f);
-    RenderImage(IMAGE_PETINFO_BOTTOM, m_Pos.x, m_Pos.y + float(PETINFOWINDOW_HEIGHT) - 45.f, float(PETINFOWINDOW_WIDTH), 45.f);
+    RenderImage(IMAGE_PETINFO_RIGHT, m_Pos.x + float(PETINFOWINDOW_WIDTH) - 21.f, m_Pos.y + 64.f, 21.f,
+                float(PETINFOWINDOW_HEIGHT) - 64.f - 45.f);
+    RenderImage(IMAGE_PETINFO_BOTTOM, m_Pos.x, m_Pos.y + float(PETINFOWINDOW_HEIGHT) - 45.f, float(PETINFOWINDOW_WIDTH),
+                45.f);
 
     g_pRenderText->SetFont(g_hFontBold);
     g_pRenderText->RenderText(m_Pos.x + 60, m_Pos.y + 13, GlobalText[1217], 70, 0, RT3_SORT_CENTER);
@@ -145,7 +147,9 @@ bool CNewUIPetInfoWindow::Render()
         {
             g_pRenderText->SetTextColor(0xFF0000FF);
             g_pRenderText->SetFont(g_hFontBold);
-            wchar_t szText[256] = { 0, };
+            wchar_t szText[256] = {
+                0,
+            };
             mu_swprintf(szText, GlobalText[1233], GlobalText[1187]);
             g_pRenderText->RenderText(m_Pos.x + 15, m_Pos.y + 100, szText, 160, 30, RT3_SORT_CENTER);
         }
@@ -183,7 +187,9 @@ bool CNewUIPetInfoWindow::Render()
 
 bool CNewUIPetInfoWindow::RenderDarkHorseInfo(PET_INFO* pPetInfo)
 {
-    wchar_t szText[256] = { 0, };
+    wchar_t szText[256] = {
+        0,
+    };
 
     g_pRenderText->SetFont(g_hFont);
     g_pRenderText->SetTextColor(255, 255, 255, 255);
@@ -219,7 +225,9 @@ bool CNewUIPetInfoWindow::RenderDarkHorseInfo(PET_INFO* pPetInfo)
 
 bool CNewUIPetInfoWindow::RenderDarkSpiritInfo(PET_INFO* pPetInfo)
 {
-    wchar_t szText[256] = { 0, };
+    wchar_t szText[256] = {
+        0,
+    };
 
     g_pRenderText->SetFont(g_hFont);
     g_pRenderText->SetTextColor(255, 255, 255, 255);
@@ -250,8 +258,7 @@ bool CNewUIPetInfoWindow::RenderDarkSpiritInfo(PET_INFO* pPetInfo)
     RenderImage(IMAGE_PETINFO_LIFE, iGBox1PosX + 9, iGBox1PosY + 42, iHP, 8);
     mu_swprintf(szText, GlobalText[357], pPetInfo->m_dwExp1, pPetInfo->m_dwExp2);
     g_pRenderText->RenderText(iGBox1PosX + 10, iGBox1PosY + 59, szText, 0, 0, RT3_SORT_CENTER);
-    mu_swprintf(szText, GlobalText[203], m_aiDamage[0], m_aiDamage[1],
-        pPetInfo->m_wAttackSuccess);
+    mu_swprintf(szText, GlobalText[203], m_aiDamage[0], m_aiDamage[1], pPetInfo->m_wAttackSuccess);
     g_pRenderText->RenderText(iGBox1PosX + 10, iGBox1PosY + 72, szText, 0, 0, RT3_SORT_CENTER);
     mu_swprintf(szText, GlobalText[64], pPetInfo->m_wAttackSpeed);
     g_pRenderText->RenderText(iGBox1PosX + 10, iGBox1PosY + 85, szText, 0, 0, RT3_SORT_CENTER);
@@ -276,14 +283,16 @@ bool CNewUIPetInfoWindow::RenderDarkSpiritInfo(PET_INFO* pPetInfo)
     return true;
 }
 
-void CNewUIPetInfoWindow::RenderGroupBox(int iPosX, int iPosY, int iWidth, int iHeight, int iTitleWidth/* =60 */, int iTitleHeight/* =20  */)
+void CNewUIPetInfoWindow::RenderGroupBox(int iPosX, int iPosY, int iWidth, int iHeight, int iTitleWidth /* =60 */,
+                                         int iTitleHeight /* =20  */)
 {
     EnableAlphaTest();
 
     glColor4f(0.f, 0.f, 0.f, 0.9f);
     RenderColor(float(iPosX + 3), float(iPosY + 2), float(iTitleWidth - 8), float(iTitleHeight));
     glColor4f(0.f, 0.f, 0.f, 0.6f);
-    RenderColor(float(iPosX + 3), float(iPosY + 2 + iTitleHeight), float(iWidth - 7), float(iHeight - iTitleHeight - 7));
+    RenderColor(float(iPosX + 3), float(iPosY + 2 + iTitleHeight), float(iWidth - 7),
+                float(iHeight - iTitleHeight - 7));
 
     EndRenderColor();
 
@@ -295,8 +304,10 @@ void CNewUIPetInfoWindow::RenderGroupBox(int iPosX, int iPosY, int iWidth, int i
 
     RenderImage(IMAGE_PETINFO_TABLE_TOP_PIXEL, iPosX + 6, iPosY, iTitleWidth - 12, 14);
     RenderImage(IMAGE_PETINFO_TABLE_RIGHT_PIXEL, iPosX + iTitleWidth - 14, iPosY + 6, 14, iTitleHeight - 6);
-    RenderImage(IMAGE_PETINFO_TABLE_TOP_PIXEL, iPosX + iTitleWidth - 5, iPosY + iTitleHeight, iWidth - iTitleWidth - 6, 14);
-    RenderImage(IMAGE_PETINFO_TABLE_RIGHT_PIXEL, iPosX + iWidth - 14, iPosY + iTitleHeight + 6, 14, iHeight - iTitleHeight - 14);
+    RenderImage(IMAGE_PETINFO_TABLE_TOP_PIXEL, iPosX + iTitleWidth - 5, iPosY + iTitleHeight, iWidth - iTitleWidth - 6,
+                14);
+    RenderImage(IMAGE_PETINFO_TABLE_RIGHT_PIXEL, iPosX + iWidth - 14, iPosY + iTitleHeight + 6, 14,
+                iHeight - iTitleHeight - 14);
     RenderImage(IMAGE_PETINFO_TABLE_BOTTOM_PIXEL, iPosX + 6, iPosY + iHeight - 14, iWidth - 12, 14);
     RenderImage(IMAGE_PETINFO_TABLE_LEFT_PIXEL, iPosX, iPosY + 6, 14, iHeight - 14);
 }
@@ -308,7 +319,7 @@ float CNewUIPetInfoWindow::GetLayerDepth()
 
 bool CNewUIPetInfoWindow::BtnProcess()
 {
-    POINT ptExitBtn1 = { m_Pos.x + 169, m_Pos.y + 7 };
+    POINT ptExitBtn1 = {m_Pos.x + 169, m_Pos.y + 7};
 
     if (SEASON3B::IsPress(VK_LBUTTON) && CheckMouseIn(ptExitBtn1.x, ptExitBtn1.y, 13, 12))
     {
@@ -339,7 +350,8 @@ void CNewUIPetInfoWindow::CalcDamage(int iNumTapButton)
         auto masterLevelUi = SEASON3B::CNewUISystem::GetInstance()->GetUI_NewMasterLevelInterface();
         if (masterLevelUi != nullptr)
         {
-            master_boost = static_cast<int>(CharacterAttribute->MasterSkillInfo[AT_SKILL_EARTHSHAKE_STR].GetSkillValue());
+            master_boost =
+                static_cast<int>(CharacterAttribute->MasterSkillInfo[AT_SKILL_EARTHSHAKE_STR].GetSkillValue());
         }
 
         pPetInfo = Hero->GetEquipedPetInfo(PET_TYPE_DARK_HORSE);
@@ -430,6 +442,4 @@ void CNewUIPetInfoWindow::OpenningProcess()
     CalcDamage(m_iNumCurOpenTab);
 }
 
-void CNewUIPetInfoWindow::ClosingProcess()
-{
-}
+void CNewUIPetInfoWindow::ClosingProcess() {}

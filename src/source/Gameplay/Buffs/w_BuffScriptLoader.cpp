@@ -14,37 +14,40 @@
 
 namespace
 {
-    void CutTokenString(wchar_t* pcCuttoken, std::list<std::wstring>& out)
+void CutTokenString(wchar_t* pcCuttoken, std::list<std::wstring>& out)
+{
+    if (wcslen(pcCuttoken) == 0)
+        return;
+
+    int cutpos = 0;
+
+    for (int i = 0; i < MAX_DESCRIPT_LENGTH; ++i)
     {
-        if (wcslen(pcCuttoken) == 0) return;
-
-        int cutpos = 0;
-
-        for (int i = 0; i < MAX_DESCRIPT_LENGTH; ++i)
+        if (pcCuttoken[i] == '/' || pcCuttoken[i] == 0)
         {
-            if (pcCuttoken[i] == '/' || pcCuttoken[i] == 0)
-            {
-                wchar_t Temp[MAX_DESCRIPT_LENGTH] = { 0, };
-                wcsncpy(Temp, pcCuttoken + cutpos, i - cutpos);
-                out.push_back(Temp);
-                cutpos = i + 1;
+            wchar_t Temp[MAX_DESCRIPT_LENGTH] = {
+                0,
+            };
+            wcsncpy(Temp, pcCuttoken + cutpos, i - cutpos);
+            out.push_back(Temp);
+            cutpos = i + 1;
 
-                if (pcCuttoken[i] == 0) return;
-            }
+            if (pcCuttoken[i] == 0)
+                return;
         }
     }
 }
+} // namespace
 
-BuffInfo::BuffInfo() : s_ItemType(255), s_ItemIndex(255), s_BuffIndex(0),
-s_BuffEffectType(0), s_BuffClassType(0), s_NoticeType(0), s_ClearType(0)
+BuffInfo::BuffInfo()
+    : s_ItemType(255), s_ItemIndex(255), s_BuffIndex(0), s_BuffEffectType(0), s_BuffClassType(0), s_NoticeType(0),
+      s_ClearType(0)
 {
     memset(&s_BuffName, 0, sizeof(char) * MAX_BUFF_NAME_LENGTH);
     memset(&s_BuffDescript, 0, sizeof(char) * MAX_DESCRIPT_LENGTH);
 }
 
-BuffInfo::~BuffInfo()
-{
-}
+BuffInfo::~BuffInfo() {}
 
 BuffScriptLoaderPtr BuffScriptLoader::Make()
 {
@@ -62,9 +65,7 @@ BuffScriptLoader::BuffScriptLoader()
     }
 }
 
-BuffScriptLoader::~BuffScriptLoader()
-{
-}
+BuffScriptLoader::~BuffScriptLoader() {}
 
 bool BuffScriptLoader::Load(const std::wstring& pchFileName)
 {
@@ -110,7 +111,8 @@ bool BuffScriptLoader::Load(const std::wstring& pchFileName)
                 buffinfo.s_ItemIndex = tempbuffinfo.s_ItemIndex;
 
                 CMultiLanguage::ConvertFromUtf8(buffinfo.s_BuffName, tempbuffinfo.s_BuffName, MAX_BUFF_NAME_LENGTH);
-                CMultiLanguage::ConvertFromUtf8(buffinfo.s_BuffDescript, tempbuffinfo.s_BuffDescript, MAX_DESCRIPT_LENGTH);
+                CMultiLanguage::ConvertFromUtf8(buffinfo.s_BuffDescript, tempbuffinfo.s_BuffDescript,
+                                                MAX_DESCRIPT_LENGTH);
 
                 buffinfo.s_BuffClassType = tempbuffinfo.s_BuffClassType;
                 buffinfo.s_NoticeType = tempbuffinfo.s_NoticeType;
@@ -138,7 +140,8 @@ bool BuffScriptLoader::Load(const std::wstring& pchFileName)
 
 const BuffInfo BuffScriptLoader::GetBuffinfo(eBuffState type) const
 {
-    if (type >= eBuff_Count) return BuffInfo();
+    if (type >= eBuff_Count)
+        return BuffInfo();
 
     auto iter = m_Info.find(type);
 
@@ -152,7 +155,8 @@ const BuffInfo BuffScriptLoader::GetBuffinfo(eBuffState type) const
 
 eBuffClass BuffScriptLoader::IsBuffClass(eBuffState type) const
 {
-    if (type >= eBuff_Count) return eBuffClass_Count;
+    if (type >= eBuff_Count)
+        return eBuffClass_Count;
 
     auto iter = m_Info.find(type);
 

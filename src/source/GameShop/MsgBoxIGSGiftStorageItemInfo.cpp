@@ -19,17 +19,17 @@
 //////////////////////////////////////////////////////////////////////
 CMsgBoxIGSGiftStorageItemInfo::CMsgBoxIGSGiftStorageItemInfo()
 {
-    m_iStorageSeq = 0;		// ������ ����
-    m_iStorageItemSeq = 0;		// ������ ��ǰ ����
-    m_wItemCode = -1;		// ������ �ڵ�
+    m_iStorageSeq = 0;     // ������ ����
+    m_iStorageItemSeq = 0; // ������ ��ǰ ����
+    m_wItemCode = -1;      // ������ �ڵ�
 
-    m_szName[0] = '\0';		// ������ �̸�
+    m_szName[0] = '\0'; // ������ �̸�
     m_szNum[0] = '\0';
     m_szPeriod[0] = '\0';
-    m_szItemType = '\0';		// ��ǰ���� (C : ĳ��, P : ��ǰ)
+    m_szItemType = '\0'; // ��ǰ���� (C : ĳ��, P : ��ǰ)
 
-    m_szIDInfo[0] = '\0';		// �������� ĳ����ID
-    m_szMessage[0] = '\0';		// �������� �޼���
+    m_szIDInfo[0] = '\0';  // �������� ĳ����ID
+    m_szMessage[0] = '\0'; // �������� �޼���
 }
 
 CMsgBoxIGSGiftStorageItemInfo::~CMsgBoxIGSGiftStorageItemInfo()
@@ -45,8 +45,8 @@ bool CMsgBoxIGSGiftStorageItemInfo::Create(float fPriority)
     SetAddCallbackFunc();
 
     CNewUIMessageBoxBase::Create((IMAGE_IGS_WINDOW_WIDTH / 2) - (IMAGE_IGS_FRAME_WIDTH / 2),
-        (IMAGE_IGS_WINDOW_HEIGHT / 2) - (IMAGE_IGS_FRAME_HEIGHT / 2),
-        IMAGE_IGS_FRAME_WIDTH, IMAGE_IGS_FRAME_HEIGHT, fPriority);
+                                 (IMAGE_IGS_WINDOW_HEIGHT / 2) - (IMAGE_IGS_FRAME_HEIGHT / 2), IMAGE_IGS_FRAME_WIDTH,
+                                 IMAGE_IGS_FRAME_HEIGHT, fPriority);
 
     if (g_pNewUI3DRenderMng)
     {
@@ -64,7 +64,7 @@ bool CMsgBoxIGSGiftStorageItemInfo::Create(float fPriority)
     m_MessageInputBox.SetUseScrollbar(FALSE);
     m_MessageInputBox.SetTextLimit(MAX_GIFT_MESSAGE_SIZE);
     m_MessageInputBox.SetFont(g_hFont);
-    //m_MessageInputBox.SetOption(UIOPTION_NULL);
+    // m_MessageInputBox.SetOption(UIOPTION_NULL);
     m_MessageInputBox.SetBackColor(0, 0, 0, 0);
     m_MessageInputBox.SetState(UISTATE_NORMAL);
     m_MessageInputBox.SetTextColor(255, 0, 0, 0);
@@ -82,8 +82,8 @@ bool CMsgBoxIGSGiftStorageItemInfo::IsVisible() const
 //--------------------------------------------
 // Initialize
 void CMsgBoxIGSGiftStorageItemInfo::Initialize(int iStorageSeq, int iStorageItemSeq, WORD wItemCode, wchar_t szItemType,
-    wchar_t* pszID, wchar_t* pszMessage, wchar_t* pszName,
-    wchar_t* pszNum, wchar_t* pszPeriod)
+                                               wchar_t* pszID, wchar_t* pszMessage, wchar_t* pszName, wchar_t* pszNum,
+                                               wchar_t* pszPeriod)
 {
     m_iStorageSeq = iStorageSeq;
     m_iStorageItemSeq = iStorageItemSeq;
@@ -94,10 +94,10 @@ void CMsgBoxIGSGiftStorageItemInfo::Initialize(int iStorageSeq, int iStorageItem
     wcscpy(m_szName, pszName);
 
     // Num
-    mu_swprintf(m_szNum, GlobalText[3040], pszNum);		// "���� : %ls"
+    mu_swprintf(m_szNum, GlobalText[3040], pszNum); // "���� : %ls"
 
     // Period
-    mu_swprintf(m_szPeriod, GlobalText[3039], pszPeriod);	// "�Ⱓ : %ls"
+    mu_swprintf(m_szPeriod, GlobalText[3039], pszPeriod); // "�Ⱓ : %ls"
 
     // ID Info
     // "\'%ls\' ���� ���� �����Դϴ�."
@@ -154,8 +154,8 @@ void CMsgBoxIGSGiftStorageItemInfo::Render3D()
     if (m_wItemCode == 65535)
         return;
 
-    RenderItem3D(GetPos().x + IGS_3DITEM_POS_X, GetPos().y + IGS_3DITEM_POS_Y,
-        IGS_3DITEM_WIDTH, IGS_3DITEM_HEIGHT, m_wItemCode, 0, 0, 0, true);
+    RenderItem3D(GetPos().x + IGS_3DITEM_POS_X, GetPos().y + IGS_3DITEM_POS_Y, IGS_3DITEM_WIDTH, IGS_3DITEM_HEIGHT,
+                 m_wItemCode, 0, 0, 0, true);
 }
 
 //--------------------------------------------
@@ -169,7 +169,8 @@ void CMsgBoxIGSGiftStorageItemInfo::SetAddCallbackFunc()
 
 //--------------------------------------------
 // LButtonUp
-CALLBACK_RESULT CMsgBoxIGSGiftStorageItemInfo::LButtonUp(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam)
+CALLBACK_RESULT CMsgBoxIGSGiftStorageItemInfo::LButtonUp(class CNewUIMessageBoxBase* pOwner,
+                                                         const leaf::xstreambuf& xParam)
 {
     auto* pOwnMsgBox = dynamic_cast<CMsgBoxIGSGiftStorageItemInfo*>(pOwner);
 
@@ -193,15 +194,16 @@ CALLBACK_RESULT CMsgBoxIGSGiftStorageItemInfo::LButtonUp(class CNewUIMessageBoxB
 
 //--------------------------------------------
 // OKButtonDown
-CALLBACK_RESULT CMsgBoxIGSGiftStorageItemInfo::OKButtonDown(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam)
+CALLBACK_RESULT CMsgBoxIGSGiftStorageItemInfo::OKButtonDown(class CNewUIMessageBoxBase* pOwner,
+                                                            const leaf::xstreambuf& xParam)
 {
     auto* pOwnMsgBox = dynamic_cast<CMsgBoxIGSGiftStorageItemInfo*>(pOwner);
 
     // ����ϱ� Ȯ�� â
     CMsgBoxIGSUseItemConfirm* pMsgBox = NULL;
     CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSUseItemConfirmLayout), &pMsgBox);
-    pMsgBox->Initialize(pOwnMsgBox->m_iStorageSeq, pOwnMsgBox->m_iStorageItemSeq,
-        pOwnMsgBox->m_wItemCode, pOwnMsgBox->m_szItemType, pOwnMsgBox->m_szName);
+    pMsgBox->Initialize(pOwnMsgBox->m_iStorageSeq, pOwnMsgBox->m_iStorageItemSeq, pOwnMsgBox->m_wItemCode,
+                        pOwnMsgBox->m_szItemType, pOwnMsgBox->m_szName);
 
     PlayBuffer(SOUND_CLICK01);
     g_MessageBox->SendEvent(pOwner, MSGBOX_EVENT_DESTROY);
@@ -211,7 +213,8 @@ CALLBACK_RESULT CMsgBoxIGSGiftStorageItemInfo::OKButtonDown(class CNewUIMessageB
 
 //--------------------------------------------
 // CancelButtonDown
-CALLBACK_RESULT CMsgBoxIGSGiftStorageItemInfo::CancelButtonDown(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam)
+CALLBACK_RESULT CMsgBoxIGSGiftStorageItemInfo::CancelButtonDown(class CNewUIMessageBoxBase* pOwner,
+                                                                const leaf::xstreambuf& xParam)
 {
     PlayBuffer(SOUND_CLICK01);
     g_MessageBox->SendEvent(pOwner, MSGBOX_EVENT_DESTROY);
@@ -225,13 +228,13 @@ void CMsgBoxIGSGiftStorageItemInfo::SetButtonInfo()
 {
     // Ȯ�� ��ư
     m_BtnUse.SetInfo(IMAGE_IGS_BUTTON, GetPos().x + IGS_BTN_OK_POS_X, GetPos().y + IGS_BTN_POS_Y + 102,
-        IMAGE_IGS_BTN_WIDTH, IMAGE_IGS_BTN_HEIGHT, CNewUIMessageBoxButton::MSGBOX_BTN_CUSTOM, true);
+                     IMAGE_IGS_BTN_WIDTH, IMAGE_IGS_BTN_HEIGHT, CNewUIMessageBoxButton::MSGBOX_BTN_CUSTOM, true);
     m_BtnUse.MoveTextPos(0, -1);
     m_BtnUse.SetText(GlobalText[228]);
 
     // ��� ��ư
     m_BtnCancel.SetInfo(IMAGE_IGS_BUTTON, GetPos().x + IGS_BTN_CANCEL_POS_X, GetPos().y + IGS_BTN_POS_Y + 102,
-        IMAGE_IGS_BTN_WIDTH, IMAGE_IGS_BTN_HEIGHT, CNewUIMessageBoxButton::MSGBOX_BTN_CUSTOM, true);
+                        IMAGE_IGS_BTN_WIDTH, IMAGE_IGS_BTN_HEIGHT, CNewUIMessageBoxButton::MSGBOX_BTN_CUSTOM, true);
     m_BtnCancel.MoveTextPos(0, -1);
     m_BtnCancel.SetText(GlobalText[229]);
 }
@@ -252,26 +255,33 @@ void CMsgBoxIGSGiftStorageItemInfo::RenderTexts()
     g_pRenderText->SetFont(g_hFontBold);
 
     // Title "���� ����â"
-    g_pRenderText->RenderText(GetPos().x, GetPos().y + IGS_TEXT_TITLE_POS_Y, GlobalText[3048], IMAGE_IGS_FRAME_WIDTH, 0, RT3_SORT_CENTER);
+    g_pRenderText->RenderText(GetPos().x, GetPos().y + IGS_TEXT_TITLE_POS_Y, GlobalText[3048], IMAGE_IGS_FRAME_WIDTH, 0,
+                              RT3_SORT_CENTER);
 
     // Item Name
     g_pRenderText->SetTextColor(255, 255, 0, 255);
-    g_pRenderText->RenderText(GetPos().x, GetPos().y + IGS_TEXT_ITEM_NAME_POS_Y, m_szName, IMAGE_IGS_FRAME_WIDTH, 0, RT3_SORT_CENTER);
+    g_pRenderText->RenderText(GetPos().x, GetPos().y + IGS_TEXT_ITEM_NAME_POS_Y, m_szName, IMAGE_IGS_FRAME_WIDTH, 0,
+                              RT3_SORT_CENTER);
 
     // ID Info
     g_pRenderText->SetTextColor(0, 0, 0, 255);
-    g_pRenderText->RenderText(GetPos().x, GetPos().y + IGS_TEXT_ID_INFO_POS_Y, m_szIDInfo, IMAGE_IGS_FRAME_WIDTH, 0, RT3_SORT_CENTER);
+    g_pRenderText->RenderText(GetPos().x, GetPos().y + IGS_TEXT_ID_INFO_POS_Y, m_szIDInfo, IMAGE_IGS_FRAME_WIDTH, 0,
+                              RT3_SORT_CENTER);
 
     g_pRenderText->SetFont(g_hFont);
     g_pRenderText->SetTextColor(255, 255, 255, 255);
 
     // Item Info
-    g_pRenderText->RenderText(GetPos().x + IGS_TEXT_ITEM_INFO_POS_X, GetPos().y + IGS_TEXT_ITEM_INFO_NUM_POS_Y, m_szNum, IGS_TEXT_ITEM_INFO_WIDTH, 0, RT3_SORT_LEFT);
-    g_pRenderText->RenderText(GetPos().x + IGS_TEXT_ITEM_INFO_POS_X, GetPos().y + IGS_TEXT_ITEM_INFO_PERIOD_POS_Y, m_szPeriod, IGS_TEXT_ITEM_INFO_WIDTH, 0, RT3_SORT_LEFT);
+    g_pRenderText->RenderText(GetPos().x + IGS_TEXT_ITEM_INFO_POS_X, GetPos().y + IGS_TEXT_ITEM_INFO_NUM_POS_Y, m_szNum,
+                              IGS_TEXT_ITEM_INFO_WIDTH, 0, RT3_SORT_LEFT);
+    g_pRenderText->RenderText(GetPos().x + IGS_TEXT_ITEM_INFO_POS_X, GetPos().y + IGS_TEXT_ITEM_INFO_PERIOD_POS_Y,
+                              m_szPeriod, IGS_TEXT_ITEM_INFO_WIDTH, 0, RT3_SORT_LEFT);
 
 #ifdef FOR_WORK
     // debug
-    wchar_t szText[256] = { 0, };
+    wchar_t szText[256] = {
+        0,
+    };
     g_pRenderText->SetTextColor(255, 0, 0, 255);
     if (m_wItemCode == 65535)
     {
@@ -279,7 +289,8 @@ void CMsgBoxIGSGiftStorageItemInfo::RenderTexts()
     }
     else
     {
-        mu_swprintf(szText, L"ItemCode : %d (%d, %d)", m_wItemCode, m_wItemCode / MAX_ITEM_INDEX, m_wItemCode % MAX_ITEM_INDEX);
+        mu_swprintf(szText, L"ItemCode : %d (%d, %d)", m_wItemCode, m_wItemCode / MAX_ITEM_INDEX,
+                    m_wItemCode % MAX_ITEM_INDEX);
     }
     g_pRenderText->RenderText(GetPos().x + IMAGE_IGS_FRAME_WIDTH, GetPos().y + 10, szText, 150, 0, RT3_SORT_LEFT);
     mu_swprintf(szText, L"Storage Seq : %d", m_iStorageSeq);

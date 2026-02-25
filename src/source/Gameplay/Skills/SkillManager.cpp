@@ -32,7 +32,8 @@ bool CSkillManager::FindHeroSkill(ActionSkillType eSkillType)
     return false;
 }
 
-void CSkillManager::GetSkillInformation(int iType, int iLevel, wchar_t* lpszName, int* piMana, int* piDistance, int* piSkillMana)
+void CSkillManager::GetSkillInformation(int iType, int iLevel, wchar_t* lpszName, int* piMana, int* piDistance,
+                                        int* piSkillMana)
 {
     SKILL_ATTRIBUTE* p = &SkillAttribute[iType];
     if (lpszName)
@@ -69,11 +70,13 @@ void CSkillManager::GetSkillInformation_Energy(int iType, int* piEnergy)
         {
             *piEnergy = 20 + (p->Energy * p->Level * 4 / 100);
 
-            if (iType == AT_SKILL_SUMMON_EXPLOSION || iType == AT_SKILL_SUMMON_REQUIEM) {
+            if (iType == AT_SKILL_SUMMON_EXPLOSION || iType == AT_SKILL_SUMMON_REQUIEM)
+            {
                 *piEnergy = 20 + (p->Energy * p->Level * 3 / 100);
             }
 
-            if (gCharacterManager.GetBaseClass(Hero->Class) == CLASS_KNIGHT) {
+            if (gCharacterManager.GetBaseClass(Hero->Class) == CLASS_KNIGHT)
+            {
                 *piEnergy = 10 + (p->Energy * p->Level * 4 / 100);
             }
         }
@@ -118,12 +121,9 @@ bool CSkillManager::CheckSkillDelay(int SkillIndex)
 
     int Delay = SkillAttribute[Skill].Delay;
 
-    if (!CheckAttack() && (
-        Skill == AT_SKILL_CHAIN_DRIVE ||
-        Skill == AT_SKILL_CHAIN_DRIVE_STR ||
-        Skill == AT_SKILL_DRAGON_ROAR ||
-        Skill == AT_SKILL_DRAGON_ROAR_STR ||
-        Skill == AT_SKILL_DRAGON_KICK))
+    if (!CheckAttack() &&
+        (Skill == AT_SKILL_CHAIN_DRIVE || Skill == AT_SKILL_CHAIN_DRIVE_STR || Skill == AT_SKILL_DRAGON_ROAR ||
+         Skill == AT_SKILL_DRAGON_ROAR_STR || Skill == AT_SKILL_DRAGON_KICK))
     {
         return false;
     }
@@ -262,7 +262,8 @@ void CSkillManager::RebuildSkillRequirementsCache()
         skillRequirements.SkillStrength = SkillAttribute[baseSkill].Strength;
         skillRequirements.SkillDexterity = SkillAttribute[baseSkill].Dexterity;
         skillRequirements.SkillVitality = 0;
-        skillRequirements.SkillEnergy = (20 + (SkillAttribute[baseSkill].Energy * SkillAttribute[baseSkill].Level) * 0.04);
+        skillRequirements.SkillEnergy =
+            (20 + (SkillAttribute[baseSkill].Energy * SkillAttribute[baseSkill].Level) * 0.04);
         skillRequirements.SkillCharisma = SkillAttribute[baseSkill].Charisma;
 
         m_aSkillRequirementsFulfilled[skillType] = (skillRequirements <= heroCharacterInfo);

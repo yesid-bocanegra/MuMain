@@ -22,16 +22,10 @@ CFTPFileDownLoader::~CFTPFileDownLoader() // OK
     SAFE_DELETE(this->m_pFileDownloader);
 }
 
-WZResult CFTPFileDownLoader::DownLoadFiles(DownloaderType type,
-    std::wstring strServerIP,
-    unsigned short PortNum,
-    std::wstring strUserName,
-    std::wstring strPWD,
-    std::wstring strRemotepath,
-    std::wstring strlocalpath,
-    bool bPassiveMode,
-    CListVersionInfo Version,
-    std::vector<std::wstring>	vScriptFiles) // OK
+WZResult CFTPFileDownLoader::DownLoadFiles(DownloaderType type, std::wstring strServerIP, unsigned short PortNum,
+                                           std::wstring strUserName, std::wstring strPWD, std::wstring strRemotepath,
+                                           std::wstring strlocalpath, bool bPassiveMode, CListVersionInfo Version,
+                                           std::vector<std::wstring> vScriptFiles) // OK
 {
     static WZResult result;
 
@@ -46,7 +40,7 @@ WZResult CFTPFileDownLoader::DownLoadFiles(DownloaderType type,
     ServerInfo.SetConnectTimeout(3000);
     ServerInfo.SetServerInfo((TCHAR*)strServerIP.c_str(), PortNum, (TCHAR*)strUserName.c_str(), (TCHAR*)strPWD.c_str());
 
-    wchar_t Buffer[MAX_PATH] = { 0 };
+    wchar_t Buffer[MAX_PATH] = {0};
 
     StringCchPrintf(Buffer, sizeof(Buffer), L"%03d.%04d.%03d", Version.Zone, Version.year, Version.yearId);
 
@@ -83,7 +77,7 @@ WZResult CFTPFileDownLoader::DownLoadFiles(DownloaderType type,
     return result;
 }
 
-void	CFTPFileDownLoader::Break() // OK
+void CFTPFileDownLoader::Break() // OK
 {
     this->m_Break = 1;
     if (this->m_pFileDownloader != NULL)

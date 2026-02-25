@@ -7,19 +7,22 @@
 #include <sstream>
 
 // Lightweight JSON parser for simple key-value translations
-namespace i18n {
+namespace i18n
+{
 
 // Translation domain (separate namespaces for editor, game, metadata)
-enum class Domain {
+enum class Domain
+{
 #ifdef _EDITOR
-    Editor,     // Only available in debug/editor builds
-    Metadata,   // Only available in debug/editor builds
+    Editor,   // Only available in debug/editor builds
+    Metadata, // Only available in debug/editor builds
 #endif
-    Game        // Always available (both debug and release)
+    Game // Always available (both debug and release)
 };
 
 // Main translator class
-class Translator {
+class Translator
+{
 public:
     static Translator& GetInstance();
 
@@ -30,7 +33,10 @@ public:
     void SetLocale(const std::string& locale);
 
     // Get current locale
-    const std::string& GetLocale() const { return m_currentLocale; }
+    const std::string& GetLocale() const
+    {
+        return m_currentLocale;
+    }
 
     // Translate a key with fallback
     const char* Translate(Domain domain, const char* key, const char* fallback = nullptr) const;
@@ -74,31 +80,36 @@ private:
     std::map<std::string, std::string> m_editorTranslations;   // Debug/Editor only
     std::map<std::string, std::string> m_metadataTranslations; // Debug/Editor only
 #endif
-    std::map<std::string, std::string> m_gameTranslations;      // Always available
+    std::map<std::string, std::string> m_gameTranslations; // Always available
 };
 
 // Convenience functions
 
 // Game translations - always available
-inline const char* TranslateGame(const char* key, const char* fallback = nullptr) {
+inline const char* TranslateGame(const char* key, const char* fallback = nullptr)
+{
     return Translator::GetInstance().Translate(Domain::Game, key, fallback);
 }
 
 #ifdef _EDITOR
 // Editor and Metadata translations - only in debug/editor builds
-inline const char* TranslateEditor(const char* key, const char* fallback = nullptr) {
+inline const char* TranslateEditor(const char* key, const char* fallback = nullptr)
+{
     return Translator::GetInstance().Translate(Domain::Editor, key, fallback);
 }
 
-inline const char* TranslateMetadata(const char* key, const char* fallback = nullptr) {
+inline const char* TranslateMetadata(const char* key, const char* fallback = nullptr)
+{
     return Translator::GetInstance().Translate(Domain::Metadata, key, fallback);
 }
 
-inline bool HasTranslation(Domain domain, const char* key) {
+inline bool HasTranslation(Domain domain, const char* key)
+{
     return Translator::GetInstance().HasTranslation(domain, key);
 }
 
-inline std::string FormatEditor(const char* key, const std::vector<std::string>& args) {
+inline std::string FormatEditor(const char* key, const std::vector<std::string>& args)
+{
     return Translator::GetInstance().Format(Domain::Editor, key, args);
 }
 #endif // _EDITOR

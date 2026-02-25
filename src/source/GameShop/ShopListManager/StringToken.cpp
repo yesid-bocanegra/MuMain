@@ -12,12 +12,13 @@
 #ifdef KJH_ADD_INGAMESHOP_UI_SYSTEM
 #include "StringToken.h"
 
+// cppcheck-suppress uninitMemberVar
 CStringToken::CStringToken() // OK
 {
     this->data.clear();
     this->delimiter.clear();
     this->tokens.clear();
-    //this->index = this->tokens.begin();
+    // this->index = this->tokens.begin();
 }
 
 CStringToken::~CStringToken() // OK

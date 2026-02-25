@@ -12,6 +12,7 @@
 #ifdef KJH_ADD_INGAMESHOP_UI_SYSTEM
 #include "ShopCategoryList.h"
 
+// cppcheck-suppress uninitMemberVar
 CShopCategoryList::CShopCategoryList() // OK
 {
     this->Clear();

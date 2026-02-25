@@ -4,8 +4,7 @@
 #include "w_MapProcess.h"
 #include "MapManager.h"
 
-template<typename T>
-T& TheWorld(int type)
+template <typename T> T& TheWorld(int type)
 {
     return dynamic_cast<T&>(TheMapProcess().GetMap(type));
 }
@@ -53,7 +52,7 @@ T& TheWorld(int type)
 #define g_PKField TheWorld<CGM_PK_Field>(WD_63PK_FIELD)
 
 #include "GM_Raklion.h"
-#define g_Raklion	TheWorld<SEASON4A::CGM_Raklion>(WD_57ICECITY)
+#define g_Raklion TheWorld<SEASON4A::CGM_Raklion>(WD_57ICECITY)
 
 #include "GMSantaTown.h"
 #define g_SantaTown TheWorld<CGMSantaTown>(WD_62SANTA_TOWN)

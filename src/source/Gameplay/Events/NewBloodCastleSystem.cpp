@@ -13,15 +13,12 @@
 
 using namespace SEASON3B;
 
-CNewBloodCastleSystem::CNewBloodCastleSystem()
-{
-}
+CNewBloodCastleSystem::CNewBloodCastleSystem() {}
 
-CNewBloodCastleSystem::~CNewBloodCastleSystem()
-{
-}
+CNewBloodCastleSystem::~CNewBloodCastleSystem() {}
 
-void CNewBloodCastleSystem::SetMatchResult(const int iNumDevilRank, const int iMyRank, const MatchResult* pMatchResult, const int Success)
+void CNewBloodCastleSystem::SetMatchResult(const int iNumDevilRank, const int iMyRank, const MatchResult* pMatchResult,
+                                           const int Success)
 {
     if (iNumDevilRank != 255)
     {
@@ -42,14 +39,15 @@ void CNewBloodCastleSystem::SetMatchGameCommand(const LPPRECEIVE_MATCH_GAME_STAT
         PlayBuffer(SOUND_BLOODCASTLE, NULL, true);
 
     case 1:
-        SetMatchInfo(data->m_byPlayState + 1, 15 * 60, data->m_wRemainSec, data->m_wMaxKillMonster, data->m_wCurKillMonster);
+        SetMatchInfo(data->m_byPlayState + 1, 15 * 60, data->m_wRemainSec, data->m_wMaxKillMonster,
+                     data->m_wCurKillMonster);
 
         if (data->m_wIndex != 65535 && data->m_byItemType != 255 && data->m_byItemType != 0)
         {
             WORD Key = data->m_wIndex;
             Key &= 0x7FFF;
 
-            int  index = HangerBloodCastleQuestItem(Key);
+            int index = HangerBloodCastleQuestItem(Key);
             CHARACTER* c = &CharactersClient[index];
 
             if (c != NULL)
@@ -69,14 +67,15 @@ void CNewBloodCastleSystem::SetMatchGameCommand(const LPPRECEIVE_MATCH_GAME_STAT
         SetActionObject(gMapManager.WorldActive, 36, 20, 1.f);
         break;
     case 4:
-        SetMatchInfo(data->m_byPlayState + 1, 15 * 60, data->m_wRemainSec, data->m_wMaxKillMonster, data->m_wCurKillMonster);
+        SetMatchInfo(data->m_byPlayState + 1, 15 * 60, data->m_wRemainSec, data->m_wMaxKillMonster,
+                     data->m_wCurKillMonster);
 
         if (data->m_wIndex != 65535 && data->m_byItemType != 255 && data->m_byItemType != 0)
         {
             WORD Key = data->m_wIndex;
             Key &= 0x7FFF;
 
-            int  index = HangerBloodCastleQuestItem(Key);
+            int index = HangerBloodCastleQuestItem(Key);
             CHARACTER* c = &CharactersClient[index];
 
             if (c != NULL)
@@ -134,7 +133,9 @@ void CNewBloodCastleSystem::RenderMatchResult(void)
     g_pRenderText->SetTextColor(128, 255, 128, 255);
     g_pRenderText->SetBgColor(0, 0, 0, 0);
 
-    wchar_t lpszStr[256] = { NULL, };
+    wchar_t lpszStr[256] = {
+        NULL,
+    };
 
     if (m_iNumResult)
     {

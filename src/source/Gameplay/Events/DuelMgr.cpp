@@ -118,11 +118,13 @@ float CDuelMgr::GetSD(int iPlayerNum)
 
 BOOL CDuelMgr::IsDuelPlayer(CHARACTER* pCharacter, int iPlayerNum, BOOL bIncludeSummon)
 {
-    if (pCharacter->Key == m_DuelPlayer[iPlayerNum].m_sIndex && wcsncmp(pCharacter->ID, m_DuelPlayer[iPlayerNum].m_szID, MAX_USERNAME_SIZE) == 0)
+    if (pCharacter->Key == m_DuelPlayer[iPlayerNum].m_sIndex &&
+        wcsncmp(pCharacter->ID, m_DuelPlayer[iPlayerNum].m_szID, MAX_USERNAME_SIZE) == 0)
     {
         return TRUE;
     }
-    else if (bIncludeSummon == TRUE && gCharacterManager.GetBaseClass(pCharacter->Class) == 0 && wcsncmp(pCharacter->OwnerID, m_DuelPlayer[iPlayerNum].m_szID, MAX_USERNAME_SIZE) == 0)
+    else if (bIncludeSummon == TRUE && gCharacterManager.GetBaseClass(pCharacter->Class) == 0 &&
+             wcsncmp(pCharacter->OwnerID, m_DuelPlayer[iPlayerNum].m_szID, MAX_USERNAME_SIZE) == 0)
     {
         return TRUE;
     }
@@ -137,10 +139,12 @@ BOOL CDuelMgr::IsDuelPlayer(WORD wIndex, int iPlayerNum)
 
 void CDuelMgr::SendDuelRequestAnswer(int iPlayerNum, BOOL bOK)
 {
-    SocketClient->ToGameServer()->SendDuelStartResponse(bOK, m_DuelPlayer[iPlayerNum].m_sIndex, m_DuelPlayer[iPlayerNum].m_szID);
+    SocketClient->ToGameServer()->SendDuelStartResponse(bOK, m_DuelPlayer[iPlayerNum].m_sIndex,
+                                                        m_DuelPlayer[iPlayerNum].m_szID);
 }
 
-void CDuelMgr::SetDuelChannel(int iChannelIndex, BOOL bEnable, BOOL bJoinable, const wchar_t* pszID1, const wchar_t* pszID2)
+void CDuelMgr::SetDuelChannel(int iChannelIndex, BOOL bEnable, BOOL bJoinable, const wchar_t* pszID1,
+                              const wchar_t* pszID2)
 {
     auto& channel = m_DuelChannels[iChannelIndex];
     channel.m_bEnable = bEnable;
@@ -186,9 +190,7 @@ void CDuelMgr::RemoveDuelWatchUser(const wchar_t* pszUserID)
     }
 
     const auto matcher = [pszUserID](const std::wstring& name)
-    {
-        return wcsncmp(name.c_str(), pszUserID, MAX_USERNAME_SIZE) == 0;
-    };
+    { return wcsncmp(name.c_str(), pszUserID, MAX_USERNAME_SIZE) == 0; };
 
     const auto iter = std::remove_if(m_DuelWatchUserList.begin(), m_DuelWatchUserList.end(), matcher);
     if (iter != m_DuelWatchUserList.end())

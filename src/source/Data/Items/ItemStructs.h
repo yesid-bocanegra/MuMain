@@ -51,17 +51,17 @@ typedef struct
 #define COPY_FIELD(name, type, arraySize, width) (dest).name = (source).name;
 
 // Macro to copy all non-name fields from source to dest
-#define COPY_ITEM_ATTRIBUTE_FIELDS(dest, source) \
-    do { \
-        ITEM_FIELDS_SIMPLE(COPY_FIELD) \
-        memcpy((dest).RequireClass, (source).RequireClass, sizeof((source).RequireClass)); \
-        memcpy((dest).Resistance, (source).Resistance, sizeof((source).Resistance)); \
-    } while(0)
+#define COPY_ITEM_ATTRIBUTE_FIELDS(dest, source)                                                                       \
+    do                                                                                                                 \
+    {                                                                                                                  \
+        ITEM_FIELDS_SIMPLE(COPY_FIELD)                                                                                 \
+        memcpy((dest).RequireClass, (source).RequireClass, sizeof((source).RequireClass));                             \
+        memcpy((dest).Resistance, (source).Resistance, sizeof((source).Resistance));                                   \
+    } while (0)
 
 // Helper template to copy from file structure to runtime structure
 // Requires: #include "MultiLanguage.h"
-template<typename TSource>
-inline void CopyItemAttributeFromSource(ITEM_ATTRIBUTE& dest, const TSource& source)
+template <typename TSource> inline void CopyItemAttributeFromSource(ITEM_ATTRIBUTE& dest, const TSource& source)
 {
     CMultiLanguage::ConvertFromUtf8(dest.Name, source.Name, MAX_ITEM_NAME);
     COPY_ITEM_ATTRIBUTE_FIELDS(dest, source);
@@ -69,8 +69,7 @@ inline void CopyItemAttributeFromSource(ITEM_ATTRIBUTE& dest, const TSource& sou
 
 // Helper template to copy from runtime structure to file structure
 // Requires: #include "MultiLanguage.h"
-template<typename TDest>
-inline void CopyItemAttributeToDestination(TDest& dest, const ITEM_ATTRIBUTE& source)
+template <typename TDest> inline void CopyItemAttributeToDestination(TDest& dest, const ITEM_ATTRIBUTE& source)
 {
     CMultiLanguage::ConvertToUtf8(dest.Name, source.Name, sizeof(dest.Name));
     COPY_ITEM_ATTRIBUTE_FIELDS(dest, source);

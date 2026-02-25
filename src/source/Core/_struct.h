@@ -13,114 +13,114 @@ class CHARACTER;
 
 namespace SEASON3B
 {
-    class CNewUIItemMng;
+class CNewUIItemMng;
 }
 
-#define MAX_MONSTERSKILL_NUM	10
+#define MAX_MONSTERSKILL_NUM 10
 
 namespace info
 {
-    struct Script_Item
-    {
-        wchar_t Name[30];
-        bool TwoHand;
-        WORD Level;
-        BYTE m_byItemSlot;
-        BYTE m_bySkillIndex;
-        BYTE Width;
-        BYTE Height;
-        BYTE DamageMin;
-        BYTE DamageMax;
-        BYTE SuccessfulBlocking;
-        BYTE Defense;
-        BYTE MagicDefense;
-        BYTE WeaponSpeed;
-        BYTE WalkSpeed;
-        BYTE Durability;
-        BYTE MagicDur;
-        BYTE MagicPower;
-        WORD RequireStrength;
-        WORD RequireDexterity;
-        WORD RequireEnergy;
-        WORD  RequireVitality;
-        WORD RequireCharisma;
-        WORD RequireLevel;
-        BYTE Value;
-        int  iZen;
-        BYTE  AttType;
-        BYTE RequireClass[MAX_CLASS];
-        BYTE Resistance[MAX_RESISTANCE];
-    };
-
-    struct Script_Silde
-    {
-        typedef std::vector<wchar_t*>     SildeVECTOR;
-        SildeVECTOR					   Sildelist;
-    };
-
-    struct Script_Dialog
-    {
-        wchar_t m_lpszText[MAX_LENGTH_DIALOG];
-        int m_iNumAnswer;
-        int m_iLinkForAnswer[MAX_ANSWER_FOR_DIALOG];
-        int m_iReturnForAnswer[MAX_ANSWER_FOR_DIALOG];
-        wchar_t m_lpszAnswer[MAX_ANSWER_FOR_DIALOG][MAX_LENGTH_ANSWER];
-    };
-
-    struct Script_Credit
-    {
-        BYTE	byClass;
-        wchar_t	szName[32];
-    };
-
-    struct Script_Movereq
-    {
-        int index;
-        wchar_t szMainMapName[32];
-        wchar_t szSubMapName[32];
-        int	iReqLevel;
-        int iReqZen;
-        int iGateNum;
-    };
-
-    struct Script_Quest_Class_Act
-    {
-        BYTE    chLive;
-        BYTE    byQuestType;
-        WORD    wItemType;
-        BYTE    byItemSubType;
-        BYTE	byItemLevel;
-        BYTE    byItemNum;
-        BYTE    byRequestType;
-        BYTE    byRequestClass[MAX_CLASS];
-        short   shQuestStartText[4];
-    };
-
-    struct Script_Quest_Class_Request
-    {
-        BYTE    byLive;
-        BYTE    byType;
-        WORD    wCompleteQuestIndex;
-        WORD    wLevelMin;
-        WORD    wLevelMax;
-        WORD	wRequestStrength;
-        DWORD   dwZen;
-        short   shErrorText;
-    };
-
-    struct Script_Quest
-    {
-        short   shQuestConditionNum;
-        short   shQuestRequestNum;
-        WORD    wNpcType;
-        char    strQuestName[32];
-
-        Script_Quest_Class_Act     QuestAct[MAX_QUEST_CONDITION];
-        Script_Quest_Class_Request QuestRequest[MAX_QUEST_REQUEST];
-    };
+struct Script_Item
+{
+    wchar_t Name[30];
+    bool TwoHand;
+    WORD Level;
+    BYTE m_byItemSlot;
+    BYTE m_bySkillIndex;
+    BYTE Width;
+    BYTE Height;
+    BYTE DamageMin;
+    BYTE DamageMax;
+    BYTE SuccessfulBlocking;
+    BYTE Defense;
+    BYTE MagicDefense;
+    BYTE WeaponSpeed;
+    BYTE WalkSpeed;
+    BYTE Durability;
+    BYTE MagicDur;
+    BYTE MagicPower;
+    WORD RequireStrength;
+    WORD RequireDexterity;
+    WORD RequireEnergy;
+    WORD RequireVitality;
+    WORD RequireCharisma;
+    WORD RequireLevel;
+    BYTE Value;
+    int iZen;
+    BYTE AttType;
+    BYTE RequireClass[MAX_CLASS];
+    BYTE Resistance[MAX_RESISTANCE];
 };
 
-//infomation start
+struct Script_Silde
+{
+    typedef std::vector<wchar_t*> SildeVECTOR;
+    SildeVECTOR Sildelist;
+};
+
+struct Script_Dialog
+{
+    wchar_t m_lpszText[MAX_LENGTH_DIALOG];
+    int m_iNumAnswer;
+    int m_iLinkForAnswer[MAX_ANSWER_FOR_DIALOG];
+    int m_iReturnForAnswer[MAX_ANSWER_FOR_DIALOG];
+    wchar_t m_lpszAnswer[MAX_ANSWER_FOR_DIALOG][MAX_LENGTH_ANSWER];
+};
+
+struct Script_Credit
+{
+    BYTE byClass;
+    wchar_t szName[32];
+};
+
+struct Script_Movereq
+{
+    int index;
+    wchar_t szMainMapName[32];
+    wchar_t szSubMapName[32];
+    int iReqLevel;
+    int iReqZen;
+    int iGateNum;
+};
+
+struct Script_Quest_Class_Act
+{
+    BYTE chLive;
+    BYTE byQuestType;
+    WORD wItemType;
+    BYTE byItemSubType;
+    BYTE byItemLevel;
+    BYTE byItemNum;
+    BYTE byRequestType;
+    BYTE byRequestClass[MAX_CLASS];
+    short shQuestStartText[4];
+};
+
+struct Script_Quest_Class_Request
+{
+    BYTE byLive;
+    BYTE byType;
+    WORD wCompleteQuestIndex;
+    WORD wLevelMin;
+    WORD wLevelMax;
+    WORD wRequestStrength;
+    DWORD dwZen;
+    short shErrorText;
+};
+
+struct Script_Quest
+{
+    short shQuestConditionNum;
+    short shQuestRequestNum;
+    WORD wNpcType;
+    char strQuestName[32];
+
+    Script_Quest_Class_Act QuestAct[MAX_QUEST_CONDITION];
+    Script_Quest_Class_Request QuestRequest[MAX_QUEST_REQUEST];
+};
+}; // namespace info
+
+// infomation start
 typedef struct
 {
     BYTE Flag;
@@ -142,7 +142,7 @@ typedef struct
     int m_iLinkForAnswer[MAX_ANSWER_FOR_DIALOG];
     int m_iReturnForAnswer[MAX_ANSWER_FOR_DIALOG];
     char m_lpszAnswer[MAX_ANSWER_FOR_DIALOG][MAX_LENGTH_ANSWER];
-} DIALOG_SCRIPT;//Script_Dialog
+} DIALOG_SCRIPT; // Script_Dialog
 
 // Item attribute structures moved to GameData/ItemData/ItemStructs.h
 #include "Data/ItemStructs.h"
@@ -151,21 +151,21 @@ typedef struct _MASTER_LEVEL_DATA
 {
     BYTE Width;
     int Ability[8][4];
-}MASTER_LEVEL_DATA;
+} MASTER_LEVEL_DATA;
 
 typedef struct
 {
     BYTE Kind;
-    int	 Location[2];
-    int  Rotation;
+    int Location[2];
+    int Rotation;
     char Name[MAX_MINIMAP_NAME];
-}MINI_MAP_FILE;
+} MINI_MAP_FILE;
 
 typedef struct
 {
     BYTE Kind;
-    int	 Location[2];
-    int  Rotation;
+    int Location[2];
+    int Rotation;
     wchar_t Name[MAX_MINIMAP_NAME];
 } MINI_MAP;
 
@@ -173,51 +173,51 @@ typedef struct
 typedef struct tagITEM
 {
     short Type;
-    int   Level;
-    BYTE  Durability;
+    int Level;
+    BYTE Durability;
     BYTE OptionLevel;
     BYTE OptionType;
     BYTE ExcellentFlags;
     BYTE AncientDiscriminator; // 0 = no ancient;
     BYTE AncientBonusOption;
-    WORD  Jewel_Of_Harmony_Option;
-    WORD  Jewel_Of_Harmony_OptionLevel;
+    WORD Jewel_Of_Harmony_Option;
+    WORD Jewel_Of_Harmony_OptionLevel;
     bool HasSkill;
     bool HasLuck;
-    BYTE  Part;
-    BYTE  Class;
-    bool  TwoHand;
-    WORD  DamageMin;
-    WORD  DamageMax;
-    BYTE  SuccessfulBlocking;
-    WORD  Defense;
-    WORD  MagicDefense;
-    BYTE  MagicPower;
-    BYTE  WeaponSpeed;
-    WORD  WalkSpeed;
+    BYTE Part;
+    BYTE Class;
+    bool TwoHand;
+    WORD DamageMin;
+    WORD DamageMax;
+    BYTE SuccessfulBlocking;
+    WORD Defense;
+    WORD MagicDefense;
+    BYTE MagicPower;
+    BYTE WeaponSpeed;
+    WORD WalkSpeed;
 
-    WORD  RequireStrength;
-    WORD  RequireDexterity;
-    WORD  RequireEnergy;
-    WORD  RequireVitality;
-    WORD  RequireCharisma;
-    WORD  RequireLevel;
-    BYTE  SpecialNum;
-    WORD  Special[MAX_ITEM_SPECIAL];
-    BYTE  SpecialValue[MAX_ITEM_SPECIAL];
-    DWORD Key;	//client olny
+    WORD RequireStrength;
+    WORD RequireDexterity;
+    WORD RequireEnergy;
+    WORD RequireVitality;
+    WORD RequireCharisma;
+    WORD RequireLevel;
+    BYTE SpecialNum;
+    WORD Special[MAX_ITEM_SPECIAL];
+    BYTE SpecialValue[MAX_ITEM_SPECIAL];
+    DWORD Key; // client olny
 
     BYTE bySelectedSlotIndex;
 
     union
     {
-        BYTE  x;    //client olny
-        BYTE  lineal_pos;
+        BYTE x; // client olny
+        BYTE lineal_pos;
     };
     union
     {
-        BYTE  y;    //client olny
-        BYTE  ex_src_type;
+        BYTE y; // client olny
+        BYTE ex_src_type;
     };
     bool option_380;
 
@@ -227,18 +227,18 @@ typedef struct tagITEM
     BYTE SocketSphereLv[MAX_SOCKETS];
     BYTE SocketSeedSetOption;
 
-    int   Number;
-    BYTE  Color;
+    int Number;
+    BYTE Color;
 
     BYTE byColorState;
 
-    bool	bPeriodItem;
-    bool	bExpiredPeriod;
-    long	lExpireTime;
+    bool bPeriodItem;
+    bool bExpiredPeriod;
+    long lExpireTime;
 
 private:
     friend class SEASON3B::CNewUIItemMng;
-    int   RefCount;
+    int RefCount;
 } ITEM;
 #pragma pack(pop)
 
@@ -257,17 +257,17 @@ typedef struct
 
 typedef struct
 {
-    WORD				Type;
-    wchar_t				Name[MAX_MONSTER_NAME];
-    WORD				Level;
-    MONSTER_ATTRIBUTE	Attribute;
+    WORD Type;
+    wchar_t Name[MAX_MONSTER_NAME];
+    WORD Level;
+    MONSTER_ATTRIBUTE Attribute;
 } MONSTER_SCRIPT;
 
 typedef struct
 {
-    short             Type;
-    BYTE              Level;
-    int               Experince;
+    short Type;
+    BYTE Level;
+    int Experince;
     MONSTER_ATTRIBUTE Attribute;
 } MONSTER;
 
@@ -338,9 +338,19 @@ public:
 
     ~CSkillTreeInfo() = default;
 
-    BYTE GetSkillLevel() const { return this->skillLevel; }
-    float GetSkillValue() const { return this->skillValue; }
-    float GetSkillNextValue() const { return this->skillNextValue; }
+    BYTE GetSkillLevel() const
+    {
+        return this->skillLevel;
+    }
+    float GetSkillValue() const
+    {
+        return this->skillValue;
+    }
+    float GetSkillNextValue() const
+    {
+        return this->skillNextValue;
+    }
+
 private:
     BYTE skillLevel;
     float skillValue;
@@ -410,37 +420,37 @@ typedef struct
     uint64_t NextExperience;
 
     ActionSkillType Skill[MAX_SKILLS];
-    int  SkillDelay[MAX_SKILLS];
+    int SkillDelay[MAX_SKILLS];
     BYTE SkillLevel[MAX_SKILLS]; // Do we even need this array when we have the map of CSkillTreeInfo?
 
     CSkillTreeInfo MasterSkillInfo[AT_SKILL_MASTER_END + 1]; // Index = ActionSkillType
-    
+
 } CHARACTER_ATTRIBUTE;
 
 typedef struct _MASTER_LEVEL_VALUE
 {
-    short		 nMLevel;
-    __int64		 lMasterLevel_Experince;
-    __int64		 lNext_MasterLevel_Experince;
+    short nMLevel;
+    __int64 lMasterLevel_Experince;
+    __int64 lNext_MasterLevel_Experince;
 
-    short		nAddMPoint;
-    short      	nMLevelUpMPoint;
-    short		nTotalMPoint;
-    short		nMaxPoint;
-    DWORD		wMaxLife;
-    DWORD		wMaxMana;
-    DWORD		wMaxShield;
-    DWORD		wMaxBP;
+    short nAddMPoint;
+    short nMLevelUpMPoint;
+    short nTotalMPoint;
+    short nMaxPoint;
+    DWORD wMaxLife;
+    DWORD wMaxMana;
+    DWORD wMaxShield;
+    DWORD wMaxBP;
 } MASTER_LEVEL_VALUE;
 
-//infomation end
+// infomation end
 
 typedef struct _OBJECT_BLOCK
 {
     unsigned char Index;
     OBJECT* Head;
     OBJECT* Tail;
-    bool          Visible;
+    bool Visible;
 
     _OBJECT_BLOCK()
     {
@@ -453,22 +463,22 @@ typedef struct _OBJECT_BLOCK
 
 typedef struct
 {
-    bool   Live;
-    int    Type;
-    int    TexType;
-    int    SubType;
-    float  Scale;
+    bool Live;
+    int Type;
+    int TexType;
+    int SubType;
+    float Scale;
     vec3_t Position;
     vec3_t Angle;
     vec3_t Light;
-    float  Alpha;
-    float  LifeTime;
+    float Alpha;
+    float LifeTime;
     OBJECT* Target;
-    float  Rotation;
-    int    Frame;
+    float Rotation;
+    int Frame;
 
-    bool   bEnableMove;
-    float  Gravity;
+    bool bEnableMove;
+    float Gravity;
     vec3_t Velocity;
     vec3_t TurningForce;
     vec3_t StartPosition;
@@ -479,19 +489,19 @@ typedef struct
 
 typedef struct
 {
-    bool	 Live;
-    int	     Type;
+    bool Live;
+    int Type;
     OBJECT* Owner;
 } OPERATE;
 
 typedef struct
 {
-    short  Key;
-    ITEM   Item;
+    short Key;
+    ITEM Item;
     OBJECT Object;
 } ITEM_t;
 
-//object end
+// object end
 
 typedef struct Script_Skill
 {
@@ -501,45 +511,46 @@ typedef struct Script_Skill
 
 typedef struct
 {
-    bool		Live;
-    int			Type;
-    int         TexType;
-    int			SubType;
-    BYTE        RenderType;
-    BYTE        RenderFace;
-    float		Scale;
-    vec3_t		Position;
-    vec3_t      StartPosition;
-    vec3_t		Angle;
-    vec3_t		HeadAngle;
-    vec3_t		Light;
+    bool Live;
+    int Type;
+    int TexType;
+    int SubType;
+    BYTE RenderType;
+    BYTE RenderFace;
+    float Scale;
+    vec3_t Position;
+    vec3_t StartPosition;
+    vec3_t Angle;
+    vec3_t HeadAngle;
+    vec3_t Light;
     OBJECT* Target;
-    vec3_t      TargetPosition;
-    BYTE        byOnlyOneRender;
-    float  		LifeTime;
-    bool        Collision;
-    float		Velocity;
-    vec3_t		Direction;
-    short       PKKey;
-    WORD		Skill;
-    float		Weapon;
-    float		MultiUse;
-    bool        bTileMapping;
-    BYTE        m_byReverseUV;
-    int			TargetIndex[5];
-    BYTE		m_bySkillSerialNum;
-    int			m_iChaIndex;
-    short int	m_sTargetIndex;
+    vec3_t TargetPosition;
+    BYTE byOnlyOneRender;
+    float LifeTime;
+    bool Collision;
+    float Velocity;
+    vec3_t Direction;
+    short PKKey;
+    WORD Skill;
+    float Weapon;
+    float MultiUse;
+    bool bTileMapping;
+    BYTE m_byReverseUV;
+    int TargetIndex[5];
+    BYTE m_bySkillSerialNum;
+    int m_iChaIndex;
+    short int m_sTargetIndex;
 
     // Fields about the "Tails" of effects:
-    bool        m_bCreateTails; // Flag, if tails are created.
-    int         NumTails; // The number of currently used tail entries. Usually this gets increased by one in every frame until the maximum is reached.
-    int         MaxTails; // The maximum number of tail entries to use.
-    vec3_t      Tails[MAX_TAILS][4]; // The tail entries, which are getting moved back by one in every frame.
+    bool m_bCreateTails; // Flag, if tails are created.
+    int NumTails; // The number of currently used tail entries. Usually this gets increased by one in every frame until
+                  // the maximum is reached.
+    int MaxTails; // The maximum number of tail entries to use.
+    vec3_t Tails[MAX_TAILS][4]; // The tail entries, which are getting moved back by one in every frame.
 } JOINT;
-//character end
+// character end
 
-//inventory start
+// inventory start
 typedef struct
 {
     wchar_t Name[MAX_USERNAME_SIZE + 1];
@@ -550,7 +561,7 @@ typedef struct
 
 typedef struct
 {
-    int  Key;
+    int Key;
     wchar_t UnionName[GuildConstants::GUILD_NAME_BUFFER_SIZE];
     wchar_t GuildName[GuildConstants::GUILD_NAME_BUFFER_SIZE];
     BYTE Mark[GuildConstants::GUILD_MARK_SIZE];
@@ -558,96 +569,97 @@ typedef struct
 
 typedef struct
 {
-    wchar_t    Name[MAX_USERNAME_SIZE + 1];
-    BYTE    Number;
-    BYTE    Map;
-    BYTE    x;
-    BYTE    y;
-    int     currHP;
-    int     maxHP;
-    BYTE    stepHP;
-    int     index;
+    wchar_t Name[MAX_USERNAME_SIZE + 1];
+    BYTE Number;
+    BYTE Map;
+    BYTE x;
+    BYTE y;
+    int currHP;
+    int maxHP;
+    BYTE stepHP;
+    int index;
 } PARTY_t;
-//inventory end
+// inventory end
 
-//interface start
+// interface start
 typedef struct
 {
-    wchar_t      ID[MAX_USERNAME_SIZE + 1];
-    wchar_t      Text[256];
-    int       Type;
-    int       LifeTime;
-    int       Width;
+    wchar_t ID[MAX_USERNAME_SIZE + 1];
+    wchar_t Text[256];
+    int Type;
+    int LifeTime;
+    int Width;
 } WHISPER;
 
 typedef struct
 {
     bool m_bMagic;
-    int m_iSkill; // When m_bMagic is true, it's the skill index, otherwise it's already the ActionSkillType. TODO: check all usages, refactor. This could be buggy as hell.
+    int m_iSkill; // When m_bMagic is true, it's the skill index, otherwise it's already the ActionSkillType. TODO:
+                  // check all usages, refactor. This could be buggy as hell.
     int m_iTarget;
 } MovementSkill;
-//interface end
+// interface end
 
-//matchevent start
+// matchevent start
 typedef struct
 {
-    wchar_t	m_lpID[MAX_USERNAME_SIZE];
-    int		m_iScore;
-    DWORD	m_dwExp;
-    int		m_iZen;
+    wchar_t m_lpID[MAX_USERNAME_SIZE];
+    int m_iScore;
+    DWORD m_dwExp;
+    int m_iZen;
 } DevilSquareRank;
-//matchevent end
+// matchevent end
 
-//gmhellas start
+// gmhellas start
 typedef struct
 {
-    wchar_t    m_strName[64];
-    vec3_t  m_vPos;
-}ObjectDescript;
-//gmhellas end
+    wchar_t m_strName[64];
+    vec3_t m_vPos;
+} ObjectDescript;
+// gmhellas end
 
-//csquest start
+// csquest start
 typedef struct
 {
-    BYTE    chLive;
-    BYTE    byQuestType;
-    WORD    wItemType;
-    BYTE    byItemSubType;
-    BYTE	byItemLevel;
-    BYTE    byItemNum;
-    BYTE    byRequestType;
-    BYTE    byRequestClass[MAX_CLASS];
-    short   shQuestStartText[4];
+    BYTE chLive;
+    BYTE byQuestType;
+    WORD wItemType;
+    BYTE byItemSubType;
+    BYTE byItemLevel;
+    BYTE byItemNum;
+    BYTE byRequestType;
+    BYTE byRequestClass[MAX_CLASS];
+    short shQuestStartText[4];
 } QUEST_CLASS_ACT;
 
 typedef struct
 {
-    BYTE    byLive;
-    BYTE    byType;
-    WORD    wCompleteQuestIndex;
-    WORD    wLevelMin;
-    WORD    wLevelMax;
-    WORD	wRequestStrength;
-    DWORD   dwZen;
-    short   shErrorText;
+    BYTE byLive;
+    BYTE byType;
+    WORD wCompleteQuestIndex;
+    WORD wLevelMin;
+    WORD wLevelMax;
+    WORD wRequestStrength;
+    DWORD dwZen;
+    short shErrorText;
 } QUEST_CLASS_REQUEST;
 
 typedef struct
 {
-    short   shQuestConditionNum;
-    short   shQuestRequestNum;
-    WORD	wNpcType;
+    short shQuestConditionNum;
+    short shQuestRequestNum;
+    WORD wNpcType;
 
     wchar_t strQuestName[32];
 
-    QUEST_CLASS_ACT     QuestAct[MAX_QUEST_CONDITION];
+    QUEST_CLASS_ACT QuestAct[MAX_QUEST_CONDITION];
     QUEST_CLASS_REQUEST QuestRequest[MAX_QUEST_REQUEST];
 } QUEST_ATTRIBUTE;
 
 typedef struct
 {
-    BYTE    byFlag;
-    BYTE    byCount;
+    BYTE byFlag;
+    BYTE byCount;
 } QUEST_FLAG_BUFFER;
 
 typedef struct
@@ -656,43 +668,43 @@ typedef struct
     int iCrastSilver;
     int iCrastBronze;
 } QUEST_CRAST;
-//csquest end
+// csquest end
 
-//csmapinterface start
+// csmapinterface start
 typedef struct
 {
-    BYTE    bIndex;
-    BYTE    x;
-    BYTE    y;
-}VisibleUnitLocation;
+    BYTE bIndex;
+    BYTE x;
+    BYTE y;
+} VisibleUnitLocation;
 
 typedef struct
 {
-    BYTE    byTeam;
-    BYTE    byX;
-    BYTE    byY;
-    BYTE    byCmd;
-    BYTE    byLifeTime;
-}GuildCommander;
-//csmapinterface end
+    BYTE byTeam;
+    BYTE byX;
+    BYTE byY;
+    BYTE byCmd;
+    BYTE byLifeTime;
+} GuildCommander;
+// csmapinterface end
 
-//cseventmatch start
+// cseventmatch start
 typedef struct
 {
-    BYTE	m_lpID[MAX_USERNAME_SIZE];
-    DWORD	m_iScore;
-    DWORD	m_dwExp;
-    DWORD	m_iZen;
-}MatchResult;
-//cseventmatch end
+    BYTE m_lpID[MAX_USERNAME_SIZE];
+    DWORD m_iScore;
+    DWORD m_dwExp;
+    DWORD m_iZen;
+} MatchResult;
+// cseventmatch end
 
-//cdirection start
+// cdirection start
 struct DirectionMonster
 {
-    int		m_Index;
-    int		m_iActionCheck;
-    bool	m_bAngleCheck;
+    int m_Index;
+    int m_iActionCheck;
+    bool m_bAngleCheck;
 };
-//cdirection end
+// cdirection end
 
 #endif ___STRUCT_H__

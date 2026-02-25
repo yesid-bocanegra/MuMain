@@ -169,7 +169,7 @@ bool SEASON3B::CNewUIItemExplanationWindow::Render()
     if (ItemHelp >= ITEM_BOOK_OF_SAHAMUTT && ItemHelp <= ITEM_STAFF + 29)
     {
         iType = 6;
-        TabSpace += int(800 / iInfoWidth);//20
+        TabSpace += int(800 / iInfoWidth); // 20
     }
 
     int iCurrMaxLevel = iMaxLevel;
@@ -249,7 +249,8 @@ bool SEASON3B::CNewUIItemExplanationWindow::Render()
 
     for (int Level = 0; Level <= iCurrMaxLevel - 1; ++Level)
     {
-        TextList[TextNum][0] = ' '; TextList[TextNum][1] = '\0';
+        TextList[TextNum][0] = ' ';
+        TextList[TextNum][1] = '\0';
         TextBold[TextNum] = false;
         TextNum++;
         TextListColor[TextNum] = TEXT_COLOR_WHITE;
@@ -263,7 +264,8 @@ bool SEASON3B::CNewUIItemExplanationWindow::Render()
         if ( g_csItemOption.GetSetItemName( Text, ItemHelp, 1 ) )
         {
             TextListColor[TextNum] = TEXT_COLOR_GREEN;
-            mu_swprintf(TextList[TextNum],"%ls %ls %ls:(%ls+%d)", Text, GlobalText[1089], GlobalText[591], GlobalText[1090], HIBYTE( mixLevel ) );TextNum++;
+            mu_swprintf(TextList[TextNum],"%ls %ls %ls:(%ls+%d)", Text, GlobalText[1089], GlobalText[591],
+    GlobalText[1090], HIBYTE( mixLevel ) );TextNum++;
         }
     }
     if ( LOBYTE( mixLevel)<=3 )
@@ -272,7 +274,8 @@ bool SEASON3B::CNewUIItemExplanationWindow::Render()
         if ( g_csItemOption.GetSetItemName( Text, ItemHelp, 2 ) )
         {
             TextListColor[TextNum] = TEXT_COLOR_GREEN;
-            mu_swprintf(TextList[TextNum],"%ls %ls %ls:(%ls+%d)", Text, GlobalText[1089], GlobalText[591], GlobalText[1090], LOBYTE( mixLevel ) );TextNum++;
+            mu_swprintf(TextList[TextNum],"%ls %ls %ls:(%ls+%d)", Text, GlobalText[1089], GlobalText[591],
+    GlobalText[1090], LOBYTE( mixLevel ) );TextNum++;
         }
     }
     */
@@ -392,10 +395,6 @@ float SEASON3B::CNewUIItemExplanationWindow::GetKeyEventOrder()
     return 10.f;
 }
 
-void SEASON3B::CNewUIItemExplanationWindow::OpenningProcess()
-{
-}
+void SEASON3B::CNewUIItemExplanationWindow::OpenningProcess() {}
 
-void SEASON3B::CNewUIItemExplanationWindow::ClosingProcess()
-{
-}
+void SEASON3B::CNewUIItemExplanationWindow::ClosingProcess() {}

@@ -23,15 +23,15 @@
 class PacketFunctions_ClientToServer : public PacketFunctions_ClientToServer_Custom
 {
 public:
-
     /// <summary>
     /// Sends a Ping to this connection.
     /// </summary>
     /// <param name="tickCount">The tick count.</param>
     /// <param name="attackSpeed">The attack speed.</param>
     /// <remarks>
-    /// Is sent by the client when: This packet is sent by the client every few seconds. It contains the current "TickCount" of the client operating system and the attack speed of the selected character.
-    /// Causes reaction on server side: By the original server this is used to detect speed hacks.
+    /// Is sent by the client when: This packet is sent by the client every few seconds. It contains the current
+    /// "TickCount" of the client operating system and the attack speed of the selected character. Causes reaction on
+    /// server side: By the original server this is used to detect speed hacks.
     /// </remarks>
     void SendPing(uint32_t tickCount, uint16_t attackSpeed);
 
@@ -81,9 +81,13 @@ public:
     /// <param name="clientSerialByteLength">The length of <paramref name="clientSerial"/> in bytes.
     /// <remarks>
     /// Is sent by the client when: The player tries to log into the game.
-    /// Causes reaction on server side: The server is authenticating the sent login name and password. If it's correct, the state of the player is proceeding to be logged in.
+    /// Causes reaction on server side: The server is authenticating the sent login name and password. If it's correct,
+    /// the state of the player is proceeding to be logged in.
     /// </remarks>
-    void SendLoginLongPassword(const BYTE* username, uint32_t usernameByteLength, const BYTE* password, uint32_t passwordByteLength, uint32_t tickCount, const BYTE* clientVersion, uint32_t clientVersionByteLength, const BYTE* clientSerial, uint32_t clientSerialByteLength);
+    void SendLoginLongPassword(const BYTE* username, uint32_t usernameByteLength, const BYTE* password,
+                               uint32_t passwordByteLength, uint32_t tickCount, const BYTE* clientVersion,
+                               uint32_t clientVersionByteLength, const BYTE* clientSerial,
+                               uint32_t clientSerialByteLength);
 
     /// <summary>
     /// Sends a LoginShortPassword to this connection.
@@ -99,9 +103,13 @@ public:
     /// <param name="clientSerialByteLength">The length of <paramref name="clientSerial"/> in bytes.
     /// <remarks>
     /// Is sent by the client when: The player tries to log into the game.
-    /// Causes reaction on server side: The server is authenticating the sent login name and password. If it's correct, the state of the player is proceeding to be logged in.
+    /// Causes reaction on server side: The server is authenticating the sent login name and password. If it's correct,
+    /// the state of the player is proceeding to be logged in.
     /// </remarks>
-    void SendLoginShortPassword(const BYTE* username, uint32_t usernameByteLength, const BYTE* password, uint32_t passwordByteLength, uint32_t tickCount, const BYTE* clientVersion, uint32_t clientVersionByteLength, const BYTE* clientSerial, uint32_t clientSerialByteLength);
+    void SendLoginShortPassword(const BYTE* username, uint32_t usernameByteLength, const BYTE* password,
+                                uint32_t passwordByteLength, uint32_t tickCount, const BYTE* clientVersion,
+                                uint32_t clientVersionByteLength, const BYTE* clientSerial,
+                                uint32_t clientSerialByteLength);
 
     /// <summary>
     /// Sends a Login075 to this connection.
@@ -117,9 +125,12 @@ public:
     /// <param name="clientSerialByteLength">The length of <paramref name="clientSerial"/> in bytes.
     /// <remarks>
     /// Is sent by the client when: The player tries to log into the game.
-    /// Causes reaction on server side: The server is authenticating the sent login name and password. If it's correct, the state of the player is proceeding to be logged in.
+    /// Causes reaction on server side: The server is authenticating the sent login name and password. If it's correct,
+    /// the state of the player is proceeding to be logged in.
     /// </remarks>
-    void SendLogin075(const BYTE* username, uint32_t usernameByteLength, const BYTE* password, uint32_t passwordByteLength, uint32_t tickCount, const BYTE* clientVersion, uint32_t clientVersionByteLength, const BYTE* clientSerial, uint32_t clientSerialByteLength);
+    void SendLogin075(const BYTE* username, uint32_t usernameByteLength, const BYTE* password,
+                      uint32_t passwordByteLength, uint32_t tickCount, const BYTE* clientVersion,
+                      uint32_t clientVersionByteLength, const BYTE* clientSerial, uint32_t clientSerialByteLength);
 
     /// <summary>
     /// Sends a LogOut to this connection.
@@ -127,7 +138,9 @@ public:
     /// <param name="type">The type.</param>
     /// <remarks>
     /// Is sent by the client when: When the client wants to leave the game in various ways.
-    /// Causes reaction on server side: Depending on the LogOutType, the game server does several checks and sends a response back to the client. If the request was successful, the game client either closes the game, goes back to server or character selection.
+    /// Causes reaction on server side: Depending on the LogOutType, the game server does several checks and sends a
+    /// response back to the client. If the request was successful, the game client either closes the game, goes back to
+    /// server or character selection.
     /// </remarks>
     void SendLogOut(uint32_t type);
 
@@ -138,7 +151,9 @@ public:
     /// <param name="type">The type.</param>
     /// <remarks>
     /// Is sent by the client when: When the client wants to leave the game in various ways.
-    /// Causes reaction on server side: Depending on the LogOutType, the game server does several checks and sends a response back to the client. If the request was successful, the game client either closes the game, goes back to server or character selection.
+    /// Causes reaction on server side: Depending on the LogOutType, the game server does several checks and sends a
+    /// response back to the client. If the request was successful, the game client either closes the game, goes back to
+    /// server or character selection.
     /// </remarks>
     void SendLogOutByCheatDetection(BYTE param, BYTE type = 4);
 
@@ -158,7 +173,8 @@ public:
     /// <param name="price">The price.</param>
     /// <remarks>
     /// Is sent by the client when: The player wants to set a price of an item which is inside his personal item shop.
-    /// Causes reaction on server side: The price is set for the specified item. Works only if the shop is currently closed.
+    /// Causes reaction on server side: The price is set for the specified item. Works only if the shop is currently
+    /// closed.
     /// </remarks>
     void SendPlayerShopSetItemPrice(BYTE itemSlot, uint32_t price);
 
@@ -168,7 +184,8 @@ public:
     /// <param name="storeName">The store name.</param>
     /// <remarks>
     /// Is sent by the client when: The player wants to open his personal item shop.
-    /// Causes reaction on server side: The personal item shop is opened and the surrounding players are informed about it, including the own player.
+    /// Causes reaction on server side: The personal item shop is opened and the surrounding players are informed about
+    /// it, including the own player.
     /// </remarks>
     void SendPlayerShopOpen(const wchar_t* storeName);
 
@@ -177,7 +194,8 @@ public:
     /// </summary>
     /// <remarks>
     /// Is sent by the client when: The player wants to close his personal item shop.
-    /// Causes reaction on server side: The personal item shop is closed and the surrounding players are informed about it, including the own player.
+    /// Causes reaction on server side: The personal item shop is closed and the surrounding players are informed about
+    /// it, including the own player.
     /// </remarks>
     void SendPlayerShopClose();
 
@@ -200,7 +218,8 @@ public:
     /// <param name="itemSlot">The item slot.</param>
     /// <remarks>
     /// Is sent by the client when: A player wants to buy the item of another players shop.
-    /// Causes reaction on server side: If the buyer has enough money, the item is sold to the player. Both players will get notifications about that.
+    /// Causes reaction on server side: If the buyer has enough money, the item is sold to the player. Both players will
+    /// get notifications about that.
     /// </remarks>
     void SendPlayerShopItemBuyRequest(uint16_t playerId, const wchar_t* playerName, BYTE itemSlot);
 
@@ -220,8 +239,10 @@ public:
     /// </summary>
     /// <param name="itemId">The item id.</param>
     /// <remarks>
-    /// Is sent by the client when: A player requests to pick up an item which is laying on the ground in the near of the players character.
-    /// Causes reaction on server side: If the player is allowed to pick the item up, and is the first player which tried that, it tries to add the item to the inventory. The server sends a response about the result of the request.
+    /// Is sent by the client when: A player requests to pick up an item which is laying on the ground in the near of
+    /// the players character. Causes reaction on server side: If the player is allowed to pick the item up, and is the
+    /// first player which tried that, it tries to add the item to the inventory. The server sends a response about the
+    /// result of the request.
     /// </remarks>
     void SendPickupItemRequest(uint16_t itemId);
 
@@ -230,8 +251,10 @@ public:
     /// </summary>
     /// <param name="itemId">The item id.</param>
     /// <remarks>
-    /// Is sent by the client when: A player requests to pick up an item which is laying on the ground in the near of the players character.
-    /// Causes reaction on server side: If the player is allowed to pick the item up, and is the first player which tried that, it tries to add the item to the inventory. The server sends a response about the result of the request.
+    /// Is sent by the client when: A player requests to pick up an item which is laying on the ground in the near of
+    /// the players character. Causes reaction on server side: If the player is allowed to pick the item up, and is the
+    /// first player which tried that, it tries to add the item to the inventory. The server sends a response about the
+    /// result of the request.
     /// </remarks>
     void SendPickupItemRequest075(uint16_t itemId);
 
@@ -243,7 +266,8 @@ public:
     /// <param name="itemSlot">The item slot.</param>
     /// <remarks>
     /// Is sent by the client when: A player requests to drop on item of his inventory on the ground.
-    /// Causes reaction on server side: When the specified coordinates are valid, and the item is allowed to be dropped, it will be dropped on the ground and the surrounding players are notified.
+    /// Causes reaction on server side: When the specified coordinates are valid, and the item is allowed to be dropped,
+    /// it will be dropped on the ground and the surrounding players are notified.
     /// </remarks>
     void SendDropItemRequest(BYTE targetX, BYTE targetY, BYTE itemSlot);
 
@@ -257,10 +281,11 @@ public:
     /// <param name="toStorage">The to storage.</param>
     /// <param name="toSlot">The to slot.</param>
     /// <remarks>
-    /// Is sent by the client when: A player requests to move an item within or between his available item storage, such as inventory, vault, trade or chaos machine.
-    /// Causes reaction on server side: 
+    /// Is sent by the client when: A player requests to move an item within or between his available item storage, such
+    /// as inventory, vault, trade or chaos machine. Causes reaction on server side:
     /// </remarks>
-    void SendItemMoveRequest(uint32_t fromStorage, BYTE fromSlot, const BYTE* itemData, uint32_t itemDataByteLength, uint32_t toStorage, BYTE toSlot);
+    void SendItemMoveRequest(uint32_t fromStorage, BYTE fromSlot, const BYTE* itemData, uint32_t itemDataByteLength,
+                             uint32_t toStorage, BYTE toSlot);
 
     /// <summary>
     /// Sends a ItemMoveRequestExtended to this connection.
@@ -270,8 +295,8 @@ public:
     /// <param name="toStorage">The to storage.</param>
     /// <param name="toSlot">The to slot.</param>
     /// <remarks>
-    /// Is sent by the client when: A player requests to move an item within or between his available item storage, such as inventory, vault, trade or chaos machine.
-    /// Causes reaction on server side: 
+    /// Is sent by the client when: A player requests to move an item within or between his available item storage, such
+    /// as inventory, vault, trade or chaos machine. Causes reaction on server side:
     /// </remarks>
     void SendItemMoveRequestExtended(uint32_t fromStorage, BYTE fromSlot, uint32_t toStorage, BYTE toSlot);
 
@@ -279,11 +304,12 @@ public:
     /// Sends a ConsumeItemRequest to this connection.
     /// </summary>
     /// <param name="itemSlot">The inventory slot index of the item which should be consumed.</param>
-    /// <param name="targetSlot">If the item has an effect on another item, e.g. upgrading it, this field contains the inventory slot index of the target item.</param>
-    /// <param name="fruitConsumption">Defines how the fruit is used. Only applies, if the the item is a fruit.</param>
-    /// <remarks>
-    /// Is sent by the client when: A player requests to 'consume' an item. This can be a potion which recovers some kind of attribute, or a jewel to upgrade a target item.
-    /// Causes reaction on server side: The server tries to 'consume' the specified item and responses accordingly.
+    /// <param name="targetSlot">If the item has an effect on another item, e.g. upgrading it, this field contains the
+    /// inventory slot index of the target item.</param> <param name="fruitConsumption">Defines how the fruit is used.
+    /// Only applies, if the the item is a fruit.</param> <remarks> Is sent by the client when: A player requests to
+    /// 'consume' an item. This can be a potion which recovers some kind of attribute, or a jewel to upgrade a target
+    /// item. Causes reaction on server side: The server tries to 'consume' the specified item and responses
+    /// accordingly.
     /// </remarks>
     void SendConsumeItemRequest(BYTE itemSlot, BYTE targetSlot, uint32_t fruitConsumption);
 
@@ -291,10 +317,11 @@ public:
     /// Sends a ConsumeItemRequest075 to this connection.
     /// </summary>
     /// <param name="itemSlot">The inventory slot index of the item which should be consumed.</param>
-    /// <param name="targetSlot">If the item has an effect on another item, e.g. upgrading it, this field contains the inventory slot index of the target item.</param>
-    /// <remarks>
-    /// Is sent by the client when: A player requests to 'consume' an item. This can be a potion which recovers some kind of attribute, or a jewel to upgrade a target item.
-    /// Causes reaction on server side: The server tries to 'consume' the specified item and responses accordingly.
+    /// <param name="targetSlot">If the item has an effect on another item, e.g. upgrading it, this field contains the
+    /// inventory slot index of the target item.</param> <remarks> Is sent by the client when: A player requests to
+    /// 'consume' an item. This can be a potion which recovers some kind of attribute, or a jewel to upgrade a target
+    /// item. Causes reaction on server side: The server tries to 'consume' the specified item and responses
+    /// accordingly.
     /// </remarks>
     void SendConsumeItemRequest075(BYTE itemSlot, BYTE targetSlot);
 
@@ -304,7 +331,9 @@ public:
     /// <param name="npcId">The npc id.</param>
     /// <remarks>
     /// Is sent by the client when: A player wants to talk to an NPC.
-    /// Causes reaction on server side: Based on the NPC type, the server sends a response back to the game client. For example, if it's a merchant NPC, it sends back that a merchant dialog should be opened and which items are offered by this NPC.
+    /// Causes reaction on server side: Based on the NPC type, the server sends a response back to the game client. For
+    /// example, if it's a merchant NPC, it sends back that a merchant dialog should be opened and which items are
+    /// offered by this NPC.
     /// </remarks>
     void SendTalkToNpcRequest(uint16_t npcId);
 
@@ -323,7 +352,8 @@ public:
     /// <param name="itemSlot">Item Slot (NPC Store)</param>
     /// <remarks>
     /// Is sent by the client when: A player wants to buy an item from an opened NPC merchant.
-    /// Causes reaction on server side: If the player has enough money, the item is added to the inventory and money is removed. Corresponding messages are sent back to the game client.
+    /// Causes reaction on server side: If the player has enough money, the item is added to the inventory and money is
+    /// removed. Corresponding messages are sent back to the game client.
     /// </remarks>
     void SendBuyItemFromNpcRequest(BYTE itemSlot);
 
@@ -333,29 +363,32 @@ public:
     /// <param name="itemSlot">Item Slot (Inventory)</param>
     /// <remarks>
     /// Is sent by the client when: A player wants to sell an item of his inventory to the opened NPC merchant.
-    /// Causes reaction on server side: The item is sold for money to the NPC. The item is removed from the inventory and money is added. Corresponding messages are sent back to the game client.
+    /// Causes reaction on server side: The item is sold for money to the NPC. The item is removed from the inventory
+    /// and money is added. Corresponding messages are sent back to the game client.
     /// </remarks>
     void SendSellItemToNpcRequest(BYTE itemSlot);
 
     /// <summary>
     /// Sends a RepairItemRequest to this connection.
     /// </summary>
-    /// <param name="itemSlot">Inventory item slot of the target item. If it's 0xFF, the player wants to repair all items - this is only possible with some opened NPC dialogs. Repairing the pet item slot (8) is only possible when the pet trainer npc is opened.</param>
-    /// <param name="isSelfRepair">If the player repairs it over his inventory, it's true. However, a server should never rely on this flag and do his own checks.</param>
-    /// <remarks>
+    /// <param name="itemSlot">Inventory item slot of the target item. If it's 0xFF, the player wants to repair all
+    /// items - this is only possible with some opened NPC dialogs. Repairing the pet item slot (8) is only possible
+    /// when the pet trainer npc is opened.</param> <param name="isSelfRepair">If the player repairs it over his
+    /// inventory, it's true. However, a server should never rely on this flag and do his own checks.</param> <remarks>
     /// Is sent by the client when: A player wants to repair an item of his inventory.
-    /// Causes reaction on server side: The item is repaired if the player has enough money in its inventory. A corresponding response is sent.
+    /// Causes reaction on server side: The item is repaired if the player has enough money in its inventory. A
+    /// corresponding response is sent.
     /// </remarks>
     void SendRepairItemRequest(BYTE itemSlot, BYTE isSelfRepair);
 
     /// <summary>
     /// Sends a WarpCommandRequest to this connection.
     /// </summary>
-    /// <param name="commandKey">A command key, which is generated by a 'secret' algorithm. Not considered in OpenMU.</param>
-    /// <param name="warpInfoIndex">The index of the entry in the warp list.</param>
-    /// <remarks>
-    /// Is sent by the client when: A player selected to warp by selecting an entry in the warp list (configured in game client files).
-    /// Causes reaction on server side: If the player has enough money and is allowed to enter the map, it's getting moved to there.
+    /// <param name="commandKey">A command key, which is generated by a 'secret' algorithm. Not considered in
+    /// OpenMU.</param> <param name="warpInfoIndex">The index of the entry in the warp list.</param> <remarks> Is sent
+    /// by the client when: A player selected to warp by selecting an entry in the warp list (configured in game client
+    /// files). Causes reaction on server side: If the player has enough money and is allowed to enter the map, it's
+    /// getting moved to there.
     /// </remarks>
     void SendWarpCommandRequest(uint32_t commandKey, uint16_t warpInfoIndex);
 
@@ -366,8 +399,10 @@ public:
     /// <param name="teleportTargetX">The teleport target x.</param>
     /// <param name="teleportTargetY">The teleport target y.</param>
     /// <remarks>
-    /// Is sent by the client when: Usually: When the player enters an area on the game map which is configured as gate at the client data files. In the special case of wizards, this packet is also used for the teleport skill. When this is the case, GateNumber is 0 and the target coordinates are specified.
-    /// Causes reaction on server side: If the player is allowed to enter the "gate", it's moved to the corresponding exit gate area.
+    /// Is sent by the client when: Usually: When the player enters an area on the game map which is configured as gate
+    /// at the client data files. In the special case of wizards, this packet is also used for the teleport skill. When
+    /// this is the case, GateNumber is 0 and the target coordinates are specified. Causes reaction on server side: If
+    /// the player is allowed to enter the "gate", it's moved to the corresponding exit gate area.
     /// </remarks>
     void SendEnterGateRequest(uint16_t gateNumber, BYTE teleportTargetX, BYTE teleportTargetY);
 
@@ -378,8 +413,10 @@ public:
     /// <param name="teleportTargetX">The teleport target x.</param>
     /// <param name="teleportTargetY">The teleport target y.</param>
     /// <remarks>
-    /// Is sent by the client when: Usually: When the player enters an area on the game map which is configured as gate at the client data files. In the special case of wizards, this packet is also used for the teleport skill. When this is the case, GateNumber is 0 and the target coordinates are specified.
-    /// Causes reaction on server side: If the player is allowed to enter the "gate", it's moved to the corresponding exit gate area.
+    /// Is sent by the client when: Usually: When the player enters an area on the game map which is configured as gate
+    /// at the client data files. In the special case of wizards, this packet is also used for the teleport skill. When
+    /// this is the case, GateNumber is 0 and the target coordinates are specified. Causes reaction on server side: If
+    /// the player is allowed to enter the "gate", it's moved to the corresponding exit gate area.
     /// </remarks>
     void SendEnterGateRequest075(BYTE gateNumber, BYTE teleportTargetX, BYTE teleportTargetY);
 
@@ -390,8 +427,9 @@ public:
     /// <param name="teleportTargetX">The teleport target x.</param>
     /// <param name="teleportTargetY">The teleport target y.</param>
     /// <remarks>
-    /// Is sent by the client when: A wizard uses the 'Teleport Ally' skill to teleport a party member of his view range to a nearby coordinate.
-    /// Causes reaction on server side: If the target player is in the same party and in the range, it will teleported to the specified coordinates.
+    /// Is sent by the client when: A wizard uses the 'Teleport Ally' skill to teleport a party member of his view range
+    /// to a nearby coordinate. Causes reaction on server side: If the target player is in the same party and in the
+    /// range, it will teleported to the specified coordinates.
     /// </remarks>
     void SendTeleportTarget(uint16_t targetId, BYTE teleportTargetX, BYTE teleportTargetY);
 
@@ -415,14 +453,18 @@ public:
     /// Is sent by the client when: After the client connected to another server due map change.
     /// Causes reaction on server side: The player spawns on the new server.
     /// </remarks>
-    void SendServerChangeAuthentication(const BYTE* accountXor3, uint32_t accountXor3ByteLength, const BYTE* characterNameXor3, uint32_t characterNameXor3ByteLength, uint32_t authCode1, uint32_t authCode2, uint32_t authCode3, uint32_t authCode4, uint32_t tickCount, const BYTE* clientVersion, uint32_t clientVersionByteLength, const BYTE* clientSerial, uint32_t clientSerialByteLength);
+    void SendServerChangeAuthentication(const BYTE* accountXor3, uint32_t accountXor3ByteLength,
+                                        const BYTE* characterNameXor3, uint32_t characterNameXor3ByteLength,
+                                        uint32_t authCode1, uint32_t authCode2, uint32_t authCode3, uint32_t authCode4,
+                                        uint32_t tickCount, const BYTE* clientVersion, uint32_t clientVersionByteLength,
+                                        const BYTE* clientSerial, uint32_t clientSerialByteLength);
 
     /// <summary>
     /// Sends a CastleSiegeStatusRequest to this connection.
     /// </summary>
     /// <remarks>
-    /// Is sent by the client when: The player opened a castle siege npc and requests the current castle siege status information.
-    /// Causes reaction on server side: The server returns the status of the castle siege event.
+    /// Is sent by the client when: The player opened a castle siege npc and requests the current castle siege status
+    /// information. Causes reaction on server side: The server returns the status of the castle siege event.
     /// </remarks>
     void SendCastleSiegeStatusRequest();
 
@@ -449,8 +491,9 @@ public:
     /// Sends a CastleSiegeRegistrationStateRequest to this connection.
     /// </summary>
     /// <remarks>
-    /// Is sent by the client when: The player opened a castle siege npc and requests the state about the own registration.
-    /// Causes reaction on server side: The server returns the state of the castle siege registration, which includes the number of submitted guild marks.
+    /// Is sent by the client when: The player opened a castle siege npc and requests the state about the own
+    /// registration. Causes reaction on server side: The server returns the state of the castle siege registration,
+    /// which includes the number of submitted guild marks.
     /// </remarks>
     void SendCastleSiegeRegistrationStateRequest();
 
@@ -459,8 +502,9 @@ public:
     /// </summary>
     /// <param name="itemIndex">The item index.</param>
     /// <remarks>
-    /// Is sent by the client when: The player opened a castle siege npc and adds a guild mark to his guilds registration.
-    /// Causes reaction on server side: The server returns a response, which includes the number of submitted guild marks.
+    /// Is sent by the client when: The player opened a castle siege npc and adds a guild mark to his guilds
+    /// registration. Causes reaction on server side: The server returns a response, which includes the number of
+    /// submitted guild marks.
     /// </remarks>
     void SendCastleSiegeMarkRegistration(BYTE itemIndex);
 
@@ -470,8 +514,8 @@ public:
     /// <param name="npcNumber">The npc number.</param>
     /// <param name="npcIndex">The npc index.</param>
     /// <remarks>
-    /// Is sent by the client when: The player opened a castle siege npc and requests to buy a gate or statue for a specific position (index)..
-    /// Causes reaction on server side: The server returns a response.
+    /// Is sent by the client when: The player opened a castle siege npc and requests to buy a gate or statue for a
+    /// specific position (index).. Causes reaction on server side: The server returns a response.
     /// </remarks>
     void SendCastleSiegeDefenseBuyRequest(uint32_t npcNumber, uint32_t npcIndex);
 
@@ -481,8 +525,8 @@ public:
     /// <param name="npcNumber">The npc number.</param>
     /// <param name="npcIndex">The npc index.</param>
     /// <remarks>
-    /// Is sent by the client when: The player opened a castle siege npc and requests to repair a gate or statue at a specific position (index)..
-    /// Causes reaction on server side: The server returns a response.
+    /// Is sent by the client when: The player opened a castle siege npc and requests to repair a gate or statue at a
+    /// specific position (index).. Causes reaction on server side: The server returns a response.
     /// </remarks>
     void SendCastleSiegeDefenseRepairRequest(uint32_t npcNumber, uint32_t npcIndex);
 
@@ -494,10 +538,11 @@ public:
     /// <param name="npcUpgradeType">The npc upgrade type.</param>
     /// <param name="npcUpgradeValue">The npc upgrade value.</param>
     /// <remarks>
-    /// Is sent by the client when: The player opened a castle siege npc and requests to upgrade a gate or statue at a specific position (index)..
-    /// Causes reaction on server side: The server returns a response.
+    /// Is sent by the client when: The player opened a castle siege npc and requests to upgrade a gate or statue at a
+    /// specific position (index).. Causes reaction on server side: The server returns a response.
     /// </remarks>
-    void SendCastleSiegeDefenseUpgradeRequest(uint32_t npcNumber, uint32_t npcIndex, uint32_t npcUpgradeType, uint32_t npcUpgradeValue);
+    void SendCastleSiegeDefenseUpgradeRequest(uint32_t npcNumber, uint32_t npcIndex, uint32_t npcUpgradeType,
+                                              uint32_t npcUpgradeValue);
 
     /// <summary>
     /// Sends a CastleSiegeTaxInfoRequest to this connection.
@@ -558,8 +603,8 @@ public:
     /// </summary>
     /// <param name="isPublic">The is public.</param>
     /// <remarks>
-    /// Is sent by the client when: A guild member of the castle owners wants to enter the hunting zone (e.g. Land of Trials).
-    /// Causes reaction on server side: The server changes the entrance setting of the hunting zone.
+    /// Is sent by the client when: A guild member of the castle owners wants to enter the hunting zone (e.g. Land of
+    /// Trials). Causes reaction on server side: The server changes the entrance setting of the hunting zone.
     /// </remarks>
     void SendCastleSiegeHuntingZoneEntranceSetting(BYTE isPublic);
 
@@ -585,8 +630,8 @@ public:
     /// Sends a CastleSiegeRegisteredGuildsListRequest to this connection.
     /// </summary>
     /// <remarks>
-    /// Is sent by the client when: The guild master opened an npc and needs the list of registered guilds for the next siege.
-    /// Causes reaction on server side: The server returns the list of guilds for the next siege.
+    /// Is sent by the client when: The guild master opened an npc and needs the list of registered guilds for the next
+    /// siege. Causes reaction on server side: The server returns the list of guilds for the next siege.
     /// </remarks>
     void SendCastleSiegeRegisteredGuildsListRequest();
 
@@ -594,8 +639,9 @@ public:
     /// Sends a CastleOwnerListRequest to this connection.
     /// </summary>
     /// <remarks>
-    /// Is sent by the client when: The guild master opened an npc and needs the list of current guilds which are the castle owners.
-    /// Causes reaction on server side: The server returns the list of guilds which are the castle owners.
+    /// Is sent by the client when: The guild master opened an npc and needs the list of current guilds which are the
+    /// castle owners. Causes reaction on server side: The server returns the list of guilds which are the castle
+    /// owners.
     /// </remarks>
     void SendCastleOwnerListRequest();
 
@@ -634,8 +680,9 @@ public:
     /// </summary>
     /// <param name="money">The money.</param>
     /// <remarks>
-    /// Is sent by the client when: A guild member of the castle owners wants to enter the hunting zone (e.g. Land of Trials).
-    /// Causes reaction on server side: The server takes the entrance money, puts it into the tax wallet and warps the player to the hunting zone.
+    /// Is sent by the client when: A guild member of the castle owners wants to enter the hunting zone (e.g. Land of
+    /// Trials). Causes reaction on server side: The server takes the entrance money, puts it into the tax wallet and
+    /// warps the player to the hunting zone.
     /// </remarks>
     void SendCastleSiegeHuntingZoneEnterRequest(uint32_t money);
 
@@ -663,7 +710,8 @@ public:
     /// </summary>
     /// <remarks>
     /// Is sent by the client when: A player opens an item crafting dialog, e.g. the chaos machine.
-    /// Causes reaction on server side: The server returns data about the state of the benefit of the crywolf event. If it was won before, the chaos rate wents up a few percent.
+    /// Causes reaction on server side: The server returns data about the state of the benefit of the crywolf event. If
+    /// it was won before, the chaos rate wents up a few percent.
     /// </remarks>
     void SendCrywolfChaosRateBenefitRequest();
 
@@ -680,8 +728,9 @@ public:
     /// Sends a EnterOnWerewolfRequest to this connection.
     /// </summary>
     /// <remarks>
-    /// Is sent by the client when: A player is running the quest "Infiltrate The Barracks of Balgass" (nr. 5), talking to the Werewolf npc in Crywolf.
-    /// Causes reaction on server side: It will warp the player to the map 'Barracks of Balgass' where the required monsters have to be killed to proceed with the quest.
+    /// Is sent by the client when: A player is running the quest "Infiltrate The Barracks of Balgass" (nr. 5), talking
+    /// to the Werewolf npc in Crywolf. Causes reaction on server side: It will warp the player to the map 'Barracks of
+    /// Balgass' where the required monsters have to be killed to proceed with the quest.
     /// </remarks>
     void SendEnterOnWerewolfRequest();
 
@@ -689,8 +738,9 @@ public:
     /// Sends a EnterOnGatekeeperRequest to this connection.
     /// </summary>
     /// <remarks>
-    /// Is sent by the client when: A player is running the quest "Into the 'Darkness' Zone" (nr. 6), talking to the gatekeeper npc in 'Barracks of Balgass'.
-    /// Causes reaction on server side: It will warp the player to the map 'Balgass Refuge' where the required monsters have to be killed to proceed with the quest.
+    /// Is sent by the client when: A player is running the quest "Into the 'Darkness' Zone" (nr. 6), talking to the
+    /// gatekeeper npc in 'Barracks of Balgass'. Causes reaction on server side: It will warp the player to the map
+    /// 'Balgass Refuge' where the required monsters have to be killed to proceed with the quest.
     /// </remarks>
     void SendEnterOnGatekeeperRequest();
 
@@ -707,8 +757,8 @@ public:
     /// Sends a MoveToDeviasBySnowmanRequest to this connection.
     /// </summary>
     /// <remarks>
-    /// Is sent by the client when: The player talks to the npc "Snowman" in Santa Village and requests to warp back to devias.
-    /// Causes reaction on server side: The player will be warped back to Devias.
+    /// Is sent by the client when: The player talks to the npc "Snowman" in Santa Village and requests to warp back to
+    /// devias. Causes reaction on server side: The player will be warped back to Devias.
     /// </remarks>
     void SendMoveToDeviasBySnowmanRequest();
 
@@ -752,8 +802,9 @@ public:
     /// Sends a CashShopPointInfoRequest to this connection.
     /// </summary>
     /// <remarks>
-    /// Is sent by the client when: The client needs information about how many cash shop points (WCoinC, WCoinP, GoblinPoints) are available to the player.
-    /// Causes reaction on server side: The server returns the cash shop points information.
+    /// Is sent by the client when: The client needs information about how many cash shop points (WCoinC, WCoinP,
+    /// GoblinPoints) are available to the player. Causes reaction on server side: The server returns the cash shop
+    /// points information.
     /// </remarks>
     void SendCashShopPointInfoRequest();
 
@@ -763,7 +814,8 @@ public:
     /// <param name="isClosed">The is closed.</param>
     /// <remarks>
     /// Is sent by the client when: The player opens or closes the cash shop dialog.
-    /// Causes reaction on server side: In case of opening, the server returns if the cash shop is available. If the player is in the safezone, it's not.
+    /// Causes reaction on server side: In case of opening, the server returns if the cash shop is available. If the
+    /// player is in the safezone, it's not.
     /// </remarks>
     void SendCashShopOpenState(BYTE isClosed);
 
@@ -780,7 +832,8 @@ public:
     /// Is sent by the client when: The player wants to buy an item in the cash shop.
     /// Causes reaction on server side: The item is bought and added to the cash shop item storage of the player.
     /// </remarks>
-    void SendCashShopItemBuyRequest(uint32_t packageMainIndex, uint32_t category, uint32_t productMainIndex, uint16_t itemIndex, uint32_t coinIndex, BYTE mileageFlag);
+    void SendCashShopItemBuyRequest(uint32_t packageMainIndex, uint32_t category, uint32_t productMainIndex,
+                                    uint16_t itemIndex, uint32_t coinIndex, BYTE mileageFlag);
 
     /// <summary>
     /// Sends a CashShopItemGiftRequest to this connection.
@@ -795,9 +848,12 @@ public:
     /// <param name="giftText">The gift text.</param>
     /// <remarks>
     /// Is sent by the client when: The player wants to send a gift to another player.
-    /// Causes reaction on server side: The server buys the item with the credits of the player and sends it as gift to the other player.
+    /// Causes reaction on server side: The server buys the item with the credits of the player and sends it as gift to
+    /// the other player.
     /// </remarks>
-    void SendCashShopItemGiftRequest(uint32_t packageMainIndex, uint32_t category, uint32_t productMainIndex, uint16_t itemIndex, uint32_t coinIndex, BYTE mileageFlag, const wchar_t* giftReceiverName, const wchar_t* giftText);
+    void SendCashShopItemGiftRequest(uint32_t packageMainIndex, uint32_t category, uint32_t productMainIndex,
+                                     uint16_t itemIndex, uint32_t coinIndex, BYTE mileageFlag,
+                                     const wchar_t* giftReceiverName, const wchar_t* giftText);
 
     /// <summary>
     /// Sends a CashShopStorageListRequest to this connection.
@@ -806,7 +862,8 @@ public:
     /// <param name="inventoryType">The inventory type.</param>
     /// <remarks>
     /// Is sent by the client when: The player opened the cash shop dialog or used paging of the storage.
-    /// Causes reaction on server side: In case of opening, the server returns if the cash shop is available. If the player is in the safezone, it's not.
+    /// Causes reaction on server side: In case of opening, the server returns if the cash shop is available. If the
+    /// player is in the safezone, it's not.
     /// </remarks>
     void SendCashShopStorageListRequest(uint32_t pageIndex, BYTE inventoryType);
 
@@ -833,7 +890,8 @@ public:
     /// Is sent by the client when: The player wants to get or consume an item which is in the cash shop storage.
     /// Causes reaction on server side: The item is applied or added to the inventory.
     /// </remarks>
-    void SendCashShopStorageItemConsumeRequest(uint32_t baseItemCode, uint32_t mainItemCode, uint16_t itemIndex, BYTE productType);
+    void SendCashShopStorageItemConsumeRequest(uint32_t baseItemCode, uint32_t mainItemCode, uint16_t itemIndex,
+                                               BYTE productType);
 
     /// <summary>
     /// Sends a CashShopEventItemListRequest to this connection.
@@ -851,7 +909,8 @@ public:
     /// <param name="pin">The pin.</param>
     /// <remarks>
     /// Is sent by the client when: The player wants to unlock the protected vault with a pin.
-    /// Causes reaction on server side: The vault lock state on the server is updated. VaultProtectionInformation is sent as response.
+    /// Causes reaction on server side: The vault lock state on the server is updated. VaultProtectionInformation is
+    /// sent as response.
     /// </remarks>
     void SendUnlockVault(uint16_t pin);
 
@@ -904,8 +963,9 @@ public:
     /// <param name="mixingStackSize">The mixing stack size.</param>
     /// <param name="unmixingSourceSlot">The unmixing source slot.</param>
     /// <remarks>
-    /// Is sent by the client when: When a player has the Lahap npc dialog open and wants to combine or disband jewel stacks.
-    /// Causes reaction on server side: If successful, the inventory is updated and the game client gets corresponding responses.
+    /// Is sent by the client when: When a player has the Lahap npc dialog open and wants to combine or disband jewel
+    /// stacks. Causes reaction on server side: If successful, the inventory is updated and the game client gets
+    /// corresponding responses.
     /// </remarks>
     void SendLahapJewelMixRequest(uint32_t operation, uint32_t item, uint32_t mixingStackSize, BYTE unmixingSourceSlot);
 
@@ -914,7 +974,8 @@ public:
     /// </summary>
     /// <remarks>
     /// Is sent by the client when: When the player opens the party menu in the game client.
-    /// Causes reaction on server side: If the player is in a party, the server sends back a list with information about all players of the party.
+    /// Causes reaction on server side: If the player is in a party, the server sends back a list with information about
+    /// all players of the party.
     /// </remarks>
     void SendPartyListRequest();
 
@@ -923,8 +984,9 @@ public:
     /// </summary>
     /// <param name="playerIndex">The player index.</param>
     /// <remarks>
-    /// Is sent by the client when: A party master wants to kick another player from his party, or when a player wants to kick himself from his party.
-    /// Causes reaction on server side: If the sending player is the party master, or the player wants to kick himself, the target player is removed from the party.
+    /// Is sent by the client when: A party master wants to kick another player from his party, or when a player wants
+    /// to kick himself from his party. Causes reaction on server side: If the sending player is the party master, or
+    /// the player wants to kick himself, the target player is removed from the party.
     /// </remarks>
     void SendPartyPlayerKickRequest(BYTE playerIndex);
 
@@ -934,7 +996,8 @@ public:
     /// <param name="targetPlayerId">The target player id.</param>
     /// <remarks>
     /// Is sent by the client when: A party master wants to invite another player to his party.
-    /// Causes reaction on server side: If the requesting player has no party, or is the party master, a request is sent to the target player.
+    /// Causes reaction on server side: If the requesting player has no party, or is the party master, a request is sent
+    /// to the target player.
     /// </remarks>
     void SendPartyInviteRequest(uint16_t targetPlayerId);
 
@@ -944,8 +1007,8 @@ public:
     /// <param name="accepted">The accepted.</param>
     /// <param name="requesterId">The requester id.</param>
     /// <remarks>
-    /// Is sent by the client when: A player was invited by another player to join a party and this player sent the response back.
-    /// Causes reaction on server side: If the sender accepts the request, it's added to the party.
+    /// Is sent by the client when: A player was invited by another player to join a party and this player sent the
+    /// response back. Causes reaction on server side: If the sender accepts the request, it's added to the party.
     /// </remarks>
     void SendPartyInviteResponse(BYTE accepted, uint16_t requesterId);
 
@@ -956,13 +1019,13 @@ public:
     /// <param name="sourceY">The source y.</param>
     /// <param name="stepCount">The step count.</param>
     /// <param name="targetRotation">The target rotation.</param>
-    /// <param name="directions">The directions of the walking path. The target is calculated by taking the source coordinates and applying the directions to it.</param>
-    /// <param name="directionsByteLength">The length of <paramref name="directions"/> in bytes.
-    /// <remarks>
-    /// Is sent by the client when: A player wants to walk on the game map.
-    /// Causes reaction on server side: The player gets moved on the map, visible for other surrounding players.
+    /// <param name="directions">The directions of the walking path. The target is calculated by taking the source
+    /// coordinates and applying the directions to it.</param> <param name="directionsByteLength">The length of
+    /// <paramref name="directions"/> in bytes. <remarks> Is sent by the client when: A player wants to walk on the game
+    /// map. Causes reaction on server side: The player gets moved on the map, visible for other surrounding players.
     /// </remarks>
-    void SendWalkRequest(BYTE sourceX, BYTE sourceY, BYTE stepCount, BYTE targetRotation, const BYTE* directions, uint32_t directionsByteLength);
+    void SendWalkRequest(BYTE sourceX, BYTE sourceY, BYTE stepCount, BYTE targetRotation, const BYTE* directions,
+                         uint32_t directionsByteLength);
 
     /// <summary>
     /// Sends a WalkRequest075 to this connection.
@@ -971,13 +1034,13 @@ public:
     /// <param name="sourceY">The source y.</param>
     /// <param name="stepCount">The step count.</param>
     /// <param name="targetRotation">The target rotation.</param>
-    /// <param name="directions">The directions of the walking path. The target is calculated by taking the source coordinates and applying the directions to it.</param>
-    /// <param name="directionsByteLength">The length of <paramref name="directions"/> in bytes.
-    /// <remarks>
-    /// Is sent by the client when: A player wants to walk on the game map.
-    /// Causes reaction on server side: The player gets moved on the map, visible for other surrounding players.
+    /// <param name="directions">The directions of the walking path. The target is calculated by taking the source
+    /// coordinates and applying the directions to it.</param> <param name="directionsByteLength">The length of
+    /// <paramref name="directions"/> in bytes. <remarks> Is sent by the client when: A player wants to walk on the game
+    /// map. Causes reaction on server side: The player gets moved on the map, visible for other surrounding players.
     /// </remarks>
-    void SendWalkRequest075(BYTE sourceX, BYTE sourceY, BYTE stepCount, BYTE targetRotation, const BYTE* directions, uint32_t directionsByteLength);
+    void SendWalkRequest075(BYTE sourceX, BYTE sourceY, BYTE stepCount, BYTE targetRotation, const BYTE* directions,
+                            uint32_t directionsByteLength);
 
     /// <summary>
     /// Sends a InstantMoveRequest to this connection.
@@ -986,7 +1049,8 @@ public:
     /// <param name="targetY">The target y.</param>
     /// <remarks>
     /// Is sent by the client when: It's sent when the player performs specific skills.
-    /// Causes reaction on server side: Usually, the player is moved instantly to the specified coordinates on the current map. In OpenMU, this request is not handled, because it allows hackers to "teleport" to any coordinates.
+    /// Causes reaction on server side: Usually, the player is moved instantly to the specified coordinates on the
+    /// current map. In OpenMU, this request is not handled, because it allows hackers to "teleport" to any coordinates.
     /// </remarks>
     void SendInstantMoveRequest(BYTE targetX, BYTE targetY);
 
@@ -1006,8 +1070,9 @@ public:
     /// </summary>
     /// <param name="language">The language.</param>
     /// <remarks>
-    /// Is sent by the client when: After a successful login or after the player decided to leave the game world to go back to the character selection screen.
-    /// Causes reaction on server side: The server sends the character list with all available characters.
+    /// Is sent by the client when: After a successful login or after the player decided to leave the game world to go
+    /// back to the character selection screen. Causes reaction on server side: The server sends the character list with
+    /// all available characters.
     /// </remarks>
     void SendRequestCharacterList(BYTE language);
 
@@ -1017,8 +1082,9 @@ public:
     /// <param name="name">The name of the character which should be created.</param>
     /// <param name="class_">The character class of the character which should be created.</param>
     /// <remarks>
-    /// Is sent by the client when: The game client is at the character selection screen and the player requests to add a new character.
-    /// Causes reaction on server side: The server checks if the player is allowed to create the character and sends a response back.
+    /// Is sent by the client when: The game client is at the character selection screen and the player requests to add
+    /// a new character. Causes reaction on server side: The server checks if the player is allowed to create the
+    /// character and sends a response back.
     /// </remarks>
     void SendCreateCharacter(const wchar_t* name, uint32_t class_);
 
@@ -1026,10 +1092,13 @@ public:
     /// Sends a DeleteCharacter to this connection.
     /// </summary>
     /// <param name="name">The name of the character which should be deleted.</param>
-    /// <param name="securityCode">A security code (7 bytes long). Some game clients/servers also expect to transmit the account password (up to 20 bytes long) here. In OpenMU, we work with the security here, but are not limiting to a length of 7 bytes.</param>
-    /// <remarks>
-    /// Is sent by the client when: The game client is at the character selection screen and the player requests to delete an existing character.
-    /// Causes reaction on server side: The server checks if the player transmitted the correct security code and if the character actually exists. If all is valid, it deletes the character from the account. It then sends a response with a result code back to the game client.
+    /// <param name="securityCode">A security code (7 bytes long). Some game clients/servers also expect to transmit the
+    /// account password (up to 20 bytes long) here. In OpenMU, we work with the security here, but are not limiting to
+    /// a length of 7 bytes.</param> <remarks> Is sent by the client when: The game client is at the character selection
+    /// screen and the player requests to delete an existing character. Causes reaction on server side: The server
+    /// checks if the player transmitted the correct security code and if the character actually exists. If all is
+    /// valid, it deletes the character from the account. It then sends a response with a result code back to the game
+    /// client.
     /// </remarks>
     void SendDeleteCharacter(const wchar_t* name, const wchar_t* securityCode);
 
@@ -1038,8 +1107,8 @@ public:
     /// </summary>
     /// <param name="name">The name of the character with which the player wants to join the game world</param>
     /// <remarks>
-    /// Is sent by the client when: The player selects a character to enter the game world on the character selection screen.
-    /// Causes reaction on server side: The player joins the game world with the specified character.
+    /// Is sent by the client when: The player selects a character to enter the game world on the character selection
+    /// screen. Causes reaction on server side: The player joins the game world with the specified character.
     /// </remarks>
     void SendSelectCharacter(const wchar_t* name);
 
@@ -1048,8 +1117,9 @@ public:
     /// </summary>
     /// <param name="name">The name.</param>
     /// <remarks>
-    /// Is sent by the client when: The player focuses (clicks on it) a character with which he plans to enter the game world on the character selection screen.
-    /// Causes reaction on server side: The server checks if this character exists and sends a response back. If successful, the game client highlights the focused character.
+    /// Is sent by the client when: The player focuses (clicks on it) a character with which he plans to enter the game
+    /// world on the character selection screen. Causes reaction on server side: The server checks if this character
+    /// exists and sends a response back. If successful, the game client highlights the focused character.
     /// </remarks>
     void SendFocusCharacter(const wchar_t* name);
 
@@ -1058,8 +1128,9 @@ public:
     /// </summary>
     /// <param name="statType">The stat type.</param>
     /// <remarks>
-    /// Is sent by the client when: The player decides to add a stat point to a specific stat type, by pressing a plus-button in the character info menu.
-    /// Causes reaction on server side: The server checks if a level-up-point is available. If yes, it adds the point to the specified stat type. It sends a response back to the client.
+    /// Is sent by the client when: The player decides to add a stat point to a specific stat type, by pressing a
+    /// plus-button in the character info menu. Causes reaction on server side: The server checks if a level-up-point is
+    /// available. If yes, it adds the point to the specified stat type. It sends a response back to the client.
     /// </remarks>
     void SendIncreaseCharacterStatPoint(uint32_t statType);
 
@@ -1076,8 +1147,9 @@ public:
     /// Sends a ClientReadyAfterMapChange to this connection.
     /// </summary>
     /// <remarks>
-    /// Is sent by the client when: After the server sent a map change message and the client has initialized the game map visualization.
-    /// Causes reaction on server side: The character is added to the internal game map and ready to interact with other entities.
+    /// Is sent by the client when: After the server sent a map change message and the client has initialized the game
+    /// map visualization. Causes reaction on server side: The character is added to the internal game map and ready to
+    /// interact with other entities.
     /// </remarks>
     void SendClientReadyAfterMapChange();
 
@@ -1097,8 +1169,9 @@ public:
     /// </summary>
     /// <param name="skillId">The skill id.</param>
     /// <remarks>
-    /// Is sent by the client when: The player wants to add or increase the level of a specific master skill of the master skill tree.
-    /// Causes reaction on server side: Adds or increases the master skill level of the specified skill, if the character is allowed to do that. A response is sent back to the client.
+    /// Is sent by the client when: The player wants to add or increase the level of a specific master skill of the
+    /// master skill tree. Causes reaction on server side: Adds or increases the master skill level of the specified
+    /// skill, if the character is allowed to do that. A response is sent back to the client.
     /// </remarks>
     void SendAddMasterSkillPoint(uint16_t skillId);
 
@@ -1110,7 +1183,8 @@ public:
     /// <param name="lookingDirection">The looking direction.</param>
     /// <remarks>
     /// Is sent by the client when: A player attacks a target without using a skill.
-    /// Causes reaction on server side: Damage is calculated and the target is hit, if the attack was successful. A response is sent back with the caused damage, and all surrounding players get an animation message.
+    /// Causes reaction on server side: Damage is calculated and the target is hit, if the attack was successful. A
+    /// response is sent back with the caused damage, and all surrounding players get an animation message.
     /// </remarks>
     void SendHitRequest(uint16_t targetId, BYTE attackAnimation, BYTE lookingDirection);
 
@@ -1121,7 +1195,8 @@ public:
     /// <param name="targetId">The target id.</param>
     /// <remarks>
     /// Is sent by the client when: A player performs a skill with a target, e.g. attacking or buffing.
-    /// Causes reaction on server side: Damage is calculated and the target is hit, if the attack was successful. A response is sent back with the caused damage, and all surrounding players get an animation message.
+    /// Causes reaction on server side: Damage is calculated and the target is hit, if the attack was successful. A
+    /// response is sent back with the caused damage, and all surrounding players get an animation message.
     /// </remarks>
     void SendTargetedSkill(uint16_t skillId, uint16_t targetId);
 
@@ -1132,7 +1207,8 @@ public:
     /// <param name="targetId">The target id.</param>
     /// <remarks>
     /// Is sent by the client when: A player performs a skill with a target, e.g. attacking or buffing.
-    /// Causes reaction on server side: Damage is calculated and the target is hit, if the attack was successful. A response is sent back with the caused damage, and all surrounding players get an animation message.
+    /// Causes reaction on server side: Damage is calculated and the target is hit, if the attack was successful. A
+    /// response is sent back with the caused damage, and all surrounding players get an animation message.
     /// </remarks>
     void SendTargetedSkill075(BYTE skillIndex, uint16_t targetId);
 
@@ -1143,7 +1219,8 @@ public:
     /// <param name="targetId">The target id.</param>
     /// <remarks>
     /// Is sent by the client when: A player performs a skill with a target, e.g. attacking or buffing.
-    /// Causes reaction on server side: Damage is calculated and the target is hit, if the attack was successful. A response is sent back with the caused damage, and all surrounding players get an animation message.
+    /// Causes reaction on server side: Damage is calculated and the target is hit, if the attack was successful. A
+    /// response is sent back with the caused damage, and all surrounding players get an animation message.
     /// </remarks>
     void SendTargetedSkill095(BYTE skillIndex, uint16_t targetId);
 
@@ -1153,8 +1230,9 @@ public:
     /// <param name="skillId">The skill id.</param>
     /// <param name="playerId">The player id.</param>
     /// <remarks>
-    /// Is sent by the client when: A player cancels a specific magic effect of a skill, usually 'Infinity Arrow' and 'Wizardy Enhance'.
-    /// Causes reaction on server side: The effect is cancelled and an update is sent to the player and all surrounding players.
+    /// Is sent by the client when: A player cancels a specific magic effect of a skill, usually 'Infinity Arrow' and
+    /// 'Wizardy Enhance'. Causes reaction on server side: The effect is cancelled and an update is sent to the player
+    /// and all surrounding players.
     /// </remarks>
     void SendMagicEffectCancelRequest(uint16_t skillId, uint16_t playerId);
 
@@ -1166,12 +1244,14 @@ public:
     /// <param name="targetY">The target y.</param>
     /// <param name="rotation">The rotation.</param>
     /// <param name="extraTargetId">The extra target id.</param>
-    /// <param name="animationCounter">Animation counter which acts as a reference to the previously sent Area Skill Animation packet.</param>
-    /// <remarks>
-    /// Is sent by the client when: A player is performing an skill which affects an area of the map.
-    /// Causes reaction on server side: It's forwarded to all surrounding players, so that the animation is visible. In the original server implementation, no damage is done yet for attack skills - there are separate hit packets.
+    /// <param name="animationCounter">Animation counter which acts as a reference to the previously sent Area Skill
+    /// Animation packet.</param> <remarks> Is sent by the client when: A player is performing an skill which affects an
+    /// area of the map. Causes reaction on server side: It's forwarded to all surrounding players, so that the
+    /// animation is visible. In the original server implementation, no damage is done yet for attack skills - there are
+    /// separate hit packets.
     /// </remarks>
-    void SendAreaSkill(uint16_t skillId, BYTE targetX, BYTE targetY, BYTE rotation, uint16_t extraTargetId, BYTE animationCounter);
+    void SendAreaSkill(uint16_t skillId, BYTE targetX, BYTE targetY, BYTE rotation, uint16_t extraTargetId,
+                       BYTE animationCounter);
 
     /// <summary>
     /// Sends a AreaSkill075 to this connection.
@@ -1182,7 +1262,8 @@ public:
     /// <param name="rotation">The rotation.</param>
     /// <remarks>
     /// Is sent by the client when: A player is performing an skill which affects an area of the map.
-    /// Causes reaction on server side: It's forwarded to all surrounding players, so that the animation is visible. In the original server implementation, no damage is done yet for attack skills - there are separate hit packets.
+    /// Causes reaction on server side: It's forwarded to all surrounding players, so that the animation is visible. In
+    /// the original server implementation, no damage is done yet for attack skills - there are separate hit packets.
     /// </remarks>
     void SendAreaSkill075(BYTE skillIndex, BYTE targetX, BYTE targetY, BYTE rotation);
 
@@ -1195,7 +1276,8 @@ public:
     /// <param name="rotation">The rotation.</param>
     /// <remarks>
     /// Is sent by the client when: A player is performing an skill which affects an area of the map.
-    /// Causes reaction on server side: It's forwarded to all surrounding players, so that the animation is visible. In the original server implementation, no damage is done yet for attack skills - there are separate hit packets.
+    /// Causes reaction on server side: It's forwarded to all surrounding players, so that the animation is visible. In
+    /// the original server implementation, no damage is done yet for attack skills - there are separate hit packets.
     /// </remarks>
     void SendAreaSkill095(BYTE skillIndex, BYTE targetX, BYTE targetY, BYTE rotation);
 
@@ -1206,7 +1288,8 @@ public:
     /// <param name="targetId">The target id.</param>
     /// <remarks>
     /// Is sent by the client when: A player performs a skill with a target, e.g. attacking or buffing.
-    /// Causes reaction on server side: Damage is calculated and the target is hit, if the attack was successful. A response is sent back with the caused damage, and all surrounding players get an animation message.
+    /// Causes reaction on server side: Damage is calculated and the target is hit, if the attack was successful. A
+    /// response is sent back with the caused damage, and all surrounding players get an animation message.
     /// </remarks>
     void SendRageAttackRequest(uint16_t skillId, uint16_t targetId);
 
@@ -1217,7 +1300,8 @@ public:
     /// <param name="targetId">The target id.</param>
     /// <remarks>
     /// Is sent by the client when: A player (rage fighter) performs the dark side skill on a target.
-    /// Causes reaction on server side: The targets (up to 5) are determined and sent back to the player with the RageAttackRangeResponse.
+    /// Causes reaction on server side: The targets (up to 5) are determined and sent back to the player with the
+    /// RageAttackRangeResponse.
     /// </remarks>
     void SendRageAttackRangeRequest(uint16_t skillId, uint16_t targetId);
 
@@ -1236,7 +1320,8 @@ public:
     /// <param name="newState">The new state.</param>
     /// <remarks>
     /// Is sent by the client when: The player presses the trade button.
-    /// Causes reaction on server side: The state change is forwarded to the trade partner. If both players press the trade button at the same time, the server will try to complete the trade by exchanging the items and money.
+    /// Causes reaction on server side: The state change is forwarded to the trade partner. If both players press the
+    /// trade button at the same time, the server will try to complete the trade by exchanging the items and money.
     /// </remarks>
     void SendTradeButtonStateChange(uint32_t newState);
 
@@ -1256,7 +1341,8 @@ public:
     /// <param name="tradeAccepted">The trade accepted.</param>
     /// <remarks>
     /// Is sent by the client when: A requested player responded to a trade request of another player.
-    /// Causes reaction on server side: When the trade request was accepted, the server tries to open a new trade and sends corresponding responses to both players. 
+    /// Causes reaction on server side: When the trade request was accepted, the server tries to open a new trade and
+    /// sends corresponding responses to both players.
     /// </remarks>
     void SendTradeRequestResponse(BYTE tradeAccepted);
 
@@ -1266,7 +1352,9 @@ public:
     /// <param name="amount">The amount.</param>
     /// <remarks>
     /// Is sent by the client when: A player requests to set an amount of money in the trade.
-    /// Causes reaction on server side: It's taken from the available money of the inventory. If the new money amount is lower than the amount which was set before, it's added back to the inventory. The trade partner is informed about any change.
+    /// Causes reaction on server side: It's taken from the available money of the inventory. If the new money amount is
+    /// lower than the amount which was set before, it's added back to the inventory. The trade partner is informed
+    /// about any change.
     /// </remarks>
     void SendSetTradeMoney(uint32_t amount);
 
@@ -1301,9 +1389,11 @@ public:
     /// <param name="message">The message.</param>
     /// <remarks>
     /// Is sent by the client when: A player wants to send a letter to another players character.
-    /// Causes reaction on server side: The letter is sent to the other character, if it exists and the player has the required money.
+    /// Causes reaction on server side: The letter is sent to the other character, if it exists and the player has the
+    /// required money.
     /// </remarks>
-    void SendLetterSendRequest(uint32_t letterId, const wchar_t* receiver, const wchar_t* title, BYTE rotation, BYTE animation, uint16_t messageLength, const wchar_t* message);
+    void SendLetterSendRequest(uint32_t letterId, const wchar_t* receiver, const wchar_t* title, BYTE rotation,
+                               BYTE animation, uint16_t messageLength, const wchar_t* message);
 
     /// <summary>
     /// Sends a LetterReadRequest to this connection.
@@ -1321,8 +1411,10 @@ public:
     /// <param name="playerName">The player name.</param>
     /// <param name="securityCode">The security code.</param>
     /// <remarks>
-    /// Is sent by the client when: A guild member wants to kick himself or a guild master wants to kick another player from its guild.
-    /// Causes reaction on server side: If the player is allowed to kick the player, it's removed from the guild. If the guild master kicks himself, the guild is disbanded. Corresponding responses are sent to all involved players.
+    /// Is sent by the client when: A guild member wants to kick himself or a guild master wants to kick another player
+    /// from its guild. Causes reaction on server side: If the player is allowed to kick the player, it's removed from
+    /// the guild. If the guild master kicks himself, the guild is disbanded. Corresponding responses are sent to all
+    /// involved players.
     /// </remarks>
     void SendGuildKickPlayerRequest(const wchar_t* playerName, const wchar_t* securityCode);
 
@@ -1332,7 +1424,9 @@ public:
     /// <param name="guildMasterPlayerId">The guild master player id.</param>
     /// <remarks>
     /// Is sent by the client when: A player (non-guild member) requests to join a guild.
-    /// Causes reaction on server side: The request is forwarded to the guild master. There can only be one request at a time. If the guild master already has an open request, a corresponding response is directly sent back to the requesting player.
+    /// Causes reaction on server side: The request is forwarded to the guild master. There can only be one request at a
+    /// time. If the guild master already has an open request, a corresponding response is directly sent back to the
+    /// requesting player.
     /// </remarks>
     void SendGuildJoinRequest(uint16_t guildMasterPlayerId);
 
@@ -1343,7 +1437,8 @@ public:
     /// <param name="requesterId">The requester id.</param>
     /// <remarks>
     /// Is sent by the client when: A guild master responded to a previously sent request.
-    /// Causes reaction on server side: If the request was accepted by the guild master, the previously requesting player is added to the guild.
+    /// Causes reaction on server side: If the request was accepted by the guild master, the previously requesting
+    /// player is added to the guild.
     /// </remarks>
     void SendGuildJoinResponse(BYTE accepted, uint16_t requesterId);
 
@@ -1360,10 +1455,9 @@ public:
     /// Sends a GuildCreateRequest to this connection.
     /// </summary>
     /// <param name="guildName">The guild name.</param>
-    /// <param name="guildEmblem">The guild emblem in a custom bitmap format. It supports 16 colors (one transparent) per pixel and has a size of 8 * 8 pixel.</param>
-    /// <param name="guildEmblemByteLength">The length of <paramref name="guildEmblem"/> in bytes.
-    /// <remarks>
-    /// Is sent by the client when: When a player wants to create a guild.
+    /// <param name="guildEmblem">The guild emblem in a custom bitmap format. It supports 16 colors (one transparent)
+    /// per pixel and has a size of 8 * 8 pixel.</param> <param name="guildEmblemByteLength">The length of <paramref
+    /// name="guildEmblem"/> in bytes. <remarks> Is sent by the client when: When a player wants to create a guild.
     /// Causes reaction on server side: The guild is created and the player is set as the new guild master of the guild.
     /// </remarks>
     void SendGuildCreateRequest(const wchar_t* guildName, const BYTE* guildEmblem, uint32_t guildEmblemByteLength);
@@ -1372,10 +1466,9 @@ public:
     /// Sends a GuildCreateRequest075 to this connection.
     /// </summary>
     /// <param name="guildName">The guild name.</param>
-    /// <param name="guildEmblem">The guild emblem in a custom bitmap format. It supports 16 colors (one transparent) per pixel and has a size of 8 * 8 pixel.</param>
-    /// <param name="guildEmblemByteLength">The length of <paramref name="guildEmblem"/> in bytes.
-    /// <remarks>
-    /// Is sent by the client when: When a player wants to create a guild.
+    /// <param name="guildEmblem">The guild emblem in a custom bitmap format. It supports 16 colors (one transparent)
+    /// per pixel and has a size of 8 * 8 pixel.</param> <param name="guildEmblemByteLength">The length of <paramref
+    /// name="guildEmblem"/> in bytes. <remarks> Is sent by the client when: When a player wants to create a guild.
     /// Causes reaction on server side: The guild is created and the player is set as the new guild master of the guild.
     /// </remarks>
     void SendGuildCreateRequest075(const wchar_t* guildName, const BYTE* guildEmblem, uint32_t guildEmblemByteLength);
@@ -1383,10 +1476,11 @@ public:
     /// <summary>
     /// Sends a GuildMasterAnswer to this connection.
     /// </summary>
-    /// <param name="showCreationDialog">A value whether the guild creation dialog should be shown. Otherwise, the guild creation is cancelled and the dialog was closed.</param>
-    /// <remarks>
-    /// Is sent by the client when: The player has the dialog of the guild master NPC opened and decided about its next step.
-    /// Causes reaction on server side: It either cancels the guild creation or proceeds with the guild creation dialog where the player can enter the guild name and symbol.
+    /// <param name="showCreationDialog">A value whether the guild creation dialog should be shown. Otherwise, the guild
+    /// creation is cancelled and the dialog was closed.</param> <remarks> Is sent by the client when: The player has
+    /// the dialog of the guild master NPC opened and decided about its next step. Causes reaction on server side: It
+    /// either cancels the guild creation or proceeds with the guild creation dialog where the player can enter the
+    /// guild name and symbol.
     /// </remarks>
     void SendGuildMasterAnswer(BYTE showCreationDialog);
 
@@ -1394,8 +1488,8 @@ public:
     /// Sends a CancelGuildCreation to this connection.
     /// </summary>
     /// <remarks>
-    /// Is sent by the client when: The player has the dialog of the guild creation dialog opened and decided against creating a guild.
-    /// Causes reaction on server side: It either cancels the guild creation.
+    /// Is sent by the client when: The player has the dialog of the guild creation dialog opened and decided against
+    /// creating a guild. Causes reaction on server side: It either cancels the guild creation.
     /// </remarks>
     void SendCancelGuildCreation();
 
@@ -1414,8 +1508,9 @@ public:
     /// </summary>
     /// <param name="guildId">The guild id.</param>
     /// <remarks>
-    /// Is sent by the client when: A player gets another player into view range which is in a guild, and the guild identifier is unknown (=not cached yet by previous requests) to him.
-    /// Causes reaction on server side: The server sends a response which includes the guild name and emblem.
+    /// Is sent by the client when: A player gets another player into view range which is in a guild, and the guild
+    /// identifier is unknown (=not cached yet by previous requests) to him. Causes reaction on server side: The server
+    /// sends a response which includes the guild name and emblem.
     /// </remarks>
     void SendGuildInfoRequest(uint32_t guildId);
 
@@ -1436,8 +1531,10 @@ public:
     /// </summary>
     /// <param name="guildType">0 = Common, 1 = Guard, FF = None.</param>
     /// <remarks>
-    /// Is sent by the client when: A guild master wants to change the type of its guild. Didn't find any place in the client where this is sent.
-    /// Causes reaction on server side: The server changes the kind of the guild. We assume it's whether the guild should be the main guild of an alliance, or not. Shouldn't be handled, because this is constant for the lifetime of an alliance.
+    /// Is sent by the client when: A guild master wants to change the type of its guild. Didn't find any place in the
+    /// client where this is sent. Causes reaction on server side: The server changes the kind of the guild. We assume
+    /// it's whether the guild should be the main guild of an alliance, or not. Shouldn't be handled, because this is
+    /// constant for the lifetime of an alliance.
     /// </remarks>
     void SendGuildTypeChangeRequest(BYTE guildType);
 
@@ -1448,8 +1545,8 @@ public:
     /// <param name="requestType">The request type.</param>
     /// <param name="targetPlayerId">The target player id.</param>
     /// <remarks>
-    /// Is sent by the client when: A guild master sends a request to another guild master about changing the relationship between their guilds.
-    /// Causes reaction on server side: The server sends a response with the result.
+    /// Is sent by the client when: A guild master sends a request to another guild master about changing the
+    /// relationship between their guilds. Causes reaction on server side: The server sends a response with the result.
     /// </remarks>
     void SendGuildRelationshipChangeRequest(uint32_t relationshipType, uint32_t requestType, uint16_t targetPlayerId);
 
@@ -1461,10 +1558,12 @@ public:
     /// <param name="response">The response.</param>
     /// <param name="targetPlayerId">The target player id.</param>
     /// <remarks>
-    /// Is sent by the client when: A guild master answered the request to another guild master about changing the relationship between their guilds.
-    /// Causes reaction on server side: The server sends a response back to the requester. If the guild master agreed, it takes the necessary actions.
+    /// Is sent by the client when: A guild master answered the request to another guild master about changing the
+    /// relationship between their guilds. Causes reaction on server side: The server sends a response back to the
+    /// requester. If the guild master agreed, it takes the necessary actions.
     /// </remarks>
-    void SendGuildRelationshipChangeResponse(uint32_t relationshipType, uint32_t requestType, BYTE response, uint16_t targetPlayerId);
+    void SendGuildRelationshipChangeResponse(uint32_t relationshipType, uint32_t requestType, BYTE response,
+                                             uint16_t targetPlayerId);
 
     /// <summary>
     /// Sends a RequestAllianceList to this connection.
@@ -1497,10 +1596,11 @@ public:
     /// <summary>
     /// Sends a ItemRepair to this connection.
     /// </summary>
-    /// <param name="inventoryItemSlot">The inventory slot of the target item. If it's 0xFF, the player requests to repair all items with the help of an NPC. If it's 8 (Pet slot), using the pet trainer NPC is mandatory, too.</param>
-    /// <remarks>
-    /// Is sent by the client when: A player wants to repair an item of his inventory, either himself or with the usage of an NPC.
-    /// Causes reaction on server side: If the item is damaged and repairable, the durability of the item is maximized and corresponding responses are sent back to the client.
+    /// <param name="inventoryItemSlot">The inventory slot of the target item. If it's 0xFF, the player requests to
+    /// repair all items with the help of an NPC. If it's 8 (Pet slot), using the pet trainer NPC is mandatory,
+    /// too.</param> <remarks> Is sent by the client when: A player wants to repair an item of his inventory, either
+    /// himself or with the usage of an NPC. Causes reaction on server side: If the item is damaged and repairable, the
+    /// durability of the item is maximized and corresponding responses are sent back to the client.
     /// </remarks>
     void SendItemRepair(BYTE inventoryItemSlot);
 
@@ -1508,10 +1608,12 @@ public:
     /// Sends a ChaosMachineMixRequest to this connection.
     /// </summary>
     /// <param name="mixType">The identifier which tells the server which kind of mix should be executed.</param>
-    /// <param name="socketSlot">The 0-based slot index of the socket at which a seed sphere should be mounted or removed. May only be available for the corresponding mixes, so access with care.</param>
-    /// <remarks>
-    /// Is sent by the client when: The player has the dialog of the chaos machine open and decided to mix (craft) the items which he put into the chaos machine dialog.
-    /// Causes reaction on server side: Based on the type of mix and it's corresponding success rate, the mix succeeds or fails. The client gets a corresponding response with the created, changed or lost items.
+    /// <param name="socketSlot">The 0-based slot index of the socket at which a seed sphere should be mounted or
+    /// removed. May only be available for the corresponding mixes, so access with care.</param> <remarks> Is sent by
+    /// the client when: The player has the dialog of the chaos machine open and decided to mix (craft) the items which
+    /// he put into the chaos machine dialog. Causes reaction on server side: Based on the type of mix and it's
+    /// corresponding success rate, the mix succeeds or fails. The client gets a corresponding response with the
+    /// created, changed or lost items.
     /// </remarks>
     void SendChaosMachineMixRequest(uint32_t mixType, BYTE socketSlot);
 
@@ -1519,8 +1621,8 @@ public:
     /// Sends a CraftingDialogCloseRequest to this connection.
     /// </summary>
     /// <remarks>
-    /// Is sent by the client when: A player closes the dialog which was opened by an interaction with the chaos machine goblin.
-    /// Causes reaction on server side: The server updates the state of the player accordingly.
+    /// Is sent by the client when: A player closes the dialog which was opened by an interaction with the chaos machine
+    /// goblin. Causes reaction on server side: The server updates the state of the player accordingly.
     /// </remarks>
     void SendCraftingDialogCloseRequest();
 
@@ -1538,8 +1640,9 @@ public:
     /// </summary>
     /// <param name="friendName">The friend name.</param>
     /// <remarks>
-    /// Is sent by the client when: A player wants to add another players character into his friend list of the messenger.
-    /// Causes reaction on server side: A request is sent to the other player. If the player is currently offline, the request will be sent as soon as he is online again.
+    /// Is sent by the client when: A player wants to add another players character into his friend list of the
+    /// messenger. Causes reaction on server side: A request is sent to the other player. If the player is currently
+    /// offline, the request will be sent as soon as he is online again.
     /// </remarks>
     void SendFriendAddRequest(const wchar_t* friendName);
 
@@ -1548,8 +1651,9 @@ public:
     /// </summary>
     /// <param name="friendName">The friend name.</param>
     /// <remarks>
-    /// Is sent by the client when: A player wants to delete another players character from his friend list of the messenger.
-    /// Causes reaction on server side: The entry in the friend list is removed. The player is shown as offline in the other players friends list.
+    /// Is sent by the client when: A player wants to delete another players character from his friend list of the
+    /// messenger. Causes reaction on server side: The entry in the friend list is removed. The player is shown as
+    /// offline in the other players friends list.
     /// </remarks>
     void SendFriendDelete(const wchar_t* friendName);
 
@@ -1559,7 +1663,9 @@ public:
     /// <param name="friendName">The friend name.</param>
     /// <remarks>
     /// Is sent by the client when: A player wants to open a chat with another player of his friend list.
-    /// Causes reaction on server side: If both players are online, a chat room is created on the chat server. Authentication data is sent to both game clients, which will then try to connect to the chat server using this data.
+    /// Causes reaction on server side: If both players are online, a chat room is created on the chat server.
+    /// Authentication data is sent to both game clients, which will then try to connect to the chat server using this
+    /// data.
     /// </remarks>
     void SendChatRoomCreateRequest(const wchar_t* friendName);
 
@@ -1570,7 +1676,8 @@ public:
     /// <param name="friendRequesterName">The friend requester name.</param>
     /// <remarks>
     /// Is sent by the client when: A player received a friend request from another player and responded to it.
-    /// Causes reaction on server side: If the player accepted, the friend is added to the players friend list and both players get subscribed about each others online status.
+    /// Causes reaction on server side: If the player accepted, the friend is added to the players friend list and both
+    /// players get subscribed about each others online status.
     /// </remarks>
     void SendFriendAddResponse(BYTE accepted, const wchar_t* friendRequesterName);
 
@@ -1580,7 +1687,8 @@ public:
     /// <param name="onlineState">The online state.</param>
     /// <remarks>
     /// Is sent by the client when: A player wants to set himself on- or offline.
-    /// Causes reaction on server side: Depending on the state, the player is shown as offline or online in all friend lists of his friends.
+    /// Causes reaction on server side: Depending on the state, the player is shown as offline or online in all friend
+    /// lists of his friends.
     /// </remarks>
     void SendSetFriendOnlineState(BYTE onlineState);
 
@@ -1591,8 +1699,9 @@ public:
     /// <param name="roomId">The room id.</param>
     /// <param name="requestId">The request id.</param>
     /// <remarks>
-    /// Is sent by the client when: A player wants to invite additional players from his friend list to an existing chat room.
-    /// Causes reaction on server side: The player additional gets authentication data sent to his game client. It then connects to the chat server and joins the chat room.
+    /// Is sent by the client when: A player wants to invite additional players from his friend list to an existing chat
+    /// room. Causes reaction on server side: The player additional gets authentication data sent to his game client. It
+    /// then connects to the chat server and joins the chat room.
     /// </remarks>
     void SendChatRoomInvitationRequest(const wchar_t* friendName, uint16_t roomId, uint32_t requestId);
 
@@ -1624,7 +1733,7 @@ public:
     /// <param name="targetId">The target id.</param>
     /// <remarks>
     /// Is sent by the client when: The player wants to command its equipped pet (raven).
-    /// Causes reaction on server side: 
+    /// Causes reaction on server side:
     /// </remarks>
     void SendPetCommandRequest(uint32_t petType, uint32_t commandMode, uint16_t targetId);
 
@@ -1635,8 +1744,9 @@ public:
     /// <param name="storage">The storage.</param>
     /// <param name="itemSlot">The item slot.</param>
     /// <remarks>
-    /// Is sent by the client when: The player hovers over a pet. The client sends this request to retrieve information (level, experience) of the pet (dark raven, horse).
-    /// Causes reaction on server side: The server sends a PetInfoResponse.
+    /// Is sent by the client when: The player hovers over a pet. The client sends this request to retrieve information
+    /// (level, experience) of the pet (dark raven, horse). Causes reaction on server side: The server sends a
+    /// PetInfoResponse.
     /// </remarks>
     void SendPetInfoRequest(uint32_t pet, uint32_t storage, BYTE itemSlot);
 
@@ -1646,8 +1756,9 @@ public:
     /// <param name="mapNumber">The map number.</param>
     /// <param name="itemSlot">The item slot.</param>
     /// <remarks>
-    /// Is sent by the client when: The client has the NPC dialog for the illusion temple opened, and wants to enter the event map.
-    /// Causes reaction on server side: The server checks if the player has the required ticket and moves the player to the event map.
+    /// Is sent by the client when: The client has the NPC dialog for the illusion temple opened, and wants to enter the
+    /// event map. Causes reaction on server side: The server checks if the player has the required ticket and moves the
+    /// player to the event map.
     /// </remarks>
     void SendIllusionTempleEnterRequest(BYTE mapNumber, BYTE itemSlot);
 
@@ -1658,8 +1769,9 @@ public:
     /// <param name="targetObjectIndex">The target object index.</param>
     /// <param name="distance">The distance.</param>
     /// <remarks>
-    /// Is sent by the client when: The player is in the illusion temple event and wants to perform a special skill (210 - 213), Order of Protection, Restraint, Tracking or Weaken.
-    /// Causes reaction on server side: The server checks if the player is inside the event etc. and performs the skills accordingly.
+    /// Is sent by the client when: The player is in the illusion temple event and wants to perform a special skill (210
+    /// - 213), Order of Protection, Restraint, Tracking or Weaken. Causes reaction on server side: The server checks if
+    /// the player is inside the event etc. and performs the skills accordingly.
     /// </remarks>
     void SendIllusionTempleSkillRequest(uint16_t skillNumber, BYTE targetObjectIndex, BYTE distance);
 
@@ -1668,7 +1780,8 @@ public:
     /// </summary>
     /// <remarks>
     /// Is sent by the client when: The player requests the reward of the event.
-    /// Causes reaction on server side: The server checks if the player is in the winning game and returns a reward, usually as item drop.
+    /// Causes reaction on server side: The server checks if the player is in the winning game and returns a reward,
+    /// usually as item drop.
     /// </remarks>
     void SendIllusionTempleRewardRequest();
 
@@ -1676,8 +1789,8 @@ public:
     /// Sends a LuckyCoinCountRequest to this connection.
     /// </summary>
     /// <remarks>
-    /// Is sent by the client when: The player has the lucky coin dialog open and requests the current count of the registered coins.
-    /// Causes reaction on server side: The server returns the count of the registered coins.
+    /// Is sent by the client when: The player has the lucky coin dialog open and requests the current count of the
+    /// registered coins. Causes reaction on server side: The server returns the count of the registered coins.
     /// </remarks>
     void SendLuckyCoinCountRequest();
 
@@ -1685,8 +1798,9 @@ public:
     /// Sends a LuckyCoinRegistrationRequest to this connection.
     /// </summary>
     /// <remarks>
-    /// Is sent by the client when: The player has the lucky coin dialog open and requests to register one lucky coin, which is in his inventory.
-    /// Causes reaction on server side: The server returns the result of the registration increases the coin count and decreases the coin durability by one.
+    /// Is sent by the client when: The player has the lucky coin dialog open and requests to register one lucky coin,
+    /// which is in his inventory. Causes reaction on server side: The server returns the result of the registration
+    /// increases the coin count and decreases the coin durability by one.
     /// </remarks>
     void SendLuckyCoinRegistrationRequest();
 
@@ -1695,8 +1809,9 @@ public:
     /// </summary>
     /// <param name="coinCount">The coin count.</param>
     /// <remarks>
-    /// Is sent by the client when: The player has the lucky coin dialog open and requests an exchange for the specified number of registered coins.
-    /// Causes reaction on server side: The server adds an item to the inventory of the character and sends a response with a result code.
+    /// Is sent by the client when: The player has the lucky coin dialog open and requests an exchange for the specified
+    /// number of registered coins. Causes reaction on server side: The server adds an item to the inventory of the
+    /// character and sends a response with a result code.
     /// </remarks>
     void SendLuckyCoinExchangeRequest(uint32_t coinCount);
 
@@ -1745,10 +1860,12 @@ public:
     /// </summary>
     /// <param name="questNumber">The quest number.</param>
     /// <param name="questGroup">The quest group.</param>
-    /// <param name="selectedTextIndex">A 1-based index of the selected index in the dialog. It's 0 when no text has been selected. It's not clear yet, when we need that.</param>
-    /// <remarks>
-    /// Is sent by the client when: The client opened an quest NPC dialog and selected an available quests.
-    /// Causes reaction on server side: If the quest is already active, it responds with the QuestProgress. If the quest is inactive, the server decides if the character can start the quest and responds with a QuestStepInfo with the StartingNumber. A character can run up to 3 concurrent quests at a time.
+    /// <param name="selectedTextIndex">A 1-based index of the selected index in the dialog. It's 0 when no text has
+    /// been selected. It's not clear yet, when we need that.</param> <remarks> Is sent by the client when: The client
+    /// opened an quest NPC dialog and selected an available quests. Causes reaction on server side: If the quest is
+    /// already active, it responds with the QuestProgress. If the quest is inactive, the server decides if the
+    /// character can start the quest and responds with a QuestStepInfo with the StartingNumber. A character can run up
+    /// to 3 concurrent quests at a time.
     /// </remarks>
     void SendQuestSelectRequest(uint16_t questNumber, uint16_t questGroup, BYTE selectedTextIndex);
 
@@ -1759,8 +1876,10 @@ public:
     /// <param name="questGroup">The quest group.</param>
     /// <param name="proceedAction">The proceed action.</param>
     /// <remarks>
-    /// Is sent by the client when: After the server started a quest (and sent a F60B message) the game client requests to proceed with the quest.
-    /// Causes reaction on server side: The quest state is set accordingly on the server. The next response seems to depend on the quest configuration. Depending on the action of the next quest state, the server will send either a quest progress message (F60C) or again a quest start message (F60B).
+    /// Is sent by the client when: After the server started a quest (and sent a F60B message) the game client requests
+    /// to proceed with the quest. Causes reaction on server side: The quest state is set accordingly on the server. The
+    /// next response seems to depend on the quest configuration. Depending on the action of the next quest state, the
+    /// server will send either a quest progress message (F60C) or again a quest start message (F60B).
     /// </remarks>
     void SendQuestProceedRequest(uint16_t questNumber, uint16_t questGroup, uint32_t proceedAction);
 
@@ -1771,7 +1890,10 @@ public:
     /// <param name="questGroup">The quest group.</param>
     /// <remarks>
     /// Is sent by the client when: The game client requests to complete an active quest.
-    /// Causes reaction on server side: The server checks the conditions to complete the quest. If this fails, nothing happens. If all conditions are met, the reward is given to the player and the quest state is set accordingly, so that the player can select to start the next quest. Additionally, the quest completion response message (F60D) is sent to the client.
+    /// Causes reaction on server side: The server checks the conditions to complete the quest. If this fails, nothing
+    /// happens. If all conditions are met, the reward is given to the player and the quest state is set accordingly, so
+    /// that the player can select to start the next quest. Additionally, the quest completion response message (F60D)
+    /// is sent to the client.
     /// </remarks>
     void SendQuestCompletionRequest(uint16_t questNumber, uint16_t questGroup);
 
@@ -1782,7 +1904,8 @@ public:
     /// <param name="questGroup">The quest group.</param>
     /// <remarks>
     /// Is sent by the client when: The game client requests to cancel an active quest.
-    /// Causes reaction on server side: The server checks if the quest is currently in progress. In this case, the quest state is reset and a response (F60F) is sent back to the client.
+    /// Causes reaction on server side: The server checks if the quest is currently in progress. In this case, the quest
+    /// state is reset and a response (F60F) is sent back to the client.
     /// </remarks>
     void SendQuestCancelRequest(uint16_t questNumber, uint16_t questGroup);
 
@@ -1793,7 +1916,8 @@ public:
     /// <param name="questGroup">The quest group.</param>
     /// <remarks>
     /// Is sent by the client when: The game client requests to complete a client action, e.g. completing a tutorial.
-    /// Causes reaction on server side: The server checks if the specified quest is currently in progress. If the quest got a Condition (condition type 0x10) for this flag, the condition is flagged as fulfilled.
+    /// Causes reaction on server side: The server checks if the specified quest is currently in progress. If the quest
+    /// got a Condition (condition type 0x10) for this flag, the condition is flagged as fulfilled.
     /// </remarks>
     void SendQuestClientActionRequest(uint16_t questNumber, uint16_t questGroup);
 
@@ -1802,7 +1926,8 @@ public:
     /// </summary>
     /// <remarks>
     /// Is sent by the client when: The clients requests the states of all quests, usually after entering the game.
-    /// Causes reaction on server side: The list of active quests is sent back (F61A) without changing any state. This list just contains all running or completed quests for each group.
+    /// Causes reaction on server side: The list of active quests is sent back (F61A) without changing any state. This
+    /// list just contains all running or completed quests for each group.
     /// </remarks>
     void SendActiveQuestListRequest();
 
@@ -1813,7 +1938,8 @@ public:
     /// <param name="questGroup">The quest group.</param>
     /// <remarks>
     /// Is sent by the client when: The game client requests the state of a specific active quests.
-    /// Causes reaction on server side: The quest state is sent back (F61B) without changing any state, if the quest is currently in progress.
+    /// Causes reaction on server side: The quest state is sent back (F61B) without changing any state, if the quest is
+    /// currently in progress.
     /// </remarks>
     void SendQuestStateRequest(uint16_t questNumber, uint16_t questGroup);
 
@@ -1822,7 +1948,8 @@ public:
     /// </summary>
     /// <remarks>
     /// Is sent by the client when: The game client requests the list of event quests, usually after entering the game.
-    /// Causes reaction on server side: The server may answer with a response which seems to depend if the character is member of a Gen or not. If it's not in a gen, it sends a response (F603).
+    /// Causes reaction on server side: The server may answer with a response which seems to depend if the character is
+    /// member of a Gen or not. If it's not in a gen, it sends a response (F603).
     /// </remarks>
     void SendEventQuestStateListRequest();
 
@@ -1839,8 +1966,11 @@ public:
     /// Sends a NpcBuffRequest to this connection.
     /// </summary>
     /// <remarks>
-    /// Is sent by the client when: The game client requests to get a buff from the currently interacting quest npc. As far as we know, only the Elf Soldier NPC offers such a buff until a certain character level (150 or 220).
-    /// Causes reaction on server side: The server should check if the correct Quest NPC (e.g. Elf Soldier) dialog is opened and the player didn't reach the level limit yet. If that's both the case, it adds a defined buff (MagicEffect) to the player; Otherwise, a message is sent to the player.
+    /// Is sent by the client when: The game client requests to get a buff from the currently interacting quest npc. As
+    /// far as we know, only the Elf Soldier NPC offers such a buff until a certain character level (150 or 220). Causes
+    /// reaction on server side: The server should check if the correct Quest NPC (e.g. Elf Soldier) dialog is opened
+    /// and the player didn't reach the level limit yet. If that's both the case, it adds a defined buff (MagicEffect)
+    /// to the player; Otherwise, a message is sent to the player.
     /// </remarks>
     void SendNpcBuffRequest();
 
@@ -1850,7 +1980,8 @@ public:
     /// <param name="itemSlot">The item slot of the event ticket. Not used by the server.</param>
     /// <remarks>
     /// Is sent by the client when: The player wants to enter the empire guardian event due an npc dialog.
-    /// Causes reaction on server side: The checks if the player can enter the event, and moves it to the event, if possible.
+    /// Causes reaction on server side: The checks if the player can enter the event, and moves it to the event, if
+    /// possible.
     /// </remarks>
     void SendEnterEmpireGuardianEvent(BYTE itemSlot = 01);
 
@@ -1860,7 +1991,8 @@ public:
     /// <param name="gensType">The gens type.</param>
     /// <remarks>
     /// Is sent by the client when: The player has opened one of the gens NPCs and requests to join it.
-    /// Causes reaction on server side: The server checks if the player is not in a gens already and joins the player to the selected gens.
+    /// Causes reaction on server side: The server checks if the player is not in a gens already and joins the player to
+    /// the selected gens.
     /// </remarks>
     void SendGensJoinRequest(uint32_t gensType);
 
@@ -1879,7 +2011,8 @@ public:
     /// <param name="gensType">The gens type.</param>
     /// <remarks>
     /// Is sent by the client when: The game client requests to get a reward from the gens npc.
-    /// Causes reaction on server side: The server checks if the player has enough points to get the reward, and sends a response.
+    /// Causes reaction on server side: The server checks if the player has enough points to get the reward, and sends a
+    /// response.
     /// </remarks>
     void SendGensRewardRequest(uint32_t gensType);
 
@@ -1896,10 +2029,11 @@ public:
     /// Sends a DevilSquareEnterRequest to this connection.
     /// </summary>
     /// <param name="squareLevel">The level of the devil square, minus 1.</param>
-    /// <param name="ticketItemInventoryIndex">The index of the ticket item in the inventory. Be aware, that the value is 12 higher than it should be - it makes no sense, but it is what it is...</param>
-    /// <remarks>
-    /// Is sent by the client when: The player requests to enter the devil square through the Charon NPC.
-    /// Causes reaction on server side: The server checks if the player can enter the event and sends a response (Code 0x90) back to the client. If it was successful, the character gets moved to the event map.
+    /// <param name="ticketItemInventoryIndex">The index of the ticket item in the inventory. Be aware, that the value
+    /// is 12 higher than it should be - it makes no sense, but it is what it is...</param> <remarks> Is sent by the
+    /// client when: The player requests to enter the devil square through the Charon NPC. Causes reaction on server
+    /// side: The server checks if the player can enter the event and sends a response (Code 0x90) back to the client.
+    /// If it was successful, the character gets moved to the event map.
     /// </remarks>
     void SendDevilSquareEnterRequest(BYTE squareLevel, BYTE ticketItemInventoryIndex);
 
@@ -1970,8 +2104,9 @@ public:
     /// <param name="serial2">The serial 2.</param>
     /// <param name="serial3">The serial 3.</param>
     /// <remarks>
-    /// Is sent by the client when: The player requests to redeem a coupon code (lucky number) which is 12 alphanumeric digits long.
-    /// Causes reaction on server side: A response is sent back to the client with the result. An item could be rewarded to the inventory.
+    /// Is sent by the client when: The player requests to redeem a coupon code (lucky number) which is 12 alphanumeric
+    /// digits long. Causes reaction on server side: A response is sent back to the client with the result. An item
+    /// could be rewarded to the inventory.
     /// </remarks>
     void SendLuckyNumberRequest(const wchar_t* serial1, const wchar_t* serial2, const wchar_t* serial3);
 
@@ -1979,10 +2114,11 @@ public:
     /// Sends a BloodCastleEnterRequest to this connection.
     /// </summary>
     /// <param name="castleLevel">The level of the battle square.</param>
-    /// <param name="ticketItemInventoryIndex">The index of the ticket item in the inventory. Be aware, that the value is 12 higher than it should be - it makes no sense, but it is what it is...</param>
-    /// <remarks>
-    /// Is sent by the client when: The player requests to enter the blood castle through the Archangel Messenger NPC.
-    /// Causes reaction on server side: The server checks if the player can enter the event and sends a response (Code 0x9A) back to the client. If it was successful, the character gets moved to the event map.
+    /// <param name="ticketItemInventoryIndex">The index of the ticket item in the inventory. Be aware, that the value
+    /// is 12 higher than it should be - it makes no sense, but it is what it is...</param> <remarks> Is sent by the
+    /// client when: The player requests to enter the blood castle through the Archangel Messenger NPC. Causes reaction
+    /// on server side: The server checks if the player can enter the event and sends a response (Code 0x9A) back to the
+    /// client. If it was successful, the character gets moved to the event map.
     /// </remarks>
     void SendBloodCastleEnterRequest(BYTE castleLevel, BYTE ticketItemInventoryIndex);
 
@@ -1992,7 +2128,8 @@ public:
     /// <param name="miniGame">The mini game.</param>
     /// <remarks>
     /// Is sent by the client when: The player requests to get the entering count of the specified mini game.
-    /// Causes reaction on server side: The remaining time is sent back to the client. However, it's not really handled on the known server sources.
+    /// Causes reaction on server side: The remaining time is sent back to the client. However, it's not really handled
+    /// on the known server sources.
     /// </remarks>
     void SendMiniGameEventCountRequest(uint32_t miniGame);
 
@@ -2002,8 +2139,9 @@ public:
     /// <param name="castleLevel">The level of the chaos castle. Appears to always be 0.</param>
     /// <param name="ticketItemInventoryIndex">The index of the ticket item in the inventory.</param>
     /// <remarks>
-    /// Is sent by the client when: The player requests to enter the chaos castle by using the 'Armor of Guardsman' item.
-    /// Causes reaction on server side: The server checks if the player can enter the event and sends a response (Code 0xAF) back to the client. If it was successful, the character gets moved to the event map.
+    /// Is sent by the client when: The player requests to enter the chaos castle by using the 'Armor of Guardsman'
+    /// item. Causes reaction on server side: The server checks if the player can enter the event and sends a response
+    /// (Code 0xAF) back to the client. If it was successful, the character gets moved to the event map.
     /// </remarks>
     void SendChaosCastleEnterRequest(BYTE castleLevel, BYTE ticketItemInventoryIndex);
 
@@ -2013,8 +2151,9 @@ public:
     /// <param name="positionX">The position x.</param>
     /// <param name="positionY">The position y.</param>
     /// <remarks>
-    /// Is sent by the client when: The game client noticed, that the coordinates of the player is not on the ground anymore. It requests to set the specified coordinates.
-    /// Causes reaction on server side: The server sets the player on the new coordinates. Not handled on OpenMU.
+    /// Is sent by the client when: The game client noticed, that the coordinates of the player is not on the ground
+    /// anymore. It requests to set the specified coordinates. Causes reaction on server side: The server sets the
+    /// player on the new coordinates. Not handled on OpenMU.
     /// </remarks>
     void SendChaosCastlePositionSet(BYTE positionX, BYTE positionY);
 

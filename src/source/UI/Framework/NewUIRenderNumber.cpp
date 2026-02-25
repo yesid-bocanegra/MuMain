@@ -3,7 +3,7 @@
 
 #include "stdafx.h"
 
-#include "NewUIRenderNumber.h"	// self
+#include "NewUIRenderNumber.h" // self
 
 SEASON3B::CNewUIRenderNumber* SEASON3B::CNewUIRenderNumber::GetInstance()
 {

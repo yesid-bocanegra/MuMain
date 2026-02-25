@@ -115,25 +115,30 @@ bool CNewUIGateSwitchWindow::Render()
 
     RenderFrame();
 
-    POINT ptOrigin = { m_Pos.x, m_Pos.y + 50 };
+    POINT ptOrigin = {m_Pos.x, m_Pos.y + 50};
 
-    g_pRenderText->RenderText(ptOrigin.x + 95, ptOrigin.y, GlobalText[1476], 0, 0, RT3_WRITE_CENTER); ptOrigin.y += 17;
-    g_pRenderText->RenderText(ptOrigin.x + 95, ptOrigin.y, GlobalText[1477], 0, 0, RT3_WRITE_CENTER); ptOrigin.y += 17;
+    g_pRenderText->RenderText(ptOrigin.x + 95, ptOrigin.y, GlobalText[1476], 0, 0, RT3_WRITE_CENTER);
+    ptOrigin.y += 17;
+    g_pRenderText->RenderText(ptOrigin.x + 95, ptOrigin.y, GlobalText[1477], 0, 0, RT3_WRITE_CENTER);
+    ptOrigin.y += 17;
 
     g_pRenderText->SetBgColor(160, 0, 0, 255);
-    g_pRenderText->RenderText(ptOrigin.x + 95, ptOrigin.y, GlobalText[1478], 0, 0, RT3_WRITE_CENTER); ptOrigin.y += 17;
+    g_pRenderText->RenderText(ptOrigin.x + 95, ptOrigin.y, GlobalText[1478], 0, 0, RT3_WRITE_CENTER);
+    ptOrigin.y += 17;
     g_pRenderText->SetBgColor(0);
 
     RenderOutlineUpper(m_Pos.x + 0, m_Pos.y + 120, 162, 159);
     RenderOutlineLower(m_Pos.x + 0, m_Pos.y + 120, 162, 159);
     if (npcGateSwitch::IsGateOpened())
     {
-        RenderBitmap(BITMAP_INTERFACE_EX + 41, m_Pos.x + 17.5f, m_Pos.y + 120, 155, 168, 0.f, 0.f, 155 / 256.f, 168 / 256.f);
+        RenderBitmap(BITMAP_INTERFACE_EX + 41, m_Pos.x + 17.5f, m_Pos.y + 120, 155, 168, 0.f, 0.f, 155 / 256.f,
+                     168 / 256.f);
         m_BtnOpen.ChangeText(GlobalText[1002]);
     }
     else
     {
-        RenderBitmap(BITMAP_INTERFACE_EX + 40, m_Pos.x + 17.5f, m_Pos.y + 120, 155, 168, 0.f, 0.f, 155 / 256.f, 168 / 256.f);
+        RenderBitmap(BITMAP_INTERFACE_EX + 40, m_Pos.x + 17.5f, m_Pos.y + 120, 155, 168, 0.f, 0.f, 155 / 256.f,
+                     168 / 256.f);
         m_BtnOpen.ChangeText(GlobalText[1479]);
     }
 
@@ -143,9 +148,7 @@ bool CNewUIGateSwitchWindow::Render()
     return true;
 }
 
-void CNewUIGateSwitchWindow::OpeningProcess()
-{
-}
+void CNewUIGateSwitchWindow::OpeningProcess() {}
 
 void CNewUIGateSwitchWindow::ClosingProcess()
 {
@@ -203,7 +206,9 @@ void CNewUIGateSwitchWindow::RenderFrame()
     RenderImage(IMAGE_GATESWITCHWINDOW_RIGHT, m_Pos.x + INVENTORY_WIDTH - 21, m_Pos.y + 64, 21.f, 320.f);
     RenderImage(IMAGE_GATESWITCHWINDOW_BOTTOM, m_Pos.x, m_Pos.y + INVENTORY_HEIGHT - 45, 190.f, 45.f);
 
-    wchar_t szText[256] = { 0, };
+    wchar_t szText[256] = {
+        0,
+    };
     float fPos_x = m_Pos.x + 15.0f, fPos_y = m_Pos.y;
     float fLine_y = 13.0f;
 
@@ -217,7 +222,7 @@ void CNewUIGateSwitchWindow::RenderFrame()
 
 bool CNewUIGateSwitchWindow::BtnProcess()
 {
-    POINT ptExitBtn1 = { m_Pos.x + 169, m_Pos.y + 7 };
+    POINT ptExitBtn1 = {m_Pos.x + 169, m_Pos.y + 7};
 
     if (SEASON3B::IsPress(VK_LBUTTON) && CheckMouseIn(ptExitBtn1.x, ptExitBtn1.y, 13, 12))
     {
@@ -235,7 +240,7 @@ bool CNewUIGateSwitchWindow::BtnProcess()
 
 void CNewUIGateSwitchWindow::RenderOutlineUpper(float fPos_x, float fPos_y, float fWidth, float fHeight)
 {
-    POINT ptOrigin = { (long)fPos_x, (long)fPos_y };
+    POINT ptOrigin = {(long)fPos_x, (long)fPos_y};
     float fBoxWidth = fWidth;
 
     RenderImage(IMAGE_GATESWITCHWINDOW_TABLE_TOP_LEFT, ptOrigin.x + 12, ptOrigin.y - 4, 14, 14);
@@ -245,13 +250,15 @@ void CNewUIGateSwitchWindow::RenderOutlineUpper(float fPos_x, float fPos_y, floa
 
 void CNewUIGateSwitchWindow::RenderOutlineLower(float fPos_x, float fPos_y, float fWidth, float fHeight)
 {
-    POINT ptOrigin = { (long)fPos_x, (long)fPos_y };
+    POINT ptOrigin = {(long)fPos_x, (long)fPos_y};
     float fBoxWidth = fWidth;
     float fBoxHeight = fHeight;
 
     RenderImage(IMAGE_GATESWITCHWINDOW_TABLE_LEFT_PIXEL, ptOrigin.x + 12, ptOrigin.y + 9, 14, fBoxHeight);
     RenderImage(IMAGE_GATESWITCHWINDOW_TABLE_RIGHT_PIXEL, ptOrigin.x + fBoxWidth + 4, ptOrigin.y + 9, 14, fBoxHeight);
     RenderImage(IMAGE_GATESWITCHWINDOW_TABLE_BOTTOM_LEFT, ptOrigin.x + 12, ptOrigin.y + fBoxHeight + 3, 14, 14);
-    RenderImage(IMAGE_GATESWITCHWINDOW_TABLE_BOTTOM_RIGHT, ptOrigin.x + fBoxWidth + 4, ptOrigin.y + fBoxHeight + 3, 14, 14);
-    RenderImage(IMAGE_GATESWITCHWINDOW_TABLE_BOTTOM_PIXEL, ptOrigin.x + 25, ptOrigin.y + fBoxHeight + 3, fBoxWidth - 21, 14);
+    RenderImage(IMAGE_GATESWITCHWINDOW_TABLE_BOTTOM_RIGHT, ptOrigin.x + fBoxWidth + 4, ptOrigin.y + fBoxHeight + 3, 14,
+                14);
+    RenderImage(IMAGE_GATESWITCHWINDOW_TABLE_BOTTOM_PIXEL, ptOrigin.x + 25, ptOrigin.y + fBoxHeight + 3, fBoxWidth - 21,
+                14);
 }

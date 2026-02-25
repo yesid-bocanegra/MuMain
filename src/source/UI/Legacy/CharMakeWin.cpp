@@ -28,121 +28,112 @@
 
 namespace
 {
-    constexpr std::array<DWORD, BTN_IMG_MAX> kJobButtonColors{
-        CLRDW_BR_GRAY, CLRDW_BR_GRAY, CLRDW_WHITE, CLRDW_GRAY,
-        CLRDW_BR_GRAY, CLRDW_BR_GRAY, CLRDW_WHITE, CLRDW_GRAY
-    };
+constexpr std::array<DWORD, BTN_IMG_MAX> kJobButtonColors{CLRDW_BR_GRAY, CLRDW_BR_GRAY, CLRDW_WHITE, CLRDW_GRAY,
+                                                          CLRDW_BR_GRAY, CLRDW_BR_GRAY, CLRDW_WHITE, CLRDW_GRAY};
 
-    constexpr std::array<int, MAX_CLASS> kClassButtonTextIds{
-        20, 21, 22, 23, 24, 1687, 3150
-    };
+constexpr std::array<int, MAX_CLASS> kClassButtonTextIds{20, 21, 22, 23, 24, 1687, 3150};
 
-    constexpr std::size_t kMinCharacterNameLength = 4;
+constexpr std::size_t kMinCharacterNameLength = 4;
 
-    constexpr int kSummonerDescriptionTextId = 1690;
-    constexpr int kRageFighterDescriptionTextId = 3152;
-    constexpr int kDefaultDescriptionBase = 1705;
+constexpr int kSummonerDescriptionTextId = 1690;
+constexpr int kRageFighterDescriptionTextId = 3152;
+constexpr int kDefaultDescriptionBase = 1705;
 
-    constexpr int kStatLabelBaseId = 1701;
-    constexpr int kStatLineSpacing = 17;
-    constexpr int kStatYOffset = 10;
-    constexpr int kStatValueOffset = 54;
-    constexpr int kStatTextOffsetX = 22;
-    constexpr int kDarkLordStatHeight = 96;
-    constexpr int kDefaultStatHeight = 80;
-    constexpr const wchar_t* kDarkLordLeadershipStatValue = L"25";
-    constexpr int kDarkLordLeadershipTextId = 1738;
+constexpr int kStatLabelBaseId = 1701;
+constexpr int kStatLineSpacing = 17;
+constexpr int kStatYOffset = 10;
+constexpr int kStatValueOffset = 54;
+constexpr int kStatTextOffsetX = 22;
+constexpr int kDarkLordStatHeight = 96;
+constexpr int kDefaultStatHeight = 80;
+constexpr const wchar_t* kDarkLordLeadershipStatValue = L"25";
+constexpr int kDarkLordLeadershipTextId = 1738;
 
-    constexpr int kJobButtonStartY = 131;
-    constexpr int kJobButtonSummonerRow = 3;
-    constexpr int kJobButtonRageFighterY = 246;
-    constexpr int kOkButtonOffsetY = 325;
-    constexpr int kCancelButtonOffsetX = 400;
-    constexpr int kInputSpriteOffsetY = 317;
-    constexpr int kInputTextOffsetX = 78;
-    constexpr int kInputTextOffsetY = 21;
-    constexpr int kDescSpriteOffsetY = 355;
-    constexpr int kStatSpriteOffsetY = 24;
-    constexpr int kDescriptionTextOffsetX = 10;
-    constexpr int kDescriptionTextOffsetY = 12;
-    constexpr int kDescriptionLineSpacing = 19;
+constexpr int kJobButtonStartY = 131;
+constexpr int kJobButtonSummonerRow = 3;
+constexpr int kJobButtonRageFighterY = 246;
+constexpr int kOkButtonOffsetY = 325;
+constexpr int kCancelButtonOffsetX = 400;
+constexpr int kInputSpriteOffsetY = 317;
+constexpr int kInputTextOffsetX = 78;
+constexpr int kInputTextOffsetY = 21;
+constexpr int kDescSpriteOffsetY = 355;
+constexpr int kStatSpriteOffsetY = 24;
+constexpr int kDescriptionTextOffsetX = 10;
+constexpr int kDescriptionTextOffsetY = 12;
+constexpr int kDescriptionLineSpacing = 19;
 
-    struct ClassStats
+struct ClassStats
+{
+    std::array<const wchar_t*, 4> values;
+};
+
+constexpr std::array<ClassStats, MAX_CLASS> kClassStatTable{{
+    ClassStats{{L"18", L"18", L"15", L"30"}}, // Knight
+    ClassStats{{L"28", L"20", L"25", L"10"}}, // Wizard
+    ClassStats{{L"22", L"25", L"20", L"15"}}, // Elf
+    ClassStats{{L"26", L"26", L"26", L"26"}}, // Magic Gladiator
+    ClassStats{{L"26", L"20", L"20", L"15"}}, // Dark Lord
+    ClassStats{{L"21", L"21", L"18", L"23"}}, // Summoner
+    ClassStats{{L"32", L"27", L"25", L"20"}}, // Rage Fighter
+}};
+
+struct ClassRenderParameters
+{
+    bool overrideAngle;
+    float angleX;
+    float angleY;
+    float angleZ;
+    float scale;
+    float positionOffsetX;
+    float positionOffsetZ;
+};
+
+constexpr ClassRenderParameters GetRenderParameters(CLASS_TYPE classType)
+{
+    switch (classType)
     {
-        std::array<const wchar_t*, 4> values;
-    };
-
-    constexpr std::array<ClassStats, MAX_CLASS> kClassStatTable{ {
-        ClassStats{ { L"18", L"18", L"15", L"30" } }, // Knight
-        ClassStats{ { L"28", L"20", L"25", L"10" } }, // Wizard
-        ClassStats{ { L"22", L"25", L"20", L"15" } }, // Elf
-        ClassStats{ { L"26", L"26", L"26", L"26" } }, // Magic Gladiator
-        ClassStats{ { L"26", L"20", L"20", L"15" } }, // Dark Lord
-        ClassStats{ { L"21", L"21", L"18", L"23" } }, // Summoner
-        ClassStats{ { L"32", L"27", L"25", L"20" } }, // Rage Fighter
-    } };
-
-    struct ClassRenderParameters
-    {
-        bool overrideAngle;
-        float angleX;
-        float angleY;
-        float angleZ;
-        float scale;
-        float positionOffsetX;
-        float positionOffsetZ;
-    };
-
-    constexpr ClassRenderParameters GetRenderParameters(CLASS_TYPE classType)
-    {
-        switch (classType)
-        {
-        case CLASS_KNIGHT:
-            return { true, 0.0f, 0.0f, -12.0f, 6.05f, 0.0f, 0.0f };
-        case CLASS_WIZARD:
-            return { true, 0.0f, 0.0f, -40.0f, 5.9f, 0.0f, 0.0f };
-        case CLASS_ELF:
-            return { true, 8.0f, 0.0f, 5.0f, 9.1f, 4.8f, 0.0f };
-        case CLASS_DARK:
-            return { true, 8.0f, 0.0f, -13.0f, 6.0f, 0.0f, 1.8f };
-        case CLASS_DARK_LORD:
-            return { true, 8.0f, 0.0f, -18.0f, 6.0f, 0.0f, 0.0f };
-        case CLASS_SUMMONER:
-            return { true, 2.0f, 0.0f, 2.0f, 9.1f, 4.8f, 4.0f };
-        case CLASS_RAGEFIGHTER:
-            return { false, 0.0f, 0.0f, 0.0f, 6.0f, 9.8f, -7.5f };
-        default:
-            return { false, 0.0f, 0.0f, 0.0f, 6.0f, 0.0f, 0.0f };
-        }
-    }
-
-    constexpr int ResolveDescriptionTextId(CLASS_TYPE selectedClass)
-    {
-        if (selectedClass == CLASS_SUMMONER)
-            return kSummonerDescriptionTextId;
-        if (selectedClass == CLASS_RAGEFIGHTER)
-            return kRageFighterDescriptionTextId;
-        return kDefaultDescriptionBase + selectedClass;
+    case CLASS_KNIGHT:
+        return {true, 0.0f, 0.0f, -12.0f, 6.05f, 0.0f, 0.0f};
+    case CLASS_WIZARD:
+        return {true, 0.0f, 0.0f, -40.0f, 5.9f, 0.0f, 0.0f};
+    case CLASS_ELF:
+        return {true, 8.0f, 0.0f, 5.0f, 9.1f, 4.8f, 0.0f};
+    case CLASS_DARK:
+        return {true, 8.0f, 0.0f, -13.0f, 6.0f, 0.0f, 1.8f};
+    case CLASS_DARK_LORD:
+        return {true, 8.0f, 0.0f, -18.0f, 6.0f, 0.0f, 0.0f};
+    case CLASS_SUMMONER:
+        return {true, 2.0f, 0.0f, 2.0f, 9.1f, 4.8f, 4.0f};
+    case CLASS_RAGEFIGHTER:
+        return {false, 0.0f, 0.0f, 0.0f, 6.0f, 9.8f, -7.5f};
+    default:
+        return {false, 0.0f, 0.0f, 0.0f, 6.0f, 0.0f, 0.0f};
     }
 }
 
-#define	CMW_OK		0
-#define	CMW_CANCEL	1
+constexpr int ResolveDescriptionTextId(CLASS_TYPE selectedClass)
+{
+    if (selectedClass == CLASS_SUMMONER)
+        return kSummonerDescriptionTextId;
+    if (selectedClass == CLASS_RAGEFIGHTER)
+        return kRageFighterDescriptionTextId;
+    return kDefaultDescriptionBase + selectedClass;
+}
+} // namespace
 
-
+#define CMW_OK 0
+#define CMW_CANCEL 1
 
 extern int g_iChatInputType;
 extern CUITextInputBox* g_pSingleTextInputBox;
 
 void MoveCharacterCamera(vec3_t Origin, vec3_t Position, vec3_t Angle);
 
-CCharMakeWin::CCharMakeWin()
-{
-}
+// cppcheck-suppress uninitMemberVar
+CCharMakeWin::CCharMakeWin() {}
 
-CCharMakeWin::~CCharMakeWin()
-{
-}
+CCharMakeWin::~CCharMakeWin() {}
 
 void CCharMakeWin::Create()
 {
@@ -178,8 +169,7 @@ void CCharMakeWin::Create()
         CWin::RegisterButton(&m_aBtn[i]);
     }
 
-    std::fill(&m_aszJobDesc[0][0],
-        &m_aszJobDesc[0][0] + (CMW_DESC_LINE_MAX * CMW_DESC_ROW_MAX), L'\0');
+    std::fill(&m_aszJobDesc[0][0], &m_aszJobDesc[0][0] + (CMW_DESC_LINE_MAX * CMW_DESC_ROW_MAX), L'\0');
     m_nDescLine = 0;
 
     m_nSelJob = CLASS_KNIGHT;
@@ -299,19 +289,16 @@ void CCharMakeWin::UpdateDisplay()
         if (!g_CharCardEnable.bCharacterEnable[i])
             m_abtnJob[i + CLASS_DARK].SetEnable(false);
     }
-#else //PBG_ADD_CHARACTERCARD
+#else  // PBG_ADD_CHARACTERCARD
     m_abtnJob[CLASS_SUMMONER].SetEnable(true);
-#endif //PBG_ADD_CHARACTERCARD
+#endif // PBG_ADD_CHARACTERCARD
 
     const bool isDarkLord = (m_nSelJob == CLASS_DARK_LORD);
     m_asprBack[CMW_SPR_STAT].SetSize(0, isDarkLord ? kDarkLordStatHeight : kDefaultStatHeight, Y);
 
     const int descriptionTextId = ResolveDescriptionTextId(m_nSelJob);
-    m_nDescLine = ::SeparateTextIntoLines(
-        GlobalText[descriptionTextId],
-        m_aszJobDesc[0],
-        CMW_DESC_LINE_MAX,
-        CMW_DESC_ROW_MAX);
+    m_nDescLine =
+        ::SeparateTextIntoLines(GlobalText[descriptionTextId], m_aszJobDesc[0], CMW_DESC_LINE_MAX, CMW_DESC_ROW_MAX);
 
     SelectCreateCharacter();
 }
@@ -377,11 +364,10 @@ void CCharMakeWin::RequestCreateCharacter()
         rUIMng.PopUpMsgWin(MESSAGE_SPECIAL_NAME);
     else
     {
-        const std::uint8_t classByte =
-            static_cast<std::uint8_t>((CharacterView.Class << 2) + CharacterView.Skin);
+        const std::uint8_t classByte = static_cast<std::uint8_t>((CharacterView.Class << 2) + CharacterView.Skin);
         CurrentProtocolState = REQUEST_CREATE_CHARACTER;
         SocketClient->ToGameServer()->SendCreateCharacter(InputText[0], classByte);
-        //SendRequestCreateCharacter(InputText[0], CharacterView.Class, CharacterView.Skin);
+        // SendRequestCreateCharacter(InputText[0], CharacterView.Class, CharacterView.Skin);
         rUIMng.HideWin(this);
         rUIMng.PopUpMsgWin(MESSAGE_WAIT);
     }
@@ -405,46 +391,37 @@ void CCharMakeWin::RenderControls()
     const int statBaseX = m_asprBack[CMW_SPR_STAT].GetXPos() + kStatTextOffsetX;
     for (std::size_t statIndex = 0; statIndex < stats.values.size(); ++statIndex)
     {
-        const int statScreenY = int(
-            (m_asprBack[CMW_SPR_STAT].GetYPos() + kStatYOffset + static_cast<int>(statIndex) * kStatLineSpacing)
-            / g_fScreenRate_y);
+        const int statScreenY =
+            int((m_asprBack[CMW_SPR_STAT].GetYPos() + kStatYOffset + static_cast<int>(statIndex) * kStatLineSpacing) /
+                g_fScreenRate_y);
 
         g_pRenderText->SetTextColor(CLRDW_ORANGE);
-        g_pRenderText->RenderText(
-            int((statBaseX + kStatValueOffset) / g_fScreenRate_x),
-            statScreenY,
-            stats.values[statIndex]);
+        g_pRenderText->RenderText(int((statBaseX + kStatValueOffset) / g_fScreenRate_x), statScreenY,
+                                  stats.values[statIndex]);
 
         g_pRenderText->SetTextColor(CLRDW_WHITE);
-        g_pRenderText->RenderText(
-            int(statBaseX / g_fScreenRate_x),
-            statScreenY,
-            GlobalText[kStatLabelBaseId + static_cast<int>(statIndex)]);
+        g_pRenderText->RenderText(int(statBaseX / g_fScreenRate_x), statScreenY,
+                                  GlobalText[kStatLabelBaseId + static_cast<int>(statIndex)]);
     }
 
     if (m_nSelJob == CLASS_DARK_LORD)
     {
-        const int leadershipY = int(
-            (m_asprBack[CMW_SPR_STAT].GetYPos() + kStatYOffset + 4 * kStatLineSpacing) / g_fScreenRate_y);
+        const int leadershipY =
+            int((m_asprBack[CMW_SPR_STAT].GetYPos() + kStatYOffset + 4 * kStatLineSpacing) / g_fScreenRate_y);
 
         g_pRenderText->SetTextColor(CLRDW_ORANGE);
-        g_pRenderText->RenderText(
-            int((statBaseX + kStatValueOffset) / g_fScreenRate_x),
-            leadershipY,
-            kDarkLordLeadershipStatValue);
+        g_pRenderText->RenderText(int((statBaseX + kStatValueOffset) / g_fScreenRate_x), leadershipY,
+                                  kDarkLordLeadershipStatValue);
         g_pRenderText->SetTextColor(CLRDW_WHITE);
-        g_pRenderText->RenderText(
-            int(statBaseX / g_fScreenRate_x),
-            leadershipY,
-            GlobalText[kDarkLordLeadershipTextId]);
+        g_pRenderText->RenderText(int(statBaseX / g_fScreenRate_x), leadershipY, GlobalText[kDarkLordLeadershipTextId]);
     }
 
     for (int lineIndex = 0; lineIndex < m_nDescLine; ++lineIndex)
     {
         g_pRenderText->RenderText(
             int((m_asprBack[CMW_SPR_DESC].GetXPos() + kDescriptionTextOffsetX) / g_fScreenRate_x),
-            int((m_asprBack[CMW_SPR_DESC].GetYPos() + kDescriptionTextOffsetY + lineIndex * kDescriptionLineSpacing)
-                / g_fScreenRate_y),
+            int((m_asprBack[CMW_SPR_DESC].GetYPos() + kDescriptionTextOffsetY + lineIndex * kDescriptionLineSpacing) /
+                g_fScreenRate_y),
             m_aszJobDesc[lineIndex]);
     }
 
@@ -453,10 +430,8 @@ void CCharMakeWin::RenderControls()
     if (g_iChatInputType == 1)
         g_pSingleTextInputBox->Render();
     else if (g_iChatInputType == 0)
-        ::RenderInputText(
-            int((m_asprBack[CMW_SPR_INPUT].GetXPos() + 78) / g_fScreenRate_x),
-            int((m_asprBack[CMW_SPR_INPUT].GetYPos() + 21) / g_fScreenRate_y),
-            0);
+        ::RenderInputText(int((m_asprBack[CMW_SPR_INPUT].GetXPos() + 78) / g_fScreenRate_x),
+                          int((m_asprBack[CMW_SPR_INPUT].GetYPos() + 21) / g_fScreenRate_y), 0);
 }
 
 void CCharMakeWin::SelectCreateCharacter()
@@ -484,7 +459,8 @@ void CCharMakeWin::RenderCreateCharacter()
     CameraFOV = 10.f;
     MoveCharacterCamera(CharacterView.Object.Position, Position, Angle);
 
-    BeginOpengl(m_winBack.GetXPos() / g_fScreenRate_x, m_winBack.GetYPos() / g_fScreenRate_y, 410 / g_fScreenRate_x, 335 / g_fScreenRate_y);
+    BeginOpengl(m_winBack.GetXPos() / g_fScreenRate_x, m_winBack.GetYPos() / g_fScreenRate_y, 410 / g_fScreenRate_x,
+                335 / g_fScreenRate_y);
 
     const ClassRenderParameters params = GetRenderParameters(CharacterView.Class);
     if (params.overrideAngle)

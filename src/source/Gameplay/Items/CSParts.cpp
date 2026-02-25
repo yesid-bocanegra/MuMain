@@ -34,7 +34,8 @@ bool ShouldAssignWebzenPart(CHARACTER& character)
 
 bool ShouldHideCastleMarks(const CHARACTER& character)
 {
-    const bool isCastleMark = (character.EtcPart >= PARTS_ATTACK_TEAM_MARK) && (character.EtcPart <= PARTS_DEFENSE_KING_TEAM_MARK);
+    const bool isCastleMark =
+        (character.EtcPart >= PARTS_ATTACK_TEAM_MARK) && (character.EtcPart <= PARTS_DEFENSE_KING_TEAM_MARK);
     return isCastleMark && !battleCastle::IsBattleCastleStart();
 }
 
@@ -196,7 +197,7 @@ void CSParts::IRender(CHARACTER* c)
 
     OBJECT* o = &c->Object;
     BMD* b = &Models[o->Type];
-    vec3_t  Position;
+    vec3_t Position;
 
     b->TransformPosition(o->BoneTransform[m_iBoneNumber], m_vOffset, Position, true);
     VectorCopy(Position, m_pObj.Position);
@@ -214,13 +215,15 @@ void CSParts::IRender(CHARACTER* c)
     b->CurrentAction = m_pObj.CurrentAction;
 
     const float speed = m_pObj.Velocity;
-    b->PlayAnimation(&m_pObj.AnimationFrame, &m_pObj.PriorAnimationFrame, &m_pObj.PriorAction, speed, m_pObj.Position, m_pObj.Angle);
+    b->PlayAnimation(&m_pObj.AnimationFrame, &m_pObj.PriorAnimationFrame, &m_pObj.PriorAction, speed, m_pObj.Position,
+                     m_pObj.Angle);
 
     Vector(1.f, 1.f, 1.f, b->BodyLight);
     RenderObject(&m_pObj, true);
 }
 
-CSAnimationParts::CSAnimationParts(int Type, int BoneNumber, bool bBillBoard, float x, float y, float z, float ax, float ay, float az)
+CSAnimationParts::CSAnimationParts(int Type, int BoneNumber, bool bBillBoard, float x, float y, float z, float ax,
+                                   float ay, float az)
 {
     m_iBoneNumber = BoneNumber;
 
@@ -243,7 +246,8 @@ void CSAnimationParts::Animation(CHARACTER* c)
     b->CurrentAction = m_pObj.CurrentAction;
 
     float fSpeed = m_pObj.Velocity;
-    b->PlayAnimation(&m_pObj.AnimationFrame, &m_pObj.PriorAnimationFrame, &m_pObj.PriorAction, fSpeed, m_pObj.Position, m_pObj.Angle);
+    b->PlayAnimation(&m_pObj.AnimationFrame, &m_pObj.PriorAnimationFrame, &m_pObj.PriorAction, fSpeed, m_pObj.Position,
+                     m_pObj.Angle);
 }
 
 void CSAnimationParts::IRender(CHARACTER* c)
@@ -260,7 +264,7 @@ void CSAnimationParts::IRender(CHARACTER* c)
 
     OBJECT* o = &c->Object;
     BMD* b = &Models[o->Type];
-    vec3_t  Position;
+    vec3_t Position;
 
     b->TransformPosition(o->BoneTransform[m_iBoneNumber], m_vOffset, Position, true);
     VectorAdd(o->Position, Position, m_pObj.Position);
@@ -294,22 +298,20 @@ void CSParts2D::IRender(CHARACTER* c)
 
     OBJECT* o = &c->Object;
     BMD* b = &Models[o->Type];
-    vec3_t  Position;
-    BYTE    bSubType = m_pObj.SubType;
+    vec3_t Position;
+    BYTE bSubType = m_pObj.SubType;
 
     b->TransformPosition(o->BoneTransform[m_iBoneNumber], m_vOffset, Position, true);
     VectorCopy(o->Position, m_pObj.Position);
     m_pObj.Position[2] = Position[2];
 
-    const bool isMarkType =
-        (c->EtcPart == PARTS_ATTACK_TEAM_MARK ||
-         c->EtcPart == PARTS_ATTACK_TEAM_MARK2 ||
-         c->EtcPart == PARTS_ATTACK_TEAM_MARK3 ||
-         c->EtcPart == PARTS_DEFENSE_TEAM_MARK);
+    const bool isMarkType = (c->EtcPart == PARTS_ATTACK_TEAM_MARK || c->EtcPart == PARTS_ATTACK_TEAM_MARK2 ||
+                             c->EtcPart == PARTS_ATTACK_TEAM_MARK3 || c->EtcPart == PARTS_DEFENSE_TEAM_MARK);
 
     if (isMarkType && c->GuildStatus == G_MASTER)
     {
-        const bool sameUnionAndGuild = (wcscmp(GuildMark[c->GuildMarkIndex].UnionName, GuildMark[c->GuildMarkIndex].GuildName) == 0);
+        const bool sameUnionAndGuild =
+            (wcscmp(GuildMark[c->GuildMarkIndex].UnionName, GuildMark[c->GuildMarkIndex].GuildName) == 0);
         const bool emptyUnionName = (wcscmp(GuildMark[c->GuildMarkIndex].UnionName, L"") == 0);
         if (sameUnionAndGuild || emptyUnionName)
         {

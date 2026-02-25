@@ -10,10 +10,9 @@
 #include "NewUISystem.h"
 
 extern CUITextInputBox* g_pSingleTextInputBox;
-extern int				g_iChatInputType;
+extern int g_iChatInputType;
 
-
-
+// cppcheck-suppress uninitMemberVar
 CUIPopup::CUIPopup()
 {
     int nButtonID = 0;
@@ -37,9 +36,7 @@ CUIPopup::CUIPopup()
     Init();
 }
 
-CUIPopup::~CUIPopup()
-{
-}
+CUIPopup::~CUIPopup() {}
 
 void CUIPopup::Init()
 {
@@ -54,7 +51,8 @@ void CUIPopup::Init()
     ZeroMemory(m_szInputText, sizeof(char) * 1024);
 }
 
-DWORD CUIPopup::SetPopup(const wchar_t* pszText, int nLineCount, int nBufferSize, int Type, int (*ResultFunc)(POPUP_RESULT Result), POPUP_ALIGN Align)
+DWORD CUIPopup::SetPopup(const wchar_t* pszText, int nLineCount, int nBufferSize, int Type,
+                         int (*ResultFunc)(POPUP_RESULT Result), POPUP_ALIGN Align)
 {
     if (nLineCount > MAX_POPUP_TEXTLINE)
     {
@@ -149,7 +147,8 @@ DWORD CUIPopup::GetPopupID()
 
 void CUIPopup::Close()
 {
-    if (m_dwPopupID == 0)	return;
+    if (m_dwPopupID == 0)
+        return;
 
     if (m_PopupType & POPUP_INPUT)
     {
@@ -171,7 +170,8 @@ void CUIPopup::Close()
 
 void CUIPopup::CancelPopup()
 {
-    if (m_dwPopupID == 0)	return;
+    if (m_dwPopupID == 0)
+        return;
 
     if (PopupResultFuncPointer)
     {
@@ -207,7 +207,8 @@ void CUIPopup::CancelPopup()
 
 bool CUIPopup::PressKey(int nKey)
 {
-    if (m_dwPopupID == 0)	return false;
+    if (m_dwPopupID == 0)
+        return false;
 
     if (m_PopupType & POPUP_CUSTOM)
     {
@@ -339,7 +340,8 @@ bool CUIPopup::CheckTimeOut()
 
 void CUIPopup::UpdateInput()
 {
-    if (m_dwPopupID == 0)	return;
+    if (m_dwPopupID == 0)
+        return;
 
     float fSubWinPos_x = 320 - m_sizePopup.cx / 2;
     float fSubWinPos_y = 130 - m_sizePopup.cy / 2;
@@ -497,7 +499,8 @@ void CUIPopup::Render()
 
         if (m_PopupType & POPUP_INPUT)
         {
-            RenderBitmap(BITMAP_INVENTORY + 11, 320 - m_nInputSize / 2, fPosY, m_nInputSize, 18, 0.f, 0.f, 113.f / 128.f, 18.f / 32.f);
+            RenderBitmap(BITMAP_INVENTORY + 11, 320 - m_nInputSize / 2, fPosY, m_nInputSize, 18, 0.f, 0.f,
+                         113.f / 128.f, 18.f / 32.f);
 
             fPosY += 7;
             if (g_iChatInputType == 1)
@@ -525,9 +528,11 @@ void CUIPopup::Render()
             DWORD dwCurrTime = GetTickCount();
             float fProgress = (float)(dwCurrTime - m_dwPopupStartTime) / m_dwPopupElapseTime;
 
-            RenderBitmap(BITMAP_INTERFACE_EX + 42, 320 - 75, fPosY, 150.0f, 12.0f, 0.f, 0.f, 200.0f / 256.0f, 16.0f / 16.0f);
+            RenderBitmap(BITMAP_INTERFACE_EX + 42, 320 - 75, fPosY, 150.0f, 12.0f, 0.f, 0.f, 200.0f / 256.0f,
+                         16.0f / 16.0f);
             EnableAlphaBlend();
-            RenderBitmap(BITMAP_INTERFACE_EX + 43, 320 - 75 - 4, fPosY, 150.0f * fProgress, 12.0f, 0.f, 0.f, (150.0f * fProgress) / 256.0f, 16.0f / 16.0f);
+            RenderBitmap(BITMAP_INTERFACE_EX + 43, 320 - 75 - 4, fPosY, 150.0f * fProgress, 12.0f, 0.f, 0.f,
+                         (150.0f * fProgress) / 256.0f, 16.0f / 16.0f);
             DisableAlphaBlend();
             fPosY += 10;
         }

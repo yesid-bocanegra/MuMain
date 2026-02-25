@@ -33,13 +33,12 @@ GMNewTown::GMNewTown()
     m_bCharacterSceneCheckMouse = false;
 }
 
-GMNewTown::~GMNewTown()
-{
-}
+GMNewTown::~GMNewTown() {}
 
 bool GMNewTown::IsCurrentMap()
 {
-    return (gMapManager.WorldActive == WD_51HOME_6TH_CHAR || gMapManager.WorldActive == WD_73NEW_LOGIN_SCENE || gMapManager.WorldActive == WD_74NEW_CHARACTER_SCENE );
+    return (gMapManager.WorldActive == WD_51HOME_6TH_CHAR || gMapManager.WorldActive == WD_73NEW_LOGIN_SCENE ||
+            gMapManager.WorldActive == WD_74NEW_CHARACTER_SCENE);
 }
 bool GMNewTown::IsNewMap73_74()
 {
@@ -56,9 +55,15 @@ void GMNewTown::CreateObject(OBJECT* pObject)
         {
             switch (pObject->Type)
             {
-            case 129:	case 79:	case 83:
-            case 82:	case 85:	case 86:
-            case 130:	case 131:	case 158:
+            case 129:
+            case 79:
+            case 83:
+            case 82:
+            case 85:
+            case 86:
+            case 130:
+            case 131:
+            case 158:
                 pObject->HiddenMesh = -2;
                 return;
             default:
@@ -77,8 +82,10 @@ void GMNewTown::CreateObject(OBJECT* pObject)
     break;
     }
 
-    if (pObject->Type == 15 || pObject->Type == 25 || pObject->Type == 27 || pObject->Type == 45 || pObject->Type == 46 || pObject->Type == 47 || pObject->Type == 48
-        || pObject->Type == 53 || pObject->Type == 98 || pObject->Type == 107 || pObject->Type == 115 || pObject->Type == 122 || pObject->Type == 130)
+    if (pObject->Type == 15 || pObject->Type == 25 || pObject->Type == 27 || pObject->Type == 45 ||
+        pObject->Type == 46 || pObject->Type == 47 || pObject->Type == 48 || pObject->Type == 53 ||
+        pObject->Type == 98 || pObject->Type == 107 || pObject->Type == 115 || pObject->Type == 122 ||
+        pObject->Type == 130)
     {
         pObject->CollisionRange = -300;
     }
@@ -168,15 +175,12 @@ bool GMNewTown::MoveObject(OBJECT* pObject)
                 pBoid->AlphaEnable = true;
                 pBoid->Scale = 0.5f;
 
-                if (
-                    gMapManager.WorldActive == WD_74NEW_CHARACTER_SCENE
-                    )
+                if (gMapManager.WorldActive == WD_74NEW_CHARACTER_SCENE)
                     pBoid->ShadowScale = 0.f;
+                else if (pObject->Position[2] > 100)
+                    pBoid->ShadowScale = 15.f;
                 else
-                    if (pObject->Position[2] > 100)
-                        pBoid->ShadowScale = 15.f;
-                    else
-                        pBoid->ShadowScale = 0.f;
+                    pBoid->ShadowScale = 0.f;
                 pBoid->HiddenMesh = -1;
                 pBoid->BlendMesh = -1;
                 pBoid->Timer = (float)(rand() % 314) * 0.01f;
@@ -270,11 +274,11 @@ bool GMNewTown::RenderObjectVisual(OBJECT* pObject, BMD* pModel)
     case 60:
         if (pObject->HiddenMesh != -2)
         {
-            vec3_t  Light;
+            vec3_t Light;
             Vector(0.06f, 0.07f, 0.08f, Light);
             for (int i = 0; i < 10; ++i)
             {
-                    CreateParticle(BITMAP_CLOUD, pObject->Position, pObject->Angle, Light, 3, pObject->Scale, pObject);
+                CreateParticle(BITMAP_CLOUD, pObject->Position, pObject->Angle, Light, 3, pObject->Scale, pObject);
             }
             pObject->HiddenMesh = -2;
         }
@@ -326,8 +330,21 @@ bool GMNewTown::RenderObjectVisual(OBJECT* pObject, BMD* pModel)
         }
     }
     break;
-    case 133:	case 134:	case 135:	case 136:	case 137:	case 138:	case 139:
-    case 140:	case 141:	case 142:	case 143:	case 144:	case 145:	case 146:	case 147:
+    case 133:
+    case 134:
+    case 135:
+    case 136:
+    case 137:
+    case 138:
+    case 139:
+    case 140:
+    case 141:
+    case 142:
+    case 143:
+    case 144:
+    case 145:
+    case 146:
+    case 147:
         if (pObject->HiddenMesh != -2)
         {
             pObject->HiddenMesh = -2;
@@ -337,7 +354,8 @@ bool GMNewTown::RenderObjectVisual(OBJECT* pObject, BMD* pModel)
             for (int i = 0; i < MAX_CHARACTERS_CLIENT; i++)
             {
                 icntIndex = i;
-                if (!CharactersClient[i].Object.Live) break;
+                if (!CharactersClient[i].Object.Live)
+                    break;
             }
 
             CHARACTER* pCharacter = &CharactersClient[icntIndex];
@@ -559,7 +577,13 @@ bool GMNewTown::RenderObjectVisual(OBJECT* pObject, BMD* pModel)
             pObject->SubType = icntIndex;
         }
         break;
-    case 149:		case 150:		case 151:		case 152:		case 153:		case 154:		case 155:
+    case 149:
+    case 150:
+    case 151:
+    case 152:
+    case 153:
+    case 154:
+    case 155:
         if (pObject->HiddenMesh != -2)
         {
             pObject->HiddenMesh = -2;
@@ -579,14 +603,28 @@ bool GMNewTown::RenderObjectVisual(OBJECT* pObject, BMD* pModel)
 
             switch (pObject->Type)
             {
-                //case 148: CreateMonster(418, 0, 0, icntIndex); break;
-            case 149: CreateMonster(EMonsterType::MONSTER_POLLUTED_BUTTERFLY, 0, 0, icntIndex); break;
-            case 150: CreateMonster(MONSTER_HIDEOUS_RABBIT, 0, 0, icntIndex); break;
-            case 151: CreateMonster(MONSTER_WEREWOLF2, 0, 0, icntIndex); break;
-            case 152: CreateMonster(MONSTER_CURSED_LICH, 0, 0, icntIndex); break;
-            case 153: CreateMonster(MONSTER_TOTEM_GOLEM, 0, 0, icntIndex); break;
-            case 154: CreateMonster(MONSTER_GRIZZLY, 0, 0, icntIndex); break;
-            case 155: CreateMonster(MONSTER_CAPTAIN_GRIZZLY, 0, 0, icntIndex); break;
+                // case 148: CreateMonster(418, 0, 0, icntIndex); break;
+            case 149:
+                CreateMonster(EMonsterType::MONSTER_POLLUTED_BUTTERFLY, 0, 0, icntIndex);
+                break;
+            case 150:
+                CreateMonster(MONSTER_HIDEOUS_RABBIT, 0, 0, icntIndex);
+                break;
+            case 151:
+                CreateMonster(MONSTER_WEREWOLF2, 0, 0, icntIndex);
+                break;
+            case 152:
+                CreateMonster(MONSTER_CURSED_LICH, 0, 0, icntIndex);
+                break;
+            case 153:
+                CreateMonster(MONSTER_TOTEM_GOLEM, 0, 0, icntIndex);
+                break;
+            case 154:
+                CreateMonster(MONSTER_GRIZZLY, 0, 0, icntIndex);
+                break;
+            case 155:
+                CreateMonster(MONSTER_CAPTAIN_GRIZZLY, 0, 0, icntIndex);
+                break;
             }
 
             VectorCopy(pObject->Position, pNewObject->Position);
@@ -700,14 +738,19 @@ bool GMNewTown::RenderObjectVisual(OBJECT* pObject, BMD* pModel)
                 if (pObject->Type == 153)
                 {
                     int iRand = rand() % 3;
-                    if (iRand == 0) SetAction(pObject->Owner, MONSTER01_ATTACK1);
-                    else if (iRand == 1)  SetAction(pObject->Owner, MONSTER01_ATTACK2);
-                    else SetAction(pObject->Owner, MONSTER01_SHOCK);
+                    if (iRand == 0)
+                        SetAction(pObject->Owner, MONSTER01_ATTACK1);
+                    else if (iRand == 1)
+                        SetAction(pObject->Owner, MONSTER01_ATTACK2);
+                    else
+                        SetAction(pObject->Owner, MONSTER01_SHOCK);
                 }
                 else if ((pObject->Type >= 152 && pObject->Type <= 155))
                 {
-                    if (rand_fps_check(2)) SetAction(pObject->Owner, MONSTER01_ATTACK1);
-                    else SetAction(pObject->Owner, MONSTER01_SHOCK);
+                    if (rand_fps_check(2))
+                        SetAction(pObject->Owner, MONSTER01_ATTACK1);
+                    else
+                        SetAction(pObject->Owner, MONSTER01_SHOCK);
                 }
                 else if ((pObject->Type >= 149 && pObject->Type <= 151))
                 {
@@ -720,7 +763,7 @@ bool GMNewTown::RenderObjectVisual(OBJECT* pObject, BMD* pModel)
     return true;
 }
 
-extern float  IntensityTransform[MAX_MESH][MAX_VERTICES];
+extern float IntensityTransform[MAX_MESH][MAX_VERTICES];
 
 bool GMNewTown::RenderObject(OBJECT* pObject, BMD* pModel, bool ExtraMon)
 {
@@ -745,35 +788,39 @@ bool GMNewTown::RenderObject(OBJECT* pObject, BMD* pModel, bool ExtraMon)
         Vector(1.0f, 1.0f, 1.0f, pObject->Light);
     }
 
-    if (pObject->Type == 53 || pObject->Type == 55
-        || pObject->Type == 110 || pObject->Type == 89
-        || pObject->Type == 78 || pObject->Type == 79
-        || pObject->Type == 125 || pObject->Type == 128
-        || pObject->Type == 2
-        )
+    if (pObject->Type == 53 || pObject->Type == 55 || pObject->Type == 110 || pObject->Type == 89 ||
+        pObject->Type == 78 || pObject->Type == 79 || pObject->Type == 125 || pObject->Type == 128 ||
+        pObject->Type == 2)
     {
         pObject->m_bRenderAfterCharacter = true;
     }
     else if (pObject->Type == 73)
     {
-        pModel->RenderBody(RENDER_TEXTURE, pObject->Alpha, pObject->BlendMesh, pObject->BlendMeshLight, pObject->BlendMeshTexCoordU, pObject->BlendMeshTexCoordV, pObject->HiddenMesh);
-        pModel->RenderBody(RENDER_BRIGHT | RENDER_CHROME, 0.5f, pObject->BlendMesh, pObject->BlendMeshLight, pObject->BlendMeshTexCoordU, pObject->BlendMeshTexCoordV, pObject->HiddenMesh);
+        pModel->RenderBody(RENDER_TEXTURE, pObject->Alpha, pObject->BlendMesh, pObject->BlendMeshLight,
+                           pObject->BlendMeshTexCoordU, pObject->BlendMeshTexCoordV, pObject->HiddenMesh);
+        pModel->RenderBody(RENDER_BRIGHT | RENDER_CHROME, 0.5f, pObject->BlendMesh, pObject->BlendMeshLight,
+                           pObject->BlendMeshTexCoordU, pObject->BlendMeshTexCoordV, pObject->HiddenMesh);
     }
     else if (pObject->Type == 104)
     {
-        pModel->RenderBody(RENDER_TEXTURE, pObject->Alpha, pObject->BlendMesh, pObject->BlendMeshLight, pObject->BlendMeshTexCoordU, pObject->BlendMeshTexCoordV, pObject->HiddenMesh);
+        pModel->RenderBody(RENDER_TEXTURE, pObject->Alpha, pObject->BlendMesh, pObject->BlendMeshLight,
+                           pObject->BlendMeshTexCoordU, pObject->BlendMeshTexCoordV, pObject->HiddenMesh);
         float fLumi = (sinf(WorldTime * 0.002f) + 1.f) * 0.5f;
         pModel->RenderMesh(4, RENDER_BRIGHT, pObject->Alpha, 4, fLumi);
     }
     else if (pObject->Type == 113)
     {
-        pModel->RenderBody(RENDER_TEXTURE, pObject->Alpha, pObject->BlendMesh, pObject->BlendMeshLight, pObject->BlendMeshTexCoordU, pObject->BlendMeshTexCoordV, pObject->HiddenMesh);
-        pModel->RenderMesh(9, RENDER_BRIGHT | RENDER_CHROME, pObject->Alpha, pObject->BlendMesh, pObject->BlendMeshLight);
+        pModel->RenderBody(RENDER_TEXTURE, pObject->Alpha, pObject->BlendMesh, pObject->BlendMeshLight,
+                           pObject->BlendMeshTexCoordU, pObject->BlendMeshTexCoordV, pObject->HiddenMesh);
+        pModel->RenderMesh(9, RENDER_BRIGHT | RENDER_CHROME, pObject->Alpha, pObject->BlendMesh,
+                           pObject->BlendMeshLight);
     }
     else if (pObject->Type == 114)
     {
-        pModel->RenderBody(RENDER_TEXTURE, pObject->Alpha, pObject->BlendMesh, pObject->BlendMeshLight, pObject->BlendMeshTexCoordU, pObject->BlendMeshTexCoordV, pObject->HiddenMesh);
-        pModel->RenderMesh(9, RENDER_BRIGHT | RENDER_CHROME, pObject->Alpha, pObject->BlendMesh, pObject->BlendMeshLight);
+        pModel->RenderBody(RENDER_TEXTURE, pObject->Alpha, pObject->BlendMesh, pObject->BlendMeshLight,
+                           pObject->BlendMeshTexCoordU, pObject->BlendMeshTexCoordV, pObject->HiddenMesh);
+        pModel->RenderMesh(9, RENDER_BRIGHT | RENDER_CHROME, pObject->Alpha, pObject->BlendMesh,
+                           pObject->BlendMeshLight);
     }
     else if (pObject->Type == 121)
     {
@@ -790,7 +837,8 @@ bool GMNewTown::RenderObject(OBJECT* pObject, BMD* pModel, bool ExtraMon)
     {
         pModel->RenderMesh(0, RENDER_TEXTURE, pObject->Alpha, pObject->BlendMesh, pObject->BlendMeshLight);
         pModel->RenderMesh(1, RENDER_TEXTURE, pObject->Alpha, pObject->BlendMesh, pObject->BlendMeshLight);
-        pModel->RenderMesh(2, RENDER_TEXTURE | RENDER_BRIGHT, pObject->Alpha, pObject->BlendMesh, pObject->BlendMeshLight);
+        pModel->RenderMesh(2, RENDER_TEXTURE | RENDER_BRIGHT, pObject->Alpha, pObject->BlendMesh,
+                           pObject->BlendMeshLight);
     }
     else if (pObject->Type == MODEL_HIDEOUS_RABBIT)
     {
@@ -800,7 +848,7 @@ bool GMNewTown::RenderObject(OBJECT* pObject, BMD* pModel, bool ExtraMon)
     else if (pObject->Type == MODEL_TOTEM_GOLEM && pObject->CurrentAction == MONSTER01_DIE)
     {
     }
-   else
+    else
         return false;
 
     return true;
@@ -817,20 +865,27 @@ void GMNewTown::RenderObjectAfterCharacter(OBJECT* pObject, BMD* pModel, bool Ex
         return;
     }
 
-    if (pObject->Type == 2 || pObject->Type == 53 || pObject->Type == 55 || pObject->Type == 89 || pObject->Type == 125 || pObject->Type == 128)	// ������1,2, ����, ȸ����, ��
+    if (pObject->Type == 2 || pObject->Type == 53 || pObject->Type == 55 || pObject->Type == 89 ||
+        pObject->Type == 125 || pObject->Type == 128) // ������1,2, ����, ȸ����, ��
     {
-        pModel->RenderBody(RENDER_TEXTURE, pObject->Alpha, pObject->BlendMesh, pObject->BlendMeshLight, pObject->BlendMeshTexCoordU, pObject->BlendMeshTexCoordV, pObject->HiddenMesh);
+        pModel->RenderBody(RENDER_TEXTURE, pObject->Alpha, pObject->BlendMesh, pObject->BlendMeshLight,
+                           pObject->BlendMeshTexCoordU, pObject->BlendMeshTexCoordV, pObject->HiddenMesh);
     }
     else if (pObject->Type == 110)
     {
-        pModel->RenderMesh(2, RENDER_TEXTURE | RENDER_BRIGHT | RENDER_CHROME2, pObject->Alpha, pObject->BlendMesh, pObject->BlendMeshLight);
-        pModel->RenderMesh(1, RENDER_TEXTURE | RENDER_BRIGHT, pObject->Alpha, pObject->BlendMesh, pObject->BlendMeshLight);
-        pModel->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT, pObject->Alpha, pObject->BlendMesh, pObject->BlendMeshLight);
+        pModel->RenderMesh(2, RENDER_TEXTURE | RENDER_BRIGHT | RENDER_CHROME2, pObject->Alpha, pObject->BlendMesh,
+                           pObject->BlendMeshLight);
+        pModel->RenderMesh(1, RENDER_TEXTURE | RENDER_BRIGHT, pObject->Alpha, pObject->BlendMesh,
+                           pObject->BlendMeshLight);
+        pModel->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT, pObject->Alpha, pObject->BlendMesh,
+                           pObject->BlendMeshLight);
     }
     else if (pObject->Type == 78)
     {
-        pModel->RenderMesh(0, RENDER_TEXTURE, pObject->Alpha, pObject->BlendMesh, pObject->BlendMeshLight, pObject->BlendMeshTexCoordU, pObject->BlendMeshTexCoordV);
-        pModel->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT, pObject->Alpha, pObject->BlendMesh, pObject->BlendMeshLight, pObject->BlendMeshTexCoordU, pObject->BlendMeshTexCoordV);
+        pModel->RenderMesh(0, RENDER_TEXTURE, pObject->Alpha, pObject->BlendMesh, pObject->BlendMeshLight,
+                           pObject->BlendMeshTexCoordU, pObject->BlendMeshTexCoordV);
+        pModel->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT, pObject->Alpha, pObject->BlendMesh,
+                           pObject->BlendMeshLight, pObject->BlendMeshTexCoordU, pObject->BlendMeshTexCoordV);
         vec3_t p, Position, Light;
         for (int i = 1; i <= 4; ++i)
         {
@@ -842,8 +897,10 @@ void GMNewTown::RenderObjectAfterCharacter(OBJECT* pObject, BMD* pModel, bool Ex
     }
     else if (pObject->Type == 79)
     {
-        pModel->RenderMesh(0, RENDER_TEXTURE, pObject->Alpha, pObject->BlendMesh, pObject->BlendMeshLight, pObject->BlendMeshTexCoordU, pObject->BlendMeshTexCoordV);
-        pModel->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT, pObject->Alpha, pObject->BlendMesh, pObject->BlendMeshLight, pObject->BlendMeshTexCoordU, pObject->BlendMeshTexCoordV);
+        pModel->RenderMesh(0, RENDER_TEXTURE, pObject->Alpha, pObject->BlendMesh, pObject->BlendMeshLight,
+                           pObject->BlendMeshTexCoordU, pObject->BlendMeshTexCoordV);
+        pModel->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT, pObject->Alpha, pObject->BlendMesh,
+                           pObject->BlendMeshLight, pObject->BlendMeshTexCoordU, pObject->BlendMeshTexCoordV);
 
         vec3_t p, Position, Light;
         for (int i = 1; i <= 6; ++i)
@@ -962,21 +1019,25 @@ void GMNewTown::MoveBlurEffect(CHARACTER* pCharacter, OBJECT* pObject, BMD* pMod
     {
         float Start_Frame = 0.f;
         float End_Frame = 6.0f;
-        if ((pObject->AnimationFrame >= Start_Frame && pObject->AnimationFrame <= End_Frame && pObject->CurrentAction == MONSTER01_ATTACK1)
-            || (pObject->AnimationFrame >= Start_Frame && pObject->AnimationFrame <= End_Frame && pObject->CurrentAction == MONSTER01_ATTACK2))
+        if ((pObject->AnimationFrame >= Start_Frame && pObject->AnimationFrame <= End_Frame &&
+             pObject->CurrentAction == MONSTER01_ATTACK1) ||
+            (pObject->AnimationFrame >= Start_Frame && pObject->AnimationFrame <= End_Frame &&
+             pObject->CurrentAction == MONSTER01_ATTACK2))
         {
-            vec3_t  Light;
+            vec3_t Light;
             Vector(1.0f, 1.2f, 2.f, Light);
 
             vec3_t StartPos, StartRelative;
             vec3_t EndPos, EndRelative;
 
-            float fActionSpeed = pModel->Actions[pObject->CurrentAction].PlaySpeed * static_cast<float>(FPS_ANIMATION_FACTOR);
+            float fActionSpeed =
+                pModel->Actions[pObject->CurrentAction].PlaySpeed * static_cast<float>(FPS_ANIMATION_FACTOR);
             float fSpeedPerFrame = fActionSpeed / 10.f;
             float fAnimationFrame = pObject->AnimationFrame - fActionSpeed;
             for (int i = 0; i < 10; i++)
             {
-                pModel->Animation(BoneTransform, fAnimationFrame, pObject->PriorAnimationFrame, pObject->PriorAction, pObject->Angle, pObject->HeadAngle);
+                pModel->Animation(BoneTransform, fAnimationFrame, pObject->PriorAnimationFrame, pObject->PriorAction,
+                                  pObject->Angle, pObject->HeadAngle);
 
                 Vector(0.f, 0.f, 0.f, StartRelative);
                 Vector(0.f, 0.f, 0.f, EndRelative);
@@ -1042,7 +1103,8 @@ bool GMNewTown::RenderMonsterVisual(CHARACTER* pCharacter, OBJECT* pObject, BMD*
         if (pObject->CurrentAction == MONSTER01_WALK)
         {
             vec3_t Position;
-            Vector(pObject->Position[0] + rand() % 200 - 100, pObject->Position[1] + rand() % 200 - 100, pObject->Position[2], Position);
+            Vector(pObject->Position[0] + rand() % 200 - 100, pObject->Position[1] + rand() % 200 - 100,
+                   pObject->Position[2], Position);
             CreateParticleFpsChecked(BITMAP_SMOKE + 1, Position, pObject->Angle, pObject->Light);
         }
         if (pObject->CurrentAction == MONSTER01_DIE)
@@ -1113,7 +1175,8 @@ bool GMNewTown::PlayMonsterSound(OBJECT* pObject)
     fDis_y = pObject->Position[1] - Hero->Object.Position[1];
     float fDistance = sqrtf(fDis_x * fDis_x + fDis_y * fDis_y);
 
-    if (fDistance > 500.0f) return true;
+    if (fDistance > 500.0f)
+        return true;
 
     switch (pObject->Type)
     {
@@ -1145,8 +1208,8 @@ bool GMNewTown::PlayMonsterSound(OBJECT* pObject)
         }
         return true;
     case MODEL_HIDEOUS_RABBIT:
-        if (pObject->CurrentAction == MONSTER01_STOP1 || pObject->CurrentAction == MONSTER01_STOP2
-            || pObject->CurrentAction == MONSTER01_WALK)
+        if (pObject->CurrentAction == MONSTER01_STOP1 || pObject->CurrentAction == MONSTER01_STOP2 ||
+            pObject->CurrentAction == MONSTER01_WALK)
         {
             if (rand_fps_check(30))
             {

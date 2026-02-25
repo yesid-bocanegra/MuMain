@@ -15,11 +15,11 @@ void TextureScript::setScript(const TextureScript& rhs)
 
 bool TextureScriptParsing::parsingTScriptA(char* filename)
 {
-    int   ch = '_';
-    char  str[] = "RHSN";
+    int ch = '_';
+    char str[] = "RHSN";
     char* strDest;
     char* strTokenFile;
-    char  strFileName[32];
+    char strFileName[32];
 
     memcpy(strFileName, filename, 32);
     strTokenFile = strchr(strFileName, ch);
@@ -29,7 +29,7 @@ bool TextureScriptParsing::parsingTScriptA(char* filename)
         int length = std::min<int>(5, strlen(strDest));
 
         int result = strcspn(strDest, str);
-        if (result)//if ( m_strDest!=NULL )
+        if (result) // if ( m_strDest!=NULL )
         {
             for (int i = 1; i < length; ++i)
             {
@@ -73,7 +73,7 @@ bool TextureScriptParsing::parsingTScriptA(char* filename)
                         m_bBright = true;
                         m_bBeScript = true;
                     }
-#endif //PJH_ADD_PANDA_CHANGERING
+#endif // PJH_ADD_PANDA_CHANGERING
                     return m_bBeScript;
                 }
             }
@@ -84,11 +84,11 @@ bool TextureScriptParsing::parsingTScriptA(char* filename)
 
 bool TextureScriptParsing::parsingTScript(wchar_t* filename)
 {
-    int   ch = '_';
-    wchar_t  str[] = L"RHSN";
+    int ch = '_';
+    wchar_t str[] = L"RHSN";
     wchar_t* strDest;
     wchar_t* strTokenFile;
-    wchar_t  strFileName[32];
+    wchar_t strFileName[32];
 
     memcpy(strFileName, filename, 32);
     strTokenFile = wcschr(strFileName, ch);
@@ -99,7 +99,7 @@ bool TextureScriptParsing::parsingTScript(wchar_t* filename)
         int length = std::min<int>(5, wcslen(strDest));
 
         int result = wcscspn(strDest, str);
-        if (result)//if ( m_strDest!=NULL )
+        if (result) // if ( m_strDest!=NULL )
         {
             for (int i = 1; i < length; ++i)
             {
@@ -128,12 +128,12 @@ bool TextureScriptParsing::parsingTScript(wchar_t* filename)
                 case L'D':
                     if (strTokenFile[i + 1] == L'C')
                     {
-                                               m_byShadowMesh = 1; //  NoneTexture.
+                        m_byShadowMesh = 1; //  NoneTexture.
                         m_bBeScript = true;
                     }
                     else if (strTokenFile[i + 1] == L'T')
                     {
-                                               m_byShadowMesh = 2; //  Texture.
+                        m_byShadowMesh = 2; //  Texture.
                         m_bBeScript = true;
                     }
                     break;
@@ -146,7 +146,7 @@ bool TextureScriptParsing::parsingTScript(wchar_t* filename)
                         m_bBright = true;
                         m_bBeScript = true;
                     }
-#endif //PJH_ADD_PANDA_CHANGERING
+#endif // PJH_ADD_PANDA_CHANGERING
                     return m_bBeScript;
                 }
             }

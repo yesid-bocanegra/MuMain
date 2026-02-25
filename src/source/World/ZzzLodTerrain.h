@@ -1,18 +1,18 @@
 #pragma once
 
-extern vec3_t		 PrimaryTerrainLight[];
-extern vec3_t		 BackTerrainLight[];
-extern vec3_t		 TerrainLight[];
-extern float		 PrimaryTerrainHeight[];
-extern float		 BackTerrainHeight[];
+extern vec3_t PrimaryTerrainLight[];
+extern vec3_t BackTerrainLight[];
+extern vec3_t TerrainLight[];
+extern float PrimaryTerrainHeight[];
+extern float BackTerrainHeight[];
 extern unsigned char TerrainMappingLayer1[];
 extern unsigned char TerrainMappingLayer2[];
-extern float         TerrainMappingAlpha[];
-extern WORD          TerrainWall[];
+extern float TerrainMappingAlpha[];
+extern WORD TerrainWall[];
 
 inline int TERRAIN_INDEX(int x, int y)
 {
-    return (y) * TERRAIN_SIZE + (x);
+    return (y)*TERRAIN_SIZE + (x);
 }
 
 inline int TERRAIN_INDEX_REPEAT(int x, int y)
@@ -53,7 +53,7 @@ void SubTerrainAttribute(int x, int y, BYTE att);
 void AddTerrainAttributeRange(int x, int y, int dx, int dy, BYTE att, BYTE Add = 0);
 void SetTerrainWaterState(std::list<int>& terrainIndex, int state = 0);
 
-//Vector RequestTerrainNormal(float xf,float yf);
+// Vector RequestTerrainNormal(float xf,float yf);
 void AddTerrainHeight(float xf, float yf, float Height, int Range, float* Buffer);
 
 void InitTerrainRay(int HeroX, int HeroY);
@@ -80,7 +80,8 @@ void RenderTerrainTile_After(float xf, float yf, int xi, int yi, float lodf, int
 void RenderTerrain_After(bool EditFlag);
 
 void RenderTerrainBitmap(int Texture, int mxi, int myi, float Rotation);
-void RenderTerrainAlphaBitmap(int Texture, float xf, float yf, float SizeX, float SizeY, vec3_t Light, float Rotation = 0.f, float Alpha = 1.f, float Height = 5.f);
+void RenderTerrainAlphaBitmap(int Texture, float xf, float yf, float SizeX, float SizeY, vec3_t Light,
+                              float Rotation = 0.f, float Alpha = 1.f, float Height = 5.f);
 
 void CreateSun();
 void RenderSky();
@@ -88,7 +89,7 @@ void RenderSun();
 
 extern float SelectXF;
 extern float SelectYF;
-extern int   CurrentLayer;
+extern int CurrentLayer;
 
 extern const float g_fMinHeight;
 extern const float g_fMaxHeight;
@@ -102,34 +103,47 @@ private:
     float m_FrustrumD[5];
     vec3_t m_FrustrumNorm[5];
 
-    vec3_t	m_vEye;
-    float	m_fFov;
-    float	m_fAspect;
-    float	m_fDist;
+    vec3_t m_vEye;
+    float m_fFov;
+    float m_fAspect;
+    float m_fDist;
 
     void Make(vec3_t vEye, float fFov, float fAspect, float fDist);
 
 public:
+    // cppcheck-suppress uninitMemberVar
     CFrustrum() {}
     ~CFrustrum() {}
 
-    //3D프러스텀 캡슐화
+    // 3D프러스텀 캡슐화
     void Create(vec3_t vEye, float fFov, float fAspect, float fDist);
     bool Test(vec3_t vPos, float fRange);
     void Reset();
 
-    inline void SetEye(vec3_t vEye) { VectorCopy(vEye, m_vEye); }
-    inline void SetFOV(float fFov) { m_fFov = fFov; }
-    inline void SetAspect(float fAspect) { m_fAspect = fAspect; }
-    inline void SetDist(float fDist) { m_fDist = fDist; }
+    inline void SetEye(vec3_t vEye)
+    {
+        VectorCopy(vEye, m_vEye);
+    }
+    inline void SetFOV(float fFov)
+    {
+        m_fFov = fFov;
+    }
+    inline void SetAspect(float fAspect)
+    {
+        m_fAspect = fAspect;
+    }
+    inline void SetDist(float fDist)
+    {
+        m_fDist = fDist;
+    }
 };
 
 void ResetAllFrustrum();
 void DeleteAllFrustrum();
 CFrustrum* FindFrustrum(unsigned int iID);
-typedef std::map<unsigned int, CFrustrum* > FrustrumMap_t;
-extern FrustrumMap_t g_FrustrumMap; //전체 프러스텀과 별개로 아이디로 지정할 수 있는 프러스텀
-#endif //DYNAMIC_FRUSTRUM
+typedef std::map<unsigned int, CFrustrum*> FrustrumMap_t;
+extern FrustrumMap_t g_FrustrumMap; // 전체 프러스텀과 별개로 아이디로 지정할 수 있는 프러스텀
+#endif                              // DYNAMIC_FRUSTRUM
 
 inline int MapFileEncrypt(BYTE* pbyDst, BYTE* pbySrc, int iSize)
 {
@@ -137,8 +151,8 @@ inline int MapFileEncrypt(BYTE* pbyDst, BYTE* pbySrc, int iSize)
     {
         return (iSize);
     }
-    BYTE byMapXorKey[16] = { 0xD1, 0x73, 0x52, 0xF6, 0xD2, 0x9A, 0xCB, 0x27,
-                            0x3E, 0xAF, 0x59, 0x31, 0x37, 0xB3, 0xE7, 0xA2 };
+    BYTE byMapXorKey[16] = {0xD1, 0x73, 0x52, 0xF6, 0xD2, 0x9A, 0xCB, 0x27,
+                            0x3E, 0xAF, 0x59, 0x31, 0x37, 0xB3, 0xE7, 0xA2};
 
     WORD wMapKey = 0x5E;
     for (int i = 0; i < iSize; ++i)
@@ -158,8 +172,8 @@ inline int MapFileDecrypt(BYTE* pbyDst, BYTE* pbySrc, int iSize)
     {
         return (iSize);
     }
-    BYTE byMapXorKey[16] = { 0xD1, 0x73, 0x52, 0xF6, 0xD2, 0x9A, 0xCB, 0x27,
-                            0x3E, 0xAF, 0x59, 0x31, 0x37, 0xB3, 0xE7, 0xA2 };
+    BYTE byMapXorKey[16] = {0xD1, 0x73, 0x52, 0xF6, 0xD2, 0x9A, 0xCB, 0x27,
+                            0x3E, 0xAF, 0x59, 0x31, 0x37, 0xB3, 0xE7, 0xA2};
 
     WORD wMapKey = 0x5E;
     for (int i = 0; i < iSize; ++i)

@@ -70,7 +70,7 @@ struct physics_vertex
     vec3_t f;
     vec3_t uf;
     vec3_t normal;
-    float  light;
+    float light;
     bool collision;
 };
 
@@ -266,7 +266,8 @@ void AddObjectBlur(ObjectBlur* b, vec3_t p1, vec3_t p2, vec3_t Light, int Type)
     b->Number = std::min<int>(b->Number + 1, MAX_OBJECT_BLUR_TAILS - 1);
 }
 
-void CreateObjectBlur(OBJECT* Owner, vec3_t p1, vec3_t p2, vec3_t Light, int Type, bool Short, int SubType, int iLimitLifeTime)
+void CreateObjectBlur(OBJECT* Owner, vec3_t p1, vec3_t p2, vec3_t Light, int Type, bool Short, int SubType,
+                      int iLimitLifeTime)
 {
     ObjectBlur* freeBlur = nullptr;
     for (auto& blur : g_objectBlurs)
@@ -376,8 +377,12 @@ void RenderObjectBlurs()
                 const float Data = 300.f;
                 if (blur.SubType == 113 || blur.SubType == 114)
                 {
-                    if (std::fabs(blur.P1[j][0] - blur.P1[j + 1][0]) > Data || std::fabs(blur.P1[j][1] - blur.P1[j + 1][1]) > Data || std::fabs(blur.P1[j][2] - blur.P1[j + 1][2]) > Data ||
-                        std::fabs(blur.P1[j][0] - blur.P2[j + 1][0]) > Data || std::fabs(blur.P1[j][1] - blur.P2[j + 1][1]) > Data || std::fabs(blur.P1[j][2] - blur.P2[j + 1][2]) > Data)
+                    if (std::fabs(blur.P1[j][0] - blur.P1[j + 1][0]) > Data ||
+                        std::fabs(blur.P1[j][1] - blur.P1[j + 1][1]) > Data ||
+                        std::fabs(blur.P1[j][2] - blur.P1[j + 1][2]) > Data ||
+                        std::fabs(blur.P1[j][0] - blur.P2[j + 1][0]) > Data ||
+                        std::fabs(blur.P1[j][1] - blur.P2[j + 1][1]) > Data ||
+                        std::fabs(blur.P1[j][2] - blur.P2[j + 1][2]) > Data)
                     {
                         continue;
                     }
@@ -468,8 +473,8 @@ void CreateBlood(OBJECT* o)
 
 vec3_t Gravity;
 float Damping = 0.04f;
-float Ks = 5.f; //hook's spring
-float Kd = 0.1f; //spring dumping
+float Ks = 5.f;  // hook's spring
+float Kd = 0.1f; // spring dumping
 float Kr = 0.8f;
 float DeltaTime = 0.1f;
 
@@ -499,10 +504,26 @@ void CreateFlag()
                 v->p[1] += 10.f;
             }
             v->link_num = 0;
-            if (j - 1 >= 0) { v->link[v->link_num] = (i)*FLAG_WIDTH + (j - 1); v->link_num++; }
-            if (j + 1 <= FLAG_WIDTH - 1) { v->link[v->link_num] = (i)*FLAG_WIDTH + (j + 1); v->link_num++; }
-            if (i - 1 >= 0) { v->link[v->link_num] = (i - 1) * FLAG_WIDTH + (j); v->link_num++; }
-            if (i + 1 <= FLAG_HEIGHT - 1) { v->link[v->link_num] = (i + 1) * FLAG_WIDTH + (j); v->link_num++; }
+            if (j - 1 >= 0)
+            {
+                v->link[v->link_num] = (i)*FLAG_WIDTH + (j - 1);
+                v->link_num++;
+            }
+            if (j + 1 <= FLAG_WIDTH - 1)
+            {
+                v->link[v->link_num] = (i)*FLAG_WIDTH + (j + 1);
+                v->link_num++;
+            }
+            if (i - 1 >= 0)
+            {
+                v->link[v->link_num] = (i - 1) * FLAG_WIDTH + (j);
+                v->link_num++;
+            }
+            if (i + 1 <= FLAG_HEIGHT - 1)
+            {
+                v->link[v->link_num] = (i + 1) * FLAG_WIDTH + (j);
+                v->link_num++;
+            }
         }
     }
 
@@ -521,7 +542,7 @@ void CreateFlag()
 }
 
 bool InitFlag = false;
-int  wind_frame = 0;
+int wind_frame = 0;
 
 void AnimationFlag()
 {
@@ -550,13 +571,13 @@ void AnimationFlag()
             VectorAdd(v->f, Gravity, v->f);
             VectorMA(v->f, -Damping, v->v, v->f);
 
-            //v->f[2] += (float)sin(j*0.4f+wind_frame*0.03f)*(j*0.08f);
+            // v->f[2] += (float)sin(j*0.4f+wind_frame*0.03f)*(j*0.08f);
             if (i < 5)
             {
                 if (wind_frame % 128 < 64)
                 {
-                    v->f[1] += 1.f;//-(float)sin(i*10.f+(j-3)*1.f+wind_frame*0.06f)*0.5f;
-                    v->f[0] -= 1.f;//-(float)sin(i*10.f+(j-3)*1.f+wind_frame*0.06f)*0.5f;
+                    v->f[1] += 1.f; //-(float)sin(i*10.f+(j-3)*1.f+wind_frame*0.06f)*0.5f;
+                    v->f[0] -= 1.f; //-(float)sin(i*10.f+(j-3)*1.f+wind_frame*0.06f)*0.5f;
                 }
             }
             if (i == 9)
@@ -620,7 +641,7 @@ void RenderFlagFace(OBJECT* o, int x, int y, vec3_t Light, int Tex1, int Tex2)
     TexCoord[3][0] = su + 1.f / 6.f;
     TexCoord[3][1] = sv;
 
-    float minz = 65536.f; //louis
+    float minz = 65536.f; // louis
     physics_face* f = &g_flagFaces[y * (FLAG_WIDTH - 1) + x];
 
     for (int i = 0; i < n; i++)
@@ -670,10 +691,8 @@ void RenderFlag(OBJECT* o, vec3_t Light, int Tex1, int Tex2)
         for (int x = 0; x < FLAG_WIDTH - 1; x++)
         {
             physics_face* f = &g_flagFaces[y * (FLAG_WIDTH - 1) + x];
-            FaceNormalize(g_flagVertices[f->vlist[0]].p,
-                g_flagVertices[f->vlist[1]].p,
-                g_flagVertices[f->vlist[2]].p,
-                f->normal);
+            FaceNormalize(g_flagVertices[f->vlist[0]].p, g_flagVertices[f->vlist[1]].p, g_flagVertices[f->vlist[2]].p,
+                          f->normal);
         }
     }
     for (int y = 0; y < FLAG_HEIGHT; y++)

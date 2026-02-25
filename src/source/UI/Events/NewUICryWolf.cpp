@@ -13,13 +13,13 @@
 #include "ZzzInterface.h"
 #include "ZzzInventory.h"
 
-extern bool	View_Bal;
-extern char	Suc_Or_Fail;
-extern char	View_Suc_Or_Fail;
+extern bool View_Bal;
+extern char Suc_Or_Fail;
+extern char View_Suc_Or_Fail;
 extern float Deco_Insert;
 extern char Message_Box;
-extern wchar_t   Box_String[2][200];
-extern int  Dark_elf_Num;
+extern wchar_t Box_String[2][200];
+extern int Dark_elf_Num;
 extern int Button_Down;
 extern int BackUp_Key;
 extern int Val_Hp;
@@ -50,6 +50,7 @@ extern int m_StatueHP;
 
 using namespace SEASON3B;
 
+// cppcheck-suppress uninitMemberVar
 SEASON3B::CNewUICryWolf::CNewUICryWolf()
 {
     m_pNewUIMng = NULL;
@@ -138,14 +139,14 @@ bool SEASON3B::CNewUICryWolf::Render()
 
     wchar_t Text[300];
 
-    float Main[] = { 518.f,278.f,122.f,119.f,120.f / 128.f,118.f / 128.f };
-    float Number[5][6] = { {565.f,280.f,13.f,13.f,12.f / 16.f,12.f / 16.f},
-                            {582.f,282.f,13.f,13.f,12.f / 16.f,12.f / 16.f},
-                            {598.f,286.f,13.f,13.f,12.f / 16.f,12.f / 16.f},
-                            {613.f,294.f,13.f,13.f,12.f / 16.f,12.f / 16.f},
-                            {625.f,306.f,13.f,13.f,12.f / 16.f,12.f / 16.f} };
-    float Dark_Elf_Icon[] = { 623.f,358.f,15.f,15.f,14.f / 16.f,14.f / 16.f };
-    float Val_Icon[] = { 623.f,379.f,15.f,15.f,14.f / 16.f,14.f / 16.f };
+    float Main[] = {518.f, 278.f, 122.f, 119.f, 120.f / 128.f, 118.f / 128.f};
+    float Number[5][6] = {{565.f, 280.f, 13.f, 13.f, 12.f / 16.f, 12.f / 16.f},
+                          {582.f, 282.f, 13.f, 13.f, 12.f / 16.f, 12.f / 16.f},
+                          {598.f, 286.f, 13.f, 13.f, 12.f / 16.f, 12.f / 16.f},
+                          {613.f, 294.f, 13.f, 13.f, 12.f / 16.f, 12.f / 16.f},
+                          {625.f, 306.f, 13.f, 13.f, 12.f / 16.f, 12.f / 16.f}};
+    float Dark_Elf_Icon[] = {623.f, 358.f, 15.f, 15.f, 14.f / 16.f, 14.f / 16.f};
+    float Val_Icon[] = {623.f, 379.f, 15.f, 15.f, 14.f / 16.f, 14.f / 16.f};
     int TotDelay = 400;
 
     if (Suc_Or_Fail == 1)
@@ -175,11 +176,13 @@ bool SEASON3B::CNewUICryWolf::Render()
 
         if ((Delay * 15) > 479)
         {
-            g_pCryWolfInterface->Render(150, 50, 329, 94, 0.f, 0.f, 328.f / 512.f, 93.f / 128.f, Add_Num, false, false, A_Value);
+            g_pCryWolfInterface->Render(150, 50, 329, 94, 0.f, 0.f, 328.f / 512.f, 93.f / 128.f, Add_Num, false, false,
+                                        A_Value);
         }
         else if (Suc_Or_Fail == 0)
         {
-            g_pCryWolfInterface->Render(150 + (Delay * 15), 50, 329, 94, 0.f, 0.f, 328.f / 512.f, 93.f / 128.f, Add_Num, false, false, A_Value);
+            g_pCryWolfInterface->Render(150 + (Delay * 15), 50, 329, 94, 0.f, 0.f, 328.f / 512.f, 93.f / 128.f, Add_Num,
+                                        false, false, A_Value);
 
             Delay++;
             if ((Delay * 15) > 479)
@@ -194,8 +197,9 @@ bool SEASON3B::CNewUICryWolf::Render()
         }
         else
         {
-            //Delay_Add_inter
-            g_pCryWolfInterface->Render(-329 + (Delay * 15), 50, 329, 94, 0.f, 0.f, 328.f / 512.f, 93.f / 128.f, Add_Num, false, false, A_Value);
+            // Delay_Add_inter
+            g_pCryWolfInterface->Render(-329 + (Delay * 15), 50, 329, 94, 0.f, 0.f, 328.f / 512.f, 93.f / 128.f,
+                                        Add_Num, false, false, A_Value);
         }
 
         g_pCryWolfInterface->Render(230, 150, 196, 141, 0.f, 0.f, 195.f / 256.f, 140.f / 256.f, 26);
@@ -203,7 +207,7 @@ bool SEASON3B::CNewUICryWolf::Render()
 
         if (Delay_Add_inter == 0)
         {
-            int Exp_val[9] = { 0,0,0,0,0,0,0,0,0 }, Exp_Dummy = 0, Val = 0;
+            int Exp_val[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0}, Exp_Dummy = 0, Val = 0;
 
             g_pCryWolfInterface->Render(250 + 120, 188, 29, 28, 0.f, 0.f, 29.f / 32.f, 27.f / 32.f, 28 + Rank);
 
@@ -230,15 +234,24 @@ bool SEASON3B::CNewUICryWolf::Render()
             int Move_X = 29;
 
             g_pCryWolfInterface->Render(200 + Move_X, 235, 60, 19, 0.f, 0.f, 60.f / 64.f, 19.f / 32.f, 43);
-            g_pCryWolfInterface->Render(250 + 130 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f, 33 + Exp_val[8]);
-            g_pCryWolfInterface->Render(250 + 115 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f, 33 + Exp_val[7]);
-            g_pCryWolfInterface->Render(250 + 100 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f, 33 + Exp_val[6]);
-            g_pCryWolfInterface->Render(250 + 85 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f, 33 + Exp_val[5]);
-            g_pCryWolfInterface->Render(250 + 70 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f, 33 + Exp_val[4]);
-            g_pCryWolfInterface->Render(250 + 55 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f, 33 + Exp_val[3]);
-            g_pCryWolfInterface->Render(250 + 40 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f, 33 + Exp_val[2]);
-            g_pCryWolfInterface->Render(250 + 25 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f, 33 + Exp_val[1]);
-            g_pCryWolfInterface->Render(250 + 10 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f, 33 + Exp_val[0]);
+            g_pCryWolfInterface->Render(250 + 130 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f,
+                                        33 + Exp_val[8]);
+            g_pCryWolfInterface->Render(250 + 115 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f,
+                                        33 + Exp_val[7]);
+            g_pCryWolfInterface->Render(250 + 100 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f,
+                                        33 + Exp_val[6]);
+            g_pCryWolfInterface->Render(250 + 85 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f,
+                                        33 + Exp_val[5]);
+            g_pCryWolfInterface->Render(250 + 70 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f,
+                                        33 + Exp_val[4]);
+            g_pCryWolfInterface->Render(250 + 55 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f,
+                                        33 + Exp_val[3]);
+            g_pCryWolfInterface->Render(250 + 40 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f,
+                                        33 + Exp_val[2]);
+            g_pCryWolfInterface->Render(250 + 25 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f,
+                                        33 + Exp_val[1]);
+            g_pCryWolfInterface->Render(250 + 10 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f,
+                                        33 + Exp_val[0]);
         }
     }
 
@@ -247,7 +260,7 @@ bool SEASON3B::CNewUICryWolf::Render()
 
     g_pCryWolfInterface->Render(Main[0], Main[1], Main[2], Main[3], 0.f, 0.f, Main[4], Main[5], 3);
 
-    //23,24;
+    // 23,24;
 
     for (int ia = 0; ia < 5; ia++)
     {
@@ -257,37 +270,44 @@ bool SEASON3B::CNewUICryWolf::Render()
         {
             if (State == 1)
             {
-                g_pCryWolfInterface->Render(Number[ia][0], Number[ia][1], Number[ia][2], Number[ia][3], 0.f, 0.f, Number[ia][4], Number[ia][5], 23);
+                g_pCryWolfInterface->Render(Number[ia][0], Number[ia][1], Number[ia][2], Number[ia][3], 0.f, 0.f,
+                                            Number[ia][4], Number[ia][5], 23);
             }
             else if (State == 2)
             {
-                g_pCryWolfInterface->Render(Number[ia][0], Number[ia][1], Number[ia][2], Number[ia][3], 0.f, 0.f, Number[ia][4], Number[ia][5], 24);
+                g_pCryWolfInterface->Render(Number[ia][0], Number[ia][1], Number[ia][2], Number[ia][3], 0.f, 0.f,
+                                            Number[ia][4], Number[ia][5], 24);
             }
             else
             {
-                g_pCryWolfInterface->Render(Number[ia][0], Number[ia][1], Number[ia][2], Number[ia][3], 0.f, 0.f, Number[ia][4], Number[ia][5], 25);
+                g_pCryWolfInterface->Render(Number[ia][0], Number[ia][1], Number[ia][2], Number[ia][3], 0.f, 0.f,
+                                            Number[ia][4], Number[ia][5], 25);
             }
         }
         else
         {
             if (State == 1)
             {
-                g_pCryWolfInterface->Render(Number[ia][0], Number[ia][1], Number[ia][2], Number[ia][3], 0.f, 0.f, Number[ia][4], Number[ia][5], 7);
+                g_pCryWolfInterface->Render(Number[ia][0], Number[ia][1], Number[ia][2], Number[ia][3], 0.f, 0.f,
+                                            Number[ia][4], Number[ia][5], 7);
             }
             else if (State == 2)
             {
-                g_pCryWolfInterface->Render(Number[ia][0], Number[ia][1], Number[ia][2], Number[ia][3], 0.f, 0.f, Number[ia][4], Number[ia][5], 8);
+                g_pCryWolfInterface->Render(Number[ia][0], Number[ia][1], Number[ia][2], Number[ia][3], 0.f, 0.f,
+                                            Number[ia][4], Number[ia][5], 8);
             }
         }
     }
 
     if (Dark_elf_Num == 0)
     {
-        g_pCryWolfInterface->Render(Dark_Elf_Icon[0], Dark_Elf_Icon[1], Dark_Elf_Icon[2], Dark_Elf_Icon[3], 0.f, 0.f, Dark_Elf_Icon[4], Dark_Elf_Icon[5], 6);
+        g_pCryWolfInterface->Render(Dark_Elf_Icon[0], Dark_Elf_Icon[1], Dark_Elf_Icon[2], Dark_Elf_Icon[3], 0.f, 0.f,
+                                    Dark_Elf_Icon[4], Dark_Elf_Icon[5], 6);
     }
     else
     {
-        g_pCryWolfInterface->Render(Dark_Elf_Icon[0], Dark_Elf_Icon[1], Dark_Elf_Icon[2], Dark_Elf_Icon[3], 0.f, 0.f, Dark_Elf_Icon[4], Dark_Elf_Icon[5], 5);
+        g_pCryWolfInterface->Render(Dark_Elf_Icon[0], Dark_Elf_Icon[1], Dark_Elf_Icon[2], Dark_Elf_Icon[3], 0.f, 0.f,
+                                    Dark_Elf_Icon[4], Dark_Elf_Icon[5], 5);
     }
 
     g_pCryWolfInterface->Render(538, 392, 104, 37, 0.f, 0.f, 104.f / 128.f, 36.f / 64.f, 12);
@@ -307,7 +327,8 @@ bool SEASON3B::CNewUICryWolf::Render()
         }
         else
         {
-            g_pCryWolfInterface->Render(Val_Icon[0], Val_Icon[1], Val_Icon[2], Val_Icon[3], 0.f, 0.f, Val_Icon[4], Val_Icon[5], 4);
+            g_pCryWolfInterface->Render(Val_Icon[0], Val_Icon[1], Val_Icon[2], Val_Icon[3], 0.f, 0.f, Val_Icon[4],
+                                        Val_Icon[5], 4);
 
             mu_swprintf(Text, GlobalText[1949]);
             g_pRenderText->RenderText(600, 380, Text, 0, 0, RT3_WRITE_CENTER);
@@ -370,7 +391,8 @@ bool SEASON3B::CNewUICryWolf::Render()
     int HpS = 100 - m_StatueHP;
     float Hp = ((88.f / 100.f) * (float)HpS);
     float nx = ((89.f / 100.f) * (float)HpS);
-    RenderImage(IMAGE_MVP_INTERFACE + 9, 548 + nx, 323, 89.f - nx, 30, Hp / 128.f, 0.f, ((((88.f / 100.f) * (float)(100.f - HpS))) / 128.f), 29.f / 32.f);
+    RenderImage(IMAGE_MVP_INTERFACE + 9, 548 + nx, 323, 89.f - nx, 30, Hp / 128.f, 0.f,
+                ((((88.f / 100.f) * (float)(100.f - HpS))) / 128.f), 29.f / 32.f);
 
     M34CryWolf1st::RenderNoticesCryWolf();
 
@@ -492,7 +514,8 @@ float SEASON3B::CNewUICryWolf::ConvertY(float y)
     return y * (float)WindowHeight / 480.f;
 }
 
-bool SEASON3B::CNewUICryWolf::Render(int Posx, int Posy, int nPosx, int nPosy, float u, float v, float su, float sv, int Index, bool Scale, bool StartScale, float Alpha)
+bool SEASON3B::CNewUICryWolf::Render(int Posx, int Posy, int nPosx, int nPosy, float u, float v, float su, float sv,
+                                     int Index, bool Scale, bool StartScale, float Alpha)
 {
     glColor4f(1.f, 1.f, 1.f, Alpha);
 

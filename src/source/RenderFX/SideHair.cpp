@@ -22,9 +22,7 @@ CSideHair::CSideHair()
     CShadowVolume();
 }
 
-CSideHair::~CSideHair()
-{
-}
+CSideHair::~CSideHair() {}
 
 void CSideHair::Create(vec3_t ppVertexTransformed[MAX_MESH][MAX_VERTICES], BMD* b, OBJECT* o, bool SkipTga)
 {
@@ -51,7 +49,8 @@ void CSideHair::Create(vec3_t ppVertexTransformed[MAX_MESH][MAX_VERTICES], BMD* 
         }
         if (Bitmaps[b->IndexTexture[i]].Components == 4)
         {
-            if (SkipTga) continue;
+            if (SkipTga)
+                continue;
         }
         iNumTriangles += b->Meshs[i].NumTriangles;
     }
@@ -69,7 +68,8 @@ void CSideHair::Create(vec3_t ppVertexTransformed[MAX_MESH][MAX_VERTICES], BMD* 
         if (Bitmaps[b->IndexTexture[i]].Components == 4)
         {
             Tga = true;
-            if (SkipTga) continue;
+            if (SkipTga)
+                continue;
         }
         DeterminateSilhouette(i, ppVertexTransformed, b->Meshs[i].NumTriangles, b->Meshs[i].Triangles, Tga);
     }
@@ -81,14 +81,15 @@ void CSideHair::Destroy(void)
     delete[] m_pVertices;
 }
 
-void CSideHair::Render(vec3_t ppVertexTransformed[MAX_MESH][MAX_VERTICES], vec3_t ppLightTransformed[MAX_MESH][MAX_VERTICES])
+void CSideHair::Render(vec3_t ppVertexTransformed[MAX_MESH][MAX_VERTICES],
+                       vec3_t ppLightTransformed[MAX_MESH][MAX_VERTICES])
 {
     for (int i = 0; i < m_iNumEdge; ++i)
     {
         RenderLine(ppVertexTransformed[m_pEdges[i].m_nMesh][m_pEdges[i].m_nVertexIndex[0]],
-            ppVertexTransformed[m_pEdges[i].m_nMesh][m_pEdges[i].m_nVertexIndex[1]],
-            ppLightTransformed[m_pEdges[i].m_nMesh][m_pEdges[i].m_nNormalIndex[0]],
-            ppLightTransformed[m_pEdges[i].m_nMesh][m_pEdges[i].m_nNormalIndex[1]]);
+                   ppVertexTransformed[m_pEdges[i].m_nMesh][m_pEdges[i].m_nVertexIndex[1]],
+                   ppLightTransformed[m_pEdges[i].m_nMesh][m_pEdges[i].m_nNormalIndex[0]],
+                   ppLightTransformed[m_pEdges[i].m_nMesh][m_pEdges[i].m_nNormalIndex[1]]);
     }
 }
 
@@ -113,9 +114,9 @@ void CSideHair::RenderLine(vec3_t v1, vec3_t v2, vec3_t c1, vec3_t c2)
     glColor3f(1.f, 1.f, 1.f);
     BindTexture(BITMAP_ROBE + 4);
     EnableAlphaBlendMinus();
-    //EnableAlphaTest();
-    //g_OpenglLib.DisableTexture();
-    //g_OpenglLib.Disable(GL_CULL_FACE);
+    // EnableAlphaTest();
+    // g_OpenglLib.DisableTexture();
+    // g_OpenglLib.Disable(GL_CULL_FACE);
     /*glBegin(GL_QUADS);
     glTexCoord2f(0.f,0.f+fTextureMove);glVertex3f(p1[0]-Scale,p1[1],p1[2]);
     glTexCoord2f(0.f,1.f-fTextureMove);glVertex3f(p2[0]-Scale,p2[1],p2[2]);
@@ -139,13 +140,17 @@ void CSideHair::RenderLine(vec3_t v1, vec3_t v2, vec3_t c1, vec3_t c2)
     VectorNormalize(vOrtho);
     VectorScale(vOrtho, 10.f, vOrtho);
     glBegin(GL_QUADS);
-    //glColor3fv( c1);
-    glTexCoord2f(0.f, 0.f + fTextureMove + fTextureV); glVertex3f(p1[0] - vOrtho[0], p1[1] - vOrtho[1], p1[2] - vOrtho[2]);
-    //glColor3fv( c2);
-    glTexCoord2f(0.f, 1.f - fTextureMove + fTextureV); glVertex3f(p2[0] - vOrtho[0], p2[1] - vOrtho[1], p2[2] - vOrtho[2]);
-    glTexCoord2f(1.f, 1.f - fTextureMove + fTextureV); glVertex3f(p2[0] + vOrtho[0], p2[1] + vOrtho[1], p2[2] + vOrtho[2]);
-    //glColor3fv( c1);
-    glTexCoord2f(1.f, 0.f + fTextureMove + fTextureV); glVertex3f(p1[0] + vOrtho[0], p1[1] + vOrtho[1], p1[2] + vOrtho[2]);
+    // glColor3fv( c1);
+    glTexCoord2f(0.f, 0.f + fTextureMove + fTextureV);
+    glVertex3f(p1[0] - vOrtho[0], p1[1] - vOrtho[1], p1[2] - vOrtho[2]);
+    // glColor3fv( c2);
+    glTexCoord2f(0.f, 1.f - fTextureMove + fTextureV);
+    glVertex3f(p2[0] - vOrtho[0], p2[1] - vOrtho[1], p2[2] - vOrtho[2]);
+    glTexCoord2f(1.f, 1.f - fTextureMove + fTextureV);
+    glVertex3f(p2[0] + vOrtho[0], p2[1] + vOrtho[1], p2[2] + vOrtho[2]);
+    // glColor3fv( c1);
+    glTexCoord2f(1.f, 0.f + fTextureMove + fTextureV);
+    glVertex3f(p1[0] + vOrtho[0], p1[1] + vOrtho[1], p1[2] + vOrtho[2]);
     glEnd();
-    //g_OpenglLib.Enable(GL_CULL_FACE);
+    // g_OpenglLib.Enable(GL_CULL_FACE);
 }

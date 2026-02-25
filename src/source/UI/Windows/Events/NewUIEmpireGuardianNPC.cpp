@@ -11,6 +11,7 @@
 
 using namespace SEASON3B;
 
+// cppcheck-suppress uninitMemberVar
 CNewUIEmpireGuardianNPC::CNewUIEmpireGuardianNPC()
 {
     m_pNewUIMng = NULL;
@@ -117,7 +118,7 @@ bool CNewUIEmpireGuardianNPC::Render()
     glColor4f(1.f, 1.f, 1.f, 1.f);
     RenderFrame();
 
-    POINT Position = { m_Pos.x + (NPC_WINDOW_WIDTH / 2), m_Pos.y };
+    POINT Position = {m_Pos.x + (NPC_WINDOW_WIDTH / 2), m_Pos.y};
 
     g_pRenderText->SetFont(g_hFont);
     g_pRenderText->SetBgColor(0, 0, 0, 0);
@@ -157,7 +158,7 @@ bool CNewUIEmpireGuardianNPC::Render()
 
 bool CNewUIEmpireGuardianNPC::BtnProcess()
 {
-    POINT ptExitBtn1 = { m_Pos.x + 169, m_Pos.y + 7 };
+    POINT ptExitBtn1 = {m_Pos.x + 169, m_Pos.y + 7};
 
     if (SEASON3B::IsPress(VK_LBUTTON) && CheckMouseIn(ptExitBtn1.x, ptExitBtn1.y, 13, 12))
     {
@@ -185,13 +186,9 @@ float CNewUIEmpireGuardianNPC::GetLayerDepth()
     return 1.2f;
 }
 
-void CNewUIEmpireGuardianNPC::OpenningProcess()
-{
-}
+void CNewUIEmpireGuardianNPC::OpenningProcess() {}
 
-void CNewUIEmpireGuardianNPC::ClosingProcess()
-{
-}
+void CNewUIEmpireGuardianNPC::ClosingProcess() {}
 
 void CNewUIEmpireGuardianNPC::LoadImages()
 {
@@ -201,10 +198,10 @@ void CNewUIEmpireGuardianNPC::LoadImages()
     LoadBitmap(L"Interface\\newui_item_back02-R.tga", IMAGE_EMPIREGUARDIAN_NPC_RIGHT, GL_LINEAR);
     LoadBitmap(L"Interface\\newui_item_back03.tga", IMAGE_EMPIREGUARDIAN_NPC_BOTTOM, GL_LINEAR);
 
-    //btn
+    // btn
     LoadBitmap(L"Interface\\newui_btn_empty_very_small.tga", IMAGE_EMPIREGUARDIAN_NPC_BTN, GL_LINEAR);
 
-    //line
+    // line
     LoadBitmap(L"Interface\\newui_myquest_Line.tga", IMAGE_EMPIREGUARDIAN_NPC_LINE, GL_LINEAR);
 }
 
@@ -225,12 +222,14 @@ void CNewUIEmpireGuardianNPC::RenderFrame()
     RenderImage(IMAGE_EMPIREGUARDIAN_NPC_TOP, m_Pos.x, m_Pos.y, float(NPC_WINDOW_WIDTH), 64.f);
     RenderImage(IMAGE_EMPIREGUARDIAN_NPC_LEFT, m_Pos.x, m_Pos.y + 64, 21.f, 320.f);
     RenderImage(IMAGE_EMPIREGUARDIAN_NPC_RIGHT, m_Pos.x + NPC_WINDOW_WIDTH - 21, m_Pos.y + 64, 21.f, 320.f);
-    RenderImage(IMAGE_EMPIREGUARDIAN_NPC_BOTTOM, m_Pos.x, m_Pos.y + NPC_WINDOW_HEIGHT - 45, float(NPC_WINDOW_WIDTH), 45.f);
+    RenderImage(IMAGE_EMPIREGUARDIAN_NPC_BOTTOM, m_Pos.x, m_Pos.y + NPC_WINDOW_HEIGHT - 45, float(NPC_WINDOW_WIDTH),
+                45.f);
 
     g_pRenderText->SetFont(g_hFontBold);
     g_pRenderText->SetTextColor(220, 220, 220, 255);
     g_pRenderText->SetBgColor(0, 0, 0, 0);
-    g_pRenderText->RenderText(m_Pos.x + (NPC_WINDOW_WIDTH / 2) - 55, m_Pos.y + 13, GlobalText[2794], 110, 0, RT3_SORT_CENTER);
+    g_pRenderText->RenderText(m_Pos.x + (NPC_WINDOW_WIDTH / 2) - 55, m_Pos.y + 13, GlobalText[2794], 110, 0,
+                              RT3_SORT_CENTER);
 }
 
 void CNewUIEmpireGuardianNPC::Render3D()
@@ -240,7 +239,7 @@ void CNewUIEmpireGuardianNPC::Render3D()
 
 void CNewUIEmpireGuardianNPC::RenderItem3D()
 {
-    POINT ptOrigin = { m_Pos.x, m_Pos.y + 50 };
+    POINT ptOrigin = {m_Pos.x, m_Pos.y + 50};
 
     int nItemType = ITEM_GAIONS_ORDER;
     int nItemLevel = 0;

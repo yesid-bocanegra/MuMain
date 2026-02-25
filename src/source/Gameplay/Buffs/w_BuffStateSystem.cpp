@@ -16,9 +16,7 @@ BuffStateSystemPtr BuffStateSystem::Make()
     return buffstatesystem;
 }
 
-BuffStateSystem::BuffStateSystem()
-{
-}
+BuffStateSystem::BuffStateSystem() {}
 
 BuffStateSystem::~BuffStateSystem()
 {
@@ -33,9 +31,7 @@ void BuffStateSystem::Initialize()
     m_BuffStateValueControl = BuffStateValueControl::Make();
 }
 
-void BuffStateSystem::Destroy()
-{
-}
+void BuffStateSystem::Destroy() {}
 
 bool BuffStateSystem::HandleWindowMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& result)
 {

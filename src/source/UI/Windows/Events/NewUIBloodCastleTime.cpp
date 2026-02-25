@@ -10,6 +10,7 @@
 using namespace SEASON3B;
 using namespace matchEvent;
 
+// cppcheck-suppress uninitMemberVar
 CNewUIBloodCastle::CNewUIBloodCastle()
 {
     m_pNewUIMng = NULL;
@@ -99,14 +100,16 @@ bool CNewUIBloodCastle::Render()
     EnableAlphaTest();
     glColor4f(1.f, 1.f, 1.f, 1.f);
 
-    wchar_t szText[256] = { NULL, };
+    wchar_t szText[256] = {
+        NULL,
+    };
 
     g_pRenderText->SetFont(g_hFont);
     g_pRenderText->SetBgColor(0);
     g_pRenderText->SetTextColor(255, 150, 0, 255);
 
-    RenderImage(IMAGE_BLOODCASTLE_TIME_WINDOW, m_Pos.x, m_Pos.y,
-        float(BLOODCASTLE_TIME_WINDOW_WIDTH), float(BLOODCASTLE_TIME_WINDOW_HEIGHT));
+    RenderImage(IMAGE_BLOODCASTLE_TIME_WINDOW, m_Pos.x, m_Pos.y, float(BLOODCASTLE_TIME_WINDOW_WIDTH),
+                float(BLOODCASTLE_TIME_WINDOW_HEIGHT));
 
     if (m_iMaxKillMonster != MAX_KILL_MONSTER)
     {
@@ -121,7 +124,8 @@ bool CNewUIBloodCastle::Render()
         g_pRenderText->RenderText(m_Pos.x, m_Pos.y + 13, szText, BLOODCASTLE_TIME_WINDOW_WIDTH, 0, RT3_SORT_CENTER);
     }
 
-    g_pRenderText->RenderText(m_Pos.x, m_Pos.y + 38, GlobalText[865], BLOODCASTLE_TIME_WINDOW_WIDTH, 0, RT3_SORT_CENTER);
+    g_pRenderText->RenderText(m_Pos.x, m_Pos.y + 38, GlobalText[865], BLOODCASTLE_TIME_WINDOW_WIDTH, 0,
+                              RT3_SORT_CENTER);
 
     if (m_iTimeState == BC_TIME_STATE_IMMINENCE)
         g_pRenderText->SetTextColor(255, 32, 32, 255);
@@ -144,13 +148,9 @@ float CNewUIBloodCastle::GetLayerDepth()
     return 1.2f;
 }
 
-void CNewUIBloodCastle::OpenningProcess()
-{
-}
+void CNewUIBloodCastle::OpenningProcess() {}
 
-void CNewUIBloodCastle::ClosingProcess()
-{
-}
+void CNewUIBloodCastle::ClosingProcess() {}
 
 void CNewUIBloodCastle::LoadImages()
 {

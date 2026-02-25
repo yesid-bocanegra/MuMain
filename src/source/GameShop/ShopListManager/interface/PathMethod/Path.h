@@ -1,15 +1,14 @@
 /*******************************************************************************
-*	작 성 자 : 진혜진
-*	작 성 일 : 2009.06.10
-*	내    용 : 기타 메소드
-*******************************************************************************/
+ *	작 성 자 : 진혜진
+ *	작 성 일 : 2009.06.10
+ *	내    용 : 기타 메소드
+ *******************************************************************************/
 
 #pragma once
 
 class Path
 {
 public:
-
     //					모듈 전체 경로 가져오기
     static TCHAR* GetCurrentFullPath(TCHAR* szPath);
     //					모듈 디렉토리 가져오기
@@ -33,9 +32,9 @@ public:
     static TCHAR* ChangeBackSlashToSlash(TCHAR* szPath);
 
     //					파일에서 마지막 줄 읽어오기
-    static BOOL			ReadFileLastLine(TCHAR* szFile, TCHAR* szLastLine);
+    static BOOL ReadFileLastLine(TCHAR* szFile, TCHAR* szLastLine);
     //					새 파일에 한줄 쓰기
-    static BOOL			WriteNewFile(TCHAR* szFile, TCHAR* szText, INT nTextSize);
+    static BOOL WriteNewFile(TCHAR* szFile, TCHAR* szText, INT nTextSize);
     //					파일 경로 디렉토리 생성
-    static BOOL			CreateDirectorys(TCHAR* szFilePath, BOOL bIsFile);
+    static BOOL CreateDirectorys(TCHAR* szFilePath, BOOL bIsFile);
 };

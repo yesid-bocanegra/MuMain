@@ -38,25 +38,11 @@ void ReportWaveWarning(const wchar_t* message, const wchar_t* filename = nullptr
 }
 } // namespace
 
-waveIO::waveIO(Mode mode)
-    : m_hmmio(nullptr)
-    , m_wfex{}
-    , m_DataSize(0)
-    , m_DataLeft(0)
-    , m_SilentSample(0)
-    , m_mode(mode)
-{
-}
+waveIO::waveIO(Mode mode) : m_hmmio(nullptr), m_wfex{}, m_DataSize(0), m_DataLeft(0), m_SilentSample(0), m_mode(mode) {}
 
-waveIO::waveIO()
-    : waveIO(Mode::Input)
-{
-}
+waveIO::waveIO() : waveIO(Mode::Input) {}
 
-waveIO::waveIO(bool legacyMode)
-    : waveIO(legacyMode ? Mode::Output : Mode::Input)
-{
-}
+waveIO::waveIO(bool legacyMode) : waveIO(legacyMode ? Mode::Output : Mode::Input) {}
 
 waveIO::~waveIO()
 {
@@ -99,7 +85,7 @@ bool waveIO::LoadWaveHeader(const wchar_t* filename)
         return false;
     }
 
-    MMCKINFO riffChunk {};
+    MMCKINFO riffChunk{};
     if (mmioDescend(m_hmmio, &riffChunk, nullptr, 0) != 0)
     {
         ReportWaveWarning(L"Cannot descend into RIFF chunk", filename);
@@ -114,7 +100,7 @@ bool waveIO::LoadWaveHeader(const wchar_t* filename)
         return false;
     }
 
-    MMCKINFO formatChunk {};
+    MMCKINFO formatChunk{};
     formatChunk.ckid = mmioFOURCC('f', 'm', 't', ' ');
     if (mmioDescend(m_hmmio, &formatChunk, &riffChunk, MMIO_FINDCHUNK) != 0)
     {
@@ -149,7 +135,7 @@ bool waveIO::LoadWaveHeader(const wchar_t* filename)
         return false;
     }
 
-    MMCKINFO dataChunk {};
+    MMCKINFO dataChunk{};
     dataChunk.ckid = mmioFOURCC('d', 'a', 't', 'a');
     if (mmioDescend(m_hmmio, &dataChunk, &riffChunk, MMIO_FINDCHUNK) != 0)
     {
@@ -224,8 +210,7 @@ bool waveIO::WriteWaveHeader(const wchar_t* filename, const PCMWAVEFORMAT& forma
 
     const int riffSize = 12 + sizeof(PCMWAVEFORMAT) + 8 + waveDataSize;
 
-    if (mmioWrite(m_hmmio, "RIFF", 4) != 4 ||
-        mmioWrite(m_hmmio, reinterpret_cast<const char*>(&riffSize), 4) != 4 ||
+    if (mmioWrite(m_hmmio, "RIFF", 4) != 4 || mmioWrite(m_hmmio, reinterpret_cast<const char*>(&riffSize), 4) != 4 ||
         mmioWrite(m_hmmio, "WAVE", 4) != 4)
     {
         ReportWaveWarning(L"Failed to write RIFF header", filename);
@@ -242,8 +227,7 @@ bool waveIO::WriteWaveHeader(const wchar_t* filename, const PCMWAVEFORMAT& forma
         return false;
     }
 
-    if (mmioWrite(m_hmmio, "data", 4) != 4 ||
-        mmioWrite(m_hmmio, reinterpret_cast<const char*>(&waveDataSize), 4) != 4)
+    if (mmioWrite(m_hmmio, "data", 4) != 4 || mmioWrite(m_hmmio, reinterpret_cast<const char*>(&waveDataSize), 4) != 4)
     {
         ReportWaveWarning(L"Failed to write data chunk header", filename);
         CloseWaveFile();

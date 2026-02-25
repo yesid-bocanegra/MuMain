@@ -3,7 +3,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
-#include "NewUIMessageBox.h"	// self
+#include "NewUIMessageBox.h" // self
 #include "NewUIManager.h"
 #include "UIControls.h"
 
@@ -13,6 +13,7 @@ using namespace SEASON3B;
 // CNewUIMessageBoxBase
 //////////////////////////////////////////////////////////////////////
 
+// cppcheck-suppress uninitMemberVar
 SEASON3B::CNewUIMessageBoxBase::CNewUIMessageBoxBase()
 {
     Release();
@@ -23,7 +24,7 @@ SEASON3B::CNewUIMessageBoxBase::~CNewUIMessageBoxBase()
     Release();
 }
 
-bool SEASON3B::CNewUIMessageBoxBase::Create(int x, int y, int width, int height, float fPriority/* = 3.f*/)
+bool SEASON3B::CNewUIMessageBoxBase::Create(int x, int y, int width, int height, float fPriority /* = 3.f*/)
 {
     SetPos(x, y);
     SetSize(width, height);
@@ -113,7 +114,8 @@ void SEASON3B::CNewUIMessageBoxBase::SendEvent(CNewUIMessageBoxBase* pOwner, DWO
     CNewUIMessageBoxMng::GetInstance()->SendEvent(pOwner, dwEvent);
 }
 
-void SEASON3B::CNewUIMessageBoxBase::SendEvent(CNewUIMessageBoxBase* pOwner, DWORD dwEvent, const leaf::xstreambuf& xParam)
+void SEASON3B::CNewUIMessageBoxBase::SendEvent(CNewUIMessageBoxBase* pOwner, DWORD dwEvent,
+                                               const leaf::xstreambuf& xParam)
 {
     CNewUIMessageBoxMng::GetInstance()->SendEvent(pOwner, dwEvent, xParam);
 }
@@ -152,9 +154,8 @@ void SEASON3B::CNewUIMessageBoxBase::SetMsgBackColor(vec3_t _vColor)
     }
 }
 
-SEASON3B::CNewUIMessageBoxMng::CNewUIMessageBoxMng() : m_pNewUIMng(NULL), m_pMsgBoxFactory(NULL)
-{
-}
+// cppcheck-suppress uninitMemberVar
+SEASON3B::CNewUIMessageBoxMng::CNewUIMessageBoxMng() : m_pNewUIMng(NULL), m_pMsgBoxFactory(NULL) {}
 
 SEASON3B::CNewUIMessageBoxMng::~CNewUIMessageBoxMng()
 {
@@ -202,21 +203,21 @@ bool SEASON3B::CNewUIMessageBoxMng::UpdateMouseEvent()
     CNewUIMessageBoxBase* pCurMsgBox = (*vi);
 
     if (m_EventState == EVENT_NONE && false == MouseLButtonPush &&
-        SEASON3B::CheckMouseIn(pCurMsgBox->GetPos().x, pCurMsgBox->GetPos().y,
-            pCurMsgBox->GetSize().cx, pCurMsgBox->GetSize().cy))
+        SEASON3B::CheckMouseIn(pCurMsgBox->GetPos().x, pCurMsgBox->GetPos().y, pCurMsgBox->GetSize().cx,
+                               pCurMsgBox->GetSize().cy))
     {
         SendEvent(pCurMsgBox, MSGBOX_EVENT_MOUSE_HOVER);
         m_EventState = EVENT_WND_MOUSE_HOVER;
     }
     else if (m_EventState == EVENT_WND_MOUSE_HOVER && false == MouseLButtonPush &&
-        false == SEASON3B::CheckMouseIn(pCurMsgBox->GetPos().x, pCurMsgBox->GetPos().y,
-            pCurMsgBox->GetSize().cx, pCurMsgBox->GetSize().cy))
+             false == SEASON3B::CheckMouseIn(pCurMsgBox->GetPos().x, pCurMsgBox->GetPos().y, pCurMsgBox->GetSize().cx,
+                                             pCurMsgBox->GetSize().cy))
     {
         m_EventState = EVENT_NONE;
     }
     else if (m_EventState == EVENT_WND_MOUSE_HOVER && MouseLButtonPush &&
-        SEASON3B::CheckMouseIn(pCurMsgBox->GetPos().x, pCurMsgBox->GetPos().y,
-            pCurMsgBox->GetSize().cx, pCurMsgBox->GetSize().cy))
+             SEASON3B::CheckMouseIn(pCurMsgBox->GetPos().x, pCurMsgBox->GetPos().y, pCurMsgBox->GetSize().cx,
+                                    pCurMsgBox->GetSize().cy))
     {
         SendEvent(pCurMsgBox, MSGBOX_EVENT_MOUSE_LBUTTON_DOWN);
         m_EventState = EVENT_WND_MOUSE_LBUTTON_DOWN;
@@ -226,7 +227,7 @@ bool SEASON3B::CNewUIMessageBoxMng::UpdateMouseEvent()
     else if (m_EventState == EVENT_WND_MOUSE_LBUTTON_DOWN)
     {
         if (false == MouseLButtonPush && SEASON3B::CheckMouseIn(pCurMsgBox->GetPos().x, pCurMsgBox->GetPos().y,
-            pCurMsgBox->GetSize().cx, pCurMsgBox->GetSize().cy))
+                                                                pCurMsgBox->GetSize().cx, pCurMsgBox->GetSize().cy))
         {
             SendEvent(pCurMsgBox, MSGBOX_EVENT_MOUSE_LBUTTON_UP);
             m_EventState = EVENT_NONE;
@@ -239,8 +240,8 @@ bool SEASON3B::CNewUIMessageBoxMng::UpdateMouseEvent()
         }
     }
     else if (m_EventState == EVENT_WND_MOUSE_HOVER && MouseRButtonPush &&
-        SEASON3B::CheckMouseIn(pCurMsgBox->GetPos().x, pCurMsgBox->GetPos().y,
-            pCurMsgBox->GetSize().cx, pCurMsgBox->GetSize().cy))
+             SEASON3B::CheckMouseIn(pCurMsgBox->GetPos().x, pCurMsgBox->GetPos().y, pCurMsgBox->GetSize().cx,
+                                    pCurMsgBox->GetSize().cy))
     {
         SendEvent(pCurMsgBox, MSGBOX_EVENT_MOUSE_RBUTTON_DOWN);
         m_EventState = EVENT_WND_MOUSE_RBUTTON_DOWN;
@@ -250,7 +251,7 @@ bool SEASON3B::CNewUIMessageBoxMng::UpdateMouseEvent()
     else if (m_EventState == EVENT_WND_MOUSE_RBUTTON_DOWN)
     {
         if (false == MouseRButtonPush && SEASON3B::CheckMouseIn(pCurMsgBox->GetPos().x, pCurMsgBox->GetPos().y,
-            pCurMsgBox->GetSize().cx, pCurMsgBox->GetSize().cy))
+                                                                pCurMsgBox->GetSize().cx, pCurMsgBox->GetSize().cy))
         {
             SendEvent(pCurMsgBox, MSGBOX_EVENT_MOUSE_RBUTTON_UP);
             m_EventState = EVENT_NONE;
@@ -321,11 +322,13 @@ bool SEASON3B::CNewUIMessageBoxMng::Update()
                 CALLBACK_RESULT Result = (*pCallback)(pCurMsgBox, pEvent->GetParam());
                 if (CALLBACK_BREAK == Result)
                 {
-                    PopEvent(); break;
+                    PopEvent();
+                    break;
                 }
                 if (CALLBACK_POP_ALL_EVENTS == Result)
                 {
-                    PopAllEvents(); break;
+                    PopAllEvents();
+                    break;
                 }
             }
             if (pEvent->GetEvent() == MSGBOX_EVENT_DESTROY)
@@ -415,7 +418,8 @@ void SEASON3B::CNewUIMessageBoxMng::SendEvent(CNewUIMessageBoxBase* pOwner, DWOR
     m_queueEvents.push(pEvent);
 }
 
-void SEASON3B::CNewUIMessageBoxMng::SendEvent(CNewUIMessageBoxBase* pOwner, DWORD dwEvent, const leaf::xstreambuf& xParam)
+void SEASON3B::CNewUIMessageBoxMng::SendEvent(CNewUIMessageBoxBase* pOwner, DWORD dwEvent,
+                                              const leaf::xstreambuf& xParam)
 {
     auto* pEvent = new CNewUIEvent(pOwner, dwEvent, xParam);
     m_queueEvents.push(pEvent);

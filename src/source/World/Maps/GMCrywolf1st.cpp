@@ -23,18 +23,17 @@ extern void MonsterDieSandSmoke(OBJECT* o);
 
 extern bool LogOut;
 
-BYTE m_AltarState[5] = { 2,2,2,2,2 };
+BYTE m_AltarState[5] = {2, 2, 2, 2, 2};
 
 #include "UIControls.h"
 
-
-bool	View_Bal = false;
-char	Suc_Or_Fail = -1;
-char	View_Suc_Or_Fail = -1;
+bool View_Bal = false;
+char Suc_Or_Fail = -1;
+char View_Suc_Or_Fail = -1;
 float Deco_Insert = 0.f;
 char Message_Box = 0;
-wchar_t   Box_String[2][200] = { NULL,NULL };
-int  Dark_elf_Num = 0;
+wchar_t Box_String[2][200] = {NULL, NULL};
+int Dark_elf_Num = 0;
 int Button_Down = 0;
 int BackUp_Key = 0;
 int Val_Hp = 100;
@@ -49,7 +48,7 @@ BYTE Rank = 0;
 int Exp = 0;
 BYTE Ranking[5];
 CLASS_TYPE HeroClass[5];
-int HeroScore[5] = { -1,-1,-1,-1,-1 };
+int HeroScore[5] = {-1, -1, -1, -1, -1};
 wchar_t HeroName[5][MAX_USERNAME_SIZE + 1];
 
 int BackUpMin = 0;
@@ -62,8 +61,6 @@ int BackUpTick = 0;
 BYTE m_OccupationState = 0;
 BYTE m_CrywolfState = 0;
 int m_StatueHP = 0;
-
-
 
 void M34CryWolf1st::CryWolfMVPInit()
 {
@@ -183,7 +180,8 @@ void M34CryWolf1st::CheckCryWolf1stMVP(BYTE btOccupationState, BYTE btCrywolfSta
     OpenTerrainAttribute(FileName);
 }
 
-void M34CryWolf1st::CheckCryWolf1stMVPAltarfInfo(int StatueHP, BYTE AltarState1, BYTE AltarState2, BYTE AltarState3, BYTE AltarState4, BYTE AltarState5)
+void M34CryWolf1st::CheckCryWolf1stMVPAltarfInfo(int StatueHP, BYTE AltarState1, BYTE AltarState2, BYTE AltarState3,
+                                                 BYTE AltarState4, BYTE AltarState5)
 {
     m_StatueHP = StatueHP;
     m_AltarState[0] = AltarState1;
@@ -200,9 +198,12 @@ void M34CryWolf1st::DoTankerFireFixStartPosition(int SourceX, int SourceY, int P
     Vector(PositionX * TERRAIN_SCALE, PositionY * TERRAIN_SCALE, 100.f, TargetPosition);
 
     int Type = 0;
-    if (SourceX == 122 || SourceX == 116) Type = 2;
-    else if (SourceX == 62)  Type = 0;
-    else if (SourceX == 183)  Type = 1;
+    if (SourceX == 122 || SourceX == 116)
+        Type = 2;
+    else if (SourceX == 62)
+        Type = 0;
+    else if (SourceX == 183)
+        Type = 1;
 
     switch (Type)
     {
@@ -274,21 +275,24 @@ void M34CryWolf1st::ChangeBackGroundMusic(int World)
             StopMp3(MUSIC_BC_CRYWOLF_1ST);
             PlayMp3(MUSIC_CRYWOLF_BEFORE);
 
-            if (IsEndMp3()) StopMp3(MUSIC_CRYWOLF_BEFORE);
+            if (IsEndMp3())
+                StopMp3(MUSIC_CRYWOLF_BEFORE);
         }
         else if (m_CrywolfState == CRYWOLF_STATE_READY)
         {
             StopMp3(MUSIC_CRYWOLF_BEFORE);
             PlayMp3(MUSIC_CRYWOLF_READY);
 
-            if (IsEndMp3()) StopMp3(MUSIC_CRYWOLF_READY);
+            if (IsEndMp3())
+                StopMp3(MUSIC_CRYWOLF_READY);
         }
         else if (m_CrywolfState == CRYWOLF_STATE_START)
         {
             StopMp3(MUSIC_CRYWOLF_READY);
             PlayMp3(MUSIC_CRYWOLF_BACK);
 
-            if (IsEndMp3()) StopMp3(MUSIC_CRYWOLF_BACK);
+            if (IsEndMp3())
+                StopMp3(MUSIC_CRYWOLF_BACK);
         }
         else if (m_CrywolfState == CRYWOLF_STATE_END)
         {
@@ -304,7 +308,8 @@ void M34CryWolf1st::ChangeBackGroundMusic(int World)
         {
             PlayMp3(MUSIC_BC_CRYWOLF_1ST);
 
-            if (IsEndMp3()) StopMp3(MUSIC_BC_CRYWOLF_1ST);
+            if (IsEndMp3())
+                StopMp3(MUSIC_BC_CRYWOLF_1ST);
         }
     }
     else
@@ -377,7 +382,7 @@ bool M34CryWolf1st::RenderCryWolf1stObjectVisual(OBJECT* o, BMD* b)
         return false;
 
     vec3_t Light, p;
-    float Scale;//,Luminosity;
+    float Scale; //,Luminosity;
     Vector(0.f, 0.f, 0.f, p);
     static int Change_weather = 0;
 
@@ -444,18 +449,21 @@ bool M34CryWolf1st::RenderCryWolf1stObjectMesh(OBJECT* o, BMD* b, int ExtraMon)
         if (m_OccupationState == CRYWOLF_OCCUPATION_STATE_PEACE)
         {
             Vector(0.4f, 0.4f, 0.4f, b->BodyLight);
-            b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
+            b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                          o->BlendMeshTexCoordV, o->HiddenMesh);
         }
         else
         {
             Vector(0.4f, 0.4f, 0.4f, b->BodyLight);
-            b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
+            b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                          o->BlendMeshTexCoordV, o->HiddenMesh);
         }
     }
-    return true;
+        return true;
     case 56:
     {
-        b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
+        b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                      o->BlendMeshTexCoordV, o->HiddenMesh);
         if (m_OccupationState == CRYWOLF_OCCUPATION_STATE_PEACE)
         {
             float Color = (int)rand() % 10000 * 0.0001f;
@@ -466,10 +474,11 @@ bool M34CryWolf1st::RenderCryWolf1stObjectMesh(OBJECT* o, BMD* b, int ExtraMon)
                 CreateEffect(BITMAP_MAGIC, o->Position, o->Angle, Light, 3, o, 4.0f);
         }
     }
-    return true;
+        return true;
     case 41:
         Vector(0.2f, 0.7f, 0.f, Light);
-        b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
+        b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                      o->BlendMeshTexCoordV, o->HiddenMesh);
         return true;
     case 57:
     {
@@ -480,7 +489,7 @@ bool M34CryWolf1st::RenderCryWolf1stObjectMesh(OBJECT* o, BMD* b, int ExtraMon)
             CreateParticle(BITMAP_SMOKE, o->Position, o->Angle, Light, 21, o->Scale);
         }
     }
-    return true;
+        return true;
     case 71:
     {
         if (rand_fps_check(3))
@@ -489,7 +498,7 @@ bool M34CryWolf1st::RenderCryWolf1stObjectMesh(OBJECT* o, BMD* b, int ExtraMon)
             CreateParticle(BITMAP_TRUE_FIRE, o->Position, o->Angle, Light, 5, o->Scale);
         }
     }
-    return true;
+        return true;
     case 72:
     {
         if (rand_fps_check(10))
@@ -502,13 +511,13 @@ bool M34CryWolf1st::RenderCryWolf1stObjectMesh(OBJECT* o, BMD* b, int ExtraMon)
             CreateParticle(BITMAP_SMOKE, Position, o->Angle, Light, 33, o->Scale);
         }
     }
-    return true;
+        return true;
     case 73:
     {
         if (weather == 0)
             ashies = true;
     }
-    return true;
+        return true;
     case 74:
     {
         if (rand_fps_check(3) && m_OccupationState == CRYWOLF_OCCUPATION_STATE_OCCUPIED)
@@ -517,7 +526,7 @@ bool M34CryWolf1st::RenderCryWolf1stObjectMesh(OBJECT* o, BMD* b, int ExtraMon)
             CreateParticle(BITMAP_SMOKE, o->Position, o->Angle, Light, 21, o->Scale);
         }
     }
-    return true;
+        return true;
     case 77:
     {
         if (rand_fps_check(6))
@@ -527,7 +536,7 @@ bool M34CryWolf1st::RenderCryWolf1stObjectMesh(OBJECT* o, BMD* b, int ExtraMon)
             CreateParticle(BITMAP_CLOUD, o->Position, o->Angle, Light, 9, o->Scale, o);
         }
     }
-    return true;
+        return true;
     case 78:
     {
         if (rand_fps_check(6))
@@ -536,7 +545,7 @@ bool M34CryWolf1st::RenderCryWolf1stObjectMesh(OBJECT* o, BMD* b, int ExtraMon)
             CreateParticle(BITMAP_CLOUD, o->Position, o->Angle, Light, 9, o->Scale, o);
         }
     }
-    return true;
+        return true;
     case 81:
     {
         if (m_OccupationState == CRYWOLF_OCCUPATION_STATE_WAR)
@@ -545,27 +554,31 @@ bool M34CryWolf1st::RenderCryWolf1stObjectMesh(OBJECT* o, BMD* b, int ExtraMon)
 
             float fTemp = 0.1f;
 
-            if (m_StatueHP <= 10) fTemp = 1.0f;
+            if (m_StatueHP <= 10)
+                fTemp = 1.0f;
             b->BodyLight[0] = (sinf(WorldTime * 0.004f) * 3.0f) * fTemp + 5.0f - m_StatueHP / 20.0f;
             b->BodyLight[1] = m_StatueHP / 25.0f - 1.0f;
             b->BodyLight[2] = m_StatueHP / 20.0f - 0.5f;
 
             b->StreamMesh = 0;
-            b->RenderMesh(0, RENDER_BRIGHT | RENDER_CHROME, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
+            b->RenderMesh(0, RENDER_BRIGHT | RENDER_CHROME, o->Alpha, o->BlendMesh, o->BlendMeshLight,
+                          o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
             b->StreamMesh = -1;
 
             b->StreamMesh = 1;
-            b->RenderMesh(0, RENDER_BRIGHT | RENDER_CHROME2, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
+            b->RenderMesh(0, RENDER_BRIGHT | RENDER_CHROME2, o->Alpha, o->BlendMesh, o->BlendMeshLight,
+                          o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
             b->StreamMesh = -1;
         }
     }
-    return true;
+        return true;
     case MODEL_SKILL_FURY_STRIKE:
     {
         Vector(0.0f, 0.0f, 0.9f, b->BodyLight);
-        b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
+        b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                      o->BlendMeshTexCoordV, o->HiddenMesh);
     }
-    return true;
+        return true;
     }
 
     return RenderCryWolf1stMonsterObjectMesh(o, b, ExtraMon);
@@ -747,13 +760,13 @@ bool M34CryWolf1st::MoveCryWolf1stMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
                 }
             }
         }
-        else
-            if (o->CurrentAction == MONSTER01_WALK || o->CurrentAction == MONSTER01_RUN)
+        else if (o->CurrentAction == MONSTER01_WALK || o->CurrentAction == MONSTER01_RUN)
+        {
+            if (rand_fps_check(10))
             {
-                if (rand_fps_check(10)) {
-                    CreateParticle(BITMAP_SMOKE + 1, o->Position, o->Angle, Light);
-                }
+                CreateParticle(BITMAP_SMOKE + 1, o->Position, o->Angle, Light);
             }
+        }
     }
     break;
     case MODEL_SORAM:
@@ -786,13 +799,13 @@ bool M34CryWolf1st::MoveCryWolf1stMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
                 }
             }
         }
-        else
-            if (o->CurrentAction == MONSTER01_WALK || o->CurrentAction == MONSTER01_RUN)
+        else if (o->CurrentAction == MONSTER01_WALK || o->CurrentAction == MONSTER01_RUN)
+        {
+            if (rand_fps_check(10))
             {
-                if (rand_fps_check(10)) {
-                    CreateParticle(BITMAP_SMOKE + 1, o->Position, o->Angle, Light);
-                }
+                CreateParticle(BITMAP_SMOKE + 1, o->Position, o->Angle, Light);
             }
+        }
     }
     break;
     case MODEL_BALGASS:
@@ -818,13 +831,13 @@ bool M34CryWolf1st::MoveCryWolf1stMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
                 //						CreateEffect ( MODEL_STONE2,EndPos,o->Angle,o->Light);
             }
         }
-        else
-            if (o->CurrentAction == MONSTER01_WALK || o->CurrentAction == MONSTER01_RUN)
+        else if (o->CurrentAction == MONSTER01_WALK || o->CurrentAction == MONSTER01_RUN)
+        {
+            if (rand_fps_check(10))
             {
-                if (rand_fps_check(10)) {
-                    CreateParticle(BITMAP_SMOKE + 1, o->Position, o->Angle, Light);
-                }
+                CreateParticle(BITMAP_SMOKE + 1, o->Position, o->Angle, Light);
             }
+        }
     }
     break;
     case MODEL_BALRAM:
@@ -833,7 +846,8 @@ bool M34CryWolf1st::MoveCryWolf1stMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
         Vector(0.9f, 0.2f, 0.1f, Light);
         if (o->CurrentAction == MONSTER01_WALK || o->CurrentAction == MONSTER01_RUN)
         {
-            if (rand_fps_check(10)) {
+            if (rand_fps_check(10))
+            {
                 CreateParticle(BITMAP_SMOKE + 1, o->Position, o->Angle, Light);
             }
         }
@@ -869,7 +883,8 @@ bool M34CryWolf1st::MoveCryWolf1stMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
         Vector(0.9f, 0.2f, 0.1f, Light);
         if (o->CurrentAction == MONSTER01_WALK || o->CurrentAction == MONSTER01_RUN)
         {
-            if (rand_fps_check(10)) {
+            if (rand_fps_check(10))
+            {
                 CreateParticle(BITMAP_SMOKE + 1, o->Position, o->Angle, Light);
             }
         }
@@ -877,10 +892,11 @@ bool M34CryWolf1st::MoveCryWolf1stMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
     break;
     case MODEL_WEREWOLF_HERO:
     {
-        //CreateEffect ( MODEL_SKILL_FURY_STRIKE, o->Position, o->Angle, o->Light, 1, o, -1, 0, 1 );
+        // CreateEffect ( MODEL_SKILL_FURY_STRIKE, o->Position, o->Angle, o->Light, 1, o, -1, 0, 1 );
         vec3_t Position, Light;
 
-        if (o->CurrentAction != MONSTER01_DIE) {
+        if (o->CurrentAction != MONSTER01_DIE)
+        {
             Vector(0.9f, 0.2f, 0.1f, Light);
             BoneManager::GetBonePosition(o, L"Monster95_Head", Position);
             CreateSprite(BITMAP_LIGHT, Position, 3.5f, Light, o);
@@ -906,10 +922,11 @@ bool M34CryWolf1st::MoveCryWolf1stMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
         }
         else
             //			Vector ( 0.9f, 0.2f, 0.1f, Light );
-                        //. Walking & Running Scene Processing
+            //. Walking & Running Scene Processing
             if (o->CurrentAction == MONSTER01_WALK || o->CurrentAction == MONSTER01_RUN)
             {
-                if (rand_fps_check(10)) {
+                if (rand_fps_check(10))
+                {
                     CreateParticle(BITMAP_SMOKE + 1, o->Position, o->Angle, Light);
                 }
             }
@@ -981,7 +998,7 @@ bool M34CryWolf1st::MoveCryWolf1stMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
 
 bool M34CryWolf1st::AttackEffectCryWolf1stMonster(CHARACTER* c, OBJECT* o, BMD* b)
 {
-    //CreateJoint ( BITMAP_FLARE+1, o->Position, o->Position, o->Angle, 6, o, 20.f, 40 );
+    // CreateJoint ( BITMAP_FLARE+1, o->Position, o->Position, o->Angle, 6, o, 20.f, 40 );
     OBJECT* to = NULL;
     /*
         if ( c->TargetCharacter >= 0 && c->TargetCharacter<MAX_CHARACTERS_CLIENT )
@@ -1049,7 +1066,8 @@ bool M34CryWolf1st::AttackEffectCryWolf1stMonster(CHARACTER* c, OBJECT* o, BMD* 
         for (int i = 0; i < 6; i++)
         {
             int Hand = 0;
-            if (i >= 3) Hand = 1;
+            if (i >= 3)
+                Hand = 1;
             b->TransformPosition(o->BoneTransform[c->Weapon[Hand].LinkBone], p, Position, true);
             Vector(0.f, 0.f, (float)(rand() % 360), Angle);
 
@@ -1068,7 +1086,8 @@ bool M34CryWolf1st::AttackEffectCryWolf1stMonster(CHARACTER* c, OBJECT* o, BMD* 
         for (int i = 0; i < 4; i++)
         {
             int Hand = 0;
-            if (i >= 2) Hand = 1;
+            if (i >= 2)
+                Hand = 1;
             b->TransformPosition(o->BoneTransform[c->Weapon[Hand].LinkBone], p, Position, true);
             Vector(0.f, 0.f, (float)(rand() % 360), Angle);
             if (to != NULL)
@@ -1093,16 +1112,16 @@ bool M34CryWolf1st::AttackEffectCryWolf1stMonster(CHARACTER* c, OBJECT* o, BMD* 
 
 void M34CryWolf1st::MoveCryWolf1stBlurEffect(CHARACTER* c, OBJECT* o, BMD* b)
 {
-    //CreateEffect ( MODEL_STONE2,o->Position,o->Angle,o->Light);
+    // CreateEffect ( MODEL_STONE2,o->Position,o->Angle,o->Light);
     vec3_t Angle, Position;
     float Matrix[3][4];
-    vec3_t  p, p2, EndPos;
-    vec3_t  TempAngle;
+    vec3_t p, p2, EndPos;
+    vec3_t TempAngle;
     switch (o->Type)
     {
     case MODEL_SORAM:
     {
-        vec3_t  Light;
+        vec3_t Light;
         Vector(1.0f, 1.0f, 1.0f, Light);
 
         /*
@@ -1120,8 +1139,10 @@ void M34CryWolf1st::MoveCryWolf1stBlurEffect(CHARACTER* c, OBJECT* o, BMD* b)
             float fSpeedPerFrame = fActionSpeed / 10.f;
             float fAnimationFrame = o->AnimationFrame - fActionSpeed;
             VectorCopy(o->Angle, TempAngle);
-            for (int i = 0; i < 10; i++) {
-                b->Animation(BoneTransform, fAnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle, o->HeadAngle);
+            for (int i = 0; i < 10; i++)
+            {
+                b->Animation(BoneTransform, fAnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle,
+                             o->HeadAngle);
 
                 Vector(0.f, 100.f, -150.f, EndRelative);
 
@@ -1138,7 +1159,7 @@ void M34CryWolf1st::MoveCryWolf1stBlurEffect(CHARACTER* c, OBJECT* o, BMD* b)
                 VectorRotate(p, Matrix, Position);
                 VectorAdd(Position, o->Position, p2);
 
-                o->Angle[2] -= 18;//
+                o->Angle[2] -= 18; //
 
                 Vector((float)(rand() % 60 + 60 - 90), 0.f, (float)(rand() % 30 + 90), Angle);
                 VectorAdd(Angle, o->Angle, Angle);
@@ -1146,15 +1167,15 @@ void M34CryWolf1st::MoveCryWolf1stBlurEffect(CHARACTER* c, OBJECT* o, BMD* b)
                 //					Position[0] += rand()%20-10;
                 //					Position[1] += rand()%20-10;
 
-                                    /*
-                                    b->TransformPosition(BoneTransform[39],StartRelative,StartPos,false);
-                                    b->TransformPosition(BoneTransform[41],EndRelative,EndPos,false);
-                                    CreateBlur(c,StartPos,EndPos,Light,3,true,24);
+                /*
+                b->TransformPosition(BoneTransform[39],StartRelative,StartPos,false);
+                b->TransformPosition(BoneTransform[41],EndRelative,EndPos,false);
+                CreateBlur(c,StartPos,EndPos,Light,3,true,24);
 
-                                    b->TransformPosition(BoneTransform[43],StartRelative,StartPos,false);
-                                    b->TransformPosition(BoneTransform[45],EndRelative,EndPos,false);
-                                    CreateBlur(c,StartPos,EndPos,Light,3,true,25);
-                */
+                b->TransformPosition(BoneTransform[43],StartRelative,StartPos,false);
+                b->TransformPosition(BoneTransform[45],EndRelative,EndPos,false);
+                CreateBlur(c,StartPos,EndPos,Light,3,true,25);
+*/
                 fAnimationFrame += fSpeedPerFrame;
             }
             VectorCopy(TempAngle, o->Angle);
@@ -1165,7 +1186,7 @@ void M34CryWolf1st::MoveCryWolf1stBlurEffect(CHARACTER* c, OBJECT* o, BMD* b)
     {
         if (o->CurrentAction == MONSTER01_ATTACK1)
         {
-            vec3_t  Light;
+            vec3_t Light;
             Vector(1.0f, 1.0f, 1.0f, Light);
 
             vec3_t StartPos, StartRelative;
@@ -1176,7 +1197,8 @@ void M34CryWolf1st::MoveCryWolf1stBlurEffect(CHARACTER* c, OBJECT* o, BMD* b)
             float fAnimationFrame = o->AnimationFrame - fActionSpeed;
             for (int i = 0; i < 10; i++)
             {
-                b->Animation(BoneTransform, fAnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle, o->HeadAngle);
+                b->Animation(BoneTransform, fAnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle,
+                             o->HeadAngle);
 
                 //					Vector(0.f, 0.f, -60.f, StartRelative);
                 //					Vector(0.f, 0.f, -150.f, EndRelative);
@@ -1202,7 +1224,7 @@ void M34CryWolf1st::MoveCryWolf1stBlurEffect(CHARACTER* c, OBJECT* o, BMD* b)
     {
         if (o->CurrentAction == MONSTER01_ATTACK1)
         {
-            vec3_t  Light;
+            vec3_t Light;
             Vector(1.f, 1.f, 1.f, Light);
 
             vec3_t StartPos, StartRelative;
@@ -1213,8 +1235,10 @@ void M34CryWolf1st::MoveCryWolf1stBlurEffect(CHARACTER* c, OBJECT* o, BMD* b)
             float fAnimationFrame = o->AnimationFrame - fActionSpeed;
 
             VectorCopy(o->Angle, TempAngle);
-            for (int i = 0; i < 10; i++) {
-                b->Animation(BoneTransform, fAnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle, o->HeadAngle);
+            for (int i = 0; i < 10; i++)
+            {
+                b->Animation(BoneTransform, fAnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle,
+                             o->HeadAngle);
 
                 Vector(0.f, 0.f, -60.f, StartRelative);
                 Vector(0.f, 0.f, -150.f, EndRelative);
@@ -1253,7 +1277,7 @@ void M34CryWolf1st::MoveCryWolf1stBlurEffect(CHARACTER* c, OBJECT* o, BMD* b)
     {
         if ((o->CurrentAction == MONSTER01_ATTACK1 || o->CurrentAction == MONSTER01_ATTACK2))
         {
-            vec3_t  Light;
+            vec3_t Light;
             Vector(1.f, 1.f, 1.f, Light);
 
             vec3_t StartPos, StartRelative;
@@ -1267,8 +1291,10 @@ void M34CryWolf1st::MoveCryWolf1stBlurEffect(CHARACTER* c, OBJECT* o, BMD* b)
                 CreateEffect(MODEL_DARK_ELF_SKILL, o->Position, o->Angle, o->Light, 2, o);
 
             VectorCopy(o->Angle, TempAngle);
-            for (int i = 0; i < 10; i++) {
-                b->Animation(BoneTransform, fAnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle, o->HeadAngle);
+            for (int i = 0; i < 10; i++)
+            {
+                b->Animation(BoneTransform, fAnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle,
+                             o->HeadAngle);
 
                 Vector(0.f, 0.f, -60.f, StartRelative);
                 Vector(0.f, 0.f, -150.f, EndRelative);
@@ -1297,7 +1323,7 @@ void M34CryWolf1st::MoveCryWolf1stBlurEffect(CHARACTER* c, OBJECT* o, BMD* b)
     {
         if ((o->CurrentAction == MONSTER01_ATTACK1 || o->CurrentAction == MONSTER01_ATTACK2))
         {
-            vec3_t  Light;
+            vec3_t Light;
             Vector(0.2f, 1.f, 0.4f, Light);
 
             vec3_t StartPos, StartRelative;
@@ -1308,8 +1334,10 @@ void M34CryWolf1st::MoveCryWolf1stBlurEffect(CHARACTER* c, OBJECT* o, BMD* b)
             float fAnimationFrame = o->AnimationFrame - fActionSpeed;
 
             VectorCopy(o->Angle, TempAngle);
-            for (int i = 0; i < 10; i++) {
-                b->Animation(BoneTransform, fAnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle, o->HeadAngle);
+            for (int i = 0; i < 10; i++)
+            {
+                b->Animation(BoneTransform, fAnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle,
+                             o->HeadAngle);
 
                 Vector(0.f, 250.f, 0.f, StartRelative);
                 Vector(0.f, 0.f, 0.f, EndRelative);
@@ -1325,8 +1353,8 @@ void M34CryWolf1st::MoveCryWolf1stBlurEffect(CHARACTER* c, OBJECT* o, BMD* b)
             {
                 CHARACTER* tc = &CharactersClient[c->TargetCharacter];
                 OBJECT* to = &tc->Object;
-                vec3_t Angle = { 0.f, 0.f, o->Angle[2] };
-                vec3_t Pos = { 0.f, 0.f, (to->BoundingBoxMax[2] / 1.f) };
+                vec3_t Angle = {0.f, 0.f, o->Angle[2]};
+                vec3_t Pos = {0.f, 0.f, (to->BoundingBoxMax[2] / 1.f)};
 
                 Vector(80.f, 0.f, 20.f, p);
                 b->TransformPosition(o->BoneTransform[0], p, Position, true);
@@ -1345,7 +1373,7 @@ void M34CryWolf1st::MoveCryWolf1stBlurEffect(CHARACTER* c, OBJECT* o, BMD* b)
     {
         if (o->CurrentAction == MONSTER01_ATTACK2)
         {
-            vec3_t  Light;
+            vec3_t Light;
             Vector(1.f, 1.f, 1.f, Light);
 
             vec3_t StartPos, StartRelative;
@@ -1354,8 +1382,10 @@ void M34CryWolf1st::MoveCryWolf1stBlurEffect(CHARACTER* c, OBJECT* o, BMD* b)
             float fActionSpeed = b->Actions[o->CurrentAction].PlaySpeed * static_cast<float>(FPS_ANIMATION_FACTOR);
             float fSpeedPerFrame = fActionSpeed / 10.f;
             float fAnimationFrame = o->AnimationFrame - fActionSpeed;
-            for (int i = 0; i < 10; i++) {
-                b->Animation(BoneTransform, fAnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle, o->HeadAngle);
+            for (int i = 0; i < 10; i++)
+            {
+                b->Animation(BoneTransform, fAnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle,
+                             o->HeadAngle);
 
                 Vector(0.f, 0.f, -90.f, StartRelative);
                 Vector(0.f, 0.f, 0.f, EndRelative);
@@ -1380,7 +1410,7 @@ void M34CryWolf1st::MoveCryWolf1stBlurEffect(CHARACTER* c, OBJECT* o, BMD* b)
     {
         if (o->CurrentAction == MONSTER01_ATTACK1)
         {
-            vec3_t  Light;
+            vec3_t Light;
             Vector(1.f, 1.f, 1.f, Light);
 
             vec3_t StartPos, StartRelative;
@@ -1389,8 +1419,10 @@ void M34CryWolf1st::MoveCryWolf1stBlurEffect(CHARACTER* c, OBJECT* o, BMD* b)
             float fActionSpeed = b->Actions[o->CurrentAction].PlaySpeed * static_cast<float>(FPS_ANIMATION_FACTOR);
             float fSpeedPerFrame = fActionSpeed / 10.f;
             float fAnimationFrame = o->AnimationFrame - fActionSpeed;
-            for (int i = 0; i < 10; i++) {
-                b->Animation(BoneTransform, fAnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle, o->HeadAngle);
+            for (int i = 0; i < 10; i++)
+            {
+                b->Animation(BoneTransform, fAnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle,
+                             o->HeadAngle);
 
                 Vector(0.f, 0.f, 120.f, StartRelative);
                 Vector(0.f, 0.f, 0.f, EndRelative);
@@ -1415,7 +1447,8 @@ bool M34CryWolf1st::RenderCryWolf1stMonsterObjectMesh(OBJECT* o, BMD* b, int Ext
     {
         Vector(1.f, 1.f, 1.f, b->BodyLight);
         b->BeginRender(o->Alpha);
-        b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, 5);
+        b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                      o->BlendMeshTexCoordV, 5);
         b->EndRender();
         return true;
     }
@@ -1426,8 +1459,10 @@ bool M34CryWolf1st::RenderCryWolf1stMonsterObjectMesh(OBJECT* o, BMD* b, int Ext
         b->BeginRender(o->Alpha);
         for (int i = 0; i < Models[o->Type].NumMeshs; i++)
         {
-            b->RenderMesh(i, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
-            b->RenderMesh(i, RENDER_CHROME2 | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, BITMAP_CHROME3);
+            b->RenderMesh(i, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                          o->BlendMeshTexCoordV);
+            b->RenderMesh(i, RENDER_CHROME2 | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight,
+                          o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, BITMAP_CHROME3);
         }
         b->EndRender();
         return true;
@@ -1435,7 +1470,8 @@ bool M34CryWolf1st::RenderCryWolf1stMonsterObjectMesh(OBJECT* o, BMD* b, int Ext
     break;
     case MODEL_BALRAM:
     {
-        b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, 5);
+        b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                      o->BlendMeshTexCoordV, 5);
         return true;
     }
     break;
@@ -1462,7 +1498,8 @@ bool M34CryWolf1st::RenderCryWolf1stMonsterObjectMesh(OBJECT* o, BMD* b, int Ext
                 o->BlendMesh = -1;
 
             o->BlendMeshTexCoordU = (int)WorldTime % 10000 * 0.0005f;
-            b->RenderMesh(i, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
+            b->RenderMesh(i, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                          o->BlendMeshTexCoordV);
         }
         b->EndRender();
         o->Alpha = 1.0f;
@@ -1477,13 +1514,16 @@ bool M34CryWolf1st::RenderCryWolf1stMonsterObjectMesh(OBJECT* o, BMD* b, int Ext
             b->BeginRender(o->Alpha);
             for (int i = 0; i < Models[o->Type].NumMeshs; i++)
             {
-                b->RenderMesh(i, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
-                b->RenderMesh(i, RENDER_CHROME | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, BITMAP_CHROME);
+                b->RenderMesh(i, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                              o->BlendMeshTexCoordV);
+                b->RenderMesh(i, RENDER_CHROME | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight,
+                              o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, BITMAP_CHROME);
             }
             b->EndRender();
         }
         else
-            b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, 5);
+            b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                          o->BlendMeshTexCoordV, 5);
         return true;
     }
     break;
@@ -1495,13 +1535,16 @@ bool M34CryWolf1st::RenderCryWolf1stMonsterObjectMesh(OBJECT* o, BMD* b, int Ext
             b->BeginRender(o->Alpha);
             for (int i = 0; i < Models[o->Type].NumMeshs; i++)
             {
-                b->RenderMesh(i, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
-                b->RenderMesh(i, RENDER_CHROME | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, BITMAP_CHROME);
+                b->RenderMesh(i, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                              o->BlendMeshTexCoordV);
+                b->RenderMesh(i, RENDER_CHROME | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight,
+                              o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, BITMAP_CHROME);
             }
             b->EndRender();
         }
         else
-            b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, 5);
+            b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                          o->BlendMeshTexCoordV, 5);
         return true;
     }
     break;
@@ -1511,8 +1554,10 @@ bool M34CryWolf1st::RenderCryWolf1stMonsterObjectMesh(OBJECT* o, BMD* b, int Ext
         b->BeginRender(o->Alpha);
         for (int i = 0; i < Models[o->Type].NumMeshs; i++)
         {
-            b->RenderMesh(i, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
-            b->RenderMesh(i, RENDER_CHROME | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, BITMAP_CHROME);
+            b->RenderMesh(i, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                          o->BlendMeshTexCoordV);
+            b->RenderMesh(i, RENDER_CHROME | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight,
+                          o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, BITMAP_CHROME);
         }
         b->EndRender();
         return true;
@@ -1524,34 +1569,40 @@ bool M34CryWolf1st::RenderCryWolf1stMonsterObjectMesh(OBJECT* o, BMD* b, int Ext
         b->BeginRender(o->Alpha);
         for (int i = 0; i < Models[o->Type].NumMeshs; i++)
         {
-            b->RenderMesh(i, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
-            b->RenderMesh(i, RENDER_CHROME | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, BITMAP_CHROME);
+            b->RenderMesh(i, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                          o->BlendMeshTexCoordV);
+            b->RenderMesh(i, RENDER_CHROME | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight,
+                          o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, BITMAP_CHROME);
         }
         b->EndRender();
         return true;
     }
     break;
-    case MODEL_BEAM_KNIGHT:	//318
+    case MODEL_BEAM_KNIGHT: // 318
     {
         Vector(0.6f, 0.8f, 0.6f, b->BodyLight);
         b->BeginRender(o->Alpha);
         for (int i = 0; i < Models[o->Type].NumMeshs; i++)
         {
-            b->RenderMesh(i, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
-            b->RenderMesh(i, RENDER_CHROME | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, BITMAP_CHROME);
+            b->RenderMesh(i, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                          o->BlendMeshTexCoordV);
+            b->RenderMesh(i, RENDER_CHROME | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight,
+                          o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, BITMAP_CHROME);
         }
         b->EndRender();
         return true;
     }
     break;
-    case MODEL_DRAGON_:	//319
+    case MODEL_DRAGON_: // 319
     {
         Vector(0.6f, 0.8f, 0.6f, b->BodyLight);
         b->BeginRender(o->Alpha);
         for (int i = 0; i < Models[o->Type].NumMeshs; i++)
         {
-            b->RenderMesh(i, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
-            b->RenderMesh(i, RENDER_CHROME | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, BITMAP_CHROME);
+            b->RenderMesh(i, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                          o->BlendMeshTexCoordV);
+            b->RenderMesh(i, RENDER_CHROME | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight,
+                          o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, BITMAP_CHROME);
         }
         b->EndRender();
         return true;
@@ -1611,8 +1662,10 @@ bool M34CryWolf1st::RenderCryWolf1stMonsterVisual(CHARACTER* c, OBJECT* o, BMD* 
         RenderTerrainAlphaBitmap(BITMAP_MAGIC_CIRCLE, o->Position[0], o->Position[1], 3.6f, 3.6f, Light, fRotation2);
         DisableAlphaBlend();
 
-        if (fRotation1 >= 360.0f) fRotation1 = 0.0f;
-        if (fRotation2 >= 360.0f) fRotation2 = 0.0f;
+        if (fRotation1 >= 360.0f)
+            fRotation1 = 0.0f;
+        if (fRotation2 >= 360.0f)
+            fRotation2 = 0.0f;
     }
     break;
     case MODEL_BALGASS:
@@ -1624,35 +1677,40 @@ bool M34CryWolf1st::RenderCryWolf1stMonsterVisual(CHARACTER* c, OBJECT* o, BMD* 
         }
         else if (o->CurrentAction == MONSTER01_ATTACK1)
         {
-            if (o->SubType == FALSE) {
+            if (o->SubType == FALSE)
+            {
                 o->SubType = TRUE;
                 PlayBuffer(SOUND_CRY1ST_BALGAS_ATTACK1);
             }
         }
         else if (o->CurrentAction == MONSTER01_ATTACK2)
         {
-            if (o->SubType == FALSE) {
+            if (o->SubType == FALSE)
+            {
                 o->SubType = TRUE;
                 PlayBuffer(SOUND_CRY1ST_BALGAS_ATTACK2);
             }
         }
         else if (o->CurrentAction == MONSTER01_ATTACK3)
         {
-            if (o->SubType == FALSE) {
+            if (o->SubType == FALSE)
+            {
                 o->SubType = TRUE;
                 PlayBuffer(SOUND_CRY1ST_BALGAS_SKILL1);
             }
         }
         else if (o->CurrentAction == MONSTER01_ATTACK4)
         {
-            if (o->SubType == FALSE) {
+            if (o->SubType == FALSE)
+            {
                 o->SubType = TRUE;
                 PlayBuffer(SOUND_CRY1ST_BALGAS_SKILL2);
             }
         }
         else if (o->CurrentAction == MONSTER01_DIE)
         {
-            if (o->SubType == FALSE) {
+            if (o->SubType == FALSE)
+            {
                 o->SubType = TRUE;
                 PlayBuffer(SOUND_CRY1ST_BALGAS_DIE);
             }
@@ -1671,35 +1729,40 @@ bool M34CryWolf1st::RenderCryWolf1stMonsterVisual(CHARACTER* c, OBJECT* o, BMD* 
         }
         else if (o->CurrentAction == MONSTER01_ATTACK1)
         {
-            if (o->SubType == FALSE) {
+            if (o->SubType == FALSE)
+            {
                 o->SubType = TRUE;
                 PlayBuffer(SOUND_CRY1ST_DARKELF_ATTACK1);
             }
         }
         else if (o->CurrentAction == MONSTER01_ATTACK2)
         {
-            if (o->SubType == FALSE) {
+            if (o->SubType == FALSE)
+            {
                 o->SubType = TRUE;
                 PlayBuffer(SOUND_CRY1ST_DARKELF_ATTACK2);
             }
         }
         else if (o->CurrentAction == MONSTER01_ATTACK3)
         {
-            if (o->SubType == FALSE) {
+            if (o->SubType == FALSE)
+            {
                 o->SubType = TRUE;
                 PlayBuffer(SOUND_CRY1ST_DARKELF_SKILL1);
             }
         }
         else if (o->CurrentAction == MONSTER01_ATTACK4)
         {
-            if (o->SubType == FALSE) {
+            if (o->SubType == FALSE)
+            {
                 o->SubType = TRUE;
                 PlayBuffer(SOUND_CRY1ST_DARKELF_SKILL2);
             }
         }
         else if (o->CurrentAction == MONSTER01_DIE)
         {
-            if (o->SubType == FALSE) {
+            if (o->SubType == FALSE)
+            {
                 o->SubType = TRUE;
                 PlayBuffer(SOUND_CRY1ST_DARKELF_DIE);
             }
@@ -1713,14 +1776,16 @@ bool M34CryWolf1st::RenderCryWolf1stMonsterVisual(CHARACTER* c, OBJECT* o, BMD* 
     {
         if (o->CurrentAction == MONSTER01_ATTACK1 || o->CurrentAction == MONSTER01_ATTACK2)
         {
-            if (o->SubType == FALSE) {
+            if (o->SubType == FALSE)
+            {
                 o->SubType = TRUE;
                 PlayBuffer(SOUND_CRY1ST_TANKER_ATTACK1);
             }
         }
         else if (o->CurrentAction == MONSTER01_DIE)
         {
-            if (o->SubType == FALSE) {
+            if (o->SubType == FALSE)
+            {
                 o->SubType = TRUE;
                 PlayBuffer(SOUND_CRY1ST_TANKER_DIE);
             }
@@ -1739,21 +1804,24 @@ bool M34CryWolf1st::RenderCryWolf1stMonsterVisual(CHARACTER* c, OBJECT* o, BMD* 
         }
         else if (o->CurrentAction == MONSTER01_ATTACK1)
         {
-            if (o->SubType == FALSE) {
+            if (o->SubType == FALSE)
+            {
                 o->SubType = TRUE;
                 PlayBuffer(SOUND_CRY1ST_DEATHSPIRIT_ATTACK1);
             }
         }
         else if (o->CurrentAction == MONSTER01_ATTACK2)
         {
-            if (o->SubType == FALSE) {
+            if (o->SubType == FALSE)
+            {
                 o->SubType = TRUE;
                 PlayBuffer(SOUND_CRY1ST_DEATHSPIRIT_ATTACK2);
             }
         }
         else if (o->CurrentAction == MONSTER01_DIE)
         {
-            if (o->SubType == FALSE) {
+            if (o->SubType == FALSE)
+            {
                 o->SubType = TRUE;
                 PlayBuffer(SOUND_CRY1ST_DEATHSPIRIT_DIE);
             }
@@ -1786,7 +1854,7 @@ bool M34CryWolf1st::RenderCryWolf1stMonsterVisual(CHARACTER* c, OBJECT* o, BMD* 
         Vector(0.3f, 0.3f, 0.7f, Light);
         CreateSprite(BITMAP_LIGHT, Position, 1.5f, Light, o);
     }
-    return true;
+        return true;
     case MODEL_BALRAM:
     {
         if (o->CurrentAction == MONSTER01_WALK || o->CurrentAction == MONSTER01_RUN)
@@ -1796,21 +1864,24 @@ bool M34CryWolf1st::RenderCryWolf1stMonsterVisual(CHARACTER* c, OBJECT* o, BMD* 
         }
         else if (o->CurrentAction == MONSTER01_ATTACK1)
         {
-            if (o->SubType == FALSE) {
+            if (o->SubType == FALSE)
+            {
                 o->SubType = TRUE;
                 PlayBuffer(SOUND_CRY1ST_BALRAM_ATTACK1);
             }
         }
         else if (o->CurrentAction == MONSTER01_ATTACK2)
         {
-            if (o->SubType == FALSE) {
+            if (o->SubType == FALSE)
+            {
                 o->SubType = TRUE;
                 PlayBuffer(SOUND_CRY1ST_BALRAM_ATTACK2);
             }
         }
         else if (o->CurrentAction == MONSTER01_DIE)
         {
-            if (o->SubType == FALSE) {
+            if (o->SubType == FALSE)
+            {
                 o->SubType = TRUE;
                 PlayBuffer(SOUND_CRY1ST_BALRAM_DIE);
             }
@@ -1818,7 +1889,7 @@ bool M34CryWolf1st::RenderCryWolf1stMonsterVisual(CHARACTER* c, OBJECT* o, BMD* 
         if (o->CurrentAction == MONSTER01_STOP1 || o->CurrentAction == MONSTER01_STOP2)
             o->SubType = FALSE;
     }
-    return true;
+        return true;
     case MODEL_SORAM:
     {
         if (o->CurrentAction == MONSTER01_WALK || o->CurrentAction == MONSTER01_RUN)
@@ -1828,21 +1899,24 @@ bool M34CryWolf1st::RenderCryWolf1stMonsterVisual(CHARACTER* c, OBJECT* o, BMD* 
         }
         else if (o->CurrentAction == MONSTER01_ATTACK1)
         {
-            if (o->SubType == FALSE) {
+            if (o->SubType == FALSE)
+            {
                 o->SubType = TRUE;
                 PlayBuffer(SOUND_CRY1ST_SORAM_ATTACK1);
             }
         }
         else if (o->CurrentAction == MONSTER01_ATTACK2)
         {
-            if (o->SubType == FALSE) {
+            if (o->SubType == FALSE)
+            {
                 o->SubType = TRUE;
                 PlayBuffer(SOUND_CRY1ST_SORAM_ATTACK2);
             }
         }
         else if (o->CurrentAction == MONSTER01_DIE)
         {
-            if (o->SubType == FALSE) {
+            if (o->SubType == FALSE)
+            {
                 o->SubType = TRUE;
                 PlayBuffer(SOUND_CRY1ST_SORAM_DIE);
             }
@@ -1850,12 +1924,13 @@ bool M34CryWolf1st::RenderCryWolf1stMonsterVisual(CHARACTER* c, OBJECT* o, BMD* 
         if (o->CurrentAction == MONSTER01_STOP1 || o->CurrentAction == MONSTER01_STOP2)
             o->SubType = FALSE;
     }
-    return true;
+        return true;
     case MODEL_WEREWOLF_HERO:
     {
         vec3_t Position, Light;
 
-        if (o->CurrentAction != MONSTER01_DIE) {
+        if (o->CurrentAction != MONSTER01_DIE)
+        {
             Vector(0.9f, 0.2f, 0.1f, Light);
             BoneManager::GetBonePosition(o, L"Monster95_Head", Position);
             CreateSprite(BITMAP_LIGHT, Position, 3.5f, Light, o);
@@ -1865,7 +1940,8 @@ bool M34CryWolf1st::RenderCryWolf1stMonsterVisual(CHARACTER* c, OBJECT* o, BMD* 
         //. Walking & Running Scene Processing
         if (o->CurrentAction == MONSTER01_WALK || o->CurrentAction == MONSTER01_RUN)
         {
-            if (rand_fps_check(10)) {
+            if (rand_fps_check(10))
+            {
                 CreateParticle(BITMAP_SMOKE + 1, o->Position, o->Angle, Light);
             }
         }
@@ -1877,21 +1953,24 @@ bool M34CryWolf1st::RenderCryWolf1stMonsterVisual(CHARACTER* c, OBJECT* o, BMD* 
         }
         else if (o->CurrentAction == MONSTER01_ATTACK1)
         {
-            if (o->SubType == FALSE) {
+            if (o->SubType == FALSE)
+            {
                 o->SubType = TRUE;
                 PlayBuffer(SOUND_CRY1ST_WWOLF_ATTACK1);
             }
         }
         else if (o->CurrentAction == MONSTER01_ATTACK2)
         {
-            if (o->SubType == FALSE) {
+            if (o->SubType == FALSE)
+            {
                 o->SubType = TRUE;
                 PlayBuffer(SOUND_CRY1ST_WWOLF_ATTACK2);
             }
         }
         else if (o->CurrentAction == MONSTER01_DIE)
         {
-            if (o->SubType == FALSE) {
+            if (o->SubType == FALSE)
+            {
                 o->SubType = TRUE;
                 PlayBuffer(SOUND_CRY1ST_WWOLF_DIE);
             }
@@ -1899,7 +1978,7 @@ bool M34CryWolf1st::RenderCryWolf1stMonsterVisual(CHARACTER* c, OBJECT* o, BMD* 
         if (o->CurrentAction == MONSTER01_STOP1 || o->CurrentAction == MONSTER01_STOP2)
             o->SubType = FALSE;
     }
-    return true;
+        return true;
     case MODEL_SOLAM:
     {
         vec3_t Position, Light;
@@ -1920,21 +1999,24 @@ bool M34CryWolf1st::RenderCryWolf1stMonsterVisual(CHARACTER* c, OBJECT* o, BMD* 
         }
         else if (o->CurrentAction == MONSTER01_ATTACK1)
         {
-            if (o->SubType == FALSE) {
+            if (o->SubType == FALSE)
+            {
                 o->SubType = TRUE;
                 PlayBuffer(SOUND_CRY1ST_SCOUT2_ATTACK1);
             }
         }
         else if (o->CurrentAction == MONSTER01_ATTACK2)
         {
-            if (o->SubType == FALSE) {
+            if (o->SubType == FALSE)
+            {
                 o->SubType = TRUE;
                 PlayBuffer(SOUND_CRY1ST_SCOUT2_ATTACK2);
             }
         }
         else if (o->CurrentAction == MONSTER01_DIE)
         {
-            if (o->SubType == FALSE) {
+            if (o->SubType == FALSE)
+            {
                 o->SubType = TRUE;
                 PlayBuffer(SOUND_CRY1ST_SCOUT2_DIE);
             }
@@ -1942,7 +2024,7 @@ bool M34CryWolf1st::RenderCryWolf1stMonsterVisual(CHARACTER* c, OBJECT* o, BMD* 
         if (o->CurrentAction == MONSTER01_STOP1 || o->CurrentAction == MONSTER01_STOP2)
             o->SubType = FALSE;
     }
-    return true;
+        return true;
     case MODEL_VALAM:
     {
         vec3_t Position, Light;
@@ -1975,21 +2057,24 @@ bool M34CryWolf1st::RenderCryWolf1stMonsterVisual(CHARACTER* c, OBJECT* o, BMD* 
         }
         else if (o->CurrentAction == MONSTER01_ATTACK1)
         {
-            if (o->SubType == FALSE) {
+            if (o->SubType == FALSE)
+            {
                 o->SubType = TRUE;
                 PlayBuffer(SOUND_CRY1ST_SCOUT3_ATTACK1);
             }
         }
         else if (o->CurrentAction == MONSTER01_ATTACK2)
         {
-            if (o->SubType == FALSE) {
+            if (o->SubType == FALSE)
+            {
                 o->SubType = TRUE;
                 PlayBuffer(SOUND_CRY1ST_SCOUT3_ATTACK2);
             }
         }
         else if (o->CurrentAction == MONSTER01_DIE)
         {
-            if (o->SubType == FALSE) {
+            if (o->SubType == FALSE)
+            {
                 o->SubType = TRUE;
                 PlayBuffer(SOUND_CRY1ST_SCOUT3_DIE);
             }
@@ -1998,7 +2083,7 @@ bool M34CryWolf1st::RenderCryWolf1stMonsterVisual(CHARACTER* c, OBJECT* o, BMD* 
         if (o->CurrentAction == MONSTER01_STOP1 || o->CurrentAction == MONSTER01_STOP2)
             o->SubType = FALSE;
     }
-    return true;
+        return true;
     case MODEL_SCOUT:
     {
         if (o->CurrentAction == MONSTER01_WALK || o->CurrentAction == MONSTER01_RUN)
@@ -2008,21 +2093,24 @@ bool M34CryWolf1st::RenderCryWolf1stMonsterVisual(CHARACTER* c, OBJECT* o, BMD* 
         }
         else if (o->CurrentAction == MONSTER01_ATTACK1)
         {
-            if (o->SubType == FALSE) {
+            if (o->SubType == FALSE)
+            {
                 o->SubType = TRUE;
                 PlayBuffer(SOUND_CRY1ST_SCOUT1_ATTACK1);
             }
         }
         else if (o->CurrentAction == MONSTER01_ATTACK2)
         {
-            if (o->SubType == FALSE) {
+            if (o->SubType == FALSE)
+            {
                 o->SubType = TRUE;
                 PlayBuffer(SOUND_CRY1ST_SCOUT1_ATTACK2);
             }
         }
         else if (o->CurrentAction == MONSTER01_DIE)
         {
-            if (o->SubType == FALSE) {
+            if (o->SubType == FALSE)
+            {
                 o->SubType = TRUE;
                 PlayBuffer(SOUND_CRY1ST_SCOUT1_DIE);
             }
@@ -2030,7 +2118,7 @@ bool M34CryWolf1st::RenderCryWolf1stMonsterVisual(CHARACTER* c, OBJECT* o, BMD* 
         if (o->CurrentAction == MONSTER01_STOP1 || o->CurrentAction == MONSTER01_STOP2)
             o->SubType = FALSE;
     }
-    return true;
+        return true;
     }
     return false;
 }
@@ -2040,12 +2128,13 @@ bool M34CryWolf1st::CreateMist(PARTICLE* pParticleObj)
     if (!IsCyrWolf1st())
         return false;
 
-    if (rand_fps_check(30)) {
+    if (rand_fps_check(30))
+    {
         vec3_t Light;
         Vector(0.07f, 0.07f, 0.07f, Light);
         int ff = 200.0f;
 
-        vec3_t TargetPosition = { 0.f, 0.f, 400.f }, TargetAngle = { 0.f, 0.f, 0.f };
+        vec3_t TargetPosition = {0.f, 0.f, 400.f}, TargetAngle = {0.f, 0.f, 0.f};
         switch (rand() % 8)
         {
         case 0:
@@ -2149,9 +2238,8 @@ void M34CryWolf1st::Set_BossMonster(int Val_Hp, int Dl_Num)
 
     if (Val_Hp > 0 && View_Bal == false)
         View_Bal = true;
-    else
-        if (Val_Hp <= 0 && View_Bal == true)
-            View_Bal = false;
+    else if (Val_Hp <= 0 && View_Bal == true)
+        View_Bal = false;
 
     Set_Val_Hp(Val_Hp);
 }
@@ -2198,7 +2286,8 @@ void M34CryWolf1st::MoveMvp_Interface()
     for(int i = 0; i < 5; i++)
     {
         int Key = 205+i;
-        if((Hero->PositionX) == AltarContract_Loc[i][0] && (Hero->PositionY) == AltarContract_Loc[i][1] && Key != BackUp_Key)
+        if((Hero->PositionX) == AltarContract_Loc[i][0] && (Hero->PositionY) == AltarContract_Loc[i][1] && Key !=
+    BackUp_Key)
         {
             Set_Message_Box(0,0,Key);
             break;
@@ -2236,10 +2325,8 @@ void M34CryWolf1st::MoveMvp_Interface()
         {
             if (MouseLButton == true)
             {
-                if (Hero->Helper.Type == MODEL_HORN_OF_UNIRIA
-                    || Hero->Helper.Type == MODEL_HORN_OF_DINORANT
-                    || Hero->Helper.Type == MODEL_HORN_OF_FENRIR
-                    )
+                if (Hero->Helper.Type == MODEL_HORN_OF_UNIRIA || Hero->Helper.Type == MODEL_HORN_OF_DINORANT ||
+                    Hero->Helper.Type == MODEL_HORN_OF_FENRIR)
                 {
                     Set_Message_Box(6, 0, 0);
                 }
@@ -2256,19 +2343,18 @@ void M34CryWolf1st::MoveMvp_Interface()
             MouseLButtonPush = false;
         }
     }
-    else
-        if (Message_Box == 2)
+    else if (Message_Box == 2)
+    {
+        if (MouseX > 290 && MouseX < 290 + 54 && MouseY > 250 && MouseY < 250 + 30)
         {
-            if (MouseX > 290 && MouseX < 290 + 54 && MouseY > 250 && MouseY < 250 + 30)
+            if (MouseLButton == true)
             {
-                if (MouseLButton == true)
-                {
-                    MouseLButton = false;
-                    MouseLButtonPush = false;
-                    Button_Down = 3;
-                }
+                MouseLButton = false;
+                MouseLButtonPush = false;
+                Button_Down = 3;
             }
         }
+    }
 }
 
 void M34CryWolf1st::Sub_Interface()
@@ -2395,15 +2481,15 @@ bool M34CryWolf1st::Render_Mvp_Interface()
 
     wchar_t Text[300];
 
-    float Main[] = { 518.f,278.f,122.f,119.f,120.f / 128.f,118.f / 128.f };
-    float Number[5][6] = { {565.f,280.f,13.f,13.f,12.f / 16.f,12.f / 16.f},
-                            {582.f,282.f,13.f,13.f,12.f / 16.f,12.f / 16.f},
-                            {598.f,286.f,13.f,13.f,12.f / 16.f,12.f / 16.f},
-                            {613.f,294.f,13.f,13.f,12.f / 16.f,12.f / 16.f},
-                            {625.f,306.f,13.f,13.f,12.f / 16.f,12.f / 16.f} };
-    float bar[] = { 0.f,98.f,97.f,21.f,97.f / 128.f,21.f / 32.f };
-    float Dark_Elf_Icon[] = { 623.f,358.f,15.f,15.f,14.f / 16.f,14.f / 16.f };
-    float Val_Icon[] = { 4.f,101.f,15.f,15.f,14.f / 16.f,14.f / 16.f };
+    float Main[] = {518.f, 278.f, 122.f, 119.f, 120.f / 128.f, 118.f / 128.f};
+    float Number[5][6] = {{565.f, 280.f, 13.f, 13.f, 12.f / 16.f, 12.f / 16.f},
+                          {582.f, 282.f, 13.f, 13.f, 12.f / 16.f, 12.f / 16.f},
+                          {598.f, 286.f, 13.f, 13.f, 12.f / 16.f, 12.f / 16.f},
+                          {613.f, 294.f, 13.f, 13.f, 12.f / 16.f, 12.f / 16.f},
+                          {625.f, 306.f, 13.f, 13.f, 12.f / 16.f, 12.f / 16.f}};
+    float bar[] = {0.f, 98.f, 97.f, 21.f, 97.f / 128.f, 21.f / 32.f};
+    float Dark_Elf_Icon[] = {623.f, 358.f, 15.f, 15.f, 14.f / 16.f, 14.f / 16.f};
+    float Val_Icon[] = {4.f, 101.f, 15.f, 15.f, 14.f / 16.f, 14.f / 16.f};
 
     int TotDelay = 400;
 
@@ -2449,7 +2535,8 @@ bool M34CryWolf1st::Render_Mvp_Interface()
 
         if (View_Suc_Or_Fail == 1)
         {
-            g_pRenderText->RenderText(330, 175 + icntIndex * 17, GlobalText[2000], 0, 0, RT3_WRITE_CENTER); icntIndex++;
+            g_pRenderText->RenderText(330, 175 + icntIndex * 17, GlobalText[2000], 0, 0, RT3_WRITE_CENTER);
+            icntIndex++;
             g_pRenderText->RenderText(328, 175 + icntIndex * 17, GlobalText[2001], 0, 0, RT3_WRITE_CENTER);
         }
         else
@@ -2504,11 +2591,13 @@ bool M34CryWolf1st::Render_Mvp_Interface()
 
         if ((Delay * 15) > 479)
         {
-            g_pCryWolfInterface->Render(150, 50, 329, 94, 0.f, 0.f, 328.f / 512.f, 93.f / 128.f, Add_Num, false, false, A_Value);
+            g_pCryWolfInterface->Render(150, 50, 329, 94, 0.f, 0.f, 328.f / 512.f, 93.f / 128.f, Add_Num, false, false,
+                                        A_Value);
         }
         else if (Suc_Or_Fail == 0)
         {
-            g_pCryWolfInterface->Render(150 + (Delay * 15), 50, 329, 94, 0.f, 0.f, 329.f / 512.f, 94.f / 128.f, Add_Num, false, false, A_Value);
+            g_pCryWolfInterface->Render(150 + (Delay * 15), 50, 329, 94, 0.f, 0.f, 329.f / 512.f, 94.f / 128.f, Add_Num,
+                                        false, false, A_Value);
 
             Delay++;
             if ((Delay * 15) > 479)
@@ -2522,7 +2611,8 @@ bool M34CryWolf1st::Render_Mvp_Interface()
         }
         else
         {
-            g_pCryWolfInterface->Render(-329 + (Delay * 15), 50, 329, 94, 0.f, 0.f, 329.f / 512.f, 94.f / 128.f, Add_Num, false, false, A_Value);
+            g_pCryWolfInterface->Render(-329 + (Delay * 15), 50, 329, 94, 0.f, 0.f, 329.f / 512.f, 94.f / 128.f,
+                                        Add_Num, false, false, A_Value);
         }
 
         g_pCryWolfInterface->Render(230, 150, 196, 141, 0.f, 0.f, 195.f / 256.f, 140.f / 256.f, 26);
@@ -2530,7 +2620,7 @@ bool M34CryWolf1st::Render_Mvp_Interface()
 
         if (Delay_Add_inter == 0)
         {
-            int Exp_val[9] = { 0,0,0,0,0,0,0,0,0 }, Exp_Dummy = 0, Val = 0;
+            int Exp_val[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0}, Exp_Dummy = 0, Val = 0;
 
             g_pCryWolfInterface->Render(250 + 120, 188, 29, 28, 0.f, 0.f, 29.f / 32.f, 27.f / 32.f, 28 + Rank);
 
@@ -2556,15 +2646,24 @@ bool M34CryWolf1st::Render_Mvp_Interface()
             }
             int Move_X = 29;
             g_pCryWolfInterface->Render(200 + Move_X, 235, 60, 19, 0.f, 0.f, 60.f / 64.f, 19.f / 32.f, 43);
-            g_pCryWolfInterface->Render(250 + 130 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f, 33 + Exp_val[8]);
-            g_pCryWolfInterface->Render(250 + 115 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f, 33 + Exp_val[7]);
-            g_pCryWolfInterface->Render(250 + 100 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f, 33 + Exp_val[6]);
-            g_pCryWolfInterface->Render(250 + 85 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f, 33 + Exp_val[5]);
-            g_pCryWolfInterface->Render(250 + 70 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f, 33 + Exp_val[4]);
-            g_pCryWolfInterface->Render(250 + 55 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f, 33 + Exp_val[3]);
-            g_pCryWolfInterface->Render(250 + 40 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f, 33 + Exp_val[2]);
-            g_pCryWolfInterface->Render(250 + 25 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f, 33 + Exp_val[1]);
-            g_pCryWolfInterface->Render(250 + 10 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f, 33 + Exp_val[0]);
+            g_pCryWolfInterface->Render(250 + 130 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f,
+                                        33 + Exp_val[8]);
+            g_pCryWolfInterface->Render(250 + 115 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f,
+                                        33 + Exp_val[7]);
+            g_pCryWolfInterface->Render(250 + 100 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f,
+                                        33 + Exp_val[6]);
+            g_pCryWolfInterface->Render(250 + 85 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f,
+                                        33 + Exp_val[5]);
+            g_pCryWolfInterface->Render(250 + 70 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f,
+                                        33 + Exp_val[4]);
+            g_pCryWolfInterface->Render(250 + 55 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f,
+                                        33 + Exp_val[3]);
+            g_pCryWolfInterface->Render(250 + 40 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f,
+                                        33 + Exp_val[2]);
+            g_pCryWolfInterface->Render(250 + 25 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f,
+                                        33 + Exp_val[1]);
+            g_pCryWolfInterface->Render(250 + 10 + Move_X, 235, 15, 19, 0.f, 0.f, 15.f / 16.f, 19.f / 32.f,
+                                        33 + Exp_val[0]);
         }
     }
 
@@ -2581,37 +2680,44 @@ bool M34CryWolf1st::Render_Mvp_Interface()
         {
             if (State == 1)
             {
-                g_pCryWolfInterface->Render(Number[ia][0], Number[ia][1], Number[ia][2], Number[ia][3], 0.f, 0.f, Number[ia][4], Number[ia][5], 23);
+                g_pCryWolfInterface->Render(Number[ia][0], Number[ia][1], Number[ia][2], Number[ia][3], 0.f, 0.f,
+                                            Number[ia][4], Number[ia][5], 23);
             }
             else if (State == 2)
             {
-                g_pCryWolfInterface->Render(Number[ia][0], Number[ia][1], Number[ia][2], Number[ia][3], 0.f, 0.f, Number[ia][4], Number[ia][5], 24);
+                g_pCryWolfInterface->Render(Number[ia][0], Number[ia][1], Number[ia][2], Number[ia][3], 0.f, 0.f,
+                                            Number[ia][4], Number[ia][5], 24);
             }
             else
             {
-                g_pCryWolfInterface->Render(Number[ia][0], Number[ia][1], Number[ia][2], Number[ia][3], 0.f, 0.f, Number[ia][4], Number[ia][5], 25);
+                g_pCryWolfInterface->Render(Number[ia][0], Number[ia][1], Number[ia][2], Number[ia][3], 0.f, 0.f,
+                                            Number[ia][4], Number[ia][5], 25);
             }
         }
         else
         {
             if (State == 1)
             {
-                g_pCryWolfInterface->Render(Number[ia][0], Number[ia][1], Number[ia][2], Number[ia][3], 0.f, 0.f, Number[ia][4], Number[ia][5], 7);
+                g_pCryWolfInterface->Render(Number[ia][0], Number[ia][1], Number[ia][2], Number[ia][3], 0.f, 0.f,
+                                            Number[ia][4], Number[ia][5], 7);
             }
             else if (State == 2)
             {
-                g_pCryWolfInterface->Render(Number[ia][0], Number[ia][1], Number[ia][2], Number[ia][3], 0.f, 0.f, Number[ia][4], Number[ia][5], 8);
+                g_pCryWolfInterface->Render(Number[ia][0], Number[ia][1], Number[ia][2], Number[ia][3], 0.f, 0.f,
+                                            Number[ia][4], Number[ia][5], 8);
             }
         }
     }
 
     if (Dark_elf_Num == 0)
     {
-        g_pCryWolfInterface->Render(Dark_Elf_Icon[0], Dark_Elf_Icon[1], Dark_Elf_Icon[2], Dark_Elf_Icon[3], 0.f, 0.f, Dark_Elf_Icon[4], Dark_Elf_Icon[5], 6);
+        g_pCryWolfInterface->Render(Dark_Elf_Icon[0], Dark_Elf_Icon[1], Dark_Elf_Icon[2], Dark_Elf_Icon[3], 0.f, 0.f,
+                                    Dark_Elf_Icon[4], Dark_Elf_Icon[5], 6);
     }
     else
     {
-        g_pCryWolfInterface->Render(Dark_Elf_Icon[0], Dark_Elf_Icon[1], Dark_Elf_Icon[2], Dark_Elf_Icon[3], 0.f, 0.f, Dark_Elf_Icon[4], Dark_Elf_Icon[5], 5);
+        g_pCryWolfInterface->Render(Dark_Elf_Icon[0], Dark_Elf_Icon[1], Dark_Elf_Icon[2], Dark_Elf_Icon[3], 0.f, 0.f,
+                                    Dark_Elf_Icon[4], Dark_Elf_Icon[5], 5);
     }
 
     g_pCryWolfInterface->Render(538, 392, 104, 37, 0.f, 0.f, 104.f / 128.f, 36.f / 64.f, 12);
@@ -2629,7 +2735,8 @@ bool M34CryWolf1st::Render_Mvp_Interface()
         else
         {
             g_pCryWolfInterface->Render(bar[0], bar[1], bar[2], bar[3], 0.f, 0.f, bar[4], bar[5], 0);
-            g_pCryWolfInterface->Render(Val_Icon[0], Val_Icon[1], Val_Icon[2], Val_Icon[3], 0.f, 0.f, Val_Icon[4], Val_Icon[5], 4);
+            g_pCryWolfInterface->Render(Val_Icon[0], Val_Icon[1], Val_Icon[2], Val_Icon[3], 0.f, 0.f, Val_Icon[4],
+                                        Val_Icon[5], 4);
             mu_swprintf(Text, GlobalText[1949]);
             g_pRenderText->RenderText(38, 101, Text, 0, 0, RT3_WRITE_CENTER);
 
@@ -2665,7 +2772,8 @@ bool M34CryWolf1st::Render_Mvp_Interface()
                     nPastTick = 0;
             }
         }
-        else nPastMinute = 0;
+        else
+            nPastMinute = 0;
 
         if (nPastMinute < 0)
         {

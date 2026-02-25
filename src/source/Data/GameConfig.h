@@ -14,46 +14,88 @@ public:
     void Save();
 
     // Window
-    int  GetWindowWidth()  const { return m_windowWidth; }
-    int  GetWindowHeight() const { return m_windowHeight; }
-    bool GetWindowMode()   const { return m_windowMode; }
+    int GetWindowWidth() const
+    {
+        return m_windowWidth;
+    }
+    int GetWindowHeight() const
+    {
+        return m_windowHeight;
+    }
+    bool GetWindowMode() const
+    {
+        return m_windowMode;
+    }
 
     void SetWindowSize(int width, int height);
     void SetWindowMode(bool windowed);
 
     // Graphics
-    int GetColorDepth() const { return m_colorDepth; }
+    int GetColorDepth() const
+    {
+        return m_colorDepth;
+    }
     void SetColorDepth(int depth);
 
     // Audio
-    bool GetSoundEnabled() const { return m_soundEnabled; }
-    bool GetMusicEnabled() const { return m_musicEnabled; }
-    int  GetVolumeLevel()  const { return m_volumeLevel; }
+    bool GetSoundEnabled() const
+    {
+        return m_soundEnabled;
+    }
+    bool GetMusicEnabled() const
+    {
+        return m_musicEnabled;
+    }
+    int GetVolumeLevel() const
+    {
+        return m_volumeLevel;
+    }
 
     void SetSoundEnabled(bool enabled);
     void SetMusicEnabled(bool enabled);
     void SetVolumeLevel(int level);
 
     // Text rendering
-    int GetRenderTextType() const { return m_renderTextType; }
+    int GetRenderTextType() const
+    {
+        return m_renderTextType;
+    }
     void SetRenderTextType(int type);
 
     // Login
-    bool GetRememberMe() const { return m_rememberMe; }
+    bool GetRememberMe() const
+    {
+        return m_rememberMe;
+    }
     void SetRememberMe(bool remember);
 
-    std::wstring GetLanguageSelection() const { return m_languageSelection; }
+    std::wstring GetLanguageSelection() const
+    {
+        return m_languageSelection;
+    }
     void SetLanguageSelection(const std::wstring& lang);
 
     void SetEncryptedUsername(const std::wstring& encryptedUsername);
-    std::wstring GetEncryptedUsername() const { return m_encryptedUsername; }
+    std::wstring GetEncryptedUsername() const
+    {
+        return m_encryptedUsername;
+    }
 
     void SetEncryptedPassword(const std::wstring& encryptedPassword);
-    std::wstring GetEncryptedPassword() const { return m_encryptedPassword; }
+    std::wstring GetEncryptedPassword() const
+    {
+        return m_encryptedPassword;
+    }
 
     // Connection
-    std::wstring GetServerIP() const { return m_serverIP; }
-    int GetServerPort() const { return m_serverPort; }
+    std::wstring GetServerIP() const
+    {
+        return m_serverIP;
+    }
+    int GetServerPort() const
+    {
+        return m_serverPort;
+    }
 
     void SetServerIP(const std::wstring& ip);
     void SetServerPort(int port);
@@ -72,15 +114,15 @@ private:
 
     std::filesystem::path m_configPath;
 
-    int  m_windowWidth;
-    int  m_windowHeight;
+    int m_windowWidth;
+    int m_windowHeight;
     bool m_windowMode;
 
     int m_colorDepth;
 
     bool m_soundEnabled;
     bool m_musicEnabled;
-    int  m_volumeLevel;
+    int m_volumeLevel;
 
     int m_renderTextType;
 

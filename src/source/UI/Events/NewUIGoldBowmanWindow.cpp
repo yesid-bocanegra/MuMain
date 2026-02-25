@@ -10,24 +10,25 @@
 
 namespace
 {
-    void RenderText(const wchar_t* text, int x, int y, int sx, int sy, DWORD color, DWORD backcolor, int sort)
-    {
-        g_pRenderText->SetFont(g_hFont);
+void RenderText(const wchar_t* text, int x, int y, int sx, int sy, DWORD color, DWORD backcolor, int sort)
+{
+    g_pRenderText->SetFont(g_hFont);
 
-        DWORD backuptextcolor = g_pRenderText->GetTextColor();
-        DWORD backuptextbackcolor = g_pRenderText->GetBgColor();
+    DWORD backuptextcolor = g_pRenderText->GetTextColor();
+    DWORD backuptextbackcolor = g_pRenderText->GetBgColor();
 
-        g_pRenderText->SetTextColor(color);
-        g_pRenderText->SetBgColor(backcolor);
-        g_pRenderText->RenderText(x, y, text, sx, sy, sort);
+    g_pRenderText->SetTextColor(color);
+    g_pRenderText->SetBgColor(backcolor);
+    g_pRenderText->RenderText(x, y, text, sx, sy, sort);
 
-        g_pRenderText->SetTextColor(backuptextcolor);
-        g_pRenderText->SetBgColor(backuptextbackcolor);
-    }
-};
+    g_pRenderText->SetTextColor(backuptextcolor);
+    g_pRenderText->SetBgColor(backuptextbackcolor);
+}
+}; // namespace
 
 using namespace SEASON3B;
 
+// cppcheck-suppress uninitMemberVar
 CNewUIGoldBowmanWindow::CNewUIGoldBowmanWindow()
 {
     m_pNewUIMng = NULL;
@@ -115,15 +116,17 @@ void CNewUIGoldBowmanWindow::ChangeEditBox(const UISTATES type)
 
 bool CNewUIGoldBowmanWindow::UpdateMouseEvent()
 {
-    if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_GOLD_BOWMAN) == false) {
+    if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_GOLD_BOWMAN) == false)
+    {
         return true;
     }
 
-    if (m_EditBox) {
+    if (m_EditBox)
+    {
         m_EditBox->DoAction();
     }
 
-    POINT ptExitBtn1 = { m_Pos.x + 169, m_Pos.y + 7 };
+    POINT ptExitBtn1 = {m_Pos.x + 169, m_Pos.y + 7};
 
     if (SEASON3B::IsPress(VK_LBUTTON) && CheckMouseIn(ptExitBtn1.x, ptExitBtn1.y, 13, 12))
     {
@@ -151,13 +154,16 @@ bool CNewUIGoldBowmanWindow::UpdateMouseEvent()
             m_EditBox->GetText(strSerial);
 
             wchar_t strSerial1[5] = L"0,";
-            memcpy(strSerial1, strSerial, sizeof(char) * 4); strSerial1[4] = 0;
+            memcpy(strSerial1, strSerial, sizeof(char) * 4);
+            strSerial1[4] = 0;
 
             wchar_t strSerial2[5] = L"0,";
-            memcpy(strSerial2, strSerial + 4, sizeof(char) * 4); strSerial2[4] = 0;
+            memcpy(strSerial2, strSerial + 4, sizeof(char) * 4);
+            strSerial2[4] = 0;
 
             wchar_t strSerial3[5] = L"0,";
-            memcpy(strSerial3, strSerial + 8, sizeof(char) * 4); strSerial3[4] = 0;
+            memcpy(strSerial3, strSerial + 8, sizeof(char) * 4);
+            strSerial3[4] = 0;
 
             SocketClient->ToGameServer()->SendLuckyNumberRequest(strSerial1, strSerial2, strSerial3);
         }
@@ -191,7 +197,8 @@ bool CNewUIGoldBowmanWindow::UpdateMouseEvent()
 
 bool CNewUIGoldBowmanWindow::UpdateKeyEvent()
 {
-    if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_GOLD_BOWMAN) == false) {
+    if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_GOLD_BOWMAN) == false)
+    {
         return true;
     }
 
@@ -282,7 +289,8 @@ void CNewUIGoldBowmanWindow::RenderTexts()
         RenderText(g_strGiftName, m_Pos.x, m_Pos.y + 330, 190, 0, 0xFFFFD200, 0x00000000, RT3_SORT_CENTER);
     }
 
-    if (m_EditBox) {
+    if (m_EditBox)
+    {
         m_EditBox->Render();
     }
 }

@@ -1,30 +1,30 @@
 // stdafx.h : include file for standard system include files,
 #pragma once
 
-//warining
-#pragma warning( disable : 4067 )
-#pragma warning( disable : 4786 )
-#pragma warning( disable : 4800 )
-#pragma warning( disable : 4996 )
-#pragma warning( disable : 4244 )
-#pragma warning( disable : 4237 )
-#pragma warning( disable : 4305 )
-#pragma warning( disable : 4503 )
-#pragma warning( disable : 4267 )
-#pragma warning( disable : 4091 )
-#pragma warning( disable : 4819 )
-#pragma warning( disable : 4505 )
-#pragma warning( disable : 4100 )
-#pragma warning( disable : 4127 )
-#pragma warning( disable : 4702 )
-#pragma warning( disable : 4838 )
-#pragma warning( disable : 5208 )
-//#pragma warning( disable : 4482 )
-//#pragma warning( disable : 4700 )
-//#pragma warning( disable : 4748 )
-//#pragma warning( disable : 4786 )
-#pragma warning( disable : 28159 )
-#pragma warning( disable : 26812 )
+// warining
+#pragma warning(disable : 4067)
+#pragma warning(disable : 4786)
+#pragma warning(disable : 4800)
+#pragma warning(disable : 4996)
+#pragma warning(disable : 4244)
+#pragma warning(disable : 4237)
+#pragma warning(disable : 4305)
+#pragma warning(disable : 4503)
+#pragma warning(disable : 4267)
+#pragma warning(disable : 4091)
+#pragma warning(disable : 4819)
+#pragma warning(disable : 4505)
+#pragma warning(disable : 4100)
+#pragma warning(disable : 4127)
+#pragma warning(disable : 4702)
+#pragma warning(disable : 4838)
+#pragma warning(disable : 5208)
+// #pragma warning( disable : 4482 )
+// #pragma warning( disable : 4700 )
+// #pragma warning( disable : 4748 )
+// #pragma warning( disable : 4786 )
+#pragma warning(disable : 28159)
+#pragma warning(disable : 26812)
 
 #define NOMINMAX
 
@@ -43,7 +43,7 @@
 #define _CRT_SECURE_NO_DEPRECATE
 #define _CRT_NONSTDC_NO_DEPRECATE
 
-#pragma warning( push, 3 )
+#pragma warning(push, 3)
 
 #include <windows.h>
 
@@ -52,12 +52,12 @@
 #undef swprintf
 #endif
 
-//windows
+// windows
 #include <winsock2.h>
 #include <mmsystem.h>
 #include <shellapi.h>
 
-//c runtime
+// c runtime
 #include <stdio.h>
 #include <stdlib.h>
 #include <malloc.h>
@@ -78,7 +78,7 @@
 #include <vector>
 #include <queue>
 
-#pragma warning( pop )
+#pragma warning(pop)
 
 // Cross-platform swprintf replacement
 // MinGW blocks swprintf, so we provide mu_swprintf as a safe cross-platform alternative
@@ -89,49 +89,51 @@
 
 // Use inline template functions instead of macros to avoid issues with #ifdef in arguments
 #ifdef _MSC_VER
-  // MSVC: swprintf doesn't need buffer size
-  template<typename... Args>
-  inline int mu_swprintf(wchar_t* buffer, const wchar_t* format, Args... args) {
-      return swprintf(buffer, format, args...);
-  }
-  // mu_swprintf_s with explicit size
-  template<typename... Args>
-  inline int mu_swprintf_s(wchar_t* buffer, size_t size, const wchar_t* format, Args... args) {
-      return swprintf_s(buffer, size, format, args...);
-  }
-  // mu_swprintf_s with array - auto-deduce size (like MSVC's swprintf_s)
-  template<size_t N, typename... Args>
-  inline int mu_swprintf_s(wchar_t (&buffer)[N], const wchar_t* format, Args... args) {
-      return swprintf_s(buffer, N, format, args...);
-  }
+// MSVC: swprintf doesn't need buffer size
+template <typename... Args> inline int mu_swprintf(wchar_t* buffer, const wchar_t* format, Args... args)
+{
+    return swprintf(buffer, format, args...);
+}
+// mu_swprintf_s with explicit size
+template <typename... Args> inline int mu_swprintf_s(wchar_t* buffer, size_t size, const wchar_t* format, Args... args)
+{
+    return swprintf_s(buffer, size, format, args...);
+}
+// mu_swprintf_s with array - auto-deduce size (like MSVC's swprintf_s)
+template <size_t N, typename... Args>
+inline int mu_swprintf_s(wchar_t (&buffer)[N], const wchar_t* format, Args... args)
+{
+    return swprintf_s(buffer, N, format, args...);
+}
 #else
-  // GCC/MinGW/Clang: use std::swprintf with explicit buffer size
-  template<typename... Args>
-  inline int mu_swprintf(wchar_t* buffer, const wchar_t* format, Args... args) {
-      return std::swprintf(buffer, 1024, format, args...);
-  }
-  // mu_swprintf_s with explicit size
-  template<typename... Args>
-  inline int mu_swprintf_s(wchar_t* buffer, size_t size, const wchar_t* format, Args... args) {
-      return std::swprintf(buffer, size, format, args...);
-  }
-  // mu_swprintf_s with array - auto-deduce size (compatible with MSVC swprintf_s)
-  template<size_t N, typename... Args>
-  inline int mu_swprintf_s(wchar_t (&buffer)[N], const wchar_t* format, Args... args) {
-      return std::swprintf(buffer, N, format, args...);
-  }
+// GCC/MinGW/Clang: use std::swprintf with explicit buffer size
+template <typename... Args> inline int mu_swprintf(wchar_t* buffer, const wchar_t* format, Args... args)
+{
+    return std::swprintf(buffer, 1024, format, args...);
+}
+// mu_swprintf_s with explicit size
+template <typename... Args> inline int mu_swprintf_s(wchar_t* buffer, size_t size, const wchar_t* format, Args... args)
+{
+    return std::swprintf(buffer, size, format, args...);
+}
+// mu_swprintf_s with array - auto-deduce size (compatible with MSVC swprintf_s)
+template <size_t N, typename... Args>
+inline int mu_swprintf_s(wchar_t (&buffer)[N], const wchar_t* format, Args... args)
+{
+    return std::swprintf(buffer, N, format, args...);
+}
 #endif
 
-//opengl
+// opengl
 #include <gl/glew.h>
 #include <gl/GL.h>
 
-//patch
-//winmain
+// patch
+// winmain
 #include "Winmain.h"
 #include "Defined_Global.h"
 
-//client
+// client
 #include "_define.h"
 #include "_enum.h"
 #include "_types.h"
@@ -145,7 +147,6 @@
 #include "ZzzOpenglUtil.h"
 
 #include "MultiLanguage.h"
-
 
 #include "Core/muConsoleDebug.h"
 #include "Core/ErrorReport.h"

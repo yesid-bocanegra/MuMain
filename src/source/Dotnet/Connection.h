@@ -29,8 +29,7 @@ namespace DotNetBridge
 void ReportDotNetError(const char* detail);
 bool IsManagedLibraryAvailable();
 
-template<typename T>
-T LoadManagedSymbol(const char* name)
+template <typename T> T LoadManagedSymbol(const char* name)
 {
     if (!IsManagedLibraryAvailable())
     {
@@ -45,7 +44,7 @@ T LoadManagedSymbol(const char* name)
 
     return symbol;
 }
-}
+} // namespace DotNetBridge
 
 using DotNetBridge::LoadManagedSymbol;
 
@@ -55,27 +54,40 @@ private:
     static void OnPacketReceivedS(int32_t handle, int32_t size, BYTE* data);
     static void OnDisconnectedS(int32_t handle);
 
-    PacketFunctions_ChatServer* _chatServer = { };
-    PacketFunctions_ConnectServer* _connectServer = { };
-    PacketFunctions_ClientToServer* _gameServer = { };
+    PacketFunctions_ChatServer* _chatServer = {};
+    PacketFunctions_ConnectServer* _connectServer = {};
+    PacketFunctions_ClientToServer* _gameServer = {};
 
     int32_t _handle;
-    void(*_packetHandler)(int32_t, const BYTE*, int32_t);
+    void (*_packetHandler)(int32_t, const BYTE*, int32_t);
 
     void OnDisconnected();
     void OnPacketReceived(const BYTE* data, const int32_t length);
 
 public:
-    Connection(const wchar_t* host, int32_t port, bool isEncrypted, void(*packetHandler)(int32_t, const BYTE*, int32_t));
+    Connection(const wchar_t* host, int32_t port, bool isEncrypted,
+               void (*packetHandler)(int32_t, const BYTE*, int32_t));
     ~Connection();
 
     bool IsConnected();
     void Send(const BYTE* data, const int32_t length);
     void Close();
 
-    int32_t GetHandle() const { return _handle; }
+    int32_t GetHandle() const
+    {
+        return _handle;
+    }
 
-    PacketFunctions_ChatServer* ToChatServer() const { return _chatServer; }
-    PacketFunctions_ConnectServer* ToConnectServer() const { return _connectServer; }
-    PacketFunctions_ClientToServer* ToGameServer() const { return _gameServer; }
+    PacketFunctions_ChatServer* ToChatServer() const
+    {
+        return _chatServer;
+    }
+    PacketFunctions_ConnectServer* ToConnectServer() const
+    {
+        return _connectServer;
+    }
+    PacketFunctions_ClientToServer* ToGameServer() const
+    {
+        return _gameServer;
+    }
 };

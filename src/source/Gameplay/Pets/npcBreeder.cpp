@@ -14,102 +14,102 @@
 #include "GIPetManager.h"
 #include "NewUISystem.h"
 
-extern  int SrcInventoryIndex;
+extern int SrcInventoryIndex;
 
 namespace npcBreeder
 {
-    int CalcRecoveryZen(BYTE type, wchar_t* Text)
+int CalcRecoveryZen(BYTE type, wchar_t* Text)
+{
+    ITEM* ip;
+
+    g_pMyInventory->SetRepairEnableLevel(false);
+
+    switch (type)
     {
-        ITEM* ip;
-
-        g_pMyInventory->SetRepairEnableLevel(false);
-
-        switch (type)
+    case REVIVAL_DARKHORSE:
+        ip = &CharacterMachine->Equipment[EQUIPMENT_HELPER];
+        if (ip->Type != ITEM_DARK_HORSE_ITEM)
         {
-        case REVIVAL_DARKHORSE:
-            ip = &CharacterMachine->Equipment[EQUIPMENT_HELPER];
-            if (ip->Type != ITEM_DARK_HORSE_ITEM)
-            {
-                mu_swprintf(Text, GlobalText[1229]);
-                return -1;
-            }
-            break;
-
-        case REVIVAL_DARKSPIRIT:
-            ip = &CharacterMachine->Equipment[EQUIPMENT_WEAPON_LEFT];
-            if (ip->Type != ITEM_DARK_RAVEN_ITEM)
-            {
-                mu_swprintf(Text, GlobalText[1229]);
-                return -1;
-            }
-            break;
-        default:
             mu_swprintf(Text, GlobalText[1229]);
             return -1;
         }
+        break;
 
-        ITEM_ATTRIBUTE* p = &ItemAttribute[ip->Type];
-
-        int maxDurability = CalcMaxDurability(ip, p, ip->Level);
-
-        int Gold = 0;
-        if (ip->Durability < maxDurability)
+    case REVIVAL_DARKSPIRIT:
+        ip = &CharacterMachine->Equipment[EQUIPMENT_WEAPON_LEFT];
+        if (ip->Type != ITEM_DARK_RAVEN_ITEM)
         {
-            DWORD dwValue = 0;
-            dwValue = giPetManager::GetPetItemValue(giPetManager::GetPetInfo(ip));
-
-            Gold = ConvertRepairGold(dwValue, ip->Durability, maxDurability, ip->Type, Text);
-        }
-
-        switch (Gold)
-        {
-        case 0:
-            mu_swprintf(Text, GlobalText[1230]);
-            break;
-
-        default:
-        {
-            wchar_t  Text2[100];
-            memset(Text2, 0, sizeof(char) * 100);
-
-            if ((int)CharacterMachine->Gold < Gold)
-            {
-                ConvertGold((double)Gold - CharacterMachine->Gold, Text);
-                mu_swprintf(Text2, GlobalText[1231], Text);
-            }
-            else
-            {
-                mu_swprintf(Text2, GlobalText[1232], Text);
-            }
-
-            int Length = wcslen(Text2);
-            memcpy(Text, Text2, sizeof(char) * Length);
-            Text[Length] = 0;
+            mu_swprintf(Text, GlobalText[1229]);
+            return -1;
         }
         break;
-        }
-
-        return Gold;
+    default:
+        mu_swprintf(Text, GlobalText[1229]);
+        return -1;
     }
 
-    void RecoverPet(BYTE type)
+    ITEM_ATTRIBUTE* p = &ItemAttribute[ip->Type];
+
+    int maxDurability = CalcMaxDurability(ip, p, ip->Level);
+
+    int Gold = 0;
+    if (ip->Durability < maxDurability)
     {
-        wchar_t Text[100];
-        int Gold = CalcRecoveryZen(type, Text);
+        DWORD dwValue = 0;
+        dwValue = giPetManager::GetPetItemValue(giPetManager::GetPetInfo(ip));
 
-        if ((int)CharacterMachine->Gold >= Gold && Gold != -1)
+        Gold = ConvertRepairGold(dwValue, ip->Durability, maxDurability, ip->Type, Text);
+    }
+
+    switch (Gold)
+    {
+    case 0:
+        mu_swprintf(Text, GlobalText[1230]);
+        break;
+
+    default:
+    {
+        wchar_t Text2[100];
+        memset(Text2, 0, sizeof(char) * 100);
+
+        if ((int)CharacterMachine->Gold < Gold)
         {
-            switch (type)
-            {
-            case REVIVAL_DARKHORSE:
-                SocketClient->ToGameServer()->SendRepairItemRequest(EQUIPMENT_HELPER, (BYTE)Gold);
-                break;
-
-            case REVIVAL_DARKSPIRIT:
-                SocketClient->ToGameServer()->SendRepairItemRequest(EQUIPMENT_WEAPON_LEFT, (BYTE)Gold);
-                break;
-            }
-            giPetManager::InitItemBackup();
+            ConvertGold((double)Gold - CharacterMachine->Gold, Text);
+            mu_swprintf(Text2, GlobalText[1231], Text);
         }
+        else
+        {
+            mu_swprintf(Text2, GlobalText[1232], Text);
+        }
+
+        int Length = wcslen(Text2);
+        memcpy(Text, Text2, sizeof(char) * Length);
+        Text[Length] = 0;
+    }
+    break;
+    }
+
+    return Gold;
+}
+
+void RecoverPet(BYTE type)
+{
+    wchar_t Text[100];
+    int Gold = CalcRecoveryZen(type, Text);
+
+    if ((int)CharacterMachine->Gold >= Gold && Gold != -1)
+    {
+        switch (type)
+        {
+        case REVIVAL_DARKHORSE:
+            SocketClient->ToGameServer()->SendRepairItemRequest(EQUIPMENT_HELPER, (BYTE)Gold);
+            break;
+
+        case REVIVAL_DARKSPIRIT:
+            SocketClient->ToGameServer()->SendRepairItemRequest(EQUIPMENT_WEAPON_LEFT, (BYTE)Gold);
+            break;
+        }
+        giPetManager::InitItemBackup();
     }
 }
+} // namespace npcBreeder

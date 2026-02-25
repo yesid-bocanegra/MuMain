@@ -72,32 +72,34 @@ static bool g_bShowFpsCounter = false;
 void SetShowDebugInfo(bool enabled)
 {
     g_bShowDebugInfo = enabled;
-    if (enabled) g_bShowFpsCounter = false;
+    if (enabled)
+        g_bShowFpsCounter = false;
 }
 
 void SetShowFpsCounter(bool enabled)
 {
     g_bShowFpsCounter = enabled;
-    if (enabled) g_bShowDebugInfo = false;
+    if (enabled)
+        g_bShowDebugInfo = false;
 }
 
 //=============================================================================
 // Frame Statistics Tracker
 //=============================================================================
 
-static constexpr int FRAME_HISTORY_SIZE = 300;      // ~5 seconds at 60fps
-static constexpr float MIN_FRAME_TIME_MS = 0.5f;    // clamp to 2000fps max
+static constexpr int FRAME_HISTORY_SIZE = 300;         // ~5 seconds at 60fps
+static constexpr float MIN_FRAME_TIME_MS = 0.5f;       // clamp to 2000fps max
 static constexpr double STATS_UPDATE_INTERVAL = 500.0; // ms between percentile recalculations
 static constexpr int MIN_FRAMES_FOR_STATS = 10;
 static constexpr float GRAPH_MAX_MS = 33.3f;        // graph Y-axis scale (30fps)
-static constexpr float THRESHOLD_60FPS_MS = 16.67f;  // 60 FPS threshold
-static constexpr float THRESHOLD_40FPS_MS = 25.0f;   // 40 FPS threshold
-static constexpr float DEBUG_TEXT_X = 10.0f;          // debug overlay X position
-static constexpr int DEBUG_TEXT_Y_START = 26;         // debug overlay Y start
-static constexpr int DEBUG_TEXT_LINE_HEIGHT = 10;     // line spacing
-static constexpr float DEBUG_GRAPH_WIDTH = 200.0f;    // frame graph width
-static constexpr float DEBUG_GRAPH_HEIGHT = 40.0f;    // frame graph height
-static constexpr float DEBUG_GRAPH_Y_OFFSET = 2.0f;   // gap between text and graph
+static constexpr float THRESHOLD_60FPS_MS = 16.67f; // 60 FPS threshold
+static constexpr float THRESHOLD_40FPS_MS = 25.0f;  // 40 FPS threshold
+static constexpr float DEBUG_TEXT_X = 10.0f;        // debug overlay X position
+static constexpr int DEBUG_TEXT_Y_START = 26;       // debug overlay Y start
+static constexpr int DEBUG_TEXT_LINE_HEIGHT = 10;   // line spacing
+static constexpr float DEBUG_GRAPH_WIDTH = 200.0f;  // frame graph width
+static constexpr float DEBUG_GRAPH_HEIGHT = 40.0f;  // frame graph height
+static constexpr float DEBUG_GRAPH_Y_OFFSET = 2.0f; // gap between text and graph
 
 static float s_frameTimesMs[FRAME_HISTORY_SIZE] = {};
 static int s_frameIndex = 0;
@@ -130,13 +132,16 @@ static void UpdateFrameStats()
     if (s_lastFrameTime > 0.0)
     {
         double dt = now - s_lastFrameTime;
-        if (dt < MIN_FRAME_TIME_MS) dt = MIN_FRAME_TIME_MS;
+        if (dt < MIN_FRAME_TIME_MS)
+            dt = MIN_FRAME_TIME_MS;
         s_frameTimesMs[s_frameIndex] = static_cast<float>(dt);
         s_frameIndex = (s_frameIndex + 1) % FRAME_HISTORY_SIZE;
-        if (s_frameCount < FRAME_HISTORY_SIZE) s_frameCount++;
+        if (s_frameCount < FRAME_HISTORY_SIZE)
+            s_frameCount++;
 
         double instantaneousFps = 1000.0 / dt;
-        if (instantaneousFps > s_highestFps) s_highestFps = instantaneousFps;
+        if (instantaneousFps > s_highestFps)
+            s_highestFps = instantaneousFps;
     }
     s_lastFrameTime = now;
 
@@ -190,8 +195,8 @@ static void GenerateScreenshotFilename(wchar_t* outFileName, wchar_t* outMessage
 {
     SYSTEMTIME st;
     GetLocalTime(&st);
-    swprintf(outFileName, L"Screen(%02d_%02d-%02d_%02d)-%04d.jpg",
-        st.wMonth, st.wDay, st.wHour, st.wMinute, GrabScreen);
+    swprintf(outFileName, L"Screen(%02d_%02d-%02d_%02d)-%04d.jpg", st.wMonth, st.wDay, st.wHour, st.wMinute,
+             GrabScreen);
     swprintf(outMessage, GlobalText[459], outFileName);
 
     wchar_t lpszTemp[64];
@@ -355,8 +360,7 @@ static void SetWorldClearColor()
     {
         glClearColor(9.f / 256.f, 8.f / 256.f, 33.f / 256.f, 1.f);
     }
-    else if (gMapManager.WorldActive == WD_51HOME_6TH_CHAR
-        )
+    else if (gMapManager.WorldActive == WD_51HOME_6TH_CHAR)
     {
         glClearColor(178.f / 256.f, 178.f / 256.f, 178.f / 256.f, 1.f);
     }
@@ -493,20 +497,23 @@ static void RenderDebugInfo()
     g_pRenderText->SetTextColor(255, 255, 255, 200);
 
     int y = DEBUG_TEXT_Y_START;
-    swprintf(szLine, L"FPS: %.1f  Avg: %.1f  Max: %.1f  Vsync: %d  CPU: %.1f%%",
-        FPS_AVG, s_avgFps, s_highestFps, IsVSyncEnabled(), CPU_AVG);
-    g_pRenderText->RenderText((int)DEBUG_TEXT_X, y, szLine); y += DEBUG_TEXT_LINE_HEIGHT;
+    swprintf(szLine, L"FPS: %.1f  Avg: %.1f  Max: %.1f  Vsync: %d  CPU: %.1f%%", FPS_AVG, s_avgFps, s_highestFps,
+             IsVSyncEnabled(), CPU_AVG);
+    g_pRenderText->RenderText((int)DEBUG_TEXT_X, y, szLine);
+    y += DEBUG_TEXT_LINE_HEIGHT;
 
-    swprintf(szLine, L"1%% Low: %.1f  Slowest: %.1f  Frame: %.2fms",
-        s_onePercentLow, s_slowestFrameFps,
-        (s_avgFps > 0.0f) ? 1000.0f / s_avgFps : 0.0f);
-    g_pRenderText->RenderText((int)DEBUG_TEXT_X, y, szLine); y += DEBUG_TEXT_LINE_HEIGHT;
+    swprintf(szLine, L"1%% Low: %.1f  Slowest: %.1f  Frame: %.2fms", s_onePercentLow, s_slowestFrameFps,
+             (s_avgFps > 0.0f) ? 1000.0f / s_avgFps : 0.0f);
+    g_pRenderText->RenderText((int)DEBUG_TEXT_X, y, szLine);
+    y += DEBUG_TEXT_LINE_HEIGHT;
 
     swprintf(szLine, L"MousePos: %d %d %d", MouseX, MouseY, MouseLButtonPush);
-    g_pRenderText->RenderText((int)DEBUG_TEXT_X, y, szLine); y += DEBUG_TEXT_LINE_HEIGHT;
+    g_pRenderText->RenderText((int)DEBUG_TEXT_X, y, szLine);
+    y += DEBUG_TEXT_LINE_HEIGHT;
 
     swprintf(szLine, L"Camera3D: %.1f %.1f:%.1f:%.1f", CameraFOV, CameraAngle[0], CameraAngle[1], CameraAngle[2]);
-    g_pRenderText->RenderText((int)DEBUG_TEXT_X, y, szLine); y += DEBUG_TEXT_LINE_HEIGHT;
+    g_pRenderText->RenderText((int)DEBUG_TEXT_X, y, szLine);
+    y += DEBUG_TEXT_LINE_HEIGHT;
 
     // Frame time graph below text
     RenderFrameGraph(DEBUG_TEXT_X, (float)y + DEBUG_GRAPH_Y_OFFSET, DEBUG_GRAPH_WIDTH, DEBUG_GRAPH_HEIGHT);
@@ -566,81 +573,81 @@ static void PlayWorldAmbientSounds()
     switch (gMapManager.WorldActive)
     {
     case WD_0LORENCIA:
-                if (HeroTile == 4)
-                {
-                    StopBuffer(SOUND_WIND01, true);
-                    StopBuffer(SOUND_RAIN01, true);
-                }
-                else
-                {
-                    PlayBuffer(SOUND_WIND01, NULL, true);
-                    if (RainCurrent > 0)
-                        PlayBuffer(SOUND_RAIN01, NULL, true);
-                }
-                break;
-            case WD_1DUNGEON:
-                PlayBuffer(SOUND_DUNGEON01, NULL, true);
-                break;
-            case WD_2DEVIAS:
-                if (HeroTile == 3 || HeroTile >= 10)
-                    StopBuffer(SOUND_WIND01, true);
-                else
-                    PlayBuffer(SOUND_WIND01, NULL, true);
-                break;
-            case WD_3NORIA:
-                PlayBuffer(SOUND_WIND01, NULL, true);
-                if (rand_fps_check(512))
-                    PlayBuffer(SOUND_FOREST01);
-                break;
-            case WD_4LOSTTOWER:
-                PlayBuffer(SOUND_TOWER01, NULL, true);
-                break;
-            case WD_5UNKNOWN:
-                //PlayBuffer(SOUND_BOSS01,NULL,true);
-                break;
-            case WD_7ATLANSE:
-                PlayBuffer(SOUND_WATER01, NULL, true);
-                break;
-            case WD_8TARKAN:
-                PlayBuffer(SOUND_DESERT01, NULL, true);
-                break;
-            case WD_10HEAVEN:
-                PlayBuffer(SOUND_HEAVEN01, NULL, true);
-                if (rand_fps_check(100))
-                {
-                    //                PlayBuffer(SOUND_HEAVEN01);
-                }
-                else if (rand_fps_check(10))
-                {
-                    //                PlayBuffer(SOUND_THUNDERS02);
-                }
-                break;
-            case WD_58ICECITY_BOSS:
-                PlayBuffer(SOUND_WIND01, NULL, true);
-                break;
-            case WD_79UNITEDMARKETPLACE:
-            {
-                PlayBuffer(SOUND_WIND01, NULL, true);
+        if (HeroTile == 4)
+        {
+            StopBuffer(SOUND_WIND01, true);
+            StopBuffer(SOUND_RAIN01, true);
+        }
+        else
+        {
+            PlayBuffer(SOUND_WIND01, NULL, true);
+            if (RainCurrent > 0)
                 PlayBuffer(SOUND_RAIN01, NULL, true);
-            }
-            break;
+        }
+        break;
+    case WD_1DUNGEON:
+        PlayBuffer(SOUND_DUNGEON01, NULL, true);
+        break;
+    case WD_2DEVIAS:
+        if (HeroTile == 3 || HeroTile >= 10)
+            StopBuffer(SOUND_WIND01, true);
+        else
+            PlayBuffer(SOUND_WIND01, NULL, true);
+        break;
+    case WD_3NORIA:
+        PlayBuffer(SOUND_WIND01, NULL, true);
+        if (rand_fps_check(512))
+            PlayBuffer(SOUND_FOREST01);
+        break;
+    case WD_4LOSTTOWER:
+        PlayBuffer(SOUND_TOWER01, NULL, true);
+        break;
+    case WD_5UNKNOWN:
+        // PlayBuffer(SOUND_BOSS01,NULL,true);
+        break;
+    case WD_7ATLANSE:
+        PlayBuffer(SOUND_WATER01, NULL, true);
+        break;
+    case WD_8TARKAN:
+        PlayBuffer(SOUND_DESERT01, NULL, true);
+        break;
+    case WD_10HEAVEN:
+        PlayBuffer(SOUND_HEAVEN01, NULL, true);
+        if (rand_fps_check(100))
+        {
+            //                PlayBuffer(SOUND_HEAVEN01);
+        }
+        else if (rand_fps_check(10))
+        {
+            //                PlayBuffer(SOUND_THUNDERS02);
+        }
+        break;
+    case WD_58ICECITY_BOSS:
+        PlayBuffer(SOUND_WIND01, NULL, true);
+        break;
+    case WD_79UNITEDMARKETPLACE:
+    {
+        PlayBuffer(SOUND_WIND01, NULL, true);
+        PlayBuffer(SOUND_RAIN01, NULL, true);
+    }
+    break;
 #ifdef ASG_ADD_MAP_KARUTAN
-            case WD_80KARUTAN1:
-                PlayBuffer(SOUND_KARUTAN_DESERT_ENV, NULL, true);
-                break;
-            case WD_81KARUTAN2:
-                if (HeroTile == 12)
-                {
-                    StopBuffer(SOUND_KARUTAN_DESERT_ENV, true);
-                    PlayBuffer(SOUND_KARUTAN_KARDAMAHAL_ENV, NULL, true);
-                }
-                else
-                {
-                    StopBuffer(SOUND_KARUTAN_KARDAMAHAL_ENV, true);
-                    PlayBuffer(SOUND_KARUTAN_DESERT_ENV, NULL, true);
-                }
-                break;
-#endif	// ASG_ADD_MAP_KARUTAN
+    case WD_80KARUTAN1:
+        PlayBuffer(SOUND_KARUTAN_DESERT_ENV, NULL, true);
+        break;
+    case WD_81KARUTAN2:
+        if (HeroTile == 12)
+        {
+            StopBuffer(SOUND_KARUTAN_DESERT_ENV, true);
+            PlayBuffer(SOUND_KARUTAN_KARDAMAHAL_ENV, NULL, true);
+        }
+        else
+        {
+            StopBuffer(SOUND_KARUTAN_KARDAMAHAL_ENV, true);
+            PlayBuffer(SOUND_KARUTAN_DESERT_ENV, NULL, true);
+        }
+        break;
+#endif // ASG_ADD_MAP_KARUTAN
     }
 }
 
@@ -651,11 +658,14 @@ static void PlayWorldAmbientSounds()
  */
 static void StopInactiveAmbientSounds()
 {
-    if (gMapManager.WorldActive != WD_0LORENCIA && gMapManager.WorldActive != WD_2DEVIAS && gMapManager.WorldActive != WD_3NORIA && gMapManager.WorldActive != WD_58ICECITY_BOSS && gMapManager.WorldActive != WD_79UNITEDMARKETPLACE)
+    if (gMapManager.WorldActive != WD_0LORENCIA && gMapManager.WorldActive != WD_2DEVIAS &&
+        gMapManager.WorldActive != WD_3NORIA && gMapManager.WorldActive != WD_58ICECITY_BOSS &&
+        gMapManager.WorldActive != WD_79UNITEDMARKETPLACE)
     {
         StopBuffer(SOUND_WIND01, true);
     }
-    if (gMapManager.WorldActive != WD_0LORENCIA && gMapManager.InDevilSquare() == false && gMapManager.WorldActive != WD_79UNITEDMARKETPLACE)
+    if (gMapManager.WorldActive != WD_0LORENCIA && gMapManager.InDevilSquare() == false &&
+        gMapManager.WorldActive != WD_79UNITEDMARKETPLACE)
     {
         StopBuffer(SOUND_RAIN01, true);
     }
@@ -700,7 +710,7 @@ static void StopInactiveAmbientSounds()
         StopBuffer(SOUND_KARUTAN_INSECT_ENV, true);
     if (gMapManager.WorldActive != WD_81KARUTAN2)
         StopBuffer(SOUND_KARUTAN_KARDAMAHAL_ENV, true);
-#endif	// ASG_ADD_MAP_KARUTAN
+#endif // ASG_ADD_MAP_KARUTAN
 }
 
 /**
@@ -730,8 +740,8 @@ static void ManageBackgroundMusic()
     {
         if (Hero->SafeZone)
         {
-            if ((Hero->PositionX) >= 205 && (Hero->PositionX) <= 214 &&
-                (Hero->PositionY) >= 13 && (Hero->PositionY) <= 31)
+            if ((Hero->PositionX) >= 205 && (Hero->PositionX) <= 214 && (Hero->PositionY) >= 13 &&
+                (Hero->PositionY) <= 31)
             {
                 PlayMp3(MUSIC_CHURCH);
             }
@@ -766,52 +776,66 @@ static void ManageBackgroundMusic()
         StopMp3(MUSIC_DUNGEON);
     }
 
-    if (gMapManager.WorldActive == WD_7ATLANSE) {
+    if (gMapManager.WorldActive == WD_7ATLANSE)
+    {
         PlayMp3(MUSIC_ATLANS);
     }
-    else {
+    else
+    {
         StopMp3(MUSIC_ATLANS);
     }
 
-    if (gMapManager.WorldActive == WD_10HEAVEN) {
+    if (gMapManager.WorldActive == WD_10HEAVEN)
+    {
         PlayMp3(MUSIC_ICARUS);
     }
-    else {
+    else
+    {
         StopMp3(MUSIC_ICARUS);
     }
 
-    if (gMapManager.WorldActive == WD_8TARKAN) {
+    if (gMapManager.WorldActive == WD_8TARKAN)
+    {
         PlayMp3(MUSIC_TARKAN);
     }
-    else {
+    else
+    {
         StopMp3(MUSIC_TARKAN);
     }
 
-    if (gMapManager.WorldActive == WD_4LOSTTOWER) {
+    if (gMapManager.WorldActive == WD_4LOSTTOWER)
+    {
         PlayMp3(MUSIC_LOSTTOWER_A);
     }
-    else {
+    else
+    {
         StopMp3(MUSIC_LOSTTOWER_A);
     }
 
-    if (gMapManager.InHellas(gMapManager.WorldActive)) {
+    if (gMapManager.InHellas(gMapManager.WorldActive))
+    {
         PlayMp3(MUSIC_KALIMA);
     }
-    else {
+    else
+    {
         StopMp3(MUSIC_KALIMA);
     }
 
-    if (gMapManager.WorldActive == WD_31HUNTING_GROUND) {
+    if (gMapManager.WorldActive == WD_31HUNTING_GROUND)
+    {
         PlayMp3(MUSIC_BC_HUNTINGGROUND);
     }
-    else {
+    else
+    {
         StopMp3(MUSIC_BC_HUNTINGGROUND);
     }
 
-    if (gMapManager.WorldActive == WD_33AIDA) {
+    if (gMapManager.WorldActive == WD_33AIDA)
+    {
         PlayMp3(MUSIC_BC_ADIA);
     }
-    else {
+    else
+    {
         StopMp3(MUSIC_BC_ADIA);
     }
 
@@ -831,17 +855,21 @@ static void ManageBackgroundMusic()
         g_CursedTemple->PlayBGM();
     }
 
-    if (gMapManager.WorldActive == WD_51HOME_6TH_CHAR) {
+    if (gMapManager.WorldActive == WD_51HOME_6TH_CHAR)
+    {
         PlayMp3(MUSIC_ELBELAND);
     }
-    else {
+    else
+    {
         StopMp3(MUSIC_ELBELAND);
     }
 
-    if (gMapManager.WorldActive == WD_56MAP_SWAMP_OF_QUIET) {
+    if (gMapManager.WorldActive == WD_56MAP_SWAMP_OF_QUIET)
+    {
         PlayMp3(MUSIC_SWAMP_OF_QUIET);
     }
-    else {
+    else
+    {
         StopMp3(MUSIC_SWAMP_OF_QUIET);
     }
 
@@ -856,7 +884,7 @@ static void ManageBackgroundMusic()
     g_UnitedMarketPlace.PlayBGM();
 #ifdef ASG_ADD_MAP_KARUTAN
     g_Karutan1.PlayBGM();
-#endif	// ASG_ADD_MAP_KARUTAN
+#endif // ASG_ADD_MAP_KARUTAN
 }
 
 /**

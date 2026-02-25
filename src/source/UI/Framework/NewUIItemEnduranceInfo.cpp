@@ -9,12 +9,11 @@
 
 #ifdef PJH_FIX_SPRIT
 #include "GIPetManager.h"
-#endif //PJH_FIX_SPRIT
-
-
+#endif // PJH_FIX_SPRIT
 
 using namespace SEASON3B;
 
+// cppcheck-suppress uninitMemberVar
 CNewUIItemEnduranceInfo::CNewUIItemEnduranceInfo()
 {
     memset(&m_UIStartPos, 0, sizeof(POINT));
@@ -79,14 +78,11 @@ bool SEASON3B::CNewUIItemEnduranceInfo::UpdateMouseEvent()
 
     int iNextPosY = m_UIStartPos.y;
 
-    if (Hero->Helper.Type >= MODEL_HELPER && Hero->Helper.Type <= MODEL_DARK_HORSE_ITEM
-        || Hero->Helper.Type == MODEL_DEMON
-        || Hero->Helper.Type == MODEL_SPIRIT_OF_GUARDIAN
-        || Hero->Helper.Type == MODEL_PET_RUDOLF
-        || Hero->Helper.Type == MODEL_PET_PANDA
-        || Hero->Helper.Type == MODEL_PET_UNICORN
-        || Hero->Helper.Type == MODEL_PET_SKELETON
-        || Hero->Helper.Type == MODEL_HORN_OF_FENRIR)
+    if (Hero->Helper.Type >= MODEL_HELPER && Hero->Helper.Type <= MODEL_DARK_HORSE_ITEM ||
+        Hero->Helper.Type == MODEL_DEMON || Hero->Helper.Type == MODEL_SPIRIT_OF_GUARDIAN ||
+        Hero->Helper.Type == MODEL_PET_RUDOLF || Hero->Helper.Type == MODEL_PET_PANDA ||
+        Hero->Helper.Type == MODEL_PET_UNICORN || Hero->Helper.Type == MODEL_PET_SKELETON ||
+        Hero->Helper.Type == MODEL_HORN_OF_FENRIR)
     {
         if (CheckMouseIn(m_UIStartPos.x, iNextPosY, PETHP_FRAME_WIDTH, PETHP_FRAME_HEIGHT))
             return false;
@@ -117,7 +113,7 @@ bool SEASON3B::CNewUIItemEnduranceInfo::UpdateMouseEvent()
     }
 
     bool bRenderRingWarning = false;
-    int	icntItemDurIcon = 0;
+    int icntItemDurIcon = 0;
     auto ItemDurPos = POINT(m_ItemDurUIStartPos);
 
     for (int i = EQUIPMENT_WEAPON_RIGHT; i < MAX_EQUIPMENT; ++i)
@@ -158,8 +154,7 @@ bool SEASON3B::CNewUIItemEnduranceInfo::UpdateMouseEvent()
 
         if (i == EQUIPMENT_RING_LEFT || i == EQUIPMENT_RING_RIGHT)
         {
-            if (pItem->Type == ITEM_WIZARDS_RING && iLevel == 1
-                || iLevel == 2)
+            if (pItem->Type == ITEM_WIZARDS_RING && iLevel == 1 || iLevel == 2)
             {
                 continue;
             }
@@ -181,7 +176,8 @@ bool SEASON3B::CNewUIItemEnduranceInfo::UpdateMouseEvent()
             }
             else if (i == EQUIPMENT_RING_LEFT)
             {
-                if (CheckMouseIn(ItemDurPos.x + (ITEM_DUR_WIDTH / 2), ItemDurPos.y, ITEM_DUR_WIDTH / 2, ITEM_DUR_HEIGHT))
+                if (CheckMouseIn(ItemDurPos.x + (ITEM_DUR_WIDTH / 2), ItemDurPos.y, ITEM_DUR_WIDTH / 2,
+                                 ITEM_DUR_HEIGHT))
                 {
                     m_iTooltipIndex = i;
                     return false;
@@ -307,13 +303,9 @@ float SEASON3B::CNewUIItemEnduranceInfo::GetLayerDepth()
     return 3.5f;
 }
 
-void SEASON3B::CNewUIItemEnduranceInfo::OpenningProcess()
-{
-}
+void SEASON3B::CNewUIItemEnduranceInfo::OpenningProcess() {}
 
-void SEASON3B::CNewUIItemEnduranceInfo::ClosingProcess()
-{
-}
+void SEASON3B::CNewUIItemEnduranceInfo::ClosingProcess() {}
 
 void SEASON3B::CNewUIItemEnduranceInfo::InitImageIndex()
 {
@@ -331,7 +323,8 @@ void SEASON3B::CNewUIItemEnduranceInfo::InitImageIndex()
     m_iItemDurImageIndex[EQUIPMENT_RING_LEFT] = IMAGE_ITEM_DUR_RING;
 }
 
-void SEASON3B::CNewUIItemEnduranceInfo::RenderHPUI(int iX, int iY, wchar_t* pszName, int iLife, int iMaxLife/*=255*/, bool bWarning/*=false*/)
+void SEASON3B::CNewUIItemEnduranceInfo::RenderHPUI(int iX, int iY, wchar_t* pszName, int iLife, int iMaxLife /*=255*/,
+                                                   bool bWarning /*=false*/)
 {
     EnableAlphaTest();
 
@@ -364,7 +357,7 @@ void SEASON3B::CNewUIItemEnduranceInfo::RenderHPUI(int iX, int iY, wchar_t* pszN
             glColor4f(1.f, 1.f, 1.f, 1.f);
     }
     else
-#endif //#ifdef PJH_FIX_SPRIT
+#endif // #ifdef PJH_FIX_SPRIT
 
         glColor4f(1.f, 1.f, 1.f, 1.f);
     RenderImage(IMAGE_PETHP_FRAME, iX, iY, PETHP_FRAME_WIDTH, PETHP_FRAME_HEIGHT);
@@ -380,12 +373,14 @@ void SEASON3B::CNewUIItemEnduranceInfo::RenderHPUI(int iX, int iY, wchar_t* pszN
 void SEASON3B::CNewUIItemEnduranceInfo::RenderTooltip(int iX, int iY, const ITEM* pItem, const DWORD& dwTextColor)
 {
     ITEM_ATTRIBUTE* pItemAtt = &ItemAttribute[pItem->Type];
-    SIZE TextSize = { 0, 0 };
+    SIZE TextSize = {0, 0};
 
     int iLevel = pItem->Level;
     int iMaxDurability = CalcMaxDurability(pItem, pItemAtt, iLevel);
 
-    wchar_t szText[256] = { NULL, };
+    wchar_t szText[256] = {
+        NULL,
+    };
     mu_swprintf(szText, L"%ls (%d/%d)", pItemAtt->Name, pItem->Durability, iMaxDurability);
     GetTextExtentPoint32(g_pRenderText->GetFontDC(), szText, 1, &TextSize);
 
@@ -394,7 +389,7 @@ void SEASON3B::CNewUIItemEnduranceInfo::RenderTooltip(int iX, int iY, const ITEM
     g_pRenderText->SetTextColor(dwTextColor);
     int iTextlen = wcslen(szText);
 
-    int iTooltipWidth = (/*TextSize.cx*/7 * iTextlen) / g_fScreenRate_x;
+    int iTooltipWidth = (/*TextSize.cx*/ 7 * iTextlen) / g_fScreenRate_x;
 
     if (iX + (iTooltipWidth / 2) > GetScreenWidth())
     {
@@ -406,16 +401,15 @@ void SEASON3B::CNewUIItemEnduranceInfo::RenderTooltip(int iX, int iY, const ITEM
 
 bool SEASON3B::CNewUIItemEnduranceInfo::RenderEquipedHelperLife(int iX, int iY)
 {
-    if (Hero->Helper.Type >= MODEL_HELPER && Hero->Helper.Type <= MODEL_DARK_HORSE_ITEM
-        || Hero->Helper.Type == MODEL_DEMON
-        || Hero->Helper.Type == MODEL_SPIRIT_OF_GUARDIAN
-        || Hero->Helper.Type == MODEL_PET_RUDOLF
-        || Hero->Helper.Type == MODEL_PET_PANDA
-        || Hero->Helper.Type == MODEL_PET_UNICORN
-        || Hero->Helper.Type == MODEL_PET_SKELETON
-        || Hero->Helper.Type == MODEL_HORN_OF_FENRIR)
+    if (Hero->Helper.Type >= MODEL_HELPER && Hero->Helper.Type <= MODEL_DARK_HORSE_ITEM ||
+        Hero->Helper.Type == MODEL_DEMON || Hero->Helper.Type == MODEL_SPIRIT_OF_GUARDIAN ||
+        Hero->Helper.Type == MODEL_PET_RUDOLF || Hero->Helper.Type == MODEL_PET_PANDA ||
+        Hero->Helper.Type == MODEL_PET_UNICORN || Hero->Helper.Type == MODEL_PET_SKELETON ||
+        Hero->Helper.Type == MODEL_HORN_OF_FENRIR)
     {
-        wchar_t szText[256] = { NULL, };
+        wchar_t szText[256] = {
+            NULL,
+        };
 
         switch (Hero->Helper.Type)
         {
@@ -497,7 +491,9 @@ bool SEASON3B::CNewUIItemEnduranceInfo::RenderEquipedPetLife(int iX, int iY)
     if (Hero->m_pPet == NULL)
         return false;
 
-    wchar_t szText[256] = { NULL, };
+    wchar_t szText[256] = {
+        NULL,
+    };
     mu_swprintf(szText, GlobalText[1214]);
 
     int iLife = CharacterMachine->Equipment[EQUIPMENT_WEAPON_LEFT].Durability;
@@ -511,7 +507,9 @@ bool SEASON3B::CNewUIItemEnduranceInfo::RenderSummonMonsterLife(int iX, int iY)
     if (SummonLife <= 0)
         return false;
 
-    wchar_t szText[256] = { NULL, };
+    wchar_t szText[256] = {
+        NULL,
+    };
     mu_swprintf(szText, GlobalText[356]);
 
     RenderHPUI(iX, iY, szText, SummonLife, 100);
@@ -524,7 +522,9 @@ bool SEASON3B::CNewUIItemEnduranceInfo::RenderNumArrow(int iX, int iY)
     if (m_iCurArrowType == ARROWTYPE_NONE)
         return false;
 
-    wchar_t szText[256] = { NULL, };
+    wchar_t szText[256] = {
+        NULL,
+    };
     int iNumEquipedArrowDurability = 0;
     int iNumArrowSetInInven = 0;
 
@@ -621,8 +621,7 @@ bool SEASON3B::CNewUIItemEnduranceInfo::RenderItemEndurance(int ix, int iY)
 
         if (i == EQUIPMENT_RING_LEFT || i == EQUIPMENT_RING_RIGHT)
         {
-            if (pItem->Type == ITEM_WIZARDS_RING && iLevel == 1
-                || iLevel == 2)
+            if (pItem->Type == ITEM_WIZARDS_RING && iLevel == 1 || iLevel == 2)
             {
                 continue;
             }

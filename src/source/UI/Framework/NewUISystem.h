@@ -67,7 +67,7 @@
 #include "NewUIDuelWatchUserListWindow.h"
 #ifdef PBG_ADD_INGAMESHOP_UI_MAINFRAME
 #include "GameShop/NewUIInGameShop.h"
-#endif //PBG_ADD_INGAMESHOP_UI_MAINFRAME
+#endif // PBG_ADD_INGAMESHOP_UI_MAINFRAME
 #include "NewUIDoppelGangerWindow.h"
 #include "NewUIDoppelGangerFrame.h"
 #include "NewUIQuestProgress.h"
@@ -85,220 +85,221 @@
 
 namespace SEASON3B
 {
-    class CNewUISystem
-    {
-        CNewUIManager* m_pNewUIMng;
-        CNewUI3DRenderMng* m_pNewUI3DRenderMng;
-        CNewUIHotKey* m_pNewUIHotKey;
+class CNewUISystem
+{
+    CNewUIManager* m_pNewUIMng;
+    CNewUI3DRenderMng* m_pNewUI3DRenderMng;
+    CNewUIHotKey* m_pNewUIHotKey;
 
-    public:
-        ~CNewUISystem();
+public:
+    ~CNewUISystem();
 
-        bool Create();
-        void Release();
+    bool Create();
+    void Release();
 
-        bool LoadMainSceneInterface();
-        void UnloadMainSceneInterface();
+    bool LoadMainSceneInterface();
+    void UnloadMainSceneInterface();
 
-        bool IsVisible(DWORD dwKey);
-        void Show(DWORD dwKey);
-        void Hide(DWORD dwKey);
-        void Toggle(DWORD dwKey);	//. Show <-> Hide
-        void HideAll();
+    bool IsVisible(DWORD dwKey);
+    void Show(DWORD dwKey);
+    void Hide(DWORD dwKey);
+    void Toggle(DWORD dwKey); //. Show <-> Hide
+    void HideAll();
 
-        void Enable(DWORD dwKey);
-        void Disable(DWORD dwKey);
+    void Enable(DWORD dwKey);
+    void Disable(DWORD dwKey);
 
-        bool CheckMouseUse();
-        bool CheckKeyUse();
+    bool CheckMouseUse();
+    bool CheckKeyUse();
 
-        bool Update();
-        bool Render();
+    bool Update();
+    bool Render();
 
-        CNewUIManager* GetNewUIManager() const;
-        CNewUI3DRenderMng* GetNewUI3DRenderMng() const;
-        CNewUIHotKey* GetNewUIHotKey() const;
+    CNewUIManager* GetNewUIManager() const;
+    CNewUI3DRenderMng* GetNewUI3DRenderMng() const;
+    CNewUIHotKey* GetNewUIHotKey() const;
 
-        bool IsImpossibleSendMoveInterface();
-        void UpdateSendMoveInterface();
-        bool IsImpossibleTradeInterface();
-        bool IsImpossibleDuelInterface();
-        bool IsImpossibleHideInterface(DWORD dwKey);
+    bool IsImpossibleSendMoveInterface();
+    void UpdateSendMoveInterface();
+    bool IsImpossibleTradeInterface();
+    bool IsImpossibleDuelInterface();
+    bool IsImpossibleHideInterface(DWORD dwKey);
 
-        static CNewUISystem* GetInstance();
+    static CNewUISystem* GetInstance();
 
-    protected:
-        CNewUISystem();		//. ban to create instance
+protected:
+    CNewUISystem(); //. ban to create instance
 
-        void HideAllGroupA();
-        void HideAllGroupB();
-        void HideGroupBeforeOpenInterface();
+    void HideAllGroupA();
+    void HideAllGroupB();
+    void HideGroupBeforeOpenInterface();
 
-        /* Interface classes */
-    private:
-        CNewUIChatInputBox* m_pNewChatInputBox;
-        CNewUIChatLogWindow* m_pNewChatLogWindow;
-        CNewUISystemLogWindow* m_pNewSystemLogWindow;
-        CNewUISlideWindow* m_pNewSlideWindow;
-        CNewUIFriendWindow* m_pNewFriendWindow;
-        CNewUIMainFrameWindow* m_pNewMainFrameWindow;
-        CNewUISkillList* m_pNewSkillList;
-        CNewUIItemMng* m_pNewItemMng;
-        CNewUIMyInventory* m_pNewMyInventory;
-        CNewUIInventoryExtension* m_pNewMyInventoryExt;
-        CNewUINPCShop* m_pNewNPCShop;
-        CNewUIPetInfoWindow* m_pNewPetInfoWindow;
-        CNewUIMixInventory* m_pNewMixInventory;
-        CNewUICastleWindow* m_pNewCastleWindow;
-        CNewUIGuardWindow* m_pNewGuardWindow;
-        CNewUIGatemanWindow* m_pNewGatemanWindow;
-        CNewUIGateSwitchWindow* m_pNewGateSwitchWindow;
-        CNewUIStorageInventory* m_pNewStorageInventory;
-        CNewUIStorageInventoryExt* m_pNewStorageInventoryExt;
-        CNewUIGuildMakeWindow* m_pNewGuildMakeWindow;
-        CNewUIGuildInfoWindow* m_pNewGuildInfoWindow;
-        CNewUIMyShopInventory* m_pNewMyShopInventory;
-        CNewUIPurchaseShopInventory* m_pNewPurchaseShopInventory;
-        CNewUICharacterInfoWindow* m_pNewCharacterInfoWindow;
-        CNewUIMyQuestInfoWindow* m_pNewMyQuestInfoWindow;
-        CNewUIPartyInfoWindow* m_pNewPartyInfoWindow;
-        CNewUIPartyListWindow* m_pNewPartyListWindow;
-        CNewUINPCQuest* m_pNewNPCQuest;
-        CNewUIEnterBloodCastle* m_pNewEnterBloodCastle;
-        CNewUIEnterDevilSquare* m_pNewEnterDevilSquare;
-        CNewUIBloodCastle* m_pNewBloodCastle;
-        CNewUITrade* m_pNewTrade;
-        CNewUIKanturu2ndEnterNpc* m_pNewKanturu2ndEnterNpc;
-        CNewUIKanturuInfoWindow* m_pNewKanturuInfoWindow;
-        CNewUICatapultWindow* m_pNewCatapultWindow;
-        CNewUIChaosCastleTime* m_pNewChaosCastleTime;
-        CNewUIBattleSoccerScore* m_pNewBattleSoccerScore;
-        CNewUICommandWindow* m_pNewCommandWindow;
-        CNewUIHeroPositionInfo* m_pNewHeroPositionInfo;
-        CNewUIWindowMenu* m_pNewWindowMenu;
-        CNewUIOptionWindow* m_pNewOptionWindow;
-        CNewUIHelpWindow* m_pNewHelpWindow;
-        CNewUIItemExplanationWindow* m_pNewItemExplanationWindow;
-        CNewUISetItemExplanation* m_pNewSetItemExplanation;
-        CNewUIQuickCommandWindow* m_pNewQuickCommandWindow;
-        CNewUIMoveCommandWindow* m_pNewMoveCommandWindow;
-        CNewUIDuelWindow* m_pNewDuelWindow;
-        CNewUINameWindow* m_pNewNameWindow;
-        CNewUISiegeWarfare* m_pNewSiegeWarfare;
-        CNewUIItemEnduranceInfo* m_pNewItemEnduranceInfo;
-        CNewUIBuffWindow* m_pNewBuffWindow;
-        CNewUICursedTempleEnter* m_pNewCursedTempleEnterWindow;
-        CNewUICursedTempleSystem* m_pNewCursedTempleWindow;
-        CNewUICursedTempleResult* m_pNewCursedTempleResultWindow;
-        CNewUICryWolf* m_pNewCryWolfInterface;
-        CNewUIMasterLevel* m_pNewMaster_Level_Interface;
-        CNewUIGoldBowmanWindow* m_pNewGoldBowman;
-        CNewUIGoldBowmanLena* m_pNewGoldBowmanLena;
-        CNewUIRegistrationLuckyCoin* m_pNewLuckyCoinRegistration;
-        CNewUIExchangeLuckyCoin* m_pNewExchangeLuckyCoinWindow;
-        CNewUIDuelWatchWindow* m_pNewDuelWatchWindow;
-        CNewUIDuelWatchMainFrameWindow* m_pNewDuelWatchMainFrameWindow;
-        CNewUIDuelWatchUserListWindow* m_pNewDuelWatchUserListWindow;
+    /* Interface classes */
+private:
+    CNewUIChatInputBox* m_pNewChatInputBox;
+    CNewUIChatLogWindow* m_pNewChatLogWindow;
+    CNewUISystemLogWindow* m_pNewSystemLogWindow;
+    CNewUISlideWindow* m_pNewSlideWindow;
+    CNewUIFriendWindow* m_pNewFriendWindow;
+    CNewUIMainFrameWindow* m_pNewMainFrameWindow;
+    CNewUISkillList* m_pNewSkillList;
+    CNewUIItemMng* m_pNewItemMng;
+    CNewUIMyInventory* m_pNewMyInventory;
+    CNewUIInventoryExtension* m_pNewMyInventoryExt;
+    CNewUINPCShop* m_pNewNPCShop;
+    CNewUIPetInfoWindow* m_pNewPetInfoWindow;
+    CNewUIMixInventory* m_pNewMixInventory;
+    CNewUICastleWindow* m_pNewCastleWindow;
+    CNewUIGuardWindow* m_pNewGuardWindow;
+    CNewUIGatemanWindow* m_pNewGatemanWindow;
+    CNewUIGateSwitchWindow* m_pNewGateSwitchWindow;
+    CNewUIStorageInventory* m_pNewStorageInventory;
+    CNewUIStorageInventoryExt* m_pNewStorageInventoryExt;
+    CNewUIGuildMakeWindow* m_pNewGuildMakeWindow;
+    CNewUIGuildInfoWindow* m_pNewGuildInfoWindow;
+    CNewUIMyShopInventory* m_pNewMyShopInventory;
+    CNewUIPurchaseShopInventory* m_pNewPurchaseShopInventory;
+    CNewUICharacterInfoWindow* m_pNewCharacterInfoWindow;
+    CNewUIMyQuestInfoWindow* m_pNewMyQuestInfoWindow;
+    CNewUIPartyInfoWindow* m_pNewPartyInfoWindow;
+    CNewUIPartyListWindow* m_pNewPartyListWindow;
+    CNewUINPCQuest* m_pNewNPCQuest;
+    CNewUIEnterBloodCastle* m_pNewEnterBloodCastle;
+    CNewUIEnterDevilSquare* m_pNewEnterDevilSquare;
+    CNewUIBloodCastle* m_pNewBloodCastle;
+    CNewUITrade* m_pNewTrade;
+    CNewUIKanturu2ndEnterNpc* m_pNewKanturu2ndEnterNpc;
+    CNewUIKanturuInfoWindow* m_pNewKanturuInfoWindow;
+    CNewUICatapultWindow* m_pNewCatapultWindow;
+    CNewUIChaosCastleTime* m_pNewChaosCastleTime;
+    CNewUIBattleSoccerScore* m_pNewBattleSoccerScore;
+    CNewUICommandWindow* m_pNewCommandWindow;
+    CNewUIHeroPositionInfo* m_pNewHeroPositionInfo;
+    CNewUIWindowMenu* m_pNewWindowMenu;
+    CNewUIOptionWindow* m_pNewOptionWindow;
+    CNewUIHelpWindow* m_pNewHelpWindow;
+    CNewUIItemExplanationWindow* m_pNewItemExplanationWindow;
+    CNewUISetItemExplanation* m_pNewSetItemExplanation;
+    CNewUIQuickCommandWindow* m_pNewQuickCommandWindow;
+    CNewUIMoveCommandWindow* m_pNewMoveCommandWindow;
+    CNewUIDuelWindow* m_pNewDuelWindow;
+    CNewUINameWindow* m_pNewNameWindow;
+    CNewUISiegeWarfare* m_pNewSiegeWarfare;
+    CNewUIItemEnduranceInfo* m_pNewItemEnduranceInfo;
+    CNewUIBuffWindow* m_pNewBuffWindow;
+    CNewUICursedTempleEnter* m_pNewCursedTempleEnterWindow;
+    CNewUICursedTempleSystem* m_pNewCursedTempleWindow;
+    CNewUICursedTempleResult* m_pNewCursedTempleResultWindow;
+    CNewUICryWolf* m_pNewCryWolfInterface;
+    CNewUIMasterLevel* m_pNewMaster_Level_Interface;
+    CNewUIGoldBowmanWindow* m_pNewGoldBowman;
+    CNewUIGoldBowmanLena* m_pNewGoldBowmanLena;
+    CNewUIRegistrationLuckyCoin* m_pNewLuckyCoinRegistration;
+    CNewUIExchangeLuckyCoin* m_pNewExchangeLuckyCoinWindow;
+    CNewUIDuelWatchWindow* m_pNewDuelWatchWindow;
+    CNewUIDuelWatchMainFrameWindow* m_pNewDuelWatchMainFrameWindow;
+    CNewUIDuelWatchUserListWindow* m_pNewDuelWatchUserListWindow;
 #ifdef PBG_ADD_INGAMESHOP_UI_MAINFRAME
-        CNewUIInGameShop* m_pNewInGameShop;
-#endif //PBG_ADD_INGAMESHOP_UI_MAINFRAME
-        CNewUIDoppelGangerWindow* m_pNewDoppelGangerWindow;
-        CNewUIDoppelGangerFrame* m_pNewDoppelGangerFrame;
-        CNewUINPCDialogue* m_pNewNPCDialogue;
-        CNewUIQuestProgress* m_pNewQuestProgress;
-        CNewUIQuestProgressByEtc* m_pNewQuestProgressByEtc;
-        CNewUIEmpireGuardianNPC* m_pNewEmpireGuardianNPC;
-        CNewUIEmpireGuardianTimer* m_pNewEmpireGuardianTimer;
-        CNewUIMiniMap* m_pNewMiniMap;
-        CNewUIGensRanking* m_pNewGensRanking;
-        CNewUIUnitedMarketPlaceWindow* m_pNewUnitedMarketPlaceWindow;
-        CNewUILuckyItemWnd* m_pNewUILuckyItemWnd;
-        CNewUIMuHelper* m_pNewUIMuHelper;
-        CNewUIMuHelperExt* m_pNewUIMuHelperExt;
-        CNewUIMuHelperSkillList* m_pNewUIMuHelperSkillList;
-    public:
-        CNewUIChatInputBox* GetUI_NewChatInputBox() const;
-        CNewUIChatLogWindow* GetUI_NewChatLogWindow() const;
-        CNewUISystemLogWindow* GetUI_NewSystemLogWindow() const;
-        CNewUISlideWindow* GetUI_NewSlideWindow() const;
-        CNewUIGuildMakeWindow* GetUI_NewGuildMakeWindow() const;
-        CNewUIFriendWindow* GetUI_NewFriendWindow() const;
-        CNewUIMainFrameWindow* GetUI_NewMainFrameWindow() const;
-        CNewUISkillList* GetUI_NewSkillList() const;
-        CNewUIItemMng* GetUI_NewItemMng() const;
-        CNewUIMyInventory* GetUI_NewMyInventory() const;
-        CNewUIInventoryExtension* GetUI_NewMyInventoryExt() const;
-        CNewUINPCShop* GetUI_NewNpcShop() const;
-        CNewUIPetInfoWindow* GetUI_NewPetInfoWindow() const;
-        CNewUIMixInventory* GetUI_NewMixInventory() const;
-        CNewUICastleWindow* GetUI_NewCastleWindow() const;
-        CNewUIGuardWindow* GetUI_NewGuardWindow() const;
-        CNewUIGatemanWindow* GetUI_NewGatemanWindow() const;
-        CNewUIGateSwitchWindow* GetUI_NewGateSwitchWindow() const;
-        CNewUIStorageInventory* GetUI_NewStorageInventory() const;
-        CNewUIStorageInventoryExt* GetUI_NewStorageInventoryExt() const;
-        CNewUIGuildInfoWindow* GetUI_NewGuildInfoWindow() const;
-        CNewUIMyShopInventory* GetUI_NewMyShopInventory() const;
-        CNewUIPurchaseShopInventory* GetUI_NewPurchaseShopInventory() const;
-        CNewUICharacterInfoWindow* GetUI_NewCharacterInfoWindow() const;
-        CNewUIMyQuestInfoWindow* GetUI_NewMyQuestInfoWindow() const;
-        CNewUIPartyInfoWindow* GetUI_NewPartyInfoWindow() const;
-        CNewUIPartyListWindow* GetUI_NewPartyListWindow() const;
-        CNewUINPCQuest* GetUI_NewNPCQuest() const;
-        CNewUIEnterBloodCastle* GetUI_NewEnterBloodCastle() const;
-        CNewUIEnterDevilSquare* GetUI_NewEnterDevilSquare() const;
-        CNewUIBloodCastle* GetUI_NewBloodCastle() const;
-        CNewUITrade* GetUI_NewTrade() const;
-        CNewUIKanturu2ndEnterNpc* GetUI_NewKanturu2ndEnterNpc() const;
-        CNewUIKanturuInfoWindow* GetUI_NewKanturuInfoWindow() const;
-        CNewUICatapultWindow* GetUI_NewCatapultWindow() const;
-        CNewUIChaosCastleTime* GetUI_NewChaosCastleTime() const;
-        CNewUIBattleSoccerScore* GetUI_NewBattleSoccerScore() const;
-        CNewUICommandWindow* GetUI_NewCommandWindow() const;
-        CNewUIHeroPositionInfo* GetUI_NewHeroPositionInfo() const;
-        CNewUIWindowMenu* GetUI_NewWindowMenu() const;
-        CNewUIOptionWindow* GetUI_NewOptionWindow() const;
-        CNewUIHelpWindow* GetUI_NewHelpWindow() const;
-        CNewUIItemExplanationWindow* GetUI_NewItemExplanationWindow() const;
-        CNewUISetItemExplanation* GetUI_NewSetItemExplanation() const;
-        CNewUIQuickCommandWindow* GetUI_NewQuickCommandWindow() const;
-        CNewUIMoveCommandWindow* GetUI_NewMoveCommandWindow() const;
-        CNewUIDuelWindow* GetUI_NewDuelWindow() const;
-        CNewUISiegeWarfare* GetUI_NewSiegeWarfare() const;
-        CNewUIItemEnduranceInfo* GetUI_NewItemEnduranceInfo() const;
-        CNewUIBuffWindow* GetUI_NewBuffWindow() const;
-        CNewUICursedTempleEnter* GetUI_NewCursedTempleEnterWindow() const;
-        CNewUICursedTempleSystem* GetUI_NewCursedTempleWindow() const;
-        CNewUICursedTempleResult* GetUI_NewCursedTempleResultWindow() const;
-        CNewUICryWolf* GetUI_NewCryWolfInterface() const;
-        CNewUIMasterLevel* GetUI_NewMasterLevelInterface() const;
-        CNewUIGoldBowmanWindow* GetUI_pNewGoldBowman() const;
-        CNewUIGoldBowmanLena* GetUI_pNewGoldBowmanLena() const;
-        CNewUIRegistrationLuckyCoin* GetUI_pNewLuckyCoinRegistration() const;
-        CNewUIExchangeLuckyCoin* GetUI_pNewExchangeLuckyCoin() const;
-        CNewUIDuelWatchWindow* GetUI_pNewDuelWatch() const;
-        CNewUIDuelWatchMainFrameWindow* GetUI_pNewDuelWatchMainFrame() const;
-        CNewUIDuelWatchUserListWindow* GetUI_pNewDuelWatchUserList() const;
+    CNewUIInGameShop* m_pNewInGameShop;
+#endif // PBG_ADD_INGAMESHOP_UI_MAINFRAME
+    CNewUIDoppelGangerWindow* m_pNewDoppelGangerWindow;
+    CNewUIDoppelGangerFrame* m_pNewDoppelGangerFrame;
+    CNewUINPCDialogue* m_pNewNPCDialogue;
+    CNewUIQuestProgress* m_pNewQuestProgress;
+    CNewUIQuestProgressByEtc* m_pNewQuestProgressByEtc;
+    CNewUIEmpireGuardianNPC* m_pNewEmpireGuardianNPC;
+    CNewUIEmpireGuardianTimer* m_pNewEmpireGuardianTimer;
+    CNewUIMiniMap* m_pNewMiniMap;
+    CNewUIGensRanking* m_pNewGensRanking;
+    CNewUIUnitedMarketPlaceWindow* m_pNewUnitedMarketPlaceWindow;
+    CNewUILuckyItemWnd* m_pNewUILuckyItemWnd;
+    CNewUIMuHelper* m_pNewUIMuHelper;
+    CNewUIMuHelperExt* m_pNewUIMuHelperExt;
+    CNewUIMuHelperSkillList* m_pNewUIMuHelperSkillList;
+
+public:
+    CNewUIChatInputBox* GetUI_NewChatInputBox() const;
+    CNewUIChatLogWindow* GetUI_NewChatLogWindow() const;
+    CNewUISystemLogWindow* GetUI_NewSystemLogWindow() const;
+    CNewUISlideWindow* GetUI_NewSlideWindow() const;
+    CNewUIGuildMakeWindow* GetUI_NewGuildMakeWindow() const;
+    CNewUIFriendWindow* GetUI_NewFriendWindow() const;
+    CNewUIMainFrameWindow* GetUI_NewMainFrameWindow() const;
+    CNewUISkillList* GetUI_NewSkillList() const;
+    CNewUIItemMng* GetUI_NewItemMng() const;
+    CNewUIMyInventory* GetUI_NewMyInventory() const;
+    CNewUIInventoryExtension* GetUI_NewMyInventoryExt() const;
+    CNewUINPCShop* GetUI_NewNpcShop() const;
+    CNewUIPetInfoWindow* GetUI_NewPetInfoWindow() const;
+    CNewUIMixInventory* GetUI_NewMixInventory() const;
+    CNewUICastleWindow* GetUI_NewCastleWindow() const;
+    CNewUIGuardWindow* GetUI_NewGuardWindow() const;
+    CNewUIGatemanWindow* GetUI_NewGatemanWindow() const;
+    CNewUIGateSwitchWindow* GetUI_NewGateSwitchWindow() const;
+    CNewUIStorageInventory* GetUI_NewStorageInventory() const;
+    CNewUIStorageInventoryExt* GetUI_NewStorageInventoryExt() const;
+    CNewUIGuildInfoWindow* GetUI_NewGuildInfoWindow() const;
+    CNewUIMyShopInventory* GetUI_NewMyShopInventory() const;
+    CNewUIPurchaseShopInventory* GetUI_NewPurchaseShopInventory() const;
+    CNewUICharacterInfoWindow* GetUI_NewCharacterInfoWindow() const;
+    CNewUIMyQuestInfoWindow* GetUI_NewMyQuestInfoWindow() const;
+    CNewUIPartyInfoWindow* GetUI_NewPartyInfoWindow() const;
+    CNewUIPartyListWindow* GetUI_NewPartyListWindow() const;
+    CNewUINPCQuest* GetUI_NewNPCQuest() const;
+    CNewUIEnterBloodCastle* GetUI_NewEnterBloodCastle() const;
+    CNewUIEnterDevilSquare* GetUI_NewEnterDevilSquare() const;
+    CNewUIBloodCastle* GetUI_NewBloodCastle() const;
+    CNewUITrade* GetUI_NewTrade() const;
+    CNewUIKanturu2ndEnterNpc* GetUI_NewKanturu2ndEnterNpc() const;
+    CNewUIKanturuInfoWindow* GetUI_NewKanturuInfoWindow() const;
+    CNewUICatapultWindow* GetUI_NewCatapultWindow() const;
+    CNewUIChaosCastleTime* GetUI_NewChaosCastleTime() const;
+    CNewUIBattleSoccerScore* GetUI_NewBattleSoccerScore() const;
+    CNewUICommandWindow* GetUI_NewCommandWindow() const;
+    CNewUIHeroPositionInfo* GetUI_NewHeroPositionInfo() const;
+    CNewUIWindowMenu* GetUI_NewWindowMenu() const;
+    CNewUIOptionWindow* GetUI_NewOptionWindow() const;
+    CNewUIHelpWindow* GetUI_NewHelpWindow() const;
+    CNewUIItemExplanationWindow* GetUI_NewItemExplanationWindow() const;
+    CNewUISetItemExplanation* GetUI_NewSetItemExplanation() const;
+    CNewUIQuickCommandWindow* GetUI_NewQuickCommandWindow() const;
+    CNewUIMoveCommandWindow* GetUI_NewMoveCommandWindow() const;
+    CNewUIDuelWindow* GetUI_NewDuelWindow() const;
+    CNewUISiegeWarfare* GetUI_NewSiegeWarfare() const;
+    CNewUIItemEnduranceInfo* GetUI_NewItemEnduranceInfo() const;
+    CNewUIBuffWindow* GetUI_NewBuffWindow() const;
+    CNewUICursedTempleEnter* GetUI_NewCursedTempleEnterWindow() const;
+    CNewUICursedTempleSystem* GetUI_NewCursedTempleWindow() const;
+    CNewUICursedTempleResult* GetUI_NewCursedTempleResultWindow() const;
+    CNewUICryWolf* GetUI_NewCryWolfInterface() const;
+    CNewUIMasterLevel* GetUI_NewMasterLevelInterface() const;
+    CNewUIGoldBowmanWindow* GetUI_pNewGoldBowman() const;
+    CNewUIGoldBowmanLena* GetUI_pNewGoldBowmanLena() const;
+    CNewUIRegistrationLuckyCoin* GetUI_pNewLuckyCoinRegistration() const;
+    CNewUIExchangeLuckyCoin* GetUI_pNewExchangeLuckyCoin() const;
+    CNewUIDuelWatchWindow* GetUI_pNewDuelWatch() const;
+    CNewUIDuelWatchMainFrameWindow* GetUI_pNewDuelWatchMainFrame() const;
+    CNewUIDuelWatchUserListWindow* GetUI_pNewDuelWatchUserList() const;
 #ifdef PBG_ADD_INGAMESHOP_UI_MAINFRAME
-        CNewUIInGameShop* GetUI_pNewInGameShop() const;
-#endif //PBG_ADD_INGAMESHOP_UI_MAINFRAME
-        CNewUIDoppelGangerWindow* GetUI_pNewDoppelGangerWindow() const;
-        CNewUIDoppelGangerFrame* GetUI_pNewDoppelGangerFrame() const;
-        CNewUINPCDialogue* GetUI_NewNPCDialogue() const;
-        CNewUIQuestProgress* GetUI_NewQuestProgress() const;
-        CNewUIQuestProgressByEtc* GetUI_NewQuestProgressByEtc() const;
-        CNewUIEmpireGuardianNPC* GetUI_pNewEmpireGuardianNPC() const;
-        CNewUIEmpireGuardianTimer* GetUI_pNewEmpireGuardianTimer() const;
-        CNewUIMiniMap* GetUI_pNewUIMiniMap() const;
-        CNewUIGensRanking* GetUI_NewGensRanking() const;
-        CNewUIUnitedMarketPlaceWindow* GetUI_pNewUnitedMarketPlaceWindow() const;
-        //CNewUIUnitedMarketPlaceWindow*	GetUI_pNewUnitedMarketPlaceFrame() const;
-        CNewUILuckyItemWnd* Get_pNewUILuckyItemWnd() const;
-        CNewUIMuHelper* Get_pNewUIMuHelper() const;
-        CNewUIMuHelperExt* Get_pNewUIMuHelperExt() const;
-        CNewUIMuHelperSkillList* Get_pNewUIMuHelperSkillList() const;
-    };
-}
+    CNewUIInGameShop* GetUI_pNewInGameShop() const;
+#endif // PBG_ADD_INGAMESHOP_UI_MAINFRAME
+    CNewUIDoppelGangerWindow* GetUI_pNewDoppelGangerWindow() const;
+    CNewUIDoppelGangerFrame* GetUI_pNewDoppelGangerFrame() const;
+    CNewUINPCDialogue* GetUI_NewNPCDialogue() const;
+    CNewUIQuestProgress* GetUI_NewQuestProgress() const;
+    CNewUIQuestProgressByEtc* GetUI_NewQuestProgressByEtc() const;
+    CNewUIEmpireGuardianNPC* GetUI_pNewEmpireGuardianNPC() const;
+    CNewUIEmpireGuardianTimer* GetUI_pNewEmpireGuardianTimer() const;
+    CNewUIMiniMap* GetUI_pNewUIMiniMap() const;
+    CNewUIGensRanking* GetUI_NewGensRanking() const;
+    CNewUIUnitedMarketPlaceWindow* GetUI_pNewUnitedMarketPlaceWindow() const;
+    // CNewUIUnitedMarketPlaceWindow*	GetUI_pNewUnitedMarketPlaceFrame() const;
+    CNewUILuckyItemWnd* Get_pNewUILuckyItemWnd() const;
+    CNewUIMuHelper* Get_pNewUIMuHelper() const;
+    CNewUIMuHelperExt* Get_pNewUIMuHelperExt() const;
+    CNewUIMuHelperSkillList* Get_pNewUIMuHelperSkillList() const;
+};
+} // namespace SEASON3B
 
 #define g_pNewUISystem SEASON3B::CNewUISystem::GetInstance()
 #define g_pNewUIMng SEASON3B::CNewUISystem::GetInstance()->GetNewUIManager()
@@ -315,7 +316,7 @@ namespace SEASON3B
 #define g_pMyInventory SEASON3B::CNewUISystem::GetInstance()->GetUI_NewMyInventory()
 #define g_pMyInventoryExt SEASON3B::CNewUISystem::GetInstance()->GetUI_NewMyInventoryExt()
 #define g_pNPCShop SEASON3B::CNewUISystem::GetInstance()->GetUI_NewNpcShop()
-#define g_pPetInfoWindow	SEASON3B::CNewUISystem::GetInstance()->GetUI_NewPetInfoWindow()
+#define g_pPetInfoWindow SEASON3B::CNewUISystem::GetInstance()->GetUI_NewPetInfoWindow()
 #define g_pMixInventory SEASON3B::CNewUISystem::GetInstance()->GetUI_NewMixInventory()
 #define g_pCastleWindow SEASON3B::CNewUISystem::GetInstance()->GetUI_NewCastleWindow()
 #define g_pGuardWindow SEASON3B::CNewUISystem::GetInstance()->GetUI_NewGuardWindow()
@@ -329,8 +330,8 @@ namespace SEASON3B
 #define g_pPurchaseShopInventory SEASON3B::CNewUISystem::GetInstance()->GetUI_NewPurchaseShopInventory()
 #define g_pCharacterInfoWindow SEASON3B::CNewUISystem::GetInstance()->GetUI_NewCharacterInfoWindow()
 #define g_pMyQuestInfoWindow SEASON3B::CNewUISystem::GetInstance()->GetUI_NewMyQuestInfoWindow()
-#define g_pPartyInfoWindow		SEASON3B::CNewUISystem::GetInstance()->GetUI_NewPartyInfoWindow()
-#define g_pPartyListWindow		SEASON3B::CNewUISystem::GetInstance()->GetUI_NewPartyListWindow()
+#define g_pPartyInfoWindow SEASON3B::CNewUISystem::GetInstance()->GetUI_NewPartyInfoWindow()
+#define g_pPartyListWindow SEASON3B::CNewUISystem::GetInstance()->GetUI_NewPartyListWindow()
 #define g_pNPCQuest SEASON3B::CNewUISystem::GetInstance()->GetUI_NewNPCQuest()
 #define g_pEnterBloodCastle SEASON3B::CNewUISystem::GetInstance()->GetUI_NewEnterBloodCastle()
 #define g_pEnterDevilSquare SEASON3B::CNewUISystem::GetInstance()->GetUI_NewEnterDevilSquare()
@@ -368,7 +369,7 @@ namespace SEASON3B
 #define g_pDuelWatchUserList SEASON3B::CNewUISystem::GetInstance()->GetUI_pNewDuelWatchUserList()
 #ifdef PBG_ADD_INGAMESHOP_UI_MAINFRAME
 #define g_pInGameShop SEASON3B::CNewUISystem::GetInstance()->GetUI_pNewInGameShop()
-#endif //PBG_ADD_INGAMESHOP_UI_MAINFRAME
+#endif // PBG_ADD_INGAMESHOP_UI_MAINFRAME
 #define g_pDoppelGangerWindow SEASON3B::CNewUISystem::GetInstance()->GetUI_pNewDoppelGangerWindow()
 #define g_pDoppelGangerFrame SEASON3B::CNewUISystem::GetInstance()->GetUI_pNewDoppelGangerFrame()
 #define g_pNPCDialogue SEASON3B::CNewUISystem::GetInstance()->GetUI_NewNPCDialogue()
@@ -379,9 +380,9 @@ namespace SEASON3B
 #define g_pNewUIMiniMap SEASON3B::CNewUISystem::GetInstance()->GetUI_pNewUIMiniMap()
 #ifdef PBG_MOD_STAMINA_UI
 #define g_pNewUIStamina SEASON3B::CNewUISystem::GetInstance()->GetUI_pNewUIStamina()
-#endif //PBG_MOD_STAMINA_UI
+#endif // PBG_MOD_STAMINA_UI
 #define g_pNewUIGensRanking SEASON3B::CNewUISystem::GetInstance()->GetUI_NewGensRanking()
-#define g_pLuckyItemWnd	SEASON3B::CNewUISystem::GetInstance()->Get_pNewUILuckyItemWnd()
+#define g_pLuckyItemWnd SEASON3B::CNewUISystem::GetInstance()->Get_pNewUILuckyItemWnd()
 #define g_pNewUIMuHelper SEASON3B::CNewUISystem::GetInstance()->Get_pNewUIMuHelper()
 #define g_pNewUIMuHelperExt SEASON3B::CNewUISystem::GetInstance()->Get_pNewUIMuHelperExt()
 #define g_pNewUIMuHelperSkillList SEASON3B::CNewUISystem::GetInstance()->Get_pNewUIMuHelperSkillList()

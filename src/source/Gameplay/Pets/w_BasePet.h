@@ -8,7 +8,8 @@ SmartPointer(PetObject);
 class PetObject
 {
 public:
-    enum ActionType {
+    enum ActionType
+    {
         eAction_Stand = 0,
         eAction_Move,
         eAction_Attack,
@@ -23,9 +24,13 @@ public:
     virtual ~PetObject();
 
 public:
-    OBJECT* GetObject() { return m_obj; }
+    OBJECT* GetObject()
+    {
+        return m_obj;
+    }
     bool IsSameOwner(OBJECT* Owner);
     bool IsSameObject(OBJECT* Owner, int itemType);
+    // cppcheck-suppress unknownMacro
     void SetActions(ActionType type, Weak_Ptr(PetAction) action, float speed);
     void SetCommand(int targetKey, ActionType cmdType);
 
@@ -50,8 +55,8 @@ private:
     PetObject();
 
 public:
-    typedef std::map< ActionType, Weak_Ptr(PetAction) > ActionMap;
-    typedef std::map< ActionType, float > SpeedMap;
+    typedef std::map<ActionType, Weak_Ptr(PetAction)> ActionMap;
+    typedef std::map<ActionType, float> SpeedMap;
 
 private:
     ActionMap m_actionMap;

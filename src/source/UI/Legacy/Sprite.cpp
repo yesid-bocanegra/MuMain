@@ -11,6 +11,7 @@
 
 #include <crtdbg.h>
 
+// cppcheck-suppress uninitMemberVar
 CSprite::CSprite()
 {
     m_aFrameTexCoord = NULL;
@@ -28,7 +29,8 @@ void CSprite::Release()
     SAFE_DELETE_ARRAY(m_aFrameTexCoord);
 }
 
-void CSprite::Create(int nOrgWidth, int nOrgHeight, int nTexID, int nMaxFrame, SFrameCoord* aFrameCoord, int nDatumX, int nDatumY, bool bTile, int nSizingDatums, float fScaleX, float fScaleY)
+void CSprite::Create(int nOrgWidth, int nOrgHeight, int nTexID, int nMaxFrame, SFrameCoord* aFrameCoord, int nDatumX,
+                     int nDatumY, bool bTile, int nSizingDatums, float fScaleX, float fScaleY)
 {
     Release();
 
@@ -108,17 +110,17 @@ void CSprite::Create(int nOrgWidth, int nOrgHeight, int nTexID, int nMaxFrame, S
     m_bShow = false;
 }
 
-void CSprite::Create(SImgInfo* pImgInfo, int nDatumX, int nDatumY, bool bTile,
-    int nSizingDatums, float fScaleX, float fScaleY)
+void CSprite::Create(SImgInfo* pImgInfo, int nDatumX, int nDatumY, bool bTile, int nSizingDatums, float fScaleX,
+                     float fScaleY)
 {
     if (pImgInfo->nX == 0 && pImgInfo->nY == 0)
-        Create(pImgInfo->nWidth, pImgInfo->nHeight, pImgInfo->nTexID, 0, NULL, nDatumX, nDatumY, bTile, nSizingDatums, fScaleX, fScaleY);
+        Create(pImgInfo->nWidth, pImgInfo->nHeight, pImgInfo->nTexID, 0, NULL, nDatumX, nDatumY, bTile, nSizingDatums,
+               fScaleX, fScaleY);
     else
     {
-        SFrameCoord frameCoord = { pImgInfo->nX, pImgInfo->nY };
-        Create(pImgInfo->nWidth, pImgInfo->nHeight, pImgInfo->nTexID, 1,
-            &frameCoord, nDatumX, nDatumY, bTile, nSizingDatums, fScaleX,
-            fScaleY);
+        SFrameCoord frameCoord = {pImgInfo->nX, pImgInfo->nY};
+        Create(pImgInfo->nWidth, pImgInfo->nHeight, pImgInfo->nTexID, 1, &frameCoord, nDatumX, nDatumY, bTile,
+               nSizingDatums, fScaleX, fScaleY);
     }
 }
 
@@ -197,14 +199,10 @@ BOOL CSprite::PtInSprite(long lXPos, long lYPos)
     if (!m_bShow)
         return FALSE;
 
-    POINT pt = { lXPos, lYPos };
+    POINT pt = {lXPos, lYPos};
 
-    RECT rc = {
-        long(m_aScrCoord[LT].fX * m_fScaleX),
-        long((m_fScrHeight - m_aScrCoord[LT].fY) * m_fScaleY),
-        long(m_aScrCoord[RB].fX * m_fScaleX),
-        long((m_fScrHeight - m_aScrCoord[RB].fY) * m_fScaleY)
-    };
+    RECT rc = {long(m_aScrCoord[LT].fX * m_fScaleX), long((m_fScrHeight - m_aScrCoord[LT].fY) * m_fScaleY),
+               long(m_aScrCoord[RB].fX * m_fScaleX), long((m_fScrHeight - m_aScrCoord[RB].fY) * m_fScaleY)};
 
     return ::PtInRect(&rc, pt);
 }
@@ -216,14 +214,12 @@ BOOL CSprite::CursorInObject()
     return PtInSprite(rInput.GetCursorX(), rInput.GetCursorY());
 }
 
-void CSprite::SetAction(int nStartFrame, int nEndFrame, double dDelayTime,
-    bool bRepeat)
+void CSprite::SetAction(int nStartFrame, int nEndFrame, double dDelayTime, bool bRepeat)
 {
     if (1 >= m_nMaxFrame)
         return;
 
-    _ASSERT(nStartFrame <= nEndFrame && nStartFrame >= 0
-        && nEndFrame < m_nMaxFrame);
+    _ASSERT(nStartFrame <= nEndFrame && nStartFrame >= 0 && nEndFrame < m_nMaxFrame);
 
     m_nStartFrame = m_nNowFrame = nStartFrame;
     m_nEndFrame = nEndFrame;
@@ -303,8 +299,7 @@ void CSprite::Render()
         for (int i = LT; i < POS_MAX; ++i)
         {
             ::glTexCoord2f(m_aTexCoord[i].fTU, m_aTexCoord[i].fTV);
-            ::glVertex2f(m_aScrCoord[i].fX * m_fScaleX,
-                m_aScrCoord[i].fY * m_fScaleY);
+            ::glVertex2f(m_aScrCoord[i].fX * m_fScaleX, m_aScrCoord[i].fY * m_fScaleY);
         }
 
         ::glEnd();
@@ -321,8 +316,7 @@ void CSprite::Render()
 
         ::glColor4ub(m_byRed, m_byGreen, m_byBlue, m_byAlpha);
         for (int i = LT; i < POS_MAX; ++i)
-            ::glVertex2f(m_aScrCoord[i].fX * m_fScaleX,
-                m_aScrCoord[i].fY * m_fScaleY);
+            ::glVertex2f(m_aScrCoord[i].fX * m_fScaleX, m_aScrCoord[i].fY * m_fScaleY);
 
         ::glEnd();
     }

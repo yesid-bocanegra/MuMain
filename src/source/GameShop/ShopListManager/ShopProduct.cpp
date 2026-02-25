@@ -13,6 +13,7 @@
 #include "ShopProduct.h"
 #include "StringToken.h"
 
+// cppcheck-suppress uninitMemberVar
 CShopProduct::CShopProduct() // OK
 {
 }

@@ -14,18 +14,13 @@
 #include "ZzzInterface.h"
 #include "SceneCommon.h"
 
-
 #ifdef _EDITOR
 #include "Core/MuEditorCore.h"
 #endif
 
-CLoadingScene::CLoadingScene()
-{
-}
+CLoadingScene::CLoadingScene() {}
 
-CLoadingScene::~CLoadingScene()
-{
-}
+CLoadingScene::~CLoadingScene() {}
 
 void CLoadingScene::Create()
 {
@@ -33,11 +28,11 @@ void CLoadingScene::Create()
     float fScaleX = (float)rInput.GetScreenWidth() / 800.0f;
     float fScaleY = (float)rInput.GetScreenHeight() / 600.0f;
 
-    int anHeight[LDS_BACK_MAX] = { 512, 512, 88, 88 };
+    int anHeight[LDS_BACK_MAX] = {512, 512, 88, 88};
     for (int i = 0; i < LDS_BACK_MAX; ++i)
     {
-        m_asprBack[i].Create(400, anHeight[i], BITMAP_TITLE + i, 0, NULL, 0, 0, false,
-            SPR_SIZING_DATUMS_LT, fScaleX, fScaleY);
+        m_asprBack[i].Create(400, anHeight[i], BITMAP_TITLE + i, 0, NULL, 0, 0, false, SPR_SIZING_DATUMS_LT, fScaleX,
+                             fScaleY);
         m_asprBack[i].Show(true);
     }
 

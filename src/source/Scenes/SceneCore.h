@@ -12,7 +12,7 @@
 
 extern EGameScene SceneFlag;
 
-extern int  ErrorMessage;
+extern int ErrorMessage;
 extern bool InitServerList;
 extern const wchar_t* szServerIpAddress;
 extern unsigned short g_ServerPort;
@@ -26,17 +26,17 @@ extern void UpdateSceneState();
 extern void LoadingScene(HDC hDC);
 extern void RenderScene(HDC Hdc);
 extern bool CheckName();
-void    StartGame();
+void StartGame();
 void SetTargetFps(double targetFps);
 double GetTargetFps();
 
-BOOL	ShowCheckBox(int num, int index, int message = MESSAGE_TRADE_CHECK);
+BOOL ShowCheckBox(int num, int index, int message = MESSAGE_TRADE_CHECK);
 
-int	SeparateTextIntoLines(const wchar_t* lpszText, wchar_t* lpszSeparated, int iMaxLine, int iLineSize);
+int SeparateTextIntoLines(const wchar_t* lpszText, wchar_t* lpszSeparated, int iMaxLine, int iLineSize);
 
-bool	GetTimeCheck(int DelayTime);
-void	SetEffectVolumeLevel(int level);
-void    SetViewPortLevel(int level);
+bool GetTimeCheck(int DelayTime);
+void SetEffectVolumeLevel(int level);
+void SetViewPortLevel(int level);
 
 bool IsEnterPressed();
 void SetEnterPressed(bool enterpressed);

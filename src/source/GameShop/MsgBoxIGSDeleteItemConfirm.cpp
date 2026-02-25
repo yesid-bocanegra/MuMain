@@ -8,7 +8,6 @@
 
 #include "MsgBoxIGSDeleteItemConfirm.h"
 
-
 #include "DSPlaySound.h"
 
 //////////////////////////////////////////////////////////////////////
@@ -18,9 +17,9 @@ CMsgBoxIGSDeleteItemConfirm::CMsgBoxIGSDeleteItemConfirm()
 {
     m_iMiddleCount = 4;
 
-    m_iStorageSeq = 0;			// ������ ����
-    m_iStorageItemSeq = 0;		// ������ ��ǰ ����
-    m_szItemType = '\0';		// ��ǰ���� (C : ĳ��, P : ��ǰ)
+    m_iStorageSeq = 0;     // ������ ����
+    m_iStorageItemSeq = 0; // ������ ��ǰ ����
+    m_szItemType = '\0';   // ��ǰ���� (C : ĳ��, P : ��ǰ)
 
     for (int i = 0; i < UIMAX_TEXT_LINE; i++)
     {
@@ -44,8 +43,8 @@ bool CMsgBoxIGSDeleteItemConfirm::Create(float fPriority)
     SetAddCallbackFunc();
 
     CNewUIMessageBoxBase::Create((IMAGE_IGS_WINDOW_WIDTH / 2) - (IMAGE_IGS_FRAME_WIDTH / 2),
-        (IMAGE_IGS_WINDOW_HEIGHT / 2) - (IMAGE_IGS_FRAME_HEIGHT / 2),
-        IMAGE_IGS_FRAME_WIDTH, IMAGE_IGS_FRAME_HEIGHT, fPriority);
+                                 (IMAGE_IGS_WINDOW_HEIGHT / 2) - (IMAGE_IGS_FRAME_HEIGHT / 2), IMAGE_IGS_FRAME_WIDTH,
+                                 IMAGE_IGS_FRAME_HEIGHT, fPriority);
 
     SetButtonInfo();
 
@@ -62,7 +61,8 @@ void CMsgBoxIGSDeleteItemConfirm::Initialize(int iStorageSeq, int iStorageItemSe
     m_iStorageItemSeq = iStorageItemSeq;
     m_szItemType = szItemType;
 
-    m_iDesciptionLine = ::DivideStringByPixel(&m_szDescription[0][0], UIMAX_TEXT_LINE, MAX_TEXT_LENGTH, GlobalText[2931], IGS_TEXT_DIVIDE_WIDTH, false, '#');
+    m_iDesciptionLine = ::DivideStringByPixel(&m_szDescription[0][0], UIMAX_TEXT_LINE, MAX_TEXT_LENGTH,
+                                              GlobalText[2931], IGS_TEXT_DIVIDE_WIDTH, false, '#');
 }
 
 //--------------------------------------------
@@ -102,7 +102,8 @@ bool CMsgBoxIGSDeleteItemConfirm::Render()
 
 //--------------------------------------------
 // LButtonUp
-CALLBACK_RESULT CMsgBoxIGSDeleteItemConfirm::LButtonUp(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam)
+CALLBACK_RESULT CMsgBoxIGSDeleteItemConfirm::LButtonUp(class CNewUIMessageBoxBase* pOwner,
+                                                       const leaf::xstreambuf& xParam)
 {
     auto* pOwnMsgBox = dynamic_cast<CMsgBoxIGSDeleteItemConfirm*>(pOwner);
 
@@ -126,11 +127,13 @@ CALLBACK_RESULT CMsgBoxIGSDeleteItemConfirm::LButtonUp(class CNewUIMessageBoxBas
 
 //--------------------------------------------
 // OKButtonDown
-CALLBACK_RESULT CMsgBoxIGSDeleteItemConfirm::OKButtonDown(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam)
+CALLBACK_RESULT CMsgBoxIGSDeleteItemConfirm::OKButtonDown(class CNewUIMessageBoxBase* pOwner,
+                                                          const leaf::xstreambuf& xParam)
 {
     auto* pOwnMsgBox = dynamic_cast<CMsgBoxIGSDeleteItemConfirm*>(pOwner);
 
-    SocketClient->ToGameServer()->SendCashShopDeleteStorageItemRequest(pOwnMsgBox->m_iStorageSeq, pOwnMsgBox->m_iStorageItemSeq, pOwnMsgBox->m_szItemType);
+    SocketClient->ToGameServer()->SendCashShopDeleteStorageItemRequest(
+        pOwnMsgBox->m_iStorageSeq, pOwnMsgBox->m_iStorageItemSeq, pOwnMsgBox->m_szItemType);
 
     PlayBuffer(SOUND_CLICK01);
     g_MessageBox->SendEvent(pOwner, MSGBOX_EVENT_DESTROY);
@@ -140,7 +143,8 @@ CALLBACK_RESULT CMsgBoxIGSDeleteItemConfirm::OKButtonDown(class CNewUIMessageBox
 
 //--------------------------------------------
 // CancelButtonDown
-CALLBACK_RESULT CMsgBoxIGSDeleteItemConfirm::CancelButtonDown(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam)
+CALLBACK_RESULT CMsgBoxIGSDeleteItemConfirm::CancelButtonDown(class CNewUIMessageBoxBase* pOwner,
+                                                              const leaf::xstreambuf& xParam)
 {
     PlayBuffer(SOUND_CLICK01);
     g_MessageBox->SendEvent(pOwner, MSGBOX_EVENT_DESTROY);
@@ -163,12 +167,12 @@ void CMsgBoxIGSDeleteItemConfirm::SetButtonInfo()
 {
     // Ȯ�� ��ư
     m_BtnDelete.SetInfo(IMAGE_IGS_BUTTON, GetPos().x + IGS_BTN_DEL_POS_X, GetPos().y + IGS_BTN_POS_Y,
-        IMAGE_IGS_BTN_WIDTH, IMAGE_IGS_BTN_HEIGHT);
+                        IMAGE_IGS_BTN_WIDTH, IMAGE_IGS_BTN_HEIGHT);
     m_BtnDelete.SetText(GlobalText[2932]);
 
     // ��� ��ư
     m_BtnCancel.SetInfo(IMAGE_IGS_BUTTON, GetPos().x + IGS_BTN_CANCEL_POS_X, GetPos().y + IGS_BTN_POS_Y,
-        IMAGE_IGS_BTN_WIDTH, IMAGE_IGS_BTN_HEIGHT);
+                        IMAGE_IGS_BTN_WIDTH, IMAGE_IGS_BTN_HEIGHT);
     m_BtnCancel.SetText(GlobalText[229]);
 }
 
@@ -187,7 +191,7 @@ void CMsgBoxIGSDeleteItemConfirm::RenderFrame()
     {
         RenderImage(IMAGE_IGS_LEFTLINE, GetPos().x, iY, IMAGE_IGS_LINE_WIDTH, IMAGE_IGS_LINE_HEIGHT);
         RenderImage(IMAGE_IGS_RIGHTLINE, GetPos().x + IMAGE_IGS_FRAME_WIDTH - IMAGE_IGS_LINE_WIDTH, iY,
-            IMAGE_IGS_LINE_WIDTH, IMAGE_IGS_LINE_HEIGHT);
+                    IMAGE_IGS_LINE_WIDTH, IMAGE_IGS_LINE_HEIGHT);
         iY += IMAGE_IGS_LINE_HEIGHT;
     }
     RenderImage(IMAGE_IGS_DOWN, GetPos().x, iY, IMAGE_IGS_FRAME_WIDTH, IMAGE_IGS_DOWN_HEIGHT);
@@ -202,19 +206,23 @@ void CMsgBoxIGSDeleteItemConfirm::RenderTexts()
     g_pRenderText->SetFont(g_hFontBold);
 
     // Title - "������ ����"
-    g_pRenderText->RenderText(GetPos().x, GetPos().y + IGS_TEXT_TITLE_Y, GlobalText[2930], IMAGE_IGS_FRAME_WIDTH, 0, RT3_SORT_CENTER);
+    g_pRenderText->RenderText(GetPos().x, GetPos().y + IGS_TEXT_TITLE_Y, GlobalText[2930], IMAGE_IGS_FRAME_WIDTH, 0,
+                              RT3_SORT_CENTER);
 
     g_pRenderText->SetFont(g_hFont);
 
     // Decription
     for (int i = 0; i < m_iDesciptionLine; ++i)
     {
-        g_pRenderText->RenderText(GetPos().x + IGS_TEXT_DESCRIPTION_POS_X, GetPos().y + IGS_TEXT_DESCRIPTION_POS_Y + (i * IGS_TEXT_DESCRIPTION_INTERVAL),
-            m_szDescription[i], IGS_TEXT_DESCRIPTION_WIDTH, 0, RT3_SORT_LEFT);
+        g_pRenderText->RenderText(GetPos().x + IGS_TEXT_DESCRIPTION_POS_X,
+                                  GetPos().y + IGS_TEXT_DESCRIPTION_POS_Y + (i * IGS_TEXT_DESCRIPTION_INTERVAL),
+                                  m_szDescription[i], IGS_TEXT_DESCRIPTION_WIDTH, 0, RT3_SORT_LEFT);
     }
 
 #ifdef FOR_WORK
-    wchar_t szText[256] = { 0, };
+    wchar_t szText[256] = {
+        0,
+    };
     g_pRenderText->SetTextColor(255, 0, 0, 255);
     mu_swprintf(szText, L"m_iStorageSeq : %d", m_iStorageSeq);
     g_pRenderText->RenderText(GetPos().x + IMAGE_IGS_FRAME_WIDTH, GetPos().y + 10, szText, 150, 0, RT3_SORT_LEFT);

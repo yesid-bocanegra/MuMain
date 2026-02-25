@@ -3,13 +3,14 @@
 // SceneCommon.h - Shared utilities used by multiple scenes
 
 #include <windows.h>
-#include "ZzzInfomation.h"  // For MAX_CHARACTERS_PER_ACCOUNT
+#include "ZzzInfomation.h" // For MAX_CHARACTERS_PER_ACCOUNT
 
 //=============================================================================
 // Character Selection State
 //=============================================================================
 
-class CharacterSelectionState {
+class CharacterSelectionState
+{
 private:
     int selectedIndex = -1;
 
@@ -17,29 +18,35 @@ public:
     static constexpr int NO_SELECTION = -1;
 
     // Check if a character is currently selected
-    bool HasSelection() const {
+    bool HasSelection() const
+    {
         return selectedIndex >= 0 && selectedIndex < MAX_CHARACTERS_PER_ACCOUNT;
     }
 
     // Select a character by index (validates bounds)
-    void SelectCharacter(int index) {
-        if (index >= 0 && index < MAX_CHARACTERS_PER_ACCOUNT) {
+    void SelectCharacter(int index)
+    {
+        if (index >= 0 && index < MAX_CHARACTERS_PER_ACCOUNT)
+        {
             selectedIndex = index;
         }
     }
 
     // Clear the current selection
-    void ClearSelection() {
+    void ClearSelection()
+    {
         selectedIndex = NO_SELECTION;
     }
 
     // Get the selected character index (-1 if none)
-    int GetSelectedIndex() const {
+    int GetSelectedIndex() const
+    {
         return selectedIndex;
     }
 
     // Legacy accessor for backward compatibility (allows direct modification)
-    int& GetLegacyReference() {
+    int& GetLegacyReference()
+    {
         return selectedIndex;
     }
 };
@@ -55,7 +62,8 @@ extern int& SelectedHero;
 // Scene Initialization State
 //=============================================================================
 
-class SceneInitializationState {
+class SceneInitializationState
+{
 private:
     bool initLogIn = false;
     bool initLoading = false;
@@ -65,7 +73,8 @@ private:
 
 public:
     // Reset all initialization flags
-    void ResetAll() {
+    void ResetAll()
+    {
         initLogIn = false;
         initLoading = false;
         initCharacterScene = false;
@@ -74,7 +83,8 @@ public:
     }
 
     // Reset flags when disconnecting from server
-    void ResetForDisconnect() {
+    void ResetForDisconnect()
+    {
         initLogIn = false;
         initCharacterScene = false;
         initMainScene = false;
@@ -83,11 +93,26 @@ public:
     }
 
     // Legacy accessors for backward compatibility
-    bool& GetInitLogIn() { return initLogIn; }
-    bool& GetInitLoading() { return initLoading; }
-    bool& GetInitCharacterScene() { return initCharacterScene; }
-    bool& GetInitMainScene() { return initMainScene; }
-    bool& GetEnableMainRender() { return enableMainRender; }
+    bool& GetInitLogIn()
+    {
+        return initLogIn;
+    }
+    bool& GetInitLoading()
+    {
+        return initLoading;
+    }
+    bool& GetInitCharacterScene()
+    {
+        return initCharacterScene;
+    }
+    bool& GetInitMainScene()
+    {
+        return initMainScene;
+    }
+    bool& GetEnableMainRender()
+    {
+        return enableMainRender;
+    }
 };
 
 // Global scene initialization state

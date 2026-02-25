@@ -31,20 +31,20 @@ extern int g_iItemInfo[16][17];
 
 namespace SEASON3B
 {
-	int& MouseY = ::MouseY;
-	int& g_iCancelSkillTarget = ::g_iCancelSkillTarget;
-	wchar_t (&TextList)[50][100] = ::TextList;
-	int (&TextListColor)[50] = ::TextListColor;
-	int (&TextBold)[50] = ::TextBold;
-	int& TextNum = ::TextNum;
-	int (&g_iItemInfo)[16][17] = ::g_iItemInfo;
-	int& ItemHelp = ::ItemHelp;
-	JewelHarmonyInfo*& g_pUIJewelHarmonyinfo = ::g_pUIJewelHarmonyinfo;
-	int& SelectedCharacter = ::SelectedCharacter;
-}
+int& MouseY = ::MouseY;
+int& g_iCancelSkillTarget = ::g_iCancelSkillTarget;
+wchar_t (&TextList)[50][100] = ::TextList;
+int (&TextListColor)[50] = ::TextListColor;
+int (&TextBold)[50] = ::TextBold;
+int& TextNum = ::TextNum;
+int (&g_iItemInfo)[16][17] = ::g_iItemInfo;
+int& ItemHelp = ::ItemHelp;
+JewelHarmonyInfo*& g_pUIJewelHarmonyinfo = ::g_pUIJewelHarmonyinfo;
+int& SelectedCharacter = ::SelectedCharacter;
+} // namespace SEASON3B
 
-extern int   ShopInventoryStartX;
-extern int   ShopInventoryStartY;
+extern int ShopInventoryStartX;
+extern int ShopInventoryStartY;
 
 extern bool g_bTradeEndByOppenent;
 extern bool LogOut;
@@ -94,11 +94,12 @@ POINT CUIManager::RenderWindowBase(int nHeight, int nOriginY)
     if (nOriginY == -1)
     {
         fPosY = 130 - nHeight / 2;
-        if (fPosY < 40.0f)		fPosY = 40.0f;
+        if (fPosY < 40.0f)
+            fPosY = 40.0f;
     }
     else
         fPosY = nOriginY;
-    POINT ptPos = { fPosX, fPosY };
+    POINT ptPos = {fPosX, fPosY};
 
     RenderBitmap(BITMAP_INTERFACE + 22, fPosX, fPosY, nWidth, 5, 0.f, 0.f, nWidth / 256.f, 5.f / 8.f);
     fPosY += 5;
@@ -114,7 +115,8 @@ POINT CUIManager::RenderWindowBase(int nHeight, int nOriginY)
     if (nBodyHeight > nPatternCount * 40)
     {
         float fRate = (float)(nBodyHeight - nPatternCount * 40) / 40.0f;
-        RenderBitmap(BITMAP_INTERFACE + 21, fPosX, fPosY, nWidth, 40 * fRate, 0.f, 0.f, nWidth / 256.f, (40.f / 64.f) * fRate);
+        RenderBitmap(BITMAP_INTERFACE + 21, fPosX, fPosY, nWidth, 40 * fRate, 0.f, 0.f, nWidth / 256.f,
+                     (40.f / 64.f) * fRate);
         fPosY += 40 * fRate;
     }
 
@@ -140,13 +142,9 @@ bool CUIManager::IsInputEnable()
     return true;
 }
 
-void CUIManager::UpdateInput()
-{
-}
+void CUIManager::UpdateInput() {}
 
-void CUIManager::Render()
-{
-}
+void CUIManager::Render() {}
 
 void CUIManager::CloseAll()
 {
@@ -214,7 +212,7 @@ void CUIManager::GetInsertInterface(std::list<DWORD>& outflag, DWORD insertflag)
 
 void CUIManager::GetDeleteInterface(std::list<DWORD>& outflag, DWORD deleteflag)
 {
-    for (auto iter = outflag.begin(); iter != outflag.end(); )
+    for (auto iter = outflag.begin(); iter != outflag.end();)
     {
         auto Tempiter = iter;
         ++iter;
@@ -263,7 +261,8 @@ bool CUIManager::Open(DWORD dwInterface, DWORD dwExtraData)
         {
             Open(INTERFACE_INVENTORY);
 
-            if (g_iPShopWndType != PSHOPWNDTYPE_NONE) {
+            if (g_iPShopWndType != PSHOPWNDTYPE_NONE)
+            {
                 g_ErrorReport.Write(L"@ OpenPersonalShop : SendRequestInventory\n");
                 SocketClient->ToGameServer()->SendInventoryRequest();
             }
@@ -282,7 +281,8 @@ bool CUIManager::Open(DWORD dwInterface, DWORD dwExtraData)
         {
             Open(INTERFACE_INVENTORY);
 
-            if (g_iPShopWndType != PSHOPWNDTYPE_NONE) {
+            if (g_iPShopWndType != PSHOPWNDTYPE_NONE)
+            {
                 g_ErrorReport.Write(L"@ OpenPersonalShop : SendRequestInventory\n");
                 SocketClient->ToGameServer()->SendInventoryRequest();
             }
@@ -315,7 +315,8 @@ bool CUIManager::Open(DWORD dwInterface, DWORD dwExtraData)
 
 bool CUIManager::Close(DWORD dwInterface, DWORD dwExtraData)
 {
-    if (!IsOpen(dwInterface))		return false;
+    if (!IsOpen(dwInterface))
+        return false;
 
     switch (dwInterface)
     {

@@ -156,13 +156,9 @@ float SEASON3B::CNewUISiegeWarfare::GetLayerDepth()
     return 1.6f;
 }
 
-void SEASON3B::CNewUISiegeWarfare::OpenningProcess()
-{
-}
+void SEASON3B::CNewUISiegeWarfare::OpenningProcess() {}
 
-void SEASON3B::CNewUISiegeWarfare::ClosingProcess()
-{
-}
+void SEASON3B::CNewUISiegeWarfare::ClosingProcess() {}
 
 void SEASON3B::CNewUISiegeWarfare::SetGuildData(const CHARACTER* pCharacter)
 {
@@ -177,11 +173,9 @@ bool SEASON3B::CNewUISiegeWarfare::CreateMiniMapUI()
         InitMiniMapUI();
     }
 
-    if (!(Hero->EtcPart == PARTS_ATTACK_TEAM_MARK
-        || Hero->EtcPart == PARTS_ATTACK_TEAM_MARK2
-        || Hero->EtcPart == PARTS_ATTACK_TEAM_MARK3
-        || Hero->EtcPart == PARTS_DEFENSE_TEAM_MARK)
-        || Hero->GuildStatus == G_PERSON)
+    if (!(Hero->EtcPart == PARTS_ATTACK_TEAM_MARK || Hero->EtcPart == PARTS_ATTACK_TEAM_MARK2 ||
+          Hero->EtcPart == PARTS_ATTACK_TEAM_MARK3 || Hero->EtcPart == PARTS_DEFENSE_TEAM_MARK) ||
+        Hero->GuildStatus == G_PERSON)
     {
         m_byGuildStatus = G_NONE;
     }
@@ -190,31 +184,34 @@ bool SEASON3B::CNewUISiegeWarfare::CreateMiniMapUI()
     {
     case G_NONE:
     {
-        m_pSiegeWarUI = new CNewUISiegeWarObserver;		// Observer
+        m_pSiegeWarUI = new CNewUISiegeWarObserver; // Observer
         m_iCurSiegeWarType = SIEGEWAR_TYPE_OBSERVER;
         m_bCreated = false;
-    }break;
+    }
+    break;
     case G_MASTER:
     {
-        if (wcscmp(GuildMark[m_sGuildMarkIndex].UnionName, L"") == NULL
-            || wcscmp(GuildMark[m_sGuildMarkIndex].GuildName, GuildMark[m_sGuildMarkIndex].UnionName) == NULL)
+        if (wcscmp(GuildMark[m_sGuildMarkIndex].UnionName, L"") == NULL ||
+            wcscmp(GuildMark[m_sGuildMarkIndex].GuildName, GuildMark[m_sGuildMarkIndex].UnionName) == NULL)
         {
-            m_pSiegeWarUI = new CNewUISiegeWarCommander;	// Commander
+            m_pSiegeWarUI = new CNewUISiegeWarCommander; // Commander
             m_iCurSiegeWarType = SIEGEWAR_TYPE_COMMANDER;
         }
         else
         {
-            m_pSiegeWarUI = new CNewUISiegeWarSoldier;	// Soldier
+            m_pSiegeWarUI = new CNewUISiegeWarSoldier; // Soldier
             m_iCurSiegeWarType = SIEGEWAR_TYPE_SOLDIER;
         }
         m_bCreated = true;
-    }break;
+    }
+    break;
     default:
     {
-        m_pSiegeWarUI = new CNewUISiegeWarSoldier;	// Soldier
+        m_pSiegeWarUI = new CNewUISiegeWarSoldier; // Soldier
         m_iCurSiegeWarType = SIEGEWAR_TYPE_SOLDIER;
         m_bCreated = true;
-    }break;
+    }
+    break;
     }
 
     m_pSiegeWarUI->LoadImages();
@@ -228,6 +225,7 @@ void SEASON3B::CNewUISiegeWarfare::ClearGuildMemberLocation(void)
 {
     if (m_iCurSiegeWarType == SIEGEWAR_TYPE_COMMANDER)
     {
+        // cppcheck-suppress dangerousTypeCast
         ((CNewUISiegeWarCommander*)m_pSiegeWarUI)->ClearGuildMemberLocation();
     }
 }
@@ -236,6 +234,7 @@ void SEASON3B::CNewUISiegeWarfare::SetGuildMemberLocation(BYTE type, int x, int 
 {
     if (m_iCurSiegeWarType == SIEGEWAR_TYPE_COMMANDER)
     {
+        // cppcheck-suppress dangerousTypeCast
         ((CNewUISiegeWarCommander*)m_pSiegeWarUI)->SetGuildMemberLocation(type, x, y);
     }
 }
@@ -257,7 +256,7 @@ void SEASON3B::CNewUISiegeWarfare::InitMiniMapUI()
     m_sGuildMarkIndex = -1;
 }
 
-void  SEASON3B::CNewUISiegeWarfare::SetTime(BYTE byHour, BYTE byMinute)
+void SEASON3B::CNewUISiegeWarfare::SetTime(BYTE byHour, BYTE byMinute)
 {
     m_iHour = (int)byHour;
     m_iMinute = (int)byMinute;

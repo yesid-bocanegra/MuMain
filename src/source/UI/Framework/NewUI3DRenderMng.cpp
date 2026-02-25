@@ -12,9 +12,8 @@ using namespace SEASON3B;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-SEASON3B::CNewUI3DCamera::CNewUI3DCamera()
-{
-}
+// cppcheck-suppress uninitMemberVar
+SEASON3B::CNewUI3DCamera::CNewUI3DCamera() {}
 
 SEASON3B::CNewUI3DCamera::~CNewUI3DCamera()
 {
@@ -66,7 +65,8 @@ void SEASON3B::CNewUI3DCamera::RemoveAll3DRenderObjs()
     m_list3DObjs.clear();
 }
 
-void SEASON3B::CNewUI3DCamera::RenderUI2DEffect(UI_2DEFFECT_CALLBACK pCallbackFunc, LPVOID pClass, DWORD dwParamA, DWORD dwParamB)
+void SEASON3B::CNewUI3DCamera::RenderUI2DEffect(UI_2DEFFECT_CALLBACK pCallbackFunc, LPVOID pClass, DWORD dwParamA,
+                                                DWORD dwParamB)
 {
     UI_2DEFFECT_INFO UI2DEffectInfo;
     UI2DEffectInfo.pCallbackFunc = pCallbackFunc;
@@ -167,9 +167,8 @@ bool SEASON3B::CNewUI3DCamera::UpdateKeyEvent()
     return true;
 }
 
-SEASON3B::CNewUI3DRenderMng::CNewUI3DRenderMng()
-{
-}
+// cppcheck-suppress uninitMemberVar
+SEASON3B::CNewUI3DRenderMng::CNewUI3DRenderMng() {}
 
 SEASON3B::CNewUI3DRenderMng::~CNewUI3DRenderMng()
 {
@@ -187,7 +186,8 @@ void SEASON3B::CNewUI3DRenderMng::Release()
     RemoveAll3DRenderObjs();
 }
 
-void SEASON3B::CNewUI3DRenderMng::Add3DRenderObj(INewUI3DRenderObj* pObj, float fZOrder/* = INFORMATION_CAMERA_Z_ORDER*/)
+void SEASON3B::CNewUI3DRenderMng::Add3DRenderObj(INewUI3DRenderObj* pObj,
+                                                 float fZOrder /* = INFORMATION_CAMERA_Z_ORDER*/)
 {
     CNewUI3DCamera* pCamera = FindCamera(fZOrder);
     if (NULL == pCamera)
@@ -240,7 +240,8 @@ void SEASON3B::CNewUI3DRenderMng::RemoveAll3DRenderObjs()
     m_listCamera.clear();
 }
 
-void SEASON3B::CNewUI3DRenderMng::RenderUI2DEffect(float fZOrder, UI_2DEFFECT_CALLBACK pCallbackFunc, LPVOID pClass, DWORD dwParamA, DWORD dwParamB)
+void SEASON3B::CNewUI3DRenderMng::RenderUI2DEffect(float fZOrder, UI_2DEFFECT_CALLBACK pCallbackFunc, LPVOID pClass,
+                                                   DWORD dwParamA, DWORD dwParamB)
 {
     CNewUI3DCamera* pCamera = FindCamera(fZOrder);
     if (pCamera)

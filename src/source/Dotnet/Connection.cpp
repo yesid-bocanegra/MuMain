@@ -22,7 +22,8 @@ void ReportDotNetError(const char* detail)
     g_dotnetErrorDisplayed = true;
 
     wchar_t buffer[512];
-    std::swprintf(buffer, std::size(buffer),
+    std::swprintf(
+        buffer, std::size(buffer),
         L"Failed to initialize the managed client library (%hs). The game client cannot connect to the server.",
         detail ? detail : "unknown error");
 #ifdef _WIN32
@@ -42,10 +43,10 @@ bool IsManagedLibraryAvailable()
     ReportDotNetError("MUnique.Client.Library.dll missing");
     return false;
 }
-}
+} // namespace DotNetBridge
 
-using DotNetBridge::ReportDotNetError;
 using DotNetBridge::IsManagedLibraryAvailable;
+using DotNetBridge::ReportDotNetError;
 
 using onPacketReceived = void(int32_t, int32_t, BYTE*);
 using onDisconnected = void(int32_t);
@@ -91,7 +92,8 @@ void Connection::OnDisconnectedS(const int32_t handle)
     }
 }
 
-Connection::Connection(const wchar_t* host, int32_t port, bool isEncrypted, void(*packetHandler)(int32_t, const BYTE*, int32_t))
+Connection::Connection(const wchar_t* host, int32_t port, bool isEncrypted,
+                       void (*packetHandler)(int32_t, const BYTE*, int32_t))
 {
     this->_packetHandler = packetHandler;
     if (!dotnet_connect)
@@ -111,6 +113,7 @@ Connection::Connection(const wchar_t* host, int32_t port, bool isEncrypted, void
             dotnet_beginreceive(this->_handle);
         }
 
+        // cppcheck-suppress [noCopyConstructor, noOperatorEq]
         _chatServer = new PacketFunctions_ChatServer();
         _connectServer = new PacketFunctions_ConnectServer();
         _gameServer = new PacketFunctions_ClientToServer();

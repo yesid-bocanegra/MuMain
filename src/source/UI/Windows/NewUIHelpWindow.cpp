@@ -234,13 +234,12 @@ void SEASON3B::CNewUIHelpWindow::OpenningProcess()
     m_iIndex = 0;
 }
 
-void SEASON3B::CNewUIHelpWindow::ClosingProcess()
-{
-}
+void SEASON3B::CNewUIHelpWindow::ClosingProcess() {}
 
 void SEASON3B::CNewUIHelpWindow::AutoUpdateIndex()
 {
-    if (++m_iIndex > 1) {
+    if (++m_iIndex > 1)
+    {
         g_pNewUISystem->Hide(SEASON3B::INTERFACE_HELP);
     }
 }

@@ -14,6 +14,7 @@
 #include "StringToken.h"
 #include "StringMethod.h"
 
+// cppcheck-suppress uninitMemberVar
 CShopPackage::CShopPackage() // OK
 {
     this->LeftCount = -1;
@@ -24,7 +25,7 @@ CShopPackage::~CShopPackage() // OK
 {
 }
 
-bool	CShopPackage::SetPackage(std::wstring strdata) // OK
+bool CShopPackage::SetPackage(std::wstring strdata) // OK
 {
     if (strdata.empty())
         return 0;
@@ -65,22 +66,22 @@ bool	CShopPackage::SetPackage(std::wstring strdata) // OK
     return 1;
 }
 
-void	CShopPackage::SetLeftCount(int nCount) // OK
+void CShopPackage::SetLeftCount(int nCount) // OK
 {
     this->LeftCount = nCount;
 }
 
-int		CShopPackage::GetProductCount() // OK
+int CShopPackage::GetProductCount() // OK
 {
     return static_cast<int>(this->ProductSeqList.size());
 }
 
-void	CShopPackage::SetProductSeqFirst() // OK
+void CShopPackage::SetProductSeqFirst() // OK
 {
     this->ProductSeqIter = this->ProductSeqList.begin();
 }
 
-bool	CShopPackage::GetProductSeqFirst(int& ProductSeq) // OK
+bool CShopPackage::GetProductSeqFirst(int& ProductSeq) // OK
 {
     this->ProductSeqIter = this->ProductSeqList.begin();
 
@@ -91,7 +92,7 @@ bool	CShopPackage::GetProductSeqFirst(int& ProductSeq) // OK
     return 1;
 }
 
-bool	CShopPackage::GetProductSeqNext(int& ProductSeq) // OK
+bool CShopPackage::GetProductSeqNext(int& ProductSeq) // OK
 {
     if (this->ProductSeqIter == this->ProductSeqList.end())
         return 0;
@@ -100,17 +101,17 @@ bool	CShopPackage::GetProductSeqNext(int& ProductSeq) // OK
     return 1;
 }
 
-int		CShopPackage::GetPriceCount()
+int CShopPackage::GetPriceCount()
 {
     return static_cast<int>(this->PriceSeqList.size());
 }
 
-void	CShopPackage::SetPriceSeqFirst()
+void CShopPackage::SetPriceSeqFirst()
 {
     this->PriceSeqIter = this->PriceSeqList.begin();
 }
 
-bool	CShopPackage::GetPriceSeqFirst(int& PriceSeq) // OK
+bool CShopPackage::GetPriceSeqFirst(int& PriceSeq) // OK
 {
     this->PriceSeqIter = this->PriceSeqList.begin();
 
@@ -121,7 +122,7 @@ bool	CShopPackage::GetPriceSeqFirst(int& PriceSeq) // OK
     return 1;
 }
 
-bool	CShopPackage::GetPriceSeqNext(int& PriceSeq) // OK
+bool CShopPackage::GetPriceSeqNext(int& PriceSeq) // OK
 {
     if (this->PriceSeqIter == this->PriceSeqList.end())
         return 0;
@@ -130,7 +131,7 @@ bool	CShopPackage::GetPriceSeqNext(int& PriceSeq) // OK
     return 1;
 }
 
-void	CShopPackage::SetProductSeqList(std::wstring strdata) // OK
+void CShopPackage::SetProductSeqList(std::wstring strdata) // OK
 {
     CStringToken token(strdata, L"|");
 
@@ -138,13 +139,14 @@ void	CShopPackage::SetProductSeqList(std::wstring strdata) // OK
     {
         std::wstring data = token.nextToken();
 
-        if (data.empty()) break;
+        if (data.empty())
+            break;
 
         this->ProductSeqList.push_back(_wtoi(data.c_str()));
     }
 }
 
-void	CShopPackage::SetPriceSeqList(std::wstring strdata) // OK
+void CShopPackage::SetPriceSeqList(std::wstring strdata) // OK
 {
     CStringToken token(strdata, L"|");
 
@@ -152,7 +154,8 @@ void	CShopPackage::SetPriceSeqList(std::wstring strdata) // OK
     {
         std::wstring data = token.nextToken();
 
-        if (data.empty()) break;
+        if (data.empty())
+            break;
 
         this->PriceSeqList.push_back(_wtoi(data.c_str()));
     }

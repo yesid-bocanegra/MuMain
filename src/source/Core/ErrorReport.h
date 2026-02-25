@@ -1,8 +1,8 @@
 #pragma once
 
-#define MAX_LENGTH_CPUNAME	( 128)
-#define MAX_LENGTH_OSINFO	( 128)
-#define MAX_DXVERSION		( 128)
+#define MAX_LENGTH_CPUNAME (128)
+#define MAX_LENGTH_OSINFO (128)
+#define MAX_DXVERSION (128)
 
 typedef struct
 {
@@ -25,15 +25,19 @@ protected:
     HANDLE m_hFile;
     wchar_t m_lpszFileName[MAX_PATH];
     int m_iKey;
+
 public:
     void Create(const wchar_t* lpszFileName);
     void Destroy(void);
+
 protected:
     void CutHead(void);
     wchar_t* CheckHeadToCut(wchar_t* lpszBuffer, DWORD dwNumber);
 
 protected:
-    BOOL WriteFile(HANDLE hFile, void* lpBuffer, DWORD nNumberOfBytesToWrite, LPDWORD lpNumberOfBytesWritten, LPOVERLAPPED lpOverlapped);
+    BOOL WriteFile(HANDLE hFile, void* lpBuffer, DWORD nNumberOfBytesToWrite, LPDWORD lpNumberOfBytesWritten,
+                   LPOVERLAPPED lpOverlapped);
+
 public:
     void WriteDebugInfoStr(wchar_t* lpszToWrite);
     void Write(const wchar_t* lpszFormat, ...);
@@ -56,10 +60,11 @@ extern CErrorReport g_ErrorReport;
 // then calls OpenMonsterModel(MONSTER_MODEL_DRAGON).
 // Falls back to numeric output for computed arguments — use the
 // direct function call with manual logging in those rare cases.
-#define LOG_CALL(func, arg) do { \
-    g_ErrorReport.Write(L"%ls(%ls)\r\n", L#func, L#arg); \
-    func(arg); \
-} while (0)
+#define LOG_CALL(func, arg)                                                                                            \
+    do                                                                                                                 \
+    {                                                                                                                  \
+        g_ErrorReport.Write(L"%ls(%ls)\r\n", L#func, L#arg);                                                           \
+        func(arg);                                                                                                     \
+    } while (0)
 
 void GetSystemInfo(ER_SystemInfo* si);
-

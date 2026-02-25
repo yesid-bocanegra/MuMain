@@ -14,6 +14,7 @@
 #include "BannerInfo.h"
 #include <fstream>
 
+// cppcheck-suppress uninitMemberVar
 CBannerInfoList::CBannerInfoList() // OK
 {
     this->Clear();
@@ -39,7 +40,7 @@ WZResult CBannerInfoList::LoadBanner(std::wstring strDirPath, std::wstring strSc
     {
         this->Clear();
 
-        wchar_t buff[1024] = { 0 };
+        wchar_t buff[1024] = {0};
 
         while (true)
         {

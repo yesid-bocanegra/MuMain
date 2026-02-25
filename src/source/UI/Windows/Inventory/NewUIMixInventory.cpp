@@ -20,6 +20,7 @@
 
 using namespace SEASON3B;
 
+// cppcheck-suppress uninitMemberVar
 CNewUIMixInventory::CNewUIMixInventory()
 {
     m_pNewUIMng = NULL;
@@ -28,7 +29,10 @@ CNewUIMixInventory::CNewUIMixInventory()
     m_iMixState = MIX_READY;
     m_iMixEffectTimer = 0;
 }
-CNewUIMixInventory::~CNewUIMixInventory() { Release(); }
+CNewUIMixInventory::~CNewUIMixInventory()
+{
+    Release();
+}
 
 bool CNewUIMixInventory::Create(CNewUIManager* pNewUIMng, int x, int y)
 {
@@ -39,7 +43,8 @@ bool CNewUIMixInventory::Create(CNewUIManager* pNewUIMng, int x, int y)
     m_pNewUIMng->AddUIObj(SEASON3B::INTERFACE_MIXINVENTORY, this);
 
     m_pNewInventoryCtrl = new CNewUIInventoryCtrl;
-    if (false == m_pNewInventoryCtrl->Create(STORAGE_TYPE::CHAOS_MIX, g_pNewUI3DRenderMng, g_pNewItemMng, this, x + 15, y + 110, 8, 4))
+    if (false == m_pNewInventoryCtrl->Create(STORAGE_TYPE::CHAOS_MIX, g_pNewUI3DRenderMng, g_pNewItemMng, this, x + 15,
+                                             y + 110, 8, 4))
     {
         SAFE_DELETE(m_pNewInventoryCtrl);
         return false;
@@ -49,7 +54,7 @@ bool CNewUIMixInventory::Create(CNewUIManager* pNewUIMng, int x, int y)
 
     LoadImages();
 
-    POINT ptBtn = { m_Pos.x + (long)INVENTORY_WIDTH * (long)0.5f - (long)22.f, m_Pos.y + (long)380 };
+    POINT ptBtn = {m_Pos.x + (long)INVENTORY_WIDTH * (long)0.5f - (long)22.f, m_Pos.y + (long)380};
 
     m_BtnMix.ChangeButtonImgState(true, IMAGE_MIXINVENTORY_MIXBTN, false);
     m_BtnMix.ChangeButtonInfo(m_Pos.x + INVENTORY_WIDTH * 0.5f - 22.f, m_Pos.y + 380, 44.f, 35.f);
@@ -227,8 +232,12 @@ bool CNewUIMixInventory::Update()
         {
             if (m_SocketListBox.GetLineNum() == 0)
             {
-                wchar_t szText[64] = { 0, };
-                wchar_t szSocketText[64] = { 0, };
+                wchar_t szText[64] = {
+                    0,
+                };
+                wchar_t szSocketText[64] = {
+                    0,
+                };
                 for (int i = 0; i < g_MixRecipeMgr.GetFirstItemSocketCount(); ++i)
                 {
                     if (g_MixRecipeMgr.GetFirstItemSocketSeedID(i) == SOCKET_EMPTY)
@@ -237,7 +246,8 @@ bool CNewUIMixInventory::Update()
                     }
                     else
                     {
-                        g_SocketItemMgr.CreateSocketOptionText(szSocketText, g_MixRecipeMgr.GetFirstItemSocketSeedID(i), g_MixRecipeMgr.GetFirstItemSocketShpereLv(i));
+                        g_SocketItemMgr.CreateSocketOptionText(szSocketText, g_MixRecipeMgr.GetFirstItemSocketSeedID(i),
+                                                               g_MixRecipeMgr.GetFirstItemSocketShpereLv(i));
                     }
                     mu_swprintf(szText, L"%d: %ls", i + 1, szSocketText);
                     m_SocketListBox.AddText(i, szText);
@@ -335,7 +345,9 @@ void CNewUIMixInventory::RenderFrame()
     RenderImage(IMAGE_MIXINVENTORY_RIGHT, m_Pos.x + INVENTORY_WIDTH - 21, m_Pos.y + 64, 21.f, 320.f);
     RenderImage(IMAGE_MIXINVENTORY_BOTTOM, m_Pos.x, m_Pos.y + INVENTORY_HEIGHT - 45, 190.f, 45.f);
 
-    wchar_t szText[256] = { 0, };
+    wchar_t szText[256] = {
+        0,
+    };
     float fPos_x = m_Pos.x + 15.0f, fPos_y = m_Pos.y;
     float fLine_y = 13.0f;
 
@@ -448,8 +460,8 @@ void CNewUIMixInventory::RenderFrame()
     case SEASON3A::MIXTYPE_TRAINER:
     case SEASON3A::MIXTYPE_EXTRACT_SEED:
     case SEASON3A::MIXTYPE_SEED_SPHERE:
-        if (g_MixRecipeMgr.IsReadyToMix() &&
-            g_MixRecipeMgr.GetPlusChaosRate() > 0 && g_MixRecipeMgr.GetCurRecipe()->m_bMixOption == 'F')
+        if (g_MixRecipeMgr.IsReadyToMix() && g_MixRecipeMgr.GetPlusChaosRate() > 0 &&
+            g_MixRecipeMgr.GetCurRecipe()->m_bMixOption == 'F')
         {
             g_pRenderText->SetTextColor(255, 255, 48, 255);
             g_pRenderText->SetBgColor(40, 40, 40, 128);
@@ -516,8 +528,8 @@ void CNewUIMixInventory::RenderFrame()
 
         g_pRenderText->RenderText(fPos_x, fPos_y + fLine_y, szText);
     }
-    fLine_y += 20;
-    break;
+        fLine_y += 20;
+        break;
     }
 
     fLine_y = 203;
@@ -527,7 +539,7 @@ void CNewUIMixInventory::RenderFrame()
         g_pRenderText->SetTextColor(220, 220, 220, 255);
         g_pRenderText->SetBgColor(40, 40, 40, 128);
 
-        wchar_t szTempText[2][100] = { 0 };
+        wchar_t szTempText[2][100] = {0};
         int iTextLines = 0;
         if (!g_MixRecipeMgr.IsReadyToMix() && g_MixRecipeMgr.GetMostSimilarRecipeName(szTempText[0], 1) == TRUE)
         {
@@ -547,10 +559,14 @@ void CNewUIMixInventory::RenderFrame()
         for (int iLine = 0; iLine < 8; ++iLine)
         {
             iResult = g_MixRecipeMgr.GetSourceName(iLine, szText);
-            if (iResult == SEASON3A::MIX_SOURCE_ERROR) break;
-            else if (iResult == SEASON3A::MIX_SOURCE_NO) g_pRenderText->SetTextColor(255, 50, 20, 255);
-            else if (iResult == SEASON3A::MIX_SOURCE_PARTIALLY) g_pRenderText->SetTextColor(210, 230, 255, 255);
-            else if (iResult == SEASON3A::MIX_SOURCE_YES) g_pRenderText->SetTextColor(255, 255, 48, 255);
+            if (iResult == SEASON3A::MIX_SOURCE_ERROR)
+                break;
+            else if (iResult == SEASON3A::MIX_SOURCE_NO)
+                g_pRenderText->SetTextColor(255, 50, 20, 255);
+            else if (iResult == SEASON3A::MIX_SOURCE_PARTIALLY)
+                g_pRenderText->SetTextColor(210, 230, 255, 255);
+            else if (iResult == SEASON3A::MIX_SOURCE_YES)
+                g_pRenderText->SetTextColor(255, 255, 48, 255);
 
             iTextLines = CutStr(szText, szTempText[0], 156, 2, 100);
 
@@ -645,7 +661,7 @@ void CNewUIMixInventory::RenderFrame()
 
 bool CNewUIMixInventory::BtnProcess()
 {
-    POINT ptExitBtn1 = { m_Pos.x + 169, m_Pos.y + 7 };
+    POINT ptExitBtn1 = {m_Pos.x + 169, m_Pos.y + 7};
 
     if (SEASON3B::IsPress(VK_LBUTTON) && CheckMouseIn(ptExitBtn1.x, ptExitBtn1.y, 13, 12))
     {
@@ -668,7 +684,9 @@ bool CNewUIMixInventory::BtnProcess()
 
 void CNewUIMixInventory::RenderMixDescriptions(float fPos_x, float fPos_y)
 {
-    wchar_t szText[256] = { 0, };
+    wchar_t szText[256] = {
+        0,
+    };
     switch (g_MixRecipeMgr.GetMixInventoryType())
     {
     case SEASON3A::MIXTYPE_GOBLIN_NORMAL:
@@ -793,7 +811,8 @@ void CNewUIMixInventory::RenderMixDescriptions(float fPos_x, float fPos_y)
 
 int CNewUIMixInventory::Rtn_MixRequireZen(int _nMixZen, int _nTax)
 {
-    if (_nTax)		_nMixZen += ((LONGLONG)_nMixZen * g_nChaosTaxRate) / 100;
+    if (_nTax)
+        _nMixZen += ((LONGLONG)_nMixZen * g_nChaosTaxRate) / 100;
     return _nMixZen;
 }
 
@@ -802,7 +821,7 @@ bool CNewUIMixInventory::Mix()
     PlayBuffer(SOUND_CLICK01);
 
     DWORD dwGold = CharacterMachine->Gold;
-    int	  nMixZen = g_MixRecipeMgr.GetReqiredZen();
+    int nMixZen = g_MixRecipeMgr.GetReqiredZen();
 
     nMixZen = Rtn_MixRequireZen(nMixZen, g_nChaosTaxRate);
 
@@ -832,7 +851,8 @@ bool CNewUIMixInventory::Mix()
     }
 
     if (g_MixRecipeMgr.GetCurRecipe()->m_iWidth != -1 &&
-        g_pMyInventory->FindEmptySlot(g_MixRecipeMgr.GetCurRecipe()->m_iWidth, g_MixRecipeMgr.GetCurRecipe()->m_iHeight) == -1)
+        g_pMyInventory->FindEmptySlot(g_MixRecipeMgr.GetCurRecipe()->m_iWidth,
+                                      g_MixRecipeMgr.GetCurRecipe()->m_iHeight) == -1)
     {
         g_pSystemLogBox->AddText(GlobalText[581], SEASON3B::TYPE_ERROR_MESSAGE);
         return false;
@@ -861,8 +881,8 @@ bool CNewUIMixInventory::Mix()
             g_pSystemLogBox->AddText(GlobalText[2676], SEASON3B::TYPE_ERROR_MESSAGE);
             return false;
         }
-        else if (iSelectedLine > g_MixRecipeMgr.GetFirstItemSocketCount()
-            || g_MixRecipeMgr.GetFirstItemSocketSeedID(iSelectedLine) != SOCKET_EMPTY)
+        else if (iSelectedLine > g_MixRecipeMgr.GetFirstItemSocketCount() ||
+                 g_MixRecipeMgr.GetFirstItemSocketSeedID(iSelectedLine) != SOCKET_EMPTY)
         {
             g_pSystemLogBox->AddText(GlobalText[2677], SEASON3B::TYPE_ERROR_MESSAGE);
             return false;
@@ -878,8 +898,8 @@ bool CNewUIMixInventory::Mix()
             g_pSystemLogBox->AddText(GlobalText[2678], SEASON3B::TYPE_ERROR_MESSAGE);
             return false;
         }
-        else if (iSelectedLine > g_MixRecipeMgr.GetFirstItemSocketCount()
-            || g_MixRecipeMgr.GetFirstItemSocketSeedID(iSelectedLine) == SOCKET_EMPTY)
+        else if (iSelectedLine > g_MixRecipeMgr.GetFirstItemSocketCount() ||
+                 g_MixRecipeMgr.GetFirstItemSocketSeedID(iSelectedLine) == SOCKET_EMPTY)
         {
             g_pSystemLogBox->AddText(GlobalText[2679], SEASON3B::TYPE_ERROR_MESSAGE);
             return false;
@@ -893,7 +913,7 @@ bool CNewUIMixInventory::Mix()
         g_pSystemLogBox->AddText(GlobalText[3286], SEASON3B::TYPE_ERROR_MESSAGE);
         return FALSE;
     }
-#endif //LJH_MOD_CANNOT_USE_CHARMITEM_AND_CHAOSCHARMITEM_SIMULTANEOUSLY
+#endif // LJH_MOD_CANNOT_USE_CHARMITEM_AND_CHAOSCHARMITEM_SIMULTANEOUSLY
 
     if (CNewUIInventoryCtrl::GetPickedItem() == NULL)
     {
@@ -923,8 +943,8 @@ bool CNewUIMixInventory::InventoryProcess()
                 int iTargetIndex = pPickedItem->GetTargetLinealPos(m_pNewInventoryCtrl);
                 if (iTargetIndex != -1 && m_pNewInventoryCtrl->CanMove(iTargetIndex, pItemObj))
                 {
-                    if (SendRequestEquipmentItem(STORAGE_TYPE::INVENTORY, iSourceIndex,
-                        pItemObj, iCurInventory, iTargetIndex))
+                    if (SendRequestEquipmentItem(STORAGE_TYPE::INVENTORY, iSourceIndex, pItemObj, iCurInventory,
+                                                 iTargetIndex))
                     {
                         return true;
                     }
@@ -940,8 +960,7 @@ bool CNewUIMixInventory::InventoryProcess()
                 int iTargetIndex = pPickedItem->GetTargetLinealPos(m_pNewInventoryCtrl);
                 if (iTargetIndex != -1 && m_pNewInventoryCtrl->CanMove(iTargetIndex, pItemObj))
                 {
-                    if (SendRequestEquipmentItem(iCurInventory, iSourceIndex,
-                        pItemObj, iCurInventory, iTargetIndex))
+                    if (SendRequestEquipmentItem(iCurInventory, iSourceIndex, pItemObj, iCurInventory, iTargetIndex))
                     {
                         return true;
                     }
@@ -949,7 +968,7 @@ bool CNewUIMixInventory::InventoryProcess()
             }
         }
         else if (GetMixState() == MIX_READY && g_MixRecipeMgr.IsMixSource(pPickedItem->GetItem()) &&
-            pItemObj->ex_src_type == ITEM_EX_SRC_EQUIPMENT)
+                 pItemObj->ex_src_type == ITEM_EX_SRC_EQUIPMENT)
         {
             m_pNewInventoryCtrl->SetSquareColorNormal(m_fInventoryColor[0], m_fInventoryColor[1], m_fInventoryColor[2]);
             if (SEASON3B::IsPress(VK_LBUTTON))
@@ -958,15 +977,16 @@ bool CNewUIMixInventory::InventoryProcess()
                 int iTargetIndex = pPickedItem->GetTargetLinealPos(m_pNewInventoryCtrl);
                 if (iTargetIndex != -1 && m_pNewInventoryCtrl->CanMove(iTargetIndex, pItemObj))
                 {
-                    SendRequestEquipmentItem(STORAGE_TYPE::INVENTORY, iSourceIndex,
-                        pItemObj, iCurInventory, iTargetIndex);
+                    SendRequestEquipmentItem(STORAGE_TYPE::INVENTORY, iSourceIndex, pItemObj, iCurInventory,
+                                             iTargetIndex);
                     return true;
                 }
             }
         }
         else
         {
-            m_pNewInventoryCtrl->SetSquareColorNormal(m_fInventoryWarningColor[0], m_fInventoryWarningColor[1], m_fInventoryWarningColor[2]);
+            m_pNewInventoryCtrl->SetSquareColorNormal(m_fInventoryWarningColor[0], m_fInventoryWarningColor[1],
+                                                      m_fInventoryWarningColor[2]);
         }
     }
     return false;
@@ -1009,11 +1029,11 @@ void CNewUIMixInventory::RenderMixEffect()
                 float Rotate = (float)((int)(WorldTime) % 100) * 20.f;
                 float Scale = 5.f + (rand() % 10);
                 float x = m_pNewInventoryCtrl->GetPos().x +
-                    (m_pNewInventoryCtrl->GetItem(i)->x + w) * INVENTORY_SQUARE_WIDTH +
-                    (rand() % INVENTORY_SQUARE_WIDTH);
+                          (m_pNewInventoryCtrl->GetItem(i)->x + w) * INVENTORY_SQUARE_WIDTH +
+                          (rand() % INVENTORY_SQUARE_WIDTH);
                 float y = m_pNewInventoryCtrl->GetPos().y +
-                    (m_pNewInventoryCtrl->GetItem(i)->y + h) * INVENTORY_SQUARE_WIDTH +
-                    (rand() % INVENTORY_SQUARE_WIDTH);
+                          (m_pNewInventoryCtrl->GetItem(i)->y + h) * INVENTORY_SQUARE_WIDTH +
+                          (rand() % INVENTORY_SQUARE_WIDTH);
                 RenderBitmapRotate(BITMAP_SHINY, x, y, Scale, Scale, 0);
                 RenderBitmapRotate(BITMAP_SHINY, x, y, Scale, Scale, Rotate);
                 RenderBitmapRotate(BITMAP_SHINY + 1, x, y, Scale * 3.f, Scale * 3.f, Rotate);

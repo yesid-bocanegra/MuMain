@@ -10,7 +10,7 @@ public:
     virtual ~Buff();
 
 public:
-    Buff& operator =  (const Buff& buff);
+    Buff& operator=(const Buff& buff);
 
 public:
     void RegisterBuff(eBuffState buffstate);
@@ -31,11 +31,10 @@ public:
     bool IsEqualBuffType(IN int iBuffType, OUT wchar_t* szBuffName);
 
 public:
-    BuffStateMap			m_Buff;
+    BuffStateMap m_Buff;
 };
 
-inline
-Buff& Buff::operator =  (const Buff& buff)
+inline Buff& Buff::operator=(const Buff& buff)
 {
     m_Buff = buff.m_Buff;
     return *this;

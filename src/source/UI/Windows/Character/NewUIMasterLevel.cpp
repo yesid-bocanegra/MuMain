@@ -10,12 +10,11 @@
 #include "NewUICommonMessageBox.h"
 #include "SkillManager.h"
 
-namespace 
+namespace
 {
-    _MASTER_SKILLTREE_DATA m_stMasterSkillTreeData[MAX_MASTER_SKILL_DATA];
-    _MASTER_SKILL_TOOLTIP m_stMasterSkillTooltip[MAX_MASTER_SKILL_DATA];
-}
-
+_MASTER_SKILLTREE_DATA m_stMasterSkillTreeData[MAX_MASTER_SKILL_DATA];
+_MASTER_SKILL_TOOLTIP m_stMasterSkillTooltip[MAX_MASTER_SKILL_DATA];
+} // namespace
 
 SEASON3B::CNewUIMasterLevel::CNewUIMasterLevel()
 {
@@ -24,9 +23,9 @@ SEASON3B::CNewUIMasterLevel::CNewUIMasterLevel()
     this->CurSkillID = 0;
     this->classCode = MASTER_SKILL_TREE_CLASS_NONE;
     this->CategoryTextIndex = 0;
-    this->categoryPos[0] = { 11,55 };
-    this->categoryPos[1] = { 221,55 };
-    this->categoryPos[2] = { 431,55 };
+    this->categoryPos[0] = {11, 55};
+    this->categoryPos[1] = {221, 55};
+    this->categoryPos[2] = {431, 55};
     this->InitMasterSkillPoint();
     this->ClearSkillTreeData();
     this->ClearSkillTooltipData();
@@ -96,6 +95,7 @@ void SEASON3B::CNewUIMasterLevel::SetPos()
 
 void SEASON3B::CNewUIMasterLevel::OpenMasterSkillTreeData(const wchar_t* path)
 {
+    // cppcheck-suppress memsetClassFloat
     memset(m_stMasterSkillTreeData, 0, sizeof(m_stMasterSkillTreeData));
 
     FILE* fp = _wfopen(path, L"rb");
@@ -180,7 +180,7 @@ void SEASON3B::CNewUIMasterLevel::OpenMasterSkillTooltip(const wchar_t* path)
     {
         BuxConvert(pSeek, record_size);
 
-        _MASTER_SKILL_TOOLTIP_FILE current{ };
+        _MASTER_SKILL_TOOLTIP_FILE current{};
         memcpy(&current, pSeek, record_size);
 
         const auto target = &m_stMasterSkillTooltip[i];
@@ -312,7 +312,10 @@ void SEASON3B::CNewUIMasterLevel::SetMasterSkillTreeData()
             continue;
         }
 
-        if (!this->map_masterData.insert(std::pair<BYTE, _MASTER_SKILLTREE_DATA>(m_stMasterSkillTreeData[i].Index, m_stMasterSkillTreeData[i])).second)
+        if (!this->map_masterData
+                 .insert(std::pair<BYTE, _MASTER_SKILLTREE_DATA>(m_stMasterSkillTreeData[i].Index,
+                                                                 m_stMasterSkillTreeData[i]))
+                 .second)
         {
             break;
         }
@@ -335,7 +338,9 @@ void SEASON3B::CNewUIMasterLevel::SetMasterSkillToolTipData()
             continue;
         }
 
-        if (!this->map_masterSkillToolTip.insert(std::pair(m_stMasterSkillTooltip[i].SkillNumber, m_stMasterSkillTooltip[i])).second)
+        if (!this->map_masterSkillToolTip
+                 .insert(std::pair(m_stMasterSkillTooltip[i].SkillNumber, m_stMasterSkillTooltip[i]))
+                 .second)
         {
             break;
         }
@@ -351,7 +356,7 @@ bool SEASON3B::CNewUIMasterLevel::SetMasterSkillTreeInfo(int index, BYTE skillLe
         return false;
     }
 
-    const CSkillTreeInfo skillInfo = { skillLevel, value, nextvalue };
+    const CSkillTreeInfo skillInfo = {skillLevel, value, nextvalue};
     CharacterAttribute->MasterSkillInfo[it->second.Skill] = skillInfo;
 
     this->CategoryPoint[it->second.Group] += skillLevel;
@@ -359,7 +364,8 @@ bool SEASON3B::CNewUIMasterLevel::SetMasterSkillTreeInfo(int index, BYTE skillLe
     return true;
 }
 
-int SEASON3B::CNewUIMasterLevel::SetDivideString(wchar_t* text, int isItemTollTip, int TextNum, int iTextColor, int iTextBold, bool isPercent)
+int SEASON3B::CNewUIMasterLevel::SetDivideString(wchar_t* text, int isItemTollTip, int TextNum, int iTextColor,
+                                                 int iTextBold, bool isPercent)
 {
     if (text == nullptr)
     {
@@ -368,7 +374,7 @@ int SEASON3B::CNewUIMasterLevel::SetDivideString(wchar_t* text, int isItemTollTi
 
     constexpr wchar_t alpszDst[10][256] = {};
 
-    int  nLine = 0;
+    int nLine = 0;
 
     if (isItemTollTip == 0)
     {
@@ -407,8 +413,10 @@ bool SEASON3B::CNewUIMasterLevel::Render()
 {
     EnableAlphaTest();
     glColor4f(1.0, 1.0, 1.0, 1.0);
-    RenderImage(IMAGE_MASTER_INTERFACE, this->PosX, this->PosY, Bitmaps[IMAGE_MASTER_INTERFACE].Width, Bitmaps[IMAGE_MASTER_INTERFACE].Height);
-    RenderImage(IMAGE_MASTER_INTERFACE + 1, this->PosX + Bitmaps[IMAGE_MASTER_INTERFACE].Width, this->PosY, Bitmaps[IMAGE_MASTER_INTERFACE + 1].Width, Bitmaps[IMAGE_MASTER_INTERFACE + 1].Height);
+    RenderImage(IMAGE_MASTER_INTERFACE, this->PosX, this->PosY, Bitmaps[IMAGE_MASTER_INTERFACE].Width,
+                Bitmaps[IMAGE_MASTER_INTERFACE].Height);
+    RenderImage(IMAGE_MASTER_INTERFACE + 1, this->PosX + Bitmaps[IMAGE_MASTER_INTERFACE].Width, this->PosY,
+                Bitmaps[IMAGE_MASTER_INTERFACE + 1].Width, Bitmaps[IMAGE_MASTER_INTERFACE + 1].Height);
     this->RenderIcon();
     this->m_CloseBT.Render();
     DisableAlphaBlend();
@@ -465,7 +473,8 @@ bool SEASON3B::CNewUIMasterLevel::UpdateMouseEvent()
 
 bool SEASON3B::CNewUIMasterLevel::UpdateKeyEvent()
 {
-    if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_MASTER_LEVEL) == false || SEASON3B::IsPress(VK_ESCAPE) == false && SEASON3B::IsPress('A') == false)
+    if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_MASTER_LEVEL) == false ||
+        SEASON3B::IsPress(VK_ESCAPE) == false && SEASON3B::IsPress('A') == false)
     {
         return true;
     }
@@ -517,7 +526,8 @@ void SEASON3B::CNewUIMasterLevel::RenderText() const
         TextList[0][0] = 0;
         TextBold[0] = 0;
         TextListColor[0] = 0;
-        mu_swprintf(TextList[0], L"%I64d / %I64d", Master_Level_Data.lMasterLevel_Experince, Master_Level_Data.lNext_MasterLevel_Experince);
+        mu_swprintf(TextList[0], L"%I64d / %I64d", Master_Level_Data.lMasterLevel_Experince,
+                    Master_Level_Data.lNext_MasterLevel_Experince);
         RenderTipTextList(466, 26, 1, 0, 3, 0, 1);
     }
 
@@ -537,30 +547,15 @@ void SEASON3B::CNewUIMasterLevel::RenderText() const
 
     if (Master_Level_Data.lNext_MasterLevel_Experince != 0)
     {
-        const __int64 iTotalLevel = Master_Level_Data.nMLevel + 400;				// 종합레벨 - 400렙이 만렙이기 때문에 더해준다.
-        const __int64 iTOverLevel = iTotalLevel - 255;		// 255레벨 이상 기준 레벨
-        __int64 iBaseExperience = 0;					// 레벨 초기 경험치
+        const __int64 iTotalLevel = Master_Level_Data.nMLevel + 400; // 종합레벨 - 400렙이 만렙이기 때문에 더해준다.
+        const __int64 iTOverLevel = iTotalLevel - 255;               // 255레벨 이상 기준 레벨
+        __int64 iBaseExperience = 0;                                 // 레벨 초기 경험치
 
-        const __int64 iData_Master =	// A
-            (
-                (
-                    (__int64)9 + (__int64)iTotalLevel
-                    )
-                * (__int64)iTotalLevel
-                * (__int64)iTotalLevel
-                * (__int64)10
-                )
-            +
-            (
-                (
-                    (__int64)9 + (__int64)iTOverLevel
-                    )
-                * (__int64)iTOverLevel
-                * (__int64)iTOverLevel
-                * (__int64)1000
-                );
+        const __int64 iData_Master = // A
+            (((__int64)9 + (__int64)iTotalLevel) * (__int64)iTotalLevel * (__int64)iTotalLevel * (__int64)10) +
+            (((__int64)9 + (__int64)iTOverLevel) * (__int64)iTOverLevel * (__int64)iTOverLevel * (__int64)1000);
 
-        iBaseExperience = (iData_Master - (__int64)3892250000) / (__int64)2;	// B
+        iBaseExperience = (iData_Master - (__int64)3892250000) / (__int64)2; // B
 
         // 레벨업 경험치
         const double fNeedExp = (double)Master_Level_Data.lNext_MasterLevel_Experince - (double)iBaseExperience;
@@ -612,16 +607,15 @@ void SEASON3B::CNewUIMasterLevel::RenderIcon()
 
         RenderImage(IMAGE_MASTER_INTERFACE + 4, CalcX, CalcY, 50, 38, 0, 0, 50.f / 64.f, 38.f / 64.f);
 
-        if (!this->CheckParentSkill(it->second)
-            || !this->CheckRankPoint(group, rank, skillLevel)
-            || !this->CheckBeforeSkill(skill, skillLevel)
-            || !g_csItemOption.IsNonWeaponSkillOrIsSkillEquipped(skill)
-            )
+        if (!this->CheckParentSkill(it->second) || !this->CheckRankPoint(group, rank, skillLevel) ||
+            !this->CheckBeforeSkill(skill, skillLevel) || !g_csItemOption.IsNonWeaponSkillOrIsSkillEquipped(skill))
         {
             textColor = RGBA(120, 120, 120, 255);
 
             g_pRenderText->SetTextColor(textColor);
-            RenderImage(IMAGE_MASTER_INTERFACE + 3, CalcX + 8, CalcY + 5, SKILL_ICON_WIDTH, SKILL_ICON_HEIGHT, (20.f / 512.f) * (skillAttribute->Magic_Icon % 25), ((28.f / 512.f) * ((skillAttribute->Magic_Icon / 25))), 20.f / 512, 28.f / 512.f);
+            RenderImage(IMAGE_MASTER_INTERFACE + 3, CalcX + 8, CalcY + 5, SKILL_ICON_WIDTH, SKILL_ICON_HEIGHT,
+                        (20.f / 512.f) * (skillAttribute->Magic_Icon % 25),
+                        ((28.f / 512.f) * ((skillAttribute->Magic_Icon / 25))), 20.f / 512, 28.f / 512.f);
         }
         else
         {
@@ -629,23 +623,30 @@ void SEASON3B::CNewUIMasterLevel::RenderIcon()
 
             g_pRenderText->SetTextColor(textColor);
 
-            RenderImage(IMAGE_MASTER_INTERFACE + 2, CalcX + 8, CalcY + 5, SKILL_ICON_WIDTH, SKILL_ICON_HEIGHT, (20.f / 512.f) * (skillAttribute->Magic_Icon % 25), ((28.f / 512.f) * ((skillAttribute->Magic_Icon / 25))), 20.f / 512.f, 28.f / 512.f);
+            RenderImage(IMAGE_MASTER_INTERFACE + 2, CalcX + 8, CalcY + 5, SKILL_ICON_WIDTH, SKILL_ICON_HEIGHT,
+                        (20.f / 512.f) * (skillAttribute->Magic_Icon % 25),
+                        ((28.f / 512.f) * ((skillAttribute->Magic_Icon / 25))), 20.f / 512.f, 28.f / 512.f);
         }
 
         if (it->second.ArrowDirection == 1)
-            RenderImage(IMAGE_MASTER_INTERFACE + 6, CalcX + 8 + (SKILL_ICON_WIDTH)+2, CalcY + (SKILL_ICON_HEIGHT / 2), 28, 7, 0, 0, 28 / 32.f, 7 / 8.f);
+            RenderImage(IMAGE_MASTER_INTERFACE + 6, CalcX + 8 + (SKILL_ICON_WIDTH) + 2, CalcY + (SKILL_ICON_HEIGHT / 2),
+                        28, 7, 0, 0, 28 / 32.f, 7 / 8.f);
         if (it->second.ArrowDirection == 2)
-            RenderImage(IMAGE_MASTER_INTERFACE + 7, CalcX + 8 + (SKILL_ICON_WIDTH)+2, CalcY + (SKILL_ICON_HEIGHT / 2), 28, 7, 0, 0, 28 / 32.f, 7 / 8.f);
+            RenderImage(IMAGE_MASTER_INTERFACE + 7, CalcX + 8 + (SKILL_ICON_WIDTH) + 2, CalcY + (SKILL_ICON_HEIGHT / 2),
+                        28, 7, 0, 0, 28 / 32.f, 7 / 8.f);
         if (it->second.ArrowDirection == 3)
-            RenderImage(IMAGE_MASTER_INTERFACE + 8, CalcX + 8 + (SKILL_ICON_WIDTH / 2) - 3.5, CalcY + SKILL_ICON_HEIGHT + 7, 7, 12, 0, 0, 7 / 8.f, 12 / 16.f);
+            RenderImage(IMAGE_MASTER_INTERFACE + 8, CalcX + 8 + (SKILL_ICON_WIDTH / 2) - 3.5,
+                        CalcY + SKILL_ICON_HEIGHT + 7, 7, 12, 0, 0, 7 / 8.f, 12 / 16.f);
         if (it->second.ArrowDirection == 4)
-            RenderImage(IMAGE_MASTER_INTERFACE + 9, CalcX + 8 + (SKILL_ICON_WIDTH / 2) - 3.5, CalcY + SKILL_ICON_HEIGHT + 7, 7, 52, 0, 0, 7 / 8.f, 12 / 16.f);
+            RenderImage(IMAGE_MASTER_INTERFACE + 9, CalcX + 8 + (SKILL_ICON_WIDTH / 2) - 3.5,
+                        CalcY + SKILL_ICON_HEIGHT + 7, 7, 52, 0, 0, 7 / 8.f, 12 / 16.f);
         if (it->second.ArrowDirection == 5)
             RenderImage(IMAGE_MASTER_INTERFACE + 10, CalcX, CalcY, 42, 31, 0, 0, 42 / 64.f, 31 / 32.f);
         if (it->second.ArrowDirection == 6)
             RenderImage(IMAGE_MASTER_INTERFACE + 11, CalcX, CalcY, 42, 31, 0, 0, 42 / 64.f, 31 / 32.f);
         if (it->second.ArrowDirection == 7)
-            RenderImage(IMAGE_MASTER_INTERFACE + 12, CalcX + 8 + (SKILL_ICON_WIDTH / 2) - 1.5, CalcY + SKILL_ICON_HEIGHT + 8, 40, 28, 0, 0, 40 / 64.f, 28 / 32.f);
+            RenderImage(IMAGE_MASTER_INTERFACE + 12, CalcX + 8 + (SKILL_ICON_WIDTH / 2) - 1.5,
+                        CalcY + SKILL_ICON_HEIGHT + 8, 40, 28, 0, 0, 40 / 64.f, 28 / 32.f);
         if (it->second.ArrowDirection == 8)
             RenderImage(IMAGE_MASTER_INTERFACE + 13, CalcX, CalcY, 40, 28, 0, 0, 40 / 64.f, 28 / 32.f);
 
@@ -800,17 +801,18 @@ void SEASON3B::CNewUIMasterLevel::RenderToolTip()
         {
             RenderTipTextList(CalcX + 8, CalcY + 33, lineCount, 0, 3, 0, 1);
         }
-
     }
 }
 
 bool SEASON3B::CNewUIMasterLevel::CheckMouse(int posx, int posy)
 {
-    constexpr POINT position[3] = { {185,65},{385,65},{585,65} };
+    constexpr POINT position[3] = {{185, 65}, {385, 65}, {585, 65}};
 
     for (int i = 0; i < MAX_MASTER_SKILL_CATEGORY; i++)
     {
-        if (SEASON3B::CheckMouseIn(position[i].x + this->PosX, this->ButtonY[i] + position[i].y + this->PosY, 15, 30) == true && this->ButtonX[i] == 0)
+        if (SEASON3B::CheckMouseIn(position[i].x + this->PosX, this->ButtonY[i] + position[i].y + this->PosY, 15, 30) ==
+                true &&
+            this->ButtonX[i] == 0)
         {
             this->ButtonY[i] = 1;
 
@@ -851,7 +853,7 @@ bool SEASON3B::CNewUIMasterLevel::CheckBtn()
     for (auto it = this->map_masterData.begin(); it != this->map_masterData.end(); it++)
     {
         auto selectedSkill = it->second;
-        
+
         switch (selectedSkill.Group)
         {
         case 0:
@@ -905,9 +907,8 @@ bool SEASON3B::CNewUIMasterLevel::CheckAttributeArea(const _MASTER_SKILLTREE_DAT
         return true;
     }
 
-    if (!this->CheckParentSkill(skillData)
-        || !this->CheckRankPoint(skillData.Group, lpskill->SkillRank, skillPoint)
-        || !this->CheckBeforeSkill(skillData.Skill, skillPoint))
+    if (!this->CheckParentSkill(skillData) || !this->CheckRankPoint(skillData.Group, lpskill->SkillRank, skillPoint) ||
+        !this->CheckBeforeSkill(skillData.Skill, skillPoint))
     {
         SEASON3B::CreateOkMessageBox(GlobalText[3327]);
 
@@ -915,7 +916,7 @@ bool SEASON3B::CNewUIMasterLevel::CheckAttributeArea(const _MASTER_SKILLTREE_DAT
     }
 
     this->ConsumePoint = skillData.RequiredPoints;
-    
+
     this->CurSkillID = skillData.Skill;
 
     SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CMaster_Level_Interface));
@@ -929,7 +930,8 @@ bool SEASON3B::CNewUIMasterLevel::CheckAttributeArea(const _MASTER_SKILLTREE_DAT
     return true;
 }
 
-bool SEASON3B::CNewUIMasterLevel::CheckSkillPoint(WORD mLevelUpPoint, const _MASTER_SKILLTREE_DATA& skillData, BYTE skillLevel)
+bool SEASON3B::CNewUIMasterLevel::CheckSkillPoint(WORD mLevelUpPoint, const _MASTER_SKILLTREE_DATA& skillData,
+                                                  BYTE skillLevel)
 {
 
     if (skillLevel >= skillData.MaxLevel)
@@ -1040,7 +1042,7 @@ void SEASON3B::CNewUIMasterLevel::SkillUpgrade(int index, BYTE skillLevel, float
     const auto realSkill = it->second.Skill;
     const int oldLevel = CharacterAttribute->MasterSkillInfo[realSkill].GetSkillLevel();
 
-    const CSkillTreeInfo skillTreeInfo = { skillLevel, value, nextValue };
+    const CSkillTreeInfo skillTreeInfo = {skillLevel, value, nextValue};
     CharacterAttribute->MasterSkillInfo[realSkill] = skillTreeInfo;
 
     // And update the category points

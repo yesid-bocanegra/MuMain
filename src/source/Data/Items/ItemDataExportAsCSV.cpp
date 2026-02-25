@@ -41,8 +41,9 @@ bool ItemDataExportAsCSV::ExportToCsv(wchar_t* fileName)
     fprintf(csvFp, "\xEF\xBB\xBF");
 
     // Write CSV header using X-macros
+    // cppcheck-suppress unknownMacro
     fprintf(csvFp, CSV_FULL_HEADER "\n");
-    
+
     for (int i = 0; i < MAX_ITEM; i++)
     {
         // Only export items with names

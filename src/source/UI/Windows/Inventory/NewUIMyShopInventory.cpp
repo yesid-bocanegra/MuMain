@@ -12,25 +12,27 @@ const int iMAX_SHOPTITLE_MULTI = 26;
 
 namespace
 {
-    void RenderText(const wchar_t* text, int x, int y, int sx, int sy, DWORD color, DWORD backcolor, int sort, HFONT hFont = g_hFont)
-    {
-        g_pRenderText->SetFont(hFont);
+void RenderText(const wchar_t* text, int x, int y, int sx, int sy, DWORD color, DWORD backcolor, int sort,
+                HFONT hFont = g_hFont)
+{
+    g_pRenderText->SetFont(hFont);
 
-        DWORD backuptextcolor = g_pRenderText->GetTextColor();
-        DWORD backuptextbackcolor = g_pRenderText->GetBgColor();
+    DWORD backuptextcolor = g_pRenderText->GetTextColor();
+    DWORD backuptextbackcolor = g_pRenderText->GetBgColor();
 
-        g_pRenderText->SetTextColor(color);
-        g_pRenderText->SetBgColor(backcolor);
-        g_pRenderText->RenderText(x, y, text, sx, sy, sort);
+    g_pRenderText->SetTextColor(color);
+    g_pRenderText->SetBgColor(backcolor);
+    g_pRenderText->RenderText(x, y, text, sx, sy, sort);
 
-        g_pRenderText->SetTextColor(backuptextcolor);
-        g_pRenderText->SetBgColor(backuptextbackcolor);
-    }
-};
+    g_pRenderText->SetTextColor(backuptextcolor);
+    g_pRenderText->SetBgColor(backuptextbackcolor);
+}
+}; // namespace
 
 using namespace SEASON3B;
 
-SEASON3B::CNewUIMyShopInventory::CNewUIMyShopInventory() : m_SourceIndex(-1), m_TargetIndex(-1), m_EnablePersonalShop(false)
+SEASON3B::CNewUIMyShopInventory::CNewUIMyShopInventory()
+    : m_SourceIndex(-1), m_TargetIndex(-1), m_EnablePersonalShop(false)
 {
     m_pNewUIMng = NULL;
     m_pNewInventoryCtrl = NULL;
@@ -58,7 +60,8 @@ bool SEASON3B::CNewUIMyShopInventory::Create(CNewUIManager* pNewUIMng, int x, in
     LoadImages();
 
     m_pNewInventoryCtrl = new CNewUIInventoryCtrl;
-    if (false == m_pNewInventoryCtrl->Create(STORAGE_TYPE::MYSHOP, g_pNewUI3DRenderMng, g_pNewItemMng, this, m_Pos.x + 16, m_Pos.y + 90, 8, 4, MAX_MY_INVENTORY_EX_INDEX))
+    if (false == m_pNewInventoryCtrl->Create(STORAGE_TYPE::MYSHOP, g_pNewUI3DRenderMng, g_pNewItemMng, this,
+                                             m_Pos.x + 16, m_Pos.y + 90, 8, 4, MAX_MY_INVENTORY_EX_INDEX))
     {
         SAFE_DELETE(m_pNewInventoryCtrl);
         return false;
@@ -156,7 +159,7 @@ void SEASON3B::CNewUIMyShopInventory::SetPos(int x, int y)
 
 void SEASON3B::CNewUIMyShopInventory::GetTitle(wchar_t* titletext)
 {
-     m_EditBox->GetText(titletext, iMAX_SHOPTITLE_MULTI);
+    m_EditBox->GetText(titletext, iMAX_SHOPTITLE_MULTI);
 }
 
 void SEASON3B::CNewUIMyShopInventory::SetTitle(wchar_t* titletext)
@@ -254,7 +257,6 @@ void SEASON3B::CNewUIMyShopInventory::ChangeEditBox(const UISTATES type)
     {
         m_EditBox->GiveFocus();
     }
-
 }
 
 bool SEASON3B::CNewUIMyShopInventory::UpdateKeyEvent()
@@ -287,7 +289,7 @@ bool SEASON3B::CNewUIMyShopInventory::MyShopInventoryProcess()
         int iSourceIndex = pPickedItem->GetSourceLinealPos();
         int iTargetIndex = pPickedItem->GetTargetLinealPos(m_pNewInventoryCtrl);
 
-#ifndef KJH_FIX_CHANGE_ITEM_PRICE_IN_PERSONAL_SHOP				// #ifndef
+#ifndef KJH_FIX_CHANGE_ITEM_PRICE_IN_PERSONAL_SHOP // #ifndef
         if (IsPersonalShopBan(pItemObj))
             m_pNewInventoryCtrl->SetSquareColorNormal(1.0f, 0.0f, 0.0f);
         else
@@ -345,8 +347,8 @@ bool SEASON3B::CNewUIMyShopInventory::MyShopInventoryProcess()
             {
                 ChangeSourceIndex(iSourceIndex);
                 ChangeTargetIndex(iTargetIndex);
-                SendRequestEquipmentItem(STORAGE_TYPE::MYSHOP, iSourceIndex, pItemObj,
-                    STORAGE_TYPE::MYSHOP, iTargetIndex);
+                SendRequestEquipmentItem(STORAGE_TYPE::MYSHOP, iSourceIndex, pItemObj, STORAGE_TYPE::MYSHOP,
+                                         iTargetIndex);
                 return true;
             }
         }
@@ -363,7 +365,7 @@ bool SEASON3B::CNewUIMyShopInventory::MyShopInventoryProcess()
         {
             ITEM* pItem = g_pMyShopInventory->FindItem(iCurSquareIndex);
 
-            if(pItem)
+            if (pItem)
             {
                 ChangeSourceIndex(iCurSquareIndex);
                 ChangeTargetIndex(-1);
@@ -391,7 +393,7 @@ bool SEASON3B::CNewUIMyShopInventory::UpdateMouseEvent()
             return false;
         }
 
-        POINT ptExitBtn1 = { m_Pos.x + 169, m_Pos.y + 7 };
+        POINT ptExitBtn1 = {m_Pos.x + 169, m_Pos.y + 7};
 
         if (SEASON3B::IsPress(VK_LBUTTON) && CheckMouseIn(ptExitBtn1.x, ptExitBtn1.y, 13, 12))
         {
@@ -399,14 +401,14 @@ bool SEASON3B::CNewUIMyShopInventory::UpdateMouseEvent()
             return false;
         }
 
-        if (SEASON3B::IsRelease(VK_LBUTTON)
-            && CheckMouseIn(m_EditBox->GetPosition_x(), m_EditBox->GetPosition_y(), m_EditBox->GetWidth(), m_EditBox->GetHeight()))
+        if (SEASON3B::IsRelease(VK_LBUTTON) && CheckMouseIn(m_EditBox->GetPosition_x(), m_EditBox->GetPosition_y(),
+                                                            m_EditBox->GetWidth(), m_EditBox->GetHeight()))
         {
             ChangeEditBox(UISTATE_NORMAL);
         }
 
-        if (SEASON3B::IsRelease(VK_LBUTTON)
-            && CheckMouseIn(m_EditBox->GetPosition_x(), m_EditBox->GetPosition_y(), m_EditBox->GetWidth(), m_EditBox->GetHeight()) == false)
+        if (SEASON3B::IsRelease(VK_LBUTTON) && CheckMouseIn(m_EditBox->GetPosition_x(), m_EditBox->GetPosition_y(),
+                                                            m_EditBox->GetWidth(), m_EditBox->GetHeight()) == false)
         {
             SetFocus(g_hWnd);
         }
@@ -424,7 +426,7 @@ bool SEASON3B::CNewUIMyShopInventory::UpdateMouseEvent()
             {
                 g_pNewUISystem->Hide(SEASON3B::INTERFACE_MYSHOP_INVENTORY);
             }
-            return false;
+                return false;
             case 1:
             {
                 wchar_t shopTitle[MAX_SHOPTITLE + 1]{};
@@ -450,7 +452,7 @@ bool SEASON3B::CNewUIMyShopInventory::UpdateMouseEvent()
                     g_pSystemLogBox->AddText(GlobalText[1119], SEASON3B::TYPE_ERROR_MESSAGE);
                 }
             }
-            return false;
+                return false;
             case 2:
             {
                 SocketClient->ToGameServer()->SendPlayerShopClose();
@@ -459,7 +461,7 @@ bool SEASON3B::CNewUIMyShopInventory::UpdateMouseEvent()
                 g_pNewUISystem->Hide(SEASON3B::INTERFACE_INVENTORY);
                 g_pNewUISystem->Hide(SEASON3B::INTERFACE_INVENTORY_EXT);
             }
-            return false;
+                return false;
             }
         }
     }
@@ -513,7 +515,8 @@ void SEASON3B::CNewUIMyShopInventory::RenderTextInfo()
 
     if (m_EnablePersonalShop)
     {
-        RenderText(GlobalText[1103], m_Pos.x, m_Pos.y + 200, INVENTORY_WIDTH, 0, RGBA(215, 138, 0, 255), 0x00000000, RT3_SORT_CENTER, g_hFontBold);
+        RenderText(GlobalText[1103], m_Pos.x, m_Pos.y + 200, INVENTORY_WIDTH, 0, RGBA(215, 138, 0, 255), 0x00000000,
+                   RT3_SORT_CENTER, g_hFontBold);
     }
 
     memset(&Text, 0, sizeof(wchar_t) * 100);

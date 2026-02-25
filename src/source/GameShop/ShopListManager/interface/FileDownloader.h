@@ -1,9 +1,9 @@
 /*******************************************************************************
-*	�� �� �� : ������
-*	�� �� �� : 2009.06.10
-*	��    �� : FileDownloader
-*				File ���� �ٿ�ε� ��� ����
-*******************************************************************************/
+ *	�� �� �� : ������
+ *	�� �� �� : 2009.06.10
+ *	��    �� : FileDownloader
+ *				File ���� �ٿ�ε� ��� ����
+ *******************************************************************************/
 
 #pragma once
 
@@ -15,56 +15,54 @@ class FileDownloader
 public:
     // Constructor, Destructor
 
-    FileDownloader(IDownloaderStateEvent* pStateEvent,
-        DownloadServerInfo* pServerInfo,
-        DownloadFileInfo* pFileInfo);
+    FileDownloader(IDownloaderStateEvent* pStateEvent, DownloadServerInfo* pServerInfo, DownloadFileInfo* pFileInfo);
     ~FileDownloader();
 
     // public Function
 
-        //					�ٿ�ε� ����
-    void				Break();
+    //					�ٿ�ε� ����
+    void Break();
     //					������ ���� �ٿ�ε� ���� : ����, Ŀ��Ʈ, ���� ���� ��� ó��
-    WZResult			DownloadFile();
+    WZResult DownloadFile();
 
 private:
     // private Function
 
-        //					���� ����
-    BOOL				CanBeContinue();
+    //					���� ����
+    BOOL CanBeContinue();
     //					������
-    void				Release();
+    void Release();
 
     //					Ŀ���� ����
     IConnecter* CreateConnecter();
     //					���� ó��
-    WZResult 			CreateConnection();
+    WZResult CreateConnection();
     static unsigned int __stdcall RunConnectThread(LPVOID pParam);
-    WZResult 			Connection();
+    WZResult Connection();
 
     //					���� ó��
-    WZResult 			TransferRemoteFile();
+    WZResult TransferRemoteFile();
 
     //					���� ���� ����
-    WZResult 			CreateLocalFile();
+    WZResult CreateLocalFile();
     //					�ٿ�ε� ���� �б�
-    WZResult 			ReadRemoteFile(BYTE* byReadBuffer, DWORD* dwBytesRead);
+    WZResult ReadRemoteFile(BYTE* byReadBuffer, DWORD* dwBytesRead);
     //					���� ���� ����
-    WZResult 			WriteLocalFile(BYTE* byReadBuffer, DWORD dwBytesRead);
+    WZResult WriteLocalFile(BYTE* byReadBuffer, DWORD dwBytesRead);
 
     //					�ٿ�ε� ���� �̺�Ʈ ������
-    void				SendStartedDownloadFileEvent(ULONGLONG nFileLength);
+    void SendStartedDownloadFileEvent(ULONGLONG nFileLength);
     //					�ٿ�ε� �Ϸ� �̺�Ʈ ������
-    void				SendCompletedDownloadFileEvent(WZResult wzResult);
+    void SendCompletedDownloadFileEvent(WZResult wzResult);
     //					�ٿ�ε� ���� ��Ȳ �̺�Ʈ ������ : ��Ŷ ����
-    void				SendProgressDownloadFileEvent(ULONGLONG nTotalBytesRead);
+    void SendProgressDownloadFileEvent(ULONGLONG nTotalBytesRead);
 
     // Member Object
 
-        //							�ٿ�ε� ���� �÷���
-    volatile BOOL				m_bBreak;
+    //							�ٿ�ε� ���� �÷���
+    volatile BOOL m_bBreak;
     //							���..
-    WZResult 					m_Result;
+    WZResult m_Result;
 
     //							�ٿ�ε� ���� �̺�Ʈ ���� ��ü
     IDownloaderStateEvent* m_pStateEvent;
@@ -76,13 +74,13 @@ private:
     IConnecter* m_pConnecter;
 
     //							WinINet ���� �ڵ�
-    HINTERNET					m_hSession;
+    HINTERNET m_hSession;
     //							WinINet Ŀ���� �ڵ�
-    HINTERNET					m_hConnection;
+    HINTERNET m_hConnection;
     //							���� ���� �ڵ�
-    HINTERNET					m_hRemoteFile;
+    HINTERNET m_hRemoteFile;
     //							���� ���� �ڵ�
-    HANDLE						m_hLocalFile;
+    HANDLE m_hLocalFile;
     //							���� ������
-    ULONGLONG					m_nFileLength;
+    ULONGLONG m_nFileLength;
 };

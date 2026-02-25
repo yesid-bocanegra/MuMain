@@ -16,7 +16,7 @@ public:
     virtual ~CGuildCache();
 
 protected:
-    DWORD	m_dwCurrIndex;
+    DWORD m_dwCurrIndex;
 
 public:
     void Reset();

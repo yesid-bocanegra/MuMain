@@ -4,7 +4,7 @@
 
 #include "stdafx.h"
 
-#include "NewUIMainFrameWindow.h"	// self
+#include "NewUIMainFrameWindow.h" // self
 #include "NewUIOptionWindow.h"
 #include "NewUISystem.h"
 #include "UIBaseDef.h"
@@ -26,8 +26,9 @@
 
 #ifdef PBG_ADD_INGAMESHOP_UI_MAINFRAME
 #include "GameShop/InGameShopSystem.h"
-#endif //PBG_ADD_INGAMESHOP_UI_MAINFRAME
+#endif // PBG_ADD_INGAMESHOP_UI_MAINFRAME
 
+// cppcheck-suppress uninitMemberVar
 SEASON3B::CNewUIMainFrameWindow::CNewUIMainFrameWindow()
 {
     m_bExpEffect = false;
@@ -205,8 +206,10 @@ void SEASON3B::CNewUIMainFrameWindow::RenderFrame()
     float width, height;
     float x, y;
 
-    width = 256.f; height = 51.f;
-    x = 0.f; y = 480.f - height;
+    width = 256.f;
+    height = 51.f;
+    x = 0.f;
+    y = 480.f - height;
     SEASON3B::RenderImage(IMAGE_MENU_1, x, y, width, height);
     width = 128.f;
     x = 256.f;
@@ -217,7 +220,8 @@ void SEASON3B::CNewUIMainFrameWindow::RenderFrame()
 
     if (g_pSkillList->IsSkillListUp() == true)
     {
-        width = 160.f; height = 40.f;
+        width = 160.f;
+        height = 40.f;
         x = 222.f;
         SEASON3B::RenderImage(IMAGE_MENU_2_1, x, y, width, height);
     }
@@ -277,11 +281,13 @@ void SEASON3B::CNewUIMainFrameWindow::RenderLifeMana()
     fV = fLife;
     if (g_isCharacterBuff((&Hero->Object), eDeBuff_Poison))
     {
-        RenderBitmap(IMAGE_GAUGE_GREEN, x, fY, width, fH, 0.f, fV * height / 64.f, width / 64.f, (1.0f - fV) * height / 64.f);
+        RenderBitmap(IMAGE_GAUGE_GREEN, x, fY, width, fH, 0.f, fV * height / 64.f, width / 64.f,
+                     (1.0f - fV) * height / 64.f);
     }
     else
     {
-        RenderBitmap(IMAGE_GAUGE_RED, x, fY, width, fH, 0.f, fV * height / 64.f, width / 64.f, (1.0f - fV) * height / 64.f);
+        RenderBitmap(IMAGE_GAUGE_RED, x, fY, width, fH, 0.f, fV * height / 64.f, width / 64.f,
+                     (1.0f - fV) * height / 64.f);
     }
 
     SEASON3B::RenderNumber(x + 25, 480 - 18, wLife);
@@ -302,7 +308,8 @@ void SEASON3B::CNewUIMainFrameWindow::RenderLifeMana()
     fY = y + (fMana * height);
     fH = height - (fMana * height);
     fV = fMana;
-    RenderBitmap(IMAGE_GAUGE_BLUE, x, fY, width, fH, 0.f, fV * height / 64.f, width / 64.f, (1.0f - fV) * height / 64.f);
+    RenderBitmap(IMAGE_GAUGE_BLUE, x, fY, width, fH, 0.f, fV * height / 64.f, width / 64.f,
+                 (1.0f - fV) * height / 64.f);
 
     SEASON3B::RenderNumber(x + 30, 480 - 18, wMana);
 
@@ -340,7 +347,8 @@ void SEASON3B::CNewUIMainFrameWindow::RenderGuageAG()
     }
 
     width = 16.f, height = 39.f;
-    x = 256 + 128 + 36; y = 480.f - 49.f;
+    x = 256 + 128 + 36;
+    y = 480.f - 49.f;
     fY = y + (fSkillMana * height);
     fH = height - (fSkillMana * height);
     fV = fSkillMana;
@@ -363,7 +371,7 @@ void SEASON3B::CNewUIMainFrameWindow::RenderGuageSD()
     float fY, fH, fV;
     DWORD wMaxShield, wShield;
 
-    //Master_Level_Data.wMaxShield
+    // Master_Level_Data.wMaxShield
     if (gCharacterManager.IsMasterLevel(Hero->Class) == true)
     {
         wMaxShield = std::max<int>(1, Master_Level_Data.wMaxShield);
@@ -383,7 +391,8 @@ void SEASON3B::CNewUIMainFrameWindow::RenderGuageSD()
     }
 
     width = 16.f, height = 39.f;
-    x = 204; y = 480.f - 49.f;
+    x = 204;
+    y = 480.f - 49.f;
     fY = y + (fShield * height);
     fH = height - (fShield * height);
     fV = fShield;
@@ -424,31 +433,19 @@ void SEASON3B::CNewUIMainFrameWindow::RenderExperience()
 
     if (gCharacterManager.IsMasterLevel(CharacterAttribute->Class) == true)
     {
-        x = 0; y = 470; width = 6; height = 4;
+        x = 0;
+        y = 470;
+        width = 6;
+        height = 4;
 
         __int64 iTotalLevel = wLevel + 400;
         __int64 iTOverLevel = iTotalLevel - 255;
         __int64 iBaseExperience = 0;
 
-        __int64 iData_Master =	// A
-            (
-                (
-                    (__int64)9 + (__int64)iTotalLevel
-                    )
-                * (__int64)iTotalLevel
-                * (__int64)iTotalLevel
-                * (__int64)10
-                )
-            +
-            (
-                (
-                    (__int64)9 + (__int64)iTOverLevel
-                    )
-                * (__int64)iTOverLevel
-                * (__int64)iTOverLevel
-                * (__int64)1000
-                );
-        iBaseExperience = (iData_Master - (__int64)3892250000) / (__int64)2;	// B
+        __int64 iData_Master = // A
+            (((__int64)9 + (__int64)iTotalLevel) * (__int64)iTotalLevel * (__int64)iTotalLevel * (__int64)10) +
+            (((__int64)9 + (__int64)iTOverLevel) * (__int64)iTOverLevel * (__int64)iTOverLevel * (__int64)1000);
+        iBaseExperience = (iData_Master - (__int64)3892250000) / (__int64)2; // B
 
         double fNeedExp = (double)dwNexExperience - (double)iBaseExperience;
         double fExp = (double)dwExperience - (double)iBaseExperience;
@@ -472,7 +469,10 @@ void SEASON3B::CNewUIMainFrameWindow::RenderExperience()
             double fPreExp = (double)m_loPreExp - (double)iBaseExperience;
             if (m_loPreExp < iBaseExperience)
             {
-                x = 2.f; y = 473.f; width = fProgress * 629.f; height = 4.f;
+                x = 2.f;
+                y = 473.f;
+                width = fProgress * 629.f;
+                height = 4.f;
                 RenderBitmap(IMAGE_MASTER_GAUGE_BAR, x, y, width, height, 0.f, 0.f, 6.f / 8.f, 4.f / 4.f);
                 glColor4f(1.f, 1.f, 1.f, 0.6f);
                 RenderColor(x, y, width, height);
@@ -492,7 +492,10 @@ void SEASON3B::CNewUIMainFrameWindow::RenderExperience()
 
                 if (iExpBarNum > iPreExpBarNum)
                 {
-                    x = 2.f; y = 473.f; width = fProgress * 629.f; height = 4.f;
+                    x = 2.f;
+                    y = 473.f;
+                    width = fProgress * 629.f;
+                    height = 4.f;
                     RenderBitmap(IMAGE_MASTER_GAUGE_BAR, x, y, width, height, 0.f, 0.f, 6.f / 8.f, 4.f / 4.f);
                     glColor4f(1.f, 1.f, 1.f, 0.6f);
                     RenderColor(x, y, width, height);
@@ -502,10 +505,14 @@ void SEASON3B::CNewUIMainFrameWindow::RenderExperience()
                 {
                     double fGapProgress = 0.f;
                     fGapProgress = (double)fProgress - (double)fPreProgress;
-                    x = 2.f; y = 473.f; width = (double)fPreProgress * (double)629.f; height = 4.f;
+                    x = 2.f;
+                    y = 473.f;
+                    width = (double)fPreProgress * (double)629.f;
+                    height = 4.f;
                     RenderBitmap(IMAGE_MASTER_GAUGE_BAR, x, y, width, height, 0.f, 0.f, 6.f / 8.f, 4.f / 4.f);
 
-                    x += width; width = (double)fGapProgress * (double)629.f;
+                    x += width;
+                    width = (double)fGapProgress * (double)629.f;
                     RenderBitmap(IMAGE_MASTER_GAUGE_BAR, x, y, width, height, 0.f, 0.f, 6.f / 8.f, 4.f / 4.f);
                     glColor4f(1.f, 1.f, 1.f, 0.6f);
                     RenderColor(x, y, width, height);
@@ -515,15 +522,22 @@ void SEASON3B::CNewUIMainFrameWindow::RenderExperience()
         }
         else
         {
-            x = 2.f; y = 473.f; width = fProgress * 629.f; height = 4.f;
+            x = 2.f;
+            y = 473.f;
+            width = fProgress * 629.f;
+            height = 4.f;
             RenderBitmap(IMAGE_MASTER_GAUGE_BAR, x, y, width, height, 0.f, 0.f, 6.f / 8.f, 4.f / 4.f);
         }
 
         int iExp = (int)fExpBarNum;
-        x = 635.f; y = 469.f;
+        x = 635.f;
+        y = 469.f;
         SEASON3B::RenderNumber(x, y, iExp);
 
-        x = 2.f; y = 473.f; width = 629.f; height = 4.f;
+        x = 2.f;
+        y = 473.f;
+        width = 629.f;
+        height = 4.f;
         if (SEASON3B::CheckMouseIn(x, y, width, height) == true)
         {
             wchar_t strTipText[256];
@@ -534,7 +548,10 @@ void SEASON3B::CNewUIMainFrameWindow::RenderExperience()
     }
     else
     {
-        x = 0; y = 470; width = 6; height = 4;
+        x = 0;
+        y = 470;
+        width = 6;
+        height = 4;
 
         WORD wPriorLevel = wLevel - 1;
         DWORD dwPriorExperience = 0;
@@ -573,7 +590,10 @@ void SEASON3B::CNewUIMainFrameWindow::RenderExperience()
             fExp = m_dwPreExp - dwPriorExperience;
             if (m_dwPreExp < dwPriorExperience)
             {
-                x = 2.f; y = 473.f; width = fProgress * 629.f; height = 4.f;
+                x = 2.f;
+                y = 473.f;
+                width = fProgress * 629.f;
+                height = 4.f;
                 RenderBitmap(IMAGE_GAUGE_EXBAR, x, y, width, height, 0.f, 0.f, 6.f / 8.f, 4.f / 4.f);
                 glColor4f(1.f, 1.f, 1.f, 0.4f);
                 RenderColor(x, y, width, height);
@@ -594,7 +614,10 @@ void SEASON3B::CNewUIMainFrameWindow::RenderExperience()
 
                 if (iExpBarNum > iPreExpBarNum)
                 {
-                    x = 2.f; y = 473.f; width = fProgress * 629.f; height = 4.f;
+                    x = 2.f;
+                    y = 473.f;
+                    width = fProgress * 629.f;
+                    height = 4.f;
                     RenderBitmap(IMAGE_GAUGE_EXBAR, x, y, width, height, 0.f, 0.f, 6.f / 8.f, 4.f / 4.f);
                     glColor4f(1.f, 1.f, 1.f, 0.4f);
                     RenderColor(x, y, width, height);
@@ -604,9 +627,13 @@ void SEASON3B::CNewUIMainFrameWindow::RenderExperience()
                 {
                     float fGapProgress = 0.f;
                     fGapProgress = fProgress - fPreProgress;
-                    x = 2.f; y = 473.f; width = fPreProgress * 629.f; height = 4.f;
+                    x = 2.f;
+                    y = 473.f;
+                    width = fPreProgress * 629.f;
+                    height = 4.f;
                     RenderBitmap(IMAGE_GAUGE_EXBAR, x, y, width, height, 0.f, 0.f, 6.f / 8.f, 4.f / 4.f);
-                    x += width; width = fGapProgress * 629.f;
+                    x += width;
+                    width = fGapProgress * 629.f;
                     RenderBitmap(IMAGE_GAUGE_EXBAR, x, y, width, height, 0.f, 0.f, 6.f / 8.f, 4.f / 4.f);
                     glColor4f(1.f, 1.f, 1.f, 0.4f);
                     RenderColor(x, y, width, height);
@@ -616,15 +643,22 @@ void SEASON3B::CNewUIMainFrameWindow::RenderExperience()
         }
         else
         {
-            x = 2.f; y = 473.f; width = fProgress * 629.f; height = 4.f;
+            x = 2.f;
+            y = 473.f;
+            width = fProgress * 629.f;
+            height = 4.f;
             RenderBitmap(IMAGE_GAUGE_EXBAR, x, y, width, height, 0.f, 0.f, 6.f / 8.f, 4.f / 4.f);
         }
 
         int iExp = (int)fExpBarNum;
-        x = 635.f; y = 469.f;
+        x = 635.f;
+        y = 469.f;
         SEASON3B::RenderNumber(x, y, iExp);
 
-        x = 2.f; y = 473.f; width = 629.f; height = 4.f;
+        x = 2.f;
+        y = 473.f;
+        width = 629.f;
+        height = 4.f;
         if (SEASON3B::CheckMouseIn(x, y, width, height) == true)
         {
             wchar_t strTipText[256];
@@ -644,7 +678,7 @@ void SEASON3B::CNewUIMainFrameWindow::RenderButtons()
 {
 #ifdef PBG_ADD_INGAMESHOP_UI_MAINFRAME
     m_BtnCShop.Render();
-#endif //defined PBG_ADD_INGAMESHOP_UI_MAINFRAME
+#endif // defined PBG_ADD_INGAMESHOP_UI_MAINFRAME
 
     RenderCharInfoButton();
     m_BtnMyInven.Render();
@@ -666,8 +700,8 @@ void SEASON3B::CNewUIMainFrameWindow::RenderCharInfoButton()
 
     if (m_bButtonBlink)
     {
-        if (!(g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_QUEST_PROGRESS_ETC)
-            || g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_CHARACTER)))
+        if (!(g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_QUEST_PROGRESS_ETC) ||
+              g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_CHARACTER)))
             RenderImage(IMAGE_MENU_BTN_CHAINFO, 489 + 30, 480 - 51, 30, 41, 0.0f, 41.f);
     }
 }
@@ -714,7 +748,7 @@ void SEASON3B::CNewUIMainFrameWindow::RenderFriendButtonState()
     {
         RenderImage(IMAGE_MENU_BTN_FRIEND, 489 + (30 * 3), 480 - 51, 30, 41, 0.0f, 41.f);
     }
-#else //defined PBG_ADD_INGAMESHOP_UI_MAINFRAME
+#else  // defined PBG_ADD_INGAMESHOP_UI_MAINFRAME
     if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_FRIEND) == true)
     {
         RenderImage(IMAGE_MENU_BTN_FRIEND, 488 + 76, 480 - 51, 38, 42, 0.0f, 126.f);
@@ -723,7 +757,7 @@ void SEASON3B::CNewUIMainFrameWindow::RenderFriendButtonState()
     {
         RenderImage(IMAGE_MENU_BTN_FRIEND, 488 + 76, 480 - 51, 38, 42, 0.0f, 42.f);
     }
-#endif//defined PBG_ADD_INGAMESHOP_UI_MAINFRAME
+#endif // defined PBG_ADD_INGAMESHOP_UI_MAINFRAME
 }
 
 bool SEASON3B::CNewUIMainFrameWindow::UpdateMouseEvent()
@@ -841,7 +875,7 @@ bool SEASON3B::CNewUIMainFrameWindow::BtnProcess()
 
             return true;
         }
-#endif //PBG_ADD_INGAMESHOP_UI_MAINFRAME
+#endif // PBG_ADD_INGAMESHOP_UI_MAINFRAME
     }
 
     return false;
@@ -935,9 +969,7 @@ SEASON3B::CNewUIItemHotKey::CNewUIItemHotKey()
     }
 }
 
-SEASON3B::CNewUIItemHotKey::~CNewUIItemHotKey()
-{
-}
+SEASON3B::CNewUIItemHotKey::~CNewUIItemHotKey() {}
 
 bool SEASON3B::CNewUIItemHotKey::UpdateKeyEvent()
 {
@@ -973,10 +1005,12 @@ bool SEASON3B::CNewUIItemHotKey::UpdateKeyEvent()
             secretPotionbufflist.push_back(eBuff_SecretPotion4);
             secretPotionbufflist.push_back(eBuff_SecretPotion5);
 
-            if (g_isCharacterBufflist((&Hero->Object), secretPotionbufflist) != eBuffNone) {
+            if (g_isCharacterBufflist((&Hero->Object), secretPotionbufflist) != eBuffNone)
+            {
                 SEASON3B::CreateOkMessageBox(GlobalText[2530], RGBA(255, 30, 0, 255));
             }
-            else {
+            else
+            {
                 SendRequestUse(iIndex, 0);
             }
         }
@@ -1001,13 +1035,16 @@ int SEASON3B::CNewUIItemHotKey::GetHotKeyItemIndex(int iType, bool bItemCount)
     case HOTKEY_Q:
         if (GetHotKeyCommonItem(iType, iStartItemType, iEndItemType) == false)
         {
-            if (m_iHotKeyItemType[iType] >= ITEM_SMALL_MANA_POTION && m_iHotKeyItemType[iType] <= ITEM_LARGE_MANA_POTION)
+            if (m_iHotKeyItemType[iType] >= ITEM_SMALL_MANA_POTION &&
+                m_iHotKeyItemType[iType] <= ITEM_LARGE_MANA_POTION)
             {
-                iStartItemType = ITEM_LARGE_MANA_POTION; iEndItemType = ITEM_SMALL_MANA_POTION;
+                iStartItemType = ITEM_LARGE_MANA_POTION;
+                iEndItemType = ITEM_SMALL_MANA_POTION;
             }
             else
             {
-                iStartItemType = ITEM_LARGE_HEALING_POTION; iEndItemType = ITEM_APPLE;
+                iStartItemType = ITEM_LARGE_HEALING_POTION;
+                iEndItemType = ITEM_APPLE;
             }
         }
         break;
@@ -1016,11 +1053,13 @@ int SEASON3B::CNewUIItemHotKey::GetHotKeyItemIndex(int iType, bool bItemCount)
         {
             if (m_iHotKeyItemType[iType] >= ITEM_APPLE && m_iHotKeyItemType[iType] <= ITEM_LARGE_HEALING_POTION)
             {
-                iStartItemType = ITEM_LARGE_HEALING_POTION; iEndItemType = ITEM_APPLE;
+                iStartItemType = ITEM_LARGE_HEALING_POTION;
+                iEndItemType = ITEM_APPLE;
             }
             else
             {
-                iStartItemType = ITEM_LARGE_MANA_POTION; iEndItemType = ITEM_SMALL_MANA_POTION;
+                iStartItemType = ITEM_LARGE_MANA_POTION;
+                iEndItemType = ITEM_SMALL_MANA_POTION;
             }
         }
         break;
@@ -1029,15 +1068,19 @@ int SEASON3B::CNewUIItemHotKey::GetHotKeyItemIndex(int iType, bool bItemCount)
         {
             if (m_iHotKeyItemType[iType] >= ITEM_APPLE && m_iHotKeyItemType[iType] <= ITEM_LARGE_HEALING_POTION)
             {
-                iStartItemType = ITEM_LARGE_HEALING_POTION; iEndItemType = ITEM_APPLE;
+                iStartItemType = ITEM_LARGE_HEALING_POTION;
+                iEndItemType = ITEM_APPLE;
             }
-            else if (m_iHotKeyItemType[iType] >= ITEM_SMALL_MANA_POTION && m_iHotKeyItemType[iType] <= ITEM_LARGE_MANA_POTION)
+            else if (m_iHotKeyItemType[iType] >= ITEM_SMALL_MANA_POTION &&
+                     m_iHotKeyItemType[iType] <= ITEM_LARGE_MANA_POTION)
             {
-                iStartItemType = ITEM_LARGE_MANA_POTION; iEndItemType = ITEM_SMALL_MANA_POTION;
+                iStartItemType = ITEM_LARGE_MANA_POTION;
+                iEndItemType = ITEM_SMALL_MANA_POTION;
             }
             else
             {
-                iStartItemType = ITEM_ANTIDOTE; iEndItemType = ITEM_ANTIDOTE;
+                iStartItemType = ITEM_ANTIDOTE;
+                iEndItemType = ITEM_ANTIDOTE;
             }
         }
         break;
@@ -1046,15 +1089,19 @@ int SEASON3B::CNewUIItemHotKey::GetHotKeyItemIndex(int iType, bool bItemCount)
         {
             if (m_iHotKeyItemType[iType] >= ITEM_APPLE && m_iHotKeyItemType[iType] <= ITEM_LARGE_HEALING_POTION)
             {
-                iStartItemType = ITEM_LARGE_HEALING_POTION; iEndItemType = ITEM_APPLE;
+                iStartItemType = ITEM_LARGE_HEALING_POTION;
+                iEndItemType = ITEM_APPLE;
             }
-            else if (m_iHotKeyItemType[iType] >= ITEM_SMALL_MANA_POTION && m_iHotKeyItemType[iType] <= ITEM_LARGE_MANA_POTION)
+            else if (m_iHotKeyItemType[iType] >= ITEM_SMALL_MANA_POTION &&
+                     m_iHotKeyItemType[iType] <= ITEM_LARGE_MANA_POTION)
             {
-                iStartItemType = ITEM_LARGE_MANA_POTION; iEndItemType = ITEM_SMALL_MANA_POTION;
+                iStartItemType = ITEM_LARGE_MANA_POTION;
+                iEndItemType = ITEM_SMALL_MANA_POTION;
             }
             else
             {
-                iStartItemType = ITEM_LARGE_SHIELD_POTION; iEndItemType = ITEM_SMALL_SHIELD_POTION;
+                iStartItemType = ITEM_LARGE_SHIELD_POTION;
+                iEndItemType = ITEM_SMALL_SHIELD_POTION;
             }
         }
         break;
@@ -1076,15 +1123,11 @@ int SEASON3B::CNewUIItemHotKey::GetHotKeyItemIndex(int iType, bool bItemCount)
                     continue;
                 }
 
-                if (
-                    (pItem->Type == i && pItem->Level == m_iHotKeyItemLevel[iType])
-                    || (pItem->Type == i && (pItem->Type >= ITEM_APPLE && pItem->Type <= ITEM_LARGE_HEALING_POTION))
-                    )
+                if ((pItem->Type == i && pItem->Level == m_iHotKeyItemLevel[iType]) ||
+                    (pItem->Type == i && (pItem->Type >= ITEM_APPLE && pItem->Type <= ITEM_LARGE_HEALING_POTION)))
                 {
-                    if (pItem->Type == ITEM_ALE
-                        || pItem->Type == ITEM_TOWN_PORTAL_SCROLL
-                        || pItem->Type == ITEM_POTION + 20
-                        )
+                    if (pItem->Type == ITEM_ALE || pItem->Type == ITEM_TOWN_PORTAL_SCROLL ||
+                        pItem->Type == ITEM_POTION + 20)
                     {
                         iItemCount++;
                     }
@@ -1110,11 +1153,9 @@ int SEASON3B::CNewUIItemHotKey::GetHotKeyItemIndex(int iType, bool bItemCount)
             if (-1 != iIndex)
             {
                 pItem = g_pMyInventory->FindItem(iIndex);
-                if ((pItem->Type != ITEM_SIEGE_POTION
-                    && pItem->Type != ITEM_TOWN_PORTAL_SCROLL
-                    && pItem->Type != ITEM_POTION + 20)
-                    || pItem->Level == m_iHotKeyItemLevel[iType]
-                    )
+                if ((pItem->Type != ITEM_SIEGE_POTION && pItem->Type != ITEM_TOWN_PORTAL_SCROLL &&
+                     pItem->Type != ITEM_POTION + 20) ||
+                    pItem->Level == m_iHotKeyItemLevel[iType])
                 {
                     return iIndex;
                 }
@@ -1163,14 +1204,18 @@ bool SEASON3B::CNewUIItemHotKey::GetHotKeyCommonItem(IN int iHotKey, OUT int& iS
         }
         break;
     default:
-        if (m_iHotKeyItemType[iHotKey] >= ITEM_SMALL_SHIELD_POTION && m_iHotKeyItemType[iHotKey] <= ITEM_LARGE_SHIELD_POTION)
+        if (m_iHotKeyItemType[iHotKey] >= ITEM_SMALL_SHIELD_POTION &&
+            m_iHotKeyItemType[iHotKey] <= ITEM_LARGE_SHIELD_POTION)
         {
-            iStart = ITEM_LARGE_SHIELD_POTION; iEnd = ITEM_SMALL_SHIELD_POTION;
+            iStart = ITEM_LARGE_SHIELD_POTION;
+            iEnd = ITEM_SMALL_SHIELD_POTION;
             return true;
         }
-        else if (m_iHotKeyItemType[iHotKey] >= ITEM_SMALL_COMPLEX_POTION && m_iHotKeyItemType[iHotKey] <= ITEM_LARGE_COMPLEX_POTION)
+        else if (m_iHotKeyItemType[iHotKey] >= ITEM_SMALL_COMPLEX_POTION &&
+                 m_iHotKeyItemType[iHotKey] <= ITEM_LARGE_COMPLEX_POTION)
         {
-            iStart = ITEM_LARGE_COMPLEX_POTION; iEnd = ITEM_SMALL_COMPLEX_POTION;
+            iStart = ITEM_LARGE_COMPLEX_POTION;
+            iEnd = ITEM_SMALL_COMPLEX_POTION;
             return true;
         }
         break;
@@ -1185,13 +1230,12 @@ int SEASON3B::CNewUIItemHotKey::GetHotKeyItemCount(int iType)
 
 void SEASON3B::CNewUIItemHotKey::SetHotKey(int iHotKey, int iItemType, int iItemLevel)
 {
-    if (iHotKey != -1 && CNewUIMyInventory::CanRegisterItemHotKey(iItemType) == true
-        )
+    if (iHotKey != -1 && CNewUIMyInventory::CanRegisterItemHotKey(iItemType) == true)
     {
         m_iHotKeyItemType[iHotKey] = iItemType;
         m_iHotKeyItemLevel[iHotKey] = iItemLevel;
     }
-    else
+    else if (iHotKey != -1)
     {
         m_iHotKeyItemType[iHotKey] = -1;
         m_iHotKeyItemLevel[iHotKey] = 0;
@@ -1230,7 +1274,10 @@ void SEASON3B::CNewUIItemHotKey::RenderItems()
             ITEM* pItem = g_pMyInventory->FindItem(iIndex);
             if (pItem)
             {
-                x = 10 + (i * 38); y = 443; width = 20; height = 20;
+                x = 10 + (i * 38);
+                y = 443;
+                width = 20;
+                height = 20;
                 RenderItem3D(x, y, width, height, pItem->Type, pItem->Level, 0, 0);
             }
         }
@@ -1248,7 +1295,10 @@ void SEASON3B::CNewUIItemHotKey::RenderItemCount()
         int iCount = GetHotKeyItemIndex(i, true);
         if (iCount > 0)
         {
-            x = 30 + (i * 38); y = 457; width = 8; height = 9;
+            x = 30 + (i * 38);
+            y = 457;
+            width = 8;
+            height = 9;
             SEASON3B::RenderNumber(x, y, iCount);
         }
     }
@@ -1260,7 +1310,10 @@ void SEASON3B::CNewUIItemHotKey::UseItemRButton()
 
     for (int i = 0; i < HOTKEY_COUNT; ++i)
     {
-        x = 10 + (i * 38); y = 445; width = 20; height = 20;
+        x = 10 + (i * 38);
+        y = 445;
+        width = 20;
+        height = 20;
         if (SEASON3B::CheckMouseIn(x, y, width, height) == true)
         {
             if (MouseRButtonPush)
@@ -1277,6 +1330,7 @@ void SEASON3B::CNewUIItemHotKey::UseItemRButton()
     }
 }
 
+// cppcheck-suppress uninitMemberVar
 SEASON3B::CNewUISkillList::CNewUISkillList()
 {
     m_pNewUIMng = NULL;
@@ -1374,7 +1428,7 @@ bool SEASON3B::CNewUISkillList::UpdateMouseEvent()
     {
         return true;
     }
-#endif //MOD_SKILLLIST_UPDATEMOUSE_BLOCK
+#endif // MOD_SKILLLIST_UPDATEMOUSE_BLOCK
 
     if (g_isCharacterBuff((&Hero->Object), eBuff_DuelWatch))
     {
@@ -1394,21 +1448,23 @@ bool SEASON3B::CNewUISkillList::UpdateMouseEvent()
         return true;
     }
 
-    x = 385.f; y = 431.f; width = 32.f; height = 38.f;
-    if (m_EventState == EVENT_NONE && MouseLButtonPush == false
-        && SEASON3B::CheckMouseIn(x, y, width, height) == true)
+    x = 385.f;
+    y = 431.f;
+    width = 32.f;
+    height = 38.f;
+    if (m_EventState == EVENT_NONE && MouseLButtonPush == false && SEASON3B::CheckMouseIn(x, y, width, height) == true)
     {
         m_EventState = EVENT_BTN_HOVER_CURRENTSKILL;
         return true;
     }
-    if (m_EventState == EVENT_BTN_HOVER_CURRENTSKILL && MouseLButtonPush == false
-        && SEASON3B::CheckMouseIn(x, y, width, height) == false)
+    if (m_EventState == EVENT_BTN_HOVER_CURRENTSKILL && MouseLButtonPush == false &&
+        SEASON3B::CheckMouseIn(x, y, width, height) == false)
     {
         m_EventState = EVENT_NONE;
         return true;
     }
-    if (m_EventState == EVENT_BTN_HOVER_CURRENTSKILL && (MouseLButtonPush == true || MouseLButtonDBClick == true)
-        && SEASON3B::CheckMouseIn(x, y, width, height) == true)
+    if (m_EventState == EVENT_BTN_HOVER_CURRENTSKILL && (MouseLButtonPush == true || MouseLButtonDBClick == true) &&
+        SEASON3B::CheckMouseIn(x, y, width, height) == true)
     {
         m_EventState = EVENT_BTN_DOWN_CURRENTSKILL;
         return false;
@@ -1443,27 +1499,32 @@ bool SEASON3B::CNewUISkillList::UpdateMouseEvent()
         return false;
     }
 
-    x = 222.f; y = 431.f; width = 32.f * 5.f; height = 38.f;
-    if (m_EventState == EVENT_NONE && MouseLButtonPush == false
-        && SEASON3B::CheckMouseIn(x, y, width, height) == true)
+    x = 222.f;
+    y = 431.f;
+    width = 32.f * 5.f;
+    height = 38.f;
+    if (m_EventState == EVENT_NONE && MouseLButtonPush == false && SEASON3B::CheckMouseIn(x, y, width, height) == true)
     {
         m_EventState = EVENT_BTN_HOVER_SKILLHOTKEY;
         return true;
     }
-    if (m_EventState == EVENT_BTN_HOVER_SKILLHOTKEY && MouseLButtonPush == false
-        && SEASON3B::CheckMouseIn(x, y, width, height) == false)
+    if (m_EventState == EVENT_BTN_HOVER_SKILLHOTKEY && MouseLButtonPush == false &&
+        SEASON3B::CheckMouseIn(x, y, width, height) == false)
     {
         m_EventState = EVENT_NONE;
         return true;
     }
-    if (m_EventState == EVENT_BTN_HOVER_SKILLHOTKEY && MouseLButtonPush == true
-        && SEASON3B::CheckMouseIn(x, y, width, height) == true)
+    if (m_EventState == EVENT_BTN_HOVER_SKILLHOTKEY && MouseLButtonPush == true &&
+        SEASON3B::CheckMouseIn(x, y, width, height) == true)
     {
         m_EventState = EVENT_BTN_DOWN_SKILLHOTKEY;
         return false;
     }
 
-    x = 190.f; y = 431.f; width = 32.f; height = 38.f;
+    x = 190.f;
+    y = 431.f;
+    width = 32.f;
+    height = 38.f;
     int iStartIndex = (m_bHotKeySkillListUp == true) ? 6 : 1;
     for (int i = 0, iIndex = iStartIndex; i < 5; ++i, iIndex++)
     {
@@ -1530,7 +1591,10 @@ bool SEASON3B::CNewUISkillList::UpdateMouseEvent()
         }
     }
 
-    x = 222.f; y = 431.f; width = 32.f * 5.f; height = 38.f;
+    x = 222.f;
+    y = 431.f;
+    width = 32.f * 5.f;
+    height = 38.f;
     if (m_EventState == EVENT_BTN_DOWN_SKILLHOTKEY)
     {
         if (MouseLButtonPush == false && SEASON3B::CheckMouseIn(x, y, width, height) == false)
@@ -1549,7 +1613,10 @@ bool SEASON3B::CNewUISkillList::UpdateMouseEvent()
     int iSkillCount = 0;
     bool bMouseOnSkillList = false;
 
-    x = 385.f; y = 390; width = 32; height = 38;
+    x = 385.f;
+    y = 390;
+    width = 32;
+    height = 38;
     float fOrigX = 385.f;
 
     EVENT_STATE PrevEventState = m_EventState;
@@ -1608,15 +1675,15 @@ bool SEASON3B::CNewUISkillList::UpdateMouseEvent()
             }
         }
 
-        if (m_EventState == EVENT_BTN_HOVER_SKILLLIST && MouseLButtonPush == true
-            && SEASON3B::CheckMouseIn(x, y, width, height) == true)
+        if (m_EventState == EVENT_BTN_HOVER_SKILLLIST && MouseLButtonPush == true &&
+            SEASON3B::CheckMouseIn(x, y, width, height) == true)
         {
             m_EventState = EVENT_BTN_DOWN_SKILLLIST;
             break;
         }
 
-        if (m_EventState == EVENT_BTN_HOVER_SKILLLIST && MouseLButtonPush == false
-            && SEASON3B::CheckMouseIn(x, y, width, height) == true)
+        if (m_EventState == EVENT_BTN_HOVER_SKILLLIST && MouseLButtonPush == false &&
+            SEASON3B::CheckMouseIn(x, y, width, height) == true)
         {
             m_bRenderSkillInfo = true;
             m_iRenderSkillInfoType = i;
@@ -1624,8 +1691,8 @@ bool SEASON3B::CNewUISkillList::UpdateMouseEvent()
             m_iRenderSkillInfoPosY = y;
         }
 
-        if (m_EventState == EVENT_BTN_DOWN_SKILLLIST && MouseLButtonPush == false
-            && m_iRenderSkillInfoType == i && SEASON3B::CheckMouseIn(x, y, width, height) == true)
+        if (m_EventState == EVENT_BTN_DOWN_SKILLLIST && MouseLButtonPush == false && m_iRenderSkillInfoType == i &&
+            SEASON3B::CheckMouseIn(x, y, width, height) == true)
         {
             m_EventState = EVENT_NONE;
 
@@ -1648,7 +1715,10 @@ bool SEASON3B::CNewUISkillList::UpdateMouseEvent()
 
     if (Hero->m_pPet != NULL)
     {
-        x = 353.f; y = 352; width = 32; height = 38;
+        x = 353.f;
+        y = 352;
+        width = 32;
+        height = 38;
         for (int i = AT_PET_COMMAND_DEFAULT; i < AT_PET_COMMAND_END; ++i)
         {
             if (SEASON3B::CheckMouseIn(x, y, width, height) == true)
@@ -1673,8 +1743,8 @@ bool SEASON3B::CNewUISkillList::UpdateMouseEvent()
                     m_iRenderSkillInfoPosX = x;
                     m_iRenderSkillInfoPosY = y;
                 }
-                if (m_EventState == EVENT_BTN_DOWN_SKILLLIST && MouseLButtonPush == false
-                    && m_iRenderSkillInfoType == i)
+                if (m_EventState == EVENT_BTN_DOWN_SKILLLIST && MouseLButtonPush == false &&
+                    m_iRenderSkillInfoType == i)
                 {
                     m_EventState = EVENT_NONE;
 
@@ -1695,8 +1765,7 @@ bool SEASON3B::CNewUISkillList::UpdateMouseEvent()
         m_EventState = EVENT_NONE;
         return true;
     }
-    if (bMouseOnSkillList == false && MouseLButtonPush == false
-        && m_EventState == EVENT_BTN_DOWN_SKILLLIST)
+    if (bMouseOnSkillList == false && MouseLButtonPush == false && m_EventState == EVENT_BTN_DOWN_SKILLLIST)
     {
         m_EventState = EVENT_NONE;
         return false;
@@ -1865,11 +1934,8 @@ void SEASON3B::CNewUISkillList::UseHotKey(int iHotKey)
 
         auto bySkill = CharacterAttribute->Skill[Hero->CurrentSkill];
 
-        if (
-            g_pOption->IsAutoAttack() == true
-            && gMapManager.WorldActive != WD_6STADIUM
-            && gMapManager.InChaosCastle() == false
-            && (bySkill == AT_SKILL_TELEPORT || bySkill == AT_SKILL_TELEPORT_ALLY))
+        if (g_pOption->IsAutoAttack() == true && gMapManager.WorldActive != WD_6STADIUM &&
+            gMapManager.InChaosCastle() == false && (bySkill == AT_SKILL_TELEPORT || bySkill == AT_SKILL_TELEPORT_ALLY))
         {
             SelectedCharacter = -1;
             Attacking = -1;
@@ -1917,7 +1983,10 @@ void SEASON3B::CNewUISkillList::RenderCurrentSkillAndHotSkillList()
             iStartSkillIndex = 6;
         }
 
-        x = 190; y = 431; width = 32; height = 38;
+        x = 190;
+        y = 431;
+        width = 32;
+        height = 38;
         for (i = 0; i < 5; ++i)
         {
             x += width;
@@ -1948,7 +2017,10 @@ void SEASON3B::CNewUISkillList::RenderCurrentSkillAndHotSkillList()
             RenderSkillIcon(m_iHotKeySkillType[iIndex], x + 6, y + 6, 20, 28);
         }
 
-        x = 392; y = 437; width = 20; height = 28;
+        x = 392;
+        y = 437;
+        width = 20;
+        height = 28;
         RenderSkillIcon(Hero->CurrentSkill, x, y, width, height);
     }
 }
@@ -1964,7 +2036,10 @@ bool SEASON3B::CNewUISkillList::Render()
     {
         if (m_bSkillList == true)
         {
-            x = 385; y = 390; width = 32; height = 38;
+            x = 385;
+            y = 390;
+            width = 32;
+            height = 38;
             float fOrigX = 385.f;
             int iSkillType = 0;
             int iSkillCount = 0;
@@ -2067,7 +2142,10 @@ void SEASON3B::CNewUISkillList::RenderPetSkill()
 
     float x, y, width, height;
 
-    x = 353.f; y = 352; width = 32; height = 38;
+    x = 353.f;
+    y = 352;
+    width = 32;
+    height = 38;
     for (int i = AT_PET_COMMAND_DEFAULT; i < AT_PET_COMMAND_END; ++i)
     {
         if (i == Hero->CurrentSkill)
@@ -2116,7 +2194,8 @@ void SEASON3B::CNewUISkillList::RenderSkillIcon(int iIndex, float x, float y, fl
     {
         bCantSkill = true;
     }
-    auto isSittingOnPet = (Hero->Helper.Type == MODEL_HORN_OF_UNIRIA || Hero->Helper.Type == MODEL_HORN_OF_DINORANT || Hero->Helper.Type == MODEL_HORN_OF_FENRIR);
+    auto isSittingOnPet = (Hero->Helper.Type == MODEL_HORN_OF_UNIRIA || Hero->Helper.Type == MODEL_HORN_OF_DINORANT ||
+                           Hero->Helper.Type == MODEL_HORN_OF_FENRIR);
     if (bySkillType == AT_SKILL_IMPALE && !isSittingOnPet)
     {
         bCantSkill = true;
@@ -2132,20 +2211,15 @@ void SEASON3B::CNewUISkillList::RenderSkillIcon(int iIndex, float x, float y, fl
         }
     }
 
-    if (isSittingOnPet
-        && ((bySkillType >= AT_SKILL_BLOCKING && bySkillType <= AT_SKILL_SLASH)
-            || bySkillType == AT_SKILL_FALLING_SLASH_STR
-            || bySkillType == AT_SKILL_LUNGE_STR
-            || bySkillType == AT_SKILL_CYCLONE_STR
-            || bySkillType == AT_SKILL_CYCLONE_STR_MG
-            || bySkillType == AT_SKILL_SLASH_STR
-            ))
+    if (isSittingOnPet && ((bySkillType >= AT_SKILL_BLOCKING && bySkillType <= AT_SKILL_SLASH) ||
+                           bySkillType == AT_SKILL_FALLING_SLASH_STR || bySkillType == AT_SKILL_LUNGE_STR ||
+                           bySkillType == AT_SKILL_CYCLONE_STR || bySkillType == AT_SKILL_CYCLONE_STR_MG ||
+                           bySkillType == AT_SKILL_SLASH_STR))
     {
         bCantSkill = true;
     }
 
-    if ((bySkillType == AT_SKILL_POWER_SLASH || bySkillType == AT_SKILL_POWER_SLASH_STR)
-        && isSittingOnPet)
+    if ((bySkillType == AT_SKILL_POWER_SLASH || bySkillType == AT_SKILL_POWER_SLASH_STR) && isSittingOnPet)
     {
         bCantSkill = true;
     }
@@ -2162,12 +2236,14 @@ void SEASON3B::CNewUISkillList::RenderSkillIcon(int iIndex, float x, float y, fl
         bCantSkill = true;
     }
 
-    if (bySkillType == AT_SKILL_PARTY_TELEPORT && (IsDoppelGanger1() || IsDoppelGanger2() || IsDoppelGanger3() || IsDoppelGanger4()))
+    if (bySkillType == AT_SKILL_PARTY_TELEPORT &&
+        (IsDoppelGanger1() || IsDoppelGanger2() || IsDoppelGanger3() || IsDoppelGanger4()))
     {
         bCantSkill = true;
     }
 
-    if (bySkillType == AT_SKILL_EARTHSHAKE || bySkillType == AT_SKILL_EARTHSHAKE_STR || bySkillType == AT_SKILL_EARTHSHAKE_MASTERY)
+    if (bySkillType == AT_SKILL_EARTHSHAKE || bySkillType == AT_SKILL_EARTHSHAKE_STR ||
+        bySkillType == AT_SKILL_EARTHSHAKE_MASTERY)
     {
         BYTE byDarkHorseLife = 0;
         byDarkHorseLife = CharacterMachine->Equipment[EQUIPMENT_HELPER].Durability;
@@ -2189,19 +2265,17 @@ void SEASON3B::CNewUISkillList::RenderSkillIcon(int iIndex, float x, float y, fl
             bCantSkill = true;
         }
     }
-#endif //PJH_FIX_SPRIT
-    if ((bySkillType == AT_SKILL_INFINITY_ARROW)
-        || (bySkillType == AT_SKILL_INFINITY_ARROW_STR)
-        || (bySkillType == AT_SKILL_EXPANSION_OF_WIZARDRY)
-        || (bySkillType == AT_SKILL_EXPANSION_OF_WIZARDRY_STR)
-        || (bySkillType == AT_SKILL_EXPANSION_OF_WIZARDRY_MASTERY)
-        )
+#endif // PJH_FIX_SPRIT
+    if ((bySkillType == AT_SKILL_INFINITY_ARROW) || (bySkillType == AT_SKILL_INFINITY_ARROW_STR) ||
+        (bySkillType == AT_SKILL_EXPANSION_OF_WIZARDRY) || (bySkillType == AT_SKILL_EXPANSION_OF_WIZARDRY_STR) ||
+        (bySkillType == AT_SKILL_EXPANSION_OF_WIZARDRY_MASTERY))
     {
         if (g_csItemOption.IsDisableSkill(bySkillType, iEnergy))
         {
             bCantSkill = true;
         }
-        if ((g_isCharacterBuff((&Hero->Object), eBuff_InfinityArrow)) || (g_isCharacterBuff((&Hero->Object), eBuff_SwellOfMagicPower)))
+        if ((g_isCharacterBuff((&Hero->Object), eBuff_InfinityArrow)) ||
+            (g_isCharacterBuff((&Hero->Object), eBuff_SwellOfMagicPower)))
         {
             bCantSkill = true;
         }
@@ -2219,7 +2293,8 @@ void SEASON3B::CNewUISkillList::RenderSkillIcon(int iIndex, float x, float y, fl
         int iTypeL = CharacterMachine->Equipment[EQUIPMENT_WEAPON_LEFT].Type;
         int iTypeR = CharacterMachine->Equipment[EQUIPMENT_WEAPON_RIGHT].Type;
 
-        if (!(iTypeR != -1 && (iTypeR < ITEM_STAFF || iTypeR >= ITEM_STAFF + MAX_ITEM_INDEX) && (iTypeL < ITEM_STAFF || iTypeL >= ITEM_STAFF + MAX_ITEM_INDEX)))
+        if (!(iTypeR != -1 && (iTypeR < ITEM_STAFF || iTypeR >= ITEM_STAFF + MAX_ITEM_INDEX) &&
+              (iTypeL < ITEM_STAFF || iTypeL >= ITEM_STAFF + MAX_ITEM_INDEX)))
         {
             bCantSkill = true;
         }
@@ -2227,35 +2302,32 @@ void SEASON3B::CNewUISkillList::RenderSkillIcon(int iIndex, float x, float y, fl
 
     switch (bySkillType)
     {
-        //case AT_SKILL_PIERCING:
+        // case AT_SKILL_PIERCING:
     case AT_SKILL_ICE_ARROW:
     case AT_SKILL_ICE_ARROW_STR:
     {
-        WORD  Dexterity;
+        WORD Dexterity;
         const WORD wRequireDexterity = 646;
         Dexterity = CharacterAttribute->Dexterity + CharacterAttribute->AddDexterity;
         if (Dexterity < wRequireDexterity)
         {
             bCantSkill = true;
         }
-    }break;
+    }
+    break;
     }
 
-    if (bySkillType == AT_SKILL_TWISTING_SLASH
-        || bySkillType == AT_SKILL_TWISTING_SLASH_STR
-        || bySkillType == AT_SKILL_TWISTING_SLASH_STR_MG
-        || bySkillType == AT_SKILL_TWISTING_SLASH_MASTERY
-        || bySkillType == AT_SKILL_RAGEFUL_BLOW
-        || bySkillType == AT_SKILL_RAGEFUL_BLOW_STR
-        || bySkillType == AT_SKILL_RAGEFUL_BLOW_MASTERY
-        || bySkillType == AT_SKILL_DEATHSTAB
-        || bySkillType == AT_SKILL_DEATHSTAB_STR
-        )
+    if (bySkillType == AT_SKILL_TWISTING_SLASH || bySkillType == AT_SKILL_TWISTING_SLASH_STR ||
+        bySkillType == AT_SKILL_TWISTING_SLASH_STR_MG || bySkillType == AT_SKILL_TWISTING_SLASH_MASTERY ||
+        bySkillType == AT_SKILL_RAGEFUL_BLOW || bySkillType == AT_SKILL_RAGEFUL_BLOW_STR ||
+        bySkillType == AT_SKILL_RAGEFUL_BLOW_MASTERY || bySkillType == AT_SKILL_DEATHSTAB ||
+        bySkillType == AT_SKILL_DEATHSTAB_STR)
     {
         int iTypeL = CharacterMachine->Equipment[EQUIPMENT_WEAPON_LEFT].Type;
         int iTypeR = CharacterMachine->Equipment[EQUIPMENT_WEAPON_RIGHT].Type;
 
-        if (!(iTypeR != -1 && (iTypeR < ITEM_STAFF || iTypeR >= ITEM_STAFF + MAX_ITEM_INDEX) && (iTypeL < ITEM_STAFF || iTypeL >= ITEM_STAFF + MAX_ITEM_INDEX)))
+        if (!(iTypeR != -1 && (iTypeR < ITEM_STAFF || iTypeR >= ITEM_STAFF + MAX_ITEM_INDEX) &&
+              (iTypeL < ITEM_STAFF || iTypeL >= ITEM_STAFF + MAX_ITEM_INDEX)))
         {
             bCantSkill = true;
         }
@@ -2263,21 +2335,17 @@ void SEASON3B::CNewUISkillList::RenderSkillIcon(int iIndex, float x, float y, fl
 
     if (gMapManager.InChaosCastle() == true)
     {
-        if (bySkillType == AT_SKILL_EARTHSHAKE
-            || bySkillType == AT_SKILL_EARTHSHAKE_STR
-            || bySkillType == AT_SKILL_EARTHSHAKE_MASTERY
-            || bySkillType == AT_SKILL_RIDER
-            || (bySkillType >= AT_PET_COMMAND_DEFAULT && bySkillType <= AT_PET_COMMAND_TARGET)
-            )
+        if (bySkillType == AT_SKILL_EARTHSHAKE || bySkillType == AT_SKILL_EARTHSHAKE_STR ||
+            bySkillType == AT_SKILL_EARTHSHAKE_MASTERY || bySkillType == AT_SKILL_RIDER ||
+            (bySkillType >= AT_PET_COMMAND_DEFAULT && bySkillType <= AT_PET_COMMAND_TARGET))
         {
             bCantSkill = true;
         }
     }
     else
     {
-        if (bySkillType == AT_SKILL_EARTHSHAKE
-            || bySkillType == AT_SKILL_EARTHSHAKE_STR
-            || bySkillType == AT_SKILL_EARTHSHAKE_MASTERY)
+        if (bySkillType == AT_SKILL_EARTHSHAKE || bySkillType == AT_SKILL_EARTHSHAKE_STR ||
+            bySkillType == AT_SKILL_EARTHSHAKE_MASTERY)
         {
             BYTE byDarkHorseLife = 0;
             byDarkHorseLife = CharacterMachine->Equipment[EQUIPMENT_HELPER].Durability;
@@ -2307,8 +2375,8 @@ void SEASON3B::CNewUISkillList::RenderSkillIcon(int iIndex, float x, float y, fl
     ITEM* pLeftRing = &CharacterMachine->Equipment[EQUIPMENT_RING_LEFT];
     ITEM* pRightRing = &CharacterMachine->Equipment[EQUIPMENT_RING_RIGHT];
 
-    if (g_CMonkSystem.IsChangeringNotUseSkill(pLeftRing->Type, pRightRing->Type, pLeftRing->Level, pRightRing->Level)
-        && (gCharacterManager.GetBaseClass(Hero->Class) == CLASS_RAGEFIGHTER))
+    if (g_CMonkSystem.IsChangeringNotUseSkill(pLeftRing->Type, pRightRing->Type, pLeftRing->Level, pRightRing->Level) &&
+        (gCharacterManager.GetBaseClass(Hero->Class) == CLASS_RAGEFIGHTER))
     {
         bCantSkill = true;
     }
@@ -2403,7 +2471,8 @@ void SEASON3B::CNewUISkillList::RenderSkillIcon(int iIndex, float x, float y, fl
         int iTypeL = CharacterMachine->Equipment[EQUIPMENT_WEAPON_LEFT].Type;
         int iTypeR = CharacterMachine->Equipment[EQUIPMENT_WEAPON_RIGHT].Type;
 
-        if (!(iTypeR != -1 && (iTypeR < ITEM_STAFF || iTypeR >= ITEM_STAFF + MAX_ITEM_INDEX) && (iTypeL < ITEM_STAFF || iTypeL >= ITEM_STAFF + MAX_ITEM_INDEX)))
+        if (!(iTypeR != -1 && (iTypeR < ITEM_STAFF || iTypeR >= ITEM_STAFF + MAX_ITEM_INDEX) &&
+              (iTypeL < ITEM_STAFF || iTypeL >= ITEM_STAFF + MAX_ITEM_INDEX)))
         {
             bCantSkill = true;
         }
@@ -2460,30 +2529,36 @@ void SEASON3B::CNewUISkillList::RenderSkillIcon(int iIndex, float x, float y, fl
     case KOS_COMMAND:
     {
         iSkillIndex = IMAGE_COMMAND;
-    }break;
+    }
+    break;
     case KOS_SKILL1:
     {
         iSkillIndex = IMAGE_SKILL1;
-    }break;
+    }
+    break;
     case KOS_SKILL2:
     {
         iSkillIndex = IMAGE_SKILL2;
-    }break;
+    }
+    break;
     case KOS_SKILL3:
     {
         iSkillIndex = IMAGE_SKILL3;
-    }break;
+    }
+    break;
     }
 
     if (bySkillType >= AT_SKILL_MASTER_BEGIN)
     {
         if (bCantSkill)
         {
-            RenderImage(BITMAP_INTERFACE_MASTER_BEGIN + 3, x, y, width, height, (20.f / 512.f) * (Skill_Icon % 25), ((28.f / 512.f) * ((Skill_Icon / 25))), 20.f / 512.f, 28.f / 512.f);
+            RenderImage(BITMAP_INTERFACE_MASTER_BEGIN + 3, x, y, width, height, (20.f / 512.f) * (Skill_Icon % 25),
+                        ((28.f / 512.f) * ((Skill_Icon / 25))), 20.f / 512.f, 28.f / 512.f);
         }
         else
         {
-            RenderImage(BITMAP_INTERFACE_MASTER_BEGIN + 2, x, y, width, height, (20.f / 512.f)* (Skill_Icon % 25), ((28.f / 512.f)* ((Skill_Icon / 25))), 20.f / 512.f, 28.f / 512.f);
+            RenderImage(BITMAP_INTERFACE_MASTER_BEGIN + 2, x, y, width, height, (20.f / 512.f) * (Skill_Icon % 25),
+                        ((28.f / 512.f) * ((Skill_Icon / 25))), 20.f / 512.f, 28.f / 512.f);
         }
     }
     else
@@ -2516,19 +2591,15 @@ void SEASON3B::CNewUISkillList::RenderSkillIcon(int iIndex, float x, float y, fl
         glColor3f(1.f, 1.f, 1.f);
     }
 
-    if ((bySkillType == AT_SKILL_CHAIN_DRIVE
-        || bySkillType == AT_SKILL_CHAIN_DRIVE_STR
-        || bySkillType == AT_SKILL_DRAGON_KICK
-        || bySkillType == AT_SKILL_DRAGON_ROAR
-        || bySkillType == AT_SKILL_DRAGON_ROAR_STR) && (bCantSkill))
+    if ((bySkillType == AT_SKILL_CHAIN_DRIVE || bySkillType == AT_SKILL_CHAIN_DRIVE_STR ||
+         bySkillType == AT_SKILL_DRAGON_KICK || bySkillType == AT_SKILL_DRAGON_ROAR ||
+         bySkillType == AT_SKILL_DRAGON_ROAR_STR) &&
+        (bCantSkill))
         return;
 
-    if ((bySkillType != AT_SKILL_INFINITY_ARROW)
-        && (bySkillType != AT_SKILL_INFINITY_ARROW_STR)
-        && (bySkillType != AT_SKILL_EXPANSION_OF_WIZARDRY)
-        && (bySkillType != AT_SKILL_EXPANSION_OF_WIZARDRY_STR)
-        && (bySkillType != AT_SKILL_EXPANSION_OF_WIZARDRY_MASTERY)
-        )
+    if ((bySkillType != AT_SKILL_INFINITY_ARROW) && (bySkillType != AT_SKILL_INFINITY_ARROW_STR) &&
+        (bySkillType != AT_SKILL_EXPANSION_OF_WIZARDRY) && (bySkillType != AT_SKILL_EXPANSION_OF_WIZARDRY_STR) &&
+        (bySkillType != AT_SKILL_EXPANSION_OF_WIZARDRY_MASTERY))
     {
         RenderSkillDelay(iIndex, x, y, width, height);
     }
@@ -2639,7 +2710,7 @@ void SEASON3B::CNewUIMainFrameWindow::SetBtnState(int iBtnType, bool bStateDown)
         }
     }
     break;
-#endif //defined defined PBG_ADD_INGAMESHOP_UI_MAINFRAME
+#endif // defined defined PBG_ADD_INGAMESHOP_UI_MAINFRAME
     case MAINFRAME_BTN_CHAINFO:
     {
         if (bStateDown)

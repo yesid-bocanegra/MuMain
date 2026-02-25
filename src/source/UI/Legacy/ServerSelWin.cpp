@@ -17,23 +17,17 @@
 #include "NewUISystem.h"
 #include "ServerListManager.h"
 
-#define	SSW_GAP_WIDTH	28
-#define	SSW_GAP_HEIGHT	5
-#define	SSW_GB_POS_X	16
-#define	SSW_GB_POS_Y	19
-
-
-
+#define SSW_GAP_WIDTH 28
+#define SSW_GAP_HEIGHT 5
+#define SSW_GB_POS_X 16
+#define SSW_GB_POS_Y 19
 
 using namespace SEASON3A;
 
-CServerSelWin::CServerSelWin()
-{
-}
+// cppcheck-suppress uninitMemberVar
+CServerSelWin::CServerSelWin() {}
 
-CServerSelWin::~CServerSelWin()
-{
-}
+CServerSelWin::~CServerSelWin() {}
 
 void CServerSelWin::Create()
 {
@@ -56,34 +50,25 @@ void CServerSelWin::Create()
         m_aServerGauge[i].Create(160, 4, BITMAP_LOG_IN + 2);
     }
 
-    SImgInfo aiiDeco[2] =
-    {
-        { BITMAP_LOG_IN + 3, 0, 0, 68, 95 },
-        { BITMAP_LOG_IN + 3, 68, 0, 68, 95 }
-    };
+    SImgInfo aiiDeco[2] = {{BITMAP_LOG_IN + 3, 0, 0, 68, 95}, {BITMAP_LOG_IN + 3, 68, 0, 68, 95}};
     m_aBtnDeco[0].Create(&aiiDeco[0], 8, 19);
     m_aBtnDeco[1].Create(&aiiDeco[1], 60, 19);
 
-    SImgInfo aiiArrow[2] =
-    {
-        { BITMAP_LOG_IN + 3, 136, 0, 23, 29 },
-        { BITMAP_LOG_IN + 3, 136, 30, 23, 29 }
-    };
+    SImgInfo aiiArrow[2] = {{BITMAP_LOG_IN + 3, 136, 0, 23, 29}, {BITMAP_LOG_IN + 3, 136, 30, 23, 29}};
     m_aArrowDeco[0].Create(&aiiArrow[0], 1, 2);
     m_aArrowDeco[1].Create(&aiiArrow[1], 23, 2);
 
-    SImgInfo aiiDescBg[WE_BG_MAX] =
-    {
-        { BITMAP_LOG_IN + 11, 0, 0, 4, 4 },
-        { BITMAP_LOG_IN + 12, 0, 0, 512, 6 },
-        { BITMAP_LOG_IN + 12, 0, 6, 512, 6 },
-        { BITMAP_LOG_IN + 13, 0, 0, 3, 4 },
-        { BITMAP_LOG_IN + 13, 3, 0, 3, 4 }
-    };
+    SImgInfo aiiDescBg[WE_BG_MAX] = {{BITMAP_LOG_IN + 11, 0, 0, 4, 4},
+                                     {BITMAP_LOG_IN + 12, 0, 0, 512, 6},
+                                     {BITMAP_LOG_IN + 12, 0, 6, 512, 6},
+                                     {BITMAP_LOG_IN + 13, 0, 0, 3, 4},
+                                     {BITMAP_LOG_IN + 13, 3, 0, 3, 4}};
     m_winDescription.Create(aiiDescBg, 1, 10);
     m_winDescription.SetLine(10);
 
-    CWin::SetSize((SERVER_GROUP_BTN_WIDTH + SSW_GAP_WIDTH) * 2 + SERVER_BTN_WIDTH, SERVER_BTN_HEIGHT * SSW_SERVER_MAX + SSW_GAP_HEIGHT * 2 + SERVER_GROUP_BTN_HEIGHT + m_winDescription.GetHeight());
+    CWin::SetSize((SERVER_GROUP_BTN_WIDTH + SSW_GAP_WIDTH) * 2 + SERVER_BTN_WIDTH,
+                  SERVER_BTN_HEIGHT * SSW_SERVER_MAX + SSW_GAP_HEIGHT * 2 + SERVER_GROUP_BTN_HEIGHT +
+                      m_winDescription.GetHeight());
 }
 
 void CServerSelWin::PreRelease()
@@ -116,11 +101,14 @@ void CServerSelWin::SetPosition(int nXCoord, int nYCoord)
     int nBtnPosY;
     int i;
 
-    int nServerGBtnBasePosY = nYCoord + CWin::GetHeight() - (nServerGBtnHeight * 11 + SSW_GAP_HEIGHT * 2 + nDescGgHeight);
+    int nServerGBtnBasePosY =
+        nYCoord + CWin::GetHeight() - (nServerGBtnHeight * 11 + SSW_GAP_HEIGHT * 2 + nDescGgHeight);
     int nRServerGBtnPosX = nXCoord + nServerGBtnWidth + nServerBtnWidth + (SSW_GAP_WIDTH * 2);
 
     int icntServreGroup = 0;
-    m_aServerGroupBtn[icntServreGroup++].SetPosition(nXCoord + (CWin::GetWidth() - nServerGBtnWidth) / 2, nYCoord + CWin::GetHeight() - nServerGBtnHeight - SSW_GAP_HEIGHT - nDescGgHeight);
+    m_aServerGroupBtn[icntServreGroup++].SetPosition(nXCoord + (CWin::GetWidth() - nServerGBtnWidth) / 2,
+                                                     nYCoord + CWin::GetHeight() - nServerGBtnHeight - SSW_GAP_HEIGHT -
+                                                         nDescGgHeight);
 
     for (i = 0; i < SSW_LEFT_SERVER_G_MAX; i++)
     {
@@ -134,10 +122,12 @@ void CServerSelWin::SetPosition(int nXCoord, int nYCoord)
         m_aServerGroupBtn[icntServreGroup++].SetPosition(nRServerGBtnPosX, nBtnPosY);
     }
 
-    m_winDescription.SetPosition(nXCoord - ((m_winDescription.GetWidth() - CWin::GetWidth()) / 2), nYCoord + CWin::GetHeight() - m_winDescription.GetHeight());
+    m_winDescription.SetPosition(nXCoord - ((m_winDescription.GetWidth() - CWin::GetWidth()) / 2),
+                                 nYCoord + CWin::GetHeight() - m_winDescription.GetHeight());
 
     m_aBtnDeco[0].SetPosition(m_aServerGroupBtn[1].GetXPos(), m_aServerGroupBtn[1].GetYPos());
-    m_aBtnDeco[1].SetPosition(m_aServerGroupBtn[SSW_LEFT_SERVER_G_MAX + 1].GetXPos() + SERVER_GROUP_BTN_WIDTH, m_aServerGroupBtn[SSW_LEFT_SERVER_G_MAX + 1].GetYPos());
+    m_aBtnDeco[1].SetPosition(m_aServerGroupBtn[SSW_LEFT_SERVER_G_MAX + 1].GetXPos() + SERVER_GROUP_BTN_WIDTH,
+                              m_aServerGroupBtn[SSW_LEFT_SERVER_G_MAX + 1].GetYPos());
 
     int a = m_aServerGroupBtn[1].GetXPos();
 }
@@ -157,12 +147,15 @@ void CServerSelWin::SetServerBtnPosition()
 
     int nLServerGBtnTop = m_aServerGroupBtn[1].GetYPos();
 
-    int nServerBtnBasePosY = nLServerGBtnHeightSum > nServerBtnHeightSum ? nLServerGBtnTop : nLServerGBtnTop - (nServerBtnHeightSum - nLServerGBtnHeightSum);
+    int nServerBtnBasePosY = nLServerGBtnHeightSum > nServerBtnHeightSum
+                                 ? nLServerGBtnTop
+                                 : nLServerGBtnTop - (nServerBtnHeightSum - nLServerGBtnHeightSum);
 
     for (int i = 0; i < m_pSelectServerGroup->GetServerSize(); i++)
     {
         m_aServerBtn[i].SetPosition(nServerBtnPosX, nServerBtnBasePosY + nServerBtnHeight * i);
-        m_aServerGauge[i].SetPosition(m_aServerBtn[i].GetXPos() + SSW_GB_POS_X, m_aServerBtn[i].GetYPos() + SSW_GB_POS_Y);
+        m_aServerGauge[i].SetPosition(m_aServerBtn[i].GetXPos() + SSW_GB_POS_X,
+                                      m_aServerBtn[i].GetYPos() + SSW_GB_POS_Y);
     }
 }
 
@@ -173,11 +166,13 @@ void CServerSelWin::SetArrowSpritePosition()
 
     if ((m_iSelectServerBtnIndex >= 0) && (m_iSelectServerBtnIndex <= SSW_LEFT_SERVER_G_MAX))
     {
-        m_aArrowDeco[0].SetPosition(m_aServerGroupBtn[m_iSelectServerBtnIndex].GetXPos() + SERVER_GROUP_BTN_WIDTH, m_aServerGroupBtn[m_iSelectServerBtnIndex].GetYPos());
+        m_aArrowDeco[0].SetPosition(m_aServerGroupBtn[m_iSelectServerBtnIndex].GetXPos() + SERVER_GROUP_BTN_WIDTH,
+                                    m_aServerGroupBtn[m_iSelectServerBtnIndex].GetYPos());
     }
     else if ((m_iSelectServerBtnIndex > SSW_LEFT_SERVER_G_MAX) && (m_iSelectServerBtnIndex < SSW_SERVER_G_MAX))
     {
-        m_aArrowDeco[1].SetPosition(m_aServerGroupBtn[m_iSelectServerBtnIndex].GetXPos(), m_aServerGroupBtn[m_iSelectServerBtnIndex].GetYPos());
+        m_aArrowDeco[1].SetPosition(m_aServerGroupBtn[m_iSelectServerBtnIndex].GetXPos(),
+                                    m_aServerGroupBtn[m_iSelectServerBtnIndex].GetYPos());
     }
 }
 
@@ -190,18 +185,14 @@ void CServerSelWin::UpdateDisplay()
     m_icntRightServerGroup = 0;
     m_bTestServerBtn = false;
 
-    DWORD adwServerGBtnClr[BTN_IMG_MAX] =
-    {
-        CLRDW_BR_GRAY, CLRDW_BR_GRAY, CLRDW_WHITE, 0,
-        CLRDW_BR_GRAY, CLRDW_BR_GRAY, CLRDW_WHITE, 0
-    };
+    DWORD adwServerGBtnClr[BTN_IMG_MAX] = {CLRDW_BR_GRAY, CLRDW_BR_GRAY, CLRDW_WHITE, 0,
+                                           CLRDW_BR_GRAY, CLRDW_BR_GRAY, CLRDW_WHITE, 0};
 
-    DWORD adwServerBtnClr[4][4] =
-    {
-        { CLRDW_BR_GRAY, CLRDW_BR_GRAY, CLRDW_WHITE, 0 },
-        { CLRDW_YELLOW, CLRDW_YELLOW, CLRDW_BR_YELLOW, 0 },
-        { CLRDW_ORANGE, CLRDW_ORANGE, CLRDW_BR_ORANGE, 0 },
-        { CLRDW_ORANGE, CLRDW_ORANGE, CLRDW_BR_ORANGE, 0 },
+    DWORD adwServerBtnClr[4][4] = {
+        {CLRDW_BR_GRAY, CLRDW_BR_GRAY, CLRDW_WHITE, 0},
+        {CLRDW_YELLOW, CLRDW_YELLOW, CLRDW_BR_YELLOW, 0},
+        {CLRDW_ORANGE, CLRDW_ORANGE, CLRDW_BR_ORANGE, 0},
+        {CLRDW_ORANGE, CLRDW_ORANGE, CLRDW_BR_ORANGE, 0},
     };
 
     m_icntServerGroup = g_ServerListManager->GetServerGroupSize();
@@ -239,7 +230,8 @@ void CServerSelWin::UpdateDisplay()
             if (m_icntRightServerGroup >= SSW_RIGHT_SERVER_G_MAX)
                 continue;
 
-            m_aServerGroupBtn[SSW_LEFT_SERVER_G_MAX + m_icntRightServerGroup + 1].SetText(pServerGroup->m_szName, adwServerGBtnClr);
+            m_aServerGroupBtn[SSW_LEFT_SERVER_G_MAX + m_icntRightServerGroup + 1].SetText(pServerGroup->m_szName,
+                                                                                          adwServerGBtnClr);
             pServerGroup->m_iBtnPos = SSW_LEFT_SERVER_G_MAX + m_icntRightServerGroup + 1;
 
             m_icntRightServerGroup++;
@@ -276,7 +268,8 @@ void CServerSelWin::UpdateDisplay()
         icntServer++;
     }
 
-    ::SeparateTextIntoLines(m_pSelectServerGroup->m_szDescription, m_szDescription[0], SSW_DESC_LINE_MAX, SSW_DESC_ROW_MAX);
+    ::SeparateTextIntoLines(m_pSelectServerGroup->m_szDescription, m_szDescription[0], SSW_DESC_LINE_MAX,
+                            SSW_DESC_ROW_MAX);
 
     SetArrowSpritePosition();
     SetServerBtnPosition();
@@ -435,16 +428,18 @@ void CServerSelWin::UpdateWhileActive(double dDeltaTick)
             {
                 CUIMng::Instance().HideWin(this);
 
-                SocketClient->ToConnectServer()->SendConnectionInfoRequest(static_cast<uint16_t>(pServerInfo->m_iConnectIndex));
+                SocketClient->ToConnectServer()->SendConnectionInfoRequest(
+                    static_cast<uint16_t>(pServerInfo->m_iConnectIndex));
                 g_pSystemLogBox->AddText(GlobalText[470], SEASON3B::TYPE_SYSTEM_MESSAGE);
                 g_pSystemLogBox->AddText(GlobalText[471], SEASON3B::TYPE_SYSTEM_MESSAGE);
 
-                //if (m_pSelectServerGroup->m_iSequence == 0)
+                // if (m_pSelectServerGroup->m_iSequence == 0)
                 //{
-                //    bTestServer = true;
-                //}
+                //     bTestServer = true;
+                // }
 
-                g_ServerListManager->SetSelectServerInfo(m_pSelectServerGroup->m_szName, pServerInfo->m_iIndex, pServerInfo->m_byNonPvP);
+                g_ServerListManager->SetSelectServerInfo(m_pSelectServerGroup->m_szName, pServerInfo->m_iIndex,
+                                                         pServerInfo->m_byNonPvP);
 
                 break;
             }

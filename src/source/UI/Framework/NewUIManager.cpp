@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "NewUIManager.h"
 
-
 using namespace SEASON3B;
 
 SEASON3B::CNewUIManager::CNewUIManager()
@@ -10,7 +9,7 @@ SEASON3B::CNewUIManager::CNewUIManager()
     m_pActiveKeyUIObj = NULL;
 #ifdef PBG_MOD_STAMINA_UI
     m_nShowUICnt = 0;
-#endif //PBG_MOD_STAMINA_UI
+#endif // PBG_MOD_STAMINA_UI
 }
 
 SEASON3B::CNewUIManager::~CNewUIManager()
@@ -119,7 +118,7 @@ bool SEASON3B::CNewUIManager::UpdateMouseEvent()
             CNewUIObj* obj_backup = (*vi);
             bool bResult = (*vi)->UpdateMouseEvent();
 
-            auto vi2 = std::find(vecUI.begin(),vecUI.end(), obj_backup);
+            auto vi2 = std::find(vecUI.begin(), vecUI.end(), obj_backup);
             if (vi2 != vecUI.end())
             {
                 vi = vi2;
@@ -163,7 +162,7 @@ bool SEASON3B::CNewUIManager::UpdateKeyEvent()
             if (false == (*vi)->UpdateKeyEvent())
             {
                 m_pActiveKeyUIObj = (*vi);
-                return false;		//. stop calling UpdateKeyEvent functions
+                return false; //. stop calling UpdateKeyEvent functions
             }
         }
     }
@@ -181,7 +180,7 @@ bool SEASON3B::CNewUIManager::Update()
         {
             if (false == (*vi)->Update())
             {
-                return false;		//. stop calling Update functions
+                return false; //. stop calling Update functions
             }
         }
     }
@@ -240,28 +239,28 @@ bool SEASON3B::CNewUIManager::IsInterfaceEnabled(DWORD dwKey)
     return pObj->IsEnabled();
 }
 
-void SEASON3B::CNewUIManager::ShowInterface(DWORD dwKey, bool bShow/* = true*/)
+void SEASON3B::CNewUIManager::ShowInterface(DWORD dwKey, bool bShow /* = true*/)
 {
     CNewUIObj* pObj = FindUIObj(dwKey);
     if (NULL != pObj)
         pObj->Show(bShow);
 }
 
-void SEASON3B::CNewUIManager::EnableInterface(DWORD dwKey, bool bEnable/* = true*/)
+void SEASON3B::CNewUIManager::EnableInterface(DWORD dwKey, bool bEnable /* = true*/)
 {
     CNewUIObj* pObj = FindUIObj(dwKey);
     if (NULL != pObj)
         pObj->Enable(bEnable);
 }
 
-void SEASON3B::CNewUIManager::ShowAllInterfaces(bool bShow/* = true*/)
+void SEASON3B::CNewUIManager::ShowAllInterfaces(bool bShow /* = true*/)
 {
     auto mi = m_mapUI.begin();
     for (; mi != m_mapUI.end(); mi++)
         (*mi).second->Show(bShow);
 }
 
-void SEASON3B::CNewUIManager::EnableAllInterfaces(bool bEnable/* = true*/)
+void SEASON3B::CNewUIManager::EnableAllInterfaces(bool bEnable /* = true*/)
 {
     auto mi = m_mapUI.begin();
     for (; mi != m_mapUI.end(); mi++)
@@ -295,4 +294,4 @@ int SEASON3B::CNewUIManager::GetShowUICnt()
     }
     return m_nShowUICnt;
 }
-#endif //PBG_MOD_STAMINA_UI
+#endif // PBG_MOD_STAMINA_UI

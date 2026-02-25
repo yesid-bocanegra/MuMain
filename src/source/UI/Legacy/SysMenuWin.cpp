@@ -16,38 +16,29 @@
 #include "Core/ErrorReport.h"
 #include "Core/muConsoleDebug.h"
 
-#define	SMW_BTN_GAP		4
+#define SMW_BTN_GAP 4
 
-extern EGameScene  SceneFlag;
+extern EGameScene SceneFlag;
 extern bool LogOut;
 
-CSysMenuWin::CSysMenuWin()
-{
-}
+CSysMenuWin::CSysMenuWin() {}
 
-CSysMenuWin::~CSysMenuWin()
-{
-}
+CSysMenuWin::~CSysMenuWin() {}
 
 void CSysMenuWin::Create()
 {
     CInput rInput = CInput::Instance();
     CWin::Create(rInput.GetScreenWidth(), rInput.GetScreenHeight());
 
-    SImgInfo aiiBack[WE_BG_MAX] =
-    {
-        { BITMAP_SYS_WIN, 0, 0, 128, 128 },
-        { BITMAP_SYS_WIN + 1, 0, 0, 213, 64 },
-        { BITMAP_SYS_WIN + 2, 0, 0, 213, 43 },
-        { BITMAP_SYS_WIN + 3, 0, 0, 5, 8 },
-        { BITMAP_SYS_WIN + 4, 0, 0, 5, 8 }
-    };
+    SImgInfo aiiBack[WE_BG_MAX] = {{BITMAP_SYS_WIN, 0, 0, 128, 128},
+                                   {BITMAP_SYS_WIN + 1, 0, 0, 213, 64},
+                                   {BITMAP_SYS_WIN + 2, 0, 0, 213, 43},
+                                   {BITMAP_SYS_WIN + 3, 0, 0, 5, 8},
+                                   {BITMAP_SYS_WIN + 4, 0, 0, 5, 8}};
     m_winBack.Create(aiiBack, 1, 10);
 
-    const wchar_t* apszBtnText[SMW_BTN_MAX] =
-    { GlobalText[381], GlobalText[382], GlobalText[385], GlobalText[388] };
-    DWORD adwBtnClr[4] =
-    { CLRDW_BR_GRAY, CLRDW_BR_GRAY, CLRDW_WHITE, 0 };
+    const wchar_t* apszBtnText[SMW_BTN_MAX] = {GlobalText[381], GlobalText[382], GlobalText[385], GlobalText[388]};
+    DWORD adwBtnClr[4] = {CLRDW_BR_GRAY, CLRDW_BR_GRAY, CLRDW_WHITE, 0};
     for (int i = 0; i < SMW_BTN_MAX; ++i)
     {
         m_aBtn[i].Create(108, 30, BITMAP_TEXT_BTN, 4, 2, 1);
@@ -68,7 +59,7 @@ void CSysMenuWin::Create()
     }
 
     SetPosition((rInput.GetScreenWidth() - m_winBack.GetWidth()) / 2,
-        (rInput.GetScreenHeight() - m_winBack.GetHeight()) / 2);
+                (rInput.GetScreenHeight() - m_winBack.GetHeight()) / 2);
 }
 
 void CSysMenuWin::PreRelease()
@@ -142,8 +133,7 @@ void CSysMenuWin::UpdateWhileActive(double dDeltaTick)
         CUIMng::Instance().SetSysMenuWinShow(false);
         CUIMng::Instance().HideWin(this);
     }
-    else if (CInput::Instance().IsKeyDown(VK_ESCAPE)
-        && !CUIMng::Instance().IsSysMenuWinShow())
+    else if (CInput::Instance().IsKeyDown(VK_ESCAPE) && !CUIMng::Instance().IsSysMenuWinShow())
     {
         ::PlayBuffer(SOUND_CLICK01);
         CUIMng::Instance().HideWin(this);

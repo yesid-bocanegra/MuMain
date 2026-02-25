@@ -28,9 +28,7 @@ CItemEqualType::CItemEqualType()
     m_nSubRightType = 0;
 }
 
-CItemEqualType::~CItemEqualType()
-{
-}
+CItemEqualType::~CItemEqualType() {}
 
 void CItemEqualType::SetModelType(int _ModelIndex, int _Left, int _Right)
 {
@@ -39,6 +37,7 @@ void CItemEqualType::SetModelType(int _ModelIndex, int _Left, int _Right)
     m_nSubRightType = _Right;
 }
 
+// cppcheck-suppress uninitMemberVar
 CMonkSystem::CMonkSystem()
 {
     m_nRepeatedlyCnt = 0;
@@ -188,7 +187,7 @@ int CMonkSystem::ModifyTypeCommonItemMonk(int _OrginalType)
 {
     int nItemType = (_OrginalType - MODEL_ITEM) / MAX_ITEM_INDEX;
     int nItemSubType = (_OrginalType - MODEL_ITEM) % MAX_ITEM_INDEX;
-    int nCommonItem[MODEL_ITEM_COMMONCNT_RAGEFIGHTER] = { 5, 6, 8, 9 };
+    int nCommonItem[MODEL_ITEM_COMMONCNT_RAGEFIGHTER] = {5, 6, 8, 9};
 
     if (nItemType >= 7 && nItemType <= 11)
     {
@@ -209,10 +208,10 @@ int CMonkSystem::ModifyTypeCommonItemMonk(int _OrginalType)
 bool CMonkSystem::IsRagefighterCommonWeapon(CLASS_TYPE _Class, int _Type)
 {
     if ((gCharacterManager.GetBaseClass(_Class) == CLASS_RAGEFIGHTER) &&
-        ((_Type == MODEL_KRIS) || (_Type == MODEL_SHORT_SWORD)
-            || (_Type == MODEL_SMALL_AXE) || (_Type == MODEL_HAND_AXE) || (_Type == MODEL_TOMAHAWK)
-            || (_Type == MODEL_SMALLMACE) || (_Type == MODEL_MORNING_STAR) || (_Type == MODEL_FLAIL)
-            || (_Type == MODEL_GREAT_HAMMER) || (_Type == MODEL_CRYSTAL_MORNING_STAR)))
+        ((_Type == MODEL_KRIS) || (_Type == MODEL_SHORT_SWORD) || (_Type == MODEL_SMALL_AXE) ||
+         (_Type == MODEL_HAND_AXE) || (_Type == MODEL_TOMAHAWK) || (_Type == MODEL_SMALLMACE) ||
+         (_Type == MODEL_MORNING_STAR) || (_Type == MODEL_FLAIL) || (_Type == MODEL_GREAT_HAMMER) ||
+         (_Type == MODEL_CRYSTAL_MORNING_STAR)))
     {
         return true;
     }
@@ -245,10 +244,12 @@ void CMonkSystem::RenderPhoenixGloves(CHARACTER* _pCha, BYTE _Hand)
     RenderLinkObject(_Hand ? 100.f : 80.f, 10.0, -75.0, _pCha, w, MODEL_SWORD_35_WING, 0, 0, true, true, 0, 1);
 }
 
-void CMonkSystem::RenderSwordformGloves(CHARACTER* _pCha, int _ModelType, int _Hand, float _Alpha, bool _Translate, int _Select)
+void CMonkSystem::RenderSwordformGloves(CHARACTER* _pCha, int _ModelType, int _Hand, float _Alpha, bool _Translate,
+                                        int _Select)
 {
     PART_t* w = &_pCha->Weapon[_Hand];
-    RenderPartObject(&_pCha->Object, ModifyTypeSwordformGloves(_ModelType, _Hand), w, _pCha->Light, _Alpha, w->Level, w->ExcellentFlags, w->AncientDiscriminator, false, false, _Translate, _Select);
+    RenderPartObject(&_pCha->Object, ModifyTypeSwordformGloves(_ModelType, _Hand), w, _pCha->Light, _Alpha, w->Level,
+                     w->ExcellentFlags, w->AncientDiscriminator, false, false, _Translate, _Select);
 }
 
 int CMonkSystem::ModifyTypeSwordformGloves(int _ModelType, int _LeftHand)
@@ -263,9 +264,12 @@ int CMonkSystem::EqualItemModelType(int _Type)
 
 void CMonkSystem::MoveBlurEffect(CHARACTER* _pCha, OBJECT* _pObj, BMD* pModel)
 {
-    if (_pCha == NULL) return;
-    if (_pObj == NULL) return;
-    if (pModel == NULL) return;
+    if (_pCha == NULL)
+        return;
+    if (_pObj == NULL)
+        return;
+    if (pModel == NULL)
+        return;
 
     BMD* b = &Models[_pObj->Type];
     vec3_t Light;
@@ -280,7 +284,8 @@ void CMonkSystem::MoveBlurEffect(CHARACTER* _pCha, OBJECT* _pObj, BMD* pModel)
 
     for (int i = 0; i < fDelay; i++)
     {
-        b->Animation(BoneTransform, fAnimationFrame, _pObj->PriorAnimationFrame, _pObj->PriorAction, _pObj->Angle, _pObj->HeadAngle);
+        b->Animation(BoneTransform, fAnimationFrame, _pObj->PriorAnimationFrame, _pObj->PriorAction, _pObj->Angle,
+                     _pObj->HeadAngle);
 
         Vector(1.0f, 1.0f, 1.0f, Light);
         int _LeftHand = 0;
@@ -325,7 +330,7 @@ bool CMonkSystem::RageEquipmentWeapon(int _Index, short _ItemType)
 {
     int _OtherEquip = (_Index == EQUIPMENT_WEAPON_LEFT) ? EQUIPMENT_WEAPON_RIGHT : EQUIPMENT_WEAPON_LEFT;
     ITEM* pOtherHand = &CharacterMachine->Equipment[_OtherEquip];
-    //글러브형 무기는 글러브형무기하고만 착용가능
+    // 글러브형 무기는 글러브형무기하고만 착용가능
     if (g_CMonkSystem.IsSwordformGlovesItemType(_ItemType))
     {
         if (pOtherHand->Type == -1)
@@ -474,7 +479,7 @@ bool CMonkSystem::SendAttackPacket(CHARACTER* _pCha, int _nMoveTarget, int _nSki
 #endif
 
         VectorCopy(CharactersClient[_nMoveTarget].Object.Position, _pCha->TargetPosition);
-        //몬스터의 넉백효과의 의해 이펙트가 혼란스러움 방지
+        // 몬스터의 넉백효과의 의해 이펙트가 혼란스러움 방지
         if (!(pObj->CurrentAction == PLAYER_SKILL_GIANTSWING && m_btAttState == FRAME_SECONDATT))
             pObj->Angle[2] = CreateAngle2D(pObj->Position, _pCha->TargetPosition);
 
@@ -496,7 +501,8 @@ bool CMonkSystem::RageFighterEffect(OBJECT* _pObj, int _Type)
         float _nRoop = (float)(180.0f / _nAniKey) * _pObj->AnimationFrame + 180.0f;
         fAlpha = sinf(_nRoop * Q_PI / 180) * 0.7f + 1.0f;
         _pObj->Angle[2] = 45.0f;
-        b->RenderBody(RENDER_TEXTURE, fAlpha, _pObj->BlendMesh, _pObj->BlendMeshLight, _pObj->BlendMeshTexCoordU, _pObj->BlendMeshTexCoordV);
+        b->RenderBody(RENDER_TEXTURE, fAlpha, _pObj->BlendMesh, _pObj->BlendMeshLight, _pObj->BlendMeshTexCoordU,
+                      _pObj->BlendMeshTexCoordV);
         return true;
     }
     else if (_pObj->CurrentAction == PLAYER_SKILL_DARKSIDE_ATTACK)
@@ -504,11 +510,12 @@ bool CMonkSystem::RageFighterEffect(OBJECT* _pObj, int _Type)
         Vector(1.0f, 1.0f, 1.0f, b->BodyLight);
         float fAlpha = _pObj->Alpha;
         VectorScale(b->BodyLight, fAlpha, b->BodyLight);
-        b->RenderBody(RENDER_TEXTURE | RENDER_BRIGHT, fAlpha, _pObj->BlendMesh, _pObj->BlendMeshLight, _pObj->BlendMeshTexCoordU, _pObj->BlendMeshTexCoordV);
+        b->RenderBody(RENDER_TEXTURE | RENDER_BRIGHT, fAlpha, _pObj->BlendMesh, _pObj->BlendMeshLight,
+                      _pObj->BlendMeshTexCoordU, _pObj->BlendMeshTexCoordV);
         return true;
     }
-    else if (_pObj->CurrentAction == PLAYER_SKILL_ATT_UP_OURFORCES
-        || _pObj->CurrentAction == PLAYER_SKILL_HP_UP_OURFORCES)
+    else if (_pObj->CurrentAction == PLAYER_SKILL_ATT_UP_OURFORCES ||
+             _pObj->CurrentAction == PLAYER_SKILL_HP_UP_OURFORCES)
     {
         float fAlpha = 1.0f;
         if (_pObj->AnimationFrame < 4)
@@ -524,8 +531,10 @@ bool CMonkSystem::RageFighterEffect(OBJECT* _pObj, int _Type)
             fAlpha = 0.0f;
         }
         Vector(1.0f, 1.0f, 1.0f, b->BodyLight);
-        b->RenderBody(RENDER_BRIGHT | RENDER_COLOR, _pObj->Alpha, _pObj->BlendMesh, _pObj->BlendMeshLight, _pObj->BlendMeshTexCoordU, _pObj->BlendMeshTexCoordV);
-        b->RenderBody(RENDER_TEXTURE, fAlpha, _pObj->BlendMesh, _pObj->BlendMeshLight, _pObj->BlendMeshTexCoordU, _pObj->BlendMeshTexCoordV);
+        b->RenderBody(RENDER_BRIGHT | RENDER_COLOR, _pObj->Alpha, _pObj->BlendMesh, _pObj->BlendMeshLight,
+                      _pObj->BlendMeshTexCoordU, _pObj->BlendMeshTexCoordV);
+        b->RenderBody(RENDER_TEXTURE, fAlpha, _pObj->BlendMesh, _pObj->BlendMeshLight, _pObj->BlendMeshTexCoordU,
+                      _pObj->BlendMeshTexCoordV);
 
         return false;
     }
@@ -586,7 +595,8 @@ void CMonkSystem::SetDarksideCnt()
 
 bool CMonkSystem::SendDarksideAtt(OBJECT* _pObj)
 {
-    if (_pObj == NULL) return false;
+    if (_pObj == NULL)
+        return false;
 
     if (m_nDarksideCnt >= DARKSIDE_TARGET_MAX)
     {
@@ -759,7 +769,8 @@ void CMonkSystem::DarksideRendering(CHARACTER* pCha, PART_t* pPart, bool Transla
         pObj->AnimationFrame = m_fOtherAniFrame;
         pObj->CurrentAction = PLAYER_SKILL_DARKSIDE_ATTACK;
         Calc_ObjectAnimation(pObj, Translate, Select);
-        RenderPartObject(pObj, Type, pPart, pCha->Light, pObj->Alpha, pPart->Level, pPart->ExcellentFlags, pPart->AncientDiscriminator, false, false, Translate, Select);
+        RenderPartObject(pObj, Type, pPart, pCha->Light, pObj->Alpha, pPart->Level, pPart->ExcellentFlags,
+                         pPart->AncientDiscriminator, false, false, Translate, Select);
     }
 
     if (m_nDarksideCnt > 0)
@@ -785,9 +796,9 @@ void CMonkSystem::DarksideRendering(CHARACTER* pCha, PART_t* pPart, bool Transla
         {
             bool bChange = false;
             if (pObj->Kind == KIND_PLAYER && pObj->Type == MODEL_PLAYER &&
-                (pObj->SubType == MODEL_SKELETON_CHANGED || pObj->SubType == MODEL_PANDA
-                    || pObj->SubType == MODEL_SKELETON_PCBANG || pObj->SubType == MODEL_HALLOWEEN
-                    || pObj->SubType == MODEL_XMAS_EVENT_CHANGE_GIRL || pObj->SubType == MODEL_SKELETON1))
+                (pObj->SubType == MODEL_SKELETON_CHANGED || pObj->SubType == MODEL_PANDA ||
+                 pObj->SubType == MODEL_SKELETON_PCBANG || pObj->SubType == MODEL_HALLOWEEN ||
+                 pObj->SubType == MODEL_XMAS_EVENT_CHANGE_GIRL || pObj->SubType == MODEL_SKELETON1))
             {
                 bChange = true;
             }
@@ -828,7 +839,8 @@ void CMonkSystem::DarksideRendering(CHARACTER* pCha, PART_t* pPart, bool Transla
                 pObj->AnimationFrame = m_fDummyAniFrame;
                 pObj->CurrentAction = PLAYER_SKILL_DARKSIDE_ATTACK;
                 Calc_ObjectAnimation(pObj, Translate, Select);
-                RenderPartObject(pObj, Type, pPart, pCha->Light, pObj->Alpha, pPart->Level, pPart->ExcellentFlags, pPart->AncientDiscriminator, false, false, Translate, Select);
+                RenderPartObject(pObj, Type, pPart, pCha->Light, pObj->Alpha, pPart->Level, pPart->ExcellentFlags,
+                                 pPart->AncientDiscriminator, false, false, Translate, Select);
             }
         }
     }
@@ -840,13 +852,13 @@ void CMonkSystem::DarksideRendering(CHARACTER* pCha, PART_t* pPart, bool Transla
     VectorCopy(vStartPos, pObj->StartPosition);
     VectorCopy(vOrgAngle, pObj->Angle);
     Calc_ObjectAnimation(pObj, Translate, Select);
-    RenderPartObject(pObj, Type, pPart, pCha->Light, pObj->Alpha, pPart->Level, pPart->ExcellentFlags, pPart->AncientDiscriminator, false, false, Translate, Select);
+    RenderPartObject(pObj, Type, pPart, pCha->Light, pObj->Alpha, pPart->Level, pPart->ExcellentFlags,
+                     pPart->AncientDiscriminator, false, false, Translate, Select);
 }
 
 void CMonkSystem::InitDummyCal()
 {
     m_tmDummyUnit.clear();
-    memset(&m_tmDummyUnit, 0, sizeof(CDummyUnit) * m_tmDummyUnit.size());
     m_nDummyIndex = 0;
 }
 
@@ -938,7 +950,7 @@ void CMonkSystem::RenderRepeatedly(int _Key, OBJECT* pObj)
 
         switch (m_arrRepeatedly[_index].m_DamageType)
         {
-            //데미지타입에 따른컬러
+            // 데미지타입에 따른컬러
         case 0:
             if (_Key == HeroKey)
             {
@@ -949,22 +961,29 @@ void CMonkSystem::RenderRepeatedly(int _Key, OBJECT* pObj)
                 Vector(1.f, 0.6f, 0.f, Light);
             }
             break;
-        case 1: scale = 50.f;
+        case 1:
+            scale = 50.f;
             Vector(0.0f, 1.f, 1.f, Light);
             break;
-        case 2: scale = 50.f;
+        case 2:
+            scale = 50.f;
             Vector(0.f, 1.f, 0.6f, Light);
             break;
-        case 3: scale = 50.f;
+        case 3:
+            scale = 50.f;
             Vector(0.f, 0.6f, 1.f, Light);
             break;
-        case 4: Vector(1.f, 0.f, 1.f, Light);
+        case 4:
+            Vector(1.f, 0.f, 1.f, Light);
             break;
-        case 5: Vector(0.f, 1.f, 0.f, Light);
+        case 5:
+            Vector(0.f, 1.f, 0.f, Light);
             break;
-        case 6: Vector(0.7f, 0.4f, 1.0f, Light);
+        case 6:
+            Vector(0.7f, 0.4f, 1.0f, Light);
             break;
-        default: Vector(1.f, 1.f, 1.f, Light);
+        default:
+            Vector(1.f, 1.f, 1.f, Light);
             break;
         }
 
@@ -1028,7 +1047,7 @@ bool CMonkSystem::IsSwordformGlovesUseSkill(int _nSkill)
 {
     switch (_nSkill)
     {
-    case AT_SKILL_CHAIN_DRIVE: //여기 스킬들은 장갑형 무기를 착용시에만 사용가능
+    case AT_SKILL_CHAIN_DRIVE: // 여기 스킬들은 장갑형 무기를 착용시에만 사용가능
     case AT_SKILL_DRAGON_ROAR:
     case AT_SKILL_DRAGON_ROAR_STR:
     case AT_SKILL_DRAGON_KICK:
@@ -1047,7 +1066,7 @@ bool CMonkSystem::IsSwordformGlovesUseSkill(int _nSkill)
             }
         }
     }
-    return false;
+        return false;
     default:
         return true;
     }
@@ -1061,11 +1080,10 @@ bool CMonkSystem::IsChangeringNotUseSkill(short _LType, short _RType, int _LLeve
         return true;
     }
 
-    if (((_LType == ITEM_TRANSFORMATION_RING)
-        && (_LLevel == 0 || _LLevel == 8 || _LLevel == 24 || _LLevel == 32 || _LLevel == 40)) ||
-        ((_RType == ITEM_TRANSFORMATION_RING)
-            && (_RLevel == 0 || _RLevel == 8 || _RLevel == 24 || _RLevel == 32 || _RLevel == 40))
-        )
+    if (((_LType == ITEM_TRANSFORMATION_RING) &&
+         (_LLevel == 0 || _LLevel == 8 || _LLevel == 24 || _LLevel == 32 || _LLevel == 40)) ||
+        ((_RType == ITEM_TRANSFORMATION_RING) &&
+         (_RLevel == 0 || _RLevel == 8 || _RLevel == 24 || _RLevel == 32 || _RLevel == 40)))
     {
         return true;
     }
@@ -1103,7 +1121,7 @@ bool CMonkSystem::RageCreateEffect(OBJECT* _pObj, int _nSkill)
 
         PlayBuffer(SOUND_RAGESKILL_THRUST);
     }
-    return true;
+        return true;
     case AT_SKILL_BEAST_UPPERCUT:
     case AT_SKILL_BEAST_UPPERCUT_STR:
     case AT_SKILL_BEAST_UPPERCUT_MASTERY:
@@ -1116,7 +1134,7 @@ bool CMonkSystem::RageCreateEffect(OBJECT* _pObj, int _nSkill)
 
         PlayBuffer(SOUND_RAGESKILL_STAMP);
     }
-    return true;
+        return true;
     case AT_SKILL_CHAIN_DRIVE:
     case AT_SKILL_CHAIN_DRIVE_STR:
     {
@@ -1124,7 +1142,7 @@ bool CMonkSystem::RageCreateEffect(OBJECT* _pObj, int _nSkill)
 
         PlayBuffer(SOUND_RAGESKILL_GIANTSWING);
     }
-    return true;
+        return true;
     case AT_SKILL_ATT_UP_OURFORCES:
     {
         if (m_bUseEffectOnce)
@@ -1142,7 +1160,8 @@ bool CMonkSystem::RageCreateEffect(OBJECT* _pObj, int _nSkill)
         for (int i = 0; i < 3; ++i)
         {
             Vector(0.6f, 0.65f, 1.0f, vLight);
-            CreateEffect(MODEL_SHOCKWAVE_GROUND01, _pObj->Position, _pObj->Angle, vLight, 0, _pObj, -1, 0, 0, 0, 1.0f - (i * 0.15f));
+            CreateEffect(MODEL_SHOCKWAVE_GROUND01, _pObj->Position, _pObj->Angle, vLight, 0, _pObj, -1, 0, 0, 0,
+                         1.0f - (i * 0.15f));
 
             Vector(0.65f, 0.8f, 1.0f, vLight);
             CreateEffect(BITMAP_EVENT_CLOUD, _pObj->Position, _pObj->Angle, vLight, 0, _pObj, -1, 0, 0, 0, 1.0f);
@@ -1153,7 +1172,7 @@ bool CMonkSystem::RageCreateEffect(OBJECT* _pObj, int _nSkill)
         Vector(0.5f, 0.55f, 0.9f, vLight);
         CreateEffect(BITMAP_MAGIC, _pObj->Position, _pObj->Angle, vLight, 13);
     }
-    return true;
+        return true;
     case AT_SKILL_HP_UP_OURFORCES:
     case AT_SKILL_HP_UP_OURFORCES_STR:
     {
@@ -1170,7 +1189,8 @@ bool CMonkSystem::RageCreateEffect(OBJECT* _pObj, int _nSkill)
         for (int i = 0; i < 3; ++i)
         {
             Vector(1.0f, 0.35f, 1.0f, vLight);
-            CreateEffect(MODEL_SHOCKWAVE_GROUND01, _pObj->Position, _pObj->Angle, vLight, 0, _pObj, -1, 0, 0, 0, 1.0f - (i * 0.15f));
+            CreateEffect(MODEL_SHOCKWAVE_GROUND01, _pObj->Position, _pObj->Angle, vLight, 0, _pObj, -1, 0, 0, 0,
+                         1.0f - (i * 0.15f));
 
             Vector(0.8f, 0.4f, 1.0f, vLight);
             CreateEffect(BITMAP_EVENT_CLOUD, _pObj->Position, _pObj->Angle, vLight, 0, _pObj, -1, 0, 0, 0, 1.0f);
@@ -1181,7 +1201,7 @@ bool CMonkSystem::RageCreateEffect(OBJECT* _pObj, int _nSkill)
         Vector(0.78f, 0.2f, 1.0f, vLight);
         CreateEffect(BITMAP_MAGIC, _pObj->Position, _pObj->Angle, vLight, 13);
     }
-    return true;
+        return true;
     case AT_SKILL_DEF_UP_OURFORCES:
     case AT_SKILL_DEF_UP_OURFORCES_STR:
     case AT_SKILL_DEF_UP_OURFORCES_MASTERY:
@@ -1200,7 +1220,8 @@ bool CMonkSystem::RageCreateEffect(OBJECT* _pObj, int _nSkill)
         for (int i = 0; i < 3; ++i)
         {
             Vector(1.0f, 0.1f, 0.0f, vLight);
-            CreateEffect(MODEL_SHOCKWAVE_GROUND01, _pObj->Position, _pObj->Angle, vLight, 0, _pObj, -1, 0, 0, 0, 1.0f - (i * 0.15f));
+            CreateEffect(MODEL_SHOCKWAVE_GROUND01, _pObj->Position, _pObj->Angle, vLight, 0, _pObj, -1, 0, 0, 0,
+                         1.0f - (i * 0.15f));
 
             Vector(1.0f, 0.3f, 0.2f, vLight);
             CreateEffect(BITMAP_EVENT_CLOUD, _pObj->Position, _pObj->Angle, vLight, 0, _pObj, -1, 0, 0, 0, 1.0f);
@@ -1211,7 +1232,7 @@ bool CMonkSystem::RageCreateEffect(OBJECT* _pObj, int _nSkill)
         Vector(1.0f, 0.15f, 0.0f, vLight);
         CreateEffect(BITMAP_MAGIC, _pObj->Position, _pObj->Angle, vLight, 13);
     }
-    return true;
+        return true;
     case AT_SKILL_DRAGON_KICK:
     {
         if (m_bUseEffectOnce)
@@ -1259,7 +1280,7 @@ bool CMonkSystem::RageCreateEffect(OBJECT* _pObj, int _nSkill)
 
         PlayBuffer(SOUND_RAGESKILL_DRAGONKICK);
     }
-    return true;
+        return true;
     case AT_SKILL_DRAGON_ROAR:
     case AT_SKILL_DRAGON_ROAR_STR:
     {

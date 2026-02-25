@@ -11,36 +11,32 @@
 #include "UIWindows.h"
 #ifdef ASG_ADD_GENS_SYSTEM
 #include "ZzzInventory.h"
-#endif	// ASG_ADD_GENS_SYSTEM
+#endif // ASG_ADD_GENS_SYSTEM
 
+#define UIMN_SHOW_TIME 5000
+#define UIMN_ALPHA_VARIATION 0.015f
 
-
-
-#define	UIMN_SHOW_TIME			5000
-#define	UIMN_ALPHA_VARIATION	0.015f
-
-#define	UIMN_IMG_WIDTH			166.0f
-#define	UIMN_IMG_HEIGHT			90.0f
+#define UIMN_IMG_WIDTH 166.0f
+#define UIMN_IMG_HEIGHT 90.0f
 
 #ifdef ASG_ADD_GENS_SYSTEM
-#define UIMN_STRIFE_HEIGHT		28.0f
-#endif	// ASG_ADD_GENS_SYSTEM
+#define UIMN_STRIFE_HEIGHT 28.0f
+#endif // ASG_ADD_GENS_SYSTEM
 
-#define	UIMN_IMG_POS_X		((::GetScreenWidth() * g_fScreenRate_x - UIMN_IMG_WIDTH) / 2.0f)
-#define	UIMN_IMG_POS_Y		(220.0f * g_fScreenRate_y)
+#define UIMN_IMG_POS_X ((::GetScreenWidth() * g_fScreenRate_x - UIMN_IMG_WIDTH) / 2.0f)
+#define UIMN_IMG_POS_Y (220.0f * g_fScreenRate_y)
 
 #ifdef ASG_ADD_GENS_SYSTEM
-#define UIMN_STRIFE_POS_Y	(UIMN_IMG_POS_Y - UIMN_STRIFE_HEIGHT)
-#endif	// ASG_ADD_GENS_SYSTEM
+#define UIMN_STRIFE_POS_Y (UIMN_IMG_POS_Y - UIMN_STRIFE_HEIGHT)
+#endif // ASG_ADD_GENS_SYSTEM
 
+// cppcheck-suppress uninitMemberVar
 CUIMapName::CUIMapName()
 {
     InitImgPathMap();
 }
 
-CUIMapName::~CUIMapName()
-{
-}
+CUIMapName::~CUIMapName() {}
 
 void CUIMapName::InitImgPathMap()
 {
@@ -120,7 +116,7 @@ void CUIMapName::InitImgPathMap()
 #ifdef ASG_ADD_MAP_KARUTAN
     m_mapImgPath[80] = strFolderName + L"MapName_Karutan.tga";
     m_mapImgPath[81] = strFolderName + L"MapName_Karutan.tga";
-#endif	// ASG_ADD_MAP_KARUTAN
+#endif // ASG_ADD_MAP_KARUTAN
 }
 
 void CUIMapName::Init()
@@ -132,7 +128,7 @@ void CUIMapName::Init()
     m_fAlpha = 1.0f;
 #ifdef ASG_ADD_GENS_SYSTEM
     m_bStrife = false;
-#endif	// ASG_ADD_GENS_SYSTEM
+#endif // ASG_ADD_GENS_SYSTEM
 }
 
 void CUIMapName::ShowMapName()
@@ -159,7 +155,7 @@ void CUIMapName::ShowMapName()
 
 #ifdef ASG_ADD_GENS_SYSTEM
         m_bStrife = ::IsStrifeMap(gMapManager.WorldActive);
-#endif	// ASG_ADD_GENS_SYSTEM
+#endif // ASG_ADD_GENS_SYSTEM
     }
 }
 
@@ -213,11 +209,11 @@ void CUIMapName::Render()
 
 #ifdef ASG_ADD_GENS_SYSTEM
     if (m_bStrife)
-        ::RenderBitmap(BITMAP_INTERFACE_EX + 47, UIMN_IMG_POS_X, UIMN_STRIFE_POS_Y,
-            UIMN_IMG_WIDTH, UIMN_STRIFE_HEIGHT, 0.0f, 0.0f, UIMN_IMG_WIDTH / 256.0f, UIMN_STRIFE_HEIGHT / 32.0f, false, false);
-#endif	// ASG_ADD_GENS_SYSTEM
-    ::RenderBitmap(BITMAP_INTERFACE_EX + 45, UIMN_IMG_POS_X, UIMN_IMG_POS_Y,
-        UIMN_IMG_WIDTH, UIMN_IMG_HEIGHT, 0.0f, 0.0f, UIMN_IMG_WIDTH / 256.0f, UIMN_IMG_HEIGHT / 128.0f, false, false);
+        ::RenderBitmap(BITMAP_INTERFACE_EX + 47, UIMN_IMG_POS_X, UIMN_STRIFE_POS_Y, UIMN_IMG_WIDTH, UIMN_STRIFE_HEIGHT,
+                       0.0f, 0.0f, UIMN_IMG_WIDTH / 256.0f, UIMN_STRIFE_HEIGHT / 32.0f, false, false);
+#endif // ASG_ADD_GENS_SYSTEM
+    ::RenderBitmap(BITMAP_INTERFACE_EX + 45, UIMN_IMG_POS_X, UIMN_IMG_POS_Y, UIMN_IMG_WIDTH, UIMN_IMG_HEIGHT, 0.0f,
+                   0.0f, UIMN_IMG_WIDTH / 256.0f, UIMN_IMG_HEIGHT / 128.0f, false, false);
 
     ::glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     ::DisableAlphaBlend();

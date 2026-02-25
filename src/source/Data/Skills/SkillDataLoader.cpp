@@ -82,8 +82,7 @@ bool SkillDataLoader::Load(wchar_t* fileName)
     return success;
 }
 
-template<typename TFileFormat>
-bool SkillDataLoader::LoadFormat(FILE* fp, const wchar_t* formatName)
+template <typename TFileFormat> bool SkillDataLoader::LoadFormat(FILE* fp, const wchar_t* formatName)
 {
     const int Size = sizeof(TFileFormat);
 

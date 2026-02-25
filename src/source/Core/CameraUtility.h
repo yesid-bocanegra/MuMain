@@ -17,10 +17,8 @@ struct CameraState
     bool& Roll3D;
 
     CameraState()
-        : DistanceTarget(::CameraDistanceTarget)
-        , Distance(::CameraDistance)
-        , Fov3D(::Camera3DFov)
-        , Roll3D(::Camera3DRoll)
+        : DistanceTarget(::CameraDistanceTarget), Distance(::CameraDistance), Fov3D(::Camera3DFov),
+          Roll3D(::Camera3DRoll)
     {
     }
 };

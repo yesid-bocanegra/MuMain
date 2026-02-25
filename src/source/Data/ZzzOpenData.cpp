@@ -74,7 +74,8 @@ void OpenModel(int Type, wchar_t* Dir, wchar_t* ModelFileName, ...)
         for (int i = 0; i < AnimationCount; i++)
         {
             bool Walk = false;
-            if (i == MONSTER01_WALK || i == MONSTER01_RUN) Walk = true;
+            if (i == MONSTER01_WALK || i == MONSTER01_RUN)
+                Walk = true;
             OpenSMDAnimation(Type, AnimationName[i], Walk);
         }
     }
@@ -239,7 +240,7 @@ void OpenPlayers()
         gLoadData.AccessModel(MODEL_ASHCROW_BOOTS + i, L"Data\\Player\\", L"CW_BootMale", i + 1);
     }
 
-    //마검사는 제외하고 투구도 추가
+    // 마검사는 제외하고 투구도 추가
     gLoadData.AccessModel(MODEL_ASHCROW_HELM, L"Data\\Player\\", L"CW_HelmMale", 1);
     gLoadData.AccessModel(MODEL_ECLIPSE_HELM, L"Data\\Player\\", L"CW_HelmMale", 2);
     gLoadData.AccessModel(MODEL_IRIS_HELM, L"Data\\Player\\", L"CW_HelmMale", 3);
@@ -301,7 +302,8 @@ void OpenPlayers()
 
     {
         auto* pCloth = new CPhysicsClothMesh[1];
-        pCloth[0].Create(&Hero->Object, 2, 17, 0.0f, 0.0f, 0.0f, 5, 8, 45.0f, 85.0f, BITMAP_PANTS_G_SOUL, BITMAP_PANTS_G_SOUL, PCT_MASK_ALPHA | PCT_HEAVY | PCT_STICKED, MODEL_GRAND_SOUL_PANTS);
+        pCloth[0].Create(&Hero->Object, 2, 17, 0.0f, 0.0f, 0.0f, 5, 8, 45.0f, 85.0f, BITMAP_PANTS_G_SOUL,
+                         BITMAP_PANTS_G_SOUL, PCT_MASK_ALPHA | PCT_HEAVY | PCT_STICKED, MODEL_GRAND_SOUL_PANTS);
         delete[] pCloth;
     }
 
@@ -509,7 +511,6 @@ void OpenPlayerTextures()
     gLoadData.OpenTexture(MODEL_MASK_HELM + 9, L"Player\\");
 
     gLoadData.OpenTexture(MODEL_SHADOW_BODY, L"Player\\");
-
 
     for (int i = 0; i < 5; ++i)
     {
@@ -761,7 +762,7 @@ void OpenItems()
     gLoadData.AccessModel(MODEL_POTION + 76, L"Data\\Item\\partCharge2\\", L"elitescroll_strenth");
     gLoadData.AccessModel(MODEL_POTION + 77, L"Data\\Item\\partCharge2\\", L"elitescroll_mana");
 
-    wchar_t	szPC6Path[24];
+    wchar_t szPC6Path[24];
     mu_swprintf(szPC6Path, L"Data\\Item\\partCharge6\\");
 
     gLoadData.AccessModel(MODEL_TYPE_CHARM_MIXWING + EWS_KNIGHT_1_CHARM, szPC6Path, L"amulet_satan");
@@ -802,13 +803,13 @@ void OpenItems()
     gLoadData.AccessModel(MODEL_HELPER + 128, L"Data\\Item\\", L"HawkStatue");
     gLoadData.AccessModel(MODEL_HELPER + 129, L"Data\\Item\\", L"SheepStatue");
     gLoadData.AccessModel(MODEL_HELPER + 134, L"Data\\Item\\", L"horseshoe");
-#endif //LJH_ADD_ITEMS_EQUIPPED_FROM_INVENTORY_SYSTEM
+#endif // LJH_ADD_ITEMS_EQUIPPED_FROM_INVENTORY_SYSTEM
 #ifdef LJH_ADD_ITEMS_EQUIPPED_FROM_INVENTORY_SYSTEM_PART_2
     gLoadData.AccessModel(MODEL_HELPER + 130, L"Data\\Item\\", L"ork_cham");
     //	gLoadData.AccessModel(MODEL_HELPER+131, L"Data\\Item\\", L"maple_cham");
     gLoadData.AccessModel(MODEL_HELPER + 132, L"Data\\Item\\", L"goldenork_cham");
     //	gLoadData.AccessModel(MODEL_HELPER+132, L"Data\\Item\\", L"goldenmaple_cham");
-#endif //LJH_ADD_ITEMS_EQUIPPED_FROM_INVENTORY_SYSTEM_PART_2
+#endif // LJH_ADD_ITEMS_EQUIPPED_FROM_INVENTORY_SYSTEM_PART_2
 
     gLoadData.AccessModel(MODEL_POTION + 91, L"Data\\Item\\partCharge3\\", L"alicecard");
 
@@ -1137,17 +1138,17 @@ void OpenItems()
 #ifdef PBG_ADD_CHARACTERSLOT
     gLoadData.AccessModel(MODEL_HELPER + 99, L"Data\\Item\\Ingameshop\\", L"key");
     gLoadData.AccessModel(MODEL_SLOT_LOCK, L"Data\\Item\\Ingameshop\\", L"lock");
-#endif //PBG_ADD_CHARACTERSLOT
+#endif // PBG_ADD_CHARACTERSLOT
 #ifdef PBG_ADD_SECRETITEM
 #ifdef PBG_MOD_SECRETITEM
     gLoadData.AccessModel(MODEL_HELPER + 117, L"Data\\Item\\Ingameshop\\", L"FRpotionD");
-#else //PBG_MOD_SECRETITEM
+#else  // PBG_MOD_SECRETITEM
     gLoadData.AccessModel(MODEL_HELPER + 117, L"Data\\Item\\Ingameshop\\", L"FRpotionA");
-#endif //PBG_MOD_SECRETITEM
+#endif // PBG_MOD_SECRETITEM
     gLoadData.AccessModel(MODEL_HELPER + 118, L"Data\\Item\\Ingameshop\\", L"FRpotionA");
     gLoadData.AccessModel(MODEL_HELPER + 119, L"Data\\Item\\Ingameshop\\", L"FRpotionB");
     gLoadData.AccessModel(MODEL_HELPER + 120, L"Data\\Item\\Ingameshop\\", L"FRpotionC");
-#endif //PBG_ADD_SECRETITEM
+#endif // PBG_ADD_SECRETITEM
 
     gLoadData.AccessModel(MODEL_POTION + 110, L"Data\\Item\\", L"indication");
     gLoadData.AccessModel(MODEL_POTION + 111, L"Data\\Item\\", L"speculum");
@@ -1224,18 +1225,20 @@ void OpenItems()
     gLoadData.AccessModel(MODEL_POTION + 160, L"Data\\Item\\LuckyItem\\", L"lucky_items01");
     gLoadData.AccessModel(MODEL_POTION + 161, L"Data\\Item\\LuckyItem\\", L"lucky_items02");
 
-    const wchar_t	szLuckySetFileName[][50] = { L"new_Helm", L"new_Armor", L"new_Pant", L"new_Glove", L"new_Boot" };
-    const wchar_t* szLuckySetPath = { L"Data\\Player\\LuckyItem\\" };
-    wchar_t	szLuckySetPathName[50] = { L"" };
-    int		nIndex = 62;
+    const wchar_t szLuckySetFileName[][50] = {L"new_Helm", L"new_Armor", L"new_Pant", L"new_Glove", L"new_Boot"};
+    const wchar_t* szLuckySetPath = {L"Data\\Player\\LuckyItem\\"};
+    wchar_t szLuckySetPathName[50] = {L""};
+    int nIndex = 62;
 
     for (int i = 0; i < 11; i++)
     {
         mu_swprintf(szLuckySetPathName, L"%ls%d\\", szLuckySetPath, nIndex);
-        if (nIndex != 71)	gLoadData.AccessModel(MODEL_HELM + nIndex, szLuckySetPathName, szLuckySetFileName[0], i + 1);
+        if (nIndex != 71)
+            gLoadData.AccessModel(MODEL_HELM + nIndex, szLuckySetPathName, szLuckySetFileName[0], i + 1);
         gLoadData.AccessModel(MODEL_ARMOR + nIndex, szLuckySetPathName, szLuckySetFileName[1], i + 1);
         gLoadData.AccessModel(MODEL_PANTS + nIndex, szLuckySetPathName, szLuckySetFileName[2], i + 1);
-        if (nIndex != 72)	gLoadData.AccessModel(MODEL_GLOVES + nIndex, szLuckySetPathName, szLuckySetFileName[3], i + 1);
+        if (nIndex != 72)
+            gLoadData.AccessModel(MODEL_GLOVES + nIndex, szLuckySetPathName, szLuckySetFileName[3], i + 1);
         gLoadData.AccessModel(MODEL_BOOTS + nIndex, szLuckySetPathName, szLuckySetFileName[4], i + 1);
         nIndex++;
     }
@@ -1413,9 +1416,9 @@ void OpenItemTextures()
     for (int i = 0; i < 2; i++)
         gLoadData.OpenTexture(MODEL_EVENT + i, L"Item\\");
 
-    //gLoadData.OpenTexture(MODEL_GOLD01  ,"Data\\Item\\Etc\\");
-    //gLoadData.OpenTexture(MODEL_APPLE01 ,"Data\\Item\\Etc\\");
-    //gLoadData.OpenTexture(MODEL_BOTTLE01,"Data\\Item\\Etc\\");
+    // gLoadData.OpenTexture(MODEL_GOLD01  ,"Data\\Item\\Etc\\");
+    // gLoadData.OpenTexture(MODEL_APPLE01 ,"Data\\Item\\Etc\\");
+    // gLoadData.OpenTexture(MODEL_BOTTLE01,"Data\\Item\\Etc\\");
     gLoadData.OpenTexture(MODEL_COMPILED_CELE, L"Item\\");
     gLoadData.OpenTexture(MODEL_COMPILED_SOUL, L"Item\\");
 
@@ -1601,14 +1604,14 @@ void OpenItemTextures()
     gLoadData.OpenTexture(MODEL_HELPER + 128, L"Item\\");
     gLoadData.OpenTexture(MODEL_HELPER + 129, L"Item\\");
     gLoadData.OpenTexture(MODEL_HELPER + 134, L"Item\\");
-#endif //LJH_ADD_ITEMS_EQUIPPED_FROM_INVENTORY_SYSTEM
+#endif // LJH_ADD_ITEMS_EQUIPPED_FROM_INVENTORY_SYSTEM
 #ifdef LJH_ADD_ITEMS_EQUIPPED_FROM_INVENTORY_SYSTEM_PART_2
     gLoadData.OpenTexture(MODEL_HELPER + 130, L"Item\\");
     //	gLoadData.OpenTexture(MODEL_HELPER+131, L"Item\\");
     gLoadData.OpenTexture(MODEL_HELPER + 132, L"Item\\");
     //	gLoadData.OpenTexture(MODEL_HELPER+133, L"Item\\");
-#endif //LJH_ADD_ITEMS_EQUIPPED_FROM_INVENTORY_SYSTEM_PART_2
-//---------------------------------------------------------------------------------
+#endif // LJH_ADD_ITEMS_EQUIPPED_FROM_INVENTORY_SYSTEM_PART_2
+    //---------------------------------------------------------------------------------
 
     gLoadData.OpenTexture(MODEL_FLAMBERGE, L"Item\\");
     gLoadData.OpenTexture(MODEL_SWORD_BREAKER, L"Item\\");
@@ -1657,7 +1660,7 @@ void OpenItemTextures()
 #ifdef PBG_ADD_CHARACTERSLOT
     gLoadData.OpenTexture(MODEL_HELPER + 99, L"Item\\Ingameshop\\");
     gLoadData.OpenTexture(MODEL_SLOT_LOCK, L"Item\\Ingameshop\\");
-#endif //PBG_ADD_CHARACTERSLOT
+#endif // PBG_ADD_CHARACTERSLOT
 
     gLoadData.OpenTexture(MODEL_POTION + 110, L"Item\\");
     gLoadData.OpenTexture(MODEL_POTION + 111, L"Item\\");
@@ -1730,24 +1733,25 @@ void OpenItemTextures()
         gLoadData.OpenTexture(MODEL_POTION + 130 + k, L"Item\\InGameShop\\");
     }
 
-    LoadBitmap(L"Item\\InGameShop\\mebership_3items_yellow.jpg", BITMAP_INGAMESHOP_SIZECOMMUTERTICKET3, GL_LINEAR, GL_REPEAT);
+    LoadBitmap(L"Item\\InGameShop\\mebership_3items_yellow.jpg", BITMAP_INGAMESHOP_SIZECOMMUTERTICKET3, GL_LINEAR,
+               GL_REPEAT);
 
     gLoadData.OpenTexture(MODEL_HELPER + 121, L"Item\\InGameShop\\");
 
 #ifdef PBG_ADD_GENSRANKING
     for (int _index = 0; _index < 4; ++_index)
         gLoadData.OpenTexture(MODEL_POTION + 141 + _index, L"Item\\");
-#endif //PBG_ADD_GENSRANKING
+#endif // PBG_ADD_GENSRANKING
 
-    gLoadData.OpenTexture(MODEL_15GRADE_ARMOR_OBJ_ARMLEFT, L"Item\\");		// 14, 15 efeito chifres brancos
-    gLoadData.OpenTexture(MODEL_15GRADE_ARMOR_OBJ_ARMRIGHT, L"Item\\");		// 14, 15
-    gLoadData.OpenTexture(MODEL_15GRADE_ARMOR_OBJ_BODYLEFT, L"Item\\");		// 14, 15
-    gLoadData.OpenTexture(MODEL_15GRADE_ARMOR_OBJ_BODYRIGHT, L"Item\\");	// 14, 15
-    gLoadData.OpenTexture(MODEL_15GRADE_ARMOR_OBJ_BOOTLEFT, L"Item\\");		// 14, 15
-    gLoadData.OpenTexture(MODEL_15GRADE_ARMOR_OBJ_BOOTRIGHT, L"Item\\");	// 14, 15
-    gLoadData.OpenTexture(MODEL_15GRADE_ARMOR_OBJ_HEAD, L"Item\\");		// 14, 15
-    gLoadData.OpenTexture(MODEL_15GRADE_ARMOR_OBJ_PANTLEFT, L"Item\\");		// 14, 15
-    gLoadData.OpenTexture(MODEL_15GRADE_ARMOR_OBJ_PANTRIGHT, L"Item\\");	// 14, 15
+    gLoadData.OpenTexture(MODEL_15GRADE_ARMOR_OBJ_ARMLEFT, L"Item\\");   // 14, 15 efeito chifres brancos
+    gLoadData.OpenTexture(MODEL_15GRADE_ARMOR_OBJ_ARMRIGHT, L"Item\\");  // 14, 15
+    gLoadData.OpenTexture(MODEL_15GRADE_ARMOR_OBJ_BODYLEFT, L"Item\\");  // 14, 15
+    gLoadData.OpenTexture(MODEL_15GRADE_ARMOR_OBJ_BODYRIGHT, L"Item\\"); // 14, 15
+    gLoadData.OpenTexture(MODEL_15GRADE_ARMOR_OBJ_BOOTLEFT, L"Item\\");  // 14, 15
+    gLoadData.OpenTexture(MODEL_15GRADE_ARMOR_OBJ_BOOTRIGHT, L"Item\\"); // 14, 15
+    gLoadData.OpenTexture(MODEL_15GRADE_ARMOR_OBJ_HEAD, L"Item\\");      // 14, 15
+    gLoadData.OpenTexture(MODEL_15GRADE_ARMOR_OBJ_PANTLEFT, L"Item\\");  // 14, 15
+    gLoadData.OpenTexture(MODEL_15GRADE_ARMOR_OBJ_PANTRIGHT, L"Item\\"); // 14, 15
     LoadBitmap(L"Item\\rgb_mix.jpg", BITMAP_RGB_MIX, GL_LINEAR, GL_REPEAT);
 
     gLoadData.OpenTexture(MODEL_CAPE_OF_FIGHTER, L"Item\\");
@@ -1770,17 +1774,19 @@ void OpenItemTextures()
     gLoadData.OpenTexture(MODEL_HELPER + 143, L"Item\\LuckyItem\\");
     gLoadData.OpenTexture(MODEL_HELPER + 144, L"Item\\LuckyItem\\");
 
-    const wchar_t* szLuckySetPath = { L"Player\\LuckyItem\\" };
-    wchar_t	szLuckySetPathName[50] = { L"" };
-    int		nIndex = 62;
+    const wchar_t* szLuckySetPath = {L"Player\\LuckyItem\\"};
+    wchar_t szLuckySetPathName[50] = {L""};
+    int nIndex = 62;
 
     for (int i = 0; i < 11; i++)
     {
         mu_swprintf(szLuckySetPathName, L"%ls%d\\", szLuckySetPath, nIndex);
-        if (nIndex != 71)	gLoadData.OpenTexture(MODEL_HELM + nIndex, szLuckySetPathName);
+        if (nIndex != 71)
+            gLoadData.OpenTexture(MODEL_HELM + nIndex, szLuckySetPathName);
         gLoadData.OpenTexture(MODEL_ARMOR + nIndex, szLuckySetPathName);
         gLoadData.OpenTexture(MODEL_PANTS + nIndex, szLuckySetPathName);
-        if (nIndex != 72)	gLoadData.OpenTexture(MODEL_GLOVES + nIndex, szLuckySetPathName);
+        if (nIndex != 72)
+            gLoadData.OpenTexture(MODEL_GLOVES + nIndex, szLuckySetPathName);
         gLoadData.OpenTexture(MODEL_BOOTS + nIndex, szLuckySetPathName);
         nIndex++;
     }
@@ -1796,14 +1802,13 @@ void OpenItemTextures()
     LoadBitmap(szLuckySetPathName, BITMAP_INVEN_ARMOR + 7);
     mu_swprintf(szLuckySetPathName, L"Player\\LuckyItem\\70\\InvenPantsMale41_luck.tga");
     LoadBitmap(szLuckySetPathName, BITMAP_INVEN_PANTS + 7);
-
 }
 
 void DeleteNpcs()
 {
     for (int i = MODEL_NPC_BEGIN; i < MODEL_NPC_END; i++)
     {
-        if(Models[i].Version)
+        if (Models[i].Version)
             Models[i].Release();
     }
 
@@ -1814,7 +1819,8 @@ void DeleteNpcs()
 void OpenNpc(int Type)
 {
     BMD* b = &Models[Type];
-    if (b->NumActions > 0) return;
+    if (b->NumActions > 0)
+        return;
 
     switch (Type)
     {
@@ -1933,17 +1939,17 @@ void OpenNpc(int Type)
         gLoadData.AccessModel(MODEL_ANGEL, L"Data\\Player\\", L"Angel");
         gLoadData.OpenTexture(MODEL_ANGEL, L"Npc\\");
         break;
-#endif	// _PVP_ATTACK_GUARD
-    case MODEL_NPC_BREEDER:    //  조련사 NPC.
+#endif                      // _PVP_ATTACK_GUARD
+    case MODEL_NPC_BREEDER: //  조련사 NPC.
         gLoadData.AccessModel(MODEL_NPC_BREEDER, L"Data\\Npc\\", L"Breeder");
         gLoadData.OpenTexture(MODEL_NPC_BREEDER, L"Npc\\");
         break;
 #ifdef _PVP_MURDERER_HERO_ITEM
-    case MODEL_HERO_SHOP:	// 영웅 상점
+    case MODEL_HERO_SHOP: // 영웅 상점
         gLoadData.AccessModel(MODEL_HERO_SHOP, L"Data\\Npc\\", L"HeroNpc");
         gLoadData.OpenTexture(MODEL_HERO_SHOP, L"Npc\\");
         break;
-#endif	// _PVP_MURDERER_HERO_ITEM
+#endif // _PVP_MURDERER_HERO_ITEM
 
     case MODEL_NPC_CAPATULT_ATT:
         gLoadData.AccessModel(MODEL_NPC_CAPATULT_ATT, L"Data\\Npc\\", L"Model_Npc_Catapult_Att");
@@ -2126,7 +2132,9 @@ void OpenNpc(int Type)
             Models[Type].Textures->FileName[i] = Models[Type].Textures->FileName[i - 1];
         }
         int _temp = (Type - MODEL_LITTLESANTA) + 1;
-        wchar_t _temp2[10] = { 0, };
+        wchar_t _temp2[10] = {
+            0,
+        };
         _itow(_temp, _temp2, 10);
         Models[Type].Textures->FileName[_index] = _temp2[0];
 
@@ -2202,7 +2210,7 @@ void OpenNpc(int Type)
         gLoadData.AccessModel(MODEL_UNITEDMARKETPLACE_JULIA, L"Data\\Npc\\", L"UnitedMarkedPlace_julia");
         gLoadData.OpenTexture(MODEL_UNITEDMARKETPLACE_JULIA, L"Npc\\");
         break;
-    case MODEL_KARUTAN_NPC_REINA:	// 로랜시장 NPC 잡화상인 크리스틴과 동일.
+    case MODEL_KARUTAN_NPC_REINA: // 로랜시장 NPC 잡화상인 크리스틴과 동일.
         gLoadData.AccessModel(MODEL_KARUTAN_NPC_REINA, L"Data\\Npc\\", L"UnitedMarketPlace_christine");
         gLoadData.OpenTexture(MODEL_KARUTAN_NPC_REINA, L"Npc\\");
         break;
@@ -2221,12 +2229,11 @@ void OpenNpc(int Type)
         gLoadData.AccessModel(MODEL_BENA, L"Data\\Npc\\", L"bena");
         gLoadData.OpenTexture(MODEL_BENA, L"Npc\\");
         break;
-
     }
 
     for (int i = 0; i < b->NumActions; i++)
         b->Actions[i].PlaySpeed = 0.25f;
-    //SetTexture(BITMAP_NPC);
+    // SetTexture(BITMAP_NPC);
 
     if (b->NumMeshs > 0)
         gLoadData.OpenTexture(Type, L"Npc\\");
@@ -2280,10 +2287,11 @@ void OpenNpc(int Type)
         break;
     }
 
-    //#endif
+    // #endif
 }
 
-void SetMonsterSound(int Type, int s1, int s2, int s3, int s4, int s5, int s6 = -1, int s7 = -1, int s8 = -1, int s9 = -1, int s10 = -1)
+void SetMonsterSound(int Type, int s1, int s2, int s3, int s4, int s5, int s6 = -1, int s7 = -1, int s8 = -1,
+                     int s9 = -1, int s10 = -1)
 {
     Models[Type].Sounds[0] = s1;
     Models[Type].Sounds[1] = s2;
@@ -2299,9 +2307,9 @@ void SetMonsterSound(int Type, int s1, int s2, int s3, int s4, int s5, int s6 = 
 
 void DeleteMonsters()
 {
-	for (int i = MODEL_MONSTER01; i < MODEL_MONSTER_END; i++)
-		if (Models[i].Version)
-         Models[i].Release();
+    for (int i = MODEL_MONSTER01; i < MODEL_MONSTER_END; i++)
+        if (Models[i].Version)
+            Models[i].Release();
 
     for (int i = SOUND_MONSTER; i < SOUND_MONSTER_END; i++)
         ReleaseBuffer(i);
@@ -2315,11 +2323,13 @@ void OpenMonsterModel(EMonsterModelType Type)
     int Index = MODEL_MONSTER01 + Type;
 
     BMD* b = &Models[Index];
-    if (b->NumActions > 0 || b->NumMeshs > 0) return;
+    if (b->NumActions > 0 || b->NumMeshs > 0)
+        return;
 
     gLoadData.AccessModel(Index, L"Data\\Monster\\", L"Monster", Type + 1);
 
-    if (b->NumMeshs == 0) return;
+    if (b->NumMeshs == 0)
+        return;
 
     if (gMapManager.InChaosCastle() == true && Type >= 70 && Type <= 72)
     {
@@ -2375,20 +2385,48 @@ void OpenMonsterModel(EMonsterModelType Type)
 
     switch (Type)
     {
-    case MONSTER_MODEL_BUDGE_DRAGON:b->Actions[MONSTER01_WALK].PlaySpeed = 0.7f; break;
-    case MONSTER_MODEL_LARVA:b->Actions[MONSTER01_WALK].PlaySpeed = 0.6f; break;
-    case MONSTER_MODEL_HELL_SPIDER:b->Actions[MONSTER01_WALK].PlaySpeed = 0.7f; break;
-    case MONSTER_MODEL_SPIDER:b->Actions[MONSTER01_WALK].PlaySpeed = 1.2f; break;
-    case MONSTER_MODEL_CYCLOPS:b->Actions[MONSTER01_WALK].PlaySpeed = 0.28f; break;
-    case MONSTER_MODEL_YETI:b->Actions[MONSTER01_WALK].PlaySpeed = 0.3f; break;
-    case MONSTER_MODEL_ELITE_YETI:b->Actions[MONSTER01_WALK].PlaySpeed = 0.28f; break;
-    case MONSTER_MODEL_WORM:b->Actions[MONSTER01_WALK].PlaySpeed = 0.5f; break;
-    case MONSTER_MODEL_GOBLIN:b->Actions[MONSTER01_WALK].PlaySpeed = 0.6f; break;
-    case MONSTER_MODEL_CHAIN_SCORPION:b->Actions[MONSTER01_WALK].PlaySpeed = 0.4f; break;
-    case MONSTER_MODEL_BEETLE_MONSTER:b->Actions[MONSTER01_WALK].PlaySpeed = 0.5f; break;
-    case MONSTER_MODEL_SHADOW:b->Actions[MONSTER01_WALK].PlaySpeed = 0.3f; break;
-    case MONSTER_MODEL_TITAN:b->Actions[MONSTER01_WALK].PlaySpeed = 0.22f; break;
-    case MONSTER_MODEL_GOLDEN_WHEEL:b->Actions[MONSTER01_WALK].PlaySpeed = 0.18f; break;
+    case MONSTER_MODEL_BUDGE_DRAGON:
+        b->Actions[MONSTER01_WALK].PlaySpeed = 0.7f;
+        break;
+    case MONSTER_MODEL_LARVA:
+        b->Actions[MONSTER01_WALK].PlaySpeed = 0.6f;
+        break;
+    case MONSTER_MODEL_HELL_SPIDER:
+        b->Actions[MONSTER01_WALK].PlaySpeed = 0.7f;
+        break;
+    case MONSTER_MODEL_SPIDER:
+        b->Actions[MONSTER01_WALK].PlaySpeed = 1.2f;
+        break;
+    case MONSTER_MODEL_CYCLOPS:
+        b->Actions[MONSTER01_WALK].PlaySpeed = 0.28f;
+        break;
+    case MONSTER_MODEL_YETI:
+        b->Actions[MONSTER01_WALK].PlaySpeed = 0.3f;
+        break;
+    case MONSTER_MODEL_ELITE_YETI:
+        b->Actions[MONSTER01_WALK].PlaySpeed = 0.28f;
+        break;
+    case MONSTER_MODEL_WORM:
+        b->Actions[MONSTER01_WALK].PlaySpeed = 0.5f;
+        break;
+    case MONSTER_MODEL_GOBLIN:
+        b->Actions[MONSTER01_WALK].PlaySpeed = 0.6f;
+        break;
+    case MONSTER_MODEL_CHAIN_SCORPION:
+        b->Actions[MONSTER01_WALK].PlaySpeed = 0.4f;
+        break;
+    case MONSTER_MODEL_BEETLE_MONSTER:
+        b->Actions[MONSTER01_WALK].PlaySpeed = 0.5f;
+        break;
+    case MONSTER_MODEL_SHADOW:
+        b->Actions[MONSTER01_WALK].PlaySpeed = 0.3f;
+        break;
+    case MONSTER_MODEL_TITAN:
+        b->Actions[MONSTER01_WALK].PlaySpeed = 0.22f;
+        break;
+    case MONSTER_MODEL_GOLDEN_WHEEL:
+        b->Actions[MONSTER01_WALK].PlaySpeed = 0.18f;
+        break;
     case MONSTER_MODEL_TANTALLOS:
         b->Actions[MONSTER01_ATTACK1].PlaySpeed = 0.35f;
         b->Actions[MONSTER01_ATTACK2].PlaySpeed = 0.35f;
@@ -2415,8 +2453,8 @@ void OpenMonsterModel(EMonsterModelType Type)
     case MONSTER_MODEL_SHRIKER:
         b->Actions[MONSTER01_DIE].PlaySpeed = 0.1f;
         break;
-    case MONSTER_MODEL_CHAOSCASTLE_KNIGHT:	//
-    case MONSTER_MODEL_CHAOSCASTLE_ELF:	//
+    case MONSTER_MODEL_CHAOSCASTLE_KNIGHT: //
+    case MONSTER_MODEL_CHAOSCASTLE_ELF:    //
         b->Actions[MONSTER01_ATTACK1].PlaySpeed = 0.5f;
         b->Actions[MONSTER01_ATTACK2].PlaySpeed = 0.5f;
         b->Actions[MONSTER01_WALK].PlaySpeed = 0.3f;
@@ -3107,7 +3145,7 @@ void OpenMonsterModel(EMonsterModelType Type)
         b->Actions[MONSTER01_ATTACK1].PlaySpeed = 0.75f;
         b->Actions[MONSTER01_ATTACK2].PlaySpeed = 0.75f;
         break;
-#endif	// ASG_ADD_KARUTAN_MONSTERS
+#endif // ASG_ADD_KARUTAN_MONSTERS
     }
     switch (Type)
     {
@@ -3407,7 +3445,7 @@ void OpenMonsterModel(EMonsterModelType Type)
         SetMonsterSound(MODEL_MONSTER01 + Type, 132, 133, 104, 104, 133);
         b->Actions[MONSTER01_ATTACK1].PlaySpeed = 0.5f;
         b->Actions[MONSTER01_ATTACK2].PlaySpeed = 0.5f;
-        b->BoneHead = 20;//인어
+        b->BoneHead = 20; // 인어
         break;
     case MONSTER_MODEL_VALKYRIE:
         LoadWaveFile(SOUND_MONSTER_VALKYRIE1, L"Data\\Sound\\mValkyrie1.wav", Channel, Enable);
@@ -3512,7 +3550,7 @@ void OpenMonsterModel(EMonsterModelType Type)
         break;
     case MONSTER_MODEL_ALQUAMOS:
         b->Actions[MONSTER01_DIE].PlaySpeed = 0.22f;
-        //LoadWaveFile(SOUND_MONSTER+174,"Data\\Sound\\mAlquamos1.wav"    ,Channel,Enable);
+        // LoadWaveFile(SOUND_MONSTER+174,"Data\\Sound\\mAlquamos1.wav"    ,Channel,Enable);
         LoadWaveFile(SOUND_MONSTER_ALQUAMOSATTACK1, L"Data\\Sound\\mAlquamosAttack1.wav", Channel, Enable);
         LoadWaveFile(SOUND_MONSTER_ALQUAMOSDIE, L"Data\\Sound\\mAlquamosDie.wav", Channel, Enable);
         SetMonsterSound(MODEL_MONSTER01 + Type, 175, 175, 175, 175, 176);
@@ -3542,12 +3580,12 @@ void OpenMonsterModel(EMonsterModelType Type)
         LoadWaveFile(SOUND_MONSTER_PHOENIX1, L"Data\\Sound\\mPhoenix1.wav", Channel, Enable);
         LoadWaveFile(SOUND_MONSTER_PHOENIX1, L"Data\\Sound\\mPhoenix1.wav", Channel, Enable);
         LoadWaveFile(SOUND_MONSTER_PHOENIXATTACK1, L"Data\\Sound\\mPhoenixAttack1.wav", Channel, Enable);
-        //LoadWaveFile(SOUND_MONSTER+186,"Data\\Sound\\mDarkPhoenixDie.wav"    ,Channel,Enable);
+        // LoadWaveFile(SOUND_MONSTER+186,"Data\\Sound\\mDarkPhoenixDie.wav"    ,Channel,Enable);
         SetMonsterSound(MODEL_MONSTER01 + Type, 183, 184, 185, 185, -1);
     case MONSTER_MODEL_DARK_PHOENIX:
         b->Actions[MONSTER01_DIE].PlaySpeed = 0.22f;
-        //b->Actions[MONSTER01_ATTACK1].PlaySpeed = 0.01f;
-        //b->Actions[MONSTER01_ATTACK2].PlaySpeed = 0.01f;
+        // b->Actions[MONSTER01_ATTACK1].PlaySpeed = 0.01f;
+        // b->Actions[MONSTER01_ATTACK2].PlaySpeed = 0.01f;
         break;
     case MONSTER_MODEL_MAGIC_SKELETON:
         LoadWaveFile(SOUND_MONSTER_MAGICSKULL1, L"Data\\Sound\\mMagicSkull.wav", Channel, Enable);
@@ -3653,7 +3691,8 @@ void OpenMonsterModel(EMonsterModelType Type)
         SetMonsterSound(MODEL_MONSTER01 + Type, -1, -1, 233, 233, 234);
         break;
     case MONSTER_MODEL_BATTLE_GUARD2:
-        LoadWaveFile(SOUND_MONSTER_SPEARMERCATTACK, L"Data\\Sound\\BattleCastle\\mSpearMercAttack.wav", Channel, Enable);
+        LoadWaveFile(SOUND_MONSTER_SPEARMERCATTACK, L"Data\\Sound\\BattleCastle\\mSpearMercAttack.wav", Channel,
+                     Enable);
         LoadWaveFile(SOUND_MONSTER_SPEARMERCDEATH, L"Data\\Sound\\BattleCastle\\mSpearMercDeath.wav", Channel, Enable);
         SetMonsterSound(MODEL_MONSTER01 + Type, -1, -1, 235, 235, 236);
         break;
@@ -3674,8 +3713,10 @@ void OpenMonsterModel(EMonsterModelType Type)
         LoadWaveFile(SOUND_ELBELAND_WOLFHUMAN_DEATH01, L"Data\\Sound\\w52\\SE_Mon_wolfhuman_death01.wav", 1);
         break;
     case MONSTER_MODEL_WEREWOLF2:
-        LoadWaveFile(SOUND_ELBELAND_BUTTERFLYPOLLUTION_MOVE01, L"Data\\Sound\\w52\\SE_Mon_butterflypollution_move01.wav", 1);
-        LoadWaveFile(SOUND_ELBELAND_BUTTERFLYPOLLUTION_DEATH01, L"Data\\Sound\\w52\\SE_Mon_butterflypollution_death01.wav", 1);
+        LoadWaveFile(SOUND_ELBELAND_BUTTERFLYPOLLUTION_MOVE01,
+                     L"Data\\Sound\\w52\\SE_Mon_butterflypollution_move01.wav", 1);
+        LoadWaveFile(SOUND_ELBELAND_BUTTERFLYPOLLUTION_DEATH01,
+                     L"Data\\Sound\\w52\\SE_Mon_butterflypollution_death01.wav", 1);
         break;
     case MONSTER_MODEL_CURSED_LICH:
         LoadWaveFile(SOUND_ELBELAND_CURSERICH_MOVE01, L"Data\\Sound\\w52\\SE_Mon_curserich_move01.wav", 1);
@@ -3696,7 +3737,8 @@ void OpenMonsterModel(EMonsterModelType Type)
         break;
     case MONSTER_MODEL_CAPTAIN_GRIZZLY:
         LoadWaveFile(SOUND_ELBELAND_BEASTWOOLEADER_MOVE01, L"Data\\Sound\\w52\\SE_Mon_beastwooleader_move01.wav", 1);
-        LoadWaveFile(SOUND_ELBELAND_BEASTWOOLEADER_ATTACK01, L"Data\\Sound\\w52\\SE_Mon_beastwooleader_attack01.wav", 1);
+        LoadWaveFile(SOUND_ELBELAND_BEASTWOOLEADER_ATTACK01, L"Data\\Sound\\w52\\SE_Mon_beastwooleader_attack01.wav",
+                     1);
         LoadWaveFile(SOUND_ELBELAND_BEASTWOO_DEATH01, L"Data\\Sound\\w52\\SE_Mon_beastwoo_death01.wav", 1);
         break;
     case MONSTER_MODEL_SAPIUNUS:
@@ -3907,13 +3949,11 @@ void OpenMonsterModel(EMonsterModelType Type)
         LoadWaveFile(SOUND_KARUTAN_NARCONDRA_ATTACK, L"Data\\Sound\\Karutan\\NarCondra_attack.wav");
         LoadWaveFile(SOUND_KARUTAN_CONDRA_DEATH, L"Data\\Sound\\Karutan\\Condra_death.wav");
         break;
-#endif	// ASG_ADD_KARUTAN_MONSTERS
+#endif // ASG_ADD_KARUTAN_MONSTERS
     }
 }
 
-void OpenMonsterModels()
-{
-}
+void OpenMonsterModels() {}
 
 void OpenSkills()
 {
@@ -4055,7 +4095,7 @@ void OpenSkills()
     gLoadData.AccessModel(MODEL_MAGIC_CIRCLE1, L"Data\\Skill\\", L"MagicCircle", 1);
     gLoadData.AccessModel(MODEL_ARROW_WING, L"Data\\Skill\\", L"ArrowWing", 1);
     gLoadData.AccessModel(MODEL_ARROW_BOMB, L"Data\\Skill\\", L"ArrowBomb", 1);
-    gLoadData.AccessModel(MODEL_BALL, L"Data\\Skill\\", L"Ball", 1);//공
+    gLoadData.AccessModel(MODEL_BALL, L"Data\\Skill\\", L"Ball", 1); // 공
     Models[MODEL_BALL].Actions[0].PlaySpeed = 0.5f;
     gLoadData.AccessModel(MODEL_SKILL_BLAST, L"Data\\Skill\\", L"Blast", 1);
     gLoadData.AccessModel(MODEL_SKILL_INFERNO, L"Data\\Skill\\", L"Inferno", 1);
@@ -4330,7 +4370,7 @@ void OpenSkills()
     gLoadData.OpenTexture(MODEL_RAKLION_BOSS_CRACKEFFECT, L"Effect\\");
     gLoadData.AccessModel(MODEL_RAKLION_BOSS_MAGIC, L"Data\\Effect\\", L"serufan_magic");
     gLoadData.OpenTexture(MODEL_RAKLION_BOSS_MAGIC, L"Effect\\");
-    //Models[MODEL_RAKLION_BOSS_MAGIC].Actions[0].PlaySpeed = 0.005f;
+    // Models[MODEL_RAKLION_BOSS_MAGIC].Actions[0].PlaySpeed = 0.005f;
 
     gLoadData.AccessModel(MODEL_EFFECT_SKURA_ITEM, L"Data\\Effect\\cherryblossom\\", L"Skura_iteam_event");
 
@@ -4362,7 +4402,7 @@ void OpenSkills()
     gLoadData.OpenTexture(MODEL_EFFECT_UMBRELLA_GOLD, L"Effect\\");
     gLoadData.AccessModel(MODEL_EMPIREGUARDIANBOSS_FRAMESTRIKE, L"Data\\Effect\\", L"Karanebos_sword_framestrike");
     gLoadData.OpenTexture(MODEL_EMPIREGUARDIANBOSS_FRAMESTRIKE, L"Effect\\");
-    //Models[MODEL_EMPIREGUARDIANBOSS_FRAMESTRIKE].Actions[MONSTER01_STOP1].PlaySpeed = 3.0f;
+    // Models[MODEL_EMPIREGUARDIANBOSS_FRAMESTRIKE].Actions[MONSTER01_STOP1].PlaySpeed = 3.0f;
     gLoadData.AccessModel(MODEL_DEASULER, L"Data\\Monster\\", L"deasther_boomerang");
     gLoadData.OpenTexture(MODEL_DEASULER, L"Monster\\");
     gLoadData.AccessModel(MODEL_EFFECT_SD_AURA, L"Data\\Effect\\", L"shield_up");
@@ -4443,7 +4483,7 @@ void OpenSkills()
     gLoadData.OpenTexture(MODEL_NARCONDRA_STONE2, L"Monster\\");
     gLoadData.AccessModel(MODEL_NARCONDRA_STONE3, L"Data\\Monster\\", L"nar_condra_7_stone_4");
     gLoadData.OpenTexture(MODEL_NARCONDRA_STONE3, L"Monster\\");
-#endif	// ASG_ADD_KARUTAN_MONSTERS
+#endif // ASG_ADD_KARUTAN_MONSTERS
 }
 
 #include "ReadScript.h"
@@ -4498,7 +4538,7 @@ void OpenSounds()
     LoadWaveFile(SOUND_TOWER01, L"Data\\Sound\\aTower.wav", 1);
     LoadWaveFile(SOUND_WATER01, L"Data\\Sound\\aWater.wav", 1);
     LoadWaveFile(SOUND_DESERT01, L"Data\\Sound\\desert.wav", 1);
-    //LoadWaveFile(SOUND_BOSS01		    ,"Data\\Sound\\a쿤둔.wav",1);
+    // LoadWaveFile(SOUND_BOSS01		    ,"Data\\Sound\\a쿤둔.wav",1);
     LoadWaveFile(SOUND_HUMAN_WALK_GROUND, L"Data\\Sound\\pWalk(Soil).wav", 2);
     LoadWaveFile(SOUND_HUMAN_WALK_GRASS, L"Data\\Sound\\pWalk(Grass).wav", 2);
     LoadWaveFile(SOUND_HUMAN_WALK_SNOW, L"Data\\Sound\\pWalk(Snow).wav", 2);
@@ -4517,7 +4557,7 @@ void OpenSounds()
     LoadWaveFile(SOUND_THUNDERS02, L"Data\\Sound\\aThunder02.wav", 1);
     LoadWaveFile(SOUND_THUNDERS03, L"Data\\Sound\\aThunder03.wav", 1);
 
-    //attack
+    // attack
     LoadWaveFile(SOUND_BRANDISH_SWORD01, L"Data\\Sound\\eSwingWeapon1.wav", 2);
     LoadWaveFile(SOUND_BRANDISH_SWORD02, L"Data\\Sound\\eSwingWeapon2.wav", 2);
     LoadWaveFile(SOUND_BRANDISH_SWORD03, L"Data\\Sound\\eSwingLightSword.wav", 2);
@@ -4525,7 +4565,7 @@ void OpenSounds()
     LoadWaveFile(SOUND_CROSSBOW01, L"Data\\Sound\\eCrossbow.wav", 2);
     LoadWaveFile(SOUND_MIX01, L"Data\\Sound\\eMix.wav", 2);
 
-    //player
+    // player
     LoadWaveFile(SOUND_DRINK01, L"Data\\Sound\\pDrink.wav", 1);
     LoadWaveFile(SOUND_EAT_APPLE01, L"Data\\Sound\\pEatApple.wav", 1);
     LoadWaveFile(SOUND_HEART, L"Data\\Sound\\pHeartBeat.wav", 1);
@@ -4541,9 +4581,9 @@ void OpenSounds()
     LoadWaveFile(SOUND_DROP_GOLD01, L"Data\\Sound\\pDropMoney.wav", 1);
     LoadWaveFile(SOUND_JEWEL01, L"Data\\Sound\\eGem.wav", 1);
     LoadWaveFile(SOUND_GET_ITEM01, L"Data\\Sound\\pGetItem.wav", 1);
-    //LoadWaveFile(SOUND_SHOUT01    		,"Data\\Sound\\p기합.wav",1);
+    // LoadWaveFile(SOUND_SHOUT01    		,"Data\\Sound\\p기합.wav",1);
 
-    //skill
+    // skill
     LoadWaveFile(SOUND_SKILL_DEFENSE, L"Data\\Sound\\sKnightDefense.wav", 1);
     LoadWaveFile(SOUND_SKILL_SWORD1, L"Data\\Sound\\sKnightSkill1.wav", 1);
     LoadWaveFile(SOUND_SKILL_SWORD2, L"Data\\Sound\\sKnightSkill2.wav", 1);
@@ -4557,13 +4597,13 @@ void OpenSounds()
     LoadWaveFile(SOUND_HELLFIRE, L"Data\\Sound\\sHellFire.wav", 2, Enable3DSound);
     LoadWaveFile(SOUND_ICE, L"Data\\Sound\\sIce.wav", 2, Enable3DSound);
     LoadWaveFile(SOUND_FLAME, L"Data\\Sound\\sFlame.wav", 2, Enable3DSound);
-    //LoadWaveFile(SOUND_FLASH            ,"Data\\Sound\\m히드라공격1.wav",2,Enable3DSound);
+    // LoadWaveFile(SOUND_FLASH            ,"Data\\Sound\\m히드라공격1.wav",2,Enable3DSound);
     LoadWaveFile(SOUND_FLASH, L"Data\\Sound\\sAquaFlash.wav", 2, Enable3DSound);
 
     LoadWaveFile(SOUND_BREAK01, L"Data\\Sound\\eBreak.wav", 1, Enable3DSound);
     LoadWaveFile(SOUND_EXPLOTION01, L"Data\\Sound\\eExplosion.wav", 1, Enable3DSound);
     LoadWaveFile(SOUND_METEORITE01, L"Data\\Sound\\eMeteorite.wav", 2, Enable3DSound);
-    //LoadWaveFile(SOUND_METEORITE02	    ,"Data\\Sound\\e유성.wav",2,Enable3DSound);
+    // LoadWaveFile(SOUND_METEORITE02	    ,"Data\\Sound\\e유성.wav",2,Enable3DSound);
     LoadWaveFile(SOUND_THUNDER01, L"Data\\Sound\\eThunder.wav", 1, Enable3DSound);
 
     LoadWaveFile(SOUND_BONE1, L"Data\\Sound\\mBone1.wav", 2, Enable3DSound);
@@ -4660,7 +4700,7 @@ void OpenSounds()
 
     LoadWaveFile(SOUND_SHIELDCLASH, L"Data\\Sound\\shieldclash.wav", 1);
     LoadWaveFile(SOUND_INFINITYARROW, L"Data\\Sound\\infinityArrow.wav", 1);
-    //SOUND_FIRE_SCREAM
+    // SOUND_FIRE_SCREAM
     LoadWaveFile(SOUND_FIRE_SCREAM, L"Data\\Sound\\Darklord_firescream.wav", 1);
 
     LoadWaveFile(SOUND_MOONRABBIT_WALK, L"Data\\Sound\\SE_Ev_rabbit_walk.wav", 1);
@@ -4714,7 +4754,7 @@ void OpenSounds()
     LoadWaveFile(SOUND_RAGESKILL_BUFF_2, L"Data\\Sound\\Ragefighter\\Rage_Buff_2.wav");
 }
 
-extern int	g_iRenderTextType;
+extern int g_iRenderTextType;
 
 bool OpenFont()
 {
@@ -4751,7 +4791,8 @@ void SaveMacro(const wchar_t* FileName)
 void OpenMacro(const wchar_t* FileName)
 {
     FILE* fp = _wfopen(FileName, L"rt");
-    if (fp == NULL) return;
+    if (fp == NULL)
+        return;
     for (int i = 0; i < 10; i++)
     {
         fwscanf(fp, L"%ls", MacroText[i]);
@@ -4826,7 +4867,7 @@ void SaveOptions()
 
 void OpenLogoSceneData()
 {
-    //image
+    // image
     ::LoadBitmap(L"Interface\\cha_bt.tga", BITMAP_LOG_IN);
     ::LoadBitmap(L"Interface\\server_b2_all.tga", BITMAP_LOG_IN + 1);
     ::LoadBitmap(L"Interface\\server_b2_loding.jpg", BITMAP_LOG_IN + 2);
@@ -4922,7 +4963,7 @@ void OpenBasicData(HDC hDC)
     LoadBitmap(L"Interface\\CursorLeanAgainst.tga", BITMAP_CURSOR + 6, GL_LINEAR, GL_CLAMP_TO_EDGE);
     LoadBitmap(L"Interface\\CursorSitDown.tga", BITMAP_CURSOR + 7, GL_LINEAR, GL_CLAMP_TO_EDGE);
     LoadBitmap(L"Interface\\CursorDontMove.tga", BITMAP_CURSOR + 8, GL_LINEAR, GL_CLAMP_TO_EDGE);
-    //interface
+    // interface
     LoadBitmap(L"Interface\\ok.jpg", BITMAP_INTERFACE + 11);
     LoadBitmap(L"Interface\\ok2.jpg", BITMAP_INTERFACE + 12);
     LoadBitmap(L"Interface\\cancel.jpg", BITMAP_INTERFACE + 13);
@@ -4952,13 +4993,17 @@ void OpenBasicData(HDC hDC)
     LoadBitmap(L"Interface\\back2.jpg", BITMAP_INTERFACE + 25);
     LoadBitmap(L"Interface\\back3.jpg", BITMAP_INTERFACE + 26);
 
-    LoadBitmap(L"Effect\\Fire01.jpg", BITMAP_FIRE, GL_LINEAR, GL_CLAMP_TO_EDGE);			// GM3rdChangeUp, GMCrywolf1st,GMHellas,Kanturu 3rd
-    LoadBitmap(L"Effect\\Fire02.jpg", BITMAP_FIRE + 1, GL_LINEAR, GL_CLAMP_TO_EDGE);			// GM3rdChangeUp, GMCrywolf1st,GMHellas,Kanturu 3rd
-    LoadBitmap(L"Effect\\Fire03.jpg", BITMAP_FIRE + 2, GL_LINEAR, GL_CLAMP_TO_EDGE);			// GM3rdChangeUp, GMCrywolf1st,GMHellas,Kanturu 3rd
+    LoadBitmap(L"Effect\\Fire01.jpg", BITMAP_FIRE, GL_LINEAR,
+               GL_CLAMP_TO_EDGE); // GM3rdChangeUp, GMCrywolf1st,GMHellas,Kanturu 3rd
+    LoadBitmap(L"Effect\\Fire02.jpg", BITMAP_FIRE + 1, GL_LINEAR,
+               GL_CLAMP_TO_EDGE); // GM3rdChangeUp, GMCrywolf1st,GMHellas,Kanturu 3rd
+    LoadBitmap(L"Effect\\Fire03.jpg", BITMAP_FIRE + 2, GL_LINEAR,
+               GL_CLAMP_TO_EDGE); // GM3rdChangeUp, GMCrywolf1st,GMHellas,Kanturu 3rd
     LoadBitmap(L"Effect\\PoundingBall.jpg", BITMAP_POUNDING_BALL, GL_LINEAR, GL_CLAMP_TO_EDGE); // Kanturu 2nd
-    LoadBitmap(L"Effect\\fi01.jpg", BITMAP_ADV_SMOKE, GL_LINEAR, GL_CLAMP_TO_EDGE);		// GM 3rd ChangeUp, CryingWolf2nd
-    LoadBitmap(L"Effect\\fi02.tga", BITMAP_ADV_SMOKE + 1, GL_LINEAR, GL_CLAMP_TO_EDGE);		// GM 3rd ChangeUp, CryingWolf2nd
-    LoadBitmap(L"Effect\\fantaF.jpg", BITMAP_TRUE_FIRE, GL_LINEAR, GL_CLAMP_TO_EDGE);	// GM Aida, GMBattleCastle, ....
+    LoadBitmap(L"Effect\\fi01.jpg", BITMAP_ADV_SMOKE, GL_LINEAR, GL_CLAMP_TO_EDGE); // GM 3rd ChangeUp, CryingWolf2nd
+    LoadBitmap(L"Effect\\fi02.tga", BITMAP_ADV_SMOKE + 1, GL_LINEAR,
+               GL_CLAMP_TO_EDGE);                                                     // GM 3rd ChangeUp, CryingWolf2nd
+    LoadBitmap(L"Effect\\fantaF.jpg", BITMAP_TRUE_FIRE, GL_LINEAR, GL_CLAMP_TO_EDGE); // GM Aida, GMBattleCastle, ....
     LoadBitmap(L"Effect\\fantaB.jpg", BITMAP_TRUE_BLUE, GL_LINEAR, GL_CLAMP_TO_EDGE);
     LoadBitmap(L"Effect\\JointSpirit02.jpg", BITMAP_JOINT_SPIRIT2, GL_LINEAR, GL_CLAMP_TO_EDGE);
     LoadBitmap(L"Effect\\Piercing.jpg", BITMAP_PIERCING, GL_LINEAR, GL_REPEAT);
@@ -4975,7 +5020,7 @@ void OpenBasicData(HDC hDC)
 #ifdef ASG_ADD_INFLUENCE_GROUND_EFFECT
     LoadBitmap(L"Effect\\guild_ring01.jpg", BITMAP_OUR_INFLUENCE_GROUND, GL_LINEAR, GL_CLAMP_TO_EDGE);
     LoadBitmap(L"Effect\\enemy_ring02.jpg", BITMAP_ENEMY_INFLUENCE_GROUND, GL_LINEAR, GL_CLAMP_TO_EDGE);
-#endif	// ASG_ADD_INFLUENCE_GROUND_EFFECT
+#endif // ASG_ADD_INFLUENCE_GROUND_EFFECT
     LoadBitmap(L"Effect\\Spark02.jpg", BITMAP_SPARK, GL_LINEAR, GL_CLAMP_TO_EDGE);
     LoadBitmap(L"Effect\\Spark03.jpg", BITMAP_SPARK + 1, GL_LINEAR, GL_CLAMP_TO_EDGE);
     LoadBitmap(L"Effect\\smoke01.jpg", BITMAP_SMOKE, GL_LINEAR, GL_CLAMP_TO_EDGE);
@@ -5156,8 +5201,8 @@ void OpenBasicData(HDC hDC)
     LoadBitmap(L"Interface\\icon_Rank_exp.tga"		, BITMAP_MVP_INTERFACE + 43, GL_LINEAR, GL_CLAMP_TO_EDGE);
     LoadBitmap(L"Interface\\m_main_rank.tga"		, BITMAP_MVP_INTERFACE + 44, GL_LINEAR, GL_CLAMP_TO_EDGE);
     */
-    //m_main_rank
-    //icon_Rank_exp
+    // m_main_rank
+    // icon_Rank_exp
     LoadBitmap(L"Interface\\BattleSkill.tga", BITMAP_INTERFACE_EX + 34);
     LoadBitmap(L"Effect\\Flashing.jpg", BITMAP_FLASH, GL_LINEAR, GL_CLAMP_TO_EDGE);
     LoadBitmap(L"Interface\\senatusmap.jpg", BITMAP_INTERFACE_EX + 35);
@@ -5167,7 +5212,7 @@ void OpenBasicData(HDC hDC)
     LoadBitmap(L"Interface\\suho_button1.jpg", BITMAP_INTERFACE_EX + 39);
     LoadBitmap(L"Interface\\DoorCL.jpg", BITMAP_INTERFACE_EX + 40);
     LoadBitmap(L"Interface\\DoorOP.jpg", BITMAP_INTERFACE_EX + 41);
-    //OpenJpeg( "Effect\\FireSnuff.jpg"       , BITMAP_FIRE_SNUFF,    GL_LINEAR, GL_CLAMP_TO_EDGE );
+    // OpenJpeg( "Effect\\FireSnuff.jpg"       , BITMAP_FIRE_SNUFF,    GL_LINEAR, GL_CLAMP_TO_EDGE );
     LoadBitmap(L"Object31\\Flag.tga", BITMAP_INTERFACE_MAP + 0, GL_LINEAR, GL_CLAMP_TO_EDGE);
     LoadBitmap(L"Interface\\CursorAttack2.tga", BITMAP_CURSOR2);
     LoadBitmap(L"Effect\\Cratered.tga", BITMAP_CRATER);
@@ -5253,8 +5298,10 @@ void OpenBasicData(HDC hDC)
     ::LoadBitmap(L"Item\\partCharge3\\jujul_R.jpg", BITMAP_NEWCHAOSCARD_RARE_R, GL_LINEAR, GL_CLAMP_TO_EDGE);
     ::LoadBitmap(L"Item\\partCharge3\\jujum_R.jpg", BITMAP_NEWCHAOSCARD_MINI_R, GL_LINEAR, GL_CLAMP_TO_EDGE);
 
-    ::LoadBitmap(L"Effect\\cherryblossom\\sakuras01.jpg", BITMAP_CHERRYBLOSSOM_EVENT_PETAL, GL_LINEAR, GL_CLAMP_TO_EDGE);
-    ::LoadBitmap(L"Effect\\cherryblossom\\sakuras02.jpg", BITMAP_CHERRYBLOSSOM_EVENT_FLOWER, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    ::LoadBitmap(L"Effect\\cherryblossom\\sakuras01.jpg", BITMAP_CHERRYBLOSSOM_EVENT_PETAL, GL_LINEAR,
+                 GL_CLAMP_TO_EDGE);
+    ::LoadBitmap(L"Effect\\cherryblossom\\sakuras02.jpg", BITMAP_CHERRYBLOSSOM_EVENT_FLOWER, GL_LINEAR,
+                 GL_CLAMP_TO_EDGE);
 
     ::LoadBitmap(L"Object39\\k_effect_01.JPG", BITMAP_KANTURU_2ND_EFFECT1, GL_LINEAR, GL_CLAMP_TO_EDGE);
     ::LoadBitmap(L"Item\\deathbeamstone_R.jpg", BITMAP_ITEM_EFFECT_DBSTONE_R, GL_LINEAR, GL_CLAMP_TO_EDGE);
@@ -5274,12 +5321,12 @@ void OpenBasicData(HDC hDC)
 #ifdef ASG_ADD_GENS_SYSTEM
     std::wstring strFileName = L"Local\\" + g_strSelectedML + L"\\ImgsMapName\\MapNameAddStrife.tga";
     ::LoadBitmap(strFileName.c_str(), BITMAP_INTERFACE_EX + 47);
-#endif	// ASG_ADD_GENS_SYSTEM
+#endif // ASG_ADD_GENS_SYSTEM
 
 #ifdef ASG_ADD_GENS_MARK
     ::LoadBitmap(L"Interface\\Gens_mark_D_new.tga", BITMAP_GENS_MARK_DUPRIAN);
     ::LoadBitmap(L"Interface\\Gens_mark_V_new.tga", BITMAP_GENS_MARK_BARNERT);
-#endif	// ASG_ADD_GENS_MARK
+#endif // ASG_ADD_GENS_MARK
 
     LoadBitmap(L"Monster\\serufanarm_R.jpg", BITMAP_SERUFAN_ARM_R, GL_LINEAR, GL_CLAMP_TO_EDGE);
     LoadBitmap(L"Monster\\serufanwand_R.jpg", BITMAP_SERUFAN_WAND_R, GL_LINEAR, GL_CLAMP_TO_EDGE);
@@ -5288,17 +5335,17 @@ void OpenBasicData(HDC hDC)
     LoadBitmap(L"npc\\santa_baggage.jpg", BITMAP_GOOD_SANTA_BAGGAGE, GL_LINEAR, GL_CLAMP_TO_EDGE);
 
 #ifdef PJH_ADD_PANDA_CHANGERING
-    LoadBitmap(L"Item\\pandabody_R.jpg", BITMAP_PANDABODY_R, GL_LINEAR, GL_LINEAR);	// OPENGL_ERROR
-#endif //PJH_ADD_PANDA_CHANGERING
+    LoadBitmap(L"Item\\pandabody_R.jpg", BITMAP_PANDABODY_R, GL_LINEAR, GL_LINEAR); // OPENGL_ERROR
+#endif                                                                              // PJH_ADD_PANDA_CHANGERING
 
-    LoadBitmap(L"Monster\\DGicewalker_body.jpg", BITMAP_DOPPELGANGER_ICEWALKER0, GL_LINEAR, GL_LINEAR);	// OPENGL_ERROR
-    LoadBitmap(L"Monster\\DGicewalker_R.jpg", BITMAP_DOPPELGANGER_ICEWALKER1, GL_LINEAR, GL_LINEAR);	// OPENGL_ERROR
-    LoadBitmap(L"Monster\\Snake1.jpg", BITMAP_DOPPELGANGER_SNAKE01, GL_LINEAR, GL_LINEAR);	// OPENGL_ERROR
+    LoadBitmap(L"Monster\\DGicewalker_body.jpg", BITMAP_DOPPELGANGER_ICEWALKER0, GL_LINEAR, GL_LINEAR); // OPENGL_ERROR
+    LoadBitmap(L"Monster\\DGicewalker_R.jpg", BITMAP_DOPPELGANGER_ICEWALKER1, GL_LINEAR, GL_LINEAR);    // OPENGL_ERROR
+    LoadBitmap(L"Monster\\Snake1.jpg", BITMAP_DOPPELGANGER_SNAKE01, GL_LINEAR, GL_LINEAR);              // OPENGL_ERROR
 
-    LoadBitmap(L"NPC\\goldboit.jpg", BITMAP_DOPPELGANGER_GOLDENBOX1, GL_LINEAR, GL_LINEAR);	// OPENGL_ERROR
-    LoadBitmap(L"NPC\\goldline.jpg", BITMAP_DOPPELGANGER_GOLDENBOX2, GL_LINEAR, GL_LINEAR);	// OPENGL_ERROR
+    LoadBitmap(L"NPC\\goldboit.jpg", BITMAP_DOPPELGANGER_GOLDENBOX1, GL_LINEAR, GL_LINEAR); // OPENGL_ERROR
+    LoadBitmap(L"NPC\\goldline.jpg", BITMAP_DOPPELGANGER_GOLDENBOX2, GL_LINEAR, GL_LINEAR); // OPENGL_ERROR
 
-    //BITMAP_LIGHT_RED
+    // BITMAP_LIGHT_RED
     LoadBitmap(L"effect\\flare01_red.jpg", BITMAP_LIGHT_RED, GL_LINEAR, GL_CLAMP_TO_EDGE);
 
     LoadBitmap(L"effect\\gra.jpg", BITMAP_GRA, GL_LINEAR, GL_CLAMP_TO_EDGE);
@@ -5320,10 +5367,11 @@ void OpenBasicData(HDC hDC)
 
 #ifdef LJH_ADD_ITEMS_EQUIPPED_FROM_INVENTORY_SYSTEM_PART_2
     LoadBitmap(L"Item\\ork_cham_R.jpg", BITMAP_ORK_CHAM_LAYER_R, GL_LINEAR, GL_CLAMP_TO_EDGE);
-    //LoadBitmap(L"Item\\maple_cham_R.jpg",			BITMAP_MAPLE_CHAM_LAYER_R,			GL_LINEAR, GL_CLAMP_TO_EDGE);
+    // LoadBitmap(L"Item\\maple_cham_R.jpg",			BITMAP_MAPLE_CHAM_LAYER_R,			GL_LINEAR,
+    // GL_CLAMP_TO_EDGE);
     LoadBitmap(L"Item\\goldenork_cham_R.jpg", BITMAP_GOLDEN_ORK_CHAM_LAYER_R, GL_LINEAR, GL_CLAMP_TO_EDGE);
-    //LoadBitmap(L"Item\\goldenmaple_cham_R.jpg",	BITMAP_GOLDEN_MAPLE_CHAM_LAYER_R,	GL_LINEAR, GL_CLAMP_TO_EDGE);
-#endif //LJH_ADD_ITEMS_EQUIPPED_FROM_INVENTORY_SYSTEM_PART_2
+    // LoadBitmap(L"Item\\goldenmaple_cham_R.jpg",	BITMAP_GOLDEN_MAPLE_CHAM_LAYER_R,	GL_LINEAR, GL_CLAMP_TO_EDGE);
+#endif // LJH_ADD_ITEMS_EQUIPPED_FROM_INVENTORY_SYSTEM_PART_2
 
     ::LoadBitmap(L"Monster\\BoneSE.jpg", BITMAP_BONE_SCORPION_SKIN_EFFECT, GL_LINEAR, GL_CLAMP_TO_EDGE);
     ::LoadBitmap(L"Monster\\KryptaBall2.jpg", BITMAP_KRYPTA_BALL_EFFECT, GL_LINEAR, GL_CLAMP_TO_EDGE);
@@ -5334,7 +5382,6 @@ void OpenBasicData(HDC hDC)
     ::LoadBitmap(L"Monster\\king_golem03_effect.jpg", BITMAP_NARCONDRA_SKIN_EFFECT3, GL_LINEAR, GL_CLAMP_TO_EDGE);
 
     ::LoadBitmap(L"NPC\\voloE.jpg", BITMAP_VOLO_SKIN_EFFECT, GL_LINEAR, GL_CLAMP_TO_EDGE);
-
 
     g_ErrorReport.Write(L"> First Load Files OK.\r\n");
 
@@ -5385,7 +5432,7 @@ void OpenBasicData(HDC hDC)
     mu_swprintf(Text, L"Data\\Local\\%ls\\SocketItem_%ls.bmd", g_strSelectedML.c_str(), g_strSelectedML.c_str());
     g_SocketItemMgr.OpenSocketItemScript(Text);
 
-    OpenTextData();		//. Text.bmd, Testtest.bmd
+    OpenTextData(); //. Text.bmd, Testtest.bmd
 
     g_csItemOption.OpenItemSetScript();
 

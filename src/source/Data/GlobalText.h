@@ -7,69 +7,67 @@
 
 namespace detail
 {
-    template <class T>
-    std::basic_string<T> NormalizePrintfSpecifiers(const T* text)
-    {
-        return std::basic_string<T>(text);
-    }
+template <class T> std::basic_string<T> NormalizePrintfSpecifiers(const T* text)
+{
+    return std::basic_string<T>(text);
+}
 
-    template <>
-    inline std::basic_string<wchar_t> NormalizePrintfSpecifiers(const wchar_t* text)
-    {
-        std::wstring result;
-        result.reserve(wcslen(text));
+template <> inline std::basic_string<wchar_t> NormalizePrintfSpecifiers(const wchar_t* text)
+{
+    std::wstring result;
+    result.reserve(wcslen(text));
 
-        bool inFormat = false;
-        bool hasLengthModifier = false;
-        for (size_t i = 0; text[i] != L'\0'; ++i)
+    bool inFormat = false;
+    bool hasLengthModifier = false;
+    for (size_t i = 0; text[i] != L'\0'; ++i)
+    {
+        const wchar_t ch = text[i];
+        if (!inFormat)
         {
-            const wchar_t ch = text[i];
-            if (!inFormat)
-            {
-                if (ch == L'%')
-                {
-                    inFormat = true;
-                    hasLengthModifier = false;
-                }
-                result.push_back(ch);
-                continue;
-            }
-
             if (ch == L'%')
             {
-                inFormat = false;
-                result.push_back(L'%');
-                continue;
+                inFormat = true;
+                hasLengthModifier = false;
             }
-
-            if (wcschr(L"hlLjztI", ch))
-            {
-                hasLengthModifier = true;
-                result.push_back(ch);
-                continue;
-            }
-
-            if (wcschr(L"cCdiouxXeEfgGaAnpsS", ch))
-            {
-                if ((ch == L's' || ch == L'S') && !hasLengthModifier)
-                {
-                    result.push_back(L'l');
-                    result.push_back(L's');
-                }
-                else
-                {
-                    result.push_back(ch == L'S' ? L's' : ch);
-                }
-                inFormat = false;
-                continue;
-            }
-
             result.push_back(ch);
+            continue;
         }
 
-        return result;
+        if (ch == L'%')
+        {
+            inFormat = false;
+            result.push_back(L'%');
+            continue;
+        }
+
+        if (wcschr(L"hlLjztI", ch))
+        {
+            hasLengthModifier = true;
+            result.push_back(ch);
+            continue;
+        }
+
+        if (wcschr(L"cCdiouxXeEfgGaAnpsS", ch))
+        {
+            if ((ch == L's' || ch == L'S') && !hasLengthModifier)
+            {
+                result.push_back(L'l');
+                result.push_back(L's');
+            }
+            else
+            {
+                result.push_back(ch == L'S' ? L's' : ch);
+            }
+            inFormat = false;
+            continue;
+        }
+
+        result.push_back(ch);
     }
+
+    return result;
 }
+} // namespace detail
 
 #include <algorithm>
 #include <array>
@@ -80,25 +78,25 @@ namespace detail
 #include <type_traits>
 #include <vector>
 
-template <class T>
-class TGlobalText
+template <class T> class TGlobalText
 {
 #pragma pack(push, 1)
     struct GLOBALTEXT_HEADER
     {
-        std::uint16_t	wSignature;
-        std::uint32_t	dwNumberOfText;
+        std::uint16_t wSignature;
+        std::uint32_t dwNumberOfText;
     };
     struct GLOBALTEXT_STRING_HEADER
     {
-        std::uint32_t	dwKey;
-        std::uint32_t	dwSizeOfString;
+        std::uint32_t dwKey;
+        std::uint32_t dwSizeOfString;
     };
 #pragma pack(pop)
 
     class CKeyCode
     {
-        std::wstring	m_strKeyCode;
+        std::wstring m_strKeyCode;
+
     public:
         explicit CKeyCode(int key)
         {
@@ -128,12 +126,14 @@ class TGlobalText
         }
     };
 
-    leaf::TStringSet<T>		m_StringSet;
+    leaf::TStringSet<T> m_StringSet;
 
 public:
-
     TGlobalText() {}
-    ~TGlobalText() { RemoveAll(); }
+    ~TGlobalText()
+    {
+        RemoveAll();
+    }
 
     enum
     {
@@ -248,30 +248,55 @@ public:
         return file.good();
     }
 
-    bool Add(int key, const T* szString) { return m_StringSet.Add(key, szString); }
-    bool Remove(int key) { return m_StringSet.Remove(key); }
-    void RemoveAll() { m_StringSet.RemoveAll(); }
+    bool Add(int key, const T* szString)
+    {
+        return m_StringSet.Add(key, szString);
+    }
+    bool Remove(int key)
+    {
+        return m_StringSet.Remove(key);
+    }
+    void RemoveAll()
+    {
+        m_StringSet.RemoveAll();
+    }
 
-    const T* Get(int key) { return m_StringSet[key]; }
-    size_t GetStringSize(int key) { return m_StringSet.FindObj(key).size(); }
+    const T* Get(int key)
+    {
+        return m_StringSet[key];
+    }
+    size_t GetStringSize(int key)
+    {
+        return m_StringSet.FindObj(key).size();
+    }
 
     std::uint16_t GetNumCountryCode(const std::wstring& strAlpha3Code)
-    {	//. strAlpha3Code: Official Alpha-3 Code
-        if (0 == strAlpha3Code.compare(L"USA") || 0 == strAlpha3Code.compare(L"CAN")) return 130;
-        if (0 == strAlpha3Code.compare(L"JPN")) return 450;
-        if (0 == strAlpha3Code.compare(L"TPE")) return 471;
-        if (0 == strAlpha3Code.compare(L"PHI")) return 480;
-        if (0 == strAlpha3Code.compare(L"CHN")) return 690;
-        if (0 == strAlpha3Code.compare(L"BRA")) return 789;
-        if (0 == strAlpha3Code.compare(L"KOR")) return 880;
-        if (0 == strAlpha3Code.compare(L"THA")) return 885;
-        if (0 == strAlpha3Code.compare(L"VIE")) return 893;
-        if (0 == strAlpha3Code.compare(L"FRN")) return 995;
+    { //. strAlpha3Code: Official Alpha-3 Code
+        if (0 == strAlpha3Code.compare(L"USA") || 0 == strAlpha3Code.compare(L"CAN"))
+            return 130;
+        if (0 == strAlpha3Code.compare(L"JPN"))
+            return 450;
+        if (0 == strAlpha3Code.compare(L"TPE"))
+            return 471;
+        if (0 == strAlpha3Code.compare(L"PHI"))
+            return 480;
+        if (0 == strAlpha3Code.compare(L"CHN"))
+            return 690;
+        if (0 == strAlpha3Code.compare(L"BRA"))
+            return 789;
+        if (0 == strAlpha3Code.compare(L"KOR"))
+            return 880;
+        if (0 == strAlpha3Code.compare(L"THA"))
+            return 885;
+        if (0 == strAlpha3Code.compare(L"VIE"))
+            return 893;
+        if (0 == strAlpha3Code.compare(L"FRN"))
+            return 995;
 
         return 0;
     }
 
-    const T* operator [] (int key)
+    const T* operator[](int key)
     {
         return Get(key);
     }
@@ -279,7 +304,7 @@ public:
 protected:
     static void BuxConvert(std::uint8_t* data, std::size_t length)
     {
-        static constexpr std::array<std::uint8_t, 3> byBuxCode{ 0xfc,0xcf,0xab };
+        static constexpr std::array<std::uint8_t, 3> byBuxCode{0xfc, 0xcf, 0xab};
         for (std::size_t i = 0; i < length; ++i)
         {
             data[i] ^= byBuxCode[i % byBuxCode.size()];
@@ -289,7 +314,8 @@ protected:
     {
         CKeyCode KeyCode(key);
         if (((dwLoadDisposition & LD_USA_CANADA_TEXTS) == LD_USA_CANADA_TEXTS) &&
-            (KeyCode.GetCountryCode() == GetNumCountryCode(L"USA") || KeyCode.GetCountryCode() == GetNumCountryCode(L"CAN")))
+            (KeyCode.GetCountryCode() == GetNumCountryCode(L"USA") ||
+             KeyCode.GetCountryCode() == GetNumCountryCode(L"CAN")))
             return true;
         if (((dwLoadDisposition & LD_JAPAN_A_TEXTS) == LD_JAPAN_A_TEXTS) &&
             (KeyCode.GetCountryCode() == GetNumCountryCode(L"JPN")))
@@ -377,8 +403,7 @@ protected:
                 return false;
             }
 
-            if ((extra == 1 && codepoint < 0x80) ||
-                (extra == 2 && codepoint < 0x800) ||
+            if ((extra == 1 && codepoint < 0x80) || (extra == 2 && codepoint < 0x800) ||
                 (extra == 3 && codepoint < 0x10000))
             {
                 return false;
@@ -406,8 +431,7 @@ protected:
     }
 };
 
-typedef TGlobalText<char>		CGlobalText;
-typedef TGlobalText<wchar_t>	CGlobalTextW;
+typedef TGlobalText<char> CGlobalText;
+typedef TGlobalText<wchar_t> CGlobalTextW;
 
 extern CGlobalTextW GlobalText;
-

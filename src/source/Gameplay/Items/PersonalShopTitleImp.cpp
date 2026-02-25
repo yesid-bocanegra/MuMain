@@ -8,8 +8,7 @@
 #include "UIManager.h"
 #include "NewUISystem.h"
 
-CPersonalShopTitleImp::CPersonalShopTitleImp() : m_iHighlightFrame(0), m_bShow(true)
-{}
+CPersonalShopTitleImp::CPersonalShopTitleImp() : m_iHighlightFrame(0), m_bShow(true) {}
 CPersonalShopTitleImp::~CPersonalShopTitleImp()
 {
     RemoveAllShopTitle();
@@ -123,14 +122,16 @@ void CPersonalShopTitleImp::EnableShopTitleDraw(CHARACTER* pPlayer)
 void CPersonalShopTitleImp::DisableShopTitleDraw(CHARACTER* pPlayer)
 {
     auto mi = m_listShopTitleDrawObj.find(pPlayer);
-    if (mi != m_listShopTitleDrawObj.end()) {
+    if (mi != m_listShopTitleDrawObj.end())
+    {
         (*mi).second->DisableDraw();
     }
 }
 bool CPersonalShopTitleImp::IsShopTitleVisible(CHARACTER* pPlayer)
 {
     type_drawobj_map::const_iterator mi = m_listShopTitleDrawObj.find(pPlayer);
-    if (mi != m_listShopTitleDrawObj.end()) {
+    if (mi != m_listShopTitleDrawObj.end())
+    {
         return (*mi).second->IsVisible();
     }
     return false;
@@ -139,7 +140,8 @@ bool CPersonalShopTitleImp::IsShopTitleVisible(CHARACTER* pPlayer)
 bool CPersonalShopTitleImp::IsShopTitleHighlight(CHARACTER* pPlayer) const
 {
     auto mi = m_listShopTitleDrawObj.find(pPlayer);
-    if (mi != m_listShopTitleDrawObj.end()) {
+    if (mi != m_listShopTitleDrawObj.end())
+    {
         return (*mi).second->IsHighlight();
     }
     return false;
@@ -157,19 +159,23 @@ bool CPersonalShopTitleImp::IsInViewport(CHARACTER* pPlayer)
 void CPersonalShopTitleImp::GetShopTitle(CHARACTER* pPlayer, std::wstring& title)
 {
     auto mi = m_listShopTitleDrawObj.find(pPlayer);
-    if (mi != m_listShopTitleDrawObj.end()) {
+    if (mi != m_listShopTitleDrawObj.end())
+    {
         (*mi).second->GetFullTitle(title);
     }
 }
 void CPersonalShopTitleImp::GetShopTitleSummary(CHARACTER* pPlayer, std::wstring& summary)
 {
     auto mi = m_listShopTitleDrawObj.find(pPlayer);
-    if (mi != m_listShopTitleDrawObj.end()) {
+    if (mi != m_listShopTitleDrawObj.end())
+    {
         std::wstring full_title;
         (*mi).second->GetFullTitle(full_title);
-        if (full_title.size() > 14) {
+        if (full_title.size() > 14)
+        {
             int offset = 0;
-            for (; offset < 12; ) {
+            for (; offset < 12;)
+            {
                 if (full_title[offset] & 0x80)
                     offset += 2;
                 else
@@ -178,7 +184,8 @@ void CPersonalShopTitleImp::GetShopTitleSummary(CHARACTER* pPlayer, std::wstring
             summary.assign(full_title, 0, offset);
             summary += L"..";
         }
-        else {
+        else
+        {
             summary = full_title;
         }
     }
@@ -200,7 +207,8 @@ DWORD CPersonalShopTitleImp::GetShopTextColor(CHARACTER* pPlayer)
         case PVP_MURDERER1:
             return RGBA(230, 110, 0, 255);
         default:
-            return IsShopTitleHighlight(pPlayer) ? (255 << 24) + (255 << 16) + (230 << 8) + (230) : (255 << 24) + (0 << 16) + (230 << 8) + (230);
+            return IsShopTitleHighlight(pPlayer) ? (255u << 24) + (255 << 16) + (230 << 8) + (230)
+                                                 : (255u << 24) + (0 << 16) + (230 << 8) + (230);
         }
     }
 }
@@ -221,7 +229,8 @@ DWORD CPersonalShopTitleImp::GetShopText2Color(CHARACTER* pPlayer)
         case PVP_MURDERER1:
             return RGBA(230, 110, 0, 255);
         default:
-            return IsShopTitleHighlight(pPlayer) ? (255 << 24) + (41 << 16) + (57 << 8) + (108) : (255 << 24) + (0 << 16) + (150 << 8) + (250);
+            return IsShopTitleHighlight(pPlayer) ? (255u << 24) + (41 << 16) + (57 << 8) + (108)
+                                                 : (255u << 24) + (0 << 16) + (150 << 8) + (250);
         }
     }
 }
@@ -242,14 +251,16 @@ DWORD CPersonalShopTitleImp::GetShopBGColor(CHARACTER* pPlayer)
         case PVP_MURDERER1:
             return IsShopTitleHighlight(pPlayer) ? RGBA(182, 122, 82, 128) : RGBA(108, 57, 41, 128);
         default:
-            return IsShopTitleHighlight(pPlayer) ? (128 << 24) + (0 << 16) + (150 << 8) + (250) : (128 << 24) + (41 << 16) + (57 << 8) + (108);
+            return IsShopTitleHighlight(pPlayer) ? (128u << 24) + (0 << 16) + (150 << 8) + (250)
+                                                 : (128u << 24) + (41 << 16) + (57 << 8) + (108);
         }
     }
 }
 
 void CPersonalShopTitleImp::Update()
 {
-    if (!m_listShopTitleDrawObj.empty()) {
+    if (!m_listShopTitleDrawObj.empty())
+    {
         CheckKeyIntegrity();
     }
 }
@@ -266,10 +277,8 @@ void CPersonalShopTitleImp::Draw()
         for (; mi != m_listShopTitleDrawObj.end(); ++mi)
         {
             CShopTitleDrawObj* pDrawObj = mi->second;
-            if (SelectedCharacter != -1
-                && isHighlightTime
-                && g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_COMMAND)
-                && g_pCommandWindow->GetCurCommandType() == COMMAND_PURCHASE)
+            if (SelectedCharacter != -1 && isHighlightTime && g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_COMMAND) &&
+                g_pCommandWindow->GetCurCommandType() == COMMAND_PURCHASE)
             {
                 CHARACTER* selectedPlayer = &CharactersClient[SelectedCharacter];
                 if (mi->first == selectedPlayer)
@@ -307,14 +316,15 @@ void CPersonalShopTitleImp::UpdatePosition()
     BeginOpengl(0, 0, Width, Height);
 
     auto mi = m_listShopTitleDrawObj.begin();
-    for (; mi != m_listShopTitleDrawObj.end(); ++mi) {
+    for (; mi != m_listShopTitleDrawObj.end(); ++mi)
+    {
         CShopTitleDrawObj* pDrawObj = (*mi).second;
 
         SIZE size;
         pDrawObj->GetBoxSize(size);
 
         POINT pos;
-        CalculateBooleanPos((*mi).first, size, pos);	//. real position
+        CalculateBooleanPos((*mi).first, size, pos); //. real position
 
         pDrawObj->SetBoxPos(pos);
     }
@@ -326,23 +336,27 @@ void CPersonalShopTitleImp::RevisionPosition()
 {
     //. Fit to screen
     auto mi_x = m_listShopTitleDrawObj.begin();
-    for (; mi_x != m_listShopTitleDrawObj.end(); ++mi_x) {
+    for (; mi_x != m_listShopTitleDrawObj.end(); ++mi_x)
+    {
         auto mi_y = m_listShopTitleDrawObj.begin();
-        for (; mi_y != m_listShopTitleDrawObj.end(); ++mi_y) {
-            if (mi_x != mi_y) {
+        for (; mi_y != m_listShopTitleDrawObj.end(); ++mi_y)
+        {
+            if (mi_x != mi_y)
+            {
                 RECT rcX, rcY;
                 (*mi_x).second->GetBoxRect(rcX);
                 (*mi_y).second->GetBoxRect(rcY);
 
-                if (rcX.right > rcY.left && rcX.left < rcY.right &&
-                    rcX.bottom > rcY.top && rcX.top < rcY.bottom)
+                if (rcX.right > rcY.left && rcX.left < rcY.right && rcX.bottom > rcY.top && rcX.top < rcY.bottom)
                 {
                     POINT pos;
-                    if (rcX.bottom < (rcY.top + rcY.bottom) / 2) {
+                    if (rcX.bottom < (rcY.top + rcY.bottom) / 2)
+                    {
                         pos.x = rcX.left;
                         pos.y = rcY.top - (rcX.bottom - rcX.top);
                     }
-                    else {
+                    else
+                    {
                         pos.x = rcX.left;
                         pos.y = rcY.bottom;
                     }
@@ -352,14 +366,20 @@ void CPersonalShopTitleImp::RevisionPosition()
         }
     }
 
-    for (mi_x = m_listShopTitleDrawObj.begin(); mi_x != m_listShopTitleDrawObj.end(); ++mi_x) {
-        POINT pos; SIZE size;
+    for (mi_x = m_listShopTitleDrawObj.begin(); mi_x != m_listShopTitleDrawObj.end(); ++mi_x)
+    {
+        POINT pos;
+        SIZE size;
         (*mi_x).second->GetBoxPos(pos);
         (*mi_x).second->GetBoxSize(size);
-        if (pos.x < 0) pos.x = 0;
-        if ((unsigned int)pos.x >= WindowWidth - (unsigned int)size.cx) pos.x = WindowWidth - (size.cx + 4);
-        if (pos.y < 0) pos.y = 0;
-        if ((unsigned int)pos.y >= WindowHeight - (unsigned int)size.cy) pos.y = WindowHeight - size.cy;
+        if (pos.x < 0)
+            pos.x = 0;
+        if ((unsigned int)pos.x >= WindowWidth - (unsigned int)size.cx)
+            pos.x = WindowWidth - (size.cx + 4);
+        if (pos.y < 0)
+            pos.y = 0;
+        if ((unsigned int)pos.y >= WindowHeight - (unsigned int)size.cy)
+            pos.y = WindowHeight - size.cy;
         (*mi_x).second->SetBoxPos(pos);
     }
 }
@@ -376,14 +396,16 @@ void CPersonalShopTitleImp::CheckKeyIntegrity()
         {
             delete pDrawObj;
             mi = m_listShopTitleDrawObj.erase(mi);
-            g_ErrorReport.Write(L"@ CheckKeyIntegrity - player key-value dismatch(id : %ls, server's key : %d, client array's key : %d) \n",
-                pPlayer->ID, pDrawObj->GetKey(), pPlayer->Key);
+            g_ErrorReport.Write(L"@ CheckKeyIntegrity - player key-value dismatch(id : %ls, server's key : %d, client "
+                                L"array's key : %d) \n",
+                                pPlayer->ID, pDrawObj->GetKey(), pPlayer->Key);
         }
         else if (pPlayer->Object.Kind != KIND_PLAYER)
         {
             delete pDrawObj;
             mi = m_listShopTitleDrawObj.erase(mi);
-            g_ErrorReport.Write(L"@ CheckKeyIntegrity - player type invalid(id : %ls, server's key : %d, client array's key : %d) \n",
+            g_ErrorReport.Write(
+                L"@ CheckKeyIntegrity - player type invalid(id : %ls, server's key : %d, client array's key : %d) \n",
                 pPlayer->ID, pDrawObj->GetKey(), pPlayer->Key);
         }
         else
@@ -397,17 +419,21 @@ void CPersonalShopTitleImp::CalculateBooleanPos(IN CHARACTER* pPlayer, IN const 
 {
     vec3_t posTemp;
     OBJECT* pObject = &pPlayer->Object;
-    Vector(pObject->Position[0], pObject->Position[1], pObject->Position[2] + pObject->BoundingBoxMax[2] + 60.f, posTemp);
+    Vector(pObject->Position[0], pObject->Position[1], pObject->Position[2] + pObject->BoundingBoxMax[2] + 60.f,
+           posTemp);
 
     POINT ptFloating;
-    Projection(posTemp, (int*)&ptFloating.x, (int*)&ptFloating.y);		//. logical position
+    Projection(posTemp, (int*)&ptFloating.x, (int*)&ptFloating.y); //. logical position
 
     //. pos : real position
     pos.x = (ptFloating.x * (int)WindowWidth / 640) - size.cx / 2;
     pos.y = (ptFloating.y * (int)WindowHeight / 480) - (12 * 3 * (int)WindowHeight / 480);
 }
 
-CPersonalShopTitleImp::CShopTitleDrawObj::CShopTitleDrawObj() { Init(); }
+CPersonalShopTitleImp::CShopTitleDrawObj::CShopTitleDrawObj()
+{
+    Init();
+}
 CPersonalShopTitleImp::CShopTitleDrawObj::~CShopTitleDrawObj() {}
 
 void CPersonalShopTitleImp::CShopTitleDrawObj::Init()
@@ -425,7 +451,8 @@ void CPersonalShopTitleImp::CShopTitleDrawObj::Init()
     m_bHighlight = false;
 }
 
-bool CPersonalShopTitleImp::CShopTitleDrawObj::Create(int key, const std::wstring& name, const std::wstring& title, POINT pos)
+bool CPersonalShopTitleImp::CShopTitleDrawObj::Create(int key, const std::wstring& name, const std::wstring& title,
+                                                      POINT pos)
 {
     m_key = key & 0x7FFF;
     SetBoxContent(name, title);
@@ -516,7 +543,8 @@ void CPersonalShopTitleImp::CShopTitleDrawObj::Draw(int iPkLevel)
     int iNameBkColor = IsHighlight() ? RGBA(250, 150, 0, 128) : RGBA(108, 57, 41, 128);
     int iNameTextColor = IsHighlight() ? RGBA(230, 230, 255, 255) : RGBA(230, 230, 0, 255);
 
-    switch (iPkLevel) {
+    switch (iPkLevel)
+    {
     case PVP_CAUTION:
     {
         iIconBkColor = iNameBkColor = IsHighlight() ? RGBA(182, 122, 82, 128) : RGBA(108, 57, 41, 128);
@@ -537,11 +565,9 @@ void CPersonalShopTitleImp::CShopTitleDrawObj::Draw(int iPkLevel)
     break;
     }
 
-    
-    
-    POINT RenderPos = { m_pos.x / g_fScreenRate_x, m_pos.y / g_fScreenRate_y };
-    SIZE RenderBoxSize = { m_size.cx / g_fScreenRate_x, m_size.cy / g_fScreenRate_y };
-    SIZE RenderIconSize = { m_icon.cx / g_fScreenRate_x, m_icon.cy / g_fScreenRate_y };
+    POINT RenderPos = {m_pos.x / g_fScreenRate_x, m_pos.y / g_fScreenRate_y};
+    SIZE RenderBoxSize = {m_size.cx / g_fScreenRate_x, m_size.cy / g_fScreenRate_y};
+    SIZE RenderIconSize = {m_icon.cx / g_fScreenRate_x, m_icon.cy / g_fScreenRate_y};
     int iLineHeight = FontHeight / g_fScreenRate_y;
 
     g_pRenderText->SetFont(g_hFontBold);
@@ -552,7 +578,7 @@ void CPersonalShopTitleImp::CShopTitleDrawObj::Draw(int iPkLevel)
     g_pRenderText->SetBgColor(iNameBkColor);
     g_pRenderText->SetTextColor(iNameTextColor);
     g_pRenderText->RenderText(RenderPos.x + RenderIconSize.cx, RenderPos.y, m_fullname.c_str(),
-        RenderBoxSize.cx - RenderIconSize.cx, iLineHeight);
+                              RenderBoxSize.cx - RenderIconSize.cx, iLineHeight);
     RenderPos.y += iLineHeight;
 
     g_pRenderText->SetFont(g_hFont);
@@ -573,16 +599,19 @@ void CPersonalShopTitleImp::CShopTitleDrawObj::Draw(int iPkLevel)
         g_pRenderText->RenderText(RenderPos.x, RenderPos.y, m_topTitle.c_str(), RenderBoxSize.cx, iLineHeight);
     }
 }
-void CPersonalShopTitleImp::CShopTitleDrawObj::SeparateShopTitle(const std::wstring& title, std::wstring& topTitle, std::wstring& bottomTitle)
+void CPersonalShopTitleImp::CShopTitleDrawObj::SeparateShopTitle(const std::wstring& title, std::wstring& topTitle,
+                                                                 std::wstring& bottomTitle)
 {
-    wchar_t pszTopTitle[MAX_SHOPTITLE] = { 0 };
-    wchar_t pszBottomTitle[MAX_SHOPTITLE] = { 0 };
+    wchar_t pszTopTitle[MAX_SHOPTITLE] = {0};
+    wchar_t pszBottomTitle[MAX_SHOPTITLE] = {0};
     CutText(title.c_str(), pszTopTitle, pszBottomTitle, MAX_SHOPTITLE);
 
     topTitle = pszTopTitle;
     bottomTitle = pszBottomTitle;
 }
-void CPersonalShopTitleImp::CShopTitleDrawObj::CalculateBooleanSize(IN const std::wstring& name, IN const std::wstring& topTitle, IN const std::wstring& bottomTitle, OUT SIZE& size)
+void CPersonalShopTitleImp::CShopTitleDrawObj::CalculateBooleanSize(IN const std::wstring& name,
+                                                                    IN const std::wstring& topTitle,
+                                                                    IN const std::wstring& bottomTitle, OUT SIZE& size)
 {
     SIZE text_size[3];
     g_pRenderText->SetFont(g_hFontBold);

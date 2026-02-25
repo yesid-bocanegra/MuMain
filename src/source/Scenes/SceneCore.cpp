@@ -17,7 +17,7 @@
 
 #include "CSQuest.h"
 #include "UIControls.h"
-#include "UIMapName.h"	// rozy
+#include "UIMapName.h" // rozy
 #include "Core/Timer.h"
 #include "UIMng.h"
 #include "LoadingScene.h"
@@ -42,21 +42,21 @@ extern bool HighLight;
 extern CTimer* g_pTimer;
 extern BOOL g_bGameServerConnected;
 
-bool	g_bTimeCheck = false;
-int 	g_iBackupTime = 0;
+bool g_bTimeCheck = false;
+int g_iBackupTime = 0;
 
-float	g_fMULogoAlpha = 0;
+float g_fMULogoAlpha = 0;
 
 extern float g_fSpecialHeight;
 
-short   g_shCameraLevel = 0;
+short g_shCameraLevel = 0;
 
 int g_iLengthAuthorityCode = 20;
 
 const wchar_t* szServerIpAddress = L"127.127.127.127";
 WORD g_ServerPort = 44406;
 
-EGameScene  SceneFlag = WEBZEN_SCENE;
+EGameScene SceneFlag = WEBZEN_SCENE;
 
 extern int g_iKeyPadEnable;
 
@@ -64,39 +64,38 @@ CPhysicsManager g_PhysicsManager;
 
 extern wchar_t Mp3FileName[256];
 
-#define MAX_LENGTH_CMB	( 38)
+#define MAX_LENGTH_CMB (38)
 
-DWORD   g_dwWaitingStartTick;
-int     g_iRequestCount;
+DWORD g_dwWaitingStartTick;
+int g_iRequestCount;
 
-int     g_iMessageTextStart = 0;
-char    g_cMessageTextCurrNum = 0;
-char    g_cMessageTextNum = 0;
-int     g_iNumLineMessageBoxCustom;
-wchar_t    g_lpszMessageBoxCustom[NUM_LINE_CMB][MAX_LENGTH_CMB];
-int     g_iCustomMessageBoxButton[NUM_BUTTON_CMB][NUM_PAR_BUTTON_CMB];
+int g_iMessageTextStart = 0;
+char g_cMessageTextCurrNum = 0;
+char g_cMessageTextNum = 0;
+int g_iNumLineMessageBoxCustom;
+wchar_t g_lpszMessageBoxCustom[NUM_LINE_CMB][MAX_LENGTH_CMB];
+int g_iCustomMessageBoxButton[NUM_BUTTON_CMB][NUM_PAR_BUTTON_CMB];
 
-int     g_iCustomMessageBoxButton_Cancel[NUM_PAR_BUTTON_CMB];
+int g_iCustomMessageBoxButton_Cancel[NUM_PAR_BUTTON_CMB];
 
-int		g_iCancelSkillTarget = 0;
+int g_iCancelSkillTarget = 0;
 
-#define NUM_LINE_DA		( 1)
+#define NUM_LINE_DA (1)
 int g_iCurrentDialogScript = -1;
 int g_iNumAnswer = 0;
 wchar_t g_lpszDialogAnswer[MAX_ANSWER_FOR_DIALOG][NUM_LINE_DA][MAX_LENGTH_CMB];
-
 
 extern int HeroKey;
 
 int DeleteGuildIndex = -1;
 
-int  ErrorMessage = NULL;
+int ErrorMessage = NULL;
 extern bool g_bEnterPressed;
 
 extern wchar_t LogInID[MAX_USERNAME_SIZE + 1];
 extern wchar_t m_ExeVersion[11];
 
-BOOL Util_CheckOption(std::wstring lpszCommandLine, wchar_t cOption, std::wstring &lpszString);
+BOOL Util_CheckOption(std::wstring lpszCommandLine, wchar_t cOption, std::wstring& lpszString);
 
 extern DWORD g_dwBKConv;
 extern DWORD g_dwBKSent;
@@ -116,7 +115,7 @@ CameraState g_CameraState;
 extern int WaterTextureNumber;
 
 int TestTime = 0;
-extern int  GrabScreen;
+extern int GrabScreen;
 
 void MoveCharacter(CHARACTER* c, OBJECT* o);
 
@@ -132,8 +131,8 @@ void WaitForNextActivity(bool usePreciseSleep)
     const auto current_ms_per_frame = g_frameTiming.GetMsPerFrame();
     if (current_ms_per_frame > 0 && current_frame_time_ms > 0 && current_frame_time_ms < current_ms_per_frame)
     {
-        const auto sleep_threshold_ms = usePreciseSleep? 4.0 : 16.0;
-        const auto sleep_duration_offset_ms = usePreciseSleep? 1.0 : 4.0;
+        const auto sleep_threshold_ms = usePreciseSleep ? 4.0 : 16.0;
+        const auto sleep_duration_offset_ms = usePreciseSleep ? 1.0 : 4.0;
         const auto max_sleep_ms = 10.0;
         const auto rest_ms = current_ms_per_frame - current_frame_time_ms;
 

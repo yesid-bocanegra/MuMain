@@ -9,12 +9,12 @@
 
 #include "Sprite.h"
 
-#define LDS_BACK_MAX	4
+#define LDS_BACK_MAX 4
 
 class CLoadingScene
 {
 protected:
-    CSprite	m_asprBack[LDS_BACK_MAX];
+    CSprite m_asprBack[LDS_BACK_MAX];
 
 public:
     CLoadingScene();

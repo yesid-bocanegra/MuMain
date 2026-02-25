@@ -20,7 +20,7 @@
 extern int MouseX, MouseY;
 #ifdef ASG_FIX_ACTIVATE_APP_INPUT
 extern bool g_bWndActive;
-#endif	// ASG_FIX_ACTIVATE_APP_INPUT
+#endif // ASG_FIX_ACTIVATE_APP_INPUT
 
 bool SEASON3B::CreateOkMessageBox(const std::wstring& strMsg, DWORD dwColor, float fPriority)
 {
@@ -67,7 +67,8 @@ void SEASON3B::RenderImage(GLuint uiImageType, float x, float y, float width, fl
     RenderBitmap(uiImageType, x, y, width, height, u, v, uw - u, vh - v);
 }
 
-void SEASON3B::RenderImage(GLuint uiImageType, float x, float y, float width, float height, float su, float sv, float uw, float vh, DWORD color)
+void SEASON3B::RenderImage(GLuint uiImageType, float x, float y, float width, float height, float su, float sv,
+                           float uw, float vh, DWORD color)
 {
     RenderColorBitmap(uiImageType, x, y, width, height, su, sv, uw, vh, color);
 }
@@ -85,7 +86,8 @@ void SEASON3B::RenderImage(GLuint uiImageType, float x, float y, float width, fl
     RenderBitmap(uiImageType, x, y, width, height, u, v, uw, vh);
 }
 
-void SEASON3B::RenderImage(GLuint uiImageType, float x, float y, float width, float height, float su, float sv, DWORD color)
+void SEASON3B::RenderImage(GLuint uiImageType, float x, float y, float width, float height, float su, float sv,
+                           DWORD color)
 {
     BITMAP_t* pImage = &Bitmaps[uiImageType];
 
@@ -128,9 +130,7 @@ SEASON3B::CNewKeyInput::CNewKeyInput()
     Init();
 }
 
-SEASON3B::CNewKeyInput::~CNewKeyInput()
-{
-}
+SEASON3B::CNewKeyInput::~CNewKeyInput() {}
 
 void SEASON3B::CNewKeyInput::Init()
 {
@@ -148,7 +148,7 @@ void SEASON3B::CNewKeyInput::ScanAsyncKeyState()
 #ifdef ASG_FIX_ACTIVATE_APP_INPUT
     if (!g_bWndActive)
         return;
-#endif	// ASG_FIX_ACTIVATE_APP_INPUT
+#endif // ASG_FIX_ACTIVATE_APP_INPUT
 
 #ifdef _EDITOR
     // EDITOR KEYBOARD BLOCKING:
@@ -201,7 +201,8 @@ void SEASON3B::CNewKeyInput::ScanAsyncKeyState()
         }
     }
 
-    if (IsPress(VK_RETURN) && IsEnterPressed() == false) {
+    if (IsPress(VK_RETURN) && IsEnterPressed() == false)
+    {
         m_pInputInfo[VK_RETURN].byKeyState = KEY_NONE;
     }
     SetEnterPressed(false);
@@ -212,7 +213,7 @@ bool SEASON3B::CNewKeyInput::IsNone(int iVirtKey)
 #ifdef ASG_FIX_ACTIVATE_APP_INPUT
     if (!g_bWndActive)
         return false;
-#endif	// ASG_FIX_ACTIVATE_APP_INPUT
+#endif // ASG_FIX_ACTIVATE_APP_INPUT
     return (m_pInputInfo[iVirtKey].byKeyState == KEY_NONE) ? true : false;
 }
 
@@ -221,7 +222,7 @@ bool SEASON3B::CNewKeyInput::IsRelease(int iVirtKey)
 #ifdef ASG_FIX_ACTIVATE_APP_INPUT
     if (!g_bWndActive)
         return false;
-#endif	// ASG_FIX_ACTIVATE_APP_INPUT
+#endif // ASG_FIX_ACTIVATE_APP_INPUT
     return (m_pInputInfo[iVirtKey].byKeyState == KEY_RELEASE) ? true : false;
 }
 
@@ -230,7 +231,7 @@ bool SEASON3B::CNewKeyInput::IsPress(int iVirtKey)
 #ifdef ASG_FIX_ACTIVATE_APP_INPUT
     if (!g_bWndActive)
         return false;
-#endif	// ASG_FIX_ACTIVATE_APP_INPUT
+#endif // ASG_FIX_ACTIVATE_APP_INPUT
     return (m_pInputInfo[iVirtKey].byKeyState == KEY_PRESS) ? true : false;
 }
 
@@ -239,7 +240,7 @@ bool SEASON3B::CNewKeyInput::IsRepeat(int iVirtKey)
 #ifdef ASG_FIX_ACTIVATE_APP_INPUT
     if (!g_bWndActive)
         return false;
-#endif	// ASG_FIX_ACTIVATE_APP_INPUT
+#endif // ASG_FIX_ACTIVATE_APP_INPUT
     return (m_pInputInfo[iVirtKey].byKeyState == KEY_REPEAT) ? true : false;
 }
 

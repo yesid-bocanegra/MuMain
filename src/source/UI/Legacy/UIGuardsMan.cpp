@@ -4,7 +4,6 @@
 
 #include "stdafx.h"
 
-
 #include "UI/Legacy/UIGuildInfo.h"
 #include "UIGuardsMan.h"
 #include "NewUIMyInventory.h"
@@ -18,9 +17,7 @@ CUIGuardsMan::CUIGuardsMan()
     m_eRegStatus = REG_STATUS_NONE;
 }
 
-CUIGuardsMan::~CUIGuardsMan()
-{
-}
+CUIGuardsMan::~CUIGuardsMan() {}
 
 bool CUIGuardsMan::IsSufficentDeclareLevel()
 {

@@ -28,48 +28,48 @@
 
 //-------------------------------------------------------------------------------------------------------------
 
-int  TerrainFlag;
+int TerrainFlag;
 bool ActiveTerrain = false;
 bool TerrainGrassEnable = true;
 bool DetailLowEnable = false;
 
-char            LodBuffer[64 * 64];
-vec3_t          TerrainNormal[TERRAIN_SIZE * TERRAIN_SIZE];
-vec3_t          PrimaryTerrainLight[TERRAIN_SIZE * TERRAIN_SIZE];
-vec3_t          BackTerrainLight[TERRAIN_SIZE * TERRAIN_SIZE];
-vec3_t          TerrainLight[TERRAIN_SIZE * TERRAIN_SIZE];
-float           PrimaryTerrainHeight[TERRAIN_SIZE * TERRAIN_SIZE];
-float           BackTerrainHeight[TERRAIN_SIZE * TERRAIN_SIZE];
-unsigned char   TerrainMappingLayer1[TERRAIN_SIZE * TERRAIN_SIZE];
-unsigned char   TerrainMappingLayer2[TERRAIN_SIZE * TERRAIN_SIZE];
-float           TerrainMappingAlpha[TERRAIN_SIZE * TERRAIN_SIZE];
-float           TerrainGrassTexture[TERRAIN_SIZE * TERRAIN_SIZE];
-float           TerrainGrassWind[TERRAIN_SIZE * TERRAIN_SIZE];
+char LodBuffer[64 * 64];
+vec3_t TerrainNormal[TERRAIN_SIZE * TERRAIN_SIZE];
+vec3_t PrimaryTerrainLight[TERRAIN_SIZE * TERRAIN_SIZE];
+vec3_t BackTerrainLight[TERRAIN_SIZE * TERRAIN_SIZE];
+vec3_t TerrainLight[TERRAIN_SIZE * TERRAIN_SIZE];
+float PrimaryTerrainHeight[TERRAIN_SIZE * TERRAIN_SIZE];
+float BackTerrainHeight[TERRAIN_SIZE * TERRAIN_SIZE];
+unsigned char TerrainMappingLayer1[TERRAIN_SIZE * TERRAIN_SIZE];
+unsigned char TerrainMappingLayer2[TERRAIN_SIZE * TERRAIN_SIZE];
+float TerrainMappingAlpha[TERRAIN_SIZE * TERRAIN_SIZE];
+float TerrainGrassTexture[TERRAIN_SIZE * TERRAIN_SIZE];
+float TerrainGrassWind[TERRAIN_SIZE * TERRAIN_SIZE];
 #ifdef ASG_ADD_MAP_KARUTAN
-float			g_fTerrainGrassWind1[TERRAIN_SIZE * TERRAIN_SIZE];
-#endif	// ASG_ADD_MAP_KARUTAN
+float g_fTerrainGrassWind1[TERRAIN_SIZE * TERRAIN_SIZE];
+#endif // ASG_ADD_MAP_KARUTAN
 
-WORD            TerrainWall[TERRAIN_SIZE * TERRAIN_SIZE];
+WORD TerrainWall[TERRAIN_SIZE * TERRAIN_SIZE];
 
-float           SelectXF;
-float           SelectYF;
-float           WaterMove;
-int             CurrentLayer;
+float SelectXF;
+float SelectYF;
+float WaterMove;
+int CurrentLayer;
 
-float           g_fSpecialHeight = 1200.f;
+float g_fSpecialHeight = 1200.f;
 
 #ifdef DYNAMIC_FRUSTRUM
-FrustrumMap_t	g_FrustrumMap;
-#endif //DYNAMIC_FRUSTRUM
+FrustrumMap_t g_FrustrumMap;
+#endif // DYNAMIC_FRUSTRUM
 
 const float g_fMinHeight = -500.f;
 const float g_fMaxHeight = 1000.f;
 
-extern  short   g_shCameraLevel;
-extern  float CameraDistanceTarget;
-extern  float CameraDistance;
+extern short g_shCameraLevel;
+extern float CameraDistanceTarget;
+extern float CameraDistance;
 
-static  float   g_fFrustumRange = -40.f;
+static float g_fFrustumRange = -40.f;
 
 void InitTerrainMappingLayer()
 {
@@ -90,7 +90,6 @@ void ExitProgram()
     MessageBoxW(g_hWnd, GlobalText[11], NULL, MB_OK);
     PostQuitMessage(0);
 }
-
 
 int OpenTerrainAttribute(wchar_t* FileName)
 {
@@ -166,19 +165,24 @@ int OpenTerrainAttribute(wchar_t* FileName)
     switch (gMapManager.WorldActive)
     {
     case WD_0LORENCIA:
-        if (TerrainWall[123 * TERRAIN_SIZE + 135] != 5) Error = true;
+        if (TerrainWall[123 * TERRAIN_SIZE + 135] != 5)
+            Error = true;
         break;
     case WD_1DUNGEON:
-        if (TerrainWall[120 * TERRAIN_SIZE + 227] != 4) Error = true;
+        if (TerrainWall[120 * TERRAIN_SIZE + 227] != 4)
+            Error = true;
         break;
     case WD_2DEVIAS:
-        if (TerrainWall[55 * TERRAIN_SIZE + 208] != 5) Error = true;
+        if (TerrainWall[55 * TERRAIN_SIZE + 208] != 5)
+            Error = true;
         break;
     case WD_3NORIA:
-        if (TerrainWall[119 * TERRAIN_SIZE + 186] != 5) Error = true;
+        if (TerrainWall[119 * TERRAIN_SIZE + 186] != 5)
+            Error = true;
         break;
     case WD_4LOSTTOWER:
-        if (TerrainWall[75 * TERRAIN_SIZE + 193] != 5) Error = true;
+        if (TerrainWall[75 * TERRAIN_SIZE + 193] != 5)
+            Error = true;
         break;
     }
 
@@ -202,7 +206,8 @@ int OpenTerrainAttribute(wchar_t* FileName)
 bool SaveTerrainAttribute(wchar_t* FileName, int iMap)
 {
     FILE* fp = _wfopen(FileName, L"wb");
-    if (fp == NULL) {
+    if (fp == NULL)
+    {
         wchar_t Text[256];
         mu_swprintf_s(Text, std::size(Text), L"%ls file not found.", FileName);
         g_ErrorReport.Write(Text);
@@ -230,13 +235,13 @@ bool SaveTerrainAttribute(wchar_t* FileName, int iMap)
 
 void AddTerrainAttribute(int x, int y, BYTE att)
 {
-    int     iIndex = (x + (y * TERRAIN_SIZE));
+    int iIndex = (x + (y * TERRAIN_SIZE));
     TerrainWall[iIndex] |= att;
 }
 
 void SubTerrainAttribute(int x, int y, BYTE att)
 {
-    int     iIndex = (x + (y * TERRAIN_SIZE));
+    int iIndex = (x + (y * TERRAIN_SIZE));
 
     TerrainWall[iIndex] ^= (TerrainWall[iIndex] & att);
 }
@@ -283,10 +288,12 @@ void SetTerrainWaterState(std::list<int>& terrainIndex, int state)
     }
 }
 
-int OpenTerrainMapping(wchar_t* FileName) {
+int OpenTerrainMapping(wchar_t* FileName)
+{
     InitTerrainMappingLayer();
     FILE* fp = _wfopen(FileName, L"rb");
-    if (fp == NULL) {
+    if (fp == NULL)
+    {
         return -1;
     }
 
@@ -315,7 +322,8 @@ int OpenTerrainMapping(wchar_t* FileName) {
     memcpy(TerrainMappingLayer2, Data + DataPtr, 256 * 256);
     DataPtr += 256 * 256;
 
-    for (int i = 0; i < TERRAIN_SIZE * TERRAIN_SIZE; i++) {
+    for (int i = 0; i < TERRAIN_SIZE * TERRAIN_SIZE; i++)
+    {
         BYTE Alpha = *(Data + DataPtr);
         DataPtr += 1;
         TerrainMappingAlpha[i] = static_cast<float>(Alpha) / 255.f;
@@ -325,7 +333,8 @@ int OpenTerrainMapping(wchar_t* FileName) {
 
     TerrainGrassEnable = true;
 
-    if (gMapManager.InChaosCastle() || gMapManager.InBattleCastle()) {
+    if (gMapManager.InChaosCastle() || gMapManager.InBattleCastle())
+    {
         TerrainGrassEnable = false;
     }
 
@@ -442,9 +451,12 @@ void CreateTerrainNormal()
             int Index = TERRAIN_INDEX(x, y);
             vec3_t v1, v2, v3, v4;
             Vector((x * TERRAIN_SCALE), (y * TERRAIN_SCALE), BackTerrainHeight[TERRAIN_INDEX_REPEAT(x, y)], v4);
-            Vector(((x + 1) * TERRAIN_SCALE), (y * TERRAIN_SCALE), BackTerrainHeight[TERRAIN_INDEX_REPEAT((x + 1), y)], v1);
-            Vector(((x + 1) * TERRAIN_SCALE), ((y + 1) * TERRAIN_SCALE), BackTerrainHeight[TERRAIN_INDEX_REPEAT((x + 1), (y + 1))], v2);
-            Vector((x * TERRAIN_SCALE), ((y + 1) * TERRAIN_SCALE), BackTerrainHeight[TERRAIN_INDEX_REPEAT(x, (y + 1))], v3);
+            Vector(((x + 1) * TERRAIN_SCALE), (y * TERRAIN_SCALE), BackTerrainHeight[TERRAIN_INDEX_REPEAT((x + 1), y)],
+                   v1);
+            Vector(((x + 1) * TERRAIN_SCALE), ((y + 1) * TERRAIN_SCALE),
+                   BackTerrainHeight[TERRAIN_INDEX_REPEAT((x + 1), (y + 1))], v2);
+            Vector((x * TERRAIN_SCALE), ((y + 1) * TERRAIN_SCALE), BackTerrainHeight[TERRAIN_INDEX_REPEAT(x, (y + 1))],
+                   v3);
             vec3_t face_normal;
             FaceNormalize(v1, v2, v3, face_normal);
             VectorAdd(TerrainNormal[Index], face_normal, TerrainNormal[Index]);
@@ -466,9 +478,12 @@ void CreateTerrainNormal_Part(int xi, int yi)
             int Index = TERRAIN_INDEX(x, y);
             vec3_t v1, v2, v3, v4;
             Vector((x * TERRAIN_SCALE), (y * TERRAIN_SCALE), BackTerrainHeight[TERRAIN_INDEX_REPEAT(x, y)], v4);
-            Vector(((x + 1) * TERRAIN_SCALE), (y * TERRAIN_SCALE), BackTerrainHeight[TERRAIN_INDEX_REPEAT((x + 1), y)], v1);
-            Vector(((x + 1) * TERRAIN_SCALE), ((y + 1) * TERRAIN_SCALE), BackTerrainHeight[TERRAIN_INDEX_REPEAT((x + 1), (y + 1))], v2);
-            Vector((x * TERRAIN_SCALE), ((y + 1) * TERRAIN_SCALE), BackTerrainHeight[TERRAIN_INDEX_REPEAT(x, (y + 1))], v3);
+            Vector(((x + 1) * TERRAIN_SCALE), (y * TERRAIN_SCALE), BackTerrainHeight[TERRAIN_INDEX_REPEAT((x + 1), y)],
+                   v1);
+            Vector(((x + 1) * TERRAIN_SCALE), ((y + 1) * TERRAIN_SCALE),
+                   BackTerrainHeight[TERRAIN_INDEX_REPEAT((x + 1), (y + 1))], v2);
+            Vector((x * TERRAIN_SCALE), ((y + 1) * TERRAIN_SCALE), BackTerrainHeight[TERRAIN_INDEX_REPEAT(x, (y + 1))],
+                   v3);
             vec3_t face_normal;
             FaceNormalize(v1, v2, v3, face_normal);
             VectorAdd(TerrainNormal[Index], face_normal, TerrainNormal[Index]);
@@ -509,11 +524,15 @@ void CreateTerrainLight()
 
 void CreateTerrainLight_Part(int xi, int yi)
 {
-    if (xi > TERRAIN_SIZE - 4) xi = TERRAIN_SIZE - 4;
-    else if (xi < 4)         xi = 4;
+    if (xi > TERRAIN_SIZE - 4)
+        xi = TERRAIN_SIZE - 4;
+    else if (xi < 4)
+        xi = 4;
 
-    if (yi > TERRAIN_SIZE - 4) yi = TERRAIN_SIZE - 4;
-    else if (yi < 4)         yi = 4;
+    if (yi > TERRAIN_SIZE - 4)
+        yi = TERRAIN_SIZE - 4;
+    else if (yi < 4)
+        yi = 4;
 
     vec3_t Light;
     Vector(0.5f, -0.5f, 0.5f, Light);
@@ -523,8 +542,10 @@ void CreateTerrainLight_Part(int xi, int yi)
         {
             int Index = TERRAIN_INDEX(x, y);
             float Luminosity = DotProduct(TerrainNormal[Index], Light) + 0.5f;
-            if (Luminosity < 0.f) Luminosity = 0.f;
-            else if (Luminosity > 1.f) Luminosity = 1.f;
+            if (Luminosity < 0.f)
+                Luminosity = 0.f;
+            else if (Luminosity > 1.f)
+                Luminosity = 1.f;
             for (int i = 0; i < 3; i++)
                 BackTerrainLight[Index][i] = TerrainLight[Index][i] * Luminosity;
         }
@@ -652,7 +673,8 @@ bool OpenTerrainHeight(wchar_t* filename)
     {
         fclose(fp);
         wchar_t Text[256];
-        mu_swprintf_s(Text, std::size(Text), L"%ls is too small (%ld bytes, needs %ld).", FileName, fileSize, RequiredSize);
+        mu_swprintf_s(Text, std::size(Text), L"%ls is too small (%ld bytes, needs %ld).", FileName, fileSize,
+                      RequiredSize);
         g_ErrorReport.Write(Text);
         g_ErrorReport.Write(L"\r\n");
         MessageBox(g_hWnd, Text, NULL, MB_OK);
@@ -680,7 +702,8 @@ bool OpenTerrainHeight(wchar_t* filename)
     {
         delete[] Buffer;
         wchar_t Text[256];
-        mu_swprintf_s(Text, std::size(Text), L"Failed to read %ls (expected %d bytes, got %zu).", FileName, Size, readBytes);
+        mu_swprintf_s(Text, std::size(Text), L"Failed to read %ls (expected %d bytes, got %zu).", FileName, Size,
+                      readBytes);
         g_ErrorReport.Write(Text);
         g_ErrorReport.Write(L"\r\n");
         MessageBox(g_hWnd, Text, NULL, MB_OK);
@@ -718,8 +741,10 @@ void SaveTerrainHeight(wchar_t* name)
         for (int j = 0; j < 256; j++)
         {
             float Height = *src / factor;
-            if (Height < 0.f) Height = 0.f;
-            else if (Height > 255.f) Height = 255.f;
+            if (Height < 0.f)
+                Height = 0.f;
+            else if (Height > 255.f)
+                Height = 255.f;
             *dst = (unsigned char)(Height);
             src++;
             dst++;
@@ -728,7 +753,8 @@ void SaveTerrainHeight(wchar_t* name)
     FILE* fp = _wfopen(name, L"wb");
     fwrite(BMPHeader, 1080, 1, fp);
 
-    for (int i = 0; i < 256; i++) fwrite(Buffer + (255 - i) * 256, 256, 1, fp);
+    for (int i = 0; i < 256; i++)
+        fwrite(Buffer + (255 - i) * 256, 256, 1, fp);
 
     SAFE_DELETE_ARRAY(Buffer);
     fclose(fp);
@@ -805,7 +831,8 @@ bool OpenTerrainHeightNew(const wchar_t* strFilename)
 
 extern EGameScene SceneFlag;
 
-float RequestTerrainHeight(float xf, float yf) {
+float RequestTerrainHeight(float xf, float yf)
+{
     if (SceneFlag == SERVER_LIST_SCENE || SceneFlag == WEBZEN_SCENE || SceneFlag == LOADING_SCENE)
         return 0.0f;
     if (xf < 0.0f || yf < 0.0f)
@@ -855,15 +882,15 @@ void AddTerrainHeight(float xf, float yf, float Height, int Range, float* Buffer
 
     xf = xf / TERRAIN_SCALE;
     yf = yf / TERRAIN_SCALE;
-    int   xi = (int)xf;
-    int   yi = (int)yf;
-    int   syi = yi - Range;
-    int   eyi = yi + Range;
+    int xi = (int)xf;
+    int yi = (int)yf;
+    int syi = yi - Range;
+    int eyi = yi + Range;
     auto syf = (float)(syi);
     for (; syi <= eyi; syi++, syf += 1.f)
     {
-        int   sxi = xi - Range;
-        int   exi = xi + Range;
+        int sxi = xi - Range;
+        int exi = xi + Range;
         auto sxf = (float)(sxi);
         for (; sxi <= exi; sxi++, sxf += 1.f)
         {
@@ -884,15 +911,15 @@ void SetTerrainLight(float xf, float yf, vec3_t Light, int Range, vec3_t* Buffer
 
     xf = (xf / TERRAIN_SCALE);
     yf = (yf / TERRAIN_SCALE);
-    int   xi = (int)xf;
-    int   yi = (int)yf;
-    int   syi = yi - Range;
-    int   eyi = yi + Range;
+    int xi = (int)xf;
+    int yi = (int)yf;
+    int syi = yi - Range;
+    int eyi = yi + Range;
     auto syf = (float)(syi);
     for (; syi <= eyi; syi++, syf += 1.f)
     {
-        int   sxi = xi - Range;
-        int   exi = xi + Range;
+        int sxi = xi - Range;
+        int exi = xi + Range;
         auto sxf = (float)(sxi);
         for (; sxi <= exi; sxi++, sxf += 1.f)
         {
@@ -917,15 +944,15 @@ void AddTerrainLight(float xf, float yf, vec3_t Light, int Range, vec3_t* Buffer
 
     xf = (xf / TERRAIN_SCALE);
     yf = (yf / TERRAIN_SCALE);
-    int   xi = (int)xf;
-    int   yi = (int)yf;
-    int   syi = yi - Range;
-    int   eyi = yi + Range;
+    int xi = (int)xf;
+    int yi = (int)yf;
+    int syi = yi - Range;
+    int eyi = yi + Range;
     auto syf = (float)(syi);
     for (; syi <= eyi; syi++, syf += 1.f)
     {
-        int   sxi = xi - Range;
-        int   exi = xi + Range;
+        int sxi = xi - Range;
+        int exi = xi + Range;
         auto sxf = (float)(sxi);
         for (; sxi <= exi; sxi++, sxf += 1.f)
         {
@@ -938,7 +965,8 @@ void AddTerrainLight(float xf, float yf, vec3_t Light, int Range, vec3_t* Buffer
                 for (int i = 0; i < 3; i++)
                 {
                     b[i] += Light[i] * lf;
-                    if (b[i] < 0.f) b[i] = 0.f;
+                    if (b[i] < 0.f)
+                        b[i] = 0.f;
                 }
             }
         }
@@ -951,15 +979,15 @@ void AddTerrainLightClip(float xf, float yf, vec3_t Light, int Range, vec3_t* Bu
 
     xf = (xf / TERRAIN_SCALE);
     yf = (yf / TERRAIN_SCALE);
-    int   xi = (int)xf;
-    int   yi = (int)yf;
-    int   syi = yi - Range;
-    int   eyi = yi + Range;
+    int xi = (int)xf;
+    int yi = (int)yf;
+    int syi = yi - Range;
+    int eyi = yi + Range;
     auto syf = (float)(syi);
     for (; syi <= eyi; syi++, syf += 1.f)
     {
-        int   sxi = xi - Range;
-        int   exi = xi + Range;
+        int sxi = xi - Range;
+        int exi = xi + Range;
         auto sxf = (float)(sxi);
         for (; sxi <= exi; sxi++, sxf += 1.f)
         {
@@ -972,8 +1000,10 @@ void AddTerrainLightClip(float xf, float yf, vec3_t Light, int Range, vec3_t* Bu
                 for (int i = 0; i < 3; i++)
                 {
                     b[i] += Light[i] * lf;
-                    if (b[i] < 0.f) b[i] = 0.f;
-                    else if (b[i] > 1.f) b[i] = 1.f;
+                    if (b[i] < 0.f)
+                        b[i] = 0.f;
+                    else if (b[i] > 1.f)
+                        b[i] = 1.f;
                 }
             }
         }
@@ -982,10 +1012,8 @@ void AddTerrainLightClip(float xf, float yf, vec3_t Light, int Range, vec3_t* Bu
 
 void RequestTerrainLight(float xf, float yf, vec3_t Light)
 {
-    if (SceneFlag == SERVER_LIST_SCENE
-        || SceneFlag == WEBZEN_SCENE
-        || SceneFlag == LOADING_SCENE
-        || ActiveTerrain == false)
+    if (SceneFlag == SERVER_LIST_SCENE || SceneFlag == WEBZEN_SCENE || SceneFlag == LOADING_SCENE ||
+        ActiveTerrain == false)
     {
         Vector(0.f, 0.f, 0.f, Light);
         return;
@@ -995,21 +1023,23 @@ void RequestTerrainLight(float xf, float yf, vec3_t Light)
     yf = yf / TERRAIN_SCALE;
     int xi = (int)xf;
     int yi = (int)yf;
-    if (xi<0 || yi<0 || xi>TERRAIN_SIZE_MASK - 1 || yi>TERRAIN_SIZE_MASK - 1)
+    if (xi < 0 || yi < 0 || xi > TERRAIN_SIZE_MASK - 1 || yi > TERRAIN_SIZE_MASK - 1)
     {
         Vector(0.f, 0.f, 0.f, Light);
         return;
     }
-    int Index1 = ((xi)+(yi)*TERRAIN_SIZE);
+    int Index1 = ((xi) + (yi)*TERRAIN_SIZE);
     int Index2 = ((xi + 1) + (yi)*TERRAIN_SIZE);
     int Index3 = ((xi + 1) + (yi + 1) * TERRAIN_SIZE);
-    int Index4 = ((xi)+(yi + 1) * TERRAIN_SIZE);
+    int Index4 = ((xi) + (yi + 1) * TERRAIN_SIZE);
     float xd = xf - (float)xi;
     float yd = yf - (float)yi;
     for (int i = 0; i < 3; i++)
     {
-        float left = PrimaryTerrainLight[Index1][i] + (PrimaryTerrainLight[Index4][i] - PrimaryTerrainLight[Index1][i]) * yd;
-        float right = PrimaryTerrainLight[Index2][i] + (PrimaryTerrainLight[Index3][i] - PrimaryTerrainLight[Index2][i]) * yd;
+        float left =
+            PrimaryTerrainLight[Index1][i] + (PrimaryTerrainLight[Index4][i] - PrimaryTerrainLight[Index1][i]) * yd;
+        float right =
+            PrimaryTerrainLight[Index2][i] + (PrimaryTerrainLight[Index3][i] - PrimaryTerrainLight[Index2][i]) * yd;
         Light[i] = (left + (right - left) * xd);
     }
 }
@@ -1032,33 +1062,47 @@ void CreateLodBuffer()
                 for (int j = 0; j < 4; j++)
                 {
                     vec3_t v1, v2, v3, v4;
-                    Vector((x + j) * TERRAIN_SCALE, (y + i) * TERRAIN_SCALE, BackTerrainHeight[TERRAIN_INDEX_REPEAT(x + j, y + i)], v1);
-                    Vector((x + j + 1) * TERRAIN_SCALE, (y + i) * TERRAIN_SCALE, BackTerrainHeight[TERRAIN_INDEX_REPEAT(x + j + 1, y + i)], v2);
-                    Vector((x + j + 1) * TERRAIN_SCALE, (y + i + 1) * TERRAIN_SCALE, BackTerrainHeight[TERRAIN_INDEX_REPEAT(x + j + 1, y + i + 1)], v3);
-                    Vector((x + j) * TERRAIN_SCALE, (y + i + 1) * TERRAIN_SCALE, BackTerrainHeight[TERRAIN_INDEX_REPEAT(x + j, y + i + 1)], v4);
+                    Vector((x + j) * TERRAIN_SCALE, (y + i) * TERRAIN_SCALE,
+                           BackTerrainHeight[TERRAIN_INDEX_REPEAT(x + j, y + i)], v1);
+                    Vector((x + j + 1) * TERRAIN_SCALE, (y + i) * TERRAIN_SCALE,
+                           BackTerrainHeight[TERRAIN_INDEX_REPEAT(x + j + 1, y + i)], v2);
+                    Vector((x + j + 1) * TERRAIN_SCALE, (y + i + 1) * TERRAIN_SCALE,
+                           BackTerrainHeight[TERRAIN_INDEX_REPEAT(x + j + 1, y + i + 1)], v3);
+                    Vector((x + j) * TERRAIN_SCALE, (y + i + 1) * TERRAIN_SCALE,
+                           BackTerrainHeight[TERRAIN_INDEX_REPEAT(x + j, y + i + 1)], v4);
 
                     int Index = TERRAIN_INDEX(x + j, y + i);
                     FaceNormalize(v1, v2, v3, TerrainNormal[Index]);
 
                     vec3_t* Normal = &TerrainNormal[Index];
-                    if (NormalMin[0] > (*Normal)[0]) NormalMin[0] = (*Normal)[0];
-                    if (NormalMax[0] < (*Normal)[0]) NormalMax[0] = (*Normal)[0];
-                    if (NormalMin[1] > (*Normal)[1]) NormalMin[1] = (*Normal)[1];
-                    if (NormalMax[1] < (*Normal)[1]) NormalMax[1] = (*Normal)[1];
-                    if (NormalMin[2] > (*Normal)[2]) NormalMin[2] = (*Normal)[2];
-                    if (NormalMax[2] < (*Normal)[2]) NormalMax[2] = (*Normal)[2];
+                    if (NormalMin[0] > (*Normal)[0])
+                        NormalMin[0] = (*Normal)[0];
+                    if (NormalMax[0] < (*Normal)[0])
+                        NormalMax[0] = (*Normal)[0];
+                    if (NormalMin[1] > (*Normal)[1])
+                        NormalMin[1] = (*Normal)[1];
+                    if (NormalMax[1] < (*Normal)[1])
+                        NormalMax[1] = (*Normal)[1];
+                    if (NormalMin[2] > (*Normal)[2])
+                        NormalMin[2] = (*Normal)[2];
+                    if (NormalMax[2] < (*Normal)[2])
+                        NormalMax[2] = (*Normal)[2];
                 }
             }
-            float Delta = maxf(maxf(absf(NormalMax[0] - NormalMin[0]), absf(NormalMax[1] - NormalMin[1])), absf(NormalMax[2] - NormalMin[2]));
+            float Delta = maxf(maxf(absf(NormalMax[0] - NormalMin[0]), absf(NormalMax[1] - NormalMin[1])),
+                               absf(NormalMax[2] - NormalMin[2]));
             if (DetailLowEnable == true)
             {
                 LodBuffer[y / 4 * 64 + x / 4] = 4;
             }
             else
             {
-                if (Delta >= 1.f) LodBuffer[y / 4 * 64 + x / 4] = 1;
-                else if (Delta >= 0.5f) LodBuffer[y / 4 * 64 + x / 4] = 2;
-                else                   LodBuffer[y / 4 * 64 + x / 4] = 4;
+                if (Delta >= 1.f)
+                    LodBuffer[y / 4 * 64 + x / 4] = 1;
+                else if (Delta >= 0.5f)
+                    LodBuffer[y / 4 * 64 + x / 4] = 2;
+                else
+                    LodBuffer[y / 4 * 64 + x / 4] = 4;
                 LodBuffer[y / 4 * 64 + x / 4] = 1;
             }
         }
@@ -1069,18 +1113,18 @@ void InterpolationHeight(int lod, int x, int y, int xd, float* TerrainHeight)
 {
     if (lod >= 4)
     {
-        TerrainHeight[TERRAIN_INDEX_REPEAT(x + xd, y + 2)] = (
-            TerrainHeight[TERRAIN_INDEX_REPEAT(x + xd, y)] +
-            TerrainHeight[TERRAIN_INDEX_REPEAT(x + xd, y + 4)]) * 0.5f;
+        TerrainHeight[TERRAIN_INDEX_REPEAT(x + xd, y + 2)] =
+            (TerrainHeight[TERRAIN_INDEX_REPEAT(x + xd, y)] + TerrainHeight[TERRAIN_INDEX_REPEAT(x + xd, y + 4)]) *
+            0.5f;
     }
     if (lod >= 2)
     {
-        TerrainHeight[TERRAIN_INDEX_REPEAT(x + xd, y + 1)] = (
-            TerrainHeight[TERRAIN_INDEX_REPEAT(x + xd, y)] +
-            TerrainHeight[TERRAIN_INDEX_REPEAT(x + xd, y + 2)]) * 0.5f;
-        TerrainHeight[TERRAIN_INDEX_REPEAT(x + xd, y + 3)] = (
-            TerrainHeight[TERRAIN_INDEX_REPEAT(x + xd, y + 2)] +
-            TerrainHeight[TERRAIN_INDEX_REPEAT(x + xd, y + 4)]) * 0.5f;
+        TerrainHeight[TERRAIN_INDEX_REPEAT(x + xd, y + 1)] =
+            (TerrainHeight[TERRAIN_INDEX_REPEAT(x + xd, y)] + TerrainHeight[TERRAIN_INDEX_REPEAT(x + xd, y + 2)]) *
+            0.5f;
+        TerrainHeight[TERRAIN_INDEX_REPEAT(x + xd, y + 3)] =
+            (TerrainHeight[TERRAIN_INDEX_REPEAT(x + xd, y + 2)] + TerrainHeight[TERRAIN_INDEX_REPEAT(x + xd, y + 4)]) *
+            0.5f;
     }
 }
 
@@ -1088,36 +1132,39 @@ void InterpolationWidth(int lod, int x, int y, int yd, float* TerrainHeight)
 {
     if (lod >= 4)
     {
-        TerrainHeight[TERRAIN_INDEX_REPEAT(x + 2, y + yd)] = (
-            TerrainHeight[TERRAIN_INDEX_REPEAT(x, y + yd)] +
-            TerrainHeight[TERRAIN_INDEX_REPEAT(x + 4, y + yd)]) * 0.5f;
+        TerrainHeight[TERRAIN_INDEX_REPEAT(x + 2, y + yd)] =
+            (TerrainHeight[TERRAIN_INDEX_REPEAT(x, y + yd)] + TerrainHeight[TERRAIN_INDEX_REPEAT(x + 4, y + yd)]) *
+            0.5f;
     }
     if (lod >= 2)
     {
-        TerrainHeight[TERRAIN_INDEX_REPEAT(x + 1, y + yd)] = (
-            TerrainHeight[TERRAIN_INDEX_REPEAT(x, y + yd)] +
-            TerrainHeight[TERRAIN_INDEX_REPEAT(x + 2, y + yd)]) * 0.5f;
-        TerrainHeight[TERRAIN_INDEX_REPEAT(x + 3, y + yd)] = (
-            TerrainHeight[TERRAIN_INDEX_REPEAT(x + 2, y + yd)] +
-            TerrainHeight[TERRAIN_INDEX_REPEAT(x + 4, y + yd)]) * 0.5f;
+        TerrainHeight[TERRAIN_INDEX_REPEAT(x + 1, y + yd)] =
+            (TerrainHeight[TERRAIN_INDEX_REPEAT(x, y + yd)] + TerrainHeight[TERRAIN_INDEX_REPEAT(x + 2, y + yd)]) *
+            0.5f;
+        TerrainHeight[TERRAIN_INDEX_REPEAT(x + 3, y + yd)] =
+            (TerrainHeight[TERRAIN_INDEX_REPEAT(x + 2, y + yd)] + TerrainHeight[TERRAIN_INDEX_REPEAT(x + 4, y + yd)]) *
+            0.5f;
     }
 }
 
 void InterpolationCross(int lod, int x, int y)
 {
-    BackTerrainHeight[TERRAIN_INDEX_REPEAT(x, y)] = (
-        BackTerrainHeight[TERRAIN_INDEX_REPEAT(x - lod, y)] +
-        BackTerrainHeight[TERRAIN_INDEX_REPEAT(x + lod, y)] +
-        BackTerrainHeight[TERRAIN_INDEX_REPEAT(x, y - lod)] +
-        BackTerrainHeight[TERRAIN_INDEX_REPEAT(x, y + lod)]) * 0.25f;
+    BackTerrainHeight[TERRAIN_INDEX_REPEAT(x, y)] =
+        (BackTerrainHeight[TERRAIN_INDEX_REPEAT(x - lod, y)] + BackTerrainHeight[TERRAIN_INDEX_REPEAT(x + lod, y)] +
+         BackTerrainHeight[TERRAIN_INDEX_REPEAT(x, y - lod)] + BackTerrainHeight[TERRAIN_INDEX_REPEAT(x, y + lod)]) *
+        0.25f;
 }
 
 void PrefixTerrainHeightEdge(int x, int y, int lod, float* TerrainHeight)
 {
-    if (lod >= LodBuffer[((y) & 63) * 64 + ((x - 1) & 63)]) InterpolationHeight(lod, x * 4, y * 4, 0, TerrainHeight);
-    if (lod >= LodBuffer[((y) & 63) * 64 + ((x + 1) & 63)]) InterpolationHeight(lod, x * 4, y * 4, 4, TerrainHeight);
-    if (lod >= LodBuffer[((y - 1) & 63) * 64 + ((x) & 63)]) InterpolationWidth(lod, x * 4, y * 4, 0, TerrainHeight);
-    if (lod >= LodBuffer[((y + 1) & 63) * 64 + ((x) & 63)]) InterpolationWidth(lod, x * 4, y * 4, 4, TerrainHeight);
+    if (lod >= LodBuffer[((y) & 63) * 64 + ((x - 1) & 63)])
+        InterpolationHeight(lod, x * 4, y * 4, 0, TerrainHeight);
+    if (lod >= LodBuffer[((y) & 63) * 64 + ((x + 1) & 63)])
+        InterpolationHeight(lod, x * 4, y * 4, 4, TerrainHeight);
+    if (lod >= LodBuffer[((y - 1) & 63) * 64 + ((x) & 63)])
+        InterpolationWidth(lod, x * 4, y * 4, 0, TerrainHeight);
+    if (lod >= LodBuffer[((y + 1) & 63) * 64 + ((x) & 63)])
+        InterpolationWidth(lod, x * 4, y * 4, 4, TerrainHeight);
 }
 
 void PrefixTerrainHeight()
@@ -1151,38 +1198,38 @@ void PrefixTerrainHeight()
     }
 }
 
-bool  SelectFlag;
+bool SelectFlag;
 
-int    TerrainIndex1;
-int    TerrainIndex2;
-int    TerrainIndex3;
-int    TerrainIndex4;
-int    Index0;
-int    Index1;
-int    Index2;
-int    Index3;
-int    Index01;
-int    Index12;
-int    Index23;
-int    Index30;
-int    Index02;
+int TerrainIndex1;
+int TerrainIndex2;
+int TerrainIndex3;
+int TerrainIndex4;
+int Index0;
+int Index1;
+int Index2;
+int Index3;
+int Index01;
+int Index12;
+int Index23;
+int Index30;
+int Index02;
 vec3_t TerrainVertex[4];
 vec3_t TerrainVertex01;
 vec3_t TerrainVertex12;
 vec3_t TerrainVertex23;
 vec3_t TerrainVertex30;
 vec3_t TerrainVertex02;
-float  TerrainTextureCoord[4][2];
-float  TerrainTextureCoord01[2];
-float  TerrainTextureCoord12[2];
-float  TerrainTextureCoord23[2];
-float  TerrainTextureCoord30[2];
-float  TerrainTextureCoord02[2];
-float  TerrainMappingAlpha01;
-float  TerrainMappingAlpha12;
-float  TerrainMappingAlpha23;
-float  TerrainMappingAlpha30;
-float  TerrainMappingAlpha02;
+float TerrainTextureCoord[4][2];
+float TerrainTextureCoord01[2];
+float TerrainTextureCoord12[2];
+float TerrainTextureCoord23[2];
+float TerrainTextureCoord30[2];
+float TerrainTextureCoord02[2];
+float TerrainMappingAlpha01;
+float TerrainMappingAlpha12;
+float TerrainMappingAlpha23;
+float TerrainMappingAlpha30;
+float TerrainMappingAlpha02;
 
 inline void Interpolation(int mx, int my)
 {
@@ -1399,8 +1446,7 @@ void RenderFace(int Texture, int mx, int my)
             DisableAlphaBlend();
         }
     }
-    else if (gMapManager.WorldActive == WD_51HOME_6TH_CHAR
-        )
+    else if (gMapManager.WorldActive == WD_51HOME_6TH_CHAR)
     {
         if (Texture == 2)
         {
@@ -1411,9 +1457,9 @@ void RenderFace(int Texture, int mx, int my)
             DisableAlphaBlend();
         }
     }
-    else if (gMapManager.WorldActive == WD_69EMPIREGUARDIAN1 || gMapManager.WorldActive == WD_70EMPIREGUARDIAN2 || gMapManager.WorldActive == WD_71EMPIREGUARDIAN3 || gMapManager.WorldActive == WD_72EMPIREGUARDIAN4
-        || gMapManager.WorldActive == WD_73NEW_LOGIN_SCENE || gMapManager.WorldActive == WD_74NEW_CHARACTER_SCENE
-        )
+    else if (gMapManager.WorldActive == WD_69EMPIREGUARDIAN1 || gMapManager.WorldActive == WD_70EMPIREGUARDIAN2 ||
+             gMapManager.WorldActive == WD_71EMPIREGUARDIAN3 || gMapManager.WorldActive == WD_72EMPIREGUARDIAN4 ||
+             gMapManager.WorldActive == WD_73NEW_LOGIN_SCENE || gMapManager.WorldActive == WD_74NEW_CHARACTER_SCENE)
     {
         if (Texture == 10)
         {
@@ -1432,7 +1478,7 @@ void RenderFace(int Texture, int mx, int my)
         else
             DisableAlphaBlend();
     }
-#endif	// ASG_ADD_MAP_KARUTAN
+#endif // ASG_ADD_MAP_KARUTAN
     else
         DisableAlphaBlend();
     BindTexture(BITMAP_MAPTILE + Texture);
@@ -1564,7 +1610,8 @@ void RenderTerrainFace(float xf, float yf, int xi, int yi, float lodf)
         int Texture;
         bool Alpha;
         bool Water = false;
-        if (TerrainMappingAlpha[TerrainIndex1] >= 1.f && TerrainMappingAlpha[TerrainIndex2] >= 1.f && TerrainMappingAlpha[TerrainIndex3] >= 1.f && TerrainMappingAlpha[TerrainIndex4] >= 1.f)
+        if (TerrainMappingAlpha[TerrainIndex1] >= 1.f && TerrainMappingAlpha[TerrainIndex2] >= 1.f &&
+            TerrainMappingAlpha[TerrainIndex3] >= 1.f && TerrainMappingAlpha[TerrainIndex4] >= 1.f)
         {
             Texture = TerrainMappingLayer2[TerrainIndex1];
             Alpha = false;
@@ -1583,12 +1630,11 @@ void RenderTerrainFace(float xf, float yf, int xi, int yi, float lodf)
         FaceTexture(Texture, xf, yf, Water, false);
         RenderFace(Texture, xi, yi);
 
-        if (TerrainMappingAlpha[TerrainIndex1] > 0.f
-            || TerrainMappingAlpha[TerrainIndex2] > 0.f
-            || TerrainMappingAlpha[TerrainIndex3] > 0.f
-            || TerrainMappingAlpha[TerrainIndex4] > 0.f)
+        if (TerrainMappingAlpha[TerrainIndex1] > 0.f || TerrainMappingAlpha[TerrainIndex2] > 0.f ||
+            TerrainMappingAlpha[TerrainIndex3] > 0.f || TerrainMappingAlpha[TerrainIndex4] > 0.f)
         {
-            if ((gMapManager.WorldActive == WD_7ATLANSE || IsDoppelGanger3()) && TerrainMappingLayer2[TerrainIndex1] == 5)
+            if ((gMapManager.WorldActive == WD_7ATLANSE || IsDoppelGanger3()) &&
+                TerrainMappingLayer2[TerrainIndex1] == 5)
             {
                 Texture = BITMAP_WATER - BITMAP_MAPTILE + WaterTextureNumber;
                 FaceTexture(Texture, xf, yf, false, true);
@@ -1609,13 +1655,12 @@ void RenderTerrainFace(float xf, float yf, int xi, int yi, float lodf)
     }
     else
     {
-        if (TerrainMappingAlpha[TerrainIndex1] > 0.f || TerrainMappingAlpha[TerrainIndex2] > 0.f || TerrainMappingAlpha[TerrainIndex3] > 0.f || TerrainMappingAlpha[TerrainIndex4] > 0.f)
+        if (TerrainMappingAlpha[TerrainIndex1] > 0.f || TerrainMappingAlpha[TerrainIndex2] > 0.f ||
+            TerrainMappingAlpha[TerrainIndex3] > 0.f || TerrainMappingAlpha[TerrainIndex4] > 0.f)
         {
             return;
         }
-        if (
-            CurrentLayer == 0 && (gMapManager.InBloodCastle() == false)
-            )
+        if (CurrentLayer == 0 && (gMapManager.InBloodCastle() == false))
         {
             int Texture = BITMAP_MAPGRASS + TerrainMappingLayer1[TerrainIndex1];
 
@@ -1649,12 +1694,12 @@ void RenderTerrainFace(float xf, float yf, int xi, int yi, float lodf)
                 }
                 else
                 {
-#endif	// ASG_ADD_MAP_KARUTAN
+#endif // ASG_ADD_MAP_KARUTAN
                     TerrainVertex[0][1] += TerrainGrassWind[TerrainIndex1];
                     TerrainVertex[1][1] += TerrainGrassWind[TerrainIndex2];
 #ifdef ASG_ADD_MAP_KARUTAN
                 }
-#endif	// ASG_ADD_MAP_KARUTAN
+#endif // ASG_ADD_MAP_KARUTAN
                 glBegin(GL_QUADS);
                 glTexCoord2f(TerrainTextureCoord[0][0], TerrainTextureCoord[0][1]);
                 glColor3fv(PrimaryTerrainLight[TerrainIndex1]);
@@ -1683,7 +1728,8 @@ void RenderTerrainFace_After(float xf, float yf, int xi, int yi, float lodf)
     {
         int Texture;
         int Water = 0;
-        if (TerrainMappingAlpha[TerrainIndex1] >= 1.f && TerrainMappingAlpha[TerrainIndex2] >= 1.f && TerrainMappingAlpha[TerrainIndex3] >= 1.f && TerrainMappingAlpha[TerrainIndex4] >= 1.f)
+        if (TerrainMappingAlpha[TerrainIndex1] >= 1.f && TerrainMappingAlpha[TerrainIndex2] >= 1.f &&
+            TerrainMappingAlpha[TerrainIndex3] >= 1.f && TerrainMappingAlpha[TerrainIndex4] >= 1.f)
         {
             Texture = TerrainMappingLayer2[TerrainIndex1];
         }
@@ -1706,7 +1752,8 @@ extern int SelectWall;
 bool RenderTerrainTile(float xf, float yf, int xi, int yi, float lodf, int lodi, bool Flag)
 {
     TerrainIndex1 = TERRAIN_INDEX(xi, yi);
-    if ((TerrainWall[TerrainIndex1] & TW_NOGROUND) == TW_NOGROUND && !Flag) return false;
+    if ((TerrainWall[TerrainIndex1] & TW_NOGROUND) == TW_NOGROUND && !Flag)
+        return false;
 
     TerrainIndex2 = TERRAIN_INDEX(xi + lodi, yi);
     TerrainIndex3 = TERRAIN_INDEX(xi + lodi, yi + lodi);
@@ -1720,10 +1767,14 @@ bool RenderTerrainTile(float xf, float yf, int xi, int yi, float lodf, int lodi,
     Vector(sx + TERRAIN_SCALE, sy + TERRAIN_SCALE, BackTerrainHeight[TerrainIndex3], TerrainVertex[2]);
     Vector(sx, sy + TERRAIN_SCALE, BackTerrainHeight[TerrainIndex4], TerrainVertex[3]);
 
-    if ((TerrainWall[TerrainIndex1] & TW_HEIGHT) == TW_HEIGHT) TerrainVertex[0][2] = g_fSpecialHeight;
-    if ((TerrainWall[TerrainIndex2] & TW_HEIGHT) == TW_HEIGHT) TerrainVertex[1][2] = g_fSpecialHeight;
-    if ((TerrainWall[TerrainIndex3] & TW_HEIGHT) == TW_HEIGHT) TerrainVertex[2][2] = g_fSpecialHeight;
-    if ((TerrainWall[TerrainIndex4] & TW_HEIGHT) == TW_HEIGHT) TerrainVertex[3][2] = g_fSpecialHeight;
+    if ((TerrainWall[TerrainIndex1] & TW_HEIGHT) == TW_HEIGHT)
+        TerrainVertex[0][2] = g_fSpecialHeight;
+    if ((TerrainWall[TerrainIndex2] & TW_HEIGHT) == TW_HEIGHT)
+        TerrainVertex[1][2] = g_fSpecialHeight;
+    if ((TerrainWall[TerrainIndex3] & TW_HEIGHT) == TW_HEIGHT)
+        TerrainVertex[2][2] = g_fSpecialHeight;
+    if ((TerrainWall[TerrainIndex4] & TW_HEIGHT) == TW_HEIGHT)
+        TerrainVertex[3][2] = g_fSpecialHeight;
 
     if (!Flag)
     {
@@ -1771,15 +1822,17 @@ bool RenderTerrainTile(float xf, float yf, int xi, int yi, float lodf, int lodi,
             glEnd();
             DisableAlphaBlend();
         }
-#endif// _DEBUG
+#endif // _DEBUG
 
         vec3_t Normal;
         FaceNormalize(TerrainVertex[0], TerrainVertex[1], TerrainVertex[2], Normal);
-        bool Success = CollisionDetectLineToFace(MousePosition, MouseTarget, 3, TerrainVertex[0], TerrainVertex[1], TerrainVertex[2], TerrainVertex[3], Normal);
+        bool Success = CollisionDetectLineToFace(MousePosition, MouseTarget, 3, TerrainVertex[0], TerrainVertex[1],
+                                                 TerrainVertex[2], TerrainVertex[3], Normal);
         if (Success == false)
         {
             FaceNormalize(TerrainVertex[0], TerrainVertex[2], TerrainVertex[3], Normal);
-            Success = CollisionDetectLineToFace(MousePosition, MouseTarget, 3, TerrainVertex[0], TerrainVertex[2], TerrainVertex[3], TerrainVertex[1], Normal);
+            Success = CollisionDetectLineToFace(MousePosition, MouseTarget, 3, TerrainVertex[0], TerrainVertex[2],
+                                                TerrainVertex[3], TerrainVertex[1], Normal);
         }
         if (Success == true)
         {
@@ -1789,18 +1842,17 @@ bool RenderTerrainTile(float xf, float yf, int xi, int yi, float lodf, int lodi,
         }
 #ifdef CSK_DEBUG_MAP_ATTRIBUTE
         if (EditFlag == EDIT_WALL &&
-            ((SelectWall == 0 && (TerrainWall[TerrainIndex1] & TW_NOMOVE) == TW_NOMOVE)
-                || (SelectWall == 2 && (TerrainWall[TerrainIndex1] & TW_SAFEZONE) == TW_SAFEZONE)
-                || (SelectWall == 6 && (TerrainWall[TerrainIndex1] & TW_CAMERA_UP) == TW_CAMERA_UP)
-                || (SelectWall == 7 && (TerrainWall[TerrainIndex1] & TW_NOATTACKZONE) == TW_NOATTACKZONE)
-                || (SelectWall == 8 && (TerrainWall[TerrainIndex1] & TW_ATT1) == TW_ATT1)
-                || (SelectWall == 9 && (TerrainWall[TerrainIndex1] & TW_ATT2) == TW_ATT2)
-                || (SelectWall == 10 && (TerrainWall[TerrainIndex1] & TW_ATT3) == TW_ATT3)
-                || (SelectWall == 11 && (TerrainWall[TerrainIndex1] & TW_ATT4) == TW_ATT4)
-                || (SelectWall == 12 && (TerrainWall[TerrainIndex1] & TW_ATT5) == TW_ATT5)
-                || (SelectWall == 13 && (TerrainWall[TerrainIndex1] & TW_ATT6) == TW_ATT6)
-                || (SelectWall == 14 && (TerrainWall[TerrainIndex1] & TW_ATT7) == TW_ATT7)
-                ))
+            ((SelectWall == 0 && (TerrainWall[TerrainIndex1] & TW_NOMOVE) == TW_NOMOVE) ||
+             (SelectWall == 2 && (TerrainWall[TerrainIndex1] & TW_SAFEZONE) == TW_SAFEZONE) ||
+             (SelectWall == 6 && (TerrainWall[TerrainIndex1] & TW_CAMERA_UP) == TW_CAMERA_UP) ||
+             (SelectWall == 7 && (TerrainWall[TerrainIndex1] & TW_NOATTACKZONE) == TW_NOATTACKZONE) ||
+             (SelectWall == 8 && (TerrainWall[TerrainIndex1] & TW_ATT1) == TW_ATT1) ||
+             (SelectWall == 9 && (TerrainWall[TerrainIndex1] & TW_ATT2) == TW_ATT2) ||
+             (SelectWall == 10 && (TerrainWall[TerrainIndex1] & TW_ATT3) == TW_ATT3) ||
+             (SelectWall == 11 && (TerrainWall[TerrainIndex1] & TW_ATT4) == TW_ATT4) ||
+             (SelectWall == 12 && (TerrainWall[TerrainIndex1] & TW_ATT5) == TW_ATT5) ||
+             (SelectWall == 13 && (TerrainWall[TerrainIndex1] & TW_ATT6) == TW_ATT6) ||
+             (SelectWall == 14 && (TerrainWall[TerrainIndex1] & TW_ATT7) == TW_ATT7)))
         {
             DisableDepthTest();
             EnableAlphaTest();
@@ -1838,10 +1890,14 @@ void RenderTerrainTile_After(float xf, float yf, int xi, int yi, float lodf, int
     Vector(sx + TERRAIN_SCALE, sy + TERRAIN_SCALE, BackTerrainHeight[TerrainIndex3], TerrainVertex[2]);
     Vector(sx, sy + TERRAIN_SCALE, BackTerrainHeight[TerrainIndex4], TerrainVertex[3]);
 
-    if ((TerrainWall[TerrainIndex1] & TW_HEIGHT) == TW_HEIGHT) TerrainVertex[0][2] = g_fSpecialHeight;
-    if ((TerrainWall[TerrainIndex2] & TW_HEIGHT) == TW_HEIGHT) TerrainVertex[1][2] = g_fSpecialHeight;
-    if ((TerrainWall[TerrainIndex3] & TW_HEIGHT) == TW_HEIGHT) TerrainVertex[2][2] = g_fSpecialHeight;
-    if ((TerrainWall[TerrainIndex4] & TW_HEIGHT) == TW_HEIGHT) TerrainVertex[3][2] = g_fSpecialHeight;
+    if ((TerrainWall[TerrainIndex1] & TW_HEIGHT) == TW_HEIGHT)
+        TerrainVertex[0][2] = g_fSpecialHeight;
+    if ((TerrainWall[TerrainIndex2] & TW_HEIGHT) == TW_HEIGHT)
+        TerrainVertex[1][2] = g_fSpecialHeight;
+    if ((TerrainWall[TerrainIndex3] & TW_HEIGHT) == TW_HEIGHT)
+        TerrainVertex[2][2] = g_fSpecialHeight;
+    if ((TerrainWall[TerrainIndex4] & TW_HEIGHT) == TW_HEIGHT)
+        TerrainVertex[3][2] = g_fSpecialHeight;
 
     if (!Flag)
     {
@@ -1850,11 +1906,13 @@ void RenderTerrainTile_After(float xf, float yf, int xi, int yi, float lodf, int
     }
 }
 
-void RenderTerrainBitmapTile(float xf, float yf, float lodf, int lodi, vec3_t c[4], bool LightEnable, float Alpha, float Height = 0.f)
+void RenderTerrainBitmapTile(float xf, float yf, float lodf, int lodi, vec3_t c[4], bool LightEnable, float Alpha,
+                             float Height = 0.f)
 {
     int xi = (int)xf;
     int yi = (int)yf;
-    if (xi < 0 || yi < 0 || xi >= TERRAIN_SIZE_MASK || yi >= TERRAIN_SIZE_MASK) return;
+    if (xi < 0 || yi < 0 || xi >= TERRAIN_SIZE_MASK || yi >= TERRAIN_SIZE_MASK)
+        return;
     float TileScale = TERRAIN_SCALE * lodf;
     float sx = xf * TERRAIN_SCALE;
     float sy = yf * TERRAIN_SCALE;
@@ -1927,7 +1985,8 @@ void RenderTerrainBitmap(int Texture, int mxi, int myi, float Rotation)
     }
 }
 
-void RenderTerrainAlphaBitmap(int Texture, float xf, float yf, float SizeX, float SizeY, vec3_t Light, float Rotation, float Alpha, float Height)
+void RenderTerrainAlphaBitmap(int Texture, float xf, float yf, float SizeX, float SizeY, vec3_t Light, float Rotation,
+                              float Alpha, float Height)
 {
     if (Alpha == 1.f)
         glColor3fv(Light);
@@ -1942,8 +2001,8 @@ void RenderTerrainAlphaBitmap(int Texture, float xf, float yf, float SizeX, floa
     BindTexture(Texture);
     float mxf = (xf / TERRAIN_SCALE);
     float myf = (yf / TERRAIN_SCALE);
-    int   mxi = (int)(mxf);
-    int   myi = (int)(myf);
+    int mxi = (int)(mxf);
+    int myi = (int)(myf);
 
     float Size;
     if (SizeX >= SizeY)
@@ -1973,20 +2032,20 @@ void RenderTerrainAlphaBitmap(int Texture, float xf, float yf, float SizeX, floa
                 p2[i][0] *= Aspect;
                 p2[i][0] += 0.5f;
                 p2[i][1] += 0.5f;
-                //if((p2[i][0]>=0.f && p2[i][0]<=1.f) || (p2[i][1]>=0.f && p2[i][1]<=1.f)) Clip = true;
+                // if((p2[i][0]>=0.f && p2[i][0]<=1.f) || (p2[i][1]>=0.f && p2[i][1]<=1.f)) Clip = true;
             }
             RenderTerrainBitmapTile((float)mxi + x, (float)myi + y, 1.f, 1, p2, false, Alpha, Height);
         }
     }
 }
 
-vec3_t  FrustrumVertex[5];
-vec3_t  FrustrumFaceNormal[5];
-float   FrustrumFaceD[5];
-int     FrustrumBoundMinX = 0;
-int     FrustrumBoundMinY = 0;
-int     FrustrumBoundMaxX = TERRAIN_SIZE_MASK;
-int     FrustrumBoundMaxY = TERRAIN_SIZE_MASK;
+vec3_t FrustrumVertex[5];
+vec3_t FrustrumFaceNormal[5];
+float FrustrumFaceD[5];
+int FrustrumBoundMinX = 0;
+int FrustrumBoundMinY = 0;
+int FrustrumBoundMaxX = TERRAIN_SIZE_MASK;
+int FrustrumBoundMaxY = TERRAIN_SIZE_MASK;
 
 float FrustrumX[4];
 float FrustrumY[4];
@@ -2000,22 +2059,23 @@ void CreateFrustrum2D(vec3_t Position)
 
     if (gMapManager.InBattleCastle() && SceneFlag == MAIN_SCENE)
     {
-        Width = (float)GetScreenWidth() / 480.f;// * 0.1f;
-        if (battleCastle::InBattleCastle2(Hero->Object.Position) && (Hero->Object.Position[0] < 17100.f || Hero->Object.Position[0]>18300.f))
+        Width = (float)GetScreenWidth() / 480.f; // * 0.1f;
+        if (battleCastle::InBattleCastle2(Hero->Object.Position) &&
+            (Hero->Object.Position[0] < 17100.f || Hero->Object.Position[0] > 18300.f))
         {
-            CameraViewFar = 5100.f;// * 0.1f;
-            CameraViewNear = CameraViewFar * 0.19f;//0.22
-            CameraViewTarget = CameraViewFar * 0.47f;//0.47
-            WidthFar = 2250.f * Width; // 1140.f
-            WidthNear = 540.f * Width; // 540.f
+            CameraViewFar = 5100.f;                   // * 0.1f;
+            CameraViewNear = CameraViewFar * 0.19f;   // 0.22
+            CameraViewTarget = CameraViewFar * 0.47f; // 0.47
+            WidthFar = 2250.f * Width;                // 1140.f
+            WidthNear = 540.f * Width;                // 540.f
         }
         else
         {
-            CameraViewFar = 3300.f;// * 0.1f;
-            CameraViewNear = CameraViewFar * 0.19f;//0.22
-            CameraViewTarget = CameraViewFar * 0.47f;//0.47
-            WidthFar = 1300.f * Width; // 1140.f
-            WidthNear = 580.f * Width; // 540.f
+            CameraViewFar = 3300.f;                   // * 0.1f;
+            CameraViewNear = CameraViewFar * 0.19f;   // 0.22
+            CameraViewTarget = CameraViewFar * 0.47f; // 0.47
+            WidthFar = 1300.f * Width;                // 1140.f
+            WidthNear = 580.f * Width;                // 540.f
         }
     }
     else if (gMapManager.WorldActive == WD_62SANTA_TOWN)
@@ -2040,7 +2100,7 @@ void CreateFrustrum2D(vec3_t Position)
     }
     else
     {
-        static  int CameraLevel;
+        static int CameraLevel;
 
         if ((int)CameraDistanceTarget >= (int)CameraDistance)
             CameraLevel = g_shCameraLevel;
@@ -2061,7 +2121,7 @@ void CreateFrustrum2D(vec3_t Position)
             }
             else
             {
-                Width = (float)GetScreenWidth()/640.f * 1.1f;
+                Width = (float)GetScreenWidth() / 640.f * 1.1f;
             }
 
             if (SceneFlag == LOG_IN_SCENE)
@@ -2091,51 +2151,51 @@ void CreateFrustrum2D(vec3_t Position)
             }
             else
             {
-                CameraViewNear = CameraViewFar * 0.19f;//0.22
-                CameraViewTarget = CameraViewFar * 0.47f;//0.47
+                CameraViewNear = CameraViewFar * 0.19f;              // 0.22
+                CameraViewTarget = CameraViewFar * 0.47f;            // 0.47
                 WidthFar = 1190.f * Width * sqrtf(CameraFOV / 33.f); // 1140.f
                 WidthNear = 540.f * Width * sqrtf(CameraFOV / 33.f); // 540.f
             }
             break;
         case 1:
-            Width = (float)GetScreenWidth() / 500.f + 0.1f;// * 0.1f;
-            CameraViewFar = 2700.f;// * 0.1f;
-            CameraViewNear = CameraViewFar * 0.19f;//0.22
-            CameraViewTarget = CameraViewFar * 0.47f;//0.47
-            WidthFar = 1200.f * Width; // 1140.f
-            WidthNear = 540.f * Width; // 540.f
+            Width = (float)GetScreenWidth() / 500.f + 0.1f; // * 0.1f;
+            CameraViewFar = 2700.f;                         // * 0.1f;
+            CameraViewNear = CameraViewFar * 0.19f;         // 0.22
+            CameraViewTarget = CameraViewFar * 0.47f;       // 0.47
+            WidthFar = 1200.f * Width;                      // 1140.f
+            WidthNear = 540.f * Width;                      // 540.f
             break;
         case 2:
-            Width = (float)GetScreenWidth() / 500.f + 0.1f;// * 0.1f;
-            CameraViewFar = 3000.f;// * 0.1f;
-            CameraViewNear = CameraViewFar * 0.19f;//0.22
-            CameraViewTarget = CameraViewFar * 0.47f;//0.47
-            WidthFar = 1300.f * Width; // 1140.f
-            WidthNear = 540.f * Width; // 540.f
+            Width = (float)GetScreenWidth() / 500.f + 0.1f; // * 0.1f;
+            CameraViewFar = 3000.f;                         // * 0.1f;
+            CameraViewNear = CameraViewFar * 0.19f;         // 0.22
+            CameraViewTarget = CameraViewFar * 0.47f;       // 0.47
+            WidthFar = 1300.f * Width;                      // 1140.f
+            WidthNear = 540.f * Width;                      // 540.f
             break;
         case 3:
-            Width = (float)GetScreenWidth() / 500.f + 0.1f;// * 0.1f;
-            CameraViewFar = 3300.f;// * 0.1f;
-            CameraViewNear = CameraViewFar * 0.19f;//0.22
-            CameraViewTarget = CameraViewFar * 0.47f;//0.47
-            WidthFar = 1500.f * Width; // 1140.f
-            WidthNear = 580.f * Width; // 540.f
+            Width = (float)GetScreenWidth() / 500.f + 0.1f; // * 0.1f;
+            CameraViewFar = 3300.f;                         // * 0.1f;
+            CameraViewNear = CameraViewFar * 0.19f;         // 0.22
+            CameraViewTarget = CameraViewFar * 0.47f;       // 0.47
+            WidthFar = 1500.f * Width;                      // 1140.f
+            WidthNear = 580.f * Width;                      // 540.f
             break;
         case 4:
-            Width = (float)GetScreenWidth() / 500.f + 0.1f;// * 0.1f;
-            CameraViewFar = 5100.f;// * 0.1f;
-            CameraViewNear = CameraViewFar * 0.19f;//0.22
-            CameraViewTarget = CameraViewFar * 0.47f;//0.47
-            WidthFar = 2250.f * Width; // 1140.f
-            WidthNear = 540.f * Width; // 540.f
+            Width = (float)GetScreenWidth() / 500.f + 0.1f; // * 0.1f;
+            CameraViewFar = 5100.f;                         // * 0.1f;
+            CameraViewNear = CameraViewFar * 0.19f;         // 0.22
+            CameraViewTarget = CameraViewFar * 0.47f;       // 0.47
+            WidthFar = 2250.f * Width;                      // 1140.f
+            WidthNear = 540.f * Width;                      // 540.f
             break;
         case 5:
-            Width = (float)GetScreenWidth() / 500.f + 0.1f;// * 0.1f;
-            CameraViewFar = 3400.f;// * 0.1f;
-            CameraViewNear = CameraViewFar * 0.19f;//0.22
-            CameraViewTarget = CameraViewFar * 0.47f;//0.47
-            WidthFar = 1600.f * Width; // 1140.f
-            WidthNear = 660.f * Width; // 540.f
+            Width = (float)GetScreenWidth() / 500.f + 0.1f; // * 0.1f;
+            CameraViewFar = 3400.f;                         // * 0.1f;
+            CameraViewNear = CameraViewFar * 0.19f;         // 0.22
+            CameraViewTarget = CameraViewFar * 0.47f;       // 0.47
+            WidthFar = 1600.f * Width;                      // 1140.f
+            WidthNear = 660.f * Width;                      // 540.f
             break;
         }
     }
@@ -2152,7 +2212,7 @@ void CreateFrustrum2D(vec3_t Position)
     {
         VectorScale(CameraAngle, -1.0f, Angle);
         CCameraMove::GetInstancePtr()->SetFrustumAngle(89.5f);
-        vec3_t _Temp = { CCameraMove::GetInstancePtr()->GetFrustumAngle(), 0.0f, 0.0f };
+        vec3_t _Temp = {CCameraMove::GetInstancePtr()->GetFrustumAngle(), 0.0f, 0.0f};
         VectorAdd(Angle, _Temp, Angle);
     }
     else
@@ -2179,8 +2239,7 @@ bool TestFrustrum2D(float x, float y, float Range)
     int j = 3;
     for (int i = 0; i < 4; j = i, i++)
     {
-        float d = (FrustrumX[i] - x) * (FrustrumY[j] - y) -
-            (FrustrumX[j] - x) * (FrustrumY[i] - y);
+        float d = (FrustrumX[i] - x) * (FrustrumY[j] - y) - (FrustrumX[j] - x) * (FrustrumY[i] - y);
         if (d <= Range)
         {
             return false;
@@ -2214,10 +2273,14 @@ void CreateFrustrum(float xAspect, float yAspect, vec3_t position)
         vec3_t t;
         VectorIRotate(Temp[i], Matrix, t);
         VectorAdd(t, CameraPosition, FrustrumVertex[i]);
-        if (FrustrumMinX > FrustrumVertex[i][0]) FrustrumMinX = FrustrumVertex[i][0];
-        if (FrustrumMinY > FrustrumVertex[i][1]) FrustrumMinY = FrustrumVertex[i][1];
-        if (FrustrumMaxX < FrustrumVertex[i][0]) FrustrumMaxX = FrustrumVertex[i][0];
-        if (FrustrumMaxY < FrustrumVertex[i][1]) FrustrumMaxY = FrustrumVertex[i][1];
+        if (FrustrumMinX > FrustrumVertex[i][0])
+            FrustrumMinX = FrustrumVertex[i][0];
+        if (FrustrumMinY > FrustrumVertex[i][1])
+            FrustrumMinY = FrustrumVertex[i][1];
+        if (FrustrumMaxX < FrustrumVertex[i][0])
+            FrustrumMaxX = FrustrumVertex[i][0];
+        if (FrustrumMaxY < FrustrumVertex[i][1])
+            FrustrumMaxY = FrustrumVertex[i][1];
     }
 
     int tileWidth = 4;
@@ -2228,8 +2291,10 @@ void CreateFrustrum(float xAspect, float yAspect, vec3_t position)
     FrustrumBoundMaxY = (int)(FrustrumMaxY / TERRAIN_SCALE) / tileWidth * tileWidth + tileWidth;
     FrustrumBoundMinX = FrustrumBoundMinX < 0 ? 0 : FrustrumBoundMinX;
     FrustrumBoundMinY = FrustrumBoundMinY < 0 ? 0 : FrustrumBoundMinY;
-    FrustrumBoundMaxX = FrustrumBoundMaxX > TERRAIN_SIZE_MASK - tileWidth ? TERRAIN_SIZE_MASK - tileWidth : FrustrumBoundMaxX;
-    FrustrumBoundMaxY = FrustrumBoundMaxY > TERRAIN_SIZE_MASK - tileWidth ? TERRAIN_SIZE_MASK - tileWidth : FrustrumBoundMaxY;
+    FrustrumBoundMaxX =
+        FrustrumBoundMaxX > TERRAIN_SIZE_MASK - tileWidth ? TERRAIN_SIZE_MASK - tileWidth : FrustrumBoundMaxX;
+    FrustrumBoundMaxY =
+        FrustrumBoundMaxY > TERRAIN_SIZE_MASK - tileWidth ? TERRAIN_SIZE_MASK - tileWidth : FrustrumBoundMaxY;
 
     FaceNormalize(FrustrumVertex[0], FrustrumVertex[1], FrustrumVertex[2], FrustrumFaceNormal[0]);
     FaceNormalize(FrustrumVertex[0], FrustrumVertex[2], FrustrumVertex[3], FrustrumFaceNormal[1]);
@@ -2241,7 +2306,7 @@ void CreateFrustrum(float xAspect, float yAspect, vec3_t position)
     FrustrumFaceD[2] = -DotProduct(FrustrumVertex[0], FrustrumFaceNormal[2]);
     FrustrumFaceD[3] = -DotProduct(FrustrumVertex[0], FrustrumFaceNormal[3]);
     FrustrumFaceD[4] = -DotProduct(FrustrumVertex[1], FrustrumFaceNormal[4]);
-    
+
     CreateFrustrum2D(position);
 }
 
@@ -2251,7 +2316,8 @@ bool TestFrustrum(vec3_t Position, float Range)
     {
         float Value;
         Value = FrustrumFaceD[i] + DotProduct(Position, FrustrumFaceNormal[i]);
-        if (Value < -Range) return false;
+        if (Value < -Range)
+            return false;
     }
     return true;
 }
@@ -2307,7 +2373,8 @@ bool CFrustrum::Test(vec3_t vPos, float fRange)
     {
         float fValue;
         fValue = m_FrustrumD[i] + DotProduct(vPos, m_FrustrumNorm[i]);
-        if (fValue < -fRange) return false;
+        if (fValue < -fRange)
+            return false;
     }
     return true;
 }
@@ -2323,7 +2390,8 @@ void ResetAllFrustrum()
     for (; iter != g_FrustrumMap.end(); ++iter)
     {
         CFrustrum* pData = iter->second;
-        if (!pData) continue;
+        if (!pData)
+            continue;
         pData->SetEye(CameraPosition);
         pData->Reset();
     }
@@ -2332,7 +2400,8 @@ void ResetAllFrustrum()
 CFrustrum* FindFrustrum(unsigned int iID)
 {
     FrustrumMap_t::iterator iter = g_FrustrumMap.find(iID);
-    if (iter != g_FrustrumMap.end()) return (CFrustrum*)iter->second;
+    if (iter != g_FrustrumMap.end())
+        return (CFrustrum*)iter->second;
     return NULL;
 }
 
@@ -2347,7 +2416,7 @@ void DeleteAllFrustrum()
     g_FrustrumMap.clear();
 }
 
-#endif// DYNAMIC_FRUSTRUM
+#endif // DYNAMIC_FRUSTRUM
 
 /*bool TestFrustrum(vec3_t Position,float Range)
 {
@@ -2398,7 +2467,7 @@ void InitTerrainLight()
         WindScale1 = 15.f;
         WindSpeed1 = (int)WorldTime % 36000 * (0.008f);
     }
-#endif	// ASG_ADD_MAP_KARUTAN
+#endif // ASG_ADD_MAP_KARUTAN
     yi = FrustrumBoundMinY;
 
     for (; yi <= std::min<int>(FrustrumBoundMaxY + 3, TERRAIN_SIZE_MASK); yi += 1)
@@ -2418,7 +2487,7 @@ void InitTerrainLight()
                 TerrainGrassWind[Index] = sinf(WindSpeed + xf * 50.f) * WindScale;
                 g_fTerrainGrassWind1[Index] = sinf(WindSpeed1 + xf * 50.f) * WindScale1;
             }
-#endif	// ASG_ADD_MAP_KARUTAN
+#endif // ASG_ADD_MAP_KARUTAN
 
             else if (gMapManager.WorldActive == WD_57ICECITY || gMapManager.WorldActive == WD_58ICECITY_BOSS)
             {
@@ -2514,9 +2583,9 @@ void InitTerrainRay(int HeroX, int HeroY)
 
 void RenderTerrainBlock(float xf, float yf, int xi, int yi, bool EditFlag)
 {
-    //int x = ((xi/4)&63);
-    //int y = ((yi/4)&63);
-    //int lodi = LodBuffer[y*64+x];
+    // int x = ((xi/4)&63);
+    // int y = ((yi/4)&63);
+    // int lodi = LodBuffer[y*64+x];
     int lodi = 1;
     auto lodf = (float)lodi;
     for (int i = 0; i < 4; i += lodi)
@@ -2537,9 +2606,9 @@ void RenderTerrainBlock(float xf, float yf, int xi, int yi, bool EditFlag)
 
 void RenderTerrainFrustrum(bool EditFlag)
 {
-    int     xi;
-    int     yi = FrustrumBoundMinY;
-    float   xf;
+    int xi;
+    int yi = FrustrumBoundMinY;
+    float xf;
     auto yf = (float)yi;
 
     for (; yi <= FrustrumBoundMaxY; yi += 4, yf += 4.f)
@@ -2587,7 +2656,7 @@ void RenderTerrainBlock_After(float xf, float yf, int xi, int yi, bool EditFlag)
 
 void RenderTerrainFrustrum_After(bool EditFlag)
 {
-    int   xi, yi;
+    int xi, yi;
     float xf, yf;
     yi = FrustrumBoundMinY;
     yf = (float)yi;
@@ -2673,7 +2742,7 @@ OBJECT Sun;
 
 void CreateSun()
 {
-    //Sun.Type = BITMAP_LIGHT;
+    // Sun.Type = BITMAP_LIGHT;
     Sun.Scale = 8.f;
     Sun.AnimationFrame = 1.f;
 }
@@ -2694,7 +2763,7 @@ void RenderSun()
     Sun.Position[2] = 550.f;
     Sun.Visible = TestDepthBuffer(Sun.Position);
     BeginSprite();
-    //RenderSprite(&Sun);
+    // RenderSprite(&Sun);
     EndSprite();
     DisableAlphaBlend();
 }
@@ -2749,8 +2818,8 @@ void RenderSky()
         vec3_t Light[4];
         VectorCopy(LightTable[(int)x], Light[0]);
         VectorCopy(LightTable[(int)x + 1], Light[1]);
-        //VectorCopy(LightTable[(int)x+1],Light[2]);
-        //VectorCopy(LightTable[(int)x  ],Light[3]);
+        // VectorCopy(LightTable[(int)x+1],Light[2]);
+        // VectorCopy(LightTable[(int)x  ],Light[3]);
         Vector(1.f, 1.f, 1.f, Light[2]);
         Vector(1.f, 1.f, 1.f, Light[3]);
 
@@ -2758,7 +2827,7 @@ void RenderSky()
         VectorRotate(p, Matrix, Position);
         VectorAdd(CameraPosition, Position, Position);
         Position[2] = 400.f;
-        //RenderSpriteUV(BITMAP_SKY,Position,Width/Num,Height,UV,Light);
+        // RenderSpriteUV(BITMAP_SKY,Position,Width/Num,Height,UV,Light);
     }
     EndSprite();
 }

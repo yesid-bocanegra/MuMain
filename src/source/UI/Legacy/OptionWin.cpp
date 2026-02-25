@@ -16,33 +16,23 @@
 #include "UIControls.h"
 #include "NewUISystem.h"
 
-#define	OW_BTN_GAP		25
-#define	OW_SLD_GAP		48
+#define OW_BTN_GAP 25
+#define OW_SLD_GAP 48
 
+COptionWin::COptionWin() {}
 
-
-
-COptionWin::COptionWin()
-{
-}
-
-COptionWin::~COptionWin()
-{
-}
+COptionWin::~COptionWin() {}
 
 void COptionWin::Create()
 {
     CInput rInput = CInput::Instance();
     CWin::Create(rInput.GetScreenWidth(), rInput.GetScreenHeight());
 
-    SImgInfo aiiBack[WE_BG_MAX] =
-    {
-        { BITMAP_SYS_WIN, 0, 0, 128, 128 },
-        { BITMAP_OPTION_WIN, 0, 0, 213, 65 },
-        { BITMAP_SYS_WIN + 2, 0, 0, 213, 43 },
-        { BITMAP_SYS_WIN + 3, 0, 0, 5, 8 },
-        { BITMAP_SYS_WIN + 4, 0, 0, 5, 8 }
-    };
+    SImgInfo aiiBack[WE_BG_MAX] = {{BITMAP_SYS_WIN, 0, 0, 128, 128},
+                                   {BITMAP_OPTION_WIN, 0, 0, 213, 65},
+                                   {BITMAP_SYS_WIN + 2, 0, 0, 213, 43},
+                                   {BITMAP_SYS_WIN + 3, 0, 0, 5, 8},
+                                   {BITMAP_SYS_WIN + 4, 0, 0, 5, 8}};
     m_winBack.Create(aiiBack, 1, 30);
     m_winBack.SetLine(30);
 
@@ -52,15 +42,15 @@ void COptionWin::Create()
         CWin::RegisterButton(&m_aBtn[i]);
     }
 
-    DWORD adwBtnClr[4] = { CLRDW_BR_GRAY, CLRDW_BR_GRAY, CLRDW_WHITE, 0 };
+    DWORD adwBtnClr[4] = {CLRDW_BR_GRAY, CLRDW_BR_GRAY, CLRDW_WHITE, 0};
     m_aBtn[OW_BTN_CLOSE].Create(108, 30, BITMAP_TEXT_BTN, 4, 2, 1);
     m_aBtn[OW_BTN_CLOSE].SetText(GlobalText[388], adwBtnClr);
     CWin::RegisterButton(&m_aBtn[OW_BTN_CLOSE]);
 
-    SImgInfo iiThumb = { BITMAP_SLIDER, 0, 0, 13, 13 };
-    SImgInfo iiBack = { BITMAP_SLIDER + 2, 0, 0, 98, 13 };
-    SImgInfo iiGauge = { BITMAP_SLIDER + 1, 0, 0, 4, 7 };
-    RECT rcGauge = { 3, 3, 95, 10 };
+    SImgInfo iiThumb = {BITMAP_SLIDER, 0, 0, 13, 13};
+    SImgInfo iiBack = {BITMAP_SLIDER + 2, 0, 0, 98, 13};
+    SImgInfo iiGauge = {BITMAP_SLIDER + 1, 0, 0, 4, 7};
+    RECT rcGauge = {3, 3, 95, 10};
 
     for (int i = 0; i < OW_SLD_MAX; ++i)
         m_aSlider[i].Create(&iiThumb, &iiBack, &iiGauge, &rcGauge);
@@ -69,7 +59,7 @@ void COptionWin::Create()
     m_aSlider[OW_SLD_RENDER_LV].SetSlideRange(4);
 
     SetPosition((rInput.GetScreenWidth() - m_winBack.GetWidth()) / 2,
-        (rInput.GetScreenHeight() - m_winBack.GetHeight()) / 2);
+                (rInput.GetScreenHeight() - m_winBack.GetHeight()) / 2);
 
     UpdateDisplay();
 }
@@ -91,13 +81,13 @@ void COptionWin::SetPosition(int nXCoord, int nYCoord)
     for (int i = 0; i <= OW_BTN_SLIDE_HELP; ++i)
         m_aBtn[i].SetPosition(nBtnPosX, nBtnPosBaseTop + i * nBtnGap);
 
-    m_aBtn[OW_BTN_CLOSE].SetPosition(m_winBack.GetXPos() + (m_winBack.GetWidth() - m_aBtn[OW_BTN_CLOSE].GetWidth()) / 2, m_winBack.GetYPos() + 301);
+    m_aBtn[OW_BTN_CLOSE].SetPosition(m_winBack.GetXPos() + (m_winBack.GetWidth() - m_aBtn[OW_BTN_CLOSE].GetWidth()) / 2,
+                                     m_winBack.GetYPos() + 301);
 
     //	int nSldPosX = m_winBack.GetXPos()
     //		+ (m_winBack.GetWidth() - m_aSlider[0].GetWidth()) / 2;
     int nSldGap = OW_SLD_GAP + m_aSlider[0].GetHeight();
-    int nSldPosBaseTop = m_aBtn[OW_BTN_SLIDE_HELP].GetYPos()
-        + m_aBtn[0].GetHeight() + OW_SLD_GAP;
+    int nSldPosBaseTop = m_aBtn[OW_BTN_SLIDE_HELP].GetYPos() + m_aBtn[0].GetHeight() + OW_SLD_GAP;
     for (int i = 0; i < OW_SLD_MAX; ++i)
         m_aSlider[i].SetPosition(nBtnPosX, nSldPosBaseTop + i * nSldGap);
 }
@@ -192,20 +182,19 @@ void COptionWin::RenderControls()
     g_pRenderText->SetTextColor(CLRDW_WHITE);
     g_pRenderText->SetBgColor(0);
     g_pRenderText->RenderText(int(m_winBack.GetXPos() / g_fScreenRate_x),
-        int((m_winBack.GetYPos() + 10) / g_fScreenRate_y),
-        GlobalText[385], m_winBack.GetWidth() / g_fScreenRate_x, 0, RT3_SORT_CENTER);
+                              int((m_winBack.GetYPos() + 10) / g_fScreenRate_y), GlobalText[385],
+                              m_winBack.GetWidth() / g_fScreenRate_x, 0, RT3_SORT_CENTER);
 
-    const wchar_t* apszBtnText[3] =
-    { GlobalText[386], GlobalText[387], GlobalText[919] };
+    const wchar_t* apszBtnText[3] = {GlobalText[386], GlobalText[387], GlobalText[919]};
     for (int i = 0; i <= OW_BTN_SLIDE_HELP; ++i)
     {
         g_pRenderText->RenderText(int((m_aBtn[i].GetXPos() + 24) / g_fScreenRate_x),
-            int((m_aBtn[i].GetYPos() + 4) / g_fScreenRate_y), apszBtnText[i]);
+                                  int((m_aBtn[i].GetYPos() + 4) / g_fScreenRate_y), apszBtnText[i]);
     }
 
     int nTextPosY;
-    const wchar_t* apszSldText[OW_SLD_MAX] = { GlobalText[389], GlobalText[1840] };
-    int anVal[OW_SLD_MAX] = { g_pOption->GetVolumeLevel(), g_pOption->GetRenderLevel() * 2 + 5 };
+    const wchar_t* apszSldText[OW_SLD_MAX] = {GlobalText[389], GlobalText[1840]};
+    int anVal[OW_SLD_MAX] = {g_pOption->GetVolumeLevel(), g_pOption->GetRenderLevel() * 2 + 5};
 
     wchar_t szVal[3];
 

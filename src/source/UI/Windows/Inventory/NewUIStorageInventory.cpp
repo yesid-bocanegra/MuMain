@@ -19,6 +19,7 @@ using namespace SEASON3B;
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
+// cppcheck-suppress uninitMemberVar
 CNewUIStorageInventory::CNewUIStorageInventory()
 {
     m_pNewUIMng = nullptr;
@@ -33,15 +34,15 @@ CNewUIStorageInventory::~CNewUIStorageInventory()
 
 bool CNewUIStorageInventory::Create(CNewUIManager* pNewUIMng, int x, int y)
 {
-    if (nullptr == pNewUIMng || nullptr == g_pNewUI3DRenderMng
-        || nullptr == g_pNewItemMng)
+    if (nullptr == pNewUIMng || nullptr == g_pNewUI3DRenderMng || nullptr == g_pNewItemMng)
         return false;
 
     m_pNewUIMng = pNewUIMng;
     m_pNewUIMng->AddUIObj(INTERFACE_STORAGE, this);
 
     m_pNewInventoryCtrl = new CNewUIInventoryCtrl;
-    if (false == m_pNewInventoryCtrl->Create(STORAGE_TYPE::VAULT, g_pNewUI3DRenderMng, g_pNewItemMng, this, x + 15, y + 36, 8, 15))
+    if (false == m_pNewInventoryCtrl->Create(STORAGE_TYPE::VAULT, g_pNewUI3DRenderMng, g_pNewItemMng, this, x + 15,
+                                             y + 36, 8, 15))
     {
         SAFE_DELETE(m_pNewInventoryCtrl);
         return false;
@@ -51,7 +52,7 @@ bool CNewUIStorageInventory::Create(CNewUIManager* pNewUIMng, int x, int y)
 
     LoadImages();
 
-    constexpr int anToolTipText[MAX_BTN] = { 235, 236, 242 };
+    constexpr int anToolTipText[MAX_BTN] = {235, 236, 242};
     for (int i = BTN_INSERT_ZEN; i < MAX_BTN; ++i)
     {
         m_abtn[i].ChangeButtonImgState(true, IMAGE_STORAGE_BTN_INSERT_ZEN + i);
@@ -205,20 +206,17 @@ void CNewUIStorageInventory::RenderText()
     g_pRenderText->SetFont(g_hFontBold);
     g_pRenderText->SetBgColor(0);
 
-    mu_swprintf(
-        szTemp, L"%ls (%ls)", GlobalText[234], GlobalText[m_bLock ? 241 : 240]);
+    mu_swprintf(szTemp, L"%ls (%ls)", GlobalText[234], GlobalText[m_bLock ? 241 : 240]);
     if (m_bLock)
         g_pRenderText->SetTextColor(240, 32, 32, 255);
     else
         g_pRenderText->SetTextColor(216, 216, 216, 255);
-    g_pRenderText->RenderText(
-        m_Pos.x, m_Pos.y + 11, szTemp, STORAGE_WIDTH, 0, RT3_SORT_CENTER);
+    g_pRenderText->RenderText(m_Pos.x, m_Pos.y + 11, szTemp, STORAGE_WIDTH, 0, RT3_SORT_CENTER);
 
     nTempZen = CharacterMachine->StorageGold;
     ConvertGold(nTempZen, szTemp);
     g_pRenderText->SetTextColor(getGoldColor(nTempZen));
-    g_pRenderText->RenderText(
-        m_Pos.x + 168, m_Pos.y + 342 + 8, szTemp, 0, 0, RT3_WRITE_RIGHT_TO_LEFT);
+    g_pRenderText->RenderText(m_Pos.x + 168, m_Pos.y + 342 + 8, szTemp, 0, 0, RT3_WRITE_RIGHT_TO_LEFT);
 
     g_pRenderText->SetTextColor(240, 64, 64, 255);
     g_pRenderText->RenderText(m_Pos.x + 10 + 15, m_Pos.y + 342 + 29, GlobalText[266]);
@@ -342,8 +340,7 @@ void CNewUIStorageInventory::ProcessInventoryCtrl()
                 const int nSrcIndex = pPickedItem->GetSourceLinealPos();
                 const auto sourceStorageType = pPickedItem->GetSourceStorageType();
                 const auto targetStorageType = m_pNewInventoryCtrl->GetStorageType();
-                SendRequestEquipmentItem(sourceStorageType, nSrcIndex,
-                    pItemObj, targetStorageType, nDstIndex);
+                SendRequestEquipmentItem(sourceStorageType, nSrcIndex, pItemObj, targetStorageType, nDstIndex);
             }
         }
         else
@@ -381,9 +378,7 @@ void CNewUIStorageInventory::ProcessStorageItemAutoMove()
         {
             SetItemAutoMove(true);
 
-            int nSrcIndex
-                = pItemObj->y * m_pNewInventoryCtrl->GetNumberOfColumn()
-                + pItemObj->x;
+            int nSrcIndex = pItemObj->y * m_pNewInventoryCtrl->GetNumberOfColumn() + pItemObj->x;
             SendRequestItemToMyInven(pItemObj, nSrcIndex, nDstIndex);
 
             PlayBuffer(SOUND_GET_ITEM01);
@@ -428,8 +423,7 @@ void CNewUIStorageInventory::SendRequestItemToMyInven(ITEM* pItemObj, int nStora
 {
     if (!IsStorageLocked() || IsCorrectPassword())
     {
-        SendRequestEquipmentItem(STORAGE_TYPE::VAULT, nStorageIndex,
-            pItemObj, STORAGE_TYPE::INVENTORY, nInvenIndex);
+        SendRequestEquipmentItem(STORAGE_TYPE::VAULT, nStorageIndex, pItemObj, STORAGE_TYPE::INVENTORY, nInvenIndex);
     }
     else
     {
@@ -437,8 +431,7 @@ void CNewUIStorageInventory::SendRequestItemToMyInven(ITEM* pItemObj, int nStora
         if (!IsItemAutoMove())
             g_pPickedItem->HidePickedItem();
 
-        CreateMessageBox(
-            MSGBOX_LAYOUT_CLASS(SEASON3B::CPasswordKeyPadMsgBoxLayout));
+        CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CPasswordKeyPadMsgBoxLayout));
     }
 }
 
@@ -461,8 +454,7 @@ void CNewUIStorageInventory::SendRequestItemToStorage(ITEM* pItemObj, int nInven
     }
     else
     {
-        SendRequestEquipmentItem(STORAGE_TYPE::INVENTORY, nInvenIndex,
-            pItemObj, STORAGE_TYPE::VAULT, nStorageIndex);
+        SendRequestEquipmentItem(STORAGE_TYPE::INVENTORY, nInvenIndex, pItemObj, STORAGE_TYPE::VAULT, nStorageIndex);
     }
 }
 
@@ -592,11 +584,8 @@ void CNewUIStorageInventory::ProcessToReceiveStorageStatus(BYTE byStatus)
 
                 if (IsItemAutoMove())
                 {
-                    pItemObj = m_pNewInventoryCtrl->FindItemAtPt(
-                        m_nBackupMouseX, m_nBackupMouseY);
-                    nStorageIndex
-                        = pItemObj->y * m_pNewInventoryCtrl->GetNumberOfColumn()
-                        + pItemObj->x;
+                    pItemObj = m_pNewInventoryCtrl->FindItemAtPt(m_nBackupMouseX, m_nBackupMouseY);
+                    nStorageIndex = pItemObj->y * m_pNewInventoryCtrl->GetNumberOfColumn() + pItemObj->x;
                 }
                 else
                 {
@@ -604,9 +593,8 @@ void CNewUIStorageInventory::ProcessToReceiveStorageStatus(BYTE byStatus)
                     pItemObj = g_pPickedItem->GetItem();
                 }
 
-                SendRequestEquipmentItem(
-                    STORAGE_TYPE::VAULT, nStorageIndex,
-                    pItemObj, STORAGE_TYPE::INVENTORY, GetBackupInvenIndex());
+                SendRequestEquipmentItem(STORAGE_TYPE::VAULT, nStorageIndex, pItemObj, STORAGE_TYPE::INVENTORY,
+                                         GetBackupInvenIndex());
 
                 InitBackupItemInfo();
             }
@@ -625,8 +613,7 @@ void CNewUIStorageInventory::ProcessToReceiveStorageItems(int nIndex, std::span<
 {
     CNewUIInventoryCtrl::DeletePickedItem();
 
-    if (nIndex >= 0 && nIndex < (m_pNewInventoryCtrl->GetNumberOfColumn()
-        * m_pNewInventoryCtrl->GetNumberOfRow()))
+    if (nIndex >= 0 && nIndex < (m_pNewInventoryCtrl->GetNumberOfColumn() * m_pNewInventoryCtrl->GetNumberOfRow()))
     {
         if (IsItemAutoMove())
         {

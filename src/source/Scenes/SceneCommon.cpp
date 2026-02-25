@@ -145,10 +145,10 @@ bool CheckAbuseNameFilter(wchar_t* Text)
 
 bool CheckName()
 {
-    if (CheckAbuseNameFilter(InputText[0]) || CheckAbuseFilter(InputText[0]) ||
-        FindText(InputText[0], L" ") || FindText(InputText[0], L"　") ||
-        FindText(InputText[0], L".") || FindText(InputText[0], L"·") || FindText(InputText[0], L"∼") ||
-        FindText(InputText[0], L"Webzen") || FindText(InputText[0], L"WebZen") || FindText(InputText[0], L"webzen") || FindText(InputText[0], L"WEBZEN") ||
+    if (CheckAbuseNameFilter(InputText[0]) || CheckAbuseFilter(InputText[0]) || FindText(InputText[0], L" ") ||
+        FindText(InputText[0], L"　") || FindText(InputText[0], L".") || FindText(InputText[0], L"·") ||
+        FindText(InputText[0], L"∼") || FindText(InputText[0], L"Webzen") || FindText(InputText[0], L"WebZen") ||
+        FindText(InputText[0], L"webzen") || FindText(InputText[0], L"WEBZEN") ||
         FindText(InputText[0], GlobalText[457]) || FindText(InputText[0], GlobalText[458]))
         return true;
     return false;
@@ -165,7 +165,8 @@ BOOL CheckOptionMouseClick(int iOptionPos_y, BOOL bPlayClickSound)
         MouseLButtonPush = false;
         MouseUpdateTime = 0;
         MouseUpdateTimeMax = 6;
-        if (bPlayClickSound == TRUE) PlayBuffer(SOUND_CLICK01);
+        if (bPlayClickSound == TRUE)
+            PlayBuffer(SOUND_CLICK01);
         return TRUE;
     }
     return FALSE;
@@ -260,9 +261,8 @@ void RenderInfomation3D()
 {
     bool Success = false;
 
-    if (((ErrorMessage == MESSAGE_TRADE_CHECK || ErrorMessage == MESSAGE_CHECK) && AskYesOrNo == 1)
-        || ErrorMessage == MESSAGE_USE_STATE
-        || ErrorMessage == MESSAGE_USE_STATE2)
+    if (((ErrorMessage == MESSAGE_TRADE_CHECK || ErrorMessage == MESSAGE_CHECK) && AskYesOrNo == 1) ||
+        ErrorMessage == MESSAGE_USE_STATE || ErrorMessage == MESSAGE_USE_STATE2)
     {
         Success = true;
     }
@@ -302,7 +302,8 @@ void RenderInfomation3D()
             y = 60 + 55;
         }
 
-        Width = 40.f; Height = 60.f;
+        Width = 40.f;
+        Height = 60.f;
         int iRenderType = ErrorMessage;
         if (AskYesOrNo == 5)
             iRenderType = MESSAGE_USE_STATE;
@@ -311,11 +312,13 @@ void RenderInfomation3D()
         case MESSAGE_USE_STATE:
         case MESSAGE_USE_STATE2:
         case MESSAGE_PERSONALSHOP_WARNING:
-            RenderItem3D(x, y, Width, Height, TargetItem.Type, TargetItem.Level, TargetItem.ExcellentFlags, TargetItem.AncientDiscriminator, true);
+            RenderItem3D(x, y, Width, Height, TargetItem.Type, TargetItem.Level, TargetItem.ExcellentFlags,
+                         TargetItem.AncientDiscriminator, true);
             break;
 
         default:
-            RenderItem3D(x, y, Width, Height, PickItem.Type, PickItem.Level, PickItem.ExcellentFlags, PickItem.AncientDiscriminator, true);
+            RenderItem3D(x, y, Width, Height, PickItem.Type, PickItem.Level, PickItem.ExcellentFlags,
+                         PickItem.AncientDiscriminator, true);
             break;
         }
 
@@ -346,16 +349,28 @@ void RenderInfomation()
  */
 static void SetupItemUseStateMessage(int num, int index, int message)
 {
-    wchar_t Name[50] = { 0, };
+    wchar_t Name[50] = {
+        0,
+    };
     if (TargetItem.Type == ITEM_FRUITS)
     {
         switch (TargetItem.Level)
         {
-        case 0:swprintf_s(Name, 50, L"%ls", GlobalText[168]); break;
-        case 1:swprintf_s(Name, 50, L"%ls", GlobalText[169]); break;
-        case 2:swprintf_s(Name, 50, L"%ls", GlobalText[167]); break;
-        case 3:swprintf_s(Name, 50, L"%ls", GlobalText[166]); break;
-        case 4:swprintf_s(Name, 50, L"%ls", GlobalText[1900]); break;
+        case 0:
+            swprintf_s(Name, 50, L"%ls", GlobalText[168]);
+            break;
+        case 1:
+            swprintf_s(Name, 50, L"%ls", GlobalText[169]);
+            break;
+        case 2:
+            swprintf_s(Name, 50, L"%ls", GlobalText[167]);
+            break;
+        case 3:
+            swprintf_s(Name, 50, L"%ls", GlobalText[166]);
+            break;
+        case 4:
+            swprintf_s(Name, 50, L"%ls", GlobalText[1900]);
+            break;
         }
     }
 
@@ -396,8 +411,8 @@ static void SetupChaosCastleCheckMessage(int num, int index)
     g_iNumLineMessageBoxCustom = 0;
     for (int i = 0; i < num; ++i)
     {
-        g_iNumLineMessageBoxCustom += SeparateTextIntoLines(GlobalText[index + i],
-            g_lpszMessageBoxCustom[g_iNumLineMessageBoxCustom], NUM_LINE_CMB, MAX_LENGTH_CMB);
+        g_iNumLineMessageBoxCustom += SeparateTextIntoLines(
+            GlobalText[index + i], g_lpszMessageBoxCustom[g_iNumLineMessageBoxCustom], NUM_LINE_CMB, MAX_LENGTH_CMB);
     }
 }
 
@@ -408,7 +423,8 @@ static void SetupGemIntegrationMessage()
 {
     wchar_t tBuf[MAX_GLOBAL_TEXT_STRING];
     wchar_t tLines[2][30];
-    for (int t = 0; t < 2; ++t) memset(tLines[t], 0, 20);
+    for (int t = 0; t < 2; ++t)
+        memset(tLines[t], 0, 20);
     g_iNumLineMessageBoxCustom = 0;
 
     if (COMGEM::isComMode())
@@ -418,14 +434,13 @@ static void SetupGemIntegrationMessage()
         else
             swprintf_s(tBuf, MAX_GLOBAL_TEXT_STRING, GlobalText[1809], GlobalText[1807], COMGEM::m_cCount);
 
-        g_iNumLineMessageBoxCustom += SeparateTextIntoLines(tBuf,
-            tLines[g_iNumLineMessageBoxCustom], 2, 30);
+        g_iNumLineMessageBoxCustom += SeparateTextIntoLines(tBuf, tLines[g_iNumLineMessageBoxCustom], 2, 30);
 
         for (int t = 0; t < 2; ++t)
             wcscpy_s(g_lpszMessageBoxCustom[t], MAX_LENGTH_CMB, tLines[t]);
 
-        swprintf_s(g_lpszMessageBoxCustom[g_iNumLineMessageBoxCustom], MAX_LENGTH_CMB,
-            GlobalText[1810], COMGEM::m_iValue);
+        swprintf_s(g_lpszMessageBoxCustom[g_iNumLineMessageBoxCustom], MAX_LENGTH_CMB, GlobalText[1810],
+                   COMGEM::m_iValue);
         ++g_iNumLineMessageBoxCustom;
     }
     else
@@ -436,14 +451,13 @@ static void SetupGemIntegrationMessage()
         else
             swprintf_s(tBuf, MAX_GLOBAL_TEXT_STRING, GlobalText[1813], GlobalText[1807], t_GemLevel);
 
-        g_iNumLineMessageBoxCustom += SeparateTextIntoLines(tBuf,
-            tLines[g_iNumLineMessageBoxCustom], 2, 30);
+        g_iNumLineMessageBoxCustom += SeparateTextIntoLines(tBuf, tLines[g_iNumLineMessageBoxCustom], 2, 30);
 
         for (int t = 0; t < 2; ++t)
             wcscpy_s(g_lpszMessageBoxCustom[t], MAX_LENGTH_CMB, tLines[t]);
 
-        swprintf_s(g_lpszMessageBoxCustom[g_iNumLineMessageBoxCustom], MAX_LENGTH_CMB,
-            GlobalText[1814], COMGEM::m_iValue);
+        swprintf_s(g_lpszMessageBoxCustom[g_iNumLineMessageBoxCustom], MAX_LENGTH_CMB, GlobalText[1814],
+                   COMGEM::m_iValue);
         ++g_iNumLineMessageBoxCustom;
     }
 }
@@ -478,8 +492,8 @@ static void ConfigureMessageBoxButtons(int message)
 {
     ZeroMemory(g_iCustomMessageBoxButton, NUM_BUTTON_CMB * NUM_PAR_BUTTON_CMB * sizeof(int));
 
-    int iOkButton[5] = { 1,  21, 90, 70, 21 };
-    int iCancelButton[5] = { 3, 120, 90, 70, 21 };
+    int iOkButton[5] = {1, 21, 90, 70, 21};
+    int iCancelButton[5] = {3, 120, 90, 70, 21};
 
     if (message == MESSAGE_USE_STATE2)
     {
@@ -571,10 +585,12 @@ bool GetTimeCheck(int DelayTime)
     return false;
 }
 
-bool IsEnterPressed() {
+bool IsEnterPressed()
+{
     return g_bEnterPressed;
 }
 
-void SetEnterPressed(bool enterpressed) {
+void SetEnterPressed(bool enterpressed)
+{
     g_bEnterPressed = enterpressed;
 }

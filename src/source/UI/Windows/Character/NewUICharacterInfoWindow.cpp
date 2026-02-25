@@ -119,7 +119,7 @@ bool SEASON3B::CNewUICharacterInfoWindow::UpdateMouseEvent()
 
 bool SEASON3B::CNewUICharacterInfoWindow::BtnProcess()
 {
-    POINT ptExitBtn1 = { m_Pos.x + 169, m_Pos.y + 7 };
+    POINT ptExitBtn1 = {m_Pos.x + 169, m_Pos.y + 7};
 
     if (SEASON3B::IsPress(VK_LBUTTON) && CheckMouseIn(ptExitBtn1.x, ptExitBtn1.y, 13, 12))
     {
@@ -170,8 +170,7 @@ bool SEASON3B::CNewUICharacterInfoWindow::BtnProcess()
 
     if (m_BtnMasterLevel.UpdateMouseEvent() == true)
     {
-        if (gCharacterManager.IsMasterLevel(Hero->Class)
-            && Hero->Class != CLASS_TEMPLENIGHT)
+        if (gCharacterManager.IsMasterLevel(Hero->Class) && Hero->Class != CLASS_TEMPLENIGHT)
             g_pNewUISystem->Toggle(SEASON3B::INTERFACE_MASTER_LEVEL);
         return true;
     }
@@ -274,10 +273,9 @@ void SEASON3B::CNewUICharacterInfoWindow::RenderSubjectTexts()
 
     wchar_t strServerName[MAX_TEXT_LENGTH];
 
-    const wchar_t* apszGlobalText[4]
-        = { GlobalText[461], GlobalText[460], GlobalText[3130], GlobalText[3131] };
+    const wchar_t* apszGlobalText[4] = {GlobalText[461], GlobalText[460], GlobalText[3130], GlobalText[3131]};
     mu_swprintf(strServerName, apszGlobalText[g_ServerListManager->GetNonPVPInfo()],
-        g_ServerListManager->GetSelectServerName(), g_ServerListManager->GetSelectServerIndex());
+                g_ServerListManager->GetSelectServerName(), g_ServerListManager->GetSelectServerIndex());
 
     float fAlpha = sinf(WorldTime * 0.001f) + 1.f;
     g_pRenderText->SetTextColor(255, 255, 255, 127 * (2.f - fAlpha));
@@ -309,9 +307,8 @@ void SEASON3B::CNewUICharacterInfoWindow::RenderTableTexts()
 
         iMaxMinus = -CharacterAttribute->wMaxMinusPoint;
 
-        mu_swprintf(strPoint, L"%ls %d/%d | %ls %d/%d",
-            GlobalText[1412], CharacterAttribute->AddPoint, CharacterAttribute->MaxAddPoint,
-            GlobalText[1903], iMinus, iMaxMinus);
+        mu_swprintf(strPoint, L"%ls %d/%d | %ls %d/%d", GlobalText[1412], CharacterAttribute->AddPoint,
+                    CharacterAttribute->MaxAddPoint, GlobalText[1903], iMinus, iMaxMinus);
     }
     else
     {
@@ -429,15 +426,14 @@ void SEASON3B::CNewUICharacterInfoWindow::RenderAttribute()
     {
         g_pRenderText->SetTextColor(255, 120, 0, 255);
     }
+    else if (CharacterAttribute->AddStrength)
+    {
+        g_pRenderText->SetTextColor(100, 150, 255, 255);
+    }
     else
-        if (CharacterAttribute->AddStrength)
-        {
-            g_pRenderText->SetTextColor(100, 150, 255, 255);
-        }
-        else
-        {
-            g_pRenderText->SetTextColor(230, 230, 0, 255);
-        }
+    {
+        g_pRenderText->SetTextColor(230, 230, 0, 255);
+    }
 
     wchar_t strStrength[32];
     mu_swprintf(strStrength, L"%d", wStrength);
@@ -497,39 +493,45 @@ void SEASON3B::CNewUICharacterInfoWindow::RenderAttribute()
             add_magic_damage_min = skillValue;
             break;
             // to be continued ...
-            // depending on the equipped weapons this may get complex. Maybe we should leave these calculations to the server.
+            // depending on the equipped weapons this may get complex. Maybe we should leave these calculations to the
+            // server.
         }
-            /*
-            else
-            if (CharacterAttribute->Skill[i] >= AT_SKILL_MAX_ATTACKRATE_UP && CharacterAttribute->Skill[i] < AT_SKILL_MAX_ATTACKRATE_UP + 5)
-            {
-            add_attack_dmg_max = SkillAttribute[CharacterAttribute->Skill[i]].Damage;
-            }
-            else
-            if (CharacterAttribute->Skill[i] >= AT_SKILL_MAX_ATT_MAGIC_UP && CharacterAttribute->Skill[i] < AT_SKILL_MAX_ATT_MAGIC_UP + 5)
-            {
-            add_mana_max = add_attack_dmg_max = SkillAttribute[CharacterAttribute->Skill[i]].Damage;
-            }
-            else
-            if (CharacterAttribute->Skill[i] >= AT_SKILL_MIN_ATT_MAGIC_UP && CharacterAttribute->Skill[i] < AT_SKILL_MIN_ATT_MAGIC_UP + 5)
-            {
-            add_magic_damage_min = add_attack_dmg_min = SkillAttribute[CharacterAttribute->Skill[i]].Damage;
-            }
-            else
-            if (CharacterAttribute->Skill[i] >= at_skill_mana && CharacterAttribute->Skill[i] < AT_SKILL_MAX_MANA_UP + 5)
-            {
-            add_mana_max = SkillAttribute[CharacterAttribute->Skill[i]].Damage;
-            }
-            else
-            if (CharacterAttribute->Skill[i] >= AT_SKILL_MIN_MANA_UP && CharacterAttribute->Skill[i] < AT_SKILL_MIN_MANA_UP + 5)
-            {
-            add_magic_damage_min = SkillAttribute[CharacterAttribute->Skill[i]].Damage;
-            }
-            else
-            if (CharacterAttribute->Skill[i] >= AT_SKILL_MIN_ATTACKRATE_UP && CharacterAttribute->Skill[i] < AT_SKILL_MIN_ATTACKRATE_UP + 5)
-            {
-                add_attack_dmg_min = SkillAttribute[CharacterAttribute->Skill[i]].Damage;
-            }*/
+        /*
+        else
+        if (CharacterAttribute->Skill[i] >= AT_SKILL_MAX_ATTACKRATE_UP && CharacterAttribute->Skill[i] <
+        AT_SKILL_MAX_ATTACKRATE_UP + 5)
+        {
+        add_attack_dmg_max = SkillAttribute[CharacterAttribute->Skill[i]].Damage;
+        }
+        else
+        if (CharacterAttribute->Skill[i] >= AT_SKILL_MAX_ATT_MAGIC_UP && CharacterAttribute->Skill[i] <
+        AT_SKILL_MAX_ATT_MAGIC_UP + 5)
+        {
+        add_mana_max = add_attack_dmg_max = SkillAttribute[CharacterAttribute->Skill[i]].Damage;
+        }
+        else
+        if (CharacterAttribute->Skill[i] >= AT_SKILL_MIN_ATT_MAGIC_UP && CharacterAttribute->Skill[i] <
+        AT_SKILL_MIN_ATT_MAGIC_UP + 5)
+        {
+        add_magic_damage_min = add_attack_dmg_min = SkillAttribute[CharacterAttribute->Skill[i]].Damage;
+        }
+        else
+        if (CharacterAttribute->Skill[i] >= at_skill_mana && CharacterAttribute->Skill[i] < AT_SKILL_MAX_MANA_UP + 5)
+        {
+        add_mana_max = SkillAttribute[CharacterAttribute->Skill[i]].Damage;
+        }
+        else
+        if (CharacterAttribute->Skill[i] >= AT_SKILL_MIN_MANA_UP && CharacterAttribute->Skill[i] < AT_SKILL_MIN_MANA_UP
+        + 5)
+        {
+        add_magic_damage_min = SkillAttribute[CharacterAttribute->Skill[i]].Damage;
+        }
+        else
+        if (CharacterAttribute->Skill[i] >= AT_SKILL_MIN_ATTACKRATE_UP && CharacterAttribute->Skill[i] <
+        AT_SKILL_MIN_ATTACKRATE_UP + 5)
+        {
+            add_attack_dmg_min = SkillAttribute[CharacterAttribute->Skill[i]].Damage;
+        }*/
     }
 
     ITEM* pWeaponRight = &CharacterMachine->Equipment[EQUIPMENT_WEAPON_RIGHT];
@@ -570,8 +572,8 @@ void SEASON3B::CNewUICharacterInfoWindow::RenderAttribute()
 
     if (g_isCharacterBuff((&Hero->Object), eBuff_Berserker))
     {
-        int nTemp = CharacterAttribute->Strength + CharacterAttribute->AddStrength
-            + CharacterAttribute->Dexterity + CharacterAttribute->AddDexterity;
+        int nTemp = CharacterAttribute->Strength + CharacterAttribute->AddStrength + CharacterAttribute->Dexterity +
+                    CharacterAttribute->AddDexterity;
         float fTemp = int(CharacterAttribute->Energy / 30) / 100.f;
         iAttackDamageMin += nTemp / 7 * fTemp;
         iAttackDamageMax += nTemp / 4 * fTemp;
@@ -691,7 +693,7 @@ void SEASON3B::CNewUICharacterInfoWindow::RenderAttribute()
         }
     }
 
-    ITEM* pItemRingLeft, * pItemRingRight;
+    ITEM *pItemRingLeft, *pItemRingRight;
 
     pItemRingLeft = &CharacterMachine->Equipment[EQUIPMENT_RING_LEFT];
     pItemRingRight = &CharacterMachine->Equipment[EQUIPMENT_RING_RIGHT];
@@ -710,17 +712,20 @@ void SEASON3B::CNewUICharacterInfoWindow::RenderAttribute()
 
         int maxIAttackDamageMin = 0;
         int maxIAttackDamageMax = 0;
-        if (iNonExpiredLRingType == ITEM_CHRISTMAS_TRANSFORMATION_RING || iNonExpiredRRingType == ITEM_CHRISTMAS_TRANSFORMATION_RING)
+        if (iNonExpiredLRingType == ITEM_CHRISTMAS_TRANSFORMATION_RING ||
+            iNonExpiredRRingType == ITEM_CHRISTMAS_TRANSFORMATION_RING)
         {
             maxIAttackDamageMin = std::max<int>(maxIAttackDamageMin, 20);
             maxIAttackDamageMax = std::max<int>(maxIAttackDamageMax, 20);
         }
-        if (iNonExpiredLRingType == ITEM_PANDA_TRANSFORMATION_RING || iNonExpiredRRingType == ITEM_PANDA_TRANSFORMATION_RING)
+        if (iNonExpiredLRingType == ITEM_PANDA_TRANSFORMATION_RING ||
+            iNonExpiredRRingType == ITEM_PANDA_TRANSFORMATION_RING)
         {
             maxIAttackDamageMin = std::max<int>(maxIAttackDamageMin, 30);
             maxIAttackDamageMax = std::max<int>(maxIAttackDamageMax, 30);
         }
-        if (iNonExpiredLRingType == ITEM_SKELETON_TRANSFORMATION_RING || iNonExpiredRRingType == ITEM_SKELETON_TRANSFORMATION_RING)
+        if (iNonExpiredLRingType == ITEM_SKELETON_TRANSFORMATION_RING ||
+            iNonExpiredRRingType == ITEM_SKELETON_TRANSFORMATION_RING)
         {
             maxIAttackDamageMin = std::max<int>(maxIAttackDamageMin, 40);
             maxIAttackDamageMax = std::max<int>(maxIAttackDamageMax, 40);
@@ -766,11 +771,13 @@ void SEASON3B::CNewUICharacterInfoWindow::RenderAttribute()
     {
         if (iAttackDamageMin + iMinIndex >= iAttackDamageMax + iMaxIndex)
         {
-            mu_swprintf(strAttakMamage, GlobalText[203], iAttackDamageMax + iMaxIndex, iAttackDamageMax + iMaxIndex, iAttackRating);
+            mu_swprintf(strAttakMamage, GlobalText[203], iAttackDamageMax + iMaxIndex, iAttackDamageMax + iMaxIndex,
+                        iAttackRating);
         }
         else
         {
-            mu_swprintf(strAttakMamage, GlobalText[203], iAttackDamageMin + iMinIndex, iAttackDamageMax + iMaxIndex, iAttackRating);
+            mu_swprintf(strAttakMamage, GlobalText[203], iAttackDamageMin + iMinIndex, iAttackDamageMax + iMaxIndex,
+                        iAttackRating);
         }
     }
     else
@@ -837,15 +844,14 @@ void SEASON3B::CNewUICharacterInfoWindow::RenderAttribute()
     {
         g_pRenderText->SetTextColor(255, 120, 0, 255);
     }
+    else if (CharacterAttribute->AddDexterity)
+    {
+        g_pRenderText->SetTextColor(100, 150, 255, 255);
+    }
     else
-        if (CharacterAttribute->AddDexterity)
-        {
-            g_pRenderText->SetTextColor(100, 150, 255, 255);
-        }
-        else
-        {
-            g_pRenderText->SetTextColor(230, 230, 0, 255);
-        }
+    {
+        g_pRenderText->SetTextColor(230, 230, 0, 255);
+    }
 
     wchar_t strDexterity[32];
     WORD wDexterity = CharacterAttribute->Dexterity + CharacterAttribute->AddDexterity;
@@ -860,8 +866,8 @@ void SEASON3B::CNewUICharacterInfoWindow::RenderAttribute()
     {
         if (iBaseClass == CLASS_DARK)
         {
-            if ((CharacterMachine->Equipment[i].Type == -1 && (i != EQUIPMENT_HELM && iBaseClass == CLASS_DARK))
-                || (CharacterMachine->Equipment[i].Type != -1 && CharacterMachine->Equipment[i].Durability <= 0))
+            if ((CharacterMachine->Equipment[i].Type == -1 && (i != EQUIPMENT_HELM && iBaseClass == CLASS_DARK)) ||
+                (CharacterMachine->Equipment[i].Type != -1 && CharacterMachine->Equipment[i].Durability <= 0))
             {
                 bDexSuccess = false;
                 break;
@@ -869,8 +875,9 @@ void SEASON3B::CNewUICharacterInfoWindow::RenderAttribute()
         }
         else if (iBaseClass == CLASS_RAGEFIGHTER)
         {
-            if ((CharacterMachine->Equipment[i].Type == -1 && (i != EQUIPMENT_GLOVES && iBaseClass == CLASS_RAGEFIGHTER))
-                || (CharacterMachine->Equipment[i].Type != -1 && CharacterMachine->Equipment[i].Durability <= 0))
+            if ((CharacterMachine->Equipment[i].Type == -1 &&
+                 (i != EQUIPMENT_GLOVES && iBaseClass == CLASS_RAGEFIGHTER)) ||
+                (CharacterMachine->Equipment[i].Type != -1 && CharacterMachine->Equipment[i].Durability <= 0))
             {
                 bDexSuccess = false;
                 break;
@@ -894,15 +901,9 @@ void SEASON3B::CNewUICharacterInfoWindow::RenderAttribute()
         {
             iType = CharacterMachine->Equipment[EQUIPMENT_ARMOR].Type;
 
-            if (
-                (iType != ITEM_STORM_CROW_ARMOR)
-                && (iType != ITEM_THUNDER_HAWK_ARMOR)
-                && (iType != ITEM_HURRICANE_ARMOR)
-                && (iType != ITEM_VOLCANO_ARMOR)
-                && (iType != ITEM_VALIANT_ARMOR)
-                && (iType != ITEM_DESTORY_ARMOR)
-                && (iType != ITEM_PHANTOM_ARMOR)
-                )
+            if ((iType != ITEM_STORM_CROW_ARMOR) && (iType != ITEM_THUNDER_HAWK_ARMOR) &&
+                (iType != ITEM_HURRICANE_ARMOR) && (iType != ITEM_VOLCANO_ARMOR) && (iType != ITEM_VALIANT_ARMOR) &&
+                (iType != ITEM_DESTORY_ARMOR) && (iType != ITEM_PHANTOM_ARMOR))
             {
                 bDexSuccess = false;
             }
@@ -973,7 +974,8 @@ void SEASON3B::CNewUICharacterInfoWindow::RenderAttribute()
 
     pItemRingLeft = &CharacterMachine->Equipment[EQUIPMENT_RING_LEFT];
     pItemRingRight = &CharacterMachine->Equipment[EQUIPMENT_RING_RIGHT];
-    if (pItemRingLeft->Type == ITEM_ELITE_TRANSFER_SKELETON_RING || pItemRingRight->Type == ITEM_ELITE_TRANSFER_SKELETON_RING)
+    if (pItemRingLeft->Type == ITEM_ELITE_TRANSFER_SKELETON_RING ||
+        pItemRingRight->Type == ITEM_ELITE_TRANSFER_SKELETON_RING)
     {
         iChangeRingAddDefense = (t_adjdef + maxdefense) / 10;
     }
@@ -1005,17 +1007,19 @@ void SEASON3B::CNewUICharacterInfoWindow::RenderAttribute()
             if (nAdd_FulBlocking)
             {
                 mu_swprintf(strBlocking, GlobalText[206], t_adjdef + maxdefense + iChangeRingAddDefense,
-                    CharacterAttribute->SuccessfulBlocking, (CharacterAttribute->SuccessfulBlocking) / 10 + nAdd_FulBlocking);
+                            CharacterAttribute->SuccessfulBlocking,
+                            (CharacterAttribute->SuccessfulBlocking) / 10 + nAdd_FulBlocking);
             }
             else
             {
                 mu_swprintf(strBlocking, GlobalText[206], t_adjdef + maxdefense + iChangeRingAddDefense,
-                    CharacterAttribute->SuccessfulBlocking, (CharacterAttribute->SuccessfulBlocking) / 10);
+                            CharacterAttribute->SuccessfulBlocking, (CharacterAttribute->SuccessfulBlocking) / 10);
             }
         }
         else
         {
-            mu_swprintf(strBlocking, GlobalText[207], t_adjdef + maxdefense + iChangeRingAddDefense, (t_adjdef + iChangeRingAddDefense) / 10);
+            mu_swprintf(strBlocking, GlobalText[207], t_adjdef + maxdefense + iChangeRingAddDefense,
+                        (t_adjdef + iChangeRingAddDefense) / 10);
         }
     }
     else
@@ -1024,19 +1028,19 @@ void SEASON3B::CNewUICharacterInfoWindow::RenderAttribute()
         {
             if (nAdd_FulBlocking)
             {
-                mu_swprintf(strBlocking, GlobalText[206], t_adjdef + maxdefense + iChangeRingAddDefense, CharacterAttribute->SuccessfulBlocking, nAdd_FulBlocking);
+                mu_swprintf(strBlocking, GlobalText[206], t_adjdef + maxdefense + iChangeRingAddDefense,
+                            CharacterAttribute->SuccessfulBlocking, nAdd_FulBlocking);
             }
             else
             {
-                mu_swprintf(strBlocking, GlobalText[208], t_adjdef + maxdefense + iChangeRingAddDefense, CharacterAttribute->SuccessfulBlocking);
+                mu_swprintf(strBlocking, GlobalText[208], t_adjdef + maxdefense + iChangeRingAddDefense,
+                            CharacterAttribute->SuccessfulBlocking);
             }
         }
         else
         {
             // 209
-            mu_swprintf(strBlocking, GlobalText[209],
-                t_adjdef + maxdefense + iChangeRingAddDefense
-            );
+            mu_swprintf(strBlocking, GlobalText[209], t_adjdef + maxdefense + iChangeRingAddDefense);
         }
     }
 
@@ -1059,8 +1063,8 @@ void SEASON3B::CNewUICharacterInfoWindow::RenderAttribute()
     g_pRenderText->SetBgColor(0);
     g_pRenderText->RenderText(m_Pos.x + 20, m_Pos.y + iY, strBlocking);
 
-    WORD wAttackSpeed = CLASS_WIZARD == iBaseClass || CLASS_SUMMONER == iBaseClass
-        ? CharacterAttribute->MagicSpeed : CharacterAttribute->AttackSpeed;
+    WORD wAttackSpeed = CLASS_WIZARD == iBaseClass || CLASS_SUMMONER == iBaseClass ? CharacterAttribute->MagicSpeed
+                                                                                   : CharacterAttribute->AttackSpeed;
 
     mu_swprintf(strBlocking, GlobalText[64], wAttackSpeed);
     iY += 13;
@@ -1079,8 +1083,7 @@ void SEASON3B::CNewUICharacterInfoWindow::RenderAttribute()
     }
 
     ITEM* phelper = &CharacterMachine->Equipment[EQUIPMENT_HELPER];
-    if (phelper->Durability != 0 &&
-        (phelper->Type == ITEM_DEMON || phelper->Type == ITEM_PET_SKELETON))
+    if (phelper->Durability != 0 && (phelper->Type == ITEM_DEMON || phelper->Type == ITEM_PET_SKELETON))
     {
         if (IsRequireEquipItem(phelper))
         {
@@ -1095,11 +1098,14 @@ void SEASON3B::CNewUICharacterInfoWindow::RenderAttribute()
 
     if (itemoption380Defense != 0 || iDefenseRate != 0)
     {
-        mu_swprintf(strBlocking, GlobalText[2110], CharacterAttribute->SuccessfulBlockingPK + add_defense_success_rate_pvp, itemoption380Defense + iDefenseRate);
+        mu_swprintf(strBlocking, GlobalText[2110],
+                    CharacterAttribute->SuccessfulBlockingPK + add_defense_success_rate_pvp,
+                    itemoption380Defense + iDefenseRate);
     }
     else
     {
-        mu_swprintf(strBlocking, GlobalText[2045], CharacterAttribute->SuccessfulBlockingPK + add_defense_success_rate_pvp);
+        mu_swprintf(strBlocking, GlobalText[2045],
+                    CharacterAttribute->SuccessfulBlockingPK + add_defense_success_rate_pvp);
     }
 
     iY += 13;
@@ -1181,7 +1187,7 @@ void SEASON3B::CNewUICharacterInfoWindow::RenderAttribute()
     if (iBaseClass == CLASS_RAGEFIGHTER)
     {
         iY += 13;
-        //물리공격력
+        // 물리공격력
         mu_swprintf(strVitality, GlobalText[3155], 50 + (wVitality / 10));
         g_pRenderText->RenderText(m_Pos.x + 20, m_Pos.y + iY, strVitality);
     }
@@ -1194,15 +1200,14 @@ void SEASON3B::CNewUICharacterInfoWindow::RenderAttribute()
     {
         g_pRenderText->SetTextColor(255, 120, 0, 255);
     }
+    else if (CharacterAttribute->AddEnergy)
+    {
+        g_pRenderText->SetTextColor(100, 150, 255, 255);
+    }
     else
-        if (CharacterAttribute->AddEnergy)
-        {
-            g_pRenderText->SetTextColor(100, 150, 255, 255);
-        }
-        else
-        {
-            g_pRenderText->SetTextColor(230, 230, 0, 255);
-        }
+    {
+        g_pRenderText->SetTextColor(230, 230, 0, 255);
+    }
 
     wchar_t strEnergy[256];
     mu_swprintf(strEnergy, L"%d", wEnergy);
@@ -1247,7 +1252,8 @@ void SEASON3B::CNewUICharacterInfoWindow::RenderAttribute()
         int iMagicDamageMin;
         int iMagicDamageMax;
 
-        gCharacterManager.GetMagicSkillDamage(CharacterAttribute->Skill[Hero->CurrentSkill], &iMagicDamageMin, &iMagicDamageMax);
+        gCharacterManager.GetMagicSkillDamage(CharacterAttribute->Skill[Hero->CurrentSkill], &iMagicDamageMin,
+                                              &iMagicDamageMax);
 
         int iMagicDamageMinInitial = iMagicDamageMin;
         int iMagicDamageMaxInitial = iMagicDamageMax;
@@ -1297,17 +1303,20 @@ void SEASON3B::CNewUICharacterInfoWindow::RenderAttribute()
         int maxIMagicDamageMin = 0;
         int maxIMagicDamageMax = 0;
 
-        if (iNonExpiredLRingType == ITEM_CHRISTMAS_TRANSFORMATION_RING || iNonExpiredRRingType == ITEM_CHRISTMAS_TRANSFORMATION_RING)
+        if (iNonExpiredLRingType == ITEM_CHRISTMAS_TRANSFORMATION_RING ||
+            iNonExpiredRRingType == ITEM_CHRISTMAS_TRANSFORMATION_RING)
         {
             maxIMagicDamageMin = std::max<int>(maxIMagicDamageMin, 20);
             maxIMagicDamageMax = std::max<int>(maxIMagicDamageMax, 20);
         }
-        if (iNonExpiredLRingType == ITEM_PANDA_TRANSFORMATION_RING || iNonExpiredRRingType == ITEM_PANDA_TRANSFORMATION_RING)
+        if (iNonExpiredLRingType == ITEM_PANDA_TRANSFORMATION_RING ||
+            iNonExpiredRRingType == ITEM_PANDA_TRANSFORMATION_RING)
         {
             maxIMagicDamageMin = std::max<int>(maxIMagicDamageMin, 30);
             maxIMagicDamageMax = std::max<int>(maxIMagicDamageMax, 30);
         }
-        if (iNonExpiredLRingType == ITEM_SKELETON_TRANSFORMATION_RING || iNonExpiredRRingType == ITEM_SKELETON_TRANSFORMATION_RING)
+        if (iNonExpiredLRingType == ITEM_SKELETON_TRANSFORMATION_RING ||
+            iNonExpiredRRingType == ITEM_SKELETON_TRANSFORMATION_RING)
         {
             maxIMagicDamageMin = std::max<int>(maxIMagicDamageMin, 40);
             maxIMagicDamageMax = std::max<int>(maxIMagicDamageMax, 40);
@@ -1357,22 +1366,23 @@ void SEASON3B::CNewUICharacterInfoWindow::RenderAttribute()
             iMagicDamageMax += nTemp / 4 * fTemp;
         }
 
-        if ((pWeaponRight->Type >= MODEL_STAFF - MODEL_ITEM
-            && pWeaponRight->Type < (MODEL_STAFF + MAX_ITEM_INDEX - MODEL_ITEM))
-            || pWeaponRight->Type == (MODEL_RUNE_BLADE - MODEL_ITEM)
-            || pWeaponRight->Type == (MODEL_EXPLOSION_BLADE - MODEL_ITEM)
-            || pWeaponRight->Type == (MODEL_SWORD_DANCER - MODEL_ITEM)
-            || pWeaponRight->Type == (MODEL_DARK_REIGN_BLADE - MODEL_ITEM)
-            || pWeaponRight->Type == (MODEL_IMPERIAL_SWORD - MODEL_ITEM)
-            )
+        if ((pWeaponRight->Type >= MODEL_STAFF - MODEL_ITEM &&
+             pWeaponRight->Type < (MODEL_STAFF + MAX_ITEM_INDEX - MODEL_ITEM)) ||
+            pWeaponRight->Type == (MODEL_RUNE_BLADE - MODEL_ITEM) ||
+            pWeaponRight->Type == (MODEL_EXPLOSION_BLADE - MODEL_ITEM) ||
+            pWeaponRight->Type == (MODEL_SWORD_DANCER - MODEL_ITEM) ||
+            pWeaponRight->Type == (MODEL_DARK_REIGN_BLADE - MODEL_ITEM) ||
+            pWeaponRight->Type == (MODEL_IMPERIAL_SWORD - MODEL_ITEM))
         {
             float magicPercent = (float)(pWeaponRight->MagicPower) / 100;
 
             ITEM_ATTRIBUTE* p = &ItemAttribute[pWeaponRight->Type];
-            float   percent = CalcDurabilityPercent(pWeaponRight->Durability, p->MagicDur, pWeaponRight->Level, pWeaponRight->ExcellentFlags, pWeaponRight->AncientDiscriminator);
+            float percent = CalcDurabilityPercent(pWeaponRight->Durability, p->MagicDur, pWeaponRight->Level,
+                                                  pWeaponRight->ExcellentFlags, pWeaponRight->AncientDiscriminator);
 
             magicPercent = magicPercent - magicPercent * percent;
-            mu_swprintf(strEnergy, GlobalText[215], iMagicDamageMin + maxMg, iMagicDamageMax + maxMg, (int)((iMagicDamageMaxInitial + maxMg) * magicPercent));
+            mu_swprintf(strEnergy, GlobalText[215], iMagicDamageMin + maxMg, iMagicDamageMax + maxMg,
+                        (int)((iMagicDamageMaxInitial + maxMg) * magicPercent));
         }
         else
         {
@@ -1405,7 +1415,8 @@ void SEASON3B::CNewUICharacterInfoWindow::RenderAttribute()
         int iCurseDamageMin = 0;
         int iCurseDamageMax = 0;
 
-        gCharacterManager.GetCurseSkillDamage(CharacterAttribute->Skill[Hero->CurrentSkill], &iCurseDamageMin, &iCurseDamageMax);
+        gCharacterManager.GetCurseSkillDamage(CharacterAttribute->Skill[Hero->CurrentSkill], &iCurseDamageMin,
+                                              &iCurseDamageMax);
 
         if (g_isCharacterBuff((&Hero->Object), eBuff_Berserker))
         {
@@ -1430,12 +1441,14 @@ void SEASON3B::CNewUICharacterInfoWindow::RenderAttribute()
         int maxICurseDamageMin = 0;
         int maxICurseDamageMax = 0;
 
-        if (iNonExpiredLRingType == ITEM_PANDA_TRANSFORMATION_RING || iNonExpiredRRingType == ITEM_PANDA_TRANSFORMATION_RING)
+        if (iNonExpiredLRingType == ITEM_PANDA_TRANSFORMATION_RING ||
+            iNonExpiredRRingType == ITEM_PANDA_TRANSFORMATION_RING)
         {
             maxICurseDamageMin = std::max<int>(maxICurseDamageMin, 30);
             maxICurseDamageMax = std::max<int>(maxICurseDamageMax, 30);
         }
-        if (iNonExpiredLRingType == ITEM_SKELETON_TRANSFORMATION_RING || iNonExpiredRRingType == ITEM_SKELETON_TRANSFORMATION_RING)
+        if (iNonExpiredLRingType == ITEM_SKELETON_TRANSFORMATION_RING ||
+            iNonExpiredRRingType == ITEM_SKELETON_TRANSFORMATION_RING)
         {
             maxICurseDamageMin = std::max<int>(maxICurseDamageMin, 40);
             maxICurseDamageMax = std::max<int>(maxICurseDamageMax, 40);
@@ -1470,19 +1483,16 @@ void SEASON3B::CNewUICharacterInfoWindow::RenderAttribute()
             float fCursePercent = (float)(pWeaponLeft->MagicPower) / 100;
 
             ITEM_ATTRIBUTE* p = &ItemAttribute[pWeaponLeft->Type];
-            float fPercent = ::CalcDurabilityPercent(pWeaponLeft->Durability,
-                p->MagicDur, pWeaponLeft->Level, pWeaponLeft->ExcellentFlags,
-                pWeaponLeft->AncientDiscriminator);
+            float fPercent = ::CalcDurabilityPercent(pWeaponLeft->Durability, p->MagicDur, pWeaponLeft->Level,
+                                                     pWeaponLeft->ExcellentFlags, pWeaponLeft->AncientDiscriminator);
 
             fCursePercent -= fCursePercent * fPercent;
-            mu_swprintf(strEnergy, GlobalText[1693],
-                iCurseDamageMin, iCurseDamageMax,
-                (int)((iCurseDamageMax)*fCursePercent));
+            mu_swprintf(strEnergy, GlobalText[1693], iCurseDamageMin, iCurseDamageMax,
+                        (int)((iCurseDamageMax)*fCursePercent));
         }
         else
         {
-            mu_swprintf(strEnergy, GlobalText[1694],
-                iCurseDamageMin, iCurseDamageMax);
+            mu_swprintf(strEnergy, GlobalText[1694], iCurseDamageMin, iCurseDamageMax);
         }
 
         iY += 13;
@@ -1508,11 +1518,11 @@ void SEASON3B::CNewUICharacterInfoWindow::RenderAttribute()
 
     if (iBaseClass == CLASS_RAGEFIGHTER)
     {
-        //마법공격력
+        // 마법공격력
         mu_swprintf(strEnergy, GlobalText[3156], 50 + (wEnergy / 10));
         g_pRenderText->RenderText(m_Pos.x + 20, m_Pos.y + iY, strEnergy);
         iY += 13;
-        //범위공격력
+        // 범위공격력
         mu_swprintf(strEnergy, GlobalText[3157], 100 + (wDexterity / 8 + wEnergy / 10));
         g_pRenderText->RenderText(m_Pos.x + 20, m_Pos.y + iY, strEnergy);
     }
@@ -1533,17 +1543,18 @@ void SEASON3B::CNewUICharacterInfoWindow::RenderAttribute()
         else
 
             if (CharacterAttribute->AddCharisma)
-            {
-                g_pRenderText->SetTextColor(100, 150, 255, 255);
-            }
-            else
-            {
-                g_pRenderText->SetTextColor(230, 230, 0, 255);
-            }
+        {
+            g_pRenderText->SetTextColor(100, 150, 255, 255);
+        }
+        else
+        {
+            g_pRenderText->SetTextColor(230, 230, 0, 255);
+        }
 
         wchar_t strCharisma[256];
         mu_swprintf(strCharisma, L"%d", wCharisma);
-        g_pRenderText->RenderText(m_Pos.x + 12, m_Pos.y + HEIGHT_CHARISMA + 6, GlobalText[1900], 74, 0, RT3_SORT_CENTER);
+        g_pRenderText->RenderText(m_Pos.x + 12, m_Pos.y + HEIGHT_CHARISMA + 6, GlobalText[1900], 74, 0,
+                                  RT3_SORT_CENTER);
         g_pRenderText->RenderText(m_Pos.x + 86, m_Pos.y + HEIGHT_CHARISMA + 6, strCharisma, 86, 0, RT3_SORT_CENTER);
     }
 }

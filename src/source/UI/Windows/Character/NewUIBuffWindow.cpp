@@ -15,11 +15,11 @@ using namespace SEASON3B;
 
 namespace
 {
-    const float BUFF_IMG_WIDTH = 20.0f;
-    const float BUFF_IMG_HEIGHT = 28.0f;
-    const int BUFF_MAX_LINE_COUNT = 8;
-    const int BUFF_IMG_SPACE = 5;
-};
+const float BUFF_IMG_WIDTH = 20.0f;
+const float BUFF_IMG_HEIGHT = 28.0f;
+const int BUFF_MAX_LINE_COUNT = 8;
+const int BUFF_IMG_SPACE = 5;
+}; // namespace
 
 SEASON3B::CNewUIBuffWindow::CNewUIBuffWindow()
 {
@@ -68,19 +68,24 @@ void SEASON3B::CNewUIBuffWindow::SetPos(int x, int y)
 
 void SEASON3B::CNewUIBuffWindow::SetPos(int iScreenWidth)
 {
-    if (iScreenWidth == 640) {
+    if (iScreenWidth == 640)
+    {
         SetPos(220, 15);
     }
-    else if (iScreenWidth == 450) {
+    else if (iScreenWidth == 450)
+    {
         SetPos(125, 15);
     }
-    else if (iScreenWidth == 373) {
+    else if (iScreenWidth == 373)
+    {
         SetPos(86, 15);
     }
-    else if (iScreenWidth == 260) {
+    else if (iScreenWidth == 260)
+    {
         SetPos(30, 15);
     }
-    else {
+    else
+    {
         SetPos(220, 15);
     }
 }
@@ -95,18 +100,23 @@ void SEASON3B::CNewUIBuffWindow::BuffSort(std::list<eBuffState>& buffstate)
     {
         eBuffState eBuffType = g_CharacterBuff(pHeroObject, i);
 
-        if (SetDisableRenderBuff(eBuffType))	continue;
+        if (SetDisableRenderBuff(eBuffType))
+            continue;
 
-        if (eBuffType != eBuffNone) {
+        if (eBuffType != eBuffNone)
+        {
             eBuffClass eBuffClassType = g_IsBuffClass(eBuffType);
 
-            if (eBuffClassType == eBuffClass_Buff) {
+            if (eBuffClassType == eBuffClass_Buff)
+            {
                 buffstate.push_front(eBuffType);
             }
-            else if (eBuffClassType == eBuffClass_DeBuff) {
+            else if (eBuffClassType == eBuffClass_DeBuff)
+            {
                 buffstate.push_back(eBuffType);
             }
-            else {
+            else
+            {
                 assert(!"SetDisableRenderBuff");
             }
         }
@@ -119,7 +129,7 @@ bool SEASON3B::CNewUIBuffWindow::SetDisableRenderBuff(const eBuffState& _BuffSta
     {
 #ifdef PBG_ADD_PKSYSTEM_INGAMESHOP
     case eDeBuff_MoveCommandWin:
-#endif //PBG_ADD_PKSYSTEM_INGAMESHOP
+#endif // PBG_ADD_PKSYSTEM_INGAMESHOP
     case eDeBuff_FlameStrikeDamage:
     case eDeBuff_GiganticStormDamage:
     case eDeBuff_LightningShockDamage:
@@ -140,7 +150,7 @@ bool SEASON3B::CNewUIBuffWindow::UpdateMouseEvent()
     BuffSort(buffstate);
 
     std::list<eBuffState>::iterator iter;
-    for (iter = buffstate.begin(); iter != buffstate.end(); )
+    for (iter = buffstate.begin(); iter != buffstate.end();)
     {
         auto tempiter = iter;
         ++iter;
@@ -169,7 +179,8 @@ bool SEASON3B::CNewUIBuffWindow::UpdateMouseEvent()
             return false;
         }
 
-        if (++buffwidthcount >= BUFF_MAX_LINE_COUNT) {
+        if (++buffwidthcount >= BUFF_MAX_LINE_COUNT)
+        {
             buffwidthcount = 0;
             ++buffheightcount;
         }
@@ -212,7 +223,7 @@ void SEASON3B::CNewUIBuffWindow::RenderBuffStatus(BUFF_RENDER renderstate)
     BuffSort(buffstate);
 
     std::list<eBuffState>::iterator iter;
-    for (iter = buffstate.begin(); iter != buffstate.end(); )
+    for (iter = buffstate.begin(); iter != buffstate.end();)
     {
         auto tempiter = iter;
         ++iter;
@@ -232,7 +243,8 @@ void SEASON3B::CNewUIBuffWindow::RenderBuffStatus(BUFF_RENDER renderstate)
         else if (renderstate == BUFF_RENDER_TOOLTIP)
         {
             // ���� ���� ������
-            if (SEASON3B::CheckMouseIn(x, y, BUFF_IMG_WIDTH, BUFF_IMG_HEIGHT)) {
+            if (SEASON3B::CheckMouseIn(x, y, BUFF_IMG_WIDTH, BUFF_IMG_HEIGHT))
+            {
                 float fTooltip_x = x + (BUFF_IMG_WIDTH / 2);
                 float fTooltip_y = y + BUFF_IMG_WIDTH;
                 eBuffClass buffclass = g_IsBuffClass(buff);
@@ -240,7 +252,8 @@ void SEASON3B::CNewUIBuffWindow::RenderBuffStatus(BUFF_RENDER renderstate)
             }
         }
 
-        if (++buffwidthcount >= BUFF_MAX_LINE_COUNT) {
+        if (++buffwidthcount >= BUFF_MAX_LINE_COUNT)
+        {
             buffwidthcount = 0;
             ++buffheightcount;
         }
@@ -265,7 +278,7 @@ void SEASON3B::CNewUIBuffWindow::RenderBuffIcon(eBuffState& eBuffType, float x, 
     else
     {
         // eBuff_Santa
-        iWidthIndex = (eBuffType - 81) % 10; // eBuff_Berserker
+        iWidthIndex = (eBuffType - 81) % 10;  // eBuff_Berserker
         iHeightIndex = (eBuffType - 81) / 10; // eBuff_Berserker
 
         u = iWidthIndex * width / 256.f;
@@ -316,23 +329,19 @@ void SEASON3B::CNewUIBuffWindow::RenderBuffTooltip(eBuffClass& eBuffClassType, e
         TextNum += 1;
     }
 
-    SIZE TextSize = { 0, 0 };
+    SIZE TextSize = {0, 0};
     GetTextExtentPoint32(g_pRenderText->GetFontDC(), TextList[0], 1, &TextSize);
     RenderTipTextList(x, y, TextNum, 0);
 }
 
-float SEASON3B::CNewUIBuffWindow::GetLayerDepth()	//. 5.3f
+float SEASON3B::CNewUIBuffWindow::GetLayerDepth() //. 5.3f
 {
     return 0.95f;
 }
 
-void SEASON3B::CNewUIBuffWindow::OpenningProcess()
-{
-}
+void SEASON3B::CNewUIBuffWindow::OpenningProcess() {}
 
-void SEASON3B::CNewUIBuffWindow::ClosingProcess()
-{
-}
+void SEASON3B::CNewUIBuffWindow::ClosingProcess() {}
 
 void SEASON3B::CNewUIBuffWindow::LoadImages()
 {

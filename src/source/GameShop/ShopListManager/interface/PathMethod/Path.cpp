@@ -18,7 +18,8 @@
 
 TCHAR* Path::GetCurrentFullPath(TCHAR* szPath)
 {
-    if (!szPath) return 0;
+    if (!szPath)
+        return 0;
 
     GetModuleFileName(0, szPath, MAX_PATH);
 
@@ -27,13 +28,15 @@ TCHAR* Path::GetCurrentFullPath(TCHAR* szPath)
 
 TCHAR* Path::GetCurrentDirectory(TCHAR* szPath)
 {
-    if (!szPath) return 0;
+    if (!szPath)
+        return 0;
 
     GetModuleFileName(0, szPath, MAX_PATH);
 
     wchar_t* chr = wcsrchr(szPath, '\\');
 
-    if (!chr) return 0;
+    if (!chr)
+        return 0;
 
     (*chr) = 0;
 
@@ -42,7 +45,8 @@ TCHAR* Path::GetCurrentDirectory(TCHAR* szPath)
 
 TCHAR* Path::GetCurrentFileName(TCHAR* szPath)
 {
-    if (!szPath) return 0;
+    if (!szPath)
+        return 0;
 
     GetModuleFileName(0, szPath, MAX_PATH);
 
@@ -51,7 +55,8 @@ TCHAR* Path::GetCurrentFileName(TCHAR* szPath)
 
 TCHAR* Path::SetDirString(TCHAR* szPath)
 {
-    if (!szPath) return 0;
+    if (!szPath)
+        return 0;
 
     if ((*szPath))
     {
@@ -75,7 +80,8 @@ TCHAR* Path::SetDirString(TCHAR* szPath)
 
 TCHAR* Path::ClearDirString(TCHAR* szPath)
 {
-    if (!szPath || !(*szPath)) return szPath;
+    if (!szPath || !(*szPath))
+        return szPath;
 
     std::size_t len = 0;
     StringCchLength(szPath, MAX_PATH, &len);
@@ -100,7 +106,8 @@ TCHAR* Path::ClearDirString(TCHAR* szPath)
 
 TCHAR* Path::GetDirectory(TCHAR* szPath)
 {
-    if (!szPath || !(*szPath)) return szPath;
+    if (!szPath || !(*szPath))
+        return szPath;
 
     wchar_t* chr = wcsrchr(szPath, '\\');
 
@@ -117,7 +124,8 @@ TCHAR* Path::GetDirectory(TCHAR* szPath)
 
 TCHAR* Path::GetFileName(TCHAR* szPath)
 {
-    if (!szPath || !(*szPath)) return szPath;
+    if (!szPath || !(*szPath))
+        return szPath;
 
     wchar_t* chr = wcsrchr(szPath, L'\\');
 
@@ -132,7 +140,8 @@ TCHAR* Path::GetFileName(TCHAR* szPath)
 
 TCHAR* Path::ChangeSlashToBackSlash(TCHAR* szPath)
 {
-    if (!szPath || !(*szPath)) return szPath;
+    if (!szPath || !(*szPath))
+        return szPath;
 
     std::size_t len = 0;
     StringCchLength(szPath, MAX_PATH, &len);
@@ -148,7 +157,8 @@ TCHAR* Path::ChangeSlashToBackSlash(TCHAR* szPath)
 
 TCHAR* Path::ChangeBackSlashToSlash(TCHAR* szPath)
 {
-    if (!szPath || !(*szPath)) return szPath;
+    if (!szPath || !(*szPath))
+        return szPath;
 
     std::size_t len = 0;
     StringCchLength(szPath, MAX_PATH, &len);
@@ -162,11 +172,11 @@ TCHAR* Path::ChangeBackSlashToSlash(TCHAR* szPath)
     return szPath;
 }
 
-BOOL			Path::ReadFileLastLine(TCHAR* szFile, TCHAR* szLastLine)
+BOOL Path::ReadFileLastLine(TCHAR* szFile, TCHAR* szLastLine)
 {
     std::ifstream ifs(szFile, std::ifstream::in | std::ifstream::binary);
 
-    char buff[1024] = { 0 };
+    char buff[1024] = {0};
 
     if (szFile && szLastLine && *szFile && ifs.is_open())
     {
@@ -180,7 +190,7 @@ BOOL			Path::ReadFileLastLine(TCHAR* szFile, TCHAR* szLastLine)
             StringCchLengthA(buff, sizeof(buff), &len);
 
             // TODO convert buff to utf8
-            //if (len > 1)
+            // if (len > 1)
             //    StringCchCopy(szLastLine, sizeof(buff), buff);
         }
 
@@ -198,9 +208,10 @@ BOOL			Path::ReadFileLastLine(TCHAR* szFile, TCHAR* szLastLine)
     return 0;
 }
 
-BOOL			Path::WriteNewFile(TCHAR* szFile, TCHAR* szText, INT nTextSize)
+BOOL Path::WriteNewFile(TCHAR* szFile, TCHAR* szText, INT nTextSize)
 {
-    if (!szFile || !szText) return 0;
+    if (!szFile || !szText)
+        return 0;
 
     std::wfstream ofs(szFile, std::wfstream::out | std::wfstream::trunc | std::wfstream::binary);
 
@@ -216,13 +227,14 @@ BOOL			Path::WriteNewFile(TCHAR* szFile, TCHAR* szText, INT nTextSize)
     return 0;
 }
 
-BOOL			Path::CreateDirectorys(TCHAR* szFilePath, BOOL bIsFile)
+BOOL Path::CreateDirectorys(TCHAR* szFilePath, BOOL bIsFile)
 
 {
-    if (!szFilePath || !(*szFilePath)) return 0;
+    if (!szFilePath || !(*szFilePath))
+        return 0;
 
-    wchar_t PathName[MAX_PATH] = { 0 };
-    wchar_t buff2[MAX_PATH] = { 0 };
+    wchar_t PathName[MAX_PATH] = {0};
+    wchar_t buff2[MAX_PATH] = {0};
 
     StringCchCopy(PathName, sizeof(PathName), szFilePath);
 

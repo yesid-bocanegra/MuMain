@@ -43,7 +43,8 @@ void CLoadData::AccessModel(int Type, const wchar_t* Dir, const wchar_t* FileNam
     {
         g_ErrorReport.Write(L"AccessModel failed: %ls%ls (Type=%d)\r\n", Dir, Name, Type);
 
-        if (wcscmp(FileName, L"Monster") == NULL || wcscmp(FileName, L"Player") == NULL || wcscmp(FileName, L"PlayerTest") == NULL || wcscmp(FileName, L"Angel") == NULL)
+        if (wcscmp(FileName, L"Monster") == NULL || wcscmp(FileName, L"Player") == NULL ||
+            wcscmp(FileName, L"PlayerTest") == NULL || wcscmp(FileName, L"Angel") == NULL)
         {
             wchar_t Text[256];
             mu_swprintf(Text, L"%ls file does not exist.", Name);
@@ -65,12 +66,16 @@ void CLoadData::OpenTexture(int Model, const wchar_t* SubFolder, int Wrap, int T
         auto* textureFileName = new wchar_t[wchars_num];
         MultiByteToWideChar(CP_UTF8, 0, pTexture->FileName, -1, textureFileName, wchars_num);
 
-        wchar_t szFullPath[256] = { 0, };
+        wchar_t szFullPath[256] = {
+            0,
+        };
         wcscpy(szFullPath, L"Data\\");
         wcscat(szFullPath, SubFolder);
         wcscat(szFullPath, textureFileName);
 
-        wchar_t __ext[_MAX_EXT] = { 0, };
+        wchar_t __ext[_MAX_EXT] = {
+            0,
+        };
         _wsplitpath(textureFileName, NULL, NULL, NULL, __ext);
         if (pTexture->FileName[0] == 'h' && pTexture->FileName[1] == 'i' && pTexture->FileName[2] == 'd')
         {
@@ -85,16 +90,15 @@ void CLoadData::OpenTexture(int Model, const wchar_t* SubFolder, int Wrap, int T
             pModel->IndexTexture[i] = Bitmaps.LoadImage(szFullPath, Type, Wrap);
         }
 
-        bool isSkin = (pTexture->FileName[0] == 's' && pTexture->FileName[1] == 'k' && pTexture->FileName[2] == 'i')
-            || !wcsnicmp(textureFileName, L"level", 5);
-        bool isHair = pTexture->FileName[0] == 'h' && pTexture->FileName[1] == 'a' && pTexture->FileName[2] == 'i' && pTexture->FileName[3] == 'r';
-        
+        bool isSkin = (pTexture->FileName[0] == 's' && pTexture->FileName[1] == 'k' && pTexture->FileName[2] == 'i') ||
+                      !wcsnicmp(textureFileName, L"level", 5);
+        bool isHair = pTexture->FileName[0] == 'h' && pTexture->FileName[1] == 'a' && pTexture->FileName[2] == 'i' &&
+                      pTexture->FileName[3] == 'r';
+
         if (isSkin || isHair)
         {
-            BITMAP_t* pBitmap =
-                pModel->IndexTexture[i] != BITMAP_UNKNOWN
-                ? Bitmaps.FindTexture(pModel->IndexTexture[i])
-                : Bitmaps.FindTextureByName(textureFileName);
+            BITMAP_t* pBitmap = pModel->IndexTexture[i] != BITMAP_UNKNOWN ? Bitmaps.FindTexture(pModel->IndexTexture[i])
+                                                                          : Bitmaps.FindTextureByName(textureFileName);
 
             if (pBitmap)
             {
@@ -102,7 +106,7 @@ void CLoadData::OpenTexture(int Model, const wchar_t* SubFolder, int Wrap, int T
                 pBitmap->IsHair = isHair;
             }
         }
-        
+
         if (pModel->IndexTexture[i] == BITMAP_UNKNOWN)
         {
             if (auto pBitmap = Bitmaps.FindTextureByName(textureFileName))
@@ -113,12 +117,14 @@ void CLoadData::OpenTexture(int Model, const wchar_t* SubFolder, int Wrap, int T
             }
             else
             {
-                wchar_t szErrorMsg[256] = { 0, };
+                wchar_t szErrorMsg[256] = {
+                    0,
+                };
                 mu_swprintf(szErrorMsg, L"OpenTexture Failed: %ls of %hs", szFullPath, pModel->Name);
                 g_ErrorReport.Write(L"%ls (Model=%d)\r\n", szErrorMsg, Model);
 #ifdef FOR_WORK
                 PopUpErrorCheckMsgBox(szErrorMsg);
-#else // FOR_WORK
+#else  // FOR_WORK
                 PopUpErrorCheckMsgBox(szErrorMsg, true);
 #endif // FOR_WORK
             }

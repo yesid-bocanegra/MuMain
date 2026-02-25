@@ -20,7 +20,9 @@ extern SKILL_ATTRIBUTE* SkillAttribute;
 #define CSV_HEADER_ARRAY(nameWithIndex, baseName, index, type, width) "," #nameWithIndex
 
 // Complete CSV header with Index and Name
-#define CSV_FULL_HEADER "Index,Name" SKILL_FIELDS_SIMPLE(CSV_HEADER_SIMPLE) SKILL_FIELDS_ARRAYS(CSV_HEADER_ARRAY) SKILL_FIELDS_AFTER_ARRAYS(CSV_HEADER_SIMPLE)
+#define CSV_FULL_HEADER                                                                                                \
+    "Index,Name" SKILL_FIELDS_SIMPLE(CSV_HEADER_SIMPLE) SKILL_FIELDS_ARRAYS(CSV_HEADER_ARRAY)                          \
+        SKILL_FIELDS_AFTER_ARRAYS(CSV_HEADER_SIMPLE)
 
 // Helper to print field values
 #define PRINT_FIELD_Byte(skill, name) fprintf(csvFp, ",%d", (skill).name)
@@ -44,6 +46,7 @@ bool SkillDataExportAsCSV::ExportToCsv(wchar_t* fileName)
     fprintf(csvFp, "\xEF\xBB\xBF");
 
     // Write CSV header using X-macros
+    // cppcheck-suppress unknownMacro
     fprintf(csvFp, CSV_FULL_HEADER "\n");
 
     int exportedCount = 0;

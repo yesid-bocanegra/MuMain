@@ -193,7 +193,8 @@ void SEASON3B::CNewUIKanturu2ndEnterNpc::CreateMessageBox(BYTE btResult)
     SEASON3B::CreateOkMessageBox(strMessage);
 }
 
-void SEASON3B::CNewUIKanturu2ndEnterNpc::ReceiveKanturu3rdInfo(BYTE btState, BYTE btDetailState, BYTE btEnter, BYTE btUserCount, int iRemainTime)
+void SEASON3B::CNewUIKanturu2ndEnterNpc::ReceiveKanturu3rdInfo(BYTE btState, BYTE btDetailState, BYTE btEnter,
+                                                               BYTE btUserCount, int iRemainTime)
 {
     if (m_pNpcObject && m_pNpcObject->CurrentAction == KANTURU2ND_NPC_ANI_ROT)
     {
@@ -241,9 +242,8 @@ void SEASON3B::CNewUIKanturu2ndEnterNpc::ReceiveKanturu3rdInfo(BYTE btState, BYT
     }
     else if (btState == KANTURU_STATE_MAYA_BATTLE)
     {
-        if (btDetailState != KANTURU_MAYA_DIRECTION_STANBY1
-            && btDetailState != KANTURU_MAYA_DIRECTION_STANBY2
-            && btDetailState != KANTURU_MAYA_DIRECTION_STANBY3)
+        if (btDetailState != KANTURU_MAYA_DIRECTION_STANBY1 && btDetailState != KANTURU_MAYA_DIRECTION_STANBY2 &&
+            btDetailState != KANTURU_MAYA_DIRECTION_STANBY3)
         {
             wcscpy(m_strSubject, GlobalText[2152]);
             mu_swprintf(m_strStateText[0], GlobalText[2153], btUserCount);
@@ -314,26 +314,29 @@ void SEASON3B::CNewUIKanturu2ndEnterNpc::ReceiveKanturu3rdInfo(BYTE btState, BYT
             }
         }
 
-        if (btDetailState == KANTURU_MAYA_DIRECTION_NOTIFY || btDetailState == KANTURU_MAYA_DIRECTION_MONSTER1 || btDetailState == KANTURU_MAYA_DIRECTION_MAYA1
-            || btDetailState == KANTURU_MAYA_DIRECTION_END_MAYA1 || btDetailState == KANTURU_MAYA_DIRECTION_ENDCYCLE_MAYA1)
+        if (btDetailState == KANTURU_MAYA_DIRECTION_NOTIFY || btDetailState == KANTURU_MAYA_DIRECTION_MONSTER1 ||
+            btDetailState == KANTURU_MAYA_DIRECTION_MAYA1 || btDetailState == KANTURU_MAYA_DIRECTION_END_MAYA1 ||
+            btDetailState == KANTURU_MAYA_DIRECTION_ENDCYCLE_MAYA1)
         {
             mu_swprintf(m_strStateText[1], GlobalText[2154], btUserCount);
             m_iStateTextNum = 2;
         }
-        else if (btDetailState == KANTURU_MAYA_DIRECTION_MONSTER2 || btDetailState == KANTURU_MAYA_DIRECTION_MAYA2
-            || btDetailState == KANTURU_MAYA_DIRECTION_END_MAYA2 || btDetailState == KANTURU_MAYA_DIRECTION_ENDCYCLE_MAYA2)
+        else if (btDetailState == KANTURU_MAYA_DIRECTION_MONSTER2 || btDetailState == KANTURU_MAYA_DIRECTION_MAYA2 ||
+                 btDetailState == KANTURU_MAYA_DIRECTION_END_MAYA2 ||
+                 btDetailState == KANTURU_MAYA_DIRECTION_ENDCYCLE_MAYA2)
         {
             mu_swprintf(m_strStateText[1], GlobalText[2155], btUserCount);
             m_iStateTextNum = 2;
         }
-        else if (btDetailState == KANTURU_MAYA_DIRECTION_MONSTER3 || btDetailState == KANTURU_MAYA_DIRECTION_MAYA3
-            || btDetailState == KANTURU_MAYA_DIRECTION_END_MAYA3 || btDetailState == KANTURU_MAYA_DIRECTION_ENDCYCLE_MAYA3)
+        else if (btDetailState == KANTURU_MAYA_DIRECTION_MONSTER3 || btDetailState == KANTURU_MAYA_DIRECTION_MAYA3 ||
+                 btDetailState == KANTURU_MAYA_DIRECTION_END_MAYA3 ||
+                 btDetailState == KANTURU_MAYA_DIRECTION_ENDCYCLE_MAYA3)
         {
             mu_swprintf(m_strStateText[1], GlobalText[2156], btUserCount);
             m_iStateTextNum = 2;
         }
-        else if (btDetailState == KANTURU_MAYA_DIRECTION_NONE || btDetailState == KANTURU_MAYA_DIRECTION_END
-            || btDetailState == KANTURU_MAYA_DIRECTION_ENDCYCLE)
+        else if (btDetailState == KANTURU_MAYA_DIRECTION_NONE || btDetailState == KANTURU_MAYA_DIRECTION_END ||
+                 btDetailState == KANTURU_MAYA_DIRECTION_ENDCYCLE)
         {
             m_iStateTextNum = 1;
         }
@@ -348,7 +351,7 @@ void SEASON3B::CNewUIKanturu2ndEnterNpc::ReceiveKanturu3rdInfo(BYTE btState, BYT
     else if (btState == KANTURU_STATE_STANDBY)
     {
         wcscpy(m_strSubject, GlobalText[2158]);
-        if (btDetailState == 1)	// STANBY_START
+        if (btDetailState == 1) // STANBY_START
         {
             mu_swprintf(m_strStateText[0], GlobalText[2159], iRemainTime / 60);
         }
@@ -475,7 +478,7 @@ bool SEASON3B::CNewUIKanturu2ndEnterNpc::BtnProcess()
                 return true;
             }
 
-            ITEM* pItemHelper, * pItemRingLeft, * pItemRingRight, * pItemWing;
+            ITEM *pItemHelper, *pItemRingLeft, *pItemRingRight, *pItemWing;
             pItemHelper = &CharacterMachine->Equipment[EQUIPMENT_HELPER];
             pItemRingLeft = &CharacterMachine->Equipment[EQUIPMENT_RING_LEFT];
             pItemRingRight = &CharacterMachine->Equipment[EQUIPMENT_RING_RIGHT];
@@ -487,22 +490,20 @@ bool SEASON3B::CNewUIKanturu2ndEnterNpc::BtnProcess()
                 return true;
             }
 
-            if (g_ChangeRingMgr->CheckChangeRing(pItemRingLeft->Type)
-                || g_ChangeRingMgr->CheckChangeRing(pItemRingRight->Type))
+            if (g_ChangeRingMgr->CheckChangeRing(pItemRingLeft->Type) ||
+                g_ChangeRingMgr->CheckChangeRing(pItemRingRight->Type))
             {
                 CreateMessageBox(POPUP_CHANGERING);
                 return true;
             }
 
-            if (!((pItemWing->Type >= ITEM_WINGS_OF_ELF && pItemWing->Type <= ITEM_WINGS_OF_DARKNESS)
-                || (pItemWing->Type >= ITEM_WING_OF_STORM && pItemWing->Type <= ITEM_WING_OF_DIMENSION)
-                || (ITEM_WING + 130 <= pItemWing->Type && pItemWing->Type <= ITEM_WING + 134)
-                || pItemHelper->Type == ITEM_HORN_OF_DINORANT
-                || pItemHelper->Type == ITEM_DARK_HORSE_ITEM
-                || pItemWing->Type == ITEM_CAPE_OF_LORD
-                || pItemHelper->Type == ITEM_HORN_OF_FENRIR
-                || (pItemWing->Type >= ITEM_CAPE_OF_FIGHTER && pItemWing->Type <= ITEM_CAPE_OF_OVERRULE)
-                || (pItemWing->Type == ITEM_WING + 135)))
+            if (!((pItemWing->Type >= ITEM_WINGS_OF_ELF && pItemWing->Type <= ITEM_WINGS_OF_DARKNESS) ||
+                  (pItemWing->Type >= ITEM_WING_OF_STORM && pItemWing->Type <= ITEM_WING_OF_DIMENSION) ||
+                  (ITEM_WING + 130 <= pItemWing->Type && pItemWing->Type <= ITEM_WING + 134) ||
+                  pItemHelper->Type == ITEM_HORN_OF_DINORANT || pItemHelper->Type == ITEM_DARK_HORSE_ITEM ||
+                  pItemWing->Type == ITEM_CAPE_OF_LORD || pItemHelper->Type == ITEM_HORN_OF_FENRIR ||
+                  (pItemWing->Type >= ITEM_CAPE_OF_FIGHTER && pItemWing->Type <= ITEM_CAPE_OF_OVERRULE) ||
+                  (pItemWing->Type == ITEM_WING + 135)))
             {
                 CreateMessageBox(POPUP_NOT_HELPER);
                 return true;
@@ -536,20 +537,29 @@ void SEASON3B::CNewUIKanturu2ndEnterNpc::RenderFrame()
 {
     float x, y, width, height;
 
-    x = m_Pos.x; y = m_Pos.y + 2.f, width = KANTURU2ND_ENTER_WINDOW_WIDTH - MSGBOX_BACK_BLANK_WIDTH; height = KANTURU2ND_ENTER_WINDOW_HEIGHT - MSGBOX_BACK_BLANK_HEIGHT;
+    x = m_Pos.x;
+    y = m_Pos.y + 2.f, width = KANTURU2ND_ENTER_WINDOW_WIDTH - MSGBOX_BACK_BLANK_WIDTH;
+    height = KANTURU2ND_ENTER_WINDOW_HEIGHT - MSGBOX_BACK_BLANK_HEIGHT;
     RenderImage(IMAGE_KANTURU2ND_BACK, x, y, width, height);
 
-    x = m_Pos.x; y = m_Pos.y, width = MSGBOX_WIDTH; height = MSGBOX_TOP_HEIGHT;
+    x = m_Pos.x;
+    y = m_Pos.y, width = MSGBOX_WIDTH;
+    height = MSGBOX_TOP_HEIGHT;
     RenderImage(IMAGE_KANTURU2ND_TOP, x, y, width, height);
 
-    x = m_Pos.x; y += MSGBOX_TOP_HEIGHT; width = MSGBOX_WIDTH; height = MSGBOX_MIDDLE_HEIGHT;
+    x = m_Pos.x;
+    y += MSGBOX_TOP_HEIGHT;
+    width = MSGBOX_WIDTH;
+    height = MSGBOX_MIDDLE_HEIGHT;
     for (int i = 0; i < 10; ++i)
     {
         RenderImage(IMAGE_KANTURU2ND_MIDDLE, x, y, width, height);
         y += height;
     }
 
-    x = m_Pos.x; width = MSGBOX_WIDTH; height = MSGBOX_BOTTOM_HEIGHT;
+    x = m_Pos.x;
+    width = MSGBOX_WIDTH;
+    height = MSGBOX_BOTTOM_HEIGHT;
     RenderImage(IMAGE_KANTURU2ND_BOTTOM, x, y, width, height);
 }
 
@@ -699,9 +709,9 @@ void SEASON3B::CNewUIKanturuInfoWindow::RenderInfo()
     g_pRenderText->SetTextColor(134, 134, 199, 255);
     g_pRenderText->RenderText(m_Pos.x + 10, m_Pos.y + 15, strText);
 
-    if (g_Direction.m_CKanturu.m_iMayaState == KANTURU_MAYA_DIRECTION_MAYA1
-        || g_Direction.m_CKanturu.m_iMayaState == KANTURU_MAYA_DIRECTION_MAYA2
-        || g_Direction.m_CKanturu.m_iMayaState == KANTURU_MAYA_DIRECTION_MAYA3)
+    if (g_Direction.m_CKanturu.m_iMayaState == KANTURU_MAYA_DIRECTION_MAYA1 ||
+        g_Direction.m_CKanturu.m_iMayaState == KANTURU_MAYA_DIRECTION_MAYA2 ||
+        g_Direction.m_CKanturu.m_iMayaState == KANTURU_MAYA_DIRECTION_MAYA3)
     {
         g_pRenderText->RenderText(m_Pos.x + 10, m_Pos.y + 35, GlobalText[2182]);
     }

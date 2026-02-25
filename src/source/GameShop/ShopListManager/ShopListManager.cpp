@@ -14,13 +14,14 @@
 
 CShopListManager::CShopListManager() // OK
 {
+    // cppcheck-suppress [noCopyConstructor, noOperatorEq]
     this->m_ShopList = new CShopList;
 
     this->m_vScriptFiles.push_back(SHOPLIST_SCRIPT_CATEGORY);
     this->m_vScriptFiles.push_back(SHOPLIST_SCRIPT_PACKAGE);
     this->m_vScriptFiles.push_back(SHOPLIST_SCRIPT_PRODUCT);
 
-    //setlocale(0,"Koraen");
+    // setlocale(0,"Koraen");
 }
 
 CShopListManager::~CShopListManager() // OK
@@ -28,7 +29,7 @@ CShopListManager::~CShopListManager() // OK
     SAFE_DELETE(m_ShopList);
 }
 
-WZResult		CShopListManager::LoadScript(bool bDonwLoad) // OK
+WZResult CShopListManager::LoadScript(bool bDonwLoad) // OK
 {
     if (this->m_ShopList)
     {

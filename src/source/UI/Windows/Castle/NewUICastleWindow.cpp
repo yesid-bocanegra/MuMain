@@ -32,7 +32,10 @@ CNewUICastleWindow::CNewUICastleWindow()
     m_iNumCurOpenTab = TAB_GATE_MANAGING;
     m_iCurrMsgBoxRequest = CASTLE_MSGREQ_NULL;
 }
-CNewUICastleWindow::~CNewUICastleWindow() { Release(); }
+CNewUICastleWindow::~CNewUICastleWindow()
+{
+    Release();
+}
 
 bool CNewUICastleWindow::Create(CNewUIManager* pNewUIMng, int x, int y)
 {
@@ -278,7 +281,9 @@ void CNewUICastleWindow::RenderFrame()
     RenderImage(IMAGE_CASTLEWINDOW_RIGHT, m_Pos.x + INVENTORY_WIDTH - 21, m_Pos.y + 64, 21.f, 320.f);
     RenderImage(IMAGE_CASTLEWINDOW_BOTTOM, m_Pos.x, m_Pos.y + INVENTORY_HEIGHT - 45, 190.f, 45.f);
 
-    wchar_t szText[256] = { 0, };
+    wchar_t szText[256] = {
+        0,
+    };
     float fPos_x = m_Pos.x + 15.0f, fPos_y = m_Pos.y;
     float fLine_y = 13.0f;
 
@@ -292,8 +297,8 @@ void CNewUICastleWindow::RenderFrame()
 
 bool CNewUICastleWindow::BtnProcess()
 {
-    POINT ptExitBtn1 = { m_Pos.x + 169, m_Pos.y + 7 };
-    POINT ptExitBtn2 = { m_Pos.x + 13, m_Pos.y + 391 };
+    POINT ptExitBtn1 = {m_Pos.x + 169, m_Pos.y + 7};
+    POINT ptExitBtn2 = {m_Pos.x + 13, m_Pos.y + 391};
 
     if (SEASON3B::IsPress(VK_LBUTTON) && CheckMouseIn(ptExitBtn1.x, ptExitBtn1.y, 13, 12))
     {
@@ -311,7 +316,7 @@ bool CNewUICastleWindow::BtnProcess()
 
 void CNewUICastleWindow::UpdateGateManagingTab()
 {
-    POINT ptOrigin = { m_Pos.x, m_Pos.y + 55 + 6 + 12 };
+    POINT ptOrigin = {m_Pos.x, m_Pos.y + 55 + 6 + 12};
 
     if (MouseLButtonPush)
     {
@@ -333,7 +338,9 @@ void CNewUICastleWindow::UpdateGateManagingTab()
     }
 
     SEASON3B::CNewUICommonMessageBox* pMsgBox = NULL;
-    wchar_t szText[256] = { 0, };
+    wchar_t szText[256] = {
+        0,
+    };
     if (m_BtnBuy.UpdateMouseEvent() == true)
     {
         SetCurrMsgBoxRequest(CASTLE_MSGREQ_BUY_GATE);
@@ -389,7 +396,7 @@ void CNewUICastleWindow::UpdateGateManagingTab()
 
 void CNewUICastleWindow::UpdateStatueManagingTab()
 {
-    POINT ptOrigin = { m_Pos.x, m_Pos.y + 55 + 6 + 12 };
+    POINT ptOrigin = {m_Pos.x, m_Pos.y + 55 + 6 + 12};
 
     if (MouseLButtonPush)
     {
@@ -407,7 +414,9 @@ void CNewUICastleWindow::UpdateStatueManagingTab()
     }
 
     SEASON3B::CNewUICommonMessageBox* pMsgBox = NULL;
-    wchar_t szText[256] = { 0, };
+    wchar_t szText[256] = {
+        0,
+    };
     if (m_BtnBuy.UpdateMouseEvent() == true)
     {
         SetCurrMsgBoxRequest(CASTLE_MSGREQ_BUY_STATUE);
@@ -481,7 +490,9 @@ void CNewUICastleWindow::UpdateStatueManagingTab()
 void CNewUICastleWindow::UpdateTaxManagingTab()
 {
     SEASON3B::CNewUICommonMessageBox* pMsgBox = NULL;
-    wchar_t szText[256] = { 0, };
+    wchar_t szText[256] = {
+        0,
+    };
     if (m_BtnApplyTax.UpdateMouseEvent() == true)
     {
         SetCurrMsgBoxRequest(CASTLE_MSGREQ_APPLY_TAX);
@@ -517,7 +528,7 @@ void CNewUICastleWindow::UpdateTaxManagingTab()
 
 void CNewUICastleWindow::RenderOutlineUpper(float fPos_x, float fPos_y, float fWidth, float fHeight)
 {
-    POINT ptOrigin = { (long)fPos_x, (long)fPos_y };
+    POINT ptOrigin = {(long)fPos_x, (long)fPos_y};
     float fBoxWidth = fWidth;
 
     RenderImage(IMAGE_CASTLEWINDOW_TABLE_TOP_LEFT, ptOrigin.x + 12, ptOrigin.y - 4, 14, 14);
@@ -530,7 +541,7 @@ void CNewUICastleWindow::RenderOutlineUpper(float fPos_x, float fPos_y, float fW
 
 void CNewUICastleWindow::RenderOutlineLower(float fPos_x, float fPos_y, float fWidth, float fHeight)
 {
-    POINT ptOrigin = { (long)fPos_x, (long)fPos_y };
+    POINT ptOrigin = {(long)fPos_x, (long)fPos_y};
     float fBoxWidth = fWidth;
     float fBoxHeight = fHeight;
 
@@ -539,20 +550,22 @@ void CNewUICastleWindow::RenderOutlineLower(float fPos_x, float fPos_y, float fW
     RenderImage(IMAGE_CASTLEWINDOW_TABLE_BOTTOM_PIXEL, ptOrigin.x + 15, ptOrigin.y + 3, fBoxWidth - 2, 14);
     RenderImage(IMAGE_CASTLEWINDOW_TABLE_BOTTOM_LEFT, ptOrigin.x + 12, ptOrigin.y + fBoxHeight + 3, 14, 14);
     RenderImage(IMAGE_CASTLEWINDOW_TABLE_BOTTOM_RIGHT, ptOrigin.x + fBoxWidth + 4, ptOrigin.y + fBoxHeight + 3, 14, 14);
-    RenderImage(IMAGE_CASTLEWINDOW_TABLE_BOTTOM_PIXEL, ptOrigin.x + 25, ptOrigin.y + fBoxHeight + 3, fBoxWidth - 21, 14);
+    RenderImage(IMAGE_CASTLEWINDOW_TABLE_BOTTOM_PIXEL, ptOrigin.x + 25, ptOrigin.y + fBoxHeight + 3, fBoxWidth - 21,
+                14);
 }
 
 void CNewUICastleWindow::RenderGateManagingTab()
 {
     LPPMSG_NPCDBLIST pNPCInfo = &g_SenatusInfo.GetCurrGateInfo();
-    POINT ptOrigin = { m_Pos.x, m_Pos.y + 55 };
+    POINT ptOrigin = {m_Pos.x, m_Pos.y + 55};
 
     g_pRenderText->SetFont(g_hFontBold);
 
     ptOrigin.y += 6;
     RenderOutlineUpper(ptOrigin.x, ptOrigin.y, 160, 165);
     g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, GlobalText[1557], 190, 0, RT3_SORT_CENTER);
-    RenderBitmap(BITMAP_INTERFACE_EX + 35, ptOrigin.x + 15, ptOrigin.y + 12, 160.f, 165.f, 0.f, 0.f, 160.f / 256.f, 165.f / 256.f);
+    RenderBitmap(BITMAP_INTERFACE_EX + 35, ptOrigin.x + 15, ptOrigin.y + 12, 160.f, 165.f, 0.f, 0.f, 160.f / 256.f,
+                 165.f / 256.f);
     RenderOutlineLower(ptOrigin.x, ptOrigin.y, 160, 165);
 
     ptOrigin.y += 12;
@@ -646,7 +659,7 @@ void CNewUICastleWindow::RenderGateManagingTab()
 
 void CNewUICastleWindow::RenderStatueManagingTab()
 {
-    POINT ptOrigin = { m_Pos.x, m_Pos.y + 55 };
+    POINT ptOrigin = {m_Pos.x, m_Pos.y + 55};
     LPPMSG_NPCDBLIST pNPCInfo = &g_SenatusInfo.GetCurrStatueInfo();
 
     g_pRenderText->SetFont(g_hFontBold);
@@ -654,7 +667,8 @@ void CNewUICastleWindow::RenderStatueManagingTab()
     ptOrigin.y += 6;
     RenderOutlineUpper(ptOrigin.x, ptOrigin.y, 160, 165);
     g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, GlobalText[1557], 190, 0, RT3_SORT_CENTER);
-    RenderBitmap(BITMAP_INTERFACE_EX + 35, ptOrigin.x + 15, ptOrigin.y + 12, 160.f, 165.f, 0.f, 0.f, 160.f / 256.f, 165.f / 256.f);
+    RenderBitmap(BITMAP_INTERFACE_EX + 35, ptOrigin.x + 15, ptOrigin.y + 12, 160.f, 165.f, 0.f, 0.f, 160.f / 256.f,
+                 165.f / 256.f);
     RenderOutlineLower(ptOrigin.x, ptOrigin.y, 160, 165);
 
     ptOrigin.y += 12;
@@ -765,7 +779,7 @@ void CNewUICastleWindow::RenderStatueManagingTab()
 
 void CNewUICastleWindow::RenderTaxManagingTab()
 {
-    POINT ptOrigin = { m_Pos.x, m_Pos.y + 55 };
+    POINT ptOrigin = {m_Pos.x, m_Pos.y + 55};
     g_pRenderText->SetTextColor(0xFFFFFFFF);
     g_pRenderText->SetBgColor(0);
 
@@ -831,8 +845,7 @@ void CNewUICastleWindow::RenderTaxManagingTab()
     g_pRenderText->RenderText(ptOrigin.x + 15, ptOrigin.y, GlobalText[1583], 160, 0, RT3_SORT_CENTER);
 
     ptOrigin.y += 10;
-    RenderBitmap(IMAGE_CASTLEWINDOW_LINE, ptOrigin.x + 1, ptOrigin.y,
-        188.f, 21, 0.f, 0.f, 188 / 256.f, 21 / 32.f);
+    RenderBitmap(IMAGE_CASTLEWINDOW_LINE, ptOrigin.x + 1, ptOrigin.y, 188.f, 21, 0.f, 0.f, 188 / 256.f, 21 / 32.f);
 
     g_pRenderText->SetTextColor(0xFFFFFFFF);
 
@@ -842,8 +855,8 @@ void CNewUICastleWindow::RenderTaxManagingTab()
     mu_swprintf(szTemp, GlobalText[1246]);
     g_pRenderText->RenderText(ptOrigin.x + 14, ptOrigin.y + 7, szTemp);
 
-    //wchar_t szGoldText[32];
-    //ConvertGold(g_SenatusInfo.GetCastleMoney(),szGoldText);
+    // wchar_t szGoldText[32];
+    // ConvertGold(g_SenatusInfo.GetCastleMoney(),szGoldText);
 
     mu_swprintf(szTemp, L"%I64d", g_SenatusInfo.GetCastleMoney());
     InsertComma64(szTemp, g_SenatusInfo.GetCastleMoney());
@@ -868,7 +881,7 @@ void CNewUICastleWindow::RenderCastleItem(int nPosX, int nPosY, LPPMSG_NPCDBLIST
     const int nDefenseBlockSize = 24 / (g_SenatusInfo.GetMaxDefenseLevel() + 1);
     const int nRecoverBlockSize = 24 / (g_SenatusInfo.GetMaxRecoverLevel() + 1);
 
-    if (g_SenatusInfo.IsGate(pInfo))	// ����
+    if (g_SenatusInfo.IsGate(pInfo)) // ����
     {
         glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 

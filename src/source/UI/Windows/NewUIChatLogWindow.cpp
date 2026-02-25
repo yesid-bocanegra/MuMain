@@ -9,8 +9,7 @@
 
 using namespace SEASON3B;
 
-
-
+// cppcheck-suppress uninitMemberVar
 SEASON3B::CNewUIChatLogWindow::CNewUIChatLogWindow()
 {
     Init();
@@ -26,7 +25,8 @@ void SEASON3B::CNewUIChatLogWindow::Init()
     m_pNewUIMng = nullptr;
     m_WndPos.x = m_WndPos.y = 0;
     m_ScrollBtnPos.x = m_ScrollBtnPos.y = 0;
-    m_WndSize.cx = WND_WIDTH; m_WndSize.cy = 0;
+    m_WndSize.cx = WND_WIDTH;
+    m_WndSize.cy = 0;
     m_nShowingLines = 6;
     m_iCurrentRenderEndLine = -1;
     m_fBackAlpha = 0.6f;
@@ -96,16 +96,19 @@ bool SEASON3B::CNewUIChatLogWindow::RenderMessages()
     }
     else
     {
-        fRenderPosY = fRenderPosY + FONT_LEADING + (SCROLL_MIDDLE_PART_HEIGHT * (m_nShowingLines - GetCurrentRenderEndLine() - 1));
+        fRenderPosY = fRenderPosY + FONT_LEADING +
+                      (SCROLL_MIDDLE_PART_HEIGHT * (m_nShowingLines - GetCurrentRenderEndLine() - 1));
     }
 
     BYTE byAlpha = 150;
-    if (m_bShowFrame) byAlpha = 100;
+    if (m_bShowFrame)
+        byAlpha = 100;
 
     EnableAlphaTest();
     for (int i = iRenderStartLine, s = 0; i <= GetCurrentRenderEndLine(); i++, s++)
     {
-        if (i < 0 && i >= (int)pvecMsgs->size()) break;
+        if (i < 0 && i >= (int)pvecMsgs->size())
+            break;
 
         bool bRenderMessage = true;
         g_pRenderText->SetFont(g_hFont);
@@ -165,7 +168,8 @@ bool SEASON3B::CNewUIChatLogWindow::RenderMessages()
 
         if (bRenderMessage && !pMsgText->GetText().empty())
         {
-            POINT ptRenderPos = { (long)fRenderPosX + (long)WND_LEFT_RIGHT_EDGE, (long)fRenderPosY + (long)FONT_LEADING + ((long)SCROLL_MIDDLE_PART_HEIGHT * (long)s) };
+            POINT ptRenderPos = {(long)fRenderPosX + (long)WND_LEFT_RIGHT_EDGE,
+                                 (long)fRenderPosY + (long)FONT_LEADING + ((long)SCROLL_MIDDLE_PART_HEIGHT * (long)s)};
             if (!pMsgText->GetID().empty())
             {
                 if (m_bPointedMessage == true && m_iPointedMessageIndex == i)
@@ -174,7 +178,7 @@ bool SEASON3B::CNewUIChatLogWindow::RenderMessages()
                     g_pRenderText->SetTextColor(255, 128, 255, 255);
                 }
 
-                type_string strLine = std::wstring( pMsgText->GetID()) + L" : " + pMsgText->GetText();
+                type_string strLine = std::wstring(pMsgText->GetID()) + L" : " + pMsgText->GetText();
                 g_pRenderText->RenderText(ptRenderPos.x, ptRenderPos.y, strLine.c_str());
             }
             else
@@ -204,21 +208,26 @@ bool SEASON3B::CNewUIChatLogWindow::RenderFrame()
         {
             glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
         }
-        RenderImage(IMAGE_DRAG_BTN, fRenderPosX, fRenderPosY - (float)RESIZING_BTN_HEIGHT, RESIZING_BTN_WIDTH, RESIZING_BTN_HEIGHT);
+        RenderImage(IMAGE_DRAG_BTN, fRenderPosX, fRenderPosY - (float)RESIZING_BTN_HEIGHT, RESIZING_BTN_WIDTH,
+                    RESIZING_BTN_HEIGHT);
         DisableAlphaBlend();
 
         glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
-        RenderImage(IMAGE_SCROLL_TOP, fRenderPosX + m_WndSize.cx - SCROLL_BAR_WIDTH - WND_LEFT_RIGHT_EDGE, fRenderPosY + WND_TOP_BOTTOM_EDGE, SCROLL_BAR_WIDTH, WND_TOP_BOTTOM_EDGE);
+        RenderImage(IMAGE_SCROLL_TOP, fRenderPosX + m_WndSize.cx - SCROLL_BAR_WIDTH - WND_LEFT_RIGHT_EDGE,
+                    fRenderPosY + WND_TOP_BOTTOM_EDGE, SCROLL_BAR_WIDTH, WND_TOP_BOTTOM_EDGE);
 
         for (int i = 0; i < (int)GetNumberOfShowingLines(); i++)
         {
             RenderImage(IMAGE_SCROLL_MIDDLE, fRenderPosX + m_WndSize.cx - SCROLL_BAR_WIDTH - WND_LEFT_RIGHT_EDGE,
-                fRenderPosY + WND_TOP_BOTTOM_EDGE + (float)(i * SCROLL_MIDDLE_PART_HEIGHT + SCROLL_TOP_BOTTOM_PART_HEIGHT), SCROLL_BAR_WIDTH, SCROLL_MIDDLE_PART_HEIGHT);
+                        fRenderPosY + WND_TOP_BOTTOM_EDGE +
+                            (float)(i * SCROLL_MIDDLE_PART_HEIGHT + SCROLL_TOP_BOTTOM_PART_HEIGHT),
+                        SCROLL_BAR_WIDTH, SCROLL_MIDDLE_PART_HEIGHT);
         }
 
         RenderImage(IMAGE_SCROLL_BOTTOM, fRenderPosX + m_WndSize.cx - SCROLL_BAR_WIDTH - WND_LEFT_RIGHT_EDGE,
-            m_WndPos.y - WND_TOP_BOTTOM_EDGE - SCROLL_TOP_BOTTOM_PART_HEIGHT, SCROLL_BAR_WIDTH, SCROLL_TOP_BOTTOM_PART_HEIGHT);
+                    m_WndPos.y - WND_TOP_BOTTOM_EDGE - SCROLL_TOP_BOTTOM_PART_HEIGHT, SCROLL_BAR_WIDTH,
+                    SCROLL_TOP_BOTTOM_PART_HEIGHT);
 
         EnableAlphaTest();
         if (m_EventState == EVENT_SCROLL_BTN_DOWN)
@@ -245,7 +254,8 @@ bool SEASON3B::CNewUIChatLogWindow::Create(CNewUIManager* pNewUIMng, int x, int 
 
     m_pNewUIMng = pNewUIMng;
     m_pNewUIMng->AddUIObj(SEASON3B::INTERFACE_CHATLOGWINDOW, this);
-    m_WndPos.x = x; m_WndPos.y = y;
+    m_WndPos.x = x;
+    m_WndPos.y = y;
     SetNumberOfShowingLines(nShowingLines);
     LoadImages();
     return true;
@@ -272,7 +282,8 @@ void SEASON3B::CNewUIChatLogWindow::SetPosition(int x, int y)
     m_WndPos.y = y;
 }
 
-void SEASON3B::CNewUIChatLogWindow::AddText(const type_string& strID, const type_string& strText, MESSAGE_TYPE MsgType, MESSAGE_TYPE ErrMsgType /*= TYPE_ALL_MESSAGE*/)
+void SEASON3B::CNewUIChatLogWindow::AddText(const type_string& strID, const type_string& strText, MESSAGE_TYPE MsgType,
+                                            MESSAGE_TYPE ErrMsgType /*= TYPE_ALL_MESSAGE*/)
 {
     if (strID.empty() && strText.empty())
     {
@@ -311,7 +322,8 @@ void SEASON3B::CNewUIChatLogWindow::AddText(const type_string& strID, const type
     }
 }
 
-void SEASON3B::CNewUIChatLogWindow::ProcessAddText(const type_string& strID, const type_string& strText, MESSAGE_TYPE MsgType, MESSAGE_TYPE ErrMsgType)
+void SEASON3B::CNewUIChatLogWindow::ProcessAddText(const type_string& strID, const type_string& strText,
+                                                   MESSAGE_TYPE MsgType, MESSAGE_TYPE ErrMsgType)
 {
     type_vector_msgs* pvecMsgs = GetMsgs(MsgType);
     if (pvecMsgs == nullptr)
@@ -323,7 +335,7 @@ void SEASON3B::CNewUIChatLogWindow::ProcessAddText(const type_string& strID, con
     int nScrollLines = 0;
     if (strText.size() >= 20)
     {
-        type_string	strText1, strText2;
+        type_string strText1, strText2;
         SeparateText(strID, strText, strText1, strText2);
         if (!strText1.empty())
         {
@@ -428,8 +440,7 @@ void SEASON3B::CNewUIChatLogWindow::ProcessAddText(const type_string& strID, con
             m_vecAllMsgs.push_back(pAllMsgText);
         }
 
-        if ((MsgType == TYPE_ERROR_MESSAGE)
-            && (ErrMsgType != TYPE_ERROR_MESSAGE && ErrMsgType != TYPE_ALL_MESSAGE))
+        if ((MsgType == TYPE_ERROR_MESSAGE) && (ErrMsgType != TYPE_ERROR_MESSAGE && ErrMsgType != TYPE_ALL_MESSAGE))
         {
             type_vector_msgs* pErrvecMsgs = GetMsgs(ErrMsgType);
             if (pErrvecMsgs == nullptr)
@@ -561,13 +572,15 @@ void SEASON3B::CNewUIChatLogWindow::SetFilterText(const type_string& strFilterTe
         ResetFilter();
     }
 
-    wchar_t szTemp[MAX_CHAT_BUFFER_SIZE + 1] = { 0, };
+    wchar_t szTemp[MAX_CHAT_BUFFER_SIZE + 1] = {
+        0,
+    };
     strFilterText.copy(szTemp, MAX_CHAT_BUFFER_SIZE);
     szTemp[MAX_CHAT_BUFFER_SIZE] = '\0';
 
     wchar_t* context = nullptr;
-	wchar_t* token = wcstok_s(szTemp, L" ", &context);
-	token = wcstok_s(nullptr, L" ", &context);
+    wchar_t* token = wcstok_s(szTemp, L" ", &context);
+    token = wcstok_s(nullptr, L" ", &context);
 
     if (token == nullptr)
     {
@@ -600,7 +613,7 @@ void SEASON3B::CNewUIChatLogWindow::SetSizeAuto()
     SetNumberOfShowingLines(GetNumberOfShowingLines() + 3);
 }
 
-void SEASON3B::CNewUIChatLogWindow::SetNumberOfShowingLines(int nShowingLines, OUT LPSIZE lpBoxSize/* = nullptr*/)
+void SEASON3B::CNewUIChatLogWindow::SetNumberOfShowingLines(int nShowingLines, OUT LPSIZE lpBoxSize /* = nullptr*/)
 {
     m_nShowingLines = (int)(nShowingLines / 3) * 3;
     if (m_nShowingLines < 3)
@@ -617,7 +630,8 @@ void SEASON3B::CNewUIChatLogWindow::SetNumberOfShowingLines(int nShowingLines, O
     if (lpBoxSize)
     {
         lpBoxSize->cx = WND_WIDTH;
-        lpBoxSize->cy = (SCROLL_MIDDLE_PART_HEIGHT * GetNumberOfShowingLines()) + (SCROLL_TOP_BOTTOM_PART_HEIGHT * 2) + (WND_TOP_BOTTOM_EDGE * 2);
+        lpBoxSize->cy = (SCROLL_MIDDLE_PART_HEIGHT * GetNumberOfShowingLines()) + (SCROLL_TOP_BOTTOM_PART_HEIGHT * 2) +
+                        (WND_TOP_BOTTOM_EDGE * 2);
     }
 }
 size_t SEASON3B::CNewUIChatLogWindow::GetNumberOfShowingLines() const
@@ -667,7 +681,6 @@ bool SEASON3B::CNewUIChatLogWindow::IsShowFrame()
 
 bool SEASON3B::CNewUIChatLogWindow::UpdateMouseEvent()
 {
-    
 
     if (m_EventState == EVENT_NONE && false == MouseLButtonPush &&
         SEASON3B::CheckMouseIn(m_WndPos.x, m_WndPos.y - m_WndSize.cy, m_WndSize.cx, m_WndSize.cy))
@@ -709,20 +722,17 @@ bool SEASON3B::CNewUIChatLogWindow::UpdateMouseEvent()
 
             CMessageText* pMsgText = (*pvecMsgs)[i];
 
-            if (pMsgText->GetType() == TYPE_WHISPER_MESSAGE
-                || pMsgText->GetType() == TYPE_CHAT_MESSAGE
-                || pMsgText->GetType() == TYPE_PARTY_MESSAGE
-                || pMsgText->GetType() == TYPE_GUILD_MESSAGE
-                || pMsgText->GetType() == TYPE_UNION_MESSAGE
-                || pMsgText->GetType() == TYPE_GENS_MESSAGE
-                || pMsgText->GetType() == TYPE_GM_MESSAGE
-                )
+            if (pMsgText->GetType() == TYPE_WHISPER_MESSAGE || pMsgText->GetType() == TYPE_CHAT_MESSAGE ||
+                pMsgText->GetType() == TYPE_PARTY_MESSAGE || pMsgText->GetType() == TYPE_GUILD_MESSAGE ||
+                pMsgText->GetType() == TYPE_UNION_MESSAGE || pMsgText->GetType() == TYPE_GENS_MESSAGE ||
+                pMsgText->GetType() == TYPE_GM_MESSAGE)
             {
                 float fRenderPosX = m_WndPos.x;
                 float fRenderPosY = m_WndPos.y - m_WndSize.cy + SCROLL_TOP_BOTTOM_PART_HEIGHT;
                 if (GetCurrentRenderEndLine() < m_nShowingLines)
                 {
-                    fRenderPosY = fRenderPosY + FONT_LEADING + (SCROLL_MIDDLE_PART_HEIGHT * (m_nShowingLines - GetCurrentRenderEndLine() - 1));
+                    fRenderPosY = fRenderPosY + FONT_LEADING +
+                                  (SCROLL_MIDDLE_PART_HEIGHT * (m_nShowingLines - GetCurrentRenderEndLine() - 1));
                 }
 
                 POINT ptRenderPos;
@@ -774,8 +784,12 @@ bool SEASON3B::CNewUIChatLogWindow::UpdateMouseEvent()
                     }
                     else
                     {
-                        float fScrollRate = (float)((MouseY - m_iGrapRelativePosY) - (m_WndPos.y - m_WndSize.cy + WND_TOP_BOTTOM_EDGE)) / (float)(m_WndSize.cy - WND_TOP_BOTTOM_EDGE * 2 - SCROLL_BTN_HEIGHT);
-                        Scrolling(GetNumberOfShowingLines() + (float)(GetNumberOfLines(GetCurrentMsgType()) - GetNumberOfShowingLines()) * fScrollRate);
+                        float fScrollRate = (float)((MouseY - m_iGrapRelativePosY) -
+                                                    (m_WndPos.y - m_WndSize.cy + WND_TOP_BOTTOM_EDGE)) /
+                                            (float)(m_WndSize.cy - WND_TOP_BOTTOM_EDGE * 2 - SCROLL_BTN_HEIGHT);
+                        Scrolling(GetNumberOfShowingLines() +
+                                  (float)(GetNumberOfLines(GetCurrentMsgType()) - GetNumberOfShowingLines()) *
+                                      fScrollRate);
 
                         m_ScrollBtnPos.y = MouseY - m_iGrapRelativePosY;
                     }
@@ -789,7 +803,7 @@ bool SEASON3B::CNewUIChatLogWindow::UpdateMouseEvent()
             }
         }
 
-        POINT ptResizingBtn = { m_WndPos.x, m_WndPos.y - m_WndSize.cy - RESIZING_BTN_HEIGHT };
+        POINT ptResizingBtn = {m_WndPos.x, m_WndPos.y - m_WndSize.cy - RESIZING_BTN_HEIGHT};
         if (m_EventState == EVENT_NONE && false == MouseLButtonPush &&
             SEASON3B::CheckMouseIn(ptResizingBtn.x, ptResizingBtn.y, RESIZING_BTN_WIDTH, RESIZING_BTN_HEIGHT))
         {
@@ -816,8 +830,9 @@ bool SEASON3B::CNewUIChatLogWindow::UpdateMouseEvent()
                 int nBottomSections = (GetNumberOfShowingLines() - 3) / 3;
                 for (int i = 0; i < nTopSections; i++)
                 {
-                    if (SEASON3B::CheckMouseIn(0, ptResizingBtn.y - RESIZING_BTN_HEIGHT - ((i + 1) * SCROLL_MIDDLE_PART_HEIGHT * 3 * 2),
-                        640, SCROLL_MIDDLE_PART_HEIGHT * 3 + RESIZING_BTN_HEIGHT))
+                    if (SEASON3B::CheckMouseIn(
+                            0, ptResizingBtn.y - RESIZING_BTN_HEIGHT - ((i + 1) * SCROLL_MIDDLE_PART_HEIGHT * 3 * 2),
+                            640, SCROLL_MIDDLE_PART_HEIGHT * 3 + RESIZING_BTN_HEIGHT))
                     {
                         SetNumberOfShowingLines(GetNumberOfShowingLines() + (i + 1) * 3);
                         return false;
@@ -825,19 +840,23 @@ bool SEASON3B::CNewUIChatLogWindow::UpdateMouseEvent()
                 }
                 for (int i = 0; i < nBottomSections; i++)
                 {
-                    if (SEASON3B::CheckMouseIn(0, ptResizingBtn.y + RESIZING_BTN_HEIGHT + ((i + 1) * SCROLL_MIDDLE_PART_HEIGHT * 3),
-                        640, RESIZING_BTN_HEIGHT + SCROLL_MIDDLE_PART_HEIGHT * 3))
+                    if (SEASON3B::CheckMouseIn(
+                            0, ptResizingBtn.y + RESIZING_BTN_HEIGHT + ((i + 1) * SCROLL_MIDDLE_PART_HEIGHT * 3), 640,
+                            RESIZING_BTN_HEIGHT + SCROLL_MIDDLE_PART_HEIGHT * 3))
                     {
                         SetNumberOfShowingLines(GetNumberOfShowingLines() - (i + 1) * 3);
                         return false;
                     }
                 }
-                if (SEASON3B::CheckMouseIn(0, 0, 640, m_WndPos.y - (SCROLL_MIDDLE_PART_HEIGHT * 15 + RESIZING_BTN_HEIGHT + SCROLL_TOP_BOTTOM_PART_HEIGHT * 2)))
+                if (SEASON3B::CheckMouseIn(0, 0, 640,
+                                           m_WndPos.y - (SCROLL_MIDDLE_PART_HEIGHT * 15 + RESIZING_BTN_HEIGHT +
+                                                         SCROLL_TOP_BOTTOM_PART_HEIGHT * 2)))
                 {
                     SetNumberOfShowingLines(15);
                 }
-                if (SEASON3B::CheckMouseIn(0, m_WndPos.y - (SCROLL_MIDDLE_PART_HEIGHT * 3 + SCROLL_TOP_BOTTOM_PART_HEIGHT * 2),
-                    640, SCROLL_MIDDLE_PART_HEIGHT * 3 + SCROLL_TOP_BOTTOM_PART_HEIGHT * 2))
+                if (SEASON3B::CheckMouseIn(
+                        0, m_WndPos.y - (SCROLL_MIDDLE_PART_HEIGHT * 3 + SCROLL_TOP_BOTTOM_PART_HEIGHT * 2), 640,
+                        SCROLL_MIDDLE_PART_HEIGHT * 3 + SCROLL_TOP_BOTTOM_PART_HEIGHT * 2))
                 {
                     SetNumberOfShowingLines(3);
                 }
@@ -897,12 +916,12 @@ float SEASON3B::CNewUIChatLogWindow::GetKeyEventOrder()
     return 8.0f;
 }
 
-void SEASON3B::CNewUIChatLogWindow::SeparateText(IN const type_string& strID, IN const type_string& strText, OUT type_string& strText1, OUT type_string& strText2)
+void SEASON3B::CNewUIChatLogWindow::SeparateText(IN const type_string& strID, IN const type_string& strText,
+                                                 OUT type_string& strText1, OUT type_string& strText2)
 {
-    
 
     SIZE TextSize;
-    
+
     float max_first_line_size = CLIENT_WIDTH * g_fScreenRate_x;
     if (!strID.empty())
     {
@@ -954,7 +973,8 @@ bool SEASON3B::CNewUIChatLogWindow::CheckFilterText(const type_string& strTestTe
 void SEASON3B::CNewUIChatLogWindow::UpdateWndSize()
 {
     m_WndSize.cx = WND_WIDTH;
-    m_WndSize.cy = (SCROLL_MIDDLE_PART_HEIGHT * GetNumberOfShowingLines()) + (SCROLL_TOP_BOTTOM_PART_HEIGHT * 2) + (WND_TOP_BOTTOM_EDGE * 2);
+    m_WndSize.cy = (SCROLL_MIDDLE_PART_HEIGHT * GetNumberOfShowingLines()) + (SCROLL_TOP_BOTTOM_PART_HEIGHT * 2) +
+                   (WND_TOP_BOTTOM_EDGE * 2);
 }
 
 void SEASON3B::CNewUIChatLogWindow::UpdateScrollPos()
@@ -969,13 +989,15 @@ void SEASON3B::CNewUIChatLogWindow::UpdateScrollPos()
         }
         else
         {
-            fPosRate = (float)(GetCurrentRenderEndLine() + 1 - GetNumberOfShowingLines()) / (float)(GetNumberOfLines(GetCurrentMsgType()) - GetNumberOfShowingLines());
+            fPosRate = (float)(GetCurrentRenderEndLine() + 1 - GetNumberOfShowingLines()) /
+                       (float)(GetNumberOfLines(GetCurrentMsgType()) - GetNumberOfShowingLines());
         }
     }
     if (m_EventState != EVENT_SCROLL_BTN_DOWN)
     {
         m_ScrollBtnPos.x = m_WndPos.x + m_WndSize.cx - SCROLL_BAR_WIDTH - WND_LEFT_RIGHT_EDGE - 4;
-        m_ScrollBtnPos.y = m_WndPos.y - m_WndSize.cy + WND_TOP_BOTTOM_EDGE + ((float)(m_WndSize.cy - SCROLL_BTN_HEIGHT - WND_TOP_BOTTOM_EDGE * 2) * fPosRate);
+        m_ScrollBtnPos.y = m_WndPos.y - m_WndSize.cy + WND_TOP_BOTTOM_EDGE +
+                           ((float)(m_WndSize.cy - SCROLL_BTN_HEIGHT - WND_TOP_BOTTOM_EDGE * 2) * fPosRate);
     }
 }
 
@@ -1071,6 +1093,7 @@ void SEASON3B::CNewUIChatLogWindow::HideChatLog()
     m_bShowChatLog = false;
 }
 
+// cppcheck-suppress uninitMemberVar
 SEASON3B::CNewUISystemLogWindow::CNewUISystemLogWindow()
 {
     Init();
@@ -1085,12 +1108,12 @@ void SEASON3B::CNewUISystemLogWindow::Init()
 {
     m_pNewUIMng = nullptr;
     m_WndPos.x = m_WndPos.y = 0;
-    m_WndSize.cx = WND_WIDTH; m_WndSize.cy = 0;
+    m_WndSize.cx = WND_WIDTH;
+    m_WndSize.cy = 0;
     m_nShowingLines = 6;
     m_iCurrentRenderEndLine = -1;
     m_fBackAlpha = 0.6f;
 }
-
 
 bool SEASON3B::CNewUISystemLogWindow::RenderMessages()
 {
@@ -1122,7 +1145,8 @@ bool SEASON3B::CNewUISystemLogWindow::RenderMessages()
     EnableAlphaTest();
     for (int i = iRenderStartLine; i <= GetCurrentRenderEndLine(); i++)
     {
-        if (i < 0 && i >= static_cast<int>(m_vecAllMsgs.size())) break;
+        if (i < 0 && i >= static_cast<int>(m_vecAllMsgs.size()))
+            break;
 
         g_pRenderText->SetFont(g_hFont);
 
@@ -1264,11 +1288,13 @@ void SEASON3B::CNewUISystemLogWindow::ClearAll()
     m_iCurrentRenderEndLine = -1;
 }
 
-bool SEASON3B::CNewUISystemLogWindow::CheckChatRedundancy(const type_string& strText, int iSearchLine/* = 1*/)
+bool SEASON3B::CNewUISystemLogWindow::CheckChatRedundancy(const type_string& strText, int iSearchLine /* = 1*/)
 {
-    if (m_vecAllMsgs.empty()) return false;
+    if (m_vecAllMsgs.empty())
+        return false;
     auto vri_msgs = m_vecAllMsgs.rbegin();
     for (int i = 0; (i < iSearchLine) || (vri_msgs != m_vecAllMsgs.rend()); vri_msgs++, i++)
-        if (0 == (*vri_msgs)->GetText().compare(strText)) return true;
+        if (0 == (*vri_msgs)->GetText().compare(strText))
+            return true;
     return false;
 }

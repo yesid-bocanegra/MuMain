@@ -33,9 +33,7 @@ void BuffStateValueControl::Initialize()
     }
 }
 
-void BuffStateValueControl::Destroy()
-{
-}
+void BuffStateValueControl::Destroy() {}
 
 eBuffValueLoadType BuffStateValueControl::CheckValue(eBuffState bufftype)
 {
@@ -56,7 +54,8 @@ void BuffStateValueControl::SetValue(eBuffState bufftype, BuffStateValueInfo& va
     if (eBuffValueLoad_ItemAddOption == loadtype)
     {
         const BuffInfo buffinfo = g_BuffInfo(bufftype);
-        const ITEM_ADD_OPTION& Item_data = g_pItemAddOptioninfo->GetItemAddOtioninfo(ITEMINDEX(buffinfo.s_ItemType, buffinfo.s_ItemIndex));
+        const ITEM_ADD_OPTION& Item_data =
+            g_pItemAddOptioninfo->GetItemAddOtioninfo(ITEMINDEX(buffinfo.s_ItemType, buffinfo.s_ItemIndex));
 
         valueinfo.s_Value1 = Item_data.m_byValue1;
         valueinfo.s_Value2 = Item_data.m_byValue2;
@@ -110,7 +109,8 @@ void BuffStateValueControl::GetBuffInfoString(std::list<std::wstring>& outstr, e
         if( tempvalueinfo.s_Value1 != 0 && tempvalueinfo.s_Value2 != 0 )
         {
             outstr.push_back(buffinfo.s_BuffName);
-            outstr.push_back(( format( buffinfo.s_BuffDescript ) % tempvalueinfo.s_Value1 % tempvalueinfo.s_Value2 ).str());
+            outstr.push_back(( format( buffinfo.s_BuffDescript ) % tempvalueinfo.s_Value1 % tempvalueinfo.s_Value2
+       ).str());
         }
         else if( tempvalueinfo.s_Value1 != 0 && tempvalueinfo.s_Value2 == 0 )
         {

@@ -53,44 +53,34 @@ CHARACTER* Hero;
 Script_Skill MonsterSkill[MODEL_MONSTER_END];
 extern CKanturuDirection KanturuDirection;
 float g_fBoneSave[10][3][4];
-static  wchar_t    vec_list[35] =
-{
-     5,  6, 33, 53, 35, 49, 50, 45, 46, 41,
-    42, 37, 38, 11, 31, 13, 27, 28, 23, 24,
-    19, 20, 15, 16, 54, 55, 62, 69, 70, 77,
-     2, 79, 81, 84, 86
+static wchar_t vec_list[35] = {5,  6,  33, 53, 35, 49, 50, 45, 46, 41, 42, 37, 38, 11, 31, 13, 27, 28,
+                               23, 24, 19, 20, 15, 16, 54, 55, 62, 69, 70, 77, 2,  79, 81, 84, 86};
+static wchar_t wingLeft[15][2] = {{0, 2},  {2, 3},  {2, 4},   {4, 5}, {5, 6}, {4, 7},  {7, 8},  {4, 9},
+                                  {9, 10}, {4, 11}, {11, 12}, {6, 5}, {8, 7}, {10, 9}, {12, 11}};
+static wchar_t wingRight[15][2] = {{0, 13},  {13, 14}, {13, 15}, {15, 16}, {16, 17}, {15, 18}, {18, 19}, {15, 20},
+                                   {20, 21}, {15, 22}, {22, 23}, {17, 16}, {19, 18}, {21, 20}, {23, 22}};
+static wchar_t arm_leg_Left[4][2] = {
+    {29, 28},
+    {28, 27},
+    {34, 33},
+    {33, 30},
 };
-static  wchar_t    wingLeft[15][2] =
-{
-    {0,2},  {2,3}, {2,4},  {4,5}, {5,6}, {4,7}, {7,8}, {4,9}, {9,10}, {4,11}, {11,12},
-    {6,5}, {8,7}, {10,9},{12,11}
-};
-static  wchar_t    wingRight[15][2] =
-{
-    {0,13}, {13,14}, {13,15}, {15,16}, {16,17}, {15,18}, {18,19}, {15,20}, {20,21}, {15,22}, {22,23},
-    {17,16},{19,18}, {21,20}, {23,22}
-};
-static  wchar_t    arm_leg_Left[4][2] =
-{
-    {29,28}, {28,27}, {34,33}, {33,30},
-};
-static  wchar_t    arm_leg_Right[4][2] =
-{
-    {26,25}, {25,24}, {32,31}, {31,30},
+static wchar_t arm_leg_Right[4][2] = {
+    {26, 25},
+    {25, 24},
+    {32, 31},
+    {31, 30},
 };
 
 //
-static  wchar_t    g_chStar[10] =
-{
-    10, 18, 37, 38, 51, 52, 58, 59, 66, 24
-};
+static wchar_t g_chStar[10] = {10, 18, 37, 38, 51, 52, 58, 59, 66, 24};
 
-int  EquipmentLevelSet = 0;
+int EquipmentLevelSet = 0;
 bool g_bAddDefense = false;
 int g_iLimitAttackTime = 15;
-static  int     g_iOldPositionX = 0;
-static  int     g_iOldPositionY = 0;
-static  float   g_fStopTime = 0.f;
+static int g_iOldPositionX = 0;
+static int g_iOldPositionY = 0;
+static float g_fStopTime = 0.f;
 
 void RegisterBuff(eBuffState buff, OBJECT* o, const int bufftime = 0);
 void UnRegisterBuff(eBuffState buff, OBJECT* o);
@@ -163,7 +153,7 @@ void SetPlayerStop(CHARACTER* c)
     {
         if (c->Helper.Type == MODEL_HORN_OF_FENRIR && !c->SafeZone)
         {
-            if (gCharacterManager.GetBaseClass(c->Class) == CLASS_RAGEFIGHTER)//레이지파이터이면
+            if (gCharacterManager.GetBaseClass(c->Class) == CLASS_RAGEFIGHTER) // 레이지파이터이면
             {
                 if (c->Weapon[0].Type != -1 && c->Weapon[1].Type != -1)
                     SetAction(&c->Object, PLAYER_RAGE_FENRIR_STAND_TWO_SWORD);
@@ -176,13 +166,13 @@ void SetPlayerStop(CHARACTER* c)
             }
             else
             {
-                if (c->Weapon[0].Type != -1 && c->Weapon[1].Type != -1)	// 양손무기
+                if (c->Weapon[0].Type != -1 && c->Weapon[1].Type != -1) // 양손무기
                     SetAction(&c->Object, PLAYER_FENRIR_STAND_TWO_SWORD);
                 else if (c->Weapon[0].Type != -1 && c->Weapon[1].Type == -1) // 오른손 무기
                     SetAction(&c->Object, PLAYER_FENRIR_STAND_ONE_RIGHT);
                 else if (c->Weapon[0].Type == -1 && c->Weapon[1].Type != -1) // 왼손 무기
                     SetAction(&c->Object, PLAYER_FENRIR_STAND_ONE_LEFT);
-                else	// 맨손
+                else // 맨손
                     SetAction(&c->Object, PLAYER_FENRIR_STAND);
             }
         }
@@ -197,148 +187,159 @@ void SetPlayerStop(CHARACTER* c)
         {
             SetAction(&c->Object, PLAYER_DARKLORD_STAND);
         }
-        else
-            if ((c->Helper.Type == MODEL_HORN_OF_UNIRIA || c->Helper.Type == MODEL_HORN_OF_DINORANT) && !c->SafeZone)
-            {
-                if (c->Weapon[0].Type == -1 && c->Weapon[1].Type == -1)
-                    SetAction(&c->Object, PLAYER_STOP_RIDE);
-                else if (gCharacterManager.GetBaseClass(c->Class) == CLASS_RAGEFIGHTER)
-                    SetAction(&c->Object, PLAYER_RAGE_UNI_STOP_ONE_RIGHT);
-                else
-                    SetAction(&c->Object, PLAYER_STOP_RIDE_WEAPON);
-            }
+        else if ((c->Helper.Type == MODEL_HORN_OF_UNIRIA || c->Helper.Type == MODEL_HORN_OF_DINORANT) && !c->SafeZone)
+        {
+            if (c->Weapon[0].Type == -1 && c->Weapon[1].Type == -1)
+                SetAction(&c->Object, PLAYER_STOP_RIDE);
+            else if (gCharacterManager.GetBaseClass(c->Class) == CLASS_RAGEFIGHTER)
+                SetAction(&c->Object, PLAYER_RAGE_UNI_STOP_ONE_RIGHT);
             else
+                SetAction(&c->Object, PLAYER_STOP_RIDE_WEAPON);
+        }
+        else
+        {
+            bool Fly = false;
+
+            if (!(c->Object.SubType == MODEL_CURSEDTEMPLE_ALLIED_PLAYER ||
+                  c->Object.SubType == MODEL_CURSEDTEMPLE_ILLUSION_PLAYER) &&
+                !c->SafeZone && c->Wing.Type != -1)
+                Fly = true;
+
+            int Index = TERRAIN_INDEX_REPEAT((int)(c->Object.Position[0] / TERRAIN_SCALE),
+                                             (int)(c->Object.Position[1] / TERRAIN_SCALE));
+
+            if (SceneFlag == MAIN_SCENE &&
+                (gMapManager.WorldActive == WD_7ATLANSE || gMapManager.InHellas() ||
+                 gMapManager.WorldActive == WD_67DOPPLEGANGER3) &&
+                (TerrainWall[Index] & TW_SAFEZONE) != TW_SAFEZONE)
+                Fly = true;
+
+            if (c->MonsterIndex == MONSTER_ELF_SOLDIER)
+                Fly = true;
+
+            if (Fly)
             {
-                bool Fly = false;
-
-                if (!(c->Object.SubType == MODEL_CURSEDTEMPLE_ALLIED_PLAYER || c->Object.SubType == MODEL_CURSEDTEMPLE_ILLUSION_PLAYER) && !c->SafeZone && c->Wing.Type != -1)
-                    Fly = true;
-
-                int Index = TERRAIN_INDEX_REPEAT((int)(c->Object.Position[0] / TERRAIN_SCALE), (int)(c->Object.Position[1] / TERRAIN_SCALE));
-
-                if (SceneFlag == MAIN_SCENE && (gMapManager.WorldActive == WD_7ATLANSE || gMapManager.InHellas() || gMapManager.WorldActive == WD_67DOPPLEGANGER3) && (TerrainWall[Index] & TW_SAFEZONE) != TW_SAFEZONE)
-                    Fly = true;
-
-                if (c->MonsterIndex == MONSTER_ELF_SOLDIER)
-                    Fly = true;
-
-                if (Fly)
+                if (g_isCharacterBuff((&c->Object), eBuff_CrywolfHeroContracted))
                 {
-                    if (g_isCharacterBuff((&c->Object), eBuff_CrywolfHeroContracted))
+                    if (c->Object.CurrentAction != PLAYER_HEALING_FEMALE1)
                     {
-                        if (c->Object.CurrentAction != PLAYER_HEALING_FEMALE1)
-                        {
-                            SetAction(&c->Object, PLAYER_HEALING_FEMALE1);
-                            SendRequestAction(c->Object, AT_HEALING1);
-                        }
-                    }
-                    else
-                    {
-                        if (gCharacterManager.GetEquipedBowType(c) == BOWTYPE_CROSSBOW)
-                        {
-                            SetAction(&c->Object, PLAYER_STOP_FLY_CROSSBOW);
-                        }
-                        else
-                        {
-                            SetAction(&c->Object, PLAYER_STOP_FLY);
-                        }
+                        SetAction(&c->Object, PLAYER_HEALING_FEMALE1);
+                        SendRequestAction(c->Object, AT_HEALING1);
                     }
                 }
                 else
                 {
-                    if (g_isCharacterBuff((&c->Object), eBuff_CrywolfHeroContracted))
+                    if (gCharacterManager.GetEquipedBowType(c) == BOWTYPE_CROSSBOW)
                     {
-                        if (c->Object.CurrentAction != PLAYER_HEALING_FEMALE1)
-                        {
-                            SetAction(&c->Object, PLAYER_HEALING_FEMALE1);
-                            SendRequestAction(c->Object, AT_HEALING1);
-                        }
+                        SetAction(&c->Object, PLAYER_STOP_FLY_CROSSBOW);
                     }
                     else
                     {
-                        //  No weapons or. Blur when you are in a safe zone that is not a hunting ground.
-                        if ((c->Weapon[0].Type == -1 && c->Weapon[1].Type == -1) || (c->SafeZone && (gMapManager.InBloodCastle() == false)))
+                        SetAction(&c->Object, PLAYER_STOP_FLY);
+                    }
+                }
+            }
+            else
+            {
+                if (g_isCharacterBuff((&c->Object), eBuff_CrywolfHeroContracted))
+                {
+                    if (c->Object.CurrentAction != PLAYER_HEALING_FEMALE1)
+                    {
+                        SetAction(&c->Object, PLAYER_HEALING_FEMALE1);
+                        SendRequestAction(c->Object, AT_HEALING1);
+                    }
+                }
+                else
+                {
+                    //  No weapons or. Blur when you are in a safe zone that is not a hunting ground.
+                    if ((c->Weapon[0].Type == -1 && c->Weapon[1].Type == -1) ||
+                        (c->SafeZone && (gMapManager.InBloodCastle() == false)))
+                    {
+                        if (gCharacterManager.GetBaseClass(c->Class) == CLASS_ELF)
+                            SetAction(&c->Object, PLAYER_STOP_FEMALE);
+                        else if (gCharacterManager.GetBaseClass(c->Class) == CLASS_SUMMONER &&
+                                 !gMapManager.InChaosCastle())
+                            SetAction(&c->Object, PLAYER_STOP_SUMMONER);
+                        else if (gCharacterManager.GetBaseClass(c->Class) == CLASS_RAGEFIGHTER)
+                            SetAction(&c->Object, PLAYER_STOP_RAGEFIGHTER);
+                        else
+                            SetAction(&c->Object, PLAYER_STOP_MALE);
+                    }
+                    else
+                    {
+                        //  칼 장착.
+                        if (c->Weapon[0].Type >= MODEL_SWORD && c->Weapon[0].Type < MODEL_MACE + MAX_ITEM_INDEX)
+                        {
+                            if (!ItemAttribute[c->Weapon[0].Type - MODEL_ITEM].TwoHand)
+                            {
+                                SetAction(&c->Object, PLAYER_STOP_SWORD);
+                            }
+                            else if (c->Weapon[0].Type == MODEL_DARK_REIGN_BLADE ||
+                                     c->Weapon[0].Type == MODEL_RUNE_BLADE ||
+                                     c->Weapon[0].Type == MODEL_EXPLOSION_BLADE ||
+                                     c->Weapon[0].Type == MODEL_SWORD_DANCER)
+                            {
+                                SetAction(&c->Object, PLAYER_STOP_TWO_HAND_SWORD_TWO);
+                            }
+                            else
+                            {
+                                SetAction(&c->Object, PLAYER_STOP_TWO_HAND_SWORD);
+                            }
+                        }
+                        //  창 장착.
+                        else if (c->Weapon[0].Type == MODEL__SPEAR || c->Weapon[0].Type == MODEL_DRAGON_LANCE)
+                        {
+                            SetAction(&c->Object, PLAYER_STOP_SPEAR);
+                        }
+                        //  창 장착.
+                        else if (c->Weapon[0].Type >= MODEL_SPEAR && c->Weapon[0].Type < MODEL_SPEAR + MAX_ITEM_INDEX)
+                        {
+                            if (!ItemAttribute[c->Weapon[0].Type - MODEL_ITEM].TwoHand)
+                                SetAction(&c->Object, PLAYER_STOP_SWORD);
+                            else
+                                SetAction(&c->Object, PLAYER_STOP_SCYTHE);
+                        }
+                        // 소환술사 스틱.
+                        else if (c->Weapon[0].Type >= MODEL_MISTERY_STICK &&
+                                 c->Weapon[0].Type <= MODEL_ETERNAL_WING_STICK)
+                        {
+                            ::SetAction(&c->Object, PLAYER_STOP_WAND);
+                        }
+                        else if (c->Weapon[0].Type >= MODEL_STAFF && c->Weapon[0].Type < MODEL_STAFF + MAX_ITEM_INDEX)
+                        {
+                            if (!ItemAttribute[c->Weapon[0].Type - MODEL_ITEM].TwoHand)
+                                SetAction(&c->Object, PLAYER_STOP_SWORD);
+                            else
+                                SetAction(&c->Object, PLAYER_STOP_SCYTHE);
+                        }
+                        else if (gCharacterManager.GetEquipedBowType(c) == BOWTYPE_BOW)
+                        {
+                            SetAction(&c->Object, PLAYER_STOP_BOW);
+                        }
+                        else if (gCharacterManager.GetEquipedBowType(c) == BOWTYPE_CROSSBOW)
+                        {
+                            SetAction(&c->Object, PLAYER_STOP_CROSSBOW);
+                        }
+                        else
                         {
                             if (gCharacterManager.GetBaseClass(c->Class) == CLASS_ELF)
                                 SetAction(&c->Object, PLAYER_STOP_FEMALE);
-                            else if (gCharacterManager.GetBaseClass(c->Class) == CLASS_SUMMONER && !gMapManager.InChaosCastle())
+                            else if (gCharacterManager.GetBaseClass(c->Class) == CLASS_SUMMONER)
                                 SetAction(&c->Object, PLAYER_STOP_SUMMONER);
                             else if (gCharacterManager.GetBaseClass(c->Class) == CLASS_RAGEFIGHTER)
                                 SetAction(&c->Object, PLAYER_STOP_RAGEFIGHTER);
                             else
                                 SetAction(&c->Object, PLAYER_STOP_MALE);
                         }
-                        else
-                        {
-                            //  칼 장착.
-                            if (c->Weapon[0].Type >= MODEL_SWORD && c->Weapon[0].Type < MODEL_MACE + MAX_ITEM_INDEX)
-                            {
-                                if (!ItemAttribute[c->Weapon[0].Type - MODEL_ITEM].TwoHand)
-                                {
-                                    SetAction(&c->Object, PLAYER_STOP_SWORD);
-                                }
-                                else if (c->Weapon[0].Type == MODEL_DARK_REIGN_BLADE || c->Weapon[0].Type == MODEL_RUNE_BLADE || c->Weapon[0].Type == MODEL_EXPLOSION_BLADE || c->Weapon[0].Type == MODEL_SWORD_DANCER)
-                                {
-                                    SetAction(&c->Object, PLAYER_STOP_TWO_HAND_SWORD_TWO);
-                                }
-                                else
-                                {
-                                    SetAction(&c->Object, PLAYER_STOP_TWO_HAND_SWORD);
-                                }
-                            }
-                            //  창 장착.
-                            else if (c->Weapon[0].Type == MODEL__SPEAR || c->Weapon[0].Type == MODEL_DRAGON_LANCE)
-                            {
-                                SetAction(&c->Object, PLAYER_STOP_SPEAR);
-                            }
-                            //  창 장착.
-                            else if (c->Weapon[0].Type >= MODEL_SPEAR && c->Weapon[0].Type < MODEL_SPEAR + MAX_ITEM_INDEX)
-                            {
-                                if (!ItemAttribute[c->Weapon[0].Type - MODEL_ITEM].TwoHand)
-                                    SetAction(&c->Object, PLAYER_STOP_SWORD);
-                                else
-                                    SetAction(&c->Object, PLAYER_STOP_SCYTHE);
-                            }
-                            // 소환술사 스틱.
-                            else if (c->Weapon[0].Type >= MODEL_MISTERY_STICK && c->Weapon[0].Type <= MODEL_ETERNAL_WING_STICK)
-                            {
-                                ::SetAction(&c->Object, PLAYER_STOP_WAND);
-                            }
-                            else if (c->Weapon[0].Type >= MODEL_STAFF && c->Weapon[0].Type < MODEL_STAFF + MAX_ITEM_INDEX)
-                            {
-                                if (!ItemAttribute[c->Weapon[0].Type - MODEL_ITEM].TwoHand)
-                                    SetAction(&c->Object, PLAYER_STOP_SWORD);
-                                else
-                                    SetAction(&c->Object, PLAYER_STOP_SCYTHE);
-                            }
-                            else if (gCharacterManager.GetEquipedBowType(c) == BOWTYPE_BOW)
-                            {
-                                SetAction(&c->Object, PLAYER_STOP_BOW);
-                            }
-                            else if (gCharacterManager.GetEquipedBowType(c) == BOWTYPE_CROSSBOW)
-                            {
-                                SetAction(&c->Object, PLAYER_STOP_CROSSBOW);
-                            }
-                            else
-                            {
-                                if (gCharacterManager.GetBaseClass(c->Class) == CLASS_ELF)
-                                    SetAction(&c->Object, PLAYER_STOP_FEMALE);
-                                else if (gCharacterManager.GetBaseClass(c->Class) == CLASS_SUMMONER)
-                                    SetAction(&c->Object, PLAYER_STOP_SUMMONER);
-                                else if (gCharacterManager.GetBaseClass(c->Class) == CLASS_RAGEFIGHTER)
-                                    SetAction(&c->Object, PLAYER_STOP_RAGEFIGHTER);
-                                else
-                                    SetAction(&c->Object, PLAYER_STOP_MALE);
-                            }
-                        }
                     }
                 }
             }
+        }
     }
     else
     {
         int Index = TERRAIN_INDEX_REPEAT((c->PositionX), (c->PositionY));
-        if (o->Type == MODEL_BALI && (TerrainWall[Index] & TW_SAFEZONE) == TW_SAFEZONE)//발리
+        if (o->Type == MODEL_BALI && (TerrainWall[Index] & TW_SAFEZONE) == TW_SAFEZONE) // 발리
             SetAction(&c->Object, MONSTER01_APEAR);
         else
             SetAction(&c->Object, MONSTER01_STOP1);
@@ -383,29 +384,30 @@ void SetPlayerWalk(CHARACTER* c)
     {
         c->Run = 0;
     }
-    else
-        if (!c->SafeZone && c->Run < 40)
+    else if (!c->SafeZone && c->Run < 40)
+    {
+        if (gCharacterManager.GetBaseClass(c->Class) == CLASS_DARK ||
+            gCharacterManager.GetBaseClass(c->Class) == CLASS_DARK_LORD ||
+            gCharacterManager.GetBaseClass(c->Class) == CLASS_RAGEFIGHTER ||
+            ((gMapManager.WorldActive != WD_7ATLANSE && !gMapManager.InHellas() &&
+              gMapManager.WorldActive != WD_67DOPPLEGANGER3) &&
+             c->BodyPart[BODYPART_BOOTS].Type != -1 && c->BodyPart[BODYPART_BOOTS].Level >= 5) ||
+            ((gMapManager.WorldActive == WD_7ATLANSE || gMapManager.InHellas() ||
+              gMapManager.WorldActive == WD_67DOPPLEGANGER3) &&
+             c->BodyPart[BODYPART_GLOVES].Type != -1 && c->BodyPart[BODYPART_GLOVES].Level >= 5) ||
+            ((gMapManager.WorldActive != WD_7ATLANSE && !gMapManager.InHellas() &&
+              gMapManager.WorldActive != WD_67DOPPLEGANGER3) &&
+             pItemBoots->Level >= 5) ||
+            ((gMapManager.WorldActive == WD_7ATLANSE || gMapManager.InHellas() ||
+              gMapManager.WorldActive == WD_67DOPPLEGANGER3) &&
+             pItemGloves->Level >= 5) ||
+            c->Helper.Type == MODEL_HORN_OF_FENRIR || c->Object.SubType == MODEL_CURSEDTEMPLE_ALLIED_PLAYER ||
+            c->Object.SubType == MODEL_CURSEDTEMPLE_ILLUSION_PLAYER)
         {
-            if (gCharacterManager.GetBaseClass(c->Class) == CLASS_DARK || gCharacterManager.GetBaseClass(c->Class) == CLASS_DARK_LORD
-                || gCharacterManager.GetBaseClass(c->Class) == CLASS_RAGEFIGHTER
-                || ((gMapManager.WorldActive != WD_7ATLANSE && !gMapManager.InHellas() && gMapManager.WorldActive != WD_67DOPPLEGANGER3) && c->BodyPart[BODYPART_BOOTS].Type != -1 && c->BodyPart[BODYPART_BOOTS].Level >= 5)
-                || ((gMapManager.WorldActive == WD_7ATLANSE || gMapManager.InHellas()
-                    || gMapManager.WorldActive == WD_67DOPPLEGANGER3
-                    ) && c->BodyPart[BODYPART_GLOVES].Type != -1 && c->BodyPart[BODYPART_GLOVES].Level >= 5)
-                || ((gMapManager.WorldActive != WD_7ATLANSE && !gMapManager.InHellas()
-                    && gMapManager.WorldActive != WD_67DOPPLEGANGER3
-                    ) && pItemBoots->Level >= 5)
-                || ((gMapManager.WorldActive == WD_7ATLANSE || gMapManager.InHellas()
-                    || gMapManager.WorldActive == WD_67DOPPLEGANGER3
-                    ) && pItemGloves->Level >= 5)
-                || c->Helper.Type == MODEL_HORN_OF_FENRIR
-                || c->Object.SubType == MODEL_CURSEDTEMPLE_ALLIED_PLAYER
-                || c->Object.SubType == MODEL_CURSEDTEMPLE_ILLUSION_PLAYER)
-            {
-                // RUN are the number of frames which are required until running gets active
-                c->Run += FPS_ANIMATION_FACTOR;
-            }
+            // RUN are the number of frames which are required until running gets active
+            c->Run += FPS_ANIMATION_FACTOR;
         }
+    }
     OBJECT* o = &c->Object;
     if (c->Object.Type == MODEL_PLAYER)
     {
@@ -499,15 +501,16 @@ void SetPlayerWalk(CHARACTER* c)
                     SetAction(&c->Object, PLAYER_RUN_RIDE_WEAPON);
             }
         }
-        else if (c->Helper.Type == MODEL_HORN_OF_DINORANT && !c->SafeZone)   //  페가시아를 타고있음.
+        else if (c->Helper.Type == MODEL_HORN_OF_DINORANT && !c->SafeZone) //  페가시아를 타고있음.
         {
-            if (gMapManager.WorldActive == WD_8TARKAN || gMapManager.WorldActive == WD_10HEAVEN || g_Direction.m_CKanturu.IsMayaScene())
+            if (gMapManager.WorldActive == WD_8TARKAN || gMapManager.WorldActive == WD_10HEAVEN ||
+                g_Direction.m_CKanturu.IsMayaScene())
             {
                 // 애니메이션 튀는거때문에 아예 막아버림
-//                if(c->Weapon[0].Type==-1 && c->Weapon[1].Type==-1)
-//				    SetAction(&c->Object,PLAYER_FLY_RIDE);
-//			    else
-//				    SetAction(&c->Object,PLAYER_FLY_RIDE_WEAPON);
+                //                if(c->Weapon[0].Type==-1 && c->Weapon[1].Type==-1)
+                //				    SetAction(&c->Object,PLAYER_FLY_RIDE);
+                //			    else
+                //				    SetAction(&c->Object,PLAYER_FLY_RIDE_WEAPON);
             }
             else
             {
@@ -529,9 +532,11 @@ void SetPlayerWalk(CHARACTER* c)
         }
         else
         {
-            int Index = TERRAIN_INDEX_REPEAT((int)(c->Object.Position[0] / TERRAIN_SCALE), (int)(c->Object.Position[1] / TERRAIN_SCALE));
+            int Index = TERRAIN_INDEX_REPEAT((int)(c->Object.Position[0] / TERRAIN_SCALE),
+                                             (int)(c->Object.Position[1] / TERRAIN_SCALE));
 
-            if (!(c->Object.SubType == MODEL_CURSEDTEMPLE_ALLIED_PLAYER || c->Object.SubType == MODEL_CURSEDTEMPLE_ILLUSION_PLAYER) &&
+            if (!(c->Object.SubType == MODEL_CURSEDTEMPLE_ALLIED_PLAYER ||
+                  c->Object.SubType == MODEL_CURSEDTEMPLE_ILLUSION_PLAYER) &&
                 !c->SafeZone && c->Wing.Type != -1)
             {
                 if (gCharacterManager.GetEquipedBowType(c) == BOWTYPE_CROSSBOW)
@@ -539,7 +544,8 @@ void SetPlayerWalk(CHARACTER* c)
                 else
                     SetAction(&c->Object, PLAYER_FLY);
             }
-            else if (!c->SafeZone && (gMapManager.WorldActive == WD_7ATLANSE || gMapManager.InHellas() || gMapManager.WorldActive == WD_67DOPPLEGANGER3))
+            else if (!c->SafeZone && (gMapManager.WorldActive == WD_7ATLANSE || gMapManager.InHellas() ||
+                                      gMapManager.WorldActive == WD_67DOPPLEGANGER3))
             {
                 if (c->Run >= 40)
                     SetAction(&c->Object, PLAYER_RUN_SWIM);
@@ -548,7 +554,8 @@ void SetPlayerWalk(CHARACTER* c)
             }
             else
             {
-                if ((c->Weapon[0].Type == -1 && c->Weapon[1].Type == -1) || (c->SafeZone && (gMapManager.InBloodCastle() == false)))
+                if ((c->Weapon[0].Type == -1 && c->Weapon[1].Type == -1) ||
+                    (c->SafeZone && (gMapManager.InBloodCastle() == false)))
                 {
                     if (c->Run >= 40)
                         SetAction(&c->Object, PLAYER_RUN);
@@ -556,7 +563,8 @@ void SetPlayerWalk(CHARACTER* c)
                     {
                         if (!gCharacterManager.IsFemale(c->Class))
                             SetAction(&c->Object, PLAYER_WALK_MALE);
-                        else if (gCharacterManager.GetBaseClass(c->Class) == CLASS_SUMMONER && gMapManager.InChaosCastle())
+                        else if (gCharacterManager.GetBaseClass(c->Class) == CLASS_SUMMONER &&
+                                 gMapManager.InChaosCastle())
                             SetAction(&c->Object, PLAYER_WALK_MALE);
                         else
                             SetAction(&c->Object, PLAYER_WALK_FEMALE);
@@ -572,7 +580,10 @@ void SetPlayerWalk(CHARACTER* c)
                             {
                                 SetAction(&c->Object, PLAYER_WALK_SWORD);
                             }
-                            else if (c->Weapon[0].Type == MODEL_DARK_REIGN_BLADE || c->Weapon[0].Type == MODEL_RUNE_BLADE || c->Weapon[0].Type == MODEL_EXPLOSION_BLADE || c->Weapon[0].Type == MODEL_SWORD_DANCER)
+                            else if (c->Weapon[0].Type == MODEL_DARK_REIGN_BLADE ||
+                                     c->Weapon[0].Type == MODEL_RUNE_BLADE ||
+                                     c->Weapon[0].Type == MODEL_EXPLOSION_BLADE ||
+                                     c->Weapon[0].Type == MODEL_SWORD_DANCER)
                             {
                                 SetAction(&c->Object, PLAYER_WALK_TWO_HAND_SWORD_TWO);
                             }
@@ -581,7 +592,8 @@ void SetPlayerWalk(CHARACTER* c)
                                 SetAction(&c->Object, PLAYER_WALK_TWO_HAND_SWORD);
                             }
                         }
-                        else if (c->Weapon[0].Type >= MODEL_MISTERY_STICK && c->Weapon[0].Type <= MODEL_ETERNAL_WING_STICK)
+                        else if (c->Weapon[0].Type >= MODEL_MISTERY_STICK &&
+                                 c->Weapon[0].Type <= MODEL_ETERNAL_WING_STICK)
                         {
                             ::SetAction(&c->Object, PLAYER_WALK_WAND);
                         }
@@ -592,7 +604,8 @@ void SetPlayerWalk(CHARACTER* c)
                             else
                                 SetAction(&c->Object, PLAYER_WALK_SCYTHE);
                         }
-                        else if (c->Weapon[0].Type == MODEL__SPEAR || c->Weapon[0].Type == MODEL_DRAGON_LANCE + MAX_ITEM_INDEX)
+                        else if (c->Weapon[0].Type == MODEL__SPEAR ||
+                                 c->Weapon[0].Type == MODEL_DRAGON_LANCE + MAX_ITEM_INDEX)
                             SetAction(&c->Object, PLAYER_WALK_SPEAR);
                         else if (c->Weapon[0].Type >= MODEL_SPEAR && c->Weapon[0].Type < MODEL_SPEAR + MAX_ITEM_INDEX)
                             SetAction(&c->Object, PLAYER_WALK_SCYTHE);
@@ -631,7 +644,10 @@ void SetPlayerWalk(CHARACTER* c)
                             {
                                 SetAction(&c->Object, PLAYER_RUN_SWORD);
                             }
-                            else if (c->Weapon[0].Type == MODEL_DARK_REIGN_BLADE || c->Weapon[0].Type == MODEL_RUNE_BLADE || c->Weapon[0].Type == MODEL_EXPLOSION_BLADE || c->Weapon[0].Type == MODEL_SWORD_DANCER)
+                            else if (c->Weapon[0].Type == MODEL_DARK_REIGN_BLADE ||
+                                     c->Weapon[0].Type == MODEL_RUNE_BLADE ||
+                                     c->Weapon[0].Type == MODEL_EXPLOSION_BLADE ||
+                                     c->Weapon[0].Type == MODEL_SWORD_DANCER)
                             {
                                 SetAction(&c->Object, PLAYER_RUN_TWO_HAND_SWORD_TWO);
                             }
@@ -640,7 +656,8 @@ void SetPlayerWalk(CHARACTER* c)
                                 SetAction(&c->Object, PLAYER_RUN_TWO_HAND_SWORD);
                             }
                         }
-                        else if (c->Weapon[0].Type >= MODEL_MISTERY_STICK && c->Weapon[0].Type <= MODEL_ETERNAL_WING_STICK)
+                        else if (c->Weapon[0].Type >= MODEL_MISTERY_STICK &&
+                                 c->Weapon[0].Type <= MODEL_ETERNAL_WING_STICK)
                         {
                             ::SetAction(&c->Object, PLAYER_RUN_WAND);
                         }
@@ -679,27 +696,31 @@ void SetPlayerWalk(CHARACTER* c)
     PlayMonsterSound(o);
     if (o->Type == MODEL_BALROG)
         PlayBuffer(SOUND_BONE2, o);
-    else if (gCharacterManager.GetBaseClass(c->Class) == CLASS_DARK_LORD && c->Helper.Type == MODEL_DARK_HORSE_ITEM && !c->SafeZone)
+    else if (gCharacterManager.GetBaseClass(c->Class) == CLASS_DARK_LORD && c->Helper.Type == MODEL_DARK_HORSE_ITEM &&
+             !c->SafeZone)
     {
         PlayBuffer(static_cast<ESound>(SOUND_RUN_DARK_HORSE_1 + rand() % 3), o);
     }
-    else if (c->Helper.Type == MODEL_HORN_OF_FENRIR && !c->SafeZone
-        && (c->Object.CurrentAction >= PLAYER_FENRIR_RUN && c->Object.CurrentAction <= PLAYER_FENRIR_RUN_ONE_LEFT_ELF))
+    else if (c->Helper.Type == MODEL_HORN_OF_FENRIR && !c->SafeZone &&
+             (c->Object.CurrentAction >= PLAYER_FENRIR_RUN &&
+              c->Object.CurrentAction <= PLAYER_FENRIR_RUN_ONE_LEFT_ELF))
     {
         PlayBuffer(static_cast<ESound>(SOUND_FENRIR_RUN_1 + rand() % 3), o);
     }
-    else if (c->Helper.Type == MODEL_HORN_OF_FENRIR && !c->SafeZone
-        && (c->Object.CurrentAction >= PLAYER_FENRIR_WALK && c->Object.CurrentAction <= PLAYER_FENRIR_WALK_ONE_LEFT))
+    else if (c->Helper.Type == MODEL_HORN_OF_FENRIR && !c->SafeZone &&
+             (c->Object.CurrentAction >= PLAYER_FENRIR_WALK && c->Object.CurrentAction <= PLAYER_FENRIR_WALK_ONE_LEFT))
     {
         PlayBuffer(static_cast<ESound>(SOUND_FENRIR_RUN_1 + rand() % 2), o);
     }
-    else if (c->Helper.Type == MODEL_HORN_OF_FENRIR && !c->SafeZone
-        && (c->Object.CurrentAction >= PLAYER_RAGE_FENRIR_RUN && c->Object.CurrentAction <= PLAYER_RAGE_FENRIR_RUN_ONE_LEFT))
+    else if (c->Helper.Type == MODEL_HORN_OF_FENRIR && !c->SafeZone &&
+             (c->Object.CurrentAction >= PLAYER_RAGE_FENRIR_RUN &&
+              c->Object.CurrentAction <= PLAYER_RAGE_FENRIR_RUN_ONE_LEFT))
     {
         PlayBuffer(static_cast<ESound>(SOUND_FENRIR_RUN_1 + rand() % 3), o);
     }
-    else if (c->Helper.Type == MODEL_HORN_OF_FENRIR && !c->SafeZone
-        && (c->Object.CurrentAction >= PLAYER_RAGE_FENRIR_WALK && c->Object.CurrentAction <= PLAYER_RAGE_FENRIR_WALK_TWO_SWORD))
+    else if (c->Helper.Type == MODEL_HORN_OF_FENRIR && !c->SafeZone &&
+             (c->Object.CurrentAction >= PLAYER_RAGE_FENRIR_WALK &&
+              c->Object.CurrentAction <= PLAYER_RAGE_FENRIR_WALK_TWO_SWORD))
     {
         PlayBuffer(static_cast<ESound>(SOUND_FENRIR_RUN_1 + rand() % 2), o);
     }
@@ -722,7 +743,7 @@ void SetPlayerWalk(CHARACTER* c)
     }
 }
 
-//extern bool EnableEdit;
+// extern bool EnableEdit;
 extern int CurrentSkill;
 int AttackHand = 0;
 
@@ -1002,7 +1023,7 @@ void SetPlayerAttack(CHARACTER* c)
             }
             else if (gCharacterManager.GetEquipedBowType(c) == BOWTYPE_CROSSBOW)
             {
-                SetAction(&c->Object, PLAYER_FENRIR_ATTACK_CROSSBOW);	//석궁공격
+                SetAction(&c->Object, PLAYER_FENRIR_ATTACK_CROSSBOW); // 석궁공격
             }
             else
             {
@@ -1010,7 +1031,8 @@ void SetPlayerAttack(CHARACTER* c)
                     SetAction(&c->Object, PLAYER_FENRIR_ATTACK_TWO_SWORD);
                 else if (c->Weapon[0].Type != -1 && c->Weapon[1].Type == -1)
                     SetAction(&c->Object, PLAYER_FENRIR_ATTACK_ONE_SWORD);
-                else if (c->Weapon[0].Type == -1 && c->Weapon[1].Type != -1 && (gCharacterManager.GetBaseClass(c->Class) == CLASS_RAGEFIGHTER))
+                else if (c->Weapon[0].Type == -1 && c->Weapon[1].Type != -1 &&
+                         (gCharacterManager.GetBaseClass(c->Class) == CLASS_RAGEFIGHTER))
                     SetAction(&c->Object, PLAYER_RAGE_FENRIR_ATTACK_RIGHT);
                 else if (c->Weapon[0].Type == -1 && c->Weapon[1].Type != -1)
                     SetAction(&c->Object, PLAYER_FENRIR_ATTACK_ONE_SWORD);
@@ -1085,16 +1107,25 @@ void SetPlayerAttack(CHARACTER* c)
                         {
                             switch (c->SwordCount % 4)
                             {
-                            case 0:SetAction(&c->Object, PLAYER_ATTACK_SWORD_RIGHT1); break;
-                            case 1:SetAction(&c->Object, PLAYER_ATTACK_SWORD_LEFT1); break;
-                            case 2:SetAction(&c->Object, PLAYER_ATTACK_SWORD_RIGHT1 + 1); break;
-                            case 3:SetAction(&c->Object, PLAYER_ATTACK_SWORD_LEFT1 + 1); break;
+                            case 0:
+                                SetAction(&c->Object, PLAYER_ATTACK_SWORD_RIGHT1);
+                                break;
+                            case 1:
+                                SetAction(&c->Object, PLAYER_ATTACK_SWORD_LEFT1);
+                                break;
+                            case 2:
+                                SetAction(&c->Object, PLAYER_ATTACK_SWORD_RIGHT1 + 1);
+                                break;
+                            case 3:
+                                SetAction(&c->Object, PLAYER_ATTACK_SWORD_LEFT1 + 1);
+                                break;
                             }
                         }
                         else
                             SetAction(&c->Object, PLAYER_ATTACK_SWORD_RIGHT1 + c->SwordCount % 2);
                     }
-                    else if (c->Weapon[0].Type == MODEL_DARK_REIGN_BLADE || c->Weapon[0].Type == MODEL_RUNE_BLADE || c->Weapon[0].Type == MODEL_EXPLOSION_BLADE || c->Weapon[0].Type == MODEL_SWORD_DANCER)
+                    else if (c->Weapon[0].Type == MODEL_DARK_REIGN_BLADE || c->Weapon[0].Type == MODEL_RUNE_BLADE ||
+                             c->Weapon[0].Type == MODEL_EXPLOSION_BLADE || c->Weapon[0].Type == MODEL_SWORD_DANCER)
                     {
                         SetAction(&c->Object, PLAYER_ATTACK_TWO_HAND_SWORD_TWO);
                     }
@@ -1169,20 +1200,33 @@ void SetPlayerAttack(CHARACTER* c)
         {
             bool Success = true;
 
-            if (SetCurrentAction_HellasMonster(c, o) == true) Success = false;
-            if (battleCastle::SetCurrentAction_BattleCastleMonster(c, o) == true) Success = false;
-            if (M31HuntingGround::SetCurrentActionHuntingGroundMonster(c, o) == true) Success = false;
-            if (M33Aida::SetCurrentActionAidaMonster(c, o) == true) Success = false;
-            if (M34CryWolf1st::SetCurrentActionCrywolfMonster(c, o) == true) Success = false;
-            if (M37Kanturu1st::SetCurrentActionKanturu1stMonster(c, o) == true) Success = false;
-            if (M38Kanturu2nd::Set_CurrentAction_Kanturu2nd_Monster(c, o) == true) Success = false;
-            if (M39Kanturu3rd::SetCurrentActionKanturu3rdMonster(c, o) == true) Success = false;
-            if (SEASON3A::CGM3rdChangeUp::Instance().SetCurrentActionBalgasBarrackMonster(c, o))	Success = false;
-            if (g_CursedTemple->SetCurrentActionMonster(c, o) == true) Success = false;
-            if (SEASON3B::GMNewTown::SetCurrentActionMonster(c, o) == true) Success = false;
-            if (SEASON3C::GMSwampOfQuiet::SetCurrentActionMonster(c, o) == true) Success = false;
+            if (SetCurrentAction_HellasMonster(c, o) == true)
+                Success = false;
+            if (battleCastle::SetCurrentAction_BattleCastleMonster(c, o) == true)
+                Success = false;
+            if (M31HuntingGround::SetCurrentActionHuntingGroundMonster(c, o) == true)
+                Success = false;
+            if (M33Aida::SetCurrentActionAidaMonster(c, o) == true)
+                Success = false;
+            if (M34CryWolf1st::SetCurrentActionCrywolfMonster(c, o) == true)
+                Success = false;
+            if (M37Kanturu1st::SetCurrentActionKanturu1stMonster(c, o) == true)
+                Success = false;
+            if (M38Kanturu2nd::Set_CurrentAction_Kanturu2nd_Monster(c, o) == true)
+                Success = false;
+            if (M39Kanturu3rd::SetCurrentActionKanturu3rdMonster(c, o) == true)
+                Success = false;
+            if (SEASON3A::CGM3rdChangeUp::Instance().SetCurrentActionBalgasBarrackMonster(c, o))
+                Success = false;
+            if (g_CursedTemple->SetCurrentActionMonster(c, o) == true)
+                Success = false;
+            if (SEASON3B::GMNewTown::SetCurrentActionMonster(c, o) == true)
+                Success = false;
+            if (SEASON3C::GMSwampOfQuiet::SetCurrentActionMonster(c, o) == true)
+                Success = false;
 
-            if (TheMapProcess().SetCurrentActionMonster(c, o) == true) Success = false;
+            if (TheMapProcess().SetCurrentActionMonster(c, o) == true)
+                Success = false;
 
             if (Success)
             {
@@ -1194,44 +1238,44 @@ void SetPlayerAttack(CHARACTER* c)
             }
         }
     }
-    if (gMapManager.WorldActive == WD_73NEW_LOGIN_SCENE);
-    else
-        if (c->Object.AnimationFrame == 0.f)
-        {
-            PlayMonsterSound(o);
+    if (gMapManager.WorldActive == WD_73NEW_LOGIN_SCENE)
+        ;
+    else if (c->Object.AnimationFrame == 0.f)
+    {
+        PlayMonsterSound(o);
 
-            if (o->Type != MODEL_PLAYER || (o->SubType >= MODEL_SKELETON1 && o->SubType <= MODEL_SKELETON3))
+        if (o->Type != MODEL_PLAYER || (o->SubType >= MODEL_SKELETON1 && o->SubType <= MODEL_SKELETON3))
+        {
+            if (o->SubType >= MODEL_SKELETON1 && o->SubType <= MODEL_SKELETON3)
+                PlayBuffer(static_cast<ESound>(SOUND_BRANDISH_SWORD01 + rand() % 2), o);
+            if (Models[o->Type].Sounds[2] != -1)
             {
-                if (o->SubType >= MODEL_SKELETON1 && o->SubType <= MODEL_SKELETON3)
-                    PlayBuffer(static_cast<ESound>(SOUND_BRANDISH_SWORD01 + rand() % 2), o);
-                if (Models[o->Type].Sounds[2] != -1)
+                int offset = 0;
+                if (o->SubType == 9)
                 {
-                    int offset = 0;
-                    if (o->SubType == 9)
-                    {
-                        offset = 5;
-                    }
-                    PlayBuffer(static_cast<ESound>(SOUND_MONSTER + offset + Models[o->Type].Sounds[2 + rand() % 2]), o);
+                    offset = 5;
                 }
-            }
-            else
-            {
-                if (gCharacterManager.GetEquipedBowType(c) == BOWTYPE_BOW)
-                {
-                    PlayBuffer(SOUND_BOW01, o);
-                }
-                else if (gCharacterManager.GetEquipedBowType(c) == BOWTYPE_CROSSBOW)
-                {
-                    PlayBuffer(SOUND_CROSSBOW01, o);
-                }
-                else if (c->Weapon[0].Type >= MODEL_BLUEWING_CROSSBOW && c->Weapon[0].Type < MODEL_ARROWS)
-                    PlayBuffer(SOUND_MAGIC, o);
-                else if (c->Weapon[0].Type == MODEL_LIGHT_SABER || c->Weapon[0].Type == MODEL_SPEAR)
-                    PlayBuffer(SOUND_BRANDISH_SWORD03, o);
-                else if (c->Weapon[0].Type != -1 || c->Weapon[1].Type != -1)
-                    PlayBuffer(static_cast<ESound>(SOUND_BRANDISH_SWORD01 + rand() % 2), o);
+                PlayBuffer(static_cast<ESound>(SOUND_MONSTER + offset + Models[o->Type].Sounds[2 + rand() % 2]), o);
             }
         }
+        else
+        {
+            if (gCharacterManager.GetEquipedBowType(c) == BOWTYPE_BOW)
+            {
+                PlayBuffer(SOUND_BOW01, o);
+            }
+            else if (gCharacterManager.GetEquipedBowType(c) == BOWTYPE_CROSSBOW)
+            {
+                PlayBuffer(SOUND_CROSSBOW01, o);
+            }
+            else if (c->Weapon[0].Type >= MODEL_BLUEWING_CROSSBOW && c->Weapon[0].Type < MODEL_ARROWS)
+                PlayBuffer(SOUND_MAGIC, o);
+            else if (c->Weapon[0].Type == MODEL_LIGHT_SABER || c->Weapon[0].Type == MODEL_SPEAR)
+                PlayBuffer(SOUND_BRANDISH_SWORD03, o);
+            else if (c->Weapon[0].Type != -1 || c->Weapon[1].Type != -1)
+                PlayBuffer(static_cast<ESound>(SOUND_BRANDISH_SWORD01 + rand() % 2), o);
+        }
+    }
     c->SwordCount++;
 }
 
@@ -1282,17 +1326,20 @@ void SetPlayerTeleport(CHARACTER* c)
 
 void SetPlayerShock(CHARACTER* c, int Hit)
 {
-    if (c->Dead > 0) return;
-    if (c->Helper.Type == MODEL_HORN_OF_UNIRIA || c->Helper.Type == MODEL_HORN_OF_DINORANT) return;
-    if (c->Helper.Type == MODEL_DARK_HORSE_ITEM) return;
+    if (c->Dead > 0)
+        return;
+    if (c->Helper.Type == MODEL_HORN_OF_UNIRIA || c->Helper.Type == MODEL_HORN_OF_DINORANT)
+        return;
+    if (c->Helper.Type == MODEL_DARK_HORSE_ITEM)
+        return;
 
     OBJECT* o = &c->Object;
 
-    if (o->CurrentAction == PLAYER_ATTACK_SKILL_FURY_STRIKE || o->CurrentAction == PLAYER_SKILL_VITALITY) return;
-    if (o->CurrentAction == PLAYER_SKILL_HELL_BEGIN
-        || (o->CurrentAction == PLAYER_SKILL_ATT_UP_OURFORCES || o->CurrentAction == PLAYER_SKILL_HP_UP_OURFORCES
-            || o->CurrentAction == PLAYER_SKILL_GIANTSWING
-            || o->CurrentAction == PLAYER_SKILL_DRAGONLORE))
+    if (o->CurrentAction == PLAYER_ATTACK_SKILL_FURY_STRIKE || o->CurrentAction == PLAYER_SKILL_VITALITY)
+        return;
+    if (o->CurrentAction == PLAYER_SKILL_HELL_BEGIN ||
+        (o->CurrentAction == PLAYER_SKILL_ATT_UP_OURFORCES || o->CurrentAction == PLAYER_SKILL_HP_UP_OURFORCES ||
+         o->CurrentAction == PLAYER_SKILL_GIANTSWING || o->CurrentAction == PLAYER_SKILL_DRAGONLORE))
         return;
 
     if (Hit > 0)
@@ -1314,9 +1361,9 @@ void SetPlayerShock(CHARACTER* c, int Hit)
         }
         else
         {
-            if (o->CurrentAction<MONSTER01_ATTACK1 || o->CurrentAction>MONSTER01_ATTACK2)
+            if (o->CurrentAction < MONSTER01_ATTACK1 || o->CurrentAction > MONSTER01_ATTACK2)
                 SetAction(&c->Object, MONSTER01_SHOCK);
-            //c->Movement = false;
+            // c->Movement = false;
         }
         if (c->Object.AnimationFrame == 0.f)
         {
@@ -1418,7 +1465,8 @@ void SetPlayerDie(CHARACTER* c)
         case MODEL_BLADE_HUNTER:
         case MODEL_TWIN_TAIL:
         {
-            if (gMapManager.WorldActive == WD_39KANTURU_3RD && g_Direction.m_CKanturu.m_iKanturuState == KANTURU_STATE_MAYA_BATTLE)
+            if (gMapManager.WorldActive == WD_39KANTURU_3RD &&
+                g_Direction.m_CKanturu.m_iKanturuState == KANTURU_STATE_MAYA_BATTLE)
             {
                 FallingMonster(c, o);
                 SetAction(&c->Object, MONSTER01_STOP2);
@@ -1430,7 +1478,8 @@ void SetPlayerDie(CHARACTER* c)
         case MODEL_MAYA_HAND_LEFT:
         case MODEL_MAYA_HAND_RIGHT:
         {
-            if (gMapManager.WorldActive == WD_39KANTURU_3RD && g_Direction.m_CKanturu.m_iMayaState >= KANTURU_MAYA_DIRECTION_MAYA3)
+            if (gMapManager.WorldActive == WD_39KANTURU_3RD &&
+                g_Direction.m_CKanturu.m_iMayaState >= KANTURU_MAYA_DIRECTION_MAYA3)
                 SetAction(&c->Object, MONSTER01_STOP2);
             else
                 SetAction(&c->Object, MONSTER01_DIE);
@@ -1486,7 +1535,7 @@ void SetPlayerDie(CHARACTER* c)
                 }
 
                 if (c->Helper.Type == MODEL_HORN_OF_FENRIR)
-                    PlayBuffer(SOUND_FENRIR_DEATH, o);	// 펜릴 죽는
+                    PlayBuffer(SOUND_FENRIR_DEATH, o); // 펜릴 죽는
             }
         }
         c->Object.AnimationFrame = 0.001f;
@@ -1550,10 +1599,13 @@ void AttackEffect(CHARACTER* c)
         return;
     if (g_CursedTemple->AttackEffectMonster(c, o, b) == true)
         return;
-    if (SEASON3B::GMNewTown::AttackEffectMonster(c, o, b) == true) return;
-    if (SEASON3C::GMSwampOfQuiet::AttackEffectMonster(c, o, b) == true) return;
+    if (SEASON3B::GMNewTown::AttackEffectMonster(c, o, b) == true)
+        return;
+    if (SEASON3C::GMSwampOfQuiet::AttackEffectMonster(c, o, b) == true)
+        return;
 
-    if (TheMapProcess().AttackEffectMonster(c, o, b) == true) return;
+    if (TheMapProcess().AttackEffectMonster(c, o, b) == true)
+        return;
 
     switch (c->MonsterIndex)
     {
@@ -1585,7 +1637,8 @@ void AttackEffect(CHARACTER* c)
             }
             else
             {
-                Vector(o->Position[0] + rand() % 1024 - 512, o->Position[1] + rand() % 1024 - 512, o->Position[2], Position);
+                Vector(o->Position[0] + rand() % 1024 - 512, o->Position[1] + rand() % 1024 - 512, o->Position[2],
+                       Position);
                 CreateEffect(MODEL_FIRE, Position, o->Angle, o->Light);
                 PlayBuffer(SOUND_METEORITE01);
             }
@@ -1630,12 +1683,12 @@ void AttackEffect(CHARACTER* c)
         {
             if (c->CheckAttackTime(14))
             {
-                vec3_t Angle = { 0.0f, 0.0f, 0.0f };
+                vec3_t Angle = {0.0f, 0.0f, 0.0f};
                 int iCount = 36;
 
                 for (int i = 0; i < iCount; ++i)
                 {
-                    //Angle[2] = ( float)i * 10.0f;
+                    // Angle[2] = ( float)i * 10.0f;
                     Angle[0] = (float)(rand() % 360);
                     Angle[1] = (float)(rand() % 360);
                     Angle[2] = (float)(rand() % 360);
@@ -1705,11 +1758,11 @@ void AttackEffect(CHARACTER* c)
         {
             if (c->CheckAttackTime(2) || c->CheckAttackTime(6))
             {
-                vec3_t Angle = { 0.0f, 0.0f, 0.0f };
+                vec3_t Angle = {0.0f, 0.0f, 0.0f};
                 int iCount = 40;
                 for (i = 0; i < iCount; ++i)
                 {
-                    //Angle[2] = ( float)i * 10.0f;
+                    // Angle[2] = ( float)i * 10.0f;
                     Angle[0] = (float)(rand() % 360);
                     Angle[1] = (float)(rand() % 360);
                     Angle[2] = (float)(rand() % 360);
@@ -1737,7 +1790,8 @@ void AttackEffect(CHARACTER* c)
             {
                 if (c->MonsterIndex == MONSTER_DEATH_BEAM_KNIGHT && rand_fps_check(1))
                 {
-                    Vector(o->Position[0] + rand() % 800 - 400, o->Position[1] + rand() % 800 - 400, o->Position[2], Position);
+                    Vector(o->Position[0] + rand() % 800 - 400, o->Position[1] + rand() % 800 - 400, o->Position[2],
+                           Position);
                     CreateEffect(MODEL_SKILL_BLAST, Position, o->Angle, o->Light);
                 }
 
@@ -1757,7 +1811,7 @@ void AttackEffect(CHARACTER* c)
         {
             if (c->CheckAttackTime(1))
             {
-                //CreateInferno(o->Position);
+                // CreateInferno(o->Position);
                 CreateEffect(MODEL_SKILL_INFERNO, o->Position, o->Angle, o->Light);
                 c->SetLastAttackEffectTime();
             }
@@ -1834,8 +1888,10 @@ void AttackEffect(CHARACTER* c)
         {
             if (c->CheckAttackTime(1))
             {
-                VectorCopy(o->Angle, Angle); Angle[2] += 20.f;
-                VectorCopy(o->Position, p); p[2] += 50.f;
+                VectorCopy(o->Angle, Angle);
+                Angle[2] += 20.f;
+                VectorCopy(o->Position, p);
+                p[2] += 50.f;
                 Luminosity = (15 - c->AttackTime) * 0.1f;
                 Vector(Luminosity * 0.3f, Luminosity * 0.6f, Luminosity * 1.f, Light);
 
@@ -1868,7 +1924,8 @@ void AttackEffect(CHARACTER* c)
             }
             if (rand_fps_check(1))
             {
-                Vector(o->Position[0] + rand() % 1024 - 512, o->Position[1] + rand() % 1024 - 512, o->Position[2], Position);
+                Vector(o->Position[0] + rand() % 1024 - 512, o->Position[1] + rand() % 1024 - 512, o->Position[2],
+                       Position);
                 CreateEffect(MODEL_FIRE, Position, o->Angle, o->Light);
                 PlayBuffer(SOUND_METEORITE01);
             }
@@ -1903,21 +1960,23 @@ void AttackEffect(CHARACTER* c)
 
             if (rand_fps_check(1))
             {
-                Vector(o->Position[0] + rand() % 1024 - 512, o->Position[1] + rand() % 1024 - 512, o->Position[2], Position);
+                Vector(o->Position[0] + rand() % 1024 - 512, o->Position[1] + rand() % 1024 - 512, o->Position[2],
+                       Position);
                 CreateEffect(MODEL_FIRE, Position, o->Angle, o->Light);
                 PlayBuffer(SOUND_METEORITE01);
             }
         }
         break;
-    case MONSTER_METEORITE_TRAP://함정
+    case MONSTER_METEORITE_TRAP: // 함정
         if ((c->Skill) == AT_SKILL_BOSS && rand_fps_check(1))
         {
-            Vector(o->Position[0] + rand() % 1024 - 512, o->Position[1] + rand() % 1024 - 512, o->Position[2], Position);
+            Vector(o->Position[0] + rand() % 1024 - 512, o->Position[1] + rand() % 1024 - 512, o->Position[2],
+                   Position);
             CreateEffect(MODEL_FIRE, Position, o->Angle, o->Light);
             PlayBuffer(SOUND_METEORITE01);
         }
         break;
-    case MONSTER_BAHAMUT://물고기
+    case MONSTER_BAHAMUT: // 물고기
         if (rand_fps_check(1))
         {
             for (int i = 0; i < 4; i++)
@@ -1942,7 +2001,7 @@ void AttackEffect(CHARACTER* c)
         {
             switch (c->MonsterIndex)
             {
-            case MONSTER_CHAOS_CASTLE_2:  //  카오스캐슬 궁수.
+            case MONSTER_CHAOS_CASTLE_2: //  카오스캐슬 궁수.
             case MONSTER_CHAOS_CASTLE_4:
             case MONSTER_CHAOS_CASTLE_6:
             case MONSTER_CHAOS_CASTLE_8:
@@ -1986,7 +2045,7 @@ void AttackEffect(CHARACTER* c)
                 }
                 break;
 
-            case MONSTER_MAGIC_SKELETON_1:   //  마법 해골.
+            case MONSTER_MAGIC_SKELETON_1: //  마법 해골.
             case MONSTER_MAGIC_SKELETON_2:
             case MONSTER_MAGIC_SKELETON_3:
             case MONSTER_MAGIC_SKELETON_4:
@@ -2004,12 +2063,12 @@ void AttackEffect(CHARACTER* c)
                 }
                 break;
 
-            case MONSTER_GIANT_OGRE_1:	//. 자이언트오거1
-            case MONSTER_GIANT_OGRE_2:	//. 자이언트오거2
-            case MONSTER_GIANT_OGRE_3:	//. 자이언트오거3
-            case MONSTER_GIANT_OGRE_4:	//. 자이언트오거4
-            case MONSTER_GIANT_OGRE_5:	//. 자이언트오거5
-            case MONSTER_GIANT_OGRE_6:	//. 자이언트오거6
+            case MONSTER_GIANT_OGRE_1: //. 자이언트오거1
+            case MONSTER_GIANT_OGRE_2: //. 자이언트오거2
+            case MONSTER_GIANT_OGRE_3: //. 자이언트오거3
+            case MONSTER_GIANT_OGRE_4: //. 자이언트오거4
+            case MONSTER_GIANT_OGRE_5: //. 자이언트오거5
+            case MONSTER_GIANT_OGRE_6: //. 자이언트오거6
             case MONSTER_GIANT_OGRE_7:
                 if (c->CheckAttackTime(13))
                 {
@@ -2023,7 +2082,7 @@ void AttackEffect(CHARACTER* c)
                 }
                 break;
 
-            case MONSTER_DARK_PHOENIX://불사조공격
+            case MONSTER_DARK_PHOENIX: // 불사조공격
                 if (c->CheckAttackTime(14))
                 {
                     Vector(0.f, 0.f, 0.f, p);
@@ -2073,8 +2132,9 @@ void AttackEffect(CHARACTER* c)
                     for (int i = 0; i < 6; i++)
                     {
                         int Hand = 0;
-                        if (i >= 3) Hand = 1;
-                        b->TransformPosition(o->BoneTransform[c->Weapon[Hand].LinkBone], p, Position, true);//에러
+                        if (i >= 3)
+                            Hand = 1;
+                        b->TransformPosition(o->BoneTransform[c->Weapon[Hand].LinkBone], p, Position, true); // 에러
                         Vector(0.f, 0.f, (float)(rand() % 360), Angle);
                         CreateJoint(BITMAP_JOINT_THUNDER, Position, to->Position, Angle, 2, to, 50.f);
                         CreateJoint(BITMAP_JOINT_THUNDER, Position, to->Position, Angle, 2, to, 10.f);
@@ -2083,7 +2143,8 @@ void AttackEffect(CHARACTER* c)
                     for (int i = 0; i < 4; i++)
                     {
                         int Hand = 0;
-                        if (i >= 2) Hand = 1;
+                        if (i >= 2)
+                            Hand = 1;
                         b->TransformPosition(o->BoneTransform[c->Weapon[Hand].LinkBone], p, Position, true);
                         Vector(0.f, 0.f, (float)(rand() % 360), Angle);
                         CreateJoint(BITMAP_JOINT_LASER + 1, Position, to->Position, Angle, 0, to, 50.f);
@@ -2110,7 +2171,8 @@ void AttackEffect(CHARACTER* c)
                     for (int i = 0; i < 4; i++)
                     {
                         int Hand = 0;
-                        if (i >= 2) Hand = 1;
+                        if (i >= 2)
+                            Hand = 1;
                         Vector(0.f, 0.f, 0.f, Angle);
                         b->TransformPosition(o->BoneTransform[c->Weapon[Hand].LinkBone], p, Position, true);
                         CreateJoint(BITMAP_BLUR + 1, Position, to->Position, Angle, 1, to, 50.f);
@@ -2130,7 +2192,8 @@ void AttackEffect(CHARACTER* c)
                     for (int i = 0; i < 4; i++)
                     {
                         int Hand = 0;
-                        if (i >= 2) Hand = 1;
+                        if (i >= 2)
+                            Hand = 1;
                         b->TransformPosition(o->BoneTransform[c->Weapon[Hand].LinkBone], p, Position, true);
                         Vector(0.f, 0.f, (float)(rand() % 360), Angle);
                         CreateJoint(BITMAP_JOINT_LASER + 1, Position, to->Position, Angle, 0, to, 50.f);
@@ -2166,11 +2229,12 @@ void AttackEffect(CHARACTER* c)
                 break;
             }
         }
-        else if ((c->Skill) == AT_SKILL_LIGHTNING || c->Skill == AT_SKILL_LIGHTNING_STR || c->Skill == AT_SKILL_LIGHTNING_STR_MG)
+        else if ((c->Skill) == AT_SKILL_LIGHTNING || c->Skill == AT_SKILL_LIGHTNING_STR ||
+                 c->Skill == AT_SKILL_LIGHTNING_STR_MG)
         {
             switch (c->MonsterIndex)
             {
-            case MONSTER_MAGIC_SKELETON_1:   //  마법 해골.
+            case MONSTER_MAGIC_SKELETON_1: //  마법 해골.
             case MONSTER_MAGIC_SKELETON_2:
             case MONSTER_MAGIC_SKELETON_3:
             case MONSTER_MAGIC_SKELETON_4:
@@ -2198,7 +2262,7 @@ void AttackEffect(CHARACTER* c)
             }
             break;
 
-            case MONSTER_DARK_PHOENIX://불사조공격
+            case MONSTER_DARK_PHOENIX: // 불사조공격
                 if (8 <= c->AttackTime && rand_fps_check(1))
                 {
                     Vector(0.f, 0.f, 0.f, p);
@@ -2210,7 +2274,7 @@ void AttackEffect(CHARACTER* c)
                     }
                 }
                 break;
-            case MONSTER_DEVIL://데빌
+            case MONSTER_DEVIL: // 데빌
                 if (c->CheckAttackTime(1))
                 {
                     PlayBuffer(SOUND_EVIL);
@@ -2222,7 +2286,8 @@ void AttackEffect(CHARACTER* c)
                     for (int i = 0; i < 4; i++)
                     {
                         int Hand = 0;
-                        if (i >= 2) Hand = 1;
+                        if (i >= 2)
+                            Hand = 1;
                         b->TransformPosition(o->BoneTransform[c->Weapon[Hand].LinkBone], p, Position, true);
                         Vector(0.f, 0.f, (float)(rand() % 360), Angle);
                         CreateJoint(BITMAP_JOINT_LASER + 1, Position, to->Position, Angle, 0, to, 50.f);
@@ -2236,7 +2301,8 @@ void AttackEffect(CHARACTER* c)
                     for (int i = 0; i < 4; i++)
                     {
                         int Hand = 0;
-                        if (i >= 2) Hand = 1;
+                        if (i >= 2)
+                            Hand = 1;
                         b->TransformPosition(o->BoneTransform[c->Weapon[Hand].LinkBone], p, Position, true);
                         Vector(0.f, 0.f, (float)(rand() % 360), Angle);
                         CreateJoint(BITMAP_JOINT_THUNDER, Position, to->Position, Angle, 0, to, 50.f);
@@ -2245,14 +2311,15 @@ void AttackEffect(CHARACTER* c)
                     }
                 }
                 break;
-            case MONSTER_LIZARD_KING://리자드킹
+            case MONSTER_LIZARD_KING: // 리자드킹
                 if (rand_fps_check(1))
                 {
                     for (int i = 0; i < 6; i++)
                     {
                         int Hand = 0;
-                        if (i >= 3) Hand = 1;
-                        b->TransformPosition(o->BoneTransform[c->Weapon[Hand].LinkBone], p, Position, true);//에러
+                        if (i >= 3)
+                            Hand = 1;
+                        b->TransformPosition(o->BoneTransform[c->Weapon[Hand].LinkBone], p, Position, true); // 에러
                         Vector(0.f, 0.f, (float)(rand() % 360), Angle);
                         CreateJoint(BITMAP_JOINT_THUNDER, Position, to->Position, Angle, 2, to, 50.f);
                         CreateJoint(BITMAP_JOINT_THUNDER, Position, to->Position, Angle, 2, to, 10.f);
@@ -2289,13 +2356,13 @@ void AttackEffect(CHARACTER* c)
                     Vector(8.f, 0.f, 0.f, Light);
                     b->TransformPosition(o->BoneTransform[17], p, Position, true);
                     Vector(-60.f, 0.f, o->Angle[2], Angle);
-                    //CreateJoint(BITMAP_JOINT_THUNDER,Position,to->Position,Angle,0,to,50.f);
+                    // CreateJoint(BITMAP_JOINT_THUNDER,Position,to->Position,Angle,0,to,50.f);
                     CreateJoint(BITMAP_JOINT_THUNDER, Position, to->Position, Angle, 21, to, 50.f);
                     CreateParticle(BITMAP_ENERGY, Position, o->Angle, Light);
 
                     b->TransformPosition(o->BoneTransform[41], p, Position, true);
                     Vector(-60.f, 0.f, o->Angle[2], Angle);
-                    //CreateJoint(BITMAP_JOINT_THUNDER,Position,to->Position,Angle,0,to,50.f);
+                    // CreateJoint(BITMAP_JOINT_THUNDER,Position,to->Position,Angle,0,to,50.f);
                     CreateJoint(BITMAP_JOINT_THUNDER, Position, to->Position, Angle, 21, to, 50.f);
                     CreateParticle(BITMAP_ENERGY, Position, o->Angle, Light);
                 }
@@ -2305,7 +2372,8 @@ void AttackEffect(CHARACTER* c)
             default:
                 if (rand_fps_check(1))
                 {
-                    if (b->NumBones < c->Weapon[0].LinkBone) break;
+                    if (b->NumBones < c->Weapon[0].LinkBone)
+                        break;
 
                     if (o->Type == MODEL_PLAYER)
                     {
@@ -2417,17 +2485,16 @@ bool CharacterAnimation(CHARACTER* c, OBJECT* o)
         {
             PlaySpeed *= pow(1.0f / (2.f), FPS_ANIMATION_FACTOR);
         }
-        else if ((o->CurrentAction == PLAYER_ATTACK_TELEPORT || o->CurrentAction == PLAYER_ATTACK_RIDE_TELEPORT
-            || o->CurrentAction == PLAYER_FENRIR_ATTACK_DARKLORD_TELEPORT
-            ) && o->AnimationFrame > 5.5f)
+        else if ((o->CurrentAction == PLAYER_ATTACK_TELEPORT || o->CurrentAction == PLAYER_ATTACK_RIDE_TELEPORT ||
+                  o->CurrentAction == PLAYER_FENRIR_ATTACK_DARKLORD_TELEPORT) &&
+                 o->AnimationFrame > 5.5f)
         {
             PlaySpeed *= pow(1.0f / (10.f), FPS_ANIMATION_FACTOR);
         }
         else if (gCharacterManager.GetBaseClass(c->Class) == CLASS_DARK_LORD &&
-            (o->CurrentAction == PLAYER_SKILL_FLASH || o->CurrentAction == PLAYER_ATTACK_RIDE_ATTACK_FLASH
-                || o->CurrentAction == PLAYER_FENRIR_ATTACK_DARKLORD_FLASH
-                ) && (o->AnimationFrame > 1.f && o->AnimationFrame < 3.f)
-            )
+                 (o->CurrentAction == PLAYER_SKILL_FLASH || o->CurrentAction == PLAYER_ATTACK_RIDE_ATTACK_FLASH ||
+                  o->CurrentAction == PLAYER_FENRIR_ATTACK_DARKLORD_FLASH) &&
+                 (o->AnimationFrame > 1.f && o->AnimationFrame < 3.f))
         {
             if (g_pPartyManager->IsPartyMemberChar(c) == false)
             {
@@ -2473,7 +2540,8 @@ bool CharacterAnimation(CHARACTER* c, OBJECT* o)
         return false;
     }
 
-    Play = b->PlayAnimation(&o->AnimationFrame, &o->PriorAnimationFrame, &o->PriorAction, PlaySpeed, o->Position, o->Angle);
+    Play = b->PlayAnimation(&o->AnimationFrame, &o->PriorAnimationFrame, &o->PriorAction, PlaySpeed, o->Position,
+                            o->Angle);
     if (o->CurrentAction == PLAYER_CHANGE_UP)
     {
         if (Play == false)
@@ -2545,8 +2613,8 @@ bool AttackStage(CHARACTER* c, OBJECT* o)
         }
 
         if (c->AttackTime <= 8 && rand_fps_check(1))
-        {	// 기 모일 곳 위치
-            vec3_t Position2 = { 0.0f, 0.0f, 0.0f };
+        { // 기 모일 곳 위치
+            vec3_t Position2 = {0.0f, 0.0f, 0.0f};
             b->TransformPosition(o->BoneTransform[c->Weapon[Hand].LinkBone], Position2, o->m_vPosSword, true);
 
             float fDistance = 300.0f;
@@ -2555,21 +2623,21 @@ bool AttackStage(CHARACTER* c, OBJECT* o)
         }
 
         if (6 <= c->AttackTime && c->AttackTime <= 12)
-        {	// 꼬깔 만들기
+        { // 꼬깔 만들기
             if (rand_fps_check(2))
             {
                 vec3_t Position;
 
-                //memcpy( Position, o->Position, sizeof ( vec3_t));
-                vec3_t Position2 = { 0.0f, 0.0f, 0.0f };
+                // memcpy( Position, o->Position, sizeof ( vec3_t));
+                vec3_t Position2 = {0.0f, 0.0f, 0.0f};
 
                 b->TransformPosition(o->BoneTransform[c->Weapon[Hand].LinkBone], Position2, Position, true);
 
                 float fDistance = 100.0f + (float)(c->AttackTime - 8) * 10.0f;
                 Position[0] += fDistance * sinf(o->Angle[2] * Q_PI / 180.0f);
                 Position[1] += -fDistance * cosf(o->Angle[2] * Q_PI / 180.0f);
-                //Position[2] += 110.0f;
-                vec3_t Light = { 1.0f, 1.0f, 1.0f };
+                // Position[2] += 110.0f;
+                vec3_t Light = {1.0f, 1.0f, 1.0f};
                 CreateEffect(MODEL_SPEAR, Position, o->Angle, Light, 1, o);
                 CreateEffect(MODEL_SPEAR, Position, o->Angle, Light, 1, o);
             }
@@ -2582,7 +2650,7 @@ bool AttackStage(CHARACTER* c, OBJECT* o)
                     OBJECT* to = &tc->Object;
                     if (10 <= c->AttackTime && to->Live)
                     {
-                        //PlayBuffer( SOUND_THUNDER01);
+                        // PlayBuffer( SOUND_THUNDER01);
                         to->m_byHurtByDeathstab = 35;
                     }
                 }
@@ -2594,7 +2662,7 @@ bool AttackStage(CHARACTER* c, OBJECT* o)
         }
     }
     break;
-    case AT_SKILL_IMPALE:	// 창찌르기
+    case AT_SKILL_IMPALE: // 창찌르기
     {
         BMD* b = &Models[o->Type];
 
@@ -2605,28 +2673,28 @@ bool AttackStage(CHARACTER* c, OBJECT* o)
             c->SetLastAttackEffectTime();
         }
         else if (c->CheckAttackTime(4))
-        {	// 준비동작
-            vec3_t Light = { 1.0f, 1.0f, .5f };
-            vec3_t Position2 = { 0.0f, 0.0f, 0.0f };
+        { // 준비동작
+            vec3_t Light = {1.0f, 1.0f, .5f};
+            vec3_t Position2 = {0.0f, 0.0f, 0.0f};
             b->TransformPosition(o->BoneTransform[c->Weapon[Hand].LinkBone], Position2, p, true);
             CreateEffect(MODEL__SPEAR, p, o->Angle, Light, c->Weapon[Hand].Type, o);
-            //CreateEffect(BITMAP_MAGIC+1,o->Position,o->Angle,Light,4,o);
+            // CreateEffect(BITMAP_MAGIC+1,o->Position,o->Angle,Light,4,o);
             c->SetLastAttackEffectTime();
         }
         else if (c->CheckAttackTime(8))
-        {	// 꼬깔 만들기
+        { // 꼬깔 만들기
             vec3_t Position;
             memcpy(Position, o->Position, sizeof(vec3_t));
             Position[0] += 50.0f * sinf(o->Angle[2] * Q_PI / 180.0f);
             Position[1] += -50.0f * cosf(o->Angle[2] * Q_PI / 180.0f);
             Position[2] += 110.0f;
-            vec3_t Light = { 1.0f, 1.0f, 1.0f };
+            vec3_t Light = {1.0f, 1.0f, 1.0f};
             CreateEffect(MODEL_SPEAR, Position, o->Angle, Light, 0, o);
             CreateEffect(MODEL_SPEAR, Position, o->Angle, Light, 0, o);
             c->SetLastAttackEffectTime();
         }
         if (13 <= c->AttackTime && c->AttackTime <= 14 && rand_fps_check(1))
-        {	// 현란한 창술
+        { // 현란한 창술
             for (int i = 0; i < 3; ++i)
             {
                 vec3_t Position;
@@ -2634,8 +2702,8 @@ bool AttackStage(CHARACTER* c, OBJECT* o)
                 Position[0] += 145.0f * sinf(o->Angle[2] * Q_PI / 180.0f);
                 Position[1] += -145.0f * cosf(o->Angle[2] * Q_PI / 180.0f);
                 Position[2] += 110.0f;
-                //vec3_t Light = { .6f, .6f, .2f};
-                vec3_t Light = { .3f, .3f, .3f };
+                // vec3_t Light = { .6f, .6f, .2f};
+                vec3_t Light = {.3f, .3f, .3f};
                 if (c->CheckAttackTime(11))
                 {
                     /*Light[0] = 1.0f;
@@ -2654,7 +2722,7 @@ bool AttackStage(CHARACTER* c, OBJECT* o)
     }
     break;
 
-    case    AT_SKILL_PENETRATION:
+    case AT_SKILL_PENETRATION:
     case AT_SKILL_PENETRATION_STR:
         if (o->Type == MODEL_PLAYER && o->CurrentAction >= PLAYER_ATTACK_FIST && o->CurrentAction <= PLAYER_RIDE_SKILL)
         {
@@ -2665,7 +2733,7 @@ bool AttackStage(CHARACTER* c, OBJECT* o)
             }
         }
 
-        if (c->CheckAttackTime(3))  //  氣 모으기.
+        if (c->CheckAttackTime(3)) //  氣 모으기.
         {
             CreateEffect(BITMAP_GATHERING, o->Position, o->Angle, o->Light, 0, o);
             PlayBuffer(SOUND_PIERCING, o);
@@ -2696,14 +2764,16 @@ bool AttackStage(CHARACTER* c, OBJECT* o)
 
                 if (iSkill == AT_SKILL_FIRE_SLASH_STR)
                 {
-                    CreateEffect(BITMAP_SWORD_FORCE, o->Position, o->Angle, o->Light, 1, o, o->PKKey, FindHotKey(iSkill));
+                    CreateEffect(BITMAP_SWORD_FORCE, o->Position, o->Angle, o->Light, 1, o, o->PKKey,
+                                 FindHotKey(iSkill));
                 }
                 else
                 {
-                    CreateEffect(BITMAP_SWORD_FORCE, o->Position, o->Angle, o->Light, 0, o, o->PKKey, FindHotKey(iSkill));
+                    CreateEffect(BITMAP_SWORD_FORCE, o->Position, o->Angle, o->Light, 0, o, o->PKKey,
+                                 FindHotKey(iSkill));
                 }
 
-                float AttackSpeed1 = CharacterAttribute->AttackSpeed * 0.004f;//
+                float AttackSpeed1 = CharacterAttribute->AttackSpeed * 0.004f; //
                 Models[MODEL_PLAYER].Actions[PLAYER_ATTACK_SKILL_WHEEL].PlaySpeed = 0.54f + AttackSpeed1;
                 c->AttackTime = 15;
             }
@@ -2751,9 +2821,12 @@ bool AttackStage(CHARACTER* c, OBJECT* o)
             c->AttackTime = 15;
         }
         break;
-    case    AT_SKILL_IMPROVE_AG:
-        if (o->AnimationFrame >= 5.f && ((o->Type == MODEL_PLAYER && o->CurrentAction >= PLAYER_ATTACK_FIST && o->CurrentAction <= PLAYER_RIDE_SKILL) ||
-            ((o->Type >= MODEL_MONSTER01 && o->Type < MODEL_MONSTER_END) && o->CurrentAction >= MONSTER01_ATTACK1 && o->CurrentAction <= MONSTER01_ATTACK2)))
+    case AT_SKILL_IMPROVE_AG:
+        if (o->AnimationFrame >= 5.f &&
+            ((o->Type == MODEL_PLAYER && o->CurrentAction >= PLAYER_ATTACK_FIST &&
+              o->CurrentAction <= PLAYER_RIDE_SKILL) ||
+             ((o->Type >= MODEL_MONSTER01 && o->Type < MODEL_MONSTER_END) && o->CurrentAction >= MONSTER01_ATTACK1 &&
+              o->CurrentAction <= MONSTER01_ATTACK2)))
         {
             c->AttackTime = 15;
         }
@@ -2761,9 +2834,9 @@ bool AttackStage(CHARACTER* c, OBJECT* o)
     case AT_SKILL_FORCE:
     case AT_SKILL_FORCE_WAVE:
     case AT_SKILL_FORCE_WAVE_STR:
-        if (o->AnimationFrame >= 3.f && o->Type == MODEL_PLAYER && (o->CurrentAction == PLAYER_ATTACK_STRIKE || o->CurrentAction == PLAYER_ATTACK_RIDE_STRIKE
-            || o->CurrentAction == PLAYER_FENRIR_ATTACK_DARKLORD_STRIKE
-            ))
+        if (o->AnimationFrame >= 3.f && o->Type == MODEL_PLAYER &&
+            (o->CurrentAction == PLAYER_ATTACK_STRIKE || o->CurrentAction == PLAYER_ATTACK_RIDE_STRIKE ||
+             o->CurrentAction == PLAYER_FENRIR_ATTACK_DARKLORD_STRIKE))
         {
             c->AttackTime = 15;
         }
@@ -2771,15 +2844,17 @@ bool AttackStage(CHARACTER* c, OBJECT* o)
     case AT_SKILL_FIREBURST:
     case AT_SKILL_FIREBURST_STR:
     case AT_SKILL_FIREBURST_MASTERY:
-        if (o->AnimationFrame >= 3.f && o->Type == MODEL_PLAYER && (o->CurrentAction == PLAYER_ATTACK_STRIKE || o->CurrentAction == PLAYER_ATTACK_RIDE_STRIKE
-            || o->CurrentAction == PLAYER_FENRIR_ATTACK_DARKLORD_STRIKE))
+        if (o->AnimationFrame >= 3.f && o->Type == MODEL_PLAYER &&
+            (o->CurrentAction == PLAYER_ATTACK_STRIKE || o->CurrentAction == PLAYER_ATTACK_RIDE_STRIKE ||
+             o->CurrentAction == PLAYER_FENRIR_ATTACK_DARKLORD_STRIKE))
         {
             c->AttackTime = 15;
         }
         break;
-    case    AT_SKILL_THUNDER_STRIKE:
-        if (o->AnimationFrame >= 5.5f && o->Type == MODEL_PLAYER && (o->CurrentAction == PLAYER_SKILL_FLASH || o->CurrentAction == PLAYER_ATTACK_RIDE_ATTACK_FLASH
-            || o->CurrentAction == PLAYER_FENRIR_ATTACK_DARKLORD_FLASH))
+    case AT_SKILL_THUNDER_STRIKE:
+        if (o->AnimationFrame >= 5.5f && o->Type == MODEL_PLAYER &&
+            (o->CurrentAction == PLAYER_SKILL_FLASH || o->CurrentAction == PLAYER_ATTACK_RIDE_ATTACK_FLASH ||
+             o->CurrentAction == PLAYER_FENRIR_ATTACK_DARKLORD_FLASH))
         {
             c->AttackTime = 15;
         }
@@ -2788,46 +2863,48 @@ bool AttackStage(CHARACTER* c, OBJECT* o)
             c->AttackTime = 10;
         }
         break;
-    case    AT_SKILL_EARTHSHAKE:
-    case    AT_SKILL_EARTHSHAKE_STR:
-    case    AT_SKILL_EARTHSHAKE_MASTERY:
+    case AT_SKILL_EARTHSHAKE:
+    case AT_SKILL_EARTHSHAKE_STR:
+    case AT_SKILL_EARTHSHAKE_MASTERY:
         if (o->AnimationFrame >= 5.f && o->Type == MODEL_PLAYER && o->CurrentAction == PLAYER_ATTACK_DARKHORSE)
         {
             c->AttackTime = 15;
         }
         break;
-    case    AT_SKILL_PARTY_TELEPORT:
-        if ((int)c->AttackTime > 5 && o->Type == MODEL_PLAYER && (o->CurrentAction == PLAYER_ATTACK_TELEPORT || o->CurrentAction == PLAYER_ATTACK_RIDE_TELEPORT
-            || o->CurrentAction == PLAYER_FENRIR_ATTACK_DARKLORD_TELEPORT))
+    case AT_SKILL_PARTY_TELEPORT:
+        if ((int)c->AttackTime > 5 && o->Type == MODEL_PLAYER &&
+            (o->CurrentAction == PLAYER_ATTACK_TELEPORT || o->CurrentAction == PLAYER_ATTACK_RIDE_TELEPORT ||
+             o->CurrentAction == PLAYER_FENRIR_ATTACK_DARKLORD_TELEPORT))
         {
             c->AttackTime = 15;
         }
         break;
-    case    AT_SKILL_RIDER:
-        if (o->AnimationFrame >= 5.f && o->Type == MODEL_PLAYER && (o->CurrentAction == PLAYER_SKILL_RIDER || o->CurrentAction == PLAYER_SKILL_RIDER_FLY))
+    case AT_SKILL_RIDER:
+        if (o->AnimationFrame >= 5.f && o->Type == MODEL_PLAYER &&
+            (o->CurrentAction == PLAYER_SKILL_RIDER || o->CurrentAction == PLAYER_SKILL_RIDER_FLY))
         {
             c->AttackTime = 15;
         }
         break;
 
-    case    AT_SKILL_STUN:
-    case    AT_SKILL_MANA:
+    case AT_SKILL_STUN:
+    case AT_SKILL_MANA:
         break;
-    case    AT_SKILL_INVISIBLE:
+    case AT_SKILL_INVISIBLE:
         c->AttackTime = 15;
         break;
-    case    AT_SKILL_REMOVAL_STUN:
-    case    AT_SKILL_REMOVAL_INVISIBLE:
+    case AT_SKILL_REMOVAL_STUN:
+    case AT_SKILL_REMOVAL_INVISIBLE:
         c->AttackTime = 15;
         break;
-    case    AT_SKILL_REMOVAL_BUFF:
+    case AT_SKILL_REMOVAL_BUFF:
         if (o->AnimationFrame >= 3.5f)
         {
             c->AttackTime = 15;
         }
         break;
 
-    case    AT_SKILL_RUSH:
+    case AT_SKILL_RUSH:
     case AT_SKILL_OCCUPY:
         if (o->AnimationFrame > 5.f)
         {
@@ -2836,7 +2913,7 @@ bool AttackStage(CHARACTER* c, OBJECT* o)
         if (rand_fps_check(1))
         {
             vec3_t Position;
-            vec3_t	Angle;
+            vec3_t Angle;
 
             VectorCopy(o->Position, Position);
             Position[0] += rand() % 30 - 15.f;
@@ -2853,7 +2930,7 @@ bool AttackStage(CHARACTER* c, OBJECT* o)
             }
         }
         break;
-    case    AT_SKILL_SPIRAL_SLASH:
+    case AT_SKILL_SPIRAL_SLASH:
         if (o->AnimationFrame > 5.f && rand_fps_check(1))
         {
             CreateJoint(BITMAP_FLARE, o->Position, o->Position, o->Angle, 23, NULL, 40.f, 0);
@@ -2874,16 +2951,15 @@ bool AttackStage(CHARACTER* c, OBJECT* o)
         break;
 
     case AT_SKILL_SPACE_SPLIT:
-        if (o->AnimationFrame >= 3.f
-            && o->Type == MODEL_PLAYER
-            && (o->CurrentAction == PLAYER_ATTACK_STRIKE || o->CurrentAction == PLAYER_ATTACK_RIDE_STRIKE || o->CurrentAction == PLAYER_FENRIR_ATTACK_DARKLORD_STRIKE)
-            )
+        if (o->AnimationFrame >= 3.f && o->Type == MODEL_PLAYER &&
+            (o->CurrentAction == PLAYER_ATTACK_STRIKE || o->CurrentAction == PLAYER_ATTACK_RIDE_STRIKE ||
+             o->CurrentAction == PLAYER_FENRIR_ATTACK_DARKLORD_STRIKE))
         {
             c->AttackTime = 15;
         }
         break;
 
-    case    AT_SKILL_DEATH_CANNON:
+    case AT_SKILL_DEATH_CANNON:
         if (o->AnimationFrame >= 3.f && o->Type == MODEL_PLAYER && o->CurrentAction == PLAYER_ATTACK_DEATH_CANNON)
         {
             c->AttackTime = 15;
@@ -2942,8 +3018,11 @@ bool AttackStage(CHARACTER* c, OBJECT* o)
         {
             c->AttackTime = 15;
         }
-        else if (o->AnimationFrame >= 5.f && ((o->Type == MODEL_PLAYER && o->CurrentAction >= PLAYER_ATTACK_FIST && o->CurrentAction <= PLAYER_RIDE_SKILL) ||
-            ((o->Type >= MODEL_MONSTER01 && o->Type < MODEL_MONSTER_END) && o->CurrentAction >= MONSTER01_ATTACK1 && o->CurrentAction <= MONSTER01_ATTACK2)))
+        else if (o->AnimationFrame >= 5.f &&
+                 ((o->Type == MODEL_PLAYER && o->CurrentAction >= PLAYER_ATTACK_FIST &&
+                   o->CurrentAction <= PLAYER_RIDE_SKILL) ||
+                  ((o->Type >= MODEL_MONSTER01 && o->Type < MODEL_MONSTER_END) &&
+                   o->CurrentAction >= MONSTER01_ATTACK1 && o->CurrentAction <= MONSTER01_ATTACK2)))
         {
             int RightType = CharacterMachine->Equipment[EQUIPMENT_WEAPON_RIGHT].Type;
             int LeftType = CharacterMachine->Equipment[EQUIPMENT_WEAPON_LEFT].Type;
@@ -3014,7 +3093,7 @@ void DeleteCloth(CHARACTER* c, OBJECT* o, PART_t* p2)
 void FallingCharacter(CHARACTER* c, OBJECT* o)
 {
     float Matrix[3][4];
-    vec3_t  Position, p;
+    vec3_t Position, p;
 
     Vector(0.f, 0.f, 0.f, Position);
     Vector(0.f, o->Direction[1], 0.f, p);
@@ -3031,7 +3110,7 @@ void FallingCharacter(CHARACTER* c, OBJECT* o)
     o->Position[2] = o->m_vDeadPosition[2] + o->Gravity;
 }
 
-void  PushingCharacter(CHARACTER* c, OBJECT* o)
+void PushingCharacter(CHARACTER* c, OBJECT* o)
 {
     if (c->StormTime > 0)
     {
@@ -3065,8 +3144,10 @@ void  PushingCharacter(CHARACTER* c, OBJECT* o)
         }
         else
         {
-            o->Position[0] += (((float)c->TargetX + 0.5f) * TERRAIN_SCALE - o->Position[0]) * Speed + FPS_ANIMATION_FACTOR;
-            o->Position[1] += (((float)c->TargetY + 0.5f) * TERRAIN_SCALE - o->Position[1]) * Speed + FPS_ANIMATION_FACTOR;
+            o->Position[0] +=
+                (((float)c->TargetX + 0.5f) * TERRAIN_SCALE - o->Position[0]) * Speed + FPS_ANIMATION_FACTOR;
+            o->Position[1] +=
+                (((float)c->TargetY + 0.5f) * TERRAIN_SCALE - o->Position[1]) * Speed + FPS_ANIMATION_FACTOR;
             if (o->Type != MODEL_BALL)
                 o->Position[2] = RequestTerrainHeight(o->Position[0], o->Position[1]);
             c->JumpTime += FPS_ANIMATION_FACTOR;
@@ -3104,7 +3185,8 @@ void DeadCharacterBuff(OBJECT* o)
 
 void DeadCharacter(CHARACTER* c, OBJECT* o, BMD* b)
 {
-    if (c->Dead <= 0) return;
+    if (c->Dead <= 0)
+        return;
 
     DeadCharacterBuff(o);
 
@@ -3114,8 +3196,10 @@ void DeadCharacter(CHARACTER* c, OBJECT* o, BMD* b)
     }
     else if (o->Type == MODEL_ILLUSION_OF_KUNDUN)
     {
-        if (o->LifeTime >= 100) c->Rot += 0.01f * FPS_ANIMATION_FACTOR;
-        else c->Rot += 0.02f * FPS_ANIMATION_FACTOR;
+        if (o->LifeTime >= 100)
+            c->Rot += 0.01f * FPS_ANIMATION_FACTOR;
+        else
+            c->Rot += 0.02f * FPS_ANIMATION_FACTOR;
     }
     else
         c->Rot += 0.02f * FPS_ANIMATION_FACTOR;
@@ -3198,7 +3282,8 @@ void DeadCharacter(CHARACTER* c, OBJECT* o, BMD* b)
             break;
         }
     }
-    if (SceneFlag == MAIN_SCENE && (gMapManager.WorldActive == WD_7ATLANSE || gMapManager.WorldActive == WD_67DOPPLEGANGER3) && rand_fps_check(1))
+    if (SceneFlag == MAIN_SCENE &&
+        (gMapManager.WorldActive == WD_7ATLANSE || gMapManager.WorldActive == WD_67DOPPLEGANGER3) && rand_fps_check(1))
     {
         for (int i = 0; i < 4; i++)
         {
@@ -3212,7 +3297,8 @@ void DeadCharacter(CHARACTER* c, OBJECT* o, BMD* b)
 
 void CalcStopTime(void)
 {
-    if (gMapManager.InChaosCastle() == false) return;
+    if (gMapManager.InChaosCastle() == false)
+        return;
 
     if ((Hero->PositionX) != g_iOldPositionX || (Hero->PositionY) != g_iOldPositionY)
     {
@@ -3238,7 +3324,8 @@ void CalcStopTime(void)
 
 void HeroAttributeCalc(CHARACTER* c)
 {
-    if (c != Hero) return;
+    if (c != Hero)
+        return;
 
     if (CharacterAttribute->AbilityTime[0] > 0)
     {
@@ -3329,7 +3416,7 @@ void PlayerNpcStopAnimationSetting(CHARACTER* c, OBJECT* o)
         int TextIndex = 0;
         if (gMapManager.WorldActive == WD_2DEVIAS)
         {
-            int iTextIndices[] = { 904, 905 };
+            int iTextIndices[] = {904, 905};
             int iNumTextIndices = 2;
 
             static int s_iTextIndex = iTextIndices[0];
@@ -3339,7 +3426,7 @@ void PlayerNpcStopAnimationSetting(CHARACTER* c, OBJECT* o)
         }
         else if (gMapManager.WorldActive == WD_0LORENCIA)
         {
-            int iTextIndices[] = { 823 };
+            int iTextIndices[] = {823};
             int iNumTextIndices = 1;
             static int s_iTextIndex = iTextIndices[0];
             if (o->CurrentAction != o->PriorAction)
@@ -3369,17 +3456,16 @@ void PlayerStopAnimationSetting(CHARACTER* c, OBJECT* o)
         (o->CurrentAction >= PLAYER_PROVOCATION && o->CurrentAction <= PLAYER_CHEERS) ||
         (o->CurrentAction >= PLAYER_IDLE1_DARKHORSE && o->CurrentAction <= PLAYER_IDLE2_DARKHORSE) ||
         ((o->CurrentAction >= PLAYER_SKILL_THRUST && o->CurrentAction <= PLAYER_RAGE_FENRIR_ATTACK_RIGHT) &&
-            !(o->CurrentAction >= PLAYER_RAGE_FENRIR_RUN && o->CurrentAction <= PLAYER_RAGE_FENRIR_RUN_ONE_LEFT) &&
-            !(o->CurrentAction >= PLAYER_RAGE_UNI_RUN && o->CurrentAction <= PLAYER_RAGE_UNI_STOP_ONE_RIGHT)) ||
+         !(o->CurrentAction >= PLAYER_RAGE_FENRIR_RUN && o->CurrentAction <= PLAYER_RAGE_FENRIR_RUN_ONE_LEFT) &&
+         !(o->CurrentAction >= PLAYER_RAGE_UNI_RUN && o->CurrentAction <= PLAYER_RAGE_UNI_STOP_ONE_RIGHT)) ||
         o->CurrentAction == PLAYER_STOP_RAGEFIGHTER ||
-        (o->CurrentAction >= PLAYER_ATTACK_FIST && o->CurrentAction <= PLAYER_SHOCK
-            && o->CurrentAction != PLAYER_WALK_TWO_HAND_SWORD_TWO && o->CurrentAction != PLAYER_RUN_TWO_HAND_SWORD_TWO
-            && o->CurrentAction != PLAYER_FLY_RIDE && o->CurrentAction != PLAYER_FLY_RIDE_WEAPON
-            && o->CurrentAction != PLAYER_SKILL_HELL_BEGIN
-            && o->CurrentAction != PLAYER_DARKLORD_WALK && o->CurrentAction != PLAYER_RUN_RIDE_HORSE
-            && (o->CurrentAction < PLAYER_FENRIR_RUN || o->CurrentAction > PLAYER_FENRIR_RUN_ONE_LEFT_ELF)
-            && o->CurrentAction != PLAYER_RECOVER_SKILL
-            ))
+        (o->CurrentAction >= PLAYER_ATTACK_FIST && o->CurrentAction <= PLAYER_SHOCK &&
+         o->CurrentAction != PLAYER_WALK_TWO_HAND_SWORD_TWO && o->CurrentAction != PLAYER_RUN_TWO_HAND_SWORD_TWO &&
+         o->CurrentAction != PLAYER_FLY_RIDE && o->CurrentAction != PLAYER_FLY_RIDE_WEAPON &&
+         o->CurrentAction != PLAYER_SKILL_HELL_BEGIN && o->CurrentAction != PLAYER_DARKLORD_WALK &&
+         o->CurrentAction != PLAYER_RUN_RIDE_HORSE &&
+         (o->CurrentAction < PLAYER_FENRIR_RUN || o->CurrentAction > PLAYER_FENRIR_RUN_ONE_LEFT_ELF) &&
+         o->CurrentAction != PLAYER_RECOVER_SKILL))
 
         SetPlayerStop(c);
 
@@ -3395,195 +3481,194 @@ void EtcStopAnimationSetting(CHARACTER* c, OBJECT* o)
     {
         o->CurrentAction = 1;
     }
-    else
-        if (battleCastle::StopBattleCastleMonster(c, o) == true)
+    else if (battleCastle::StopBattleCastleMonster(c, o) == true)
+    {
+        CharacterAnimation(c, o);
+        return;
+    }
+    else if (gMapManager.WorldActive == WD_1DUNGEON && o->Type == 40)
+    {
+        SetAction(&c->Object, 0);
+    }
+    else if (o->Type >= MODEL_MONSTER01 && o->Type < MODEL_MONSTER_END)
+    {
+        if (o->CurrentAction == MONSTER01_DIE)
         {
-            CharacterAnimation(c, o);
+            if (!c->Blood)
+            {
+                c->Blood = true;
+                CreateBlood(o);
+            }
             return;
         }
-        else
-            if (gMapManager.WorldActive == WD_1DUNGEON && o->Type == 40)
-            {
-                SetAction(&c->Object, 0);
-            }
-            else if (o->Type >= MODEL_MONSTER01 && o->Type < MODEL_MONSTER_END)
-            {
-                if (o->CurrentAction == MONSTER01_DIE)
-                {
-                    if (!c->Blood)
-                    {
-                        c->Blood = true;
-                        CreateBlood(o);
-                    }
-                    return;
-                }
-                else if (o->CurrentAction == MONSTER01_STOP2 || o->CurrentAction == MONSTER01_SHOCK
-                    || o->CurrentAction == MONSTER01_ATTACK1 || o->CurrentAction == MONSTER01_ATTACK2
-                    || o->CurrentAction == MONSTER01_ATTACK3 || o->CurrentAction == MONSTER01_ATTACK4
-                    || o->CurrentAction == MONSTER01_ATTACK5
-                    )
-                {
-                    SetAction(o, MONSTER01_STOP1);
-                }
+        else if (o->CurrentAction == MONSTER01_STOP2 || o->CurrentAction == MONSTER01_SHOCK ||
+                 o->CurrentAction == MONSTER01_ATTACK1 || o->CurrentAction == MONSTER01_ATTACK2 ||
+                 o->CurrentAction == MONSTER01_ATTACK3 || o->CurrentAction == MONSTER01_ATTACK4 ||
+                 o->CurrentAction == MONSTER01_ATTACK5)
+        {
+            SetAction(o, MONSTER01_STOP1);
+        }
 
-                if (o->CurrentAction == MONSTER01_APEAR && (o->Type == MODEL_MAYA_HAND_LEFT || o->Type == MODEL_MAYA_HAND_RIGHT || o->Type == MODEL_SELUPAN))
-                {
-                    if (o->Type == MODEL_SELUPAN)
-                    {
-                        o->CurrentAction = MONSTER01_STOP1;
-                    }
-                    SetAction(o, MONSTER01_STOP1);
-                }
+        if (o->CurrentAction == MONSTER01_APEAR &&
+            (o->Type == MODEL_MAYA_HAND_LEFT || o->Type == MODEL_MAYA_HAND_RIGHT || o->Type == MODEL_SELUPAN))
+        {
+            if (o->Type == MODEL_SELUPAN)
+            {
+                o->CurrentAction = MONSTER01_STOP1;
+            }
+            SetAction(o, MONSTER01_STOP1);
+        }
+    }
+    else
+    {
+        switch (o->Type)
+        {
+        case MODEL_WEDDING_NPC:
+            if ((rand() % 16 < 4) && o->SubType == 0)
+            {
+                SetAction(o, 1);
+                o->SubType = 1;
             }
             else
             {
-                switch (o->Type)
-                {
-                case MODEL_WEDDING_NPC:
-                    if ((rand() % 16 < 4) && o->SubType == 0)
-                    {
-                        SetAction(o, 1);
-                        o->SubType = 1;
-                    }
-                    else
-                    {
-                        SetAction(o, 0);
-                        o->SubType = 0;
-                    }
-                    break;
-                case MODEL_SMITH:
-                case MODEL_SCIENTIST:
-                    if (rand() % 16 < 12)
-                        SetAction(o, 0);
-                    else
-                        SetAction(o, rand() % 2 + 1);
-                    break;
-                case MODEL_FACE:
-                case MODEL_FACE + 1:
-                case MODEL_FACE + 2:
-                case MODEL_FACE + 3:
-                case MODEL_FACE + 4:
-                case MODEL_FACE + 5:
-                case MODEL_FACE + 6:
-                    break;
-                case MODEL_ELBELAND_SILVIA:
-                case MODEL_ELBELAND_RHEA:
-                    if (rand() % 5 < 4 || o->CurrentAction == 1)
-                        SetAction(o, 0);
-                    else
-                        SetAction(o, 1);
-                    break;
-                case MODEL_NPC_DEVIN:
-                    if (rand() % 5 < 4)
-                        SetAction(o, 0);
-                    else
-                        SetAction(o, 1);
-                    break;
-
-                case MODEL_SEED_MASTER:
-                    if (rand() % 3 < 2 || o->CurrentAction != 0)
-                        SetAction(o, 0);
-                    else
-                    {
-                        SetAction(o, rand() % 3 + 1);
-                    }
-                    break;
-                case MODEL_SEED_INVESTIGATOR:
-                    if (rand() % 3 < 2 || o->CurrentAction == 1)
-                        SetAction(o, 0);
-                    else
-                        SetAction(o, 1);
-                    break;
-                case MODEL_LITTLESANTA:
-                case MODEL_LITTLESANTA + 1:
-                case MODEL_LITTLESANTA + 2:
-                case MODEL_LITTLESANTA + 3:
-                    if (rand() % 5 < 2)
-                        SetAction(o, 0);
-                    else
-                        SetAction(o, rand() % 3 + 2);
-                    break;
-
-                case MODEL_LITTLESANTA + 4:
-                case MODEL_LITTLESANTA + 5:
-                case MODEL_LITTLESANTA + 6:
-                case MODEL_LITTLESANTA + 7:
-                    if (rand() % 5 < 2)
-                        SetAction(o, 1);
-                    else
-                        SetAction(o, rand() % 3 + 2);
-                    break;
-                case MODEL_XMAS2008_SANTA_NPC:
-                    if (rand() % 3 < 2 || (o->CurrentAction == 1 || o->CurrentAction == 2))
-                    {
-                        SetAction(o, 0);
-                    }
-                    else
-                    {
-                        SetAction(o, rand() % 2 + 1);
-                    }
-                    break;
-                case MODEL_XMAS2008_SNOWMAN_NPC:
-                    SetAction(o, 0);
-                    break;
-                case MODEL_GAMBLE_NPC_MOSS:
-                    if (rand() % 5 < 4 || o->CurrentAction == 1)
-                    {
-                        SetAction(o, 0);
-                    }
-                    else
-                    {
-                        SetAction(o, 1);
-                    }
-                    break;
-                case MODAL_GENS_NPC_DUPRIAN:
-                case MODAL_GENS_NPC_BARNERT:
-                    if (rand() % 5 < 4)
-                        SetAction(o, 0);
-                    else
-                        SetAction(o, rand() % 2 + 1);
-                    break;
-                case MODEL_UNITEDMARKETPLACE_RAUL:
-                case MODEL_UNITEDMARKETPLACE_JULIA:
-                    if (rand() % 5 < 4)
-                        SetAction(o, 0);
-                    else
-                        SetAction(o, rand() % 2 + 1);
-                    break;
-                case MODEL_UNITEDMARKETPLACE_CHRISTIN:
-                case MODEL_KARUTAN_NPC_REINA:
-                    if (rand() % 5 < 3)
-                        SetAction(o, 0);
-                    else
-                        SetAction(o, rand() % 2 + 1);
-                    break;
-                case MODEL_KARUTAN_NPC_VOLVO:
-                    if (rand() % 5 < 4)
-                        SetAction(o, 0);
-                    else
-                        SetAction(o, 1);
-                    break;
-                case MODEL_LUCKYITEM_NPC:
-                    if (rand() % 5 < 4 || o->CurrentAction == 1)
-                    {
-                        SetAction(o, 0);
-                    }
-                    else
-                    {
-                        SetAction(o, 1);
-                    }
-                    break;
-                default:
-                    SetAction(o, rand() % 2);
-                    break;
-                }
+                SetAction(o, 0);
+                o->SubType = 0;
             }
+            break;
+        case MODEL_SMITH:
+        case MODEL_SCIENTIST:
+            if (rand() % 16 < 12)
+                SetAction(o, 0);
+            else
+                SetAction(o, rand() % 2 + 1);
+            break;
+        case MODEL_FACE:
+        case MODEL_FACE + 1:
+        case MODEL_FACE + 2:
+        case MODEL_FACE + 3:
+        case MODEL_FACE + 4:
+        case MODEL_FACE + 5:
+        case MODEL_FACE + 6:
+            break;
+        case MODEL_ELBELAND_SILVIA:
+        case MODEL_ELBELAND_RHEA:
+            if (rand() % 5 < 4 || o->CurrentAction == 1)
+                SetAction(o, 0);
+            else
+                SetAction(o, 1);
+            break;
+        case MODEL_NPC_DEVIN:
+            if (rand() % 5 < 4)
+                SetAction(o, 0);
+            else
+                SetAction(o, 1);
+            break;
+
+        case MODEL_SEED_MASTER:
+            if (rand() % 3 < 2 || o->CurrentAction != 0)
+                SetAction(o, 0);
+            else
+            {
+                SetAction(o, rand() % 3 + 1);
+            }
+            break;
+        case MODEL_SEED_INVESTIGATOR:
+            if (rand() % 3 < 2 || o->CurrentAction == 1)
+                SetAction(o, 0);
+            else
+                SetAction(o, 1);
+            break;
+        case MODEL_LITTLESANTA:
+        case MODEL_LITTLESANTA + 1:
+        case MODEL_LITTLESANTA + 2:
+        case MODEL_LITTLESANTA + 3:
+            if (rand() % 5 < 2)
+                SetAction(o, 0);
+            else
+                SetAction(o, rand() % 3 + 2);
+            break;
+
+        case MODEL_LITTLESANTA + 4:
+        case MODEL_LITTLESANTA + 5:
+        case MODEL_LITTLESANTA + 6:
+        case MODEL_LITTLESANTA + 7:
+            if (rand() % 5 < 2)
+                SetAction(o, 1);
+            else
+                SetAction(o, rand() % 3 + 2);
+            break;
+        case MODEL_XMAS2008_SANTA_NPC:
+            if (rand() % 3 < 2 || (o->CurrentAction == 1 || o->CurrentAction == 2))
+            {
+                SetAction(o, 0);
+            }
+            else
+            {
+                SetAction(o, rand() % 2 + 1);
+            }
+            break;
+        case MODEL_XMAS2008_SNOWMAN_NPC:
+            SetAction(o, 0);
+            break;
+        case MODEL_GAMBLE_NPC_MOSS:
+            if (rand() % 5 < 4 || o->CurrentAction == 1)
+            {
+                SetAction(o, 0);
+            }
+            else
+            {
+                SetAction(o, 1);
+            }
+            break;
+        case MODAL_GENS_NPC_DUPRIAN:
+        case MODAL_GENS_NPC_BARNERT:
+            if (rand() % 5 < 4)
+                SetAction(o, 0);
+            else
+                SetAction(o, rand() % 2 + 1);
+            break;
+        case MODEL_UNITEDMARKETPLACE_RAUL:
+        case MODEL_UNITEDMARKETPLACE_JULIA:
+            if (rand() % 5 < 4)
+                SetAction(o, 0);
+            else
+                SetAction(o, rand() % 2 + 1);
+            break;
+        case MODEL_UNITEDMARKETPLACE_CHRISTIN:
+        case MODEL_KARUTAN_NPC_REINA:
+            if (rand() % 5 < 3)
+                SetAction(o, 0);
+            else
+                SetAction(o, rand() % 2 + 1);
+            break;
+        case MODEL_KARUTAN_NPC_VOLVO:
+            if (rand() % 5 < 4)
+                SetAction(o, 0);
+            else
+                SetAction(o, 1);
+            break;
+        case MODEL_LUCKYITEM_NPC:
+            if (rand() % 5 < 4 || o->CurrentAction == 1)
+            {
+                SetAction(o, 0);
+            }
+            else
+            {
+                SetAction(o, 1);
+            }
+            break;
+        default:
+            SetAction(o, rand() % 2);
+            break;
+        }
+    }
 }
 
 void AnimationCharacter(CHARACTER* c, OBJECT* o, BMD* b)
 {
     bool bEventNpc = false;
-    if (o->Kind == KIND_NPC && (gMapManager.WorldActive == WD_0LORENCIA || gMapManager.WorldActive == WD_2DEVIAS) && o->Type == MODEL_PLAYER && (o->SubType >= MODEL_SKELETON1 && o->SubType <= MODEL_SKELETON3))
+    if (o->Kind == KIND_NPC && (gMapManager.WorldActive == WD_0LORENCIA || gMapManager.WorldActive == WD_2DEVIAS) &&
+        o->Type == MODEL_PLAYER && (o->SubType >= MODEL_SKELETON1 && o->SubType <= MODEL_SKELETON3))
     {
         if (gMapManager.WorldActive == WD_0LORENCIA)
         {
@@ -3655,9 +3740,7 @@ void AnimationCharacter(CHARACTER* c, OBJECT* o, BMD* b)
 
 void CreateWeaponBlur(CHARACTER* c, OBJECT* o, BMD* b)
 {
-    if (o->AnimationFrame >= 3.f
-        || (o->CurrentAction == PLAYER_ATTACK_TWO_HAND_SWORD_TWO)
-        )
+    if (o->AnimationFrame >= 3.f || (o->CurrentAction == PLAYER_ATTACK_TWO_HAND_SWORD_TWO))
     {
         int Hand = 0;
         int Hand2 = 0;
@@ -3680,7 +3763,8 @@ void CreateWeaponBlur(CHARACTER* c, OBJECT* o, BMD* b)
                 BlurType = 1;
                 BlurMapping = 2;
             }
-            else if (o->CurrentAction == PLAYER_ATTACK_SKILL_SWORD2 || o->CurrentAction == PLAYER_ATTACK_SKILL_SWORD3 || o->CurrentAction == PLAYER_ATTACK_SKILL_SWORD4)
+            else if (o->CurrentAction == PLAYER_ATTACK_SKILL_SWORD2 || o->CurrentAction == PLAYER_ATTACK_SKILL_SWORD3 ||
+                     o->CurrentAction == PLAYER_ATTACK_SKILL_SWORD4)
             {
                 BlurType = 1;
                 if (Type == MODEL_LIGHTING_SWORD || Type == MODEL_DARK_REIGN_BLADE || Type == MODEL_RUNE_BLADE)
@@ -3693,15 +3777,16 @@ void CreateWeaponBlur(CHARACTER* c, OBJECT* o, BMD* b)
                 BlurType = 1;
                 BlurMapping = 2;
             }
-            else if (o->CurrentAction == PLAYER_SKILL_LIGHTNING_ORB
-                || o->CurrentAction == PLAYER_SKILL_LIGHTNING_ORB_UNI
-                || o->CurrentAction == PLAYER_SKILL_LIGHTNING_ORB_DINO
-                || o->CurrentAction == PLAYER_SKILL_LIGHTNING_ORB_FENRIR)
+            else if (o->CurrentAction == PLAYER_SKILL_LIGHTNING_ORB ||
+                     o->CurrentAction == PLAYER_SKILL_LIGHTNING_ORB_UNI ||
+                     o->CurrentAction == PLAYER_SKILL_LIGHTNING_ORB_DINO ||
+                     o->CurrentAction == PLAYER_SKILL_LIGHTNING_ORB_FENRIR)
             {
                 BlurType = 1;
                 BlurMapping = 1;
             }
-            else if (o->CurrentAction == PLAYER_SKILL_BLOW_OF_DESTRUCTION && o->AnimationFrame >= 2.f && o->AnimationFrame <= 8.f)
+            else if (o->CurrentAction == PLAYER_SKILL_BLOW_OF_DESTRUCTION && o->AnimationFrame >= 2.f &&
+                     o->AnimationFrame <= 8.f)
             {
                 BlurType = 1;
                 BlurMapping = 2;
@@ -3716,17 +3801,17 @@ void CreateWeaponBlur(CHARACTER* c, OBJECT* o, BMD* b)
             }
             else if (Type >= MODEL_SWORD && Type < MODEL_SWORD + MAX_ITEM_INDEX)
             {
-                if ((o->CurrentAction >= PLAYER_ATTACK_SWORD_RIGHT1 && o->CurrentAction <= PLAYER_ATTACK_TWO_HAND_SWORD3)
-                    || o->CurrentAction == PLAYER_ATTACK_TWO_HAND_SWORD_TWO
-                    )
+                if ((o->CurrentAction >= PLAYER_ATTACK_SWORD_RIGHT1 &&
+                     o->CurrentAction <= PLAYER_ATTACK_TWO_HAND_SWORD3) ||
+                    o->CurrentAction == PLAYER_ATTACK_TWO_HAND_SWORD_TWO)
                 {
                     BlurType = 1;
                     if (Type == MODEL_DARK_BREAKER)
                     {
                         BlurMapping = 6;
                     }
-                    else if (o->CurrentAction == PLAYER_ATTACK_TWO_HAND_SWORD3
-                        || o->CurrentAction == PLAYER_ATTACK_TWO_HAND_SWORD_TWO)
+                    else if (o->CurrentAction == PLAYER_ATTACK_TWO_HAND_SWORD3 ||
+                             o->CurrentAction == PLAYER_ATTACK_TWO_HAND_SWORD_TWO)
                     {
                         if (Type == MODEL_SWORD_DANCER)
                             BlurMapping = 2;
@@ -3760,7 +3845,8 @@ void CreateWeaponBlur(CHARACTER* c, OBJECT* o, BMD* b)
         }
         else
         {
-            if (c->MonsterIndex == MONSTER_MEGA_CRUST || c->MonsterIndex == MONSTER_ALPHA_CRUST || c->MonsterIndex == MONSTER_OMEGA_WING)
+            if (c->MonsterIndex == MONSTER_MEGA_CRUST || c->MonsterIndex == MONSTER_ALPHA_CRUST ||
+                c->MonsterIndex == MONSTER_OMEGA_WING)
             {
                 if (o->CurrentAction >= MONSTER01_ATTACK1 && o->CurrentAction <= MONSTER01_ATTACK2)
                 {
@@ -3813,14 +3899,20 @@ void CreateWeaponBlur(CHARACTER* c, OBJECT* o, BMD* b)
         }
         if (BlurType > 0)
         {
-            vec3_t  Light;
-            vec3_t  Pos1, Pos2;
-            vec3_t  p, p2;
+            vec3_t Light;
+            vec3_t Pos1, Pos2;
+            vec3_t p, p2;
             switch (BlurType)
             {
-            case 1:Vector(0.f, -20.f, 0.f, Pos1); break;
-            case 2:Vector(0.f, -80.f, 0.f, Pos1); break;
-            case 3:Vector(0.f, -100.f, 0.f, Pos1); break;
+            case 1:
+                Vector(0.f, -20.f, 0.f, Pos1);
+                break;
+            case 2:
+                Vector(0.f, -80.f, 0.f, Pos1);
+                break;
+            case 3:
+                Vector(0.f, -100.f, 0.f, Pos1);
+                break;
             }
             Vector(0.f, -120.f, 0.f, Pos2);
 
@@ -3867,9 +3959,9 @@ void CreateWeaponBlur(CHARACTER* c, OBJECT* o, BMD* b)
                 Vector(1.f, 1.f, 1.f, Light);
             }
 
-            if ((o->Type != MODEL_PLAYER || Type == MODEL_KATACHE || Type == MODEL_GLADIUS || Type == MODEL_SWORD_OF_SALAMANDER || Type == MODEL_LEGENDARY_SWORD || Type == MODEL_SERPENT_SPEAR)
-                && o->Type != MODEL_AEGIS && o->Type != MODEL_DEATH_CENTURION && o->Type != MODEL_SHRIKER
-                )
+            if ((o->Type != MODEL_PLAYER || Type == MODEL_KATACHE || Type == MODEL_GLADIUS ||
+                 Type == MODEL_SWORD_OF_SALAMANDER || Type == MODEL_LEGENDARY_SWORD || Type == MODEL_SERPENT_SPEAR) &&
+                o->Type != MODEL_AEGIS && o->Type != MODEL_DEATH_CENTURION && o->Type != MODEL_SHRIKER)
             {
                 b->TransformPosition(o->BoneTransform[c->Weapon[Hand].LinkBone], Pos1, p, true);
                 b->TransformPosition(o->BoneTransform[c->Weapon[Hand2].LinkBone], Pos2, p2, true);
@@ -3888,7 +3980,8 @@ void CreateWeaponBlur(CHARACTER* c, OBJECT* o, BMD* b)
                 const float animationSpeed = playSpeed / inter;
                 for (int i = 0; i < (int)(inter); ++i)
                 {
-                    b->Animation(BoneTransform, animationFrame, priorAnimationFrame, o->PriorAction, o->Angle, o->HeadAngle);
+                    b->Animation(BoneTransform, animationFrame, priorAnimationFrame, o->PriorAction, o->Angle,
+                                 o->HeadAngle);
 
                     b->TransformPosition(BoneTransform[c->Weapon[Hand].LinkBone], Pos1, p, false);
                     b->TransformPosition(BoneTransform[c->Weapon[Hand2].LinkBone], Pos2, p2, false);
@@ -4002,10 +4095,9 @@ void MoveCharacter(CHARACTER* c, OBJECT* o)
         o->m_byHurtByDeathstab -= FPS_ANIMATION_FACTOR;
     }
 
-    if ((o->CurrentAction == PLAYER_ATTACK_TELEPORT || o->CurrentAction == PLAYER_ATTACK_RIDE_TELEPORT
-        || o->CurrentAction == PLAYER_FENRIR_ATTACK_DARKLORD_TELEPORT)
-        && o->AnimationFrame > 5.5f
-        && rand_fps_check(1))
+    if ((o->CurrentAction == PLAYER_ATTACK_TELEPORT || o->CurrentAction == PLAYER_ATTACK_RIDE_TELEPORT ||
+         o->CurrentAction == PLAYER_FENRIR_ATTACK_DARKLORD_TELEPORT) &&
+        o->AnimationFrame > 5.5f && rand_fps_check(1))
     {
         Vector(0.f, 0.f, 0.f, p);
         Vector(0.3f, 0.5f, 1.f, Light);
@@ -4037,7 +4129,7 @@ void MoveCharacter(CHARACTER* c, OBJECT* o)
         case AT_SKILL_SUMMON + 6:
 #ifdef ADD_ELF_SUMMON
         case AT_SKILL_SUMMON + 7:
-#endif// ADD_ELF_SUMMON
+#endif // ADD_ELF_SUMMON
             CreateEffect(BITMAP_MAGIC + 1, o->Position, o->Angle, o->Light, 3, o);
             break;
         case AT_SKILL_RAGEFUL_BLOW:
@@ -4046,7 +4138,8 @@ void MoveCharacter(CHARACTER* c, OBJECT* o)
         {
             o->Weapon = c->Weapon[0].Type - MODEL_SWORD;
             o->WeaponLevel = (BYTE)c->Weapon[0].Level;
-            CreateEffect(MODEL_SKILL_FURY_STRIKE, o->Position, o->Angle, o->Light, 0, o, o->PKKey, FindHotKey((c->Skill)));
+            CreateEffect(MODEL_SKILL_FURY_STRIKE, o->Position, o->Angle, o->Light, 0, o, o->PKKey,
+                         FindHotKey((c->Skill)));
             PlayBuffer(SOUND_FURY_STRIKE1);
             break;
         }
@@ -4075,7 +4168,7 @@ void MoveCharacter(CHARACTER* c, OBJECT* o)
         case AT_SKILL_SWELL_LIFE_STR:
         case AT_SKILL_SWELL_LIFE_PROFICIENCY:
         {
-            vec3_t Angle = { 0.0f, 0.0f, 0.0f };
+            vec3_t Angle = {0.0f, 0.0f, 0.0f};
             int iCount = 36;
             for (int i = 0; i < iCount; ++i)
             {
@@ -4093,8 +4186,8 @@ void MoveCharacter(CHARACTER* c, OBJECT* o)
                 }
             }
         }
-        PlayBuffer(SOUND_SWELLLIFE);
-        break;
+            PlayBuffer(SOUND_SWELLLIFE);
+            break;
         case AT_SKILL_STUN:
             //            CreateEffect ( MODEL_STUN_STONE, o->Position, o->Angle, o->Light, 1 );
             CreateJoint(BITMAP_FLASH, o->Position, o->Position, o->Angle, 7, NULL);
@@ -4122,7 +4215,7 @@ void MoveCharacter(CHARACTER* c, OBJECT* o)
 
         case AT_SKILL_MANA:
         {
-            vec3_t Angle = { 0.0f, 0.0f, 0.0f };
+            vec3_t Angle = {0.0f, 0.0f, 0.0f};
             int iCount = 36;
 
             for (int i = 0; i < iCount; ++i)
@@ -4138,8 +4231,8 @@ void MoveCharacter(CHARACTER* c, OBJECT* o)
                     CreateEffect(BITMAP_MAGIC + 1, o->Position, Angle, Light, 10, o);
             }
         }
-        PlayBuffer(SOUND_BMS_MANA);
-        break;
+            PlayBuffer(SOUND_BMS_MANA);
+            break;
 
         case AT_SKILL_INVISIBLE:
         {
@@ -4185,7 +4278,7 @@ void MoveCharacter(CHARACTER* c, OBJECT* o)
 
             std::list<eBuffState> bufflist;
 
-            //debuff
+            // debuff
             bufflist.push_back(eDeBuff_Poison);
             bufflist.push_back(eDeBuff_Freeze);
             bufflist.push_back(eDeBuff_Harden);
@@ -4194,11 +4287,15 @@ void MoveCharacter(CHARACTER* c, OBJECT* o)
             bufflist.push_back(eDeBuff_Sleep);
             bufflist.push_back(eDeBuff_BlowOfDestruction);
 
-            //buff
-            bufflist.push_back(eBuff_Life); bufflist.push_back(eBuff_Attack);
-            bufflist.push_back(eBuff_Defense); bufflist.push_back(eBuff_AddAG);
-            bufflist.push_back(eBuff_Cloaking); bufflist.push_back(eBuff_AddSkill);
-            bufflist.push_back(eBuff_WizDefense); bufflist.push_back(eBuff_AddCriticalDamage);
+            // buff
+            bufflist.push_back(eBuff_Life);
+            bufflist.push_back(eBuff_Attack);
+            bufflist.push_back(eBuff_Defense);
+            bufflist.push_back(eBuff_AddAG);
+            bufflist.push_back(eBuff_Cloaking);
+            bufflist.push_back(eBuff_AddSkill);
+            bufflist.push_back(eBuff_WizDefense);
+            bufflist.push_back(eBuff_AddCriticalDamage);
             bufflist.push_back(eBuff_CrywolfAltarOccufied);
 
             g_CharacterUnRegisterBuffList(o, bufflist);
@@ -4222,12 +4319,12 @@ void MoveCharacter(CHARACTER* c, OBJECT* o)
             CreateJoint(MODEL_SPEARSKILL, Position, Position, Angle, 7, o, 170.0f);
         }
 
-        PlayBuffer(SOUND_BMS_MAGIC_REMOVAL);
-        break;
+            PlayBuffer(SOUND_BMS_MAGIC_REMOVAL);
+            break;
         case AT_SKILL_IMPROVE_AG:
         {
-            vec3_t Angle = { -45.f, 0.f, 45.f };
-            vec3_t Light = { 1.f, 1.f, 1.f };
+            vec3_t Angle = {-45.f, 0.f, 45.f};
+            vec3_t Light = {1.f, 1.f, 1.f};
             vec3_t Position;
 
             Position[0] = o->Position[0] + sinf(45 * 0.1f) * 80.f;
@@ -4245,8 +4342,8 @@ void MoveCharacter(CHARACTER* c, OBJECT* o)
             Angle[2] = 450.f;
             CreateJoint(BITMAP_JOINT_HEALING, Position, Position, Angle, 10, o, 15.f);
         }
-        PlayBuffer(SOUND_SWELLLIFE);
-        break;
+            PlayBuffer(SOUND_SWELLLIFE);
+            break;
         case AT_SKILL_ADD_CRITICAL:
         case AT_SKILL_ADD_CRITICAL_STR1:
         case AT_SKILL_ADD_CRITICAL_STR2:
@@ -4258,7 +4355,8 @@ void MoveCharacter(CHARACTER* c, OBJECT* o)
                 b->TransformPosition(o->BoneTransform[c->Weapon[0].LinkBone], p, Position, true);
                 CreateEffect(MODEL_DARKLORD_SKILL, Position, o->Angle, Light, 0);
             }
-            if (c->Weapon[1].Type != MODEL_BOLT && (c->Weapon[1].Type < MODEL_SHIELD || c->Weapon[1].Type >= MODEL_SHIELD + MAX_ITEM_INDEX))
+            if (c->Weapon[1].Type != MODEL_BOLT &&
+                (c->Weapon[1].Type < MODEL_SHIELD || c->Weapon[1].Type >= MODEL_SHIELD + MAX_ITEM_INDEX))
             {
                 b->TransformPosition(o->BoneTransform[c->Weapon[1].LinkBone], p, Position, true);
                 CreateEffect(MODEL_DARKLORD_SKILL, Position, o->Angle, Light, 1);
@@ -4390,7 +4488,8 @@ void MoveCharacter(CHARACTER* c, OBJECT* o)
 
             VectorCopy(pObj->Position, ap);
             CreateEffect(MODEL_DARK_SCREAM, pObj->Position, pObj->Angle, pObj->Light, 0, pObj, pObj->PKKey, SkillIndex);
-            CreateEffect(MODEL_DARK_SCREAM_FIRE, pObj->Position, pObj->Angle, pObj->Light, 0, pObj, pObj->PKKey, SkillIndex);
+            CreateEffect(MODEL_DARK_SCREAM_FIRE, pObj->Position, pObj->Angle, pObj->Light, 0, pObj, pObj->PKKey,
+                         SkillIndex);
 
             Vector(80.f, 0.f, 0.f, P);
 
@@ -4400,7 +4499,8 @@ void MoveCharacter(CHARACTER* c, OBJECT* o)
             VectorRotate(P, pObj->Matrix, dp);
             VectorAdd(dp, pObj->Position, pObj->Position);
             CreateEffect(MODEL_DARK_SCREAM, pObj->Position, pObj->Angle, pObj->Light, 0, pObj, pObj->PKKey, SkillIndex);
-            CreateEffect(MODEL_DARK_SCREAM_FIRE, pObj->Position, pObj->Angle, pObj->Light, 0, pObj, pObj->PKKey, SkillIndex);
+            CreateEffect(MODEL_DARK_SCREAM_FIRE, pObj->Position, pObj->Angle, pObj->Light, 0, pObj, pObj->PKKey,
+                         SkillIndex);
 
             VectorCopy(ap, pObj->Position);
             VectorCopy(pObj->Position, ap);
@@ -4411,7 +4511,8 @@ void MoveCharacter(CHARACTER* c, OBJECT* o)
             VectorRotate(P, pObj->Matrix, dp);
             VectorAdd(dp, pObj->Position, pObj->Position);
             CreateEffect(MODEL_DARK_SCREAM, pObj->Position, pObj->Angle, pObj->Light, 0, pObj, pObj->PKKey, SkillIndex);
-            CreateEffect(MODEL_DARK_SCREAM_FIRE, pObj->Position, pObj->Angle, pObj->Light, 0, pObj, pObj->PKKey, SkillIndex);
+            CreateEffect(MODEL_DARK_SCREAM_FIRE, pObj->Position, pObj->Angle, pObj->Light, 0, pObj, pObj->PKKey,
+                         SkillIndex);
             VectorCopy(ap, pObj->Position);
             pObj->Angle[2] = BkO;
 
@@ -4478,7 +4579,8 @@ void MoveCharacter(CHARACTER* c, OBJECT* o)
                 Vector(0.f, 0.f, i * 90.f, Angle);
 
                 int SkillIndex = FindHotKey((c->Skill));
-                CreateJoint(BITMAP_JOINT_SPIRIT, Position, o->Position, Angle, 0, o, 80.f, o->PKKey, SkillIndex, o->m_bySkillSerialNum);
+                CreateJoint(BITMAP_JOINT_SPIRIT, Position, o->Position, Angle, 0, o, 80.f, o->PKKey, SkillIndex,
+                            o->m_bySkillSerialNum);
                 CreateJoint(BITMAP_JOINT_SPIRIT, Position, o->Position, Angle, 0, o, 20.f);
             }
             if (c == Hero)
@@ -4498,7 +4600,8 @@ void MoveCharacter(CHARACTER* c, OBJECT* o)
             {
                 p_temp_c = &CharactersClient[i];
 
-                if (p_temp_c->Object.Live == TRUE && p_temp_c->Object.Kind == KIND_MONSTER && p_temp_c->Object.CurrentAction != MONSTER01_DIE)
+                if (p_temp_c->Object.Live == TRUE && p_temp_c->Object.Kind == KIND_MONSTER &&
+                    p_temp_c->Object.CurrentAction != MONSTER01_DIE)
                 {
                     float dx = c->Object.Position[0] - p_temp_c->Object.Position[0];
                     float dy = c->Object.Position[1] - p_temp_c->Object.Position[1];
@@ -4509,7 +4612,8 @@ void MoveCharacter(CHARACTER* c, OBJECT* o)
                         iMonsterNum++;
                     }
                 }
-                else if (p_temp_c->Object.Live == TRUE && p_temp_c->Object.Kind == KIND_PLAYER && p_temp_c->Object.CurrentAction != PLAYER_DIE1)
+                else if (p_temp_c->Object.Live == TRUE && p_temp_c->Object.Kind == KIND_PLAYER &&
+                         p_temp_c->Object.CurrentAction != PLAYER_DIE1)
                 {
                     if (CheckAttack_Fenrir(p_temp_c) == true && CInput::Instance().IsKeyDown(VK_LCONTROL))
                     {
@@ -4542,8 +4646,10 @@ void MoveCharacter(CHARACTER* c, OBJECT* o)
                     CalcAddPosition(o, 0.f, -140.f, 130.f, Position);
                     Vector((float)(rand() % 360), 0.0f, (float)(rand() % 360), vAngle);
 
-                    CreateJoint(MODEL_FENRIR_SKILL_THUNDER, Position, p_to->Position, vAngle, 0 + fenrirType, p_to, 100.f);
-                    CreateJoint(MODEL_FENRIR_SKILL_THUNDER, Position, p_to->Position, vAngle, 3 + fenrirType, p_to, 80.f);
+                    CreateJoint(MODEL_FENRIR_SKILL_THUNDER, Position, p_to->Position, vAngle, 0 + fenrirType, p_to,
+                                100.f);
+                    CreateJoint(MODEL_FENRIR_SKILL_THUNDER, Position, p_to->Position, vAngle, 3 + fenrirType, p_to,
+                                80.f);
                 }
 
                 for (int i = 0; i < iMonsterNum; i++)
@@ -4553,8 +4659,10 @@ void MoveCharacter(CHARACTER* c, OBJECT* o)
                         CalcAddPosition(o, 0.f, -140.f, 130.f, Position);
                         Vector((float)(rand() % 360), 0.0f, (float)(rand() % 360), vAngle);
 
-                        CreateJoint(MODEL_FENRIR_SKILL_THUNDER, Position, p_o[i]->Position, vAngle, 0 + fenrirType, p_o[i], 100.f);
-                        CreateJoint(MODEL_FENRIR_SKILL_THUNDER, Position, p_o[i]->Position, vAngle, 4 + fenrirType, p_o[i], 80.f);
+                        CreateJoint(MODEL_FENRIR_SKILL_THUNDER, Position, p_o[i]->Position, vAngle, 0 + fenrirType,
+                                    p_o[i], 100.f);
+                        CreateJoint(MODEL_FENRIR_SKILL_THUNDER, Position, p_o[i]->Position, vAngle, 4 + fenrirType,
+                                    p_o[i], 80.f);
                     }
                 }
 
@@ -4588,7 +4696,8 @@ void MoveCharacter(CHARACTER* c, OBJECT* o)
                 b->TransformPosition(o->BoneTransform[c->Weapon[0].LinkBone], p, Position, true);
                 CreateEffect(MODEL_DARKLORD_SKILL, Position, o->Angle, Light, 0);
             }
-            if (c->Weapon[1].Type != MODEL_BOLT && (c->Weapon[1].Type < MODEL_SHIELD || c->Weapon[1].Type >= MODEL_SHIELD + MAX_ITEM_INDEX))
+            if (c->Weapon[1].Type != MODEL_BOLT &&
+                (c->Weapon[1].Type < MODEL_SHIELD || c->Weapon[1].Type >= MODEL_SHIELD + MAX_ITEM_INDEX))
             {
                 b->TransformPosition(o->BoneTransform[c->Weapon[1].LinkBone], p, Position, true);
                 CreateEffect(MODEL_DARKLORD_SKILL, Position, o->Angle, Light, 1);
@@ -4637,7 +4746,7 @@ void MoveCharacter(CHARACTER* c, OBJECT* o)
             break;
         case AT_SKILL_FLAME_STRIKE:
         {
-            //DeleteEffect(MODEL_EFFECT_FLAME_STRIKE, o, 0);
+            // DeleteEffect(MODEL_EFFECT_FLAME_STRIKE, o, 0);
             CreateEffect(MODEL_EFFECT_FLAME_STRIKE, o->Position, o->Angle, o->Light, 0, o);
             PlayBuffer(SOUND_SKILL_FLAME_STRIKE);
         }
@@ -4695,24 +4804,22 @@ void MoveCharacter(CHARACTER* c, OBJECT* o)
         if (c->TargetCharacter == -1)
         {
             BYTE Skill = 0;
-            if (c->Skill == AT_SKILL_TRIPLE_SHOT
-                || c->Skill == AT_SKILL_TRIPLE_SHOT_STR
-                || c->Skill == AT_SKILL_TRIPLE_SHOT_MASTERY)
+            if (c->Skill == AT_SKILL_TRIPLE_SHOT || c->Skill == AT_SKILL_TRIPLE_SHOT_STR ||
+                c->Skill == AT_SKILL_TRIPLE_SHOT_MASTERY)
                 Skill = 1;
             if ((o->Type == MODEL_PLAYER &&
-                (o->CurrentAction == PLAYER_ATTACK_BOW || o->CurrentAction == PLAYER_ATTACK_CROSSBOW ||
-                    o->CurrentAction == PLAYER_ATTACK_FLY_BOW || o->CurrentAction == PLAYER_ATTACK_FLY_CROSSBOW ||
-                    o->CurrentAction == PLAYER_FENRIR_ATTACK_BOW || o->CurrentAction == PLAYER_FENRIR_ATTACK_CROSSBOW ||
-                    o->CurrentAction == PLAYER_ATTACK_RIDE_BOW || o->CurrentAction == PLAYER_ATTACK_RIDE_CROSSBOW)) ||
-                o->Type != MODEL_PLAYER && o->Kind == KIND_PLAYER
-                )
+                 (o->CurrentAction == PLAYER_ATTACK_BOW || o->CurrentAction == PLAYER_ATTACK_CROSSBOW ||
+                  o->CurrentAction == PLAYER_ATTACK_FLY_BOW || o->CurrentAction == PLAYER_ATTACK_FLY_CROSSBOW ||
+                  o->CurrentAction == PLAYER_FENRIR_ATTACK_BOW || o->CurrentAction == PLAYER_FENRIR_ATTACK_CROSSBOW ||
+                  o->CurrentAction == PLAYER_ATTACK_RIDE_BOW || o->CurrentAction == PLAYER_ATTACK_RIDE_CROSSBOW)) ||
+                o->Type != MODEL_PLAYER && o->Kind == KIND_PLAYER)
             {
                 if (AT_SKILL_MULTI_SHOT != (c->Skill))
                     CreateArrows(c, o, NULL, FindHotKey((c->Skill)), Skill, (c->Skill));
             }
 
-            if (o->Type == MODEL_HUNTER || o->Type == MODEL_VALKYRIE || o->Type == MODEL_SOLDIER
-                || o->Type == MODEL_ORC_ARCHER)
+            if (o->Type == MODEL_HUNTER || o->Type == MODEL_VALKYRIE || o->Type == MODEL_SOLDIER ||
+                o->Type == MODEL_ORC_ARCHER)
             {
                 CreateArrows(c, o, NULL, 0, 0);
             }
@@ -4723,10 +4830,11 @@ void MoveCharacter(CHARACTER* c, OBJECT* o)
             OBJECT* to = &tc->Object;
             if (o->Type == MODEL_PLAYER &&
                 (o->CurrentAction == PLAYER_ATTACK_BOW || o->CurrentAction == PLAYER_ATTACK_CROSSBOW ||
-                    o->CurrentAction == PLAYER_ATTACK_FLY_BOW || o->CurrentAction == PLAYER_ATTACK_FLY_CROSSBOW ||
-                    o->CurrentAction == PLAYER_ATTACK_RIDE_BOW || o->CurrentAction == PLAYER_ATTACK_RIDE_CROSSBOW
-                    || o->CurrentAction == PLAYER_FENRIR_ATTACK_BOW || o->CurrentAction == PLAYER_FENRIR_ATTACK_CROSSBOW	//^ 펜릴 스킬 관련(요정 화살 나가게 하는 것)
-                    ))
+                 o->CurrentAction == PLAYER_ATTACK_FLY_BOW || o->CurrentAction == PLAYER_ATTACK_FLY_CROSSBOW ||
+                 o->CurrentAction == PLAYER_ATTACK_RIDE_BOW || o->CurrentAction == PLAYER_ATTACK_RIDE_CROSSBOW ||
+                 o->CurrentAction == PLAYER_FENRIR_ATTACK_BOW ||
+                 o->CurrentAction == PLAYER_FENRIR_ATTACK_CROSSBOW //^ 펜릴 스킬 관련(요정 화살 나가게 하는 것)
+                 ))
             {
                 if (AT_SKILL_MULTI_SHOT != (c->Skill))
                     CreateArrows(c, o, to, FindHotKey((c->Skill)), 0, (c->Skill));
@@ -4743,7 +4851,8 @@ void MoveCharacter(CHARACTER* c, OBJECT* o)
                 {
                     for (int i = 0; i < 10; i++)
                     {
-                        Vector(to->Position[0] + (float)(rand() % 64 - 32), to->Position[1] + (float)(rand() % 64 - 32), to->Position[2] + (float)(rand() % 64 + 90), Position);
+                        Vector(to->Position[0] + (float)(rand() % 64 - 32), to->Position[1] + (float)(rand() % 64 - 32),
+                               to->Position[2] + (float)(rand() % 64 + 90), Position);
                         CreateParticle(BITMAP_BLOOD + 1, Position, o->Angle, Light);
                     }
                 }
@@ -4812,15 +4921,16 @@ void MoveCharacter(CHARACTER* c, OBJECT* o)
 
                         for (int j = 0; j < 5; ++j)
                         {
-                            CreateJoint(MODEL_SPEARSKILL, to->Position, to->Position, to->Angle, 4, to, 20.0f, -1, 0, 0, c->TargetCharacter);
+                            CreateJoint(MODEL_SPEARSKILL, to->Position, to->Position, to->Angle, 4, to, 20.0f, -1, 0, 0,
+                                        c->TargetCharacter);
                         }
                     }
-                    else if (!SearchJoint(MODEL_SPEARSKILL, to, 4)
-                        && !SearchJoint(MODEL_SPEARSKILL, to, 9))
+                    else if (!SearchJoint(MODEL_SPEARSKILL, to, 4) && !SearchJoint(MODEL_SPEARSKILL, to, 9))
                     {
                         for (int j = 0; j < 5; ++j)
                         {
-                            CreateJoint(MODEL_SPEARSKILL, to->Position, to->Position, to->Angle, 4, to, 20.0f, -1, 0, 0, c->TargetCharacter);
+                            CreateJoint(MODEL_SPEARSKILL, to->Position, to->Position, to->Angle, 4, to, 20.0f, -1, 0, 0,
+                                        c->TargetCharacter);
                         }
                     }
                 }
@@ -4828,7 +4938,8 @@ void MoveCharacter(CHARACTER* c, OBJECT* o)
             case AT_SKILL_ATTACK:
             case AT_SKILL_ATTACK_STR:
             case AT_SKILL_ATTACK_MASTERY:
-                if (g_isCharacterBuff(o, eBuff_Cloaking)) break;
+                if (g_isCharacterBuff(o, eBuff_Cloaking))
+                    break;
                 CreateEffect(BITMAP_MAGIC + 1, to->Position, to->Angle, to->Light, 3, to);
                 if (c->SkillSuccess)
                 {
@@ -4861,7 +4972,8 @@ void MoveCharacter(CHARACTER* c, OBJECT* o)
                 }
                 else
                 {
-                    if (g_isCharacterBuff(to, eBuff_Cloaking)) break;
+                    if (g_isCharacterBuff(to, eBuff_Cloaking))
+                        break;
                     g_CharacterRegisterBuff(to, eBuff_WizDefense);
 
                     PlayBuffer(SOUND_SOULBARRIER);
@@ -4948,8 +5060,8 @@ void MoveCharacter(CHARACTER* c, OBJECT* o)
             case AT_SKILL_FIREBURST_STR:
             case AT_SKILL_FIREBURST_MASTERY:
             {
-                vec3_t Angle = { 0.f, 0.f, o->Angle[2] };
-                vec3_t Pos = { 0.f, 0.f, (to->BoundingBoxMax[2] / 1.f) };
+                vec3_t Angle = {0.f, 0.f, o->Angle[2]};
+                vec3_t Pos = {0.f, 0.f, (to->BoundingBoxMax[2] / 1.f)};
 
                 Vector(40.f, 0.f, 10.f, p);
                 b->TransformPosition(o->BoneTransform[0], p, Position, true);
@@ -5058,7 +5170,8 @@ void MoveCharacter(CHARACTER* c, OBJECT* o)
                 {
                     Vector(0.8f, 0.5f, 0.2f, vLight);
                 }
-                if (iSkillIndex == AT_SKILL_ALICE_SLEEP || iSkillIndex == AT_SKILL_ALICE_THORNS || iSkillIndex == AT_SKILL_ALICE_SLEEP_STR)
+                if (iSkillIndex == AT_SKILL_ALICE_SLEEP || iSkillIndex == AT_SKILL_ALICE_THORNS ||
+                    iSkillIndex == AT_SKILL_ALICE_SLEEP_STR)
                 {
                     CreateEffect(BITMAP_MAGIC + 1, o->Position, o->Angle, vLight, 11, o);
                 }
@@ -5100,7 +5213,8 @@ void MoveCharacter(CHARACTER* c, OBJECT* o)
                 OBJECT* pSourceObj = o;
                 pSourceObj->Owner = &(pTargetChar->Object);
 
-                CreateEffect(MODEL_ALICE_DRAIN_LIFE, pSourceObj->Position, pSourceObj->Angle, pSourceObj->Light, 0, pSourceObj);
+                CreateEffect(MODEL_ALICE_DRAIN_LIFE, pSourceObj->Position, pSourceObj->Angle, pSourceObj->Light, 0,
+                             pSourceObj);
                 PlayBuffer(SOUND_SKILL_DRAIN_LIFE);
             }
             break;
@@ -5180,7 +5294,8 @@ void MoveCharacter(CHARACTER* c, OBJECT* o)
                     ITEM* r = &CharacterMachine->Equipment[EQUIPMENT_WEAPON_RIGHT];
                     ITEM* l = &CharacterMachine->Equipment[EQUIPMENT_WEAPON_LEFT];
 
-                    if ((r->Type >= ITEM_BOW && r->Type < ITEM_BOW + MAX_ITEM_INDEX) && (l->Type >= ITEM_BOW && l->Type < ITEM_BOW + MAX_ITEM_INDEX))
+                    if ((r->Type >= ITEM_BOW && r->Type < ITEM_BOW + MAX_ITEM_INDEX) &&
+                        (l->Type >= ITEM_BOW && l->Type < ITEM_BOW + MAX_ITEM_INDEX))
                     {
                         PlayBuffer(static_cast<ESound>(SOUND_ATTACK_MELEE_HIT1 + 5 + rand() % 4), o);
                     }
@@ -5222,8 +5337,10 @@ void MoveCharacter(CHARACTER* c, OBJECT* o)
 
     if (c->Dead > 0)
     {
-        if (g_isCharacterBuff(o, eBuff_BlessPotion)) g_CharacterUnRegisterBuff(o, eBuff_BlessPotion);
-        if (g_isCharacterBuff(o, eBuff_SoulPotion)) g_CharacterUnRegisterBuff(o, eBuff_SoulPotion);
+        if (g_isCharacterBuff(o, eBuff_BlessPotion))
+            g_CharacterUnRegisterBuff(o, eBuff_BlessPotion);
+        if (g_isCharacterBuff(o, eBuff_SoulPotion))
+            g_CharacterUnRegisterBuff(o, eBuff_SoulPotion);
     }
 }
 
@@ -5247,7 +5364,9 @@ void PlayWalkSound()
         {
             PlayBuffer(SOUND_HUMAN_WALK_GRASS);
         }
-        else if ((gMapManager.WorldActive == WD_7ATLANSE || gMapManager.InHellas() || gMapManager.WorldActive == WD_67DOPPLEGANGER3) && !Hero->SafeZone)
+        else if ((gMapManager.WorldActive == WD_7ATLANSE || gMapManager.InHellas() ||
+                  gMapManager.WorldActive == WD_67DOPPLEGANGER3) &&
+                 !Hero->SafeZone)
         {
             PlayBuffer(SOUND_HUMAN_WALK_SWIM);
         }
@@ -5270,7 +5389,7 @@ bool CheckFullSet(CHARACTER* c)
 {
     int tmpLevel = 10;
     bool Success = true;
-    int  start = 5, end = 1;
+    int start = 5, end = 1;
 
     EquipmentLevelSet = 0;
 
@@ -5336,14 +5455,13 @@ bool CheckFullSet(CHARACTER* c)
 
         if (gCharacterManager.GetBaseClass(c->Class) == CLASS_DARK && Success)
         {
-            if (CharacterMachine->Equipment[EQUIPMENT_ARMOR].Type != ITEM_STORM_CROW_ARMOR
-                && CharacterMachine->Equipment[EQUIPMENT_ARMOR].Type != ITEM_THUNDER_HAWK_ARMOR
-                && CharacterMachine->Equipment[EQUIPMENT_ARMOR].Type != ITEM_HURRICANE_ARMOR
-                && CharacterMachine->Equipment[EQUIPMENT_ARMOR].Type != ITEM_VOLCANO_ARMOR
-                && CharacterMachine->Equipment[EQUIPMENT_ARMOR].Type != ITEM_VALIANT_ARMOR
-                && CharacterMachine->Equipment[EQUIPMENT_ARMOR].Type != ITEM_DESTORY_ARMOR
-                && CharacterMachine->Equipment[EQUIPMENT_ARMOR].Type != ITEM_PHANTOM_ARMOR
-                )
+            if (CharacterMachine->Equipment[EQUIPMENT_ARMOR].Type != ITEM_STORM_CROW_ARMOR &&
+                CharacterMachine->Equipment[EQUIPMENT_ARMOR].Type != ITEM_THUNDER_HAWK_ARMOR &&
+                CharacterMachine->Equipment[EQUIPMENT_ARMOR].Type != ITEM_HURRICANE_ARMOR &&
+                CharacterMachine->Equipment[EQUIPMENT_ARMOR].Type != ITEM_VOLCANO_ARMOR &&
+                CharacterMachine->Equipment[EQUIPMENT_ARMOR].Type != ITEM_VALIANT_ARMOR &&
+                CharacterMachine->Equipment[EQUIPMENT_ARMOR].Type != ITEM_DESTORY_ARMOR &&
+                CharacterMachine->Equipment[EQUIPMENT_ARMOR].Type != ITEM_PHANTOM_ARMOR)
             {
                 g_bAddDefense = false;
             }
@@ -5393,14 +5511,13 @@ bool CheckFullSet(CHARACTER* c)
 
         if (gCharacterManager.GetBaseClass(c->Class) == CLASS_DARK && Success)
         {
-            if (c->BodyPart[BODYPART_ARMOR].Type != ITEM_STORM_CROW_ARMOR
-                && c->BodyPart[BODYPART_ARMOR].Type != ITEM_THUNDER_HAWK_ARMOR
-                && c->BodyPart[BODYPART_ARMOR].Type != ITEM_HURRICANE_ARMOR
-                && c->BodyPart[BODYPART_ARMOR].Type != ITEM_VOLCANO_ARMOR
-                && c->BodyPart[BODYPART_ARMOR].Type != ITEM_VALIANT_ARMOR
-                && c->BodyPart[BODYPART_ARMOR].Type != ITEM_DESTORY_ARMOR
-                && c->BodyPart[BODYPART_ARMOR].Type != ITEM_PHANTOM_ARMOR
-                )
+            if (c->BodyPart[BODYPART_ARMOR].Type != ITEM_STORM_CROW_ARMOR &&
+                c->BodyPart[BODYPART_ARMOR].Type != ITEM_THUNDER_HAWK_ARMOR &&
+                c->BodyPart[BODYPART_ARMOR].Type != ITEM_HURRICANE_ARMOR &&
+                c->BodyPart[BODYPART_ARMOR].Type != ITEM_VOLCANO_ARMOR &&
+                c->BodyPart[BODYPART_ARMOR].Type != ITEM_VALIANT_ARMOR &&
+                c->BodyPart[BODYPART_ARMOR].Type != ITEM_DESTORY_ARMOR &&
+                c->BodyPart[BODYPART_ARMOR].Type != ITEM_PHANTOM_ARMOR)
             {
                 g_bAddDefense = false;
             }
@@ -5439,9 +5556,8 @@ void MonsterDieSandSmoke(OBJECT* o)
         for (int i = 0; i < 20; i++)
         {
             Vector(1.f, 1.f, 1.f, o->Light);
-            Vector(o->Position[0] + (float)(rand() % 64 - 32),
-                o->Position[1] + (float)(rand() % 64 - 32),
-                o->Position[2] + (float)(rand() % 32 - 16), Position);
+            Vector(o->Position[0] + (float)(rand() % 64 - 32), o->Position[1] + (float)(rand() % 64 - 32),
+                   o->Position[2] + (float)(rand() % 32 - 16), Position);
             if (rand_fps_check(1))
             {
                 CreateParticle(BITMAP_SMOKE + 1, Position, o->Angle, o->Light, 1);
@@ -5493,11 +5609,9 @@ void MoveCharacterVisual(CHARACTER* c, OBJECT* o)
         else
             c->SafeZone = false;
 
-        if (!g_isCharacterBuff(o, eDeBuff_Harden) && !g_isCharacterBuff(o, eDeBuff_Stun)
-            && !g_isCharacterBuff(o, eDeBuff_Sleep)
-            && !g_isCharacterBuff(o, eBuff_Att_up_Ourforces)
-            && !g_isCharacterBuff(o, eBuff_Hp_up_Ourforces)
-            && !g_isCharacterBuff(o, eBuff_Def_up_Ourforces))
+        if (!g_isCharacterBuff(o, eDeBuff_Harden) && !g_isCharacterBuff(o, eDeBuff_Stun) &&
+            !g_isCharacterBuff(o, eDeBuff_Sleep) && !g_isCharacterBuff(o, eBuff_Att_up_Ourforces) &&
+            !g_isCharacterBuff(o, eBuff_Hp_up_Ourforces) && !g_isCharacterBuff(o, eBuff_Def_up_Ourforces))
         {
             if (o->Type != MODEL_PLAYER)
                 MoveHead(c);
@@ -5506,11 +5620,13 @@ void MoveCharacterVisual(CHARACTER* c, OBJECT* o)
                 o->HeadTargetAngle[0] = (float)(rand() % 128 - 64);
                 o->HeadTargetAngle[1] = (float)(rand() % 32 - 16);
                 for (int i = 0; i < 2; i++)
-                    if (o->HeadTargetAngle[i] < 0) o->HeadTargetAngle[i] += 360.f;
+                    if (o->HeadTargetAngle[i] < 0)
+                        o->HeadTargetAngle[i] += 360.f;
             }
 
             for (int j = 0; j < 2; j++)
-                o->HeadAngle[j] = TurnAngle2(o->HeadAngle[j], o->HeadTargetAngle[j], FarAngle(o->HeadAngle[j], o->HeadTargetAngle[j]) * 0.2f);
+                o->HeadAngle[j] = TurnAngle2(o->HeadAngle[j], o->HeadTargetAngle[j],
+                                             FarAngle(o->HeadAngle[j], o->HeadTargetAngle[j]) * 0.2f);
         }
 
         vec3_t p, Position;
@@ -5522,9 +5638,8 @@ void MoveCharacterVisual(CHARACTER* c, OBJECT* o)
             for (int i = 0; i < 20; i++)
             {
                 Vector(1.f, 1.f, 1.f, o->Light);
-                Vector(o->Position[0] + (float)(rand() % 64 - 32),
-                    o->Position[1] + (float)(rand() % 64 - 32),
-                    o->Position[2] + (float)(rand() % 32 - 16), Position);
+                Vector(o->Position[0] + (float)(rand() % 64 - 32), o->Position[1] + (float)(rand() % 64 - 32),
+                       o->Position[2] + (float)(rand() % 32 - 16), Position);
                 if (rand_fps_check(10))
                     CreateParticle(BITMAP_SMOKE + 1, Position, o->Angle, o->Light, 1);
                 if (rand_fps_check(10))
@@ -5545,7 +5660,10 @@ void MoveCharacterVisual(CHARACTER* c, OBJECT* o)
                     Vector(Luminosity, Luminosity * 0.8f, Luminosity * 0.5f, Light);
                     AddTerrainLight(o->Position[0], o->Position[1], Light, 3, PrimaryTerrainLight);
                 }
-                else if (c->Weapon[j].Type == MODEL_DIVINE_SWORD_OF_ARCHANGEL || c->Weapon[j].Type == MODEL_DIVINE_CB_OF_ARCHANGEL || c->Weapon[j].Type == MODEL_DIVINE_STAFF_OF_ARCHANGEL || c->Weapon[j].Type == MODEL_DIVINE_SCEPTER_OF_ARCHANGEL)
+                else if (c->Weapon[j].Type == MODEL_DIVINE_SWORD_OF_ARCHANGEL ||
+                         c->Weapon[j].Type == MODEL_DIVINE_CB_OF_ARCHANGEL ||
+                         c->Weapon[j].Type == MODEL_DIVINE_STAFF_OF_ARCHANGEL ||
+                         c->Weapon[j].Type == MODEL_DIVINE_SCEPTER_OF_ARCHANGEL)
                 {
                     Vector(Luminosity * 0.8f, Luminosity * 0.5f, Luminosity * 0.3f, Light);
                     AddTerrainLight(o->Position[0], o->Position[1], Light, 2, PrimaryTerrainLight);
@@ -5556,9 +5674,10 @@ void MoveCharacterVisual(CHARACTER* c, OBJECT* o)
         {
             if (c->FreezeType == BITMAP_ICE && rand_fps_check(4))
             {
-                Vector(o->Position[0] + (float)(rand() % 100 - 50), o->Position[1] + (float)(rand() % 100 - 50), o->Position[2] + (float)(rand() % 180), Position);
-                //CreateParticle(BITMAP_SHINY,Position,o->Angle,o->Light);
-                //CreateParticle(BITMAP_SHINY,Position,o->Angle,o->Light,1);
+                Vector(o->Position[0] + (float)(rand() % 100 - 50), o->Position[1] + (float)(rand() % 100 - 50),
+                       o->Position[2] + (float)(rand() % 180), Position);
+                // CreateParticle(BITMAP_SHINY,Position,o->Angle,o->Light);
+                // CreateParticle(BITMAP_SHINY,Position,o->Angle,o->Light,1);
             }
             if (c->FreezeType == BITMAP_BURN)
             {
@@ -5568,10 +5687,11 @@ void MoveCharacterVisual(CHARACTER* c, OBJECT* o)
                     if (!b->Bones[i].Dummy)
                     {
                         b->TransformPosition(o->BoneTransform[i], Position, p);
-                        //CreateParticle(BITMAP_FIRE+1,p,o->Angle,o->Light,rand()%4);
+                        // CreateParticle(BITMAP_FIRE+1,p,o->Angle,o->Light,rand()%4);
                     }
                     int d = (int)(4.f / c->Freeze);
-                    if (d < 1) d = 1;
+                    if (d < 1)
+                        d = 1;
                     i += d;
                 }
             }
@@ -5583,10 +5703,9 @@ void MoveCharacterVisual(CHARACTER* c, OBJECT* o)
         switch (o->Type)
         {
         case MODEL_PLAYER:
-            if (SceneFlag == MAIN_SCENE
-                && (gMapManager.WorldActive == WD_7ATLANSE || gMapManager.WorldActive == WD_67DOPPLEGANGER3)
-                && (int)WorldTime % 10000 < 1000
-                && rand_fps_check(1))
+            if (SceneFlag == MAIN_SCENE &&
+                (gMapManager.WorldActive == WD_7ATLANSE || gMapManager.WorldActive == WD_67DOPPLEGANGER3) &&
+                (int)WorldTime % 10000 < 1000 && rand_fps_check(1))
             {
                 Vector(0.f, 20.f, -10.f, p);
                 b->TransformPosition(o->BoneTransform[b->BoneHead], p, Position, true);
@@ -5607,7 +5726,8 @@ void MoveCharacterVisual(CHARACTER* c, OBJECT* o)
                     CreateParticle(BITMAP_RAIN_CIRCLE + 1, Position, o->Angle, Light);
                 }
             }
-            if (o->CurrentAction == PLAYER_SKILL_HELL_BEGIN || o->CurrentAction == PLAYER_SKILL_HELL_START && rand_fps_check(1))
+            if (o->CurrentAction == PLAYER_SKILL_HELL_BEGIN ||
+                o->CurrentAction == PLAYER_SKILL_HELL_START && rand_fps_check(1))
             {
                 if (o->BoneTransform != NULL)
                 {
@@ -5621,7 +5741,8 @@ void MoveCharacterVisual(CHARACTER* c, OBJECT* o)
 
                             for (int j = 0; j < o->m_bySkillCount + 1; ++j)
                             {
-                                CreateParticle(BITMAP_LIGHT, Position, o->Angle, Light, 6, 1.3f + (o->m_bySkillCount * 0.08f));
+                                CreateParticle(BITMAP_LIGHT, Position, o->Angle, Light, 6,
+                                               1.3f + (o->m_bySkillCount * 0.08f));
                             }
                         }
                     }
@@ -5718,18 +5839,18 @@ void MoveCharacterVisual(CHARACTER* c, OBJECT* o)
         case MODEL_MUTANT:
             MoveEye(o, b, 8, 9);
             MonsterMoveSandSmoke(o);
-            //MonsterDieSandSmoke(o);
+            // MonsterDieSandSmoke(o);
             break;
-        case MODEL_BEAM_KNIGHT://
+        case MODEL_BEAM_KNIGHT: //
             MoveEye(o, b, 8, 9);
             if (c->MonsterIndex == MONSTER_DEATH_BEAM_KNIGHT)
             {
-                wchar_t    body[2] = { 30,0 };
-                char    head = 1;
-                vec3_t  vec[35];
-                vec3_t  angle;
-                vec3_t  dist;
-                vec3_t  p;
+                wchar_t body[2] = {30, 0};
+                char head = 1;
+                vec3_t vec[35];
+                vec3_t angle;
+                vec3_t dist;
+                vec3_t p;
 
                 Vector(0.f, 0.f, 0.f, angle);
                 Vector(0.f, 0.f, 0.f, p);
@@ -5807,7 +5928,7 @@ void MoveCharacterVisual(CHARACTER* c, OBJECT* o)
             }
             else
             {
-                vec3_t  pos, angle;
+                vec3_t pos, angle;
                 Vector(0.f, 0.f, 0.f, angle);
 
                 Luminosity = (float)sinf(WorldTime * 0.002f) * 0.3f + 0.7f;
@@ -5837,9 +5958,9 @@ void MoveCharacterVisual(CHARACTER* c, OBJECT* o)
         case MODEL_BLOODY_WOLF:
             MoveEye(o, b, 11, 12);
             MonsterMoveSandSmoke(o);
-            //MonsterDieSandSmoke(o);
+            // MonsterDieSandSmoke(o);
             break;
-        case MODEL_TANTALLOS://
+        case MODEL_TANTALLOS: //
             MoveEye(o, b, 24, 25);
             if (o->SubType == 1)
             {
@@ -6039,9 +6160,8 @@ void MoveCharacterVisual(CHARACTER* c, OBJECT* o)
             }
             if (c->Dead == 0 && rand_fps_check(4))
             {
-                Vector(o->Position[0] + (float)(rand() % 64 - 32),
-                    o->Position[1] + (float)(rand() % 64 - 32),
-                    o->Position[2] + (float)(rand() % 32 - 16), Position);
+                Vector(o->Position[0] + (float)(rand() % 64 - 32), o->Position[1] + (float)(rand() % 64 - 32),
+                       o->Position[2] + (float)(rand() % 32 - 16), Position);
                 if (gMapManager.WorldActive == WD_2DEVIAS)
                     CreateParticle(BITMAP_SMOKE, Position, o->Angle, Light);
                 else
@@ -6051,9 +6171,8 @@ void MoveCharacterVisual(CHARACTER* c, OBJECT* o)
         case MODEL_BAHAMUT:
             if (c->Dead == 0 && c->Level == 1 && rand_fps_check(4))
             {
-                Vector(o->Position[0] + (float)(rand() % 64 - 32),
-                    o->Position[1] + (float)(rand() % 64 - 32),
-                    o->Position[2] + (float)(rand() % 32 - 16), Position);
+                Vector(o->Position[0] + (float)(rand() % 64 - 32), o->Position[1] + (float)(rand() % 64 - 32),
+                       o->Position[2] + (float)(rand() % 32 - 16), Position);
                 CreateParticle(BITMAP_SMOKE + 1, Position, o->Angle, Light);
             }
             break;
@@ -6070,13 +6189,13 @@ void MoveCharacterVisual(CHARACTER* c, OBJECT* o)
             }
             break;
         case MODEL_BULL_FIGHTER:
-            if (o->CurrentAction == MONSTER01_STOP1 &&
-                (o->AnimationFrame >= 15.f && o->AnimationFrame <= 20.f)) Smoke = true;
-            if (o->CurrentAction == MONSTER01_STOP2 &&
-                (o->AnimationFrame >= 20.f && o->AnimationFrame <= 25.f)) Smoke = true;
-            if (o->CurrentAction == MONSTER01_WALK &&
-                ((o->AnimationFrame >= 2.f && o->AnimationFrame <= 3.f) ||
-                    (o->AnimationFrame >= 5.f && o->AnimationFrame <= 6.f))) Smoke = true;
+            if (o->CurrentAction == MONSTER01_STOP1 && (o->AnimationFrame >= 15.f && o->AnimationFrame <= 20.f))
+                Smoke = true;
+            if (o->CurrentAction == MONSTER01_STOP2 && (o->AnimationFrame >= 20.f && o->AnimationFrame <= 25.f))
+                Smoke = true;
+            if (o->CurrentAction == MONSTER01_WALK && ((o->AnimationFrame >= 2.f && o->AnimationFrame <= 3.f) ||
+                                                       (o->AnimationFrame >= 5.f && o->AnimationFrame <= 6.f)))
+                Smoke = true;
             if (Smoke)
             {
                 if (rand_fps_check(2))
@@ -6089,36 +6208,57 @@ void MoveCharacterVisual(CHARACTER* c, OBJECT* o)
             break;
         default:
         {
-            if (MoveHellasMonsterVisual(o, b)) break;
-            if (battleCastle::MoveBattleCastleMonsterVisual(o, b)) break;
-            if (M31HuntingGround::MoveHuntingGroundMonsterVisual(o, b)) break;
-            if (M34CryingWolf2nd::MoveCryingWolf2ndMonsterVisual(o, b)) break;
-            if (M34CryWolf1st::MoveCryWolf1stMonsterVisual(c, o, b)) break;
-            if (M33Aida::MoveAidaMonsterVisual(o, b)) break;
-            if (M37Kanturu1st::MoveKanturu1stMonsterVisual(c, o, b)) break;
-            if (M38Kanturu2nd::Move_Kanturu2nd_MonsterVisual(c, o, b)) break;
-            if (M39Kanturu3rd::MoveKanturu3rdMonsterVisual(o, b)) break;
-            if (SEASON3A::CGM3rdChangeUp::Instance().MoveBalgasBarrackMonsterVisual(c, o, b))	break;
-            if (g_NewYearsDayEvent->MoveMonsterVisual(c, o, b) == true) break;
-            if (g_CursedTemple->MoveMonsterVisual(o, b) == true) break;
-            if (SEASON3B::GMNewTown::MoveMonsterVisual(o, b) == true) break;
-            if (SEASON3C::GMSwampOfQuiet::MoveMonsterVisual(o, b) == true) break;
-            if (g_09SummerEvent->MoveMonsterVisual(c, o, b)) break;
-            if (g_EmpireGuardian1.MoveMonsterVisual(c, o, b) == true) break;
-            if (g_EmpireGuardian2.MoveMonsterVisual(c, o, b) == true) break;
-            if (g_EmpireGuardian3.MoveMonsterVisual(c, o, b) == true) break;
-            if (g_EmpireGuardian4.MoveMonsterVisual(c, o, b) == true) break;
-            if (TheMapProcess().MoveMonsterVisual(o, b) == true) break;
+            if (MoveHellasMonsterVisual(o, b))
+                break;
+            if (battleCastle::MoveBattleCastleMonsterVisual(o, b))
+                break;
+            if (M31HuntingGround::MoveHuntingGroundMonsterVisual(o, b))
+                break;
+            if (M34CryingWolf2nd::MoveCryingWolf2ndMonsterVisual(o, b))
+                break;
+            if (M34CryWolf1st::MoveCryWolf1stMonsterVisual(c, o, b))
+                break;
+            if (M33Aida::MoveAidaMonsterVisual(o, b))
+                break;
+            if (M37Kanturu1st::MoveKanturu1stMonsterVisual(c, o, b))
+                break;
+            if (M38Kanturu2nd::Move_Kanturu2nd_MonsterVisual(c, o, b))
+                break;
+            if (M39Kanturu3rd::MoveKanturu3rdMonsterVisual(o, b))
+                break;
+            if (SEASON3A::CGM3rdChangeUp::Instance().MoveBalgasBarrackMonsterVisual(c, o, b))
+                break;
+            if (g_NewYearsDayEvent->MoveMonsterVisual(c, o, b) == true)
+                break;
+            if (g_CursedTemple->MoveMonsterVisual(o, b) == true)
+                break;
+            if (SEASON3B::GMNewTown::MoveMonsterVisual(o, b) == true)
+                break;
+            if (SEASON3C::GMSwampOfQuiet::MoveMonsterVisual(o, b) == true)
+                break;
+            if (g_09SummerEvent->MoveMonsterVisual(c, o, b))
+                break;
+            if (g_EmpireGuardian1.MoveMonsterVisual(c, o, b) == true)
+                break;
+            if (g_EmpireGuardian2.MoveMonsterVisual(c, o, b) == true)
+                break;
+            if (g_EmpireGuardian3.MoveMonsterVisual(c, o, b) == true)
+                break;
+            if (g_EmpireGuardian4.MoveMonsterVisual(c, o, b) == true)
+                break;
+            if (TheMapProcess().MoveMonsterVisual(o, b) == true)
+                break;
         }
         break;
         }
 
         if (o->Type == MODEL_PLAYER && c == Hero)
         {
-            if ((o->CurrentAction >= PLAYER_WALK_MALE && o->CurrentAction <= PLAYER_RUN_RIDE_WEAPON)
-                || (o->CurrentAction == PLAYER_WALK_TWO_HAND_SWORD_TWO || o->CurrentAction == PLAYER_RUN_TWO_HAND_SWORD_TWO)
-                || (o->CurrentAction == PLAYER_RUN_RIDE_HORSE)
-                || (o->CurrentAction == PLAYER_RAGE_UNI_RUN || o->CurrentAction == PLAYER_RAGE_UNI_RUN_ONE_RIGHT))
+            if ((o->CurrentAction >= PLAYER_WALK_MALE && o->CurrentAction <= PLAYER_RUN_RIDE_WEAPON) ||
+                (o->CurrentAction == PLAYER_WALK_TWO_HAND_SWORD_TWO ||
+                 o->CurrentAction == PLAYER_RUN_TWO_HAND_SWORD_TWO) ||
+                (o->CurrentAction == PLAYER_RUN_RIDE_HORSE) ||
+                (o->CurrentAction == PLAYER_RAGE_UNI_RUN || o->CurrentAction == PLAYER_RAGE_UNI_RUN_ONE_RIGHT))
             {
                 Vector(0.f, 0.f, 0.f, p);
                 if (o->AnimationFrame >= 1.5f && !c->Foot[0])
@@ -6134,18 +6274,17 @@ void MoveCharacterVisual(CHARACTER* c, OBJECT* o)
             }
         }
 
-        if ((o->CurrentAction == PLAYER_RUN_RIDE
-            || o->CurrentAction == PLAYER_RAGE_UNI_RUN
-            || o->CurrentAction == PLAYER_RAGE_UNI_RUN_ONE_RIGHT
-            || o->CurrentAction == PLAYER_RUN_RIDE_WEAPON || o->CurrentAction == PLAYER_RUN_SWIM || o->CurrentAction == PLAYER_WALK_SWIM || o->CurrentAction == PLAYER_FLY || o->CurrentAction == PLAYER_FLY_CROSSBOW || o->CurrentAction == PLAYER_RUN_RIDE_HORSE)
-            && o->Type == MODEL_PLAYER
-            && gMapManager.InHellas()
-            && rand_fps_check(1))
+        if ((o->CurrentAction == PLAYER_RUN_RIDE || o->CurrentAction == PLAYER_RAGE_UNI_RUN ||
+             o->CurrentAction == PLAYER_RAGE_UNI_RUN_ONE_RIGHT || o->CurrentAction == PLAYER_RUN_RIDE_WEAPON ||
+             o->CurrentAction == PLAYER_RUN_SWIM || o->CurrentAction == PLAYER_WALK_SWIM ||
+             o->CurrentAction == PLAYER_FLY || o->CurrentAction == PLAYER_FLY_CROSSBOW ||
+             o->CurrentAction == PLAYER_RUN_RIDE_HORSE) &&
+            o->Type == MODEL_PLAYER && gMapManager.InHellas() && rand_fps_check(1))
         {
-            vec3_t Light = { 0.3f, 0.3f, 0.3f };
+            vec3_t Light = {0.3f, 0.3f, 0.3f};
             VectorCopy(o->Position, Position);
 
-            float  Matrix[3][4];
+            float Matrix[3][4];
 
             Vector(0.f, -40.f, 0.f, p);
 
@@ -6156,9 +6295,10 @@ void MoveCharacterVisual(CHARACTER* c, OBJECT* o)
             Position[0] += rand() % 64 - 32.f;
             Position[1] += rand() % 64 - 32.f;
             Position[2] += 50.f;
+            // cppcheck-suppress unknownMacro
             VectorScale(Position, FPS_ANIMATION_FACTOR, Position)
 
-            CreateParticle(BITMAP_WATERFALL_5, Position, o->Angle, Light, 1);
+                CreateParticle(BITMAP_WATERFALL_5, Position, o->Angle, Light, 1);
         }
     }
 }
@@ -6199,13 +6339,13 @@ float CharacterMoveSpeed(CHARACTER* c)
             c->Run = 40;
             Speed = 17;
         }
-        else if (!(c->Object.SubType == MODEL_CURSEDTEMPLE_ALLIED_PLAYER || c->Object.SubType == MODEL_CURSEDTEMPLE_ILLUSION_PLAYER)
-            && (c->Wing.Type != -1 || (c->Helper.Type >= MODEL_HORN_OF_UNIRIA && c->Helper.Type <= MODEL_HORN_OF_DINORANT)) && !c->SafeZone
-            && !isholyitem)
+        else if (!(c->Object.SubType == MODEL_CURSEDTEMPLE_ALLIED_PLAYER ||
+                   c->Object.SubType == MODEL_CURSEDTEMPLE_ILLUSION_PLAYER) &&
+                 (c->Wing.Type != -1 ||
+                  (c->Helper.Type >= MODEL_HORN_OF_UNIRIA && c->Helper.Type <= MODEL_HORN_OF_DINORANT)) &&
+                 !c->SafeZone && !isholyitem)
         {
-            if (c->Wing.Type == MODEL_WINGS_OF_DRAGON
-                || c->Wing.Type == MODEL_WING_OF_STORM
-                )
+            if (c->Wing.Type == MODEL_WINGS_OF_DRAGON || c->Wing.Type == MODEL_WING_OF_STORM)
             {
                 c->Run = 40;
                 Speed = 16;
@@ -6230,7 +6370,7 @@ float CharacterMoveSpeed(CHARACTER* c)
         c->Run = 40;
         Speed = 15;
     }
-#endif// GUILD_WAR_EVENT
+#endif // GUILD_WAR_EVENT
 
     if (g_isCharacterBuff((&c->Object), eDeBuff_Freeze))
     {
@@ -6280,7 +6420,8 @@ void MoveCharacterPosition(CHARACTER* c)
 
 void MoveMonsterClient(CHARACTER* c, OBJECT* o)
 {
-    if (c == Hero) return;
+    if (c == Hero)
+        return;
 
     if (c->Dead == 0)
     {
@@ -6291,7 +6432,8 @@ void MoveMonsterClient(CHARACTER* c, OBJECT* o)
 
         if (!c->Movement)
         {
-            if (c->Appear == 0 && o->Type != MODEL_GHOST && ((c->PositionX) != c->TargetX || (c->PositionY) != c->TargetY))
+            if (c->Appear == 0 && o->Type != MODEL_GHOST &&
+                ((c->PositionX) != c->TargetX || (c->PositionY) != c->TargetY))
             {
                 int iDefaultWall = TW_CHARACTER;
 
@@ -6308,11 +6450,10 @@ void MoveMonsterClient(CHARACTER* c, OBJECT* o)
         }
         else
         {
-            if (o->Type == MODEL_DARK_SKULL_SOLDIER_5 && (o->CurrentAction == MONSTER01_ATTACK1
-                || o->CurrentAction == MONSTER01_ATTACK2
-                || o->CurrentAction == MONSTER01_ATTACK3
-                || o->CurrentAction == MONSTER01_ATTACK4
-                || o->CurrentAction == MONSTER01_ATTACK5))
+            if (o->Type == MODEL_DARK_SKULL_SOLDIER_5 &&
+                (o->CurrentAction == MONSTER01_ATTACK1 || o->CurrentAction == MONSTER01_ATTACK2 ||
+                 o->CurrentAction == MONSTER01_ATTACK3 || o->CurrentAction == MONSTER01_ATTACK4 ||
+                 o->CurrentAction == MONSTER01_ATTACK5))
             {
                 c->Movement = true;
                 SetAction(o, o->CurrentAction);
@@ -6360,7 +6501,8 @@ void MoveCharactersClient()
 {
     for (int i = 0; i < TERRAIN_SIZE * TERRAIN_SIZE; i++)
     {
-        if ((TerrainWall[i] & TW_CHARACTER) == TW_CHARACTER) TerrainWall[i] -= TW_CHARACTER;
+        if ((TerrainWall[i] & TW_CHARACTER) == TW_CHARACTER)
+            TerrainWall[i] -= TW_CHARACTER;
     }
 
     for (int i = 0; i < MAX_CHARACTERS_CLIENT; i++)
@@ -6383,7 +6525,7 @@ void MoveCharactersClient()
     MoveBlurs();
 }
 
-extern float  ParentMatrix[3][4];
+extern float ParentMatrix[3][4];
 
 void RenderGuild(OBJECT* o, int Type, vec3_t vPos)
 {
@@ -6404,11 +6546,11 @@ void RenderGuild(OBJECT* o, int Type, vec3_t vPos)
     Matrix[1][3] = -5.f;
     if (Type == MODEL_THUNDER_HAWK_ARMOR && Type != -1)
     {
-        Matrix[2][3] = -18.f;//-5
+        Matrix[2][3] = -18.f; //-5
     }
     else
     {
-        Matrix[2][3] = -10.f;//-5
+        Matrix[2][3] = -10.f; //-5
     }
 
     if (vPos != NULL)
@@ -6436,18 +6578,22 @@ void RenderBrightEffect(BMD* b, int Bitmap, int Link, float Scale, vec3_t Light,
 
 OBJECT g_ItemObject[ITEM_ETC + MAX_ITEM_INDEX];
 
-void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Type, int Level, int Option1, bool Link, bool Translate, int RenderType, bool bRightHandItem)
+void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Type, int Level, int Option1, bool Link,
+                      bool Translate, int RenderType, bool bRightHandItem)
 {
     OBJECT* o = &c->Object;
     BMD* b = &Models[Type];
 
     if (o->SubType == MODEL_CURSEDTEMPLE_ALLIED_PLAYER || o->SubType == MODEL_CURSEDTEMPLE_ILLUSION_PLAYER)
     {
-        if (Type >= MODEL_WING && Type <= MODEL_WINGS_OF_DARKNESS) return; // 1st and 2nd Wings
+        if (Type >= MODEL_WING && Type <= MODEL_WINGS_OF_DARKNESS)
+            return;                                                              // 1st and 2nd Wings
         else if (Type >= MODEL_WING_OF_STORM && Type <= MODEL_WING_OF_DIMENSION) // 3rd Wings
             return;
-        else if (MODEL_WING + 130 >= Type && Type <= MODEL_WING + 135) return; // Small Wings and Capes
-        else if (Type >= MODEL_CAPE_OF_FIGHTER && Type <= MODEL_CAPE_OF_OVERRULE) return; // Capes
+        else if (MODEL_WING + 130 >= Type && Type <= MODEL_WING + 135)
+            return; // Small Wings and Capes
+        else if (Type >= MODEL_CAPE_OF_FIGHTER && Type <= MODEL_CAPE_OF_OVERRULE)
+            return; // Capes
     }
 
     if (Type >= MODEL_BOOK_OF_SAHAMUTT && Type <= MODEL_STAFF + 29)
@@ -6458,7 +6604,7 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
     if (g_isCharacterBuff(o, eBuff_Cloaking))
         return;
 
-    //CopyShadowAngle(f,b);
+    // CopyShadowAngle(f,b);
     b->ContrastEnable = o->ContrastEnable;
     b->BodyScale = o->Scale;
     b->CurrentAction = f->CurrentAction;
@@ -6540,8 +6686,9 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
             Matrix[2][3] = 0.f;
         }
 
-        else if ((Type >= MODEL_CROSSBOW && Type < MODEL_ARROWS) || (Type >= MODEL_SAINT_CROSSBOW && Type < MODEL_CELESTIAL_BOW) ||
-            (Type >= MODEL_DIVINE_CB_OF_ARCHANGEL && Type < MODEL_ARROW_VIPER_BOW))
+        else if ((Type >= MODEL_CROSSBOW && Type < MODEL_ARROWS) ||
+                 (Type >= MODEL_SAINT_CROSSBOW && Type < MODEL_CELESTIAL_BOW) ||
+                 (Type >= MODEL_DIVINE_CB_OF_ARCHANGEL && Type < MODEL_ARROW_VIPER_BOW))
         {
             Vector(0.f, 20.f, 180.f, Angle);
             AngleMatrix(Angle, Matrix);
@@ -6550,10 +6697,10 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
             Matrix[2][3] = 40.f;
         }
         else if (Type == MODEL_15GRADE_ARMOR_OBJ_ARMLEFT || Type == MODEL_15GRADE_ARMOR_OBJ_ARMRIGHT ||
-            Type == MODEL_15GRADE_ARMOR_OBJ_BODYLEFT || Type == MODEL_15GRADE_ARMOR_OBJ_BODYRIGHT ||
-            Type == MODEL_15GRADE_ARMOR_OBJ_BOOTLEFT || Type == MODEL_15GRADE_ARMOR_OBJ_BOOTRIGHT ||
-            Type == MODEL_15GRADE_ARMOR_OBJ_HEAD || Type == MODEL_15GRADE_ARMOR_OBJ_PANTLEFT ||
-            Type == MODEL_15GRADE_ARMOR_OBJ_PANTRIGHT)
+                 Type == MODEL_15GRADE_ARMOR_OBJ_BODYLEFT || Type == MODEL_15GRADE_ARMOR_OBJ_BODYRIGHT ||
+                 Type == MODEL_15GRADE_ARMOR_OBJ_BOOTLEFT || Type == MODEL_15GRADE_ARMOR_OBJ_BOOTRIGHT ||
+                 Type == MODEL_15GRADE_ARMOR_OBJ_HEAD || Type == MODEL_15GRADE_ARMOR_OBJ_PANTLEFT ||
+                 Type == MODEL_15GRADE_ARMOR_OBJ_PANTRIGHT)
         {
             switch (Type)
             {
@@ -6564,7 +6711,8 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
                 Matrix[0][3] = 30.f;
                 Matrix[1][3] = 0.f;
                 Matrix[2][3] = 20.f;
-            }break;
+            }
+            break;
             case MODEL_15GRADE_ARMOR_OBJ_ARMRIGHT:
             {
                 Vector(0.f, -90.f, 0.f, Angle);
@@ -6572,7 +6720,8 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
                 Matrix[0][3] = 30.f;
                 Matrix[1][3] = 0.f;
                 Matrix[2][3] = -20.f;
-            }break;
+            }
+            break;
             case MODEL_15GRADE_ARMOR_OBJ_BODYLEFT:
             {
                 Vector(0.f, -90.f, 0.f, Angle);
@@ -6580,7 +6729,8 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
                 Matrix[0][3] = 5.f;
                 Matrix[1][3] = -20.f;
                 Matrix[2][3] = 0.f;
-            }break;
+            }
+            break;
             case MODEL_15GRADE_ARMOR_OBJ_BODYRIGHT:
             {
                 Vector(0.f, -90.f, 0.f, Angle);
@@ -6588,7 +6738,8 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
                 Matrix[0][3] = 5.f;
                 Matrix[1][3] = -20.f;
                 Matrix[2][3] = 0.f;
-            }break;
+            }
+            break;
             case MODEL_15GRADE_ARMOR_OBJ_BOOTLEFT:
             {
                 Vector(0.f, 90.f, 180.f, Angle);
@@ -6596,7 +6747,8 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
                 Matrix[0][3] = 20.f;
                 Matrix[1][3] = 15.f;
                 Matrix[2][3] = -10.f;
-            }break;
+            }
+            break;
             case MODEL_15GRADE_ARMOR_OBJ_BOOTRIGHT:
             {
                 Vector(0.f, 90.f, 180.f, Angle);
@@ -6604,15 +6756,17 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
                 Matrix[0][3] = 20.f;
                 Matrix[1][3] = 15.f;
                 Matrix[2][3] = 10.f;
-            }break;
+            }
+            break;
             case MODEL_15GRADE_ARMOR_OBJ_HEAD:
             {
-                Vector(180.f, -90.f, 0.f, Angle); //y,x,z
+                Vector(180.f, -90.f, 0.f, Angle); // y,x,z
                 AngleMatrix(Angle, Matrix);
-                Matrix[0][3] = 28.f; //y
-                Matrix[1][3] = 20.f; //x
+                Matrix[0][3] = 28.f; // y
+                Matrix[1][3] = 20.f; // x
                 Matrix[2][3] = 0.f;
-            }break;
+            }
+            break;
             case MODEL_15GRADE_ARMOR_OBJ_PANTLEFT:
             {
                 Vector(0.f, 90.f, 180.f, Angle);
@@ -6620,7 +6774,8 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
                 Matrix[0][3] = 25.f;
                 Matrix[1][3] = 5.f;
                 Matrix[2][3] = -5.f;
-            }break;
+            }
+            break;
             case MODEL_15GRADE_ARMOR_OBJ_PANTRIGHT:
             {
                 Vector(0.f, 90.f, 180.f, Angle);
@@ -6628,7 +6783,8 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
                 Matrix[0][3] = 25.f;
                 Matrix[1][3] = 5.f;
                 Matrix[2][3] = 5.f;
-            }break;
+            }
+            break;
             }
         }
         else
@@ -6652,80 +6808,79 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
                 Matrix[1][3] = 20.f;
                 Matrix[2][3] = 0.f;
             }
-            else
-                if (Type == MODEL_STINGER_BOW)
+            else if (Type == MODEL_STINGER_BOW)
+            {
+                Vector(-60.f, 0.f, -80.f, Angle);
+                AngleMatrix(Angle, Matrix);
+                Matrix[0][3] = -5.f;
+                Matrix[1][3] = 20.f;
+                Matrix[2][3] = -5.f;
+            }
+            else if (Type == MODEL_AIR_LYN_BOW)
+            {
+                Vector(90.f, 0.f, -80.f, Angle);
+                AngleMatrix(Angle, Matrix);
+                Matrix[0][3] = 10.f;
+                Matrix[1][3] = 20.f;
+                Matrix[2][3] = -5.f;
+            }
+            else if (Type >= MODEL_BOW && Type < MODEL_BOW + MAX_ITEM_INDEX)
+            {
+                Matrix[0][3] = -10.f;
+                Matrix[1][3] = 5.f;
+                Matrix[2][3] = 10.f;
+            }
+            else if (Type == MODEL_DRAGON_SOUL_STAFF)
+            {
+                Matrix[0][3] = -10.f;
+                Matrix[1][3] = 5.f;
+                Matrix[2][3] = -10.f;
+            }
+            else if (Type == MODEL_STAFF_OF_DESTRUCTION)
+            {
+                Matrix[0][3] = -10.f;
+                Matrix[1][3] = 5.f;
+                Matrix[2][3] = 10.f;
+            }
+            else if (Type >= MODEL_SHIELD && Type < MODEL_SHIELD + MAX_ITEM_INDEX)
+            {
+                if (Type == MODEL_ELEMENTAL_SHIELD)
                 {
-                    Vector(-60.f, 0.f, -80.f, Angle);
+                    Vector(30.f, 0.f, 90.f, Angle);
                     AngleMatrix(Angle, Matrix);
-                    Matrix[0][3] = -5.f;
-                    Matrix[1][3] = 20.f;
-                    Matrix[2][3] = -5.f;
+                    Matrix[0][3] = -20.f;
+                    Matrix[1][3] = 0.f;
+                    Matrix[2][3] = -20.f;
                 }
-                else if (Type == MODEL_AIR_LYN_BOW)
+                else if (Type == MODEL_LEGENDARY_SHIELD || Type == MODEL_GRAND_SOUL_SHIELD)
                 {
-                    Vector(90.f, 0.f, -80.f, Angle);
+                    Vector(50.f, 0.f, 90.f, Angle);
                     AngleMatrix(Angle, Matrix);
-                    Matrix[0][3] = 10.f;
-                    Matrix[1][3] = 20.f;
-                    Matrix[2][3] = -5.f;
+                    Matrix[0][3] = -28.f;
+                    Matrix[1][3] = 0.f;
+                    Matrix[2][3] = -25.f;
                 }
-                else if (Type >= MODEL_BOW && Type < MODEL_BOW + MAX_ITEM_INDEX)
+                else if (Type == MODEL_SKULL_SHIELD)
                 {
-                    Matrix[0][3] = -10.f;
-                    Matrix[1][3] = 5.f;
-                    Matrix[2][3] = 10.f;
-                }
-                else if (Type == MODEL_DRAGON_SOUL_STAFF)
-                {
-                    Matrix[0][3] = -10.f;
-                    Matrix[1][3] = 5.f;
-                    Matrix[2][3] = -10.f;
-                }
-                else if (Type == MODEL_STAFF_OF_DESTRUCTION)
-                {
-                    Matrix[0][3] = -10.f;
-                    Matrix[1][3] = 5.f;
-                    Matrix[2][3] = 10.f;
-                }
-                else if (Type >= MODEL_SHIELD && Type < MODEL_SHIELD + MAX_ITEM_INDEX)
-                {
-                    if (Type == MODEL_ELEMENTAL_SHIELD)
-                    {
-                        Vector(30.f, 0.f, 90.f, Angle);
-                        AngleMatrix(Angle, Matrix);
-                        Matrix[0][3] = -20.f;
-                        Matrix[1][3] = 0.f;
-                        Matrix[2][3] = -20.f;
-                    }
-                    else if (Type == MODEL_LEGENDARY_SHIELD || Type == MODEL_GRAND_SOUL_SHIELD)
-                    {
-                        Vector(50.f, 0.f, 90.f, Angle);
-                        AngleMatrix(Angle, Matrix);
-                        Matrix[0][3] = -28.f;
-                        Matrix[1][3] = 0.f;
-                        Matrix[2][3] = -25.f;
-                    }
-                    else if (Type == MODEL_SKULL_SHIELD)
-                    {
-                        Vector(30.f, 0.f, 90.f, Angle);
-                        AngleMatrix(Angle, Matrix);
-                        Matrix[0][3] = -15.f;
-                        Matrix[1][3] = 0.f;
-                        Matrix[2][3] = -25.f;
-                    }
-                    else
-                    {
-                        Matrix[0][3] = -10.f;
-                        Matrix[1][3] = 0.f;
-                        Matrix[2][3] = 0.f;
-                    }
+                    Vector(30.f, 0.f, 90.f, Angle);
+                    AngleMatrix(Angle, Matrix);
+                    Matrix[0][3] = -15.f;
+                    Matrix[1][3] = 0.f;
+                    Matrix[2][3] = -25.f;
                 }
                 else
                 {
-                    Matrix[0][3] = -20.f;
-                    Matrix[1][3] = 5.f;
-                    Matrix[2][3] = 40.f;
+                    Matrix[0][3] = -10.f;
+                    Matrix[1][3] = 0.f;
+                    Matrix[2][3] = 0.f;
                 }
+            }
+            else
+            {
+                Matrix[0][3] = -20.f;
+                Matrix[1][3] = 5.f;
+                Matrix[2][3] = 40.f;
+            }
         }
 
         if (g_CMonkSystem.IsRagefighterCommonWeapon(c->Class, Type))
@@ -6735,7 +6890,8 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
             b->BodyScale = 0.9f;
         }
 
-        if (bRightHandItem == false && !(Type >= MODEL_SHIELD && Type < MODEL_SHIELD + MAX_ITEM_INDEX) && Type != MODEL_ARROW_VIPER_BOW)
+        if (bRightHandItem == false && !(Type >= MODEL_SHIELD && Type < MODEL_SHIELD + MAX_ITEM_INDEX) &&
+            Type != MODEL_ARROW_VIPER_BOW)
         {
             vec3_t vNewAngle;
             float mNewRot[3][4];
@@ -6790,14 +6946,16 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
     {
         if (!g_isCharacterBuff(o, eDeBuff_Stun) && !g_isCharacterBuff(o, eDeBuff_Sleep))
         {
-            b->PlayAnimation(&f->AnimationFrame, &f->PriorAnimationFrame, &f->PriorAction, f->PlaySpeed, Position, Object->Angle);
+            b->PlayAnimation(&f->AnimationFrame, &f->PriorAnimationFrame, &f->PriorAction, f->PlaySpeed, Position,
+                             Object->Angle);
         }
     }
 
     VectorCopy(b->BodyOrigin, Object->Position);
 
     vec3_t Temp;
-    b->Animation(BoneTransform, f->AnimationFrame, f->PriorAnimationFrame, f->PriorAction, Object->Angle, Object->Angle, true);
+    b->Animation(BoneTransform, f->AnimationFrame, f->PriorAnimationFrame, f->PriorAction, Object->Angle, Object->Angle,
+                 true);
     if (g_CMonkSystem.IsRagefighterCommonWeapon(c->Class, Type) && !Link)
     {
         float _KnightScale = 0.9f;
@@ -6808,13 +6966,17 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
     else
         b->Transform(BoneTransform, Temp, Temp, &OBB, Translate);
 
-    if (Type != MODEL_CAPE_OF_LORD // Cape of Lord
+    if (Type != MODEL_CAPE_OF_LORD       // Cape of Lord
         && Type != MODEL_CAPE_OF_FIGHTER // Cape of Fighter
-        && Type != MODEL_WING + 130 // Small Cape of Lord
-        && Type != MODEL_WING + 135 // Small Cape of Fighter
-        )
+        && Type != MODEL_WING + 130      // Small Cape of Lord
+        && Type != MODEL_WING + 135      // Small Cape of Fighter
+    )
     {
-        RenderPartObjectEffect(Object, Type, c->Light, o->Alpha, Level, Option1, false, 0, RenderType | ((c->MonsterIndex == MONSTER_METAL_BALROG || c->MonsterIndex == MONSTER_ORC_ARCHER_OF_DOOM) ? (RENDER_EXTRA | RENDER_TEXTURE) : RENDER_TEXTURE));
+        RenderPartObjectEffect(
+            Object, Type, c->Light, o->Alpha, Level, Option1, false, 0,
+            RenderType | ((c->MonsterIndex == MONSTER_METAL_BALROG || c->MonsterIndex == MONSTER_ORC_ARCHER_OF_DOOM)
+                              ? (RENDER_EXTRA | RENDER_TEXTURE)
+                              : RENDER_TEXTURE));
     }
 
     float Luminosity;
@@ -7054,20 +7216,20 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
         Vector(1.0f, 0.1f, 0.0f, Light);
         Vector(0.f, 0.f, 0.f, p);
         b->TransformPosition(BoneTransform[1], p, Position, true);
-        CreateSprite(BITMAP_LIGHT, Position, 1.0f, Light, o);	// flare01.jpg
+        CreateSprite(BITMAP_LIGHT, Position, 1.0f, Light, o); // flare01.jpg
 
         fScale = (float)(rand() % 30) / 60.0f + 0.2f;
         fLight = (float)sinf((WorldTime) * 0.7f) * 0.2f + 0.3f;
         fRotation = (WorldTime * 0.0006f) * 360.0f;
         Vector(0.1f + fLight, 0.2f, 0.0f, Light);
-        CreateSprite(BITMAP_LIGHT + 3, Position, fScale, Light, o, fRotation);	// impact01.jpg
+        CreateSprite(BITMAP_LIGHT + 3, Position, fScale, Light, o, fRotation); // impact01.jpg
 
         Vector(1.0f - fLight, 0.0f, 0.0f, Light);
         if (fPosition >= 20.0f)
         {
-            iRandom = rand() % 5 + 2;	// 2 ~ 6
+            iRandom = rand() % 5 + 2; // 2 ~ 6
             fPosition = 0.0f;
-            //Vector(1.0f, 0.0f, 0.0f, Light);
+            // Vector(1.0f, 0.0f, 0.0f, Light);
         }
         else
             fPosition += 1.5f;
@@ -7087,7 +7249,8 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
             CreateSprite(BITMAP_LIGHT, Position, 1.1f, Light, o);
         }
 
-        if (o->CurrentAction == PLAYER_RUN_TWO_HAND_SWORD_TWO && gMapManager.WorldActive != WD_10HEAVEN && rand_fps_check(2))
+        if (o->CurrentAction == PLAYER_RUN_TWO_HAND_SWORD_TWO && gMapManager.WorldActive != WD_10HEAVEN &&
+            rand_fps_check(2))
         {
             if (!g_Direction.m_CKanturu.IsMayaScene())
             {
@@ -7098,10 +7261,10 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
                 Position[1] += rand() % 30 - 15.f;
                 Position[2] += 20.f;
 
-                vec3_t	Angle;
+                vec3_t Angle;
                 for (int i = 0; i < 4; i++)
                 {
-                    Vector((float)(rand() % 60 + 60 + 90), 0.f, o->Angle[2], Angle);//(float)(rand()%30),Angle);
+                    Vector((float)(rand() % 60 + 60 + 90), 0.f, o->Angle[2], Angle); //(float)(rand()%30),Angle);
                     CreateJoint(BITMAP_JOINT_SPARK, Position, Position, Angle);
                     CreateParticle(BITMAP_SPARK, Position, Angle, Light);
                 }
@@ -7297,9 +7460,8 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
             CreateSprite(BITMAP_LIGHT, Position, 2.f, Light, o);
         }
 
-        if (((o->CurrentAction<PLAYER_WALK_MALE || o->CurrentAction>PLAYER_RUN_RIDE_WEAPON) &&
-            (o->CurrentAction<PLAYER_ATTACK_SKILL_SWORD1 || o->CurrentAction>PLAYER_ATTACK_SKILL_SWORD5)
-            ))
+        if (((o->CurrentAction < PLAYER_WALK_MALE || o->CurrentAction > PLAYER_RUN_RIDE_WEAPON) &&
+             (o->CurrentAction < PLAYER_ATTACK_SKILL_SWORD1 || o->CurrentAction > PLAYER_ATTACK_SKILL_SWORD5)))
         {
             vec3_t pos, delta, angle;
 
@@ -7392,7 +7554,7 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
             Vector(Luminosity * 0.6f, Luminosity * 0.8f, Luminosity * 1.f, Light);
             Vector(-10.f, 0.f, 0.f, p);
             b->TransformPosition(BoneTransform[i + 1], p, Position, true);
-            CreateSprite(BITMAP_LIGHT, Position, /*Luminosity**/1.f, Light, o);
+            CreateSprite(BITMAP_LIGHT, Position, /*Luminosity**/ 1.f, Light, o);
 
             if (i == 3)
             {
@@ -7453,7 +7615,8 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
     break;
     case MODEL_KNIGHT_BLADE:
     {
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 2; i++)
+        {
             Vector(0.f, 0.f, 0.f, p);
             b->TransformPosition(BoneTransform[i + 1], p, Position, true);
             Luminosity = (float)sinf((WorldTime) * 0.002f) * 0.35f + 0.65f;
@@ -7490,7 +7653,8 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
     break;
     case MODEL_DARK_REIGN_BLADE:
     case MODEL_RUNE_BLADE:
-        if (o->CurrentAction == PLAYER_RUN_TWO_HAND_SWORD_TWO && gMapManager.WorldActive != WD_10HEAVEN && rand_fps_check(2))
+        if (o->CurrentAction == PLAYER_RUN_TWO_HAND_SWORD_TWO && gMapManager.WorldActive != WD_10HEAVEN &&
+            rand_fps_check(2))
         {
             if (!g_Direction.m_CKanturu.IsMayaScene())
             {
@@ -7501,10 +7665,10 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
                 Position[1] += rand() % 30 - 15.f;
                 Position[2] += 20.f;
 
-                vec3_t	Angle;
+                vec3_t Angle;
                 for (int i = 0; i < 4; i++)
                 {
-                    Vector((float)(rand() % 60 + 60 + 90), 0.f, o->Angle[2], Angle);//(float)(rand()%30),Angle);
+                    Vector((float)(rand() % 60 + 60 + 90), 0.f, o->Angle[2], Angle); //(float)(rand()%30),Angle);
                     CreateJoint(BITMAP_JOINT_SPARK, Position, Position, Angle);
                     CreateParticle(BITMAP_SPARK, Position, Angle, Light);
                 }
@@ -7524,54 +7688,55 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
     case MODEL_FLAMBERGE:
     {
         Vector(0.8f, 0.6f, 0.2f, Light);
-        b->TransformByObjectBone(Position, Object, 11);		// Gold01
+        b->TransformByObjectBone(Position, Object, 11); // Gold01
         CreateSprite(BITMAP_LIGHT, Position, 0.6f, Light, o);
         CreateSprite(BITMAP_LIGHT, Position, 0.6f, Light, o);
 
         Vector(0.3f, 0.8f, 0.7f, Light);
-        b->TransformByObjectBone(Position, Object, 12);		// b01
+        b->TransformByObjectBone(Position, Object, 12); // b01
         CreateSprite(BITMAP_LIGHT, Position, 0.5f, Light, o);
-        b->TransformByObjectBone(Position, Object, 13);		// n02
+        b->TransformByObjectBone(Position, Object, 13); // n02
         CreateSprite(BITMAP_LIGHT, Position, 0.5f, Light, o);
 
-        b->TransformByObjectBone(Position, Object, 12);		// n04
+        b->TransformByObjectBone(Position, Object, 12); // n04
         CreateSprite(BITMAP_LIGHT, Position, 0.3f, Light, o);
-        b->TransformByObjectBone(Position, Object, 13);		// b03
+        b->TransformByObjectBone(Position, Object, 13); // b03
         CreateSprite(BITMAP_LIGHT, Position, 0.3f, Light, o);
 
         Vector(0.9f, 0.1f, 0.1f, Light);
-        b->TransformByObjectBone(Position, Object, 1);		// Zx01
+        b->TransformByObjectBone(Position, Object, 1); // Zx01
         CreateSprite(BITMAP_LIGHTMARKS, Position, 0.8f, Light, o);
-        b->TransformByObjectBone(Position, Object, 2);		// Zx02
+        b->TransformByObjectBone(Position, Object, 2); // Zx02
         CreateSprite(BITMAP_LIGHTMARKS, Position, 0.7f, Light, o);
-        b->TransformByObjectBone(Position, Object, 3);		// Zx03
+        b->TransformByObjectBone(Position, Object, 3); // Zx03
         CreateSprite(BITMAP_LIGHTMARKS, Position, 0.7f, Light, o);
-        b->TransformByObjectBone(Position, Object, 4);		// Zx04
+        b->TransformByObjectBone(Position, Object, 4); // Zx04
         CreateSprite(BITMAP_LIGHTMARKS, Position, 0.7f, Light, o);
-        b->TransformByObjectBone(Position, Object, 5);		// Zx05
+        b->TransformByObjectBone(Position, Object, 5); // Zx05
         CreateSprite(BITMAP_LIGHTMARKS, Position, 0.6f, Light, o);
-        b->TransformByObjectBone(Position, Object, 6);		// Zx06
+        b->TransformByObjectBone(Position, Object, 6); // Zx06
         CreateSprite(BITMAP_LIGHTMARKS, Position, 0.5f, Light, o);
-        b->TransformByObjectBone(Position, Object, 7);		// Zx07
+        b->TransformByObjectBone(Position, Object, 7); // Zx07
         CreateSprite(BITMAP_LIGHTMARKS, Position, 0.5f, Light, o);
-    }break;
+    }
+    break;
     case MODEL_SWORD_BREAKER:
     {
         Vector(0.1f, 0.9f, 0.1f, Light);
 
-        b->TransformByObjectBone(Position, Object, 1);		// Zx01
+        b->TransformByObjectBone(Position, Object, 1); // Zx01
         CreateSprite(BITMAP_LIGHTMARKS, Position, 0.6f, Light, o);
-        b->TransformByObjectBone(Position, Object, 2);		// Zx02
+        b->TransformByObjectBone(Position, Object, 2); // Zx02
         CreateSprite(BITMAP_LIGHTMARKS, Position, 0.5f, Light, o);
-        b->TransformByObjectBone(Position, Object, 3);		// Zx03
+        b->TransformByObjectBone(Position, Object, 3); // Zx03
         CreateSprite(BITMAP_LIGHTMARKS, Position, 0.5f, Light, o);
-        b->TransformByObjectBone(Position, Object, 4);		// Zx04
+        b->TransformByObjectBone(Position, Object, 4); // Zx04
         CreateSprite(BITMAP_LIGHTMARKS, Position, 0.5f, Light, o);
-        b->TransformByObjectBone(Position, Object, 5);		// Zx05
+        b->TransformByObjectBone(Position, Object, 5); // Zx05
         CreateSprite(BITMAP_LIGHTMARKS, Position, 0.4f, Light, o);
-        b->TransformByObjectBone(Position, Object, 6);		// Zx06
+        b->TransformByObjectBone(Position, Object, 6); // Zx06
         CreateSprite(BITMAP_LIGHTMARKS, Position, 0.3f, Light, o);
-        b->TransformByObjectBone(Position, Object, 7);		// Zx07
+        b->TransformByObjectBone(Position, Object, 7); // Zx07
         CreateSprite(BITMAP_LIGHTMARKS, Position, 0.3f, Light, o);
 
         for (int i = 1; i <= 7; i++)
@@ -7585,13 +7750,14 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
             b->TransformByObjectBone(Position, Object, i);
             CreateParticle(BITMAP_WATERFALL_4, Position, Object->Angle, Light, 12, 0.5f, Object);
         }
-    }break;
+    }
+    break;
     case MODEL_IMPERIAL_SWORD:
     {
         float fRendomScale = (float)((rand() % 15) / 30.0f) + 0.5f;
         Vector(0.f, 0.f, 0.f, Position);
         Vector(0.1f, 0.4f, 0.9f, Light);
-        b->TransformPosition(BoneTransform[8], Position, p, true);		// Zx01
+        b->TransformPosition(BoneTransform[8], Position, p, true); // Zx01
         CreateSprite(BITMAP_FLARE_BLUE, p, 0.4f, o->Light, o);
         CreateSprite(BITMAP_SHINY + 6, p, fRendomScale, Light, o);
 
@@ -7602,34 +7768,35 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
         if (rand_fps_check(1))
         {
             CreateJoint(BITMAP_JOINT_ENERGY, p, p, o->Angle, 17, o, 25.f);
-            //CreateEffect(MODEL_EFFECT_TRACE, p, o->Angle, vColor, 0, NULL, -1, 0, 0, 0, 25.f);
+            // CreateEffect(MODEL_EFFECT_TRACE, p, o->Angle, vColor, 0, NULL, -1, 0, 0, 0, 25.f);
         }
 
-        b->TransformPosition(BoneTransform[9], Position, p, true);		// Zx02
+        b->TransformPosition(BoneTransform[9], Position, p, true); // Zx02
         CreateSprite(BITMAP_FLARE_BLUE, p, 0.4f, o->Light, o);
         CreateSprite(BITMAP_SHINY + 6, p, fRendomScale, Light, o);
-        b->TransformPosition(BoneTransform[10], Position, p, true);		// Zx03
+        b->TransformPosition(BoneTransform[10], Position, p, true); // Zx03
         CreateSprite(BITMAP_FLARE_BLUE, p, 0.4f, o->Light, o);
         CreateSprite(BITMAP_SHINY + 6, p, 0.4f, Light, o);
-        b->TransformPosition(BoneTransform[11], Position, p, true);		// Zx04
+        b->TransformPosition(BoneTransform[11], Position, p, true); // Zx04
         CreateSprite(BITMAP_FLARE_BLUE, p, 0.4f, o->Light, o);
         CreateSprite(BITMAP_SHINY + 6, p, 0.4f, Light, o);
 
         // 칼주변
         Vector(0.0f, 0.3f, 0.7f, Light);
-        b->TransformPosition(BoneTransform[2], Position, p, true);		// rx01
+        b->TransformPosition(BoneTransform[2], Position, p, true); // rx01
         CreateSprite(BITMAP_LIGHTMARKS, p, 1.0f, Light, o);
-        b->TransformPosition(BoneTransform[3], Position, p, true);		// rx02
+        b->TransformPosition(BoneTransform[3], Position, p, true); // rx02
         CreateSprite(BITMAP_LIGHTMARKS, p, 0.8f, Light, o);
-        b->TransformPosition(BoneTransform[4], Position, p, true);		// rx03
+        b->TransformPosition(BoneTransform[4], Position, p, true); // rx03
         CreateSprite(BITMAP_LIGHTMARKS, p, 0.6f, Light, o);
-        b->TransformPosition(BoneTransform[5], Position, p, true);		// rx04
+        b->TransformPosition(BoneTransform[5], Position, p, true); // rx04
         CreateSprite(BITMAP_LIGHTMARKS, p, 0.4f, Light, o);
-        b->TransformPosition(BoneTransform[6], Position, p, true);		// Zx05
+        b->TransformPosition(BoneTransform[6], Position, p, true); // Zx05
         CreateSprite(BITMAP_LIGHTMARKS, p, 0.2f, Light, o);
-        b->TransformPosition(BoneTransform[7], Position, p, true);		// Zx06
+        b->TransformPosition(BoneTransform[7], Position, p, true); // Zx06
         CreateSprite(BITMAP_LIGHTMARKS, p, 0.1f, Light, o);
-    }break;
+    }
+    break;
     case MODEL_FROST_MACE:
     {
         vec3_t vDPos;
@@ -7717,7 +7884,8 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
         // Zx17
         b->TransformByObjectBone(Position, Object, 23);
         CreateSprite(BITMAP_LIGHT, Position, 0.4f, Light, o);
-    }break;
+    }
+    break;
     case MODEL_ABSOLUTE_SCEPTER:
     {
         float fRandomScale;
@@ -7728,8 +7896,8 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
 
         Vector(0.6f, 0.5f, 0.8f, vLight1);
         Vector(0.8f, 0.8f, 0.8f, vLight2);
-        b->TransformByObjectBone(vPosZx01, Object, 3);		// Zx01
-        b->TransformByObjectBone(vPosZx02, Object, 4);		// Zx02
+        b->TransformByObjectBone(vPosZx01, Object, 3); // Zx01
+        b->TransformByObjectBone(vPosZx02, Object, 4); // Zx02
 
         if (((int)WorldTime / 100) % 10 == 0)
         {
@@ -7743,23 +7911,26 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
         }
         // Object->m_iAnimation Random Texture
         int iRandomTexure1, iRandomTexure2;
-        iRandomTexure1 = (Object->m_iAnimation / 10) % 3;	// 3개
-        iRandomTexure2 = (Object->m_iAnimation) % 3;		// 3개
+        iRandomTexure1 = (Object->m_iAnimation / 10) % 3; // 3개
+        iRandomTexure2 = (Object->m_iAnimation) % 3;      // 3개
 
         // Zx01
-        fRandomScale = (float)(rand() % 10) / 10.0f + 1.0f;		//(1.0~2.0)
+        fRandomScale = (float)(rand() % 10) / 10.0f + 1.0f; //(1.0~2.0)
         CreateSprite(BITMAP_LIGHT, vPosZx01, fRandomScale, vLight1, o);
         CreateSprite(BITMAP_SHINY + 1, vPosZx01, 0.5f, vDLight, o);
         VectorAdd(vPosZx01, Object->EyeRight, vPosZx01);
-        CreateSprite(BITMAP_LIGHTNING_MEGA1 + iRandomTexure1, vPosZx01, (((rand() % 11) - 20) / 100.f) + 0.5f, vLight2, o, rand() % 380);
+        CreateSprite(BITMAP_LIGHTNING_MEGA1 + iRandomTexure1, vPosZx01, (((rand() % 11) - 20) / 100.f) + 0.5f, vLight2,
+                     o, rand() % 380);
 
         // Zx02
-        fRandomScale = (float)((rand() % 10) / 5.0f) + 1.5f;		//(2.0~3.25)
+        fRandomScale = (float)((rand() % 10) / 5.0f) + 1.5f; //(2.0~3.25)
         CreateSprite(BITMAP_LIGHT, vPosZx02, fRandomScale, vLight1, o);
         CreateSprite(BITMAP_SHINY + 1, vPosZx02, 1.0f, vDLight, o);
         VectorAdd(vPosZx02, Object->EyeRight2, vPosZx02);
-        CreateSprite(BITMAP_LIGHTNING_MEGA1 + iRandomTexure1, vPosZx02, (((rand() % 11) - 20) / 50.f) + 0.8f, vLight2, o, rand() % 380);
-    }break;
+        CreateSprite(BITMAP_LIGHTNING_MEGA1 + iRandomTexure1, vPosZx02, (((rand() % 11) - 20) / 50.f) + 0.8f, vLight2,
+                     o, rand() % 380);
+    }
+    break;
     case MODEL_STINGER_BOW:
     {
         vec3_t vZX03, vZx04;
@@ -7773,7 +7944,7 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
             {
                 continue;
             }
-            b->TransformByObjectBone(Position, Object, i);	//
+            b->TransformByObjectBone(Position, Object, i); //
             CreateSprite(BITMAP_LIGHT, Position, 0.8f, Light, Object);
         }
 
@@ -7787,33 +7958,34 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
                 CreateEffect(MODEL_FEATHER, vZx04, o->Angle, Light, 1, NULL, -1, 0, 0, 0, 0.6f);
             }
         }
-    }break;
+    }
+    break;
     case MODEL_DEADLY_STAFF:
     {
         Vector(0.f, 0.f, 0.f, Position);
         Vector(0.8f, 0.3f, 0.1f, Light);
-        b->TransformPosition(BoneTransform[4], Position, p, true);		// Rx01
+        b->TransformPosition(BoneTransform[4], Position, p, true); // Rx01
         CreateSprite(BITMAP_LIGHT, p, 0.8f, Light, o);
-        b->TransformPosition(BoneTransform[5], Position, p, true);		// Rx02
+        b->TransformPosition(BoneTransform[5], Position, p, true); // Rx02
         CreateSprite(BITMAP_LIGHT, p, 0.4f, Light, o);
-        b->TransformPosition(BoneTransform[6], Position, p, true);		// Zx02
+        b->TransformPosition(BoneTransform[6], Position, p, true); // Zx02
         CreateSprite(BITMAP_LIGHT, p, 0.8f, Light, o);
-        b->TransformPosition(BoneTransform[7], Position, p, true);		// Zx03
+        b->TransformPosition(BoneTransform[7], Position, p, true); // Zx03
         CreateSprite(BITMAP_LIGHT, p, 0.8f, Light, o);
-        b->TransformPosition(BoneTransform[8], Position, p, true);		// Zx04
+        b->TransformPosition(BoneTransform[8], Position, p, true); // Zx04
         CreateSprite(BITMAP_LIGHT, p, 2.0f, Light, o);
-        b->TransformPosition(BoneTransform[9], Position, p, true);		// Zx05
+        b->TransformPosition(BoneTransform[9], Position, p, true); // Zx05
         CreateSprite(BITMAP_LIGHT, p, 0.8f, Light, o);
 
         float fLumi = absf((sinf(WorldTime * 0.001f))) * 0.8f + 0.2f;
         vec3_t vDLight;
         Vector(fLumi * 0.8f, fLumi * 0.1f, fLumi * 0.3f, vDLight);
-        float fRendomScale = (float)(rand() % 10) / 20.0f + 0.8f;		// (0.5~1.25)
+        float fRendomScale = (float)(rand() % 10) / 20.0f + 0.8f; // (0.5~1.25)
         Vector(0.8f, 0.2f, 0.4f, Light);
-        b->TransformPosition(BoneTransform[2], Position, p, true);		// Red01
+        b->TransformPosition(BoneTransform[2], Position, p, true); // Red01
         CreateSprite(BITMAP_LIGHT, p, 2.0f, vDLight, o);
         CreateSprite(BITMAP_SHINY + 6, p, fRendomScale, Light, o);
-        b->TransformPosition(BoneTransform[3], Position, p, true);		// Red02
+        b->TransformPosition(BoneTransform[3], Position, p, true); // Red02
         CreateSprite(BITMAP_LIGHT, p, 2.0f, vDLight, o);
         CreateSprite(BITMAP_SHINY + 6, p, fRendomScale, Light, o);
 
@@ -7824,21 +7996,22 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
         {
             CreateJoint(BITMAP_JOINT_ENERGY, p, p, o->Angle, 47, o, 25.f);
         }
-    }break;
+    }
+    break;
     case MODEL_IMPERIAL_STAFF:
     {
         Vector(0.f, 0.f, 0.f, Position);
         Vector(0.3f, 0.3f, 0.9f, Light);
-        b->TransformPosition(BoneTransform[2], Position, p, true);		// Zx01
+        b->TransformPosition(BoneTransform[2], Position, p, true); // Zx01
         CreateSprite(BITMAP_LIGHT, p, 2.f, Light, o);
         CreateSprite(BITMAP_LIGHT, p, 2.f, Light, o);
-        b->TransformPosition(BoneTransform[3], Position, p, true);		// Zx02
+        b->TransformPosition(BoneTransform[3], Position, p, true); // Zx02
         CreateSprite(BITMAP_LIGHT, p, 2.5f, Light, o);
         CreateSprite(BITMAP_LIGHT, p, 2.5f, Light, o);
-        b->TransformPosition(BoneTransform[4], Position, p, true);		// Zx03
+        b->TransformPosition(BoneTransform[4], Position, p, true); // Zx03
         CreateSprite(BITMAP_LIGHT, p, 3.f, Light, o);
         Vector(0.7f, 0.1f, 0.2f, Light);
-        b->TransformPosition(BoneTransform[5], Position, p, true);		// Zx04
+        b->TransformPosition(BoneTransform[5], Position, p, true); // Zx04
         CreateSprite(BITMAP_LIGHT, p, 2.f, Light, o);
         Vector(0.9f, 0.3f, 0.5f, Light);
         CreateSprite(BITMAP_SHINY + 6, p, 0.8f, Light, o);
@@ -7850,18 +8023,19 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
         {
             CreateParticle(BITMAP_SPARK + 1, p, o->Angle, Light, 11, 2.0f);
             CreateJoint(BITMAP_JOINT_ENERGY, p, p, o->Angle, 17, o, 30.f);
-            //vec3_t vColor;
-            //Vector(0.f, 0.f, 0.9f, vColor);
-            //CreateEffect(MODEL_EFFECT_TRACE, p, o->Angle, vColor, 0, NULL, -1, 0, 0, 0, 30.f);
+            // vec3_t vColor;
+            // Vector(0.f, 0.f, 0.9f, vColor);
+            // CreateEffect(MODEL_EFFECT_TRACE, p, o->Angle, vColor, 0, NULL, -1, 0, 0, 0, 30.f);
         }
 
         // 잔상
-        
+
         VectorCopy(p, o->EyeLeft);
 
         Vector(0.7f, 0.7f, 0.7f, Light);
         CreateSprite(BITMAP_SHINY + 2, p, 2.f, Light, o);
-    }break;
+    }
+    break;
     case MODEL_STAFF + 32:
     {
         float fRandomScale;
@@ -7869,7 +8043,7 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
         Vector(0.9f, 0.7f, 0.4f, vLight1);
         Vector(0.9f, 0.1f, 0.3f, vLight2);
 
-        b->TransformByObjectBone(Position, Object, 1);		// Zx01
+        b->TransformByObjectBone(Position, Object, 1); // Zx01
         Vector(1.0f, 0.1f, 0.2f, Light);
         CreateSprite(BITMAP_SHINY + 6, Position, 0.7f, Light, o);
         CreateSprite(BITMAP_LIGHTMARKS, Position, 0.6f, Light, o);
@@ -7895,49 +8069,51 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
         CreateSprite(BITMAP_SHOCK_WAVE, Position, Object->Timer, Object->EyeRight, o);
 
         Vector(0.9f, 0.5f, 0.2f, Light);
-        fRandomScale = (float)(rand() % 5) / 25.0f + 0.3f;		// (0.3~0.4)
+        fRandomScale = (float)(rand() % 5) / 25.0f + 0.3f; // (0.3~0.4)
         CreateSprite(BITMAP_LIGHTMARKS, Position, fRandomScale, Light, o);
 
-        b->TransformByObjectBone(Position, Object, 2);		// Zx02
+        b->TransformByObjectBone(Position, Object, 2); // Zx02
         CreateSprite(BITMAP_SHINY + 6, Position, 0.3f, vLight1, o);
         CreateSprite(BITMAP_LIGHTMARKS, Position, 0.4f, vLight2, o);
 
-        b->TransformByObjectBone(Position, Object, 3);		// Zx03
+        b->TransformByObjectBone(Position, Object, 3); // Zx03
         CreateSprite(BITMAP_SHINY + 6, Position, 0.2f, vLight1, o);
         CreateSprite(BITMAP_LIGHTMARKS, Position, 0.3f, vLight2, o);
-    }break;
+    }
+    break;
     case MODEL_CRIMSONGLORY:
     {
         vec3_t vDLight;
         Vector(0.8f, 0.6f, 0.2f, Light);
-        b->TransformByObjectBone(Position, Object, 4);		// Zx03
+        b->TransformByObjectBone(Position, Object, 4); // Zx03
         CreateSprite(BITMAP_LIGHT, Position, 1.5f, Light, o);
-        b->TransformByObjectBone(Position, Object, 5);		// Zx04
+        b->TransformByObjectBone(Position, Object, 5); // Zx04
         CreateSprite(BITMAP_LIGHT, Position, 1.5f, Light, o);
-        b->TransformByObjectBone(Position, Object, 6);		// Zx05
+        b->TransformByObjectBone(Position, Object, 6); // Zx05
         CreateSprite(BITMAP_LIGHT, Position, 1.5f, Light, o);
-        b->TransformByObjectBone(Position, Object, 7);		// Zx06
+        b->TransformByObjectBone(Position, Object, 7); // Zx06
         CreateSprite(BITMAP_LIGHT, Position, 1.5f, Light, o);
-        b->TransformByObjectBone(Position, Object, 8);		// Zx07
+        b->TransformByObjectBone(Position, Object, 8); // Zx07
         CreateSprite(BITMAP_LIGHT, Position, 1.5f, Light, o);
-        b->TransformByObjectBone(Position, Object, 9);		// Zx08
+        b->TransformByObjectBone(Position, Object, 9); // Zx08
         CreateSprite(BITMAP_LIGHT, Position, 1.5f, Light, o);
-        b->TransformByObjectBone(Position, Object, 10);		// Zx09
+        b->TransformByObjectBone(Position, Object, 10); // Zx09
         CreateSprite(BITMAP_LIGHT, Position, 1.5f, Light, o);
 
         float fLumi = absf((sinf(WorldTime * 0.0005f)));
         Vector(fLumi * 1.f, fLumi * 1.f, fLumi * 1.f, vDLight);
-        b->TransformByObjectBone(Position, Object, 1);		// Zx01
+        b->TransformByObjectBone(Position, Object, 1); // Zx01
         CreateSprite(BITMAP_FLARE_RED, Position, 0.5f, vDLight, o);
-        b->TransformByObjectBone(Position, Object, 2);		// Zx02
+        b->TransformByObjectBone(Position, Object, 2); // Zx02
         CreateSprite(BITMAP_FLARE_RED, Position, 0.3f, vDLight, o);
-        b->TransformByObjectBone(Position, Object, 3);		// Zx002
+        b->TransformByObjectBone(Position, Object, 3); // Zx002
         CreateSprite(BITMAP_FLARE_RED, Position, 0.3f, vDLight, o);
-    }break;
+    }
+    break;
     case MODEL_SALAMANDER_SHIELD:
     {
         Vector(0.9f, 0.f, 0.2f, Light);
-        b->TransformByObjectBone(Position, Object, 1);		// Zx01
+        b->TransformByObjectBone(Position, Object, 1); // Zx01
         CreateSprite(BITMAP_LIGHT, Position, 2.0f, Light, o);
 
         if (rand_fps_check(1))
@@ -7956,31 +8132,33 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
                 break;
             }
         }
-    }break;
+    }
+    break;
     case MODEL_GUARDIAN_SHILED:
     {
         Vector(0.f, 0.f, 0.f, Position);
         float fLumi = fabs(sinf(WorldTime * 0.001f)) + 0.1f;
         Vector(0.8f * fLumi, 0.3f * fLumi, 0.8f * fLumi, Light);
-        b->TransformPosition(BoneTransform[1], Position, p, true);		// b01
+        b->TransformPosition(BoneTransform[1], Position, p, true); // b01
         CreateSprite(BITMAP_LIGHT, p, 1.5f, Light, o);
-        b->TransformPosition(BoneTransform[2], Position, p, true);		// Zx01
+        b->TransformPosition(BoneTransform[2], Position, p, true); // Zx01
         CreateSprite(BITMAP_LIGHT, p, 1.5f, Light, o);
-        b->TransformPosition(BoneTransform[3], Position, p, true);		// Zx05
+        b->TransformPosition(BoneTransform[3], Position, p, true); // Zx05
         CreateSprite(BITMAP_LIGHT, p, 1.5f, Light, o);
-        b->TransformPosition(BoneTransform[4], Position, p, true);		// Zx04
+        b->TransformPosition(BoneTransform[4], Position, p, true); // Zx04
         CreateSprite(BITMAP_LIGHT, p, 1.5f, Light, o);
-        b->TransformPosition(BoneTransform[5], Position, p, true);		// Object04
+        b->TransformPosition(BoneTransform[5], Position, p, true); // Object04
         CreateSprite(BITMAP_LIGHT, p, 1.5f, Light, o);
-        b->TransformPosition(BoneTransform[6], Position, p, true);		// Object05
+        b->TransformPosition(BoneTransform[6], Position, p, true); // Object05
         CreateSprite(BITMAP_LIGHT, p, 1.5f, Light, o);
-        b->TransformPosition(BoneTransform[7], Position, p, true);		// Zx02
+        b->TransformPosition(BoneTransform[7], Position, p, true); // Zx02
         CreateSprite(BITMAP_LIGHT, p, 1.5f, Light, o);
-        b->TransformPosition(BoneTransform[8], Position, p, true);		// Object01
+        b->TransformPosition(BoneTransform[8], Position, p, true); // Object01
         CreateSprite(BITMAP_LIGHT, p, 1.5f, Light, o);
-        b->TransformPosition(BoneTransform[9], Position, p, true);		// Object03
+        b->TransformPosition(BoneTransform[9], Position, p, true); // Object03
         CreateSprite(BITMAP_LIGHT, p, 1.5f, Light, o);
-    }break;
+    }
+    break;
     case MODEL_CROSS_SHIELD:
     {
         vec3_t vPos, vLight;
@@ -8030,7 +8208,7 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
         Vector(0.8f, 0.8f, 0.2f, vLight);
         CreateSprite(BITMAP_SHINY + 1, vPos, 1.0f, vLight, Object);
 
-        //작은 구슬
+        // 작은 구슬
         for (int i = 1; i < 8; i++)
         {
             b->TransformByObjectBone(vPos, Object, i);
@@ -8046,7 +8224,7 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
     {
         vec3_t vPos, vLight;
 
-        //zx01
+        // zx01
         b->TransformByObjectBone(vPos, Object, 1);
         Vector(0.4f, 0.2f, 1.0f, vLight);
         CreateSprite(BITMAP_SHINY + 6, vPos, 1.4f, vLight, Object);
@@ -8070,12 +8248,12 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
         Vector(0.1f + 0.7f * theta, 0.1f * theta, 0.1f + 0.3f * theta, vLight);
         CreateSprite(BITMAP_MAGIC, vPos, fSize, vLight, Object);
 
-        //zx02
+        // zx02
         Vector(0.9f, 0.0f, 0.1f, vLight);
         b->TransformByObjectBone(vPos, Object, 2);
         CreateSprite(BITMAP_SHINY + 6, vPos, 0.8f, vLight, Object);
 
-        //zx03
+        // zx03
         Vector(0.9f, 0.4f, 0.7f, vLight);
         b->TransformByObjectBone(vPos, Object, 3);
         CreateSprite(BITMAP_SHINY + 6, vPos, 0.6f, vLight, Object);
@@ -8085,7 +8263,7 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
     {
         vec3_t vPos, vLight;
 
-        //zx01, zx02
+        // zx01, zx02
         Vector(0.9f, 0.2f, 0.7f, vLight);
         b->TransformByObjectBone(vPos, Object, 3);
         CreateSprite(BITMAP_SHINY + 6, vPos, 0.8f, vLight, Object);
@@ -8094,7 +8272,7 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
         CreateSprite(BITMAP_SHINY + 6, vPos, 0.8f, vLight, Object);
         CreateSprite(BITMAP_SHINY + 6, vPos, 0.3f, vLight, Object);
 
-        //bone02
+        // bone02
         Vector(0.2f, 0.9f, 0.1f, vLight);
         b->TransformByObjectBone(vPos, Object, 5);
         CreateSprite(BITMAP_LIGHT, vPos, 1.5f, vLight, Object);
@@ -8105,7 +8283,7 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
         vec3_t vPos, vLight;
         float fSize = 0.0f;
 
-        //rx01
+        // rx01
         b->TransformByObjectBone(vPos, Object, 5);
         Vector(0.5f, 0.8f, 0.9f, vLight);
         CreateSprite(BITMAP_SHINY + 1, vPos, 0.5f, vLight, Object);
@@ -8116,19 +8294,19 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
         if (int(WorldTime) % 14 == 0)
             CreateParticle(BITMAP_SHINY + 6, vPos, o->Angle, vLight, 1);
 
-        //rx02
+        // rx02
         Vector(0.5f, 0.6f, 0.9f, vLight);
         b->TransformByObjectBone(vPos, Object, 6);
         CreateSprite(BITMAP_SHINY + 1, vPos, 1.1f, vLight, Object);
 
-        //zx 01, 02
+        // zx 01, 02
         Vector(0.8f, 0.5f, 0.2f, vLight);
         b->TransformByObjectBone(vPos, Object, 2);
         CreateSprite(BITMAP_SHINY + 1, vPos, 0.5f, vLight, Object);
         b->TransformByObjectBone(vPos, Object, 3);
         CreateSprite(BITMAP_SHINY + 1, vPos, 0.5f, vLight, Object);
 
-        //zx03
+        // zx03
         Vector(1.0f, 1.0f, 1.0f, vLight);
         b->TransformByObjectBone(vPos, Object, 4);
         fSize = 0.5f * absf((sinf(WorldTime * 0.0015f)));
@@ -8140,9 +8318,9 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
         vec3_t vPos, vLight;
         float quarterAngle, theta, fSize;
 
-        //zx02, 03
+        // zx02, 03
         Vector(0.2f, 0.8f, 0.5f, vLight);
-        int iBoneNum[2] = { 7,11 };
+        int iBoneNum[2] = {7, 11};
 
         for (int i = 0; i < 2; i++)
         {
@@ -8164,7 +8342,7 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
             CreateSprite(BITMAP_SHOCK_WAVE, vPos, fSize, vLight, Object);
         }
 
-        //model_bow action, frame
+        // model_bow action, frame
         if (o->CurrentAction >= PLAYER_ATTACK_FIST && o->CurrentAction <= PLAYER_RIDE_SKILL)
         {
             Vector(0.2f, 0.8f, 0.5f, vLight);
@@ -8194,40 +8372,41 @@ void RenderLinkObject(float x, float y, float z, CHARACTER* c, PART_t* f, int Ty
         break;
     }
 
-    if (gMapManager.WorldActive != WD_10HEAVEN && gMapManager.InHellas() == FALSE && !g_Direction.m_CKanturu.IsMayaScene())
+    if (gMapManager.WorldActive != WD_10HEAVEN && gMapManager.InHellas() == FALSE &&
+        !g_Direction.m_CKanturu.IsMayaScene())
     {
-        switch (Type)        // 날개인지 검사
+        switch (Type) // 날개인지 검사
         {
-        case MODEL_WINGS_OF_ELF:        // Wings of Elf
-        case MODEL_WINGS_OF_HEAVEN:        // Wings of Heaven
-        case MODEL_WINGS_OF_SATAN:        // Wings of Satan
-        case MODEL_WING_OF_CURSE:       // Wing of Curse
+        case MODEL_WINGS_OF_ELF:    // Wings of Elf
+        case MODEL_WINGS_OF_HEAVEN: // Wings of Heaven
+        case MODEL_WINGS_OF_SATAN:  // Wings of Satan
+        case MODEL_WING_OF_CURSE:   // Wing of Curse
 
-        case MODEL_WINGS_OF_SPIRITS:        // Wings of Spirits
-        case MODEL_WINGS_OF_SOUL:        // Wings of Soul
-        case MODEL_WINGS_OF_DRAGON:        // Wings of Dragon
-        case MODEL_WINGS_OF_DARKNESS:        // Wings of Darkness
-        case MODEL_WINGS_OF_DESPAIR:        // Wings of Despair
-        
-        case MODEL_WING_OF_STORM:        // Wing of Storm
-        case MODEL_WING_OF_ETERNAL:        // Wing of Eternal
-        case MODEL_WING_OF_ILLUSION:        // Wing of Illusion
-        case MODEL_WING_OF_RUIN:        // Wing of Ruin
-        case MODEL_WING_OF_DIMENSION:        // Wing of Dimension
+        case MODEL_WINGS_OF_SPIRITS:  // Wings of Spirits
+        case MODEL_WINGS_OF_SOUL:     // Wings of Soul
+        case MODEL_WINGS_OF_DRAGON:   // Wings of Dragon
+        case MODEL_WINGS_OF_DARKNESS: // Wings of Darkness
+        case MODEL_WINGS_OF_DESPAIR:  // Wings of Despair
 
-        case MODEL_WING + 131:        // Small Wing of Curse
-        case MODEL_WING + 132:        // Small Wings of Elf
-        case MODEL_WING + 133:        // Small Wings of Heaven
-        case MODEL_WING + 134:        // Small Wings of Satan
+        case MODEL_WING_OF_STORM:     // Wing of Storm
+        case MODEL_WING_OF_ETERNAL:   // Wing of Eternal
+        case MODEL_WING_OF_ILLUSION:  // Wing of Illusion
+        case MODEL_WING_OF_RUIN:      // Wing of Ruin
+        case MODEL_WING_OF_DIMENSION: // Wing of Dimension
+
+        case MODEL_WING + 131: // Small Wing of Curse
+        case MODEL_WING + 132: // Small Wings of Elf
+        case MODEL_WING + 133: // Small Wings of Heaven
+        case MODEL_WING + 134: // Small Wings of Satan
             b->RenderBodyShadow();
             break;
-            
-        case MODEL_CAPE_OF_LORD:    // Cape of Lord
-        case MODEL_CAPE_OF_FIGHTER:      // Cape of Fighter
-        case MODEL_CAPE_OF_EMPEROR:        // Cape of Emperor
-        case MODEL_CAPE_OF_OVERRULE:        // Cape of Overrule
-        case MODEL_WING + 130:        // Small Cape of Lord
-        case MODEL_WING + 135:        // Little Warrior's Cloak
+
+        case MODEL_CAPE_OF_LORD:     // Cape of Lord
+        case MODEL_CAPE_OF_FIGHTER:  // Cape of Fighter
+        case MODEL_CAPE_OF_EMPEROR:  // Cape of Emperor
+        case MODEL_CAPE_OF_OVERRULE: // Cape of Overrule
+        case MODEL_WING + 130:       // Small Cape of Lord
+        case MODEL_WING + 135:       // Little Warrior's Cloak
             b->RenderBodyShadow(-1, -1, -1, -1, o->m_pCloth, o->m_byNumCloth);
             break;
         default:
@@ -8261,11 +8440,11 @@ void RenderEye(OBJECT* o, int Left, int Right, float fSize = 1.0f)
     Vector(Luminosity, Luminosity, Luminosity, Light);
     Vector(5.f, 0.f, 0.f, p);
     b->TransformPosition(o->BoneTransform[Left], p, Position, true);
-    //CreateParticle(BITMAP_SHINY+3,Position,o->Angle,Light);
+    // CreateParticle(BITMAP_SHINY+3,Position,o->Angle,Light);
     CreateSprite(BITMAP_SHINY + 3, Position, fSize, Light, NULL);
     Vector(-5.f, 0.f, 0.f, p);
     b->TransformPosition(o->BoneTransform[Right], p, Position, true);
-    //CreateParticle(BITMAP_SHINY+3,Position,o->Angle,Light);
+    // CreateParticle(BITMAP_SHINY+3,Position,o->Angle,Light);
     CreateSprite(BITMAP_SHINY + 3, Position, fSize, Light, NULL);
     VectorCopy(Position, o->EyeLeft);
 }
@@ -8278,7 +8457,8 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
     }
 
     BMD* b = &Models[o->Type];
-    if (Models[o->Type].NumActions == 0) return;
+    if (Models[o->Type].NumActions == 0)
+        return;
 
     bool Translate = true;
 
@@ -8340,10 +8520,9 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
         break;
     }
 
-    if (o->Type == MODEL_PLAYER
-        && (o->SubType == MODEL_XMAS_EVENT_CHA_SSANTA
-            || o->SubType == MODEL_XMAS_EVENT_CHA_SNOWMAN
-            || o->SubType == MODEL_XMAS_EVENT_CHA_DEER))
+    if (o->Type == MODEL_PLAYER &&
+        (o->SubType == MODEL_XMAS_EVENT_CHA_SSANTA || o->SubType == MODEL_XMAS_EVENT_CHA_SNOWMAN ||
+         o->SubType == MODEL_XMAS_EVENT_CHA_DEER))
     {
         OBJECT* pOwner = o->Owner;
 
@@ -8364,10 +8543,9 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
             DeleteCharacter(c, o);
         }
     }
-    else if (o->Type == MODEL_PLAYER && o->SubType == MODEL_XMAS_EVENT_CHANGE_GIRL
-        || o->Type == MODEL_PLAYER && o->SubType == MODEL_PANDA
-        || o->Type == MODEL_PLAYER && o->SubType == MODEL_SKELETON_CHANGED
-        )
+    else if (o->Type == MODEL_PLAYER && o->SubType == MODEL_XMAS_EVENT_CHANGE_GIRL ||
+             o->Type == MODEL_PLAYER && o->SubType == MODEL_PANDA ||
+             o->Type == MODEL_PLAYER && o->SubType == MODEL_SKELETON_CHANGED)
     {
         if (o->m_iAnimation >= 1)
         {
@@ -8381,9 +8559,9 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
 
     if (o->Alpha >= 0.5f && c->HideShadow == false)
     {
-        if (gMapManager.WorldActive != WD_10HEAVEN && (o->Type == MODEL_PLAYER) && (!(MODEL_HORN_OF_UNIRIA <= c->Helper.Type && c->Helper.Type <= MODEL_HORN_OF_DINORANT) || c->SafeZone)
-            && gMapManager.InHellas() == false
-            )
+        if (gMapManager.WorldActive != WD_10HEAVEN && (o->Type == MODEL_PLAYER) &&
+            (!(MODEL_HORN_OF_UNIRIA <= c->Helper.Type && c->Helper.Type <= MODEL_HORN_OF_DINORANT) || c->SafeZone) &&
+            gMapManager.InHellas() == false)
         {
             if (gMapManager.InBloodCastle() && o->m_bActionStart && c->Dead > 0)
             {
@@ -8405,7 +8583,8 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
                 }
                 else
                 {
-                    RenderPartObject(&c->Object, MODEL_SHADOW_BODY, NULL, c->Light, o->Alpha, 0, 0, 0, false, false, Translate);
+                    RenderPartObject(&c->Object, MODEL_SHADOW_BODY, NULL, c->Light, o->Alpha, 0, 0, 0, false, false,
+                                     Translate);
                 }
             }
 
@@ -8431,11 +8610,14 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
 
     if (byRender == CHARACTER_RENDER_OBJ)
     {
-        if (MONSTER_METAL_BALROG == c->MonsterIndex || MONSTER_ALPHA_CRUST == c->MonsterIndex || MONSTER_GREAT_DRAKAN == c->MonsterIndex
-            || MONSTER_WHITE_WIZARD == c->MonsterIndex || MONSTER_ORC_SOLDIER_OF_DOOM == c->MonsterIndex || MONSTER_ORC_ARCHER_OF_DOOM == c->MonsterIndex
-            || MONSTER_MUTANT_HERO == c->MonsterIndex || MONSTER_OMEGA_WING == c->MonsterIndex || MONSTER_AXE_HERO == c->MonsterIndex || MONSTER_GIGAS_GOLEM == c->MonsterIndex
-            || MONSTER_SCOUTHERO == c->MonsterIndex || MONSTER_WEREWOLFHERO == c->MonsterIndex || MONSTER_VALAM == c->MonsterIndex || MONSTER_SOLAM == c->MonsterIndex || MONSTER_SCOUT == c->MonsterIndex || 319 == c->MonsterIndex
-            )
+        if (MONSTER_METAL_BALROG == c->MonsterIndex || MONSTER_ALPHA_CRUST == c->MonsterIndex ||
+            MONSTER_GREAT_DRAKAN == c->MonsterIndex || MONSTER_WHITE_WIZARD == c->MonsterIndex ||
+            MONSTER_ORC_SOLDIER_OF_DOOM == c->MonsterIndex || MONSTER_ORC_ARCHER_OF_DOOM == c->MonsterIndex ||
+            MONSTER_MUTANT_HERO == c->MonsterIndex || MONSTER_OMEGA_WING == c->MonsterIndex ||
+            MONSTER_AXE_HERO == c->MonsterIndex || MONSTER_GIGAS_GOLEM == c->MonsterIndex ||
+            MONSTER_SCOUTHERO == c->MonsterIndex || MONSTER_WEREWOLFHERO == c->MonsterIndex ||
+            MONSTER_VALAM == c->MonsterIndex || MONSTER_SOLAM == c->MonsterIndex || MONSTER_SCOUT == c->MonsterIndex ||
+            319 == c->MonsterIndex)
         {
             RenderObject(o, Translate, Select, c->MonsterIndex);
         }
@@ -8452,12 +8634,11 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
         }
     }
 
-    if ((
-        o->Type != MODEL_PLAYER && o->Kind != KIND_TRAP &&
-        c->MonsterIndex != MONSTER_ICE_QUEEN && c->MonsterIndex != MONSTER_ICE_MONSTER && c->MonsterIndex != MONSTER_RED_DRAGON && c->MonsterIndex != MONSTER_ELF_LALA && c->MonsterIndex != MONSTER_ZAIKAN && c->MonsterIndex != MONSTER_DEATH_BEAM_KNIGHT
-        && c->MonsterIndex != MONSTER_GATE_TO_KALIMA_1
-        ) && gMapManager.WorldActive != WD_10HEAVEN
-        )
+    if ((o->Type != MODEL_PLAYER && o->Kind != KIND_TRAP && c->MonsterIndex != MONSTER_ICE_QUEEN &&
+         c->MonsterIndex != MONSTER_ICE_MONSTER && c->MonsterIndex != MONSTER_RED_DRAGON &&
+         c->MonsterIndex != MONSTER_ELF_LALA && c->MonsterIndex != MONSTER_ZAIKAN &&
+         c->MonsterIndex != MONSTER_DEATH_BEAM_KNIGHT && c->MonsterIndex != MONSTER_GATE_TO_KALIMA_1) &&
+        gMapManager.WorldActive != WD_10HEAVEN)
     {
         if (o->Alpha >= 0.3f)
         {
@@ -8475,9 +8656,8 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
             else if (c->MonsterIndex == MONSTER_MESSENGER_OF_ARCH)
                 o->HiddenMesh = 2;
 
-            if (o->Type != MODEL_STATUE_OF_SAINT && o->Type != MODEL_CASTLE_GATE
-                && !(o->Type >= MODEL_FACE
-                    && o->Type <= MODEL_FACE + 6))
+            if (o->Type != MODEL_STATUE_OF_SAINT && o->Type != MODEL_CASTLE_GATE &&
+                !(o->Type >= MODEL_FACE && o->Type <= MODEL_FACE + 6))
             {
                 o->EnableShadow = true;
                 RenderPartObject(&c->Object, o->Type, NULL, c->Light, o->Alpha, 0, 0, 0, false, false, Translate);
@@ -8495,21 +8675,27 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
                 float Luminosity = sinf(WorldTime * 0.0015f) * 0.3f + 0.8f;
 
                 Vector(Luminosity * 0.5f, Luminosity * 0.5f, Luminosity, Light);
-                RenderTerrainAlphaBitmap(BITMAP_MAGIC + 1, o->Position[0], o->Position[1], 2.7f, 2.7f, Light, -o->Angle[2]);
+                RenderTerrainAlphaBitmap(BITMAP_MAGIC + 1, o->Position[0], o->Position[1], 2.7f, 2.7f, Light,
+                                         -o->Angle[2]);
 
                 o->HiddenMesh = -1;
             }
         }
     }
 
-    if (c->MonsterIndex == MONSTER_BALROG || c->MonsterIndex == MONSTER_GOLDEN_BUDGE_DRAGON || c->MonsterIndex == MONSTER_SILVER_VALKYRIE || c->MonsterIndex == MONSTER_ZAIKAN || c->MonsterIndex == MONSTER_METAL_BALROG || (78 <= c->MonsterIndex && c->MonsterIndex <= MONSTER_GOLDEN_WHEEL) || (c->MonsterIndex >= MONSTER_GOLDEN_DARK_KNIGHT && c->MonsterIndex <= MONSTER_GOLDEN_RABBIT))
+    if (c->MonsterIndex == MONSTER_BALROG || c->MonsterIndex == MONSTER_GOLDEN_BUDGE_DRAGON ||
+        c->MonsterIndex == MONSTER_SILVER_VALKYRIE || c->MonsterIndex == MONSTER_ZAIKAN ||
+        c->MonsterIndex == MONSTER_METAL_BALROG || (78 <= c->MonsterIndex && c->MonsterIndex <= MONSTER_GOLDEN_WHEEL) ||
+        (c->MonsterIndex >= MONSTER_GOLDEN_DARK_KNIGHT && c->MonsterIndex <= MONSTER_GOLDEN_RABBIT))
     {
         vec3_t vBackupBodyLight;
 
         float Bright = 1.f;
         if (c->MonsterIndex == MONSTER_ZAIKAN)
             Bright = 0.5f;
-        if (c->MonsterIndex == MONSTER_GOLDEN_BUDGE_DRAGON || (78 <= c->MonsterIndex && c->MonsterIndex <= MONSTER_GOLDEN_WHEEL) || (c->MonsterIndex >= MONSTER_GOLDEN_DARK_KNIGHT && c->MonsterIndex <= MONSTER_GOLDEN_RABBIT))
+        if (c->MonsterIndex == MONSTER_GOLDEN_BUDGE_DRAGON ||
+            (78 <= c->MonsterIndex && c->MonsterIndex <= MONSTER_GOLDEN_WHEEL) ||
+            (c->MonsterIndex >= MONSTER_GOLDEN_DARK_KNIGHT && c->MonsterIndex <= MONSTER_GOLDEN_RABBIT))
         {
             if (c->MonsterIndex >= MONSTER_GOLDEN_DARK_KNIGHT)
             {
@@ -8522,8 +8708,8 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
                 VectorCopy(Models[o->Type].BodyLight, vBackupBodyLight);
                 Vector(1.f, 0.0f, 0.0f, Models[o->Type].BodyLight);
 
-                float	fEffectScale = o->Scale * 1.6f;
-                vec3_t	v3EffectLightColor, v3EffectPosition;
+                float fEffectScale = o->Scale * 1.6f;
+                vec3_t v3EffectLightColor, v3EffectPosition;
 
                 Vector(1.0f, 0.6f, 0.1f, v3EffectLightColor);
 
@@ -8546,19 +8732,24 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
                 if (rand_fps_check(1))
                 {
                     b->TransformPosition(o->BoneTransform[57], p, v3EffectPosition, true);
-                    CreateEffect(MODEL_EFFECT_FIRE_HIK3_MONO, v3EffectPosition, o->Angle, v3EffectLightColor, 1, NULL, -1, 0, 0, 0, fEffectScale);
+                    CreateEffect(MODEL_EFFECT_FIRE_HIK3_MONO, v3EffectPosition, o->Angle, v3EffectLightColor, 1, NULL,
+                                 -1, 0, 0, 0, fEffectScale);
 
                     b->TransformPosition(o->BoneTransform[60], p, v3EffectPosition, true);
-                    CreateEffect(MODEL_EFFECT_FIRE_HIK3_MONO, v3EffectPosition, o->Angle, v3EffectLightColor, 1, NULL, -1, 0, 0, 0, fEffectScale);
+                    CreateEffect(MODEL_EFFECT_FIRE_HIK3_MONO, v3EffectPosition, o->Angle, v3EffectLightColor, 1, NULL,
+                                 -1, 0, 0, 0, fEffectScale);
 
                     b->TransformPosition(o->BoneTransform[66], p, v3EffectPosition, true);
-                    CreateEffect(MODEL_EFFECT_FIRE_HIK3_MONO, v3EffectPosition, o->Angle, v3EffectLightColor, 1, NULL, -1, 0, 0, 0, fEffectScale);
+                    CreateEffect(MODEL_EFFECT_FIRE_HIK3_MONO, v3EffectPosition, o->Angle, v3EffectLightColor, 1, NULL,
+                                 -1, 0, 0, 0, fEffectScale);
 
                     b->TransformPosition(o->BoneTransform[78], p, v3EffectPosition, true);
-                    CreateEffect(MODEL_EFFECT_FIRE_HIK3_MONO, v3EffectPosition, o->Angle, v3EffectLightColor, 1, NULL, -1, 0, 0, 0, fEffectScale);
+                    CreateEffect(MODEL_EFFECT_FIRE_HIK3_MONO, v3EffectPosition, o->Angle, v3EffectLightColor, 1, NULL,
+                                 -1, 0, 0, 0, fEffectScale);
 
                     b->TransformPosition(o->BoneTransform[91], p, v3EffectPosition, true);
-                    CreateEffect(MODEL_EFFECT_FIRE_HIK3_MONO, v3EffectPosition, o->Angle, v3EffectLightColor, 1, NULL, -1, 0, 0, 0, fEffectScale);
+                    CreateEffect(MODEL_EFFECT_FIRE_HIK3_MONO, v3EffectPosition, o->Angle, v3EffectLightColor, 1, NULL,
+                                 -1, 0, 0, 0, fEffectScale);
                 }
             }
             RenderPartObjectBodyColor(&Models[o->Type], o, o->Type, o->Alpha, RENDER_METAL | RENDER_BRIGHT, Bright);
@@ -8566,7 +8757,8 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
 
         if (c->MonsterIndex == MONSTER_METAL_BALROG)
         {
-            RenderPartObjectBodyColor(&Models[o->Type], o, o->Type, o->Alpha, RENDER_CHROME | RENDER_BRIGHT | RENDER_EXTRA, Bright);
+            RenderPartObjectBodyColor(&Models[o->Type], o, o->Type, o->Alpha,
+                                      RENDER_CHROME | RENDER_BRIGHT | RENDER_EXTRA, Bright);
         }
         else
         {
@@ -8606,13 +8798,15 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
         b->TransformPosition(o->BoneTransform[20], p, Position, true);
         CreateSprite(BITMAP_LIGHT, Position, 0.8f, Light, o);
     }
-    else if (c->MonsterIndex == MONSTER_MEGA_CRUST || c->MonsterIndex == MONSTER_ALPHA_CRUST || c->MonsterIndex == MONSTER_OMEGA_WING)
+    else if (c->MonsterIndex == MONSTER_MEGA_CRUST || c->MonsterIndex == MONSTER_ALPHA_CRUST ||
+             c->MonsterIndex == MONSTER_OMEGA_WING)
     {
         if (!c->Object.m_pCloth)
         {
             int iTex = (c->MonsterIndex == MONSTER_MEGA_CRUST) ? BITMAP_ROBE + 3 : BITMAP_ROBE + 5;
             auto* pCloth = new CPhysicsCloth[1];
-            pCloth[0].Create(&(c->Object), 19, 0.0f, 10.0f, 0.0f, 5, 15, 30.0f, 300.0f, iTex, iTex, PCT_RUBBER | PCT_MASK_ALPHA);
+            pCloth[0].Create(&(c->Object), 19, 0.0f, 10.0f, 0.0f, 5, 15, 30.0f, 300.0f, iTex, iTex,
+                             PCT_RUBBER | PCT_MASK_ALPHA);
             c->Object.m_pCloth = (void*)pCloth;
             c->Object.m_byNumCloth = 1;
         }
@@ -8669,17 +8863,20 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
         }
 
         int RenderType = (c->MonsterIndex == MONSTER_DRAKAN) ? 0 : RENDER_EXTRA;
-        RenderPartObjectBodyColor(&Models[o->Type], o, o->Type, o->Alpha, RENDER_CHROME | RENDER_BRIGHT | RenderType, 1.f);
+        RenderPartObjectBodyColor(&Models[o->Type], o, o->Type, o->Alpha, RENDER_CHROME | RENDER_BRIGHT | RenderType,
+                                  1.f);
 
         if (c->MonsterIndex == MONSTER_DRAKAN)
         {
-            RenderPartObjectBodyColor2(&Models[o->Type], o, o->Type, o->Alpha, RENDER_CHROME2 | RENDER_LIGHTMAP | RENDER_BRIGHT, 1.f);
+            RenderPartObjectBodyColor2(&Models[o->Type], o, o->Type, o->Alpha,
+                                       RENDER_CHROME2 | RENDER_LIGHTMAP | RENDER_BRIGHT, 1.f);
         }
     }
     else if (c->MonsterIndex == MONSTER_DARK_PHOENIX)
     {
         float fSin = 0.5f * (1.0f + sinf((float)((int)WorldTime % 10000) * 0.001f));
-        RenderPartObjectBodyColor(&Models[o->Type], o, o->Type, o->Alpha, RENDER_CHROME | RENDER_BRIGHT, 0.3f + fSin * 0.7f);
+        RenderPartObjectBodyColor(&Models[o->Type], o, o->Type, o->Alpha, RENDER_CHROME | RENDER_BRIGHT,
+                                  0.3f + fSin * 0.7f);
         fSin = 0.3f * (1.0f - fSin) + 0.3f;
         o->BlendMeshLight = fSin;
         o->BlendMesh = 0;
@@ -8695,7 +8892,8 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
         if (!c->Object.m_pCloth)
         {
             auto* pCloth = new CPhysicsCloth[1];
-            pCloth[0].Create(o, 10, 0.0f, -10.0f, 0.0f, 5, 12, 15.0f, 240.0f, BITMAP_PHO_R_HAIR, BITMAP_PHO_R_HAIR, PCT_RUBBER | PCT_MASK_ALPHA);
+            pCloth[0].Create(o, 10, 0.0f, -10.0f, 0.0f, 5, 12, 15.0f, 240.0f, BITMAP_PHO_R_HAIR, BITMAP_PHO_R_HAIR,
+                             PCT_RUBBER | PCT_MASK_ALPHA);
             pCloth[0].AddCollisionSphere(0.0f, 0.0f, 40.0f, 30.0f, 10);
             o->m_pCloth = (void*)pCloth;
             o->m_byNumCloth = 1;
@@ -8714,7 +8912,8 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
 
     if (c->MonsterIndex == MONSTER_GOLDEN_TITAN || c->MonsterIndex == MONSTER_GOLDEN_SOLDIER)
     {
-        RenderPartObjectBodyColor(&Models[o->Type], o, o->Type, o->Alpha, RENDER_METAL | RENDER_BRIGHT, 1.f, BITMAP_SHINY + 1);
+        RenderPartObjectBodyColor(&Models[o->Type], o, o->Type, o->Alpha, RENDER_METAL | RENDER_BRIGHT, 1.f,
+                                  BITMAP_SHINY + 1);
     }
 
     if (c->MonsterIndex == MONSTER_RED_DRAGON)
@@ -8748,8 +8947,10 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
         float TempScale = o->Scale;
         o->Scale = 0.7f;
 
-        if (c->MonsterIndex == MONSTER_STATUE_OF_SAINT_1) w->Type = MODEL_DIVINE_STAFF_OF_ARCHANGEL;
-        if (c->MonsterIndex == MONSTER_STATUE_OF_SAINT_2) w->Type = MODEL_DIVINE_SWORD_OF_ARCHANGEL;
+        if (c->MonsterIndex == MONSTER_STATUE_OF_SAINT_1)
+            w->Type = MODEL_DIVINE_STAFF_OF_ARCHANGEL;
+        if (c->MonsterIndex == MONSTER_STATUE_OF_SAINT_2)
+            w->Type = MODEL_DIVINE_SWORD_OF_ARCHANGEL;
         if (c->MonsterIndex == MONSTER_STATUE_OF_SAINT_3)
         {
             w->Type = MODEL_DIVINE_CB_OF_ARCHANGEL;
@@ -8824,7 +9025,8 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
                         {
                             CreateEffect(MODEL_MOONHARVEST_GAM, vPos, o->Angle, vLight);
                         }
-                    }break;
+                    }
+                    break;
                     case 1:
                     {
                         for (int i = 0; i < 5; i++)
@@ -8857,17 +9059,17 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
         }
         else
         {
-            BoneManager::GetBonePosition(o, L"Rabbit_1", vPos);		// Bip01 Spine
+            BoneManager::GetBonePosition(o, L"Rabbit_1", vPos); // Bip01 Spine
             Vector(0.4f, 0.4f, 0.9f, vLight);
-            CreateSprite(BITMAP_LIGHT, vPos, 3.0f, vLight, o);	// flare01.jpg
+            CreateSprite(BITMAP_LIGHT, vPos, 3.0f, vLight, o); // flare01.jpg
 
-            BoneManager::GetBonePosition(o, L"Rabbit_2", vPos);		// Bip01 Head
+            BoneManager::GetBonePosition(o, L"Rabbit_2", vPos); // Bip01 Head
             Vector(0.4f, 0.4f, 0.9f, vLight);
-            CreateSprite(BITMAP_LIGHT, vPos, 2.0f, vLight, o);	// flare01.jpg
+            CreateSprite(BITMAP_LIGHT, vPos, 2.0f, vLight, o); // flare01.jpg
 
-            BoneManager::GetBonePosition(o, L"Rabbit_4", vPos);		// Bip01 Pelvis
+            BoneManager::GetBonePosition(o, L"Rabbit_4", vPos); // Bip01 Pelvis
             Vector(0.4f, 0.4f, 0.9f, vLight);
-            CreateSprite(BITMAP_LIGHT, vPos, 1.0f, vLight, o);	// flare01.jpg
+            CreateSprite(BITMAP_LIGHT, vPos, 1.0f, vLight, o); // flare01.jpg
         }
     }
 
@@ -8888,11 +9090,13 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
         if (rand_fps_check(2))
         {
             VectorCopy(o->Position, b->BodyOrigin);
-            b->Animation(BoneTransform, o->AnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle, o->HeadAngle);
+            b->Animation(BoneTransform, o->AnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle,
+                         o->HeadAngle);
             b->TransformPosition(BoneTransform[43], vRelativePos, vtaWorldPos, false);
             vtaWorldPos[2] += 20.f;
 
-            CreateParticle(BITMAP_CHERRYBLOSSOM_EVENT_PETAL, vtaWorldPos, o->Angle, rand_fps_check(3) ? vLight : vLight1, 1, 0.3f);
+            CreateParticle(BITMAP_CHERRYBLOSSOM_EVENT_PETAL, vtaWorldPos, o->Angle,
+                           rand_fps_check(3) ? vLight : vLight1, 1, 0.3f);
         }
 
         VectorCopy(o->Position, b->BodyOrigin);
@@ -8902,8 +9106,10 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
 
         if (rand_fps_check(1))
         {
-            CreateParticle(BITMAP_SPARK + 1, vtaWorldPos, o->Angle, rand_fps_check(3) ? vLight2 : vLight1, 25, Scale + 0.2f);
-            CreateParticle(BITMAP_SPARK + 1, vtaWorldPos, o->Angle, rand_fps_check(2) ? vLight2 : vLight1, 25, Scale + 0.3f);
+            CreateParticle(BITMAP_SPARK + 1, vtaWorldPos, o->Angle, rand_fps_check(3) ? vLight2 : vLight1, 25,
+                           Scale + 0.2f);
+            CreateParticle(BITMAP_SPARK + 1, vtaWorldPos, o->Angle, rand_fps_check(2) ? vLight2 : vLight1, 25,
+                           Scale + 0.3f);
         }
 
         Vector(0.7f, 0.5f, 0.2f, vLight);
@@ -8915,11 +9121,13 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
         b->TransformPosition(BoneTransform[3], vRelativePos, vtaWorldPos, false);
         CreateSprite(BITMAP_LIGHT, vtaWorldPos, 5.f, vLight, o, 0.f);
 
-        int iRedFlarePos[] = { 53, 56, 59, 62 };
-        for (int i = 0; i < 4; ++i) {
+        int iRedFlarePos[] = {53, 56, 59, 62};
+        for (int i = 0; i < 4; ++i)
+        {
             Vector(0.9f, 0.4f, 0.8f, vLight);
             VectorCopy(o->Position, b->BodyOrigin);
-            b->Animation(BoneTransform, o->AnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle, o->HeadAngle);
+            b->Animation(BoneTransform, o->AnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle,
+                         o->HeadAngle);
             b->TransformPosition(BoneTransform[iRedFlarePos[i]], vRelativePos, vtaWorldPos, false);
 
             CreateSprite(BITMAP_LIGHT, vtaWorldPos, 1.5f, vLight, o, 0.f);
@@ -8928,10 +9136,12 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
             {
                 auto randpos = (float)(rand() % 30 + 5);
 
-                if (rand_fps_check(2)) {
+                if (rand_fps_check(2))
+                {
                     vtaWorldPos[0] += randpos;
                 }
-                else {
+                else
+                {
                     vtaWorldPos[0] -= randpos;
                 }
 
@@ -8952,8 +9162,9 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
 
     bool bCloak = false;
 
-    if ((c->Class == CLASS_DARK || gCharacterManager.GetBaseClass(c->Class) == CLASS_DARK_LORD
-        || gCharacterManager.GetBaseClass(c->Class) == CLASS_RAGEFIGHTER) && o->Type == MODEL_PLAYER)
+    if ((c->Class == CLASS_DARK || gCharacterManager.GetBaseClass(c->Class) == CLASS_DARK_LORD ||
+         gCharacterManager.GetBaseClass(c->Class) == CLASS_RAGEFIGHTER) &&
+        o->Type == MODEL_PLAYER)
     {
         if (c->Change == false || (c->Change == true && c->Object.Type == MODEL_PLAYER))
         {
@@ -9065,36 +9276,37 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
             Vector(1.0f, 0.3f, 0.1f, c->Light);
         }
 
-        if (gMapManager.WorldActive == WD_65DOPPLEGANGER1);
+        if (gMapManager.WorldActive == WD_65DOPPLEGANGER1)
+            ;
+        else if (o->CurrentAction != PLAYER_DIE1)
+        {
+            // 			if (!g_isCharacterBuff((&c->Object), eBuff_Doppelganger_Ascension))
+            // 			{
+            c->Object.Alpha = 1.0f;
+            // 			}
+        }
         else
-            if (o->CurrentAction != PLAYER_DIE1)
+        {
+            c->Object.Alpha -= 0.07f;
+            float fAlpha = c->Object.Alpha;
+            if (fAlpha < 0)
+                fAlpha = 0;
+
+            Vector(1.0f * fAlpha, 0.3f * fAlpha, 0.1f * fAlpha, c->Light);
+
+            // 			vec3_t vLight;
+            vec3_t vPos;
+            BMD* b = &Models[o->Type];
+
+            // Vector(0.5f, 0.5f, 0.5f, vLight);
+
+            int iNumBones = Models[o->Type].NumBones;
+            if (rand_fps_check(1))
             {
-                // 			if (!g_isCharacterBuff((&c->Object), eBuff_Doppelganger_Ascension))
-                // 			{
-                c->Object.Alpha = 1.0f;
-                // 			}
+                Models[o->Type].TransformByObjectBone(vPos, o, rand() % iNumBones);
+                CreateParticle(BITMAP_TWINTAIL_WATER, vPos, o->Angle, c->Light, 2, 0.5f);
             }
-            else
-            {
-                c->Object.Alpha -= 0.07f;
-                float fAlpha = c->Object.Alpha;
-                if (fAlpha < 0) fAlpha = 0;
-
-                Vector(1.0f * fAlpha, 0.3f * fAlpha, 0.1f * fAlpha, c->Light);
-
-                // 			vec3_t vLight;
-                vec3_t vPos;
-                BMD* b = &Models[o->Type];
-
-                //Vector(0.5f, 0.5f, 0.5f, vLight);
-
-                int iNumBones = Models[o->Type].NumBones;
-                if (rand_fps_check(1))
-                {
-                    Models[o->Type].TransformByObjectBone(vPos, o, rand() % iNumBones);
-                    CreateParticle(BITMAP_TWINTAIL_WATER, vPos, o->Angle, c->Light, 2, 0.5f);
-                }
-            }
+        }
         c->Object.BlendMesh = -1;
 
         if (g_isCharacterBuff((&c->Object), eBuff_Doppelganger_Ascension))
@@ -9105,22 +9317,30 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
 
     if (c == Hero)
     {
-        vec3_t AbilityLight = { 1.f, 1.f, 1.f };
+        vec3_t AbilityLight = {1.f, 1.f, 1.f};
         if (CharacterAttribute->Ability & ABILITY_FAST_ATTACK_SPEED)
         {
-            AbilityLight[0] *= 0.9f; AbilityLight[1] *= 0.5f; AbilityLight[2] *= 0.5f;
+            AbilityLight[0] *= 0.9f;
+            AbilityLight[1] *= 0.5f;
+            AbilityLight[2] *= 0.5f;
         }
         if (CharacterAttribute->Ability & ABILITY_PLUS_DAMAGE)
         {
-            AbilityLight[0] *= 0.5f; AbilityLight[1] *= 0.9f; AbilityLight[2] *= 0.5f;
+            AbilityLight[0] *= 0.5f;
+            AbilityLight[1] *= 0.9f;
+            AbilityLight[2] *= 0.5f;
         }
         if (CharacterAttribute->Ability & ABILITY_FAST_ATTACK_RING)
         {
-            AbilityLight[0] *= 0.9f; AbilityLight[1] *= 0.5f; AbilityLight[2] *= 0.5f;
+            AbilityLight[0] *= 0.9f;
+            AbilityLight[1] *= 0.5f;
+            AbilityLight[2] *= 0.5f;
         }
         if (CharacterAttribute->Ability & ABILITY_FAST_ATTACK_SPEED2)
         {
-            AbilityLight[0] *= 0.9f; AbilityLight[1] *= 0.5f; AbilityLight[2] *= 0.5f;
+            AbilityLight[0] *= 0.9f;
+            AbilityLight[1] *= 0.5f;
+            AbilityLight[2] *= 0.5f;
         }
         if (SceneFlag == CHARACTER_SCENE)
         {
@@ -9131,14 +9351,17 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
             VectorCopy(AbilityLight, c->Light);
     }
 
-    if (o->Kind == KIND_NPC && gMapManager.WorldActive == WD_0LORENCIA && o->Type == MODEL_PLAYER && (o->SubType >= MODEL_SKELETON1 && o->SubType <= MODEL_SKELETON3))
+    if (o->Kind == KIND_NPC && gMapManager.WorldActive == WD_0LORENCIA && o->Type == MODEL_PLAYER &&
+        (o->SubType >= MODEL_SKELETON1 && o->SubType <= MODEL_SKELETON3))
     {
-        RenderPartObject(&c->Object, o->SubType, NULL, c->Light, o->Alpha, c->Level, 0, 0, false, false, Translate, Select);
+        RenderPartObject(&c->Object, o->SubType, NULL, c->Light, o->Alpha, c->Level, 0, 0, false, false, Translate,
+                         Select);
     }
-    else if (o->Kind == KIND_PLAYER && o->Type == MODEL_PLAYER && gCharacterManager.GetBaseClass(c->Class) == CLASS_RAGEFIGHTER
-        && (o->SubType == MODEL_SKELETON_PCBANG || o->SubType == MODEL_HALLOWEEN
-            || o->SubType == MODEL_PANDA || o->SubType == MODEL_SKELETON_CHANGED
-            || o->SubType == MODEL_XMAS_EVENT_CHANGE_GIRL || o->SubType == MODEL_SKELETON1))
+    else if (o->Kind == KIND_PLAYER && o->Type == MODEL_PLAYER &&
+             gCharacterManager.GetBaseClass(c->Class) == CLASS_RAGEFIGHTER &&
+             (o->SubType == MODEL_SKELETON_PCBANG || o->SubType == MODEL_HALLOWEEN || o->SubType == MODEL_PANDA ||
+              o->SubType == MODEL_SKELETON_CHANGED || o->SubType == MODEL_XMAS_EVENT_CHANGE_GIRL ||
+              o->SubType == MODEL_SKELETON1))
     {
         PART_t* p = &c->BodyPart[o->SubType];
         if (o->CurrentAction == PLAYER_SKILL_DRAGONKICK)
@@ -9151,7 +9374,8 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
             OBJECT* pObj = &c->Object;
             if (pObj->m_sTargetIndex < 0 || c->JumpTime > 0)
             {
-                RenderPartObject(&c->Object, o->SubType, p, c->Light, o->Alpha, 0, 0, 0, false, false, Translate, Select);
+                RenderPartObject(&c->Object, o->SubType, p, c->Light, o->Alpha, 0, 0, 0, false, false, Translate,
+                                 Select);
             }
             else
             {
@@ -9161,7 +9385,8 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
         }
         else
         {
-            RenderPartObject(&c->Object, o->SubType, NULL, c->Light, o->Alpha, 0, 0, 0, false, false, Translate, Select);
+            RenderPartObject(&c->Object, o->SubType, NULL, c->Light, o->Alpha, 0, 0, 0, false, false, Translate,
+                             Select);
         }
 
         if (o->SubType == MODEL_XMAS_EVENT_CHANGE_GIRL)
@@ -9248,9 +9473,11 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
             fLumi = sinf(WorldTime * 0.0015f) * 0.3f + 0.5f;
             EnableAlphaBlend();
             Vector(fLumi * vLight[0], fLumi * vLight[1], fLumi * vLight[2], vLight);
-            RenderTerrainAlphaBitmap(BITMAP_GM_AURORA, o->Position[0], o->Position[1], 1.5f, 1.5f, vLight, WorldTime * 0.01f);
-            RenderTerrainAlphaBitmap(BITMAP_GM_AURORA, o->Position[0], o->Position[1], 1.f, 1.f, vLight, -WorldTime * 0.01f);
-            //RenderAurora ( BITMAP_GM_AURORA, RENDER_BRIGHT, o->Position[0], o->Position[1], 1.5f, 1.5f, vLight );
+            RenderTerrainAlphaBitmap(BITMAP_GM_AURORA, o->Position[0], o->Position[1], 1.5f, 1.5f, vLight,
+                                     WorldTime * 0.01f);
+            RenderTerrainAlphaBitmap(BITMAP_GM_AURORA, o->Position[0], o->Position[1], 1.f, 1.f, vLight,
+                                     -WorldTime * 0.01f);
+            // RenderAurora ( BITMAP_GM_AURORA, RENDER_BRIGHT, o->Position[0], o->Position[1], 1.5f, 1.5f, vLight );
 
             if (c->Object.m_pCloth == NULL)
             {
@@ -9258,12 +9485,14 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
 
                 auto* pCloth = new CPhysicsCloth[iNumCloth];
 
-                pCloth[0].Create(o, 20, 0.0f, 5.0f, 10.0f, 6, 5, 30.0f, 70.0f, BITMAP_GM_HAIR_1, BITMAP_GM_HAIR_1, PCT_COTTON | PCT_SHORT_SHOULDER | PCT_MASK_ALPHA);
+                pCloth[0].Create(o, 20, 0.0f, 5.0f, 10.0f, 6, 5, 30.0f, 70.0f, BITMAP_GM_HAIR_1, BITMAP_GM_HAIR_1,
+                                 PCT_COTTON | PCT_SHORT_SHOULDER | PCT_MASK_ALPHA);
                 pCloth[0].SetWindMinMax(10, 20);
                 pCloth[0].AddCollisionSphere(-10.f, 20.0f, 20.0f, 27.0f, 17);
                 pCloth[0].AddCollisionSphere(10.f, 20.0f, 20.0f, 27.0f, 17);
 
-                pCloth[1].Create(o, 20, 0.0f, 5.0f, 25.0f, 4, 4, 30.0f, 40.0f, BITMAP_GM_HAIR_3, BITMAP_GM_HAIR_3, PCT_COTTON | PCT_SHORT_SHOULDER | PCT_MASK_ALPHA);
+                pCloth[1].Create(o, 20, 0.0f, 5.0f, 25.0f, 4, 4, 30.0f, 40.0f, BITMAP_GM_HAIR_3, BITMAP_GM_HAIR_3,
+                                 PCT_COTTON | PCT_SHORT_SHOULDER | PCT_MASK_ALPHA);
                 pCloth[1].SetWindMinMax(8, 15);
                 pCloth[1].AddCollisionSphere(-10.f, 20.0f, 20.0f, 27.0f, 17);
                 pCloth[1].AddCollisionSphere(10.f, 20.0f, 20.0f, 27.0f, 17);
@@ -9294,10 +9523,9 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
             DisableAlphaBlend();
         }
     }
-    else if (o->Type == MODEL_PLAYER
-        && (o->SubType == MODEL_XMAS_EVENT_CHA_SSANTA
-            || o->SubType == MODEL_XMAS_EVENT_CHA_SNOWMAN
-            || o->SubType == MODEL_XMAS_EVENT_CHA_DEER))
+    else if (o->Type == MODEL_PLAYER &&
+             (o->SubType == MODEL_XMAS_EVENT_CHA_SSANTA || o->SubType == MODEL_XMAS_EVENT_CHA_SNOWMAN ||
+              o->SubType == MODEL_XMAS_EVENT_CHA_DEER))
     {
         vec3_t vOriginPos;
         VectorCopy(o->Position, vOriginPos);
@@ -9334,7 +9562,8 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
                 RenderType |= RENDER_CHROME;
             }
 
-            if ((o->CurrentAction == PLAYER_SKILL_DRAGONKICK) && (gCharacterManager.GetBaseClass(c->Class) == CLASS_RAGEFIGHTER))
+            if ((o->CurrentAction == PLAYER_SKILL_DRAGONKICK) &&
+                (gCharacterManager.GetBaseClass(c->Class) == CLASS_RAGEFIGHTER))
             {
                 p->Type = MODEL_ANGEL;
                 RenderCharacter_AfterImage(c, p, Translate, Select, 2.5f, 1.0f);
@@ -9344,7 +9573,8 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
                 OBJECT* pObj = &c->Object;
                 if (pObj->m_sTargetIndex < 0 || c->JumpTime > 0)
                 {
-                    RenderPartObject(&c->Object, MODEL_ANGEL, p, c->Light, o->Alpha, 0, 0, 0, false, false, Translate, Select, RenderType);
+                    RenderPartObject(&c->Object, MODEL_ANGEL, p, c->Light, o->Alpha, 0, 0, 0, false, false, Translate,
+                                     Select, RenderType);
                 }
                 else
                 {
@@ -9354,11 +9584,12 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
             }
             else
             {
-                RenderPartObject(&c->Object, MODEL_ANGEL, p, c->Light, o->Alpha, 0, 0, 0, false, false, Translate, Select, RenderType);
+                RenderPartObject(&c->Object, MODEL_ANGEL, p, c->Light, o->Alpha, 0, 0, 0, false, false, Translate,
+                                 Select, RenderType);
             }
         }
         else
-#endif// GUILD_WAR_EVENT
+#endif // GUILD_WAR_EVENT
         {
             for (int i = MAX_BODYPART - 1; i >= 0; i--)
             {
@@ -9372,8 +9603,7 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
                         int nItemType = (Type - MODEL_ITEM) / MAX_ITEM_INDEX;
                         int nItemSubType = (Type - MODEL_ITEM) % MAX_ITEM_INDEX;
 
-                        if (nItemType >= 7 && nItemType <= 11
-                            && (nItemSubType == 10 || nItemSubType == 11))
+                        if (nItemType >= 7 && nItemType <= 11 && (nItemSubType == 10 || nItemSubType == 11))
                         {
                             Type = MODEL_HELM2 + (nItemType - 7) * MODEL_ITEM_COMMON_NUM + nItemSubType - 10;
                         }
@@ -9384,14 +9614,16 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
                     }
 
                     BMD* b = &Models[Type];
-                    
+
                     if (CLASS_RAGEFIGHTER == gCharacterManager.GetBaseClass(c->Class))
                     {
-                        b->Skin = gCharacterManager.GetBaseClass(c->Class) * 2 + gCharacterManager.IsThirdClass(c->Class);
+                        b->Skin =
+                            gCharacterManager.GetBaseClass(c->Class) * 2 + gCharacterManager.IsThirdClass(c->Class);
                     }
                     else
                     {
-                        b->Skin = gCharacterManager.GetBaseClass(c->Class) * 2 + gCharacterManager.IsSecondClass(c->Class);
+                        b->Skin =
+                            gCharacterManager.GetBaseClass(c->Class) * 2 + gCharacterManager.IsSecondClass(c->Class);
                     }
 
                     if (gCharacterManager.GetBaseClass(c->Class) == CLASS_DARK_LORD && i == BODYPART_HELM)
@@ -9411,36 +9643,41 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
                     if (c->MonsterIndex >= MONSTER_TERRIBLE_BUTCHER && c->MonsterIndex <= MONSTER_DOPPELGANGER_SUM)
                     {
                         if (gMapManager.WorldActive == WD_65DOPPLEGANGER1)
-                            RenderPartObject(&c->Object, Type, p, c->Light, o->Alpha, p->Level, p->ExcellentFlags, p->AncientDiscriminator, false, false, Translate,
-                                Select, RENDER_DOPPELGANGER | RENDER_TEXTURE);
+                            RenderPartObject(&c->Object, Type, p, c->Light, o->Alpha, p->Level, p->ExcellentFlags,
+                                             p->AncientDiscriminator, false, false, Translate, Select,
+                                             RENDER_DOPPELGANGER | RENDER_TEXTURE);
                         else
-                            RenderPartObject(&c->Object, Type, p, c->Light, o->Alpha, p->Level, p->ExcellentFlags, p->AncientDiscriminator, false, false, Translate,
-                                Select, RENDER_DOPPELGANGER | RENDER_BRIGHT | RENDER_TEXTURE);
+                            RenderPartObject(&c->Object, Type, p, c->Light, o->Alpha, p->Level, p->ExcellentFlags,
+                                             p->AncientDiscriminator, false, false, Translate, Select,
+                                             RENDER_DOPPELGANGER | RENDER_BRIGHT | RENDER_TEXTURE);
                         // 						RenderPartObject(&c->Object,Type,p,c->Light,o->Alpha,p->Level<<3,p->Option1,p->ExtOption,false,false,Translate,
                         // 							Select,RENDER_DOPPELGANGER|RENDER_BRIGHT|RENDER_CHROME);
                     }
                     else
                     {
-                        if ((o->CurrentAction == PLAYER_SKILL_DRAGONKICK) && (gCharacterManager.GetBaseClass(c->Class) == CLASS_RAGEFIGHTER))
+                        if ((o->CurrentAction == PLAYER_SKILL_DRAGONKICK) &&
+                            (gCharacterManager.GetBaseClass(c->Class) == CLASS_RAGEFIGHTER))
                         {
                             RenderCharacter_AfterImage(c, p, Translate, Select, 2.5f, 1.0f);
                         }
-                        else
-                            if ((o->CurrentAction == PLAYER_SKILL_DARKSIDE_READY) && (gCharacterManager.GetBaseClass(c->Class) == CLASS_RAGEFIGHTER))
+                        else if ((o->CurrentAction == PLAYER_SKILL_DARKSIDE_READY) &&
+                                 (gCharacterManager.GetBaseClass(c->Class) == CLASS_RAGEFIGHTER))
+                        {
+                            if (o->m_sTargetIndex < 0 || c->JumpTime > 0)
                             {
-                                if (o->m_sTargetIndex < 0 || c->JumpTime>0)
-                                {
-                                    RenderPartObject(&c->Object, Type, p, c->Light, o->Alpha, p->Level, p->ExcellentFlags, p->AncientDiscriminator, false, false, Translate, Select);
-                                }
-                                else
-                                {
-                                    g_CMonkSystem.DarksideRendering(c, p, Translate, Select);
-                                }
+                                RenderPartObject(&c->Object, Type, p, c->Light, o->Alpha, p->Level, p->ExcellentFlags,
+                                                 p->AncientDiscriminator, false, false, Translate, Select);
                             }
                             else
                             {
-                                RenderPartObject(&c->Object, Type, p, c->Light, o->Alpha, p->Level, p->ExcellentFlags, p->AncientDiscriminator, false, false, Translate, Select);
+                                g_CMonkSystem.DarksideRendering(c, p, Translate, Select);
                             }
+                        }
+                        else
+                        {
+                            RenderPartObject(&c->Object, Type, p, c->Light, o->Alpha, p->Level, p->ExcellentFlags,
+                                             p->AncientDiscriminator, false, false, Translate, Select);
+                        }
                     }
                 }
             }
@@ -9448,18 +9685,19 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
 
         if (gMapManager.InChaosCastle() == false)
         {
-            if (c->GuildMarkIndex >= 0 && o->Type == MODEL_PLAYER && o->Alpha != 0.0f
-                && (c->GuildMarkIndex == MARK_EDIT || g_GuildCache.IsExistGuildMark(GuildMark[c->GuildMarkIndex].Key) == TRUE)
-                && (!g_isCharacterBuff(o, eBuff_Cloaking)))
+            if (c->GuildMarkIndex >= 0 && o->Type == MODEL_PLAYER && o->Alpha != 0.0f &&
+                (c->GuildMarkIndex == MARK_EDIT ||
+                 g_GuildCache.IsExistGuildMark(GuildMark[c->GuildMarkIndex].Key) == TRUE) &&
+                (!g_isCharacterBuff(o, eBuff_Cloaking)))
             {
                 CreateGuildMark(c->GuildMarkIndex);
                 if (gCharacterManager.GetBaseClass(c->Class) == CLASS_RAGEFIGHTER)
                 {
                     vec3_t vPos;
-                    if (c->BodyPart[BODYPART_ARMOR].Type == MODEL_SACRED_ARMOR
-                        || c->BodyPart[BODYPART_ARMOR].Type == MODEL_STORM_HARD_ARMOR
-                        || c->BodyPart[BODYPART_ARMOR].Type == MODEL_PIERCING_ARMOR
-                        || c->BodyPart[BODYPART_ARMOR].Type == MODEL_PHOENIX_SOUL_ARMOR)
+                    if (c->BodyPart[BODYPART_ARMOR].Type == MODEL_SACRED_ARMOR ||
+                        c->BodyPart[BODYPART_ARMOR].Type == MODEL_STORM_HARD_ARMOR ||
+                        c->BodyPart[BODYPART_ARMOR].Type == MODEL_PIERCING_ARMOR ||
+                        c->BodyPart[BODYPART_ARMOR].Type == MODEL_PHOENIX_SOUL_ARMOR)
                     {
                         Vector(5.0f, 0.0f, -35.0f, vPos);
                     }
@@ -9495,19 +9733,24 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
 
                 auto* pCloth = new CPhysicsCloth[numCloth];
 
-                pCloth[0].Create(o, 20, 0.0f, 0.0f, 20.0f, 6, 5, 30.0f, 70.0f, BITMAP_ROBE + 6, BITMAP_ROBE + 6, PCT_CURVED | PCT_RUBBER2 | PCT_MASK_LIGHT | PLS_STRICTDISTANCE | PCT_SHORT_SHOULDER | PCT_NORMAL_THICKNESS | PCT_OPT_HAIR);
+                pCloth[0].Create(o, 20, 0.0f, 0.0f, 20.0f, 6, 5, 30.0f, 70.0f, BITMAP_ROBE + 6, BITMAP_ROBE + 6,
+                                 PCT_CURVED | PCT_RUBBER2 | PCT_MASK_LIGHT | PLS_STRICTDISTANCE | PCT_SHORT_SHOULDER |
+                                     PCT_NORMAL_THICKNESS | PCT_OPT_HAIR);
                 pCloth[0].SetWindMinMax(10, 50);
                 pCloth[0].AddCollisionSphere(-10.f, 20.0f, 20.0f, 27.0f, 17);
                 pCloth[0].AddCollisionSphere(10.f, 20.0f, 20.0f, 27.0f, 17);
 
-                pCloth[1].Create(o, 20, 0.0f, 5.0f, 18.0f, 5, 5, 30.0f, 70.0f, BITMAP_ROBE + 6, BITMAP_ROBE + 6, PCT_CURVED | PCT_RUBBER2 | PCT_MASK_BLEND | PLS_STRICTDISTANCE | PCT_SHORT_SHOULDER | PCT_NORMAL_THICKNESS | PCT_OPT_HAIR);
+                pCloth[1].Create(o, 20, 0.0f, 5.0f, 18.0f, 5, 5, 30.0f, 70.0f, BITMAP_ROBE + 6, BITMAP_ROBE + 6,
+                                 PCT_CURVED | PCT_RUBBER2 | PCT_MASK_BLEND | PLS_STRICTDISTANCE | PCT_SHORT_SHOULDER |
+                                     PCT_NORMAL_THICKNESS | PCT_OPT_HAIR);
                 pCloth[1].SetWindMinMax(8, 40);
                 pCloth[1].AddCollisionSphere(-10.f, 20.0f, 20.0f, 27.0f, 17);
                 pCloth[1].AddCollisionSphere(10.f, 20.0f, 20.0f, 27.0f, 17);
 
                 if (c->Wing.Type == MODEL_CAPE_OF_EMPEROR)
                 {
-                    pCloth[2].Create(o, 19, 0.0f, 8.0f, 10.0f, 10, 10, 180.0f, 180.0f, BITMAP_ROBE + 9, BITMAP_ROBE + 9, PCT_CURVED | PCT_SHORT_SHOULDER | PCT_HEAVY | PCT_MASK_ALPHA);
+                    pCloth[2].Create(o, 19, 0.0f, 8.0f, 10.0f, 10, 10, 180.0f, 180.0f, BITMAP_ROBE + 9, BITMAP_ROBE + 9,
+                                     PCT_CURVED | PCT_SHORT_SHOULDER | PCT_HEAVY | PCT_MASK_ALPHA);
                     pCloth[2].AddCollisionSphere(-10.f, -10.0f, -10.0f, 25.0f, 17);
                     pCloth[2].AddCollisionSphere(10.f, -10.0f, -10.0f, 25.0f, 17);
                     pCloth[2].AddCollisionSphere(-10.f, -10.0f, 20.0f, 27.0f, 17);
@@ -9515,7 +9758,8 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
                 }
                 else if (c->Wing.Type == MODEL_WING + 130)
                 {
-                    pCloth[2].Create(o, 19, 0.0f, 8.0f, 10.0f, 10, 10, 100.0f, 100.0f, BITMAP_ROBE + 7, BITMAP_ROBE + 7, PCT_CURVED | PCT_SHORT_SHOULDER | PCT_MASK_ALPHA);
+                    pCloth[2].Create(o, 19, 0.0f, 8.0f, 10.0f, 10, 10, 100.0f, 100.0f, BITMAP_ROBE + 7, BITMAP_ROBE + 7,
+                                     PCT_CURVED | PCT_SHORT_SHOULDER | PCT_MASK_ALPHA);
                     pCloth[2].AddCollisionSphere(-10.f, -10.0f, -10.0f, 25.0f, 17);
                     pCloth[2].AddCollisionSphere(10.f, -10.0f, -10.0f, 25.0f, 17);
                     pCloth[2].AddCollisionSphere(-10.f, -10.0f, 20.0f, 27.0f, 17);
@@ -9524,7 +9768,8 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
                 else
                 {
                     //
-                    pCloth[2].Create(o, 19, 0.0f, 8.0f, 10.0f, 10, 10, 180.0f, 180.0f, BITMAP_ROBE + 7, BITMAP_ROBE + 7, PCT_CURVED | PCT_SHORT_SHOULDER | PCT_MASK_ALPHA);
+                    pCloth[2].Create(o, 19, 0.0f, 8.0f, 10.0f, 10, 10, 180.0f, 180.0f, BITMAP_ROBE + 7, BITMAP_ROBE + 7,
+                                     PCT_CURVED | PCT_SHORT_SHOULDER | PCT_MASK_ALPHA);
                     pCloth[2].AddCollisionSphere(-10.f, -10.0f, -10.0f, 25.0f, 17);
                     pCloth[2].AddCollisionSphere(10.f, -10.0f, -10.0f, 25.0f, 17);
                     pCloth[2].AddCollisionSphere(-10.f, -10.0f, 20.0f, 27.0f, 17);
@@ -9542,22 +9787,28 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
 
                 if (c->BodyPart[BODYPART_ARMOR].Type == MODEL_BODY_ARMOR + SKIN_CLASS_DARK_LORD)
                 {
-                    pCloth[3].Create(o, 18, 0.0f, 10.0f, -5.0f, 5, 5, 50.0f, 90.0f, BITMAP_DARK_LOAD_SKIRT, BITMAP_DARK_LOAD_SKIRT, PCT_MASK_ALPHA | PCT_HEAVY | PCT_STICKED | PCT_SHORT_SHOULDER);
+                    pCloth[3].Create(o, 18, 0.0f, 10.0f, -5.0f, 5, 5, 50.0f, 90.0f, BITMAP_DARK_LOAD_SKIRT,
+                                     BITMAP_DARK_LOAD_SKIRT,
+                                     PCT_MASK_ALPHA | PCT_HEAVY | PCT_STICKED | PCT_SHORT_SHOULDER);
                     pCloth[3].AddCollisionSphere(0.0f, -15.0f, -20.0f, 30.0f, 2);
                 }
                 else if (c->BodyPart[BODYPART_ARMOR].Type == MODEL_BODY_ARMOR + SKIN_CLASS_LORDEMPEROR)
                 {
-                    pCloth[3].Create(o, 18, 0.0f, 10.0f, -5.0f, 5, 5, 50.0f, 90.0f, BITMAP_DARKLOAD_SKIRT_3RD, BITMAP_DARKLOAD_SKIRT_3RD, PCT_MASK_ALPHA | PCT_HEAVY | PCT_STICKED | PCT_SHORT_SHOULDER);
+                    pCloth[3].Create(o, 18, 0.0f, 10.0f, -5.0f, 5, 5, 50.0f, 90.0f, BITMAP_DARKLOAD_SKIRT_3RD,
+                                     BITMAP_DARKLOAD_SKIRT_3RD,
+                                     PCT_MASK_ALPHA | PCT_HEAVY | PCT_STICKED | PCT_SHORT_SHOULDER);
                     pCloth[3].AddCollisionSphere(0.0f, -15.0f, -20.0f, 30.0f, 2);
                 }
 
                 if (c->Wing.Type == MODEL_CAPE_OF_EMPEROR)
                 {
-                    pCloth[4].Create(o, 19, 30.0f, 15.0f, 10.0f, 2, 5, 12.0f, 200.0f, BITMAP_ROBE + 10, BITMAP_ROBE + 10, PCT_FLAT | PCT_SHAPE_NORMAL | PCT_COTTON | PCT_MASK_ALPHA);
+                    pCloth[4].Create(o, 19, 30.0f, 15.0f, 10.0f, 2, 5, 12.0f, 200.0f, BITMAP_ROBE + 10,
+                                     BITMAP_ROBE + 10, PCT_FLAT | PCT_SHAPE_NORMAL | PCT_COTTON | PCT_MASK_ALPHA);
                     pCloth[4].AddCollisionSphere(0.0f, -15.0f, -20.0f, 30.0f, 2);
                     pCloth[4].AddCollisionSphere(0.f, 0.0f, 0.0f, 35.0f, 17);
 
-                    pCloth[5].Create(o, 19, -30.0f, 20.0f, 10.0f, 2, 5, 12.0f, 200.0f, BITMAP_ROBE + 10, BITMAP_ROBE + 10, PCT_FLAT | PCT_SHAPE_NORMAL | PCT_COTTON | PCT_MASK_ALPHA);
+                    pCloth[5].Create(o, 19, -30.0f, 20.0f, 10.0f, 2, 5, 12.0f, 200.0f, BITMAP_ROBE + 10,
+                                     BITMAP_ROBE + 10, PCT_FLAT | PCT_SHAPE_NORMAL | PCT_COTTON | PCT_MASK_ALPHA);
                     pCloth[5].AddCollisionSphere(0.0f, -15.0f, -20.0f, 30.0f, 2);
                     pCloth[5].AddCollisionSphere(0.f, 0.0f, 0.0f, 35.0f, 17);
                 }
@@ -9573,7 +9824,8 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
 
                 if (c->Wing.Type == MODEL_CAPE_OF_OVERRULE)
                 {
-                    pCloth[0].Create(o, 19, 0.0f, 15.0f, 5.0f, 10, 10, 180.0f, 170.0f, BITMAP_MANTOE, BITMAP_MANTOE, PCT_CURVED | PCT_SHORT_SHOULDER | PCT_HEAVY | PCT_MASK_ALPHA);
+                    pCloth[0].Create(o, 19, 0.0f, 15.0f, 5.0f, 10, 10, 180.0f, 170.0f, BITMAP_MANTOE, BITMAP_MANTOE,
+                                     PCT_CURVED | PCT_SHORT_SHOULDER | PCT_HEAVY | PCT_MASK_ALPHA);
                     pCloth[0].AddCollisionSphere(-10.f, -10.0f, -10.0f, 35.0f, 17);
                     pCloth[0].AddCollisionSphere(10.f, -10.0f, -10.0f, 35.0f, 17);
                     pCloth[0].AddCollisionSphere(-10.f, -10.0f, 20.0f, 37.0f, 17);
@@ -9581,7 +9833,8 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
                 }
                 else if (c->Wing.Type == MODEL_WING + 135)
                 {
-                    pCloth[0].Create(o, 19, 0.0f, 15.0f, 5.0f, 10, 10, 150.0f, 130.0f, BITMAP_NCCAPE, BITMAP_NCCAPE, PCT_CURVED | PCT_SHORT_SHOULDER | PCT_HEAVY | PCT_MASK_ALPHA);
+                    pCloth[0].Create(o, 19, 0.0f, 15.0f, 5.0f, 10, 10, 150.0f, 130.0f, BITMAP_NCCAPE, BITMAP_NCCAPE,
+                                     PCT_CURVED | PCT_SHORT_SHOULDER | PCT_HEAVY | PCT_MASK_ALPHA);
                     pCloth[0].AddCollisionSphere(-10.f, -10.0f, -10.0f, 35.0f, 17);
                     pCloth[0].AddCollisionSphere(10.f, -10.0f, -10.0f, 35.0f, 17);
                     pCloth[0].AddCollisionSphere(-10.f, -10.0f, 20.0f, 37.0f, 17);
@@ -9589,7 +9842,8 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
                 }
                 else
                 {
-                    pCloth[0].Create(o, 19, 0.0f, 15.0f, 5.0f, 10, 10, 180.0f, 170.0f, BITMAP_NCCAPE, BITMAP_NCCAPE, PCT_CURVED | PCT_SHORT_SHOULDER | PCT_HEAVY | PCT_MASK_ALPHA);
+                    pCloth[0].Create(o, 19, 0.0f, 15.0f, 5.0f, 10, 10, 180.0f, 170.0f, BITMAP_NCCAPE, BITMAP_NCCAPE,
+                                     PCT_CURVED | PCT_SHORT_SHOULDER | PCT_HEAVY | PCT_MASK_ALPHA);
                     pCloth[0].AddCollisionSphere(-10.f, -10.0f, -10.0f, 35.0f, 17);
                     pCloth[0].AddCollisionSphere(10.f, -10.0f, -10.0f, 35.0f, 17);
                     pCloth[0].AddCollisionSphere(-10.f, -10.0f, 20.0f, 37.0f, 17);
@@ -9598,11 +9852,13 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
 
                 if (c->Wing.Type == MODEL_CAPE_OF_OVERRULE)
                 {
-                    pCloth[1].Create(o, 19, 25.0f, 15.0f, 2.0f, 2, 5, 12.0f, 180.0f, BITMAP_MANTO01, BITMAP_MANTO01, PCT_FLAT | PCT_SHAPE_NORMAL | PCT_COTTON | PCT_ELASTIC_RAGE_L | PCT_MASK_ALPHA);
+                    pCloth[1].Create(o, 19, 25.0f, 15.0f, 2.0f, 2, 5, 12.0f, 180.0f, BITMAP_MANTO01, BITMAP_MANTO01,
+                                     PCT_FLAT | PCT_SHAPE_NORMAL | PCT_COTTON | PCT_ELASTIC_RAGE_L | PCT_MASK_ALPHA);
                     pCloth[1].AddCollisionSphere(0.0f, -15.0f, -20.0f, 35.0f, 2);
                     pCloth[1].AddCollisionSphere(0.0f, 0.0f, 0.0f, 45.0f, 17);
 
-                    pCloth[2].Create(o, 19, -25.0f, 15.0f, 2.0f, 2, 5, 12.0f, 180.0f, BITMAP_MANTO01, BITMAP_MANTO01, PCT_FLAT | PCT_SHAPE_NORMAL | PCT_COTTON | PCT_ELASTIC_RAGE_R | PCT_MASK_ALPHA);
+                    pCloth[2].Create(o, 19, -25.0f, 15.0f, 2.0f, 2, 5, 12.0f, 180.0f, BITMAP_MANTO01, BITMAP_MANTO01,
+                                     PCT_FLAT | PCT_SHAPE_NORMAL | PCT_COTTON | PCT_ELASTIC_RAGE_R | PCT_MASK_ALPHA);
                     pCloth[2].AddCollisionSphere(0.0f, -15.0f, -20.0f, 35.0f, 2);
                     pCloth[2].AddCollisionSphere(0.0f, 0.0f, 0.0f, 50.0f, 17);
                 }
@@ -9616,24 +9872,28 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
 
                 if (c->MonsterIndex == MONSTER_DEATH_KING)
                 {
-                    pCloth[0].Create(o, 19, 0.0f, 10.0f, 0.0f, 10, 10, 55.0f, 140.0f, BITMAP_ROBE + 2, BITMAP_ROBE + 2, PCT_CURVED | PCT_MASK_ALPHA);
+                    pCloth[0].Create(o, 19, 0.0f, 10.0f, 0.0f, 10, 10, 55.0f, 140.0f, BITMAP_ROBE + 2, BITMAP_ROBE + 2,
+                                     PCT_CURVED | PCT_MASK_ALPHA);
                     pCloth[0].AddCollisionSphere(-10.f, -10.0f, -10.0f, 35.0f, 17);
                     pCloth[0].AddCollisionSphere(10.f, -10.0f, -10.0f, 35.0f, 17);
                     pCloth[0].AddCollisionSphere(0.f, -10.0f, -40.0f, 50.0f, 19);
                 }
                 else if (c->MonsterIndex == MONSTER_NIGHTMARE)
                 {
-                    pCloth[0].Create(o, 2, 0.0f, 0.0f, 0.0f, 6, 6, 180.0f, 100.0f, BITMAP_NIGHTMARE_ROBE, BITMAP_NIGHTMARE_ROBE, PCT_CYLINDER | PCT_MASK_ALPHA);
+                    pCloth[0].Create(o, 2, 0.0f, 0.0f, 0.0f, 6, 6, 180.0f, 100.0f, BITMAP_NIGHTMARE_ROBE,
+                                     BITMAP_NIGHTMARE_ROBE, PCT_CYLINDER | PCT_MASK_ALPHA);
                 }
                 else
                 {
                     if (c->Wing.Type == MODEL_WING_OF_RUIN)
                     {
-                        pCloth[0].Create(o, 19, 0.0f, 15.0f, 0.0f, 10, 10, 120.0f, 120.0f, BITMAP_ROBE + 8, BITMAP_ROBE + 8, PCT_CURVED | PCT_SHORT_SHOULDER | PCT_HEAVY | PCT_MASK_ALPHA);
+                        pCloth[0].Create(o, 19, 0.0f, 15.0f, 0.0f, 10, 10, 120.0f, 120.0f, BITMAP_ROBE + 8,
+                                         BITMAP_ROBE + 8, PCT_CURVED | PCT_SHORT_SHOULDER | PCT_HEAVY | PCT_MASK_ALPHA);
                     }
                     else
                     {
-                        pCloth[0].Create(o, 19, 0.0f, 10.0f, 0.0f, 10, 10, /*45.0f*/75.0f, 120.0f, BITMAP_ROBE, BITMAP_ROBE + 1, PCT_CURVED | PCT_SHORT_SHOULDER | PCT_HEAVY);
+                        pCloth[0].Create(o, 19, 0.0f, 10.0f, 0.0f, 10, 10, /*45.0f*/ 75.0f, 120.0f, BITMAP_ROBE,
+                                         BITMAP_ROBE + 1, PCT_CURVED | PCT_SHORT_SHOULDER | PCT_HEAVY);
                     }
                 }
                 o->m_pCloth = (void*)pCloth;
@@ -9642,9 +9902,9 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
         }
         else if (gCharacterManager.GetBaseClass(c->Class) == CLASS_DARK_LORD)
         {
-            if ((c->BodyPart[BODYPART_ARMOR].Type != MODEL_BODY_ARMOR + SKIN_CLASS_DARK_LORD
-                && c->BodyPart[BODYPART_ARMOR].Type != MODEL_BODY_ARMOR + SKIN_CLASS_LORDEMPEROR
-                ) && o->m_byNumCloth == 4)
+            if ((c->BodyPart[BODYPART_ARMOR].Type != MODEL_BODY_ARMOR + SKIN_CLASS_DARK_LORD &&
+                 c->BodyPart[BODYPART_ARMOR].Type != MODEL_BODY_ARMOR + SKIN_CLASS_LORDEMPEROR) &&
+                o->m_byNumCloth == 4)
             {
                 if (o && o->m_pCloth)
                 {
@@ -9660,23 +9920,29 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
                 {
                     auto* pCloth = (CPhysicsCloth*)o->m_pCloth;
 
-                    pCloth[3].Create(o, 18, 0.0f, 8.0f, -5.0f, 5, 5, 50.0f, 90.0f, BITMAP_DARK_LOAD_SKIRT, BITMAP_DARK_LOAD_SKIRT, PCT_MASK_ALPHA | PCT_HEAVY | PCT_STICKED | PCT_CURVED | PCT_SHORT_SHOULDER);
+                    pCloth[3].Create(o, 18, 0.0f, 8.0f, -5.0f, 5, 5, 50.0f, 90.0f, BITMAP_DARK_LOAD_SKIRT,
+                                     BITMAP_DARK_LOAD_SKIRT,
+                                     PCT_MASK_ALPHA | PCT_HEAVY | PCT_STICKED | PCT_CURVED | PCT_SHORT_SHOULDER);
                     pCloth[3].AddCollisionSphere(0.0f, -15.0f, -20.0f, 30.0f, 2);
                     o->m_byNumCloth = 4;
                 }
             }
-            else if (c->BodyPart[BODYPART_ARMOR].Type == MODEL_BODY_ARMOR + SKIN_CLASS_LORDEMPEROR && o->m_byNumCloth == 3)
+            else if (c->BodyPart[BODYPART_ARMOR].Type == MODEL_BODY_ARMOR + SKIN_CLASS_LORDEMPEROR &&
+                     o->m_byNumCloth == 3)
             {
                 if (o && o->m_pCloth)
                 {
                     auto* pCloth = (CPhysicsCloth*)o->m_pCloth;
 
-                    pCloth[3].Create(o, 18, 0.0f, 8.0f, -5.0f, 5, 5, 50.0f, 90.0f, BITMAP_DARKLOAD_SKIRT_3RD, BITMAP_DARKLOAD_SKIRT_3RD, PCT_MASK_ALPHA | PCT_HEAVY | PCT_STICKED | PCT_CURVED | PCT_SHORT_SHOULDER);
+                    pCloth[3].Create(o, 18, 0.0f, 8.0f, -5.0f, 5, 5, 50.0f, 90.0f, BITMAP_DARKLOAD_SKIRT_3RD,
+                                     BITMAP_DARKLOAD_SKIRT_3RD,
+                                     PCT_MASK_ALPHA | PCT_HEAVY | PCT_STICKED | PCT_CURVED | PCT_SHORT_SHOULDER);
                     pCloth[3].AddCollisionSphere(0.0f, -15.0f, -20.0f, 30.0f, 2);
                     o->m_byNumCloth = 4;
                 }
             }
-            else if (c->BodyPart[BODYPART_ARMOR].Type != MODEL_BODY_ARMOR + SKIN_CLASS_DARK_LORD && o->m_byNumCloth == 6)
+            else if (c->BodyPart[BODYPART_ARMOR].Type != MODEL_BODY_ARMOR + SKIN_CLASS_DARK_LORD &&
+                     o->m_byNumCloth == 6)
             {
                 if (o && o->m_pCloth)
                 {
@@ -9685,26 +9951,32 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
                         pCloth[3].Destroy();
                 }
             }
-            else if (c->BodyPart[BODYPART_ARMOR].Type == MODEL_BODY_ARMOR + SKIN_CLASS_DARK_LORD && o->m_byNumCloth == 6)
+            else if (c->BodyPart[BODYPART_ARMOR].Type == MODEL_BODY_ARMOR + SKIN_CLASS_DARK_LORD &&
+                     o->m_byNumCloth == 6)
             {
                 if (o && o->m_pCloth)
                 {
                     auto* pCloth = (CPhysicsCloth*)o->m_pCloth;
                     if (pCloth[3].GetOwner() == NULL)
                     {
-                        pCloth[3].Create(o, 18, 0.0f, 8.0f, -5.0f, 5, 5, 50.0f, 90.0f, BITMAP_DARK_LOAD_SKIRT, BITMAP_DARK_LOAD_SKIRT, PCT_MASK_ALPHA | PCT_HEAVY | PCT_STICKED | PCT_CURVED | PCT_SHORT_SHOULDER);
+                        pCloth[3].Create(o, 18, 0.0f, 8.0f, -5.0f, 5, 5, 50.0f, 90.0f, BITMAP_DARK_LOAD_SKIRT,
+                                         BITMAP_DARK_LOAD_SKIRT,
+                                         PCT_MASK_ALPHA | PCT_HEAVY | PCT_STICKED | PCT_CURVED | PCT_SHORT_SHOULDER);
                         pCloth[3].AddCollisionSphere(0.0f, -15.0f, -20.0f, 30.0f, 2);
                     }
                 }
             }
-            else if (c->BodyPart[BODYPART_ARMOR].Type == MODEL_BODY_ARMOR + SKIN_CLASS_LORDEMPEROR && o->m_byNumCloth == 6)
+            else if (c->BodyPart[BODYPART_ARMOR].Type == MODEL_BODY_ARMOR + SKIN_CLASS_LORDEMPEROR &&
+                     o->m_byNumCloth == 6)
             {
                 if (o && o->m_pCloth)
                 {
                     auto* pCloth = (CPhysicsCloth*)o->m_pCloth;
                     if (pCloth[3].GetOwner() == NULL)
                     {
-                        pCloth[3].Create(o, 18, 0.0f, 8.0f, -5.0f, 5, 5, 50.0f, 90.0f, BITMAP_DARKLOAD_SKIRT_3RD, BITMAP_DARKLOAD_SKIRT_3RD, PCT_MASK_ALPHA | PCT_HEAVY | PCT_STICKED | PCT_CURVED | PCT_SHORT_SHOULDER);
+                        pCloth[3].Create(o, 18, 0.0f, 8.0f, -5.0f, 5, 5, 50.0f, 90.0f, BITMAP_DARKLOAD_SKIRT_3RD,
+                                         BITMAP_DARKLOAD_SKIRT_3RD,
+                                         PCT_MASK_ALPHA | PCT_HEAVY | PCT_STICKED | PCT_CURVED | PCT_SHORT_SHOULDER);
                         pCloth[3].AddCollisionSphere(0.0f, -15.0f, -20.0f, 30.0f, 2);
                     }
                 }
@@ -9718,7 +9990,9 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
             {
                 if (gCharacterManager.GetBaseClass(c->Class) == CLASS_DARK_LORD)
                 {
-                    if (i == 2 && ((c->Wing.Type != MODEL_CAPE_OF_LORD && c->Wing.Type != MODEL_CAPE_OF_EMPEROR && c->Wing.Type != MODEL_WING + 130) && (CloakLight[0] == 1.f && CloakLight[1] == 1.f && CloakLight[2] == 1.f)))
+                    if (i == 2 && ((c->Wing.Type != MODEL_CAPE_OF_LORD && c->Wing.Type != MODEL_CAPE_OF_EMPEROR &&
+                                    c->Wing.Type != MODEL_WING + 130) &&
+                                   (CloakLight[0] == 1.f && CloakLight[1] == 1.f && CloakLight[2] == 1.f)))
                     {
                         continue;
                     }
@@ -9733,10 +10007,9 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
                 }
                 if (gCharacterManager.GetBaseClass(c->Class) == CLASS_RAGEFIGHTER)
                 {
-                    if (i == 0 && ((c->Wing.Type != MODEL_CAPE_OF_FIGHTER
-                        && c->Wing.Type != MODEL_CAPE_OF_OVERRULE
-                        && c->Wing.Type != MODEL_WING + 135)
-                        && (CloakLight[0] == 1.f && CloakLight[1] == 1.f && CloakLight[2] == 1.f)))
+                    if (i == 0 && ((c->Wing.Type != MODEL_CAPE_OF_FIGHTER && c->Wing.Type != MODEL_CAPE_OF_OVERRULE &&
+                                    c->Wing.Type != MODEL_WING + 135) &&
+                                   (CloakLight[0] == 1.f && CloakLight[1] == 1.f && CloakLight[2] == 1.f)))
                     {
                         continue;
                     }
@@ -9746,14 +10019,14 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
                     continue;
                 }
 
-                if (c->Object.SubType == MODEL_CURSEDTEMPLE_ALLIED_PLAYER || c->Object.SubType == MODEL_CURSEDTEMPLE_ILLUSION_PLAYER)
+                if (c->Object.SubType == MODEL_CURSEDTEMPLE_ALLIED_PLAYER ||
+                    c->Object.SubType == MODEL_CURSEDTEMPLE_ILLUSION_PLAYER)
                 {
                     continue;
                 }
 
                 float Flag = 0.005f;
-                if (g_isCharacterBuff(o, eDeBuff_Stun)
-                    || g_isCharacterBuff(o, eDeBuff_Sleep))
+                if (g_isCharacterBuff(o, eDeBuff_Stun) || g_isCharacterBuff(o, eDeBuff_Sleep))
                 {
                     Flag = 0.0f;
                 }
@@ -9762,18 +10035,17 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
                 {
                     continue;
                 }
+                else if (!pCloth[i].Move2(Flag, 5))
+                {
+                    DeleteCloth(c, o);
+                }
                 else
-                    if (!pCloth[i].Move2(Flag, 5))
-                    {
-                        DeleteCloth(c, o);
-                    }
-                    else
-                    {
-                        pCloth[i].Render(&CloakLight);
-                    }
+                {
+                    pCloth[i].Render(&CloakLight);
+                }
             }
         } // if( !g_isCharacterBuff(o, eBuff_Cloaking) )
-    } //if ( bCloak )
+    } // if ( bCloak )
 
     float Luminosity = (float)(rand() % 30 + 70) * 0.01f;
     if (c->PK >= PVP_MURDERER2)
@@ -9785,11 +10057,12 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
         VectorAdd(Light, o->Light, c->Light);
 
         int nCastle = BLOODCASTLE_NUM + (gMapManager.WorldActive - WD_11BLOODCASTLE_END);
-        if (nCastle > 0 && nCastle <= BLOODCASTLE_NUM)		//. 블러드 캐슬일경우
+        if (nCastle > 0 && nCastle <= BLOODCASTLE_NUM) //. 블러드 캐슬일경우
         {
             if ((c->MonsterIndex >= MONSTER_DARK_SKULL_SOLDIER_1 && c->MonsterIndex <= MONSTER_MAGIC_SKELETON_1) ||
                 (c->MonsterIndex >= MONSTER_DARK_SKULL_SOLDIER_2 && c->MonsterIndex <= MONSTER_MAGIC_SKELETON_2) ||
-                (c->MonsterIndex == MONSTER_GIANT_OGRE_3 && c->MonsterIndex == MONSTER_RED_SKELETON_KNIGHT_3 && c->MonsterIndex == MONSTER_MAGIC_SKELETON_3) ||
+                (c->MonsterIndex == MONSTER_GIANT_OGRE_3 && c->MonsterIndex == MONSTER_RED_SKELETON_KNIGHT_3 &&
+                 c->MonsterIndex == MONSTER_MAGIC_SKELETON_3) ||
                 (c->MonsterIndex >= MONSTER_DARK_SKULL_SOLDIER_4 && c->MonsterIndex <= MONSTER_MAGIC_SKELETON_4) ||
                 (c->MonsterIndex >= MONSTER_DARK_SKULL_SOLDIER_5 && c->MonsterIndex <= MONSTER_MAGIC_SKELETON_5) ||
                 (c->MonsterIndex >= MONSTER_DARK_SKULL_SOLDIER_6 && c->MonsterIndex <= MONSTER_MAGIC_SKELETON_6) ||
@@ -9807,8 +10080,10 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
         NextGradeObjectRender(c);
     }
 
-    for (int i = 0; i < 2; i++) {
-        if (g_CMonkSystem.EqualItemModelType(c->Weapon[i].Type) == MODEL_PHOENIX_SOUL_STAR) {
+    for (int i = 0; i < 2; i++)
+    {
+        if (g_CMonkSystem.EqualItemModelType(c->Weapon[i].Type) == MODEL_PHOENIX_SOUL_STAR)
+        {
             g_CMonkSystem.RenderPhoenixGloves(c, i);
         }
     }
@@ -9821,34 +10096,40 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
         if (!g_isCharacterBuff(o, eBuff_Cloaking))
         {
             constexpr float CritDamageEffectInterval = 1200.0f;
-            if (g_isCharacterBuff(o, eBuff_AddCriticalDamage) && o->Kind == KIND_PLAYER && o->Type == MODEL_PLAYER && (c->LastCritDamageEffect < WorldTime - CritDamageEffectInterval))
+            if (g_isCharacterBuff(o, eBuff_AddCriticalDamage) && o->Kind == KIND_PLAYER && o->Type == MODEL_PLAYER &&
+                (c->LastCritDamageEffect < WorldTime - CritDamageEffectInterval))
             {
                 c->LastCritDamageEffect = WorldTime;
-                bool    renderSkillWave = (rand() % 20) ? true : false;
-                short   weaponType = -1;
+                bool renderSkillWave = (rand() % 20) ? true : false;
+                short weaponType = -1;
                 Vector(0.f, 0.f, 0.f, p);
                 Vector(1.f, 0.6f, 0.3f, Light);
-                if (c->Weapon[0].Type != -1 && c->Weapon[0].Type != MODEL_ARROWS)//&& ( c->Weapon[0].Type<MODEL_SHIELD || c->Weapon[0].Type>=MODEL_SHIELD+MAX_ITEM_INDEX ) )
+                if (c->Weapon[0].Type != -1 &&
+                    c->Weapon[0].Type != MODEL_ARROWS) //&& ( c->Weapon[0].Type<MODEL_SHIELD ||
+                                                       // c->Weapon[0].Type>=MODEL_SHIELD+MAX_ITEM_INDEX ) )
                 {
                     b->TransformPosition(o->BoneTransform[c->Weapon[0].LinkBone], p, Position, true);
                     if (c->Weapon[0].Type >= MODEL_BOW && c->Weapon[0].Type < MODEL_BOW + MAX_ITEM_INDEX)
                     {
                         weaponType = 1;
                     }
-                    CreateEffect(BITMAP_FLARE_FORCE, Position, o->Angle, o->Light, 1, o, weaponType, c->Weapon[0].LinkBone);
+                    CreateEffect(BITMAP_FLARE_FORCE, Position, o->Angle, o->Light, 1, o, weaponType,
+                                 c->Weapon[0].LinkBone);
                     if (renderSkillWave == false)
                     {
                         CreateEffect(MODEL_DARKLORD_SKILL, Position, o->Angle, Light, 0);
                     }
                 }
-                if (c->Weapon[1].Type != -1 && c->Weapon[1].Type != MODEL_BOLT && (c->Weapon[1].Type < MODEL_SHIELD || c->Weapon[1].Type >= MODEL_SHIELD + MAX_ITEM_INDEX))
+                if (c->Weapon[1].Type != -1 && c->Weapon[1].Type != MODEL_BOLT &&
+                    (c->Weapon[1].Type < MODEL_SHIELD || c->Weapon[1].Type >= MODEL_SHIELD + MAX_ITEM_INDEX))
                 {
                     b->TransformPosition(o->BoneTransform[c->Weapon[1].LinkBone], p, Position, true);
                     if (c->Weapon[1].Type >= MODEL_BOW && c->Weapon[1].Type < MODEL_BOW + MAX_ITEM_INDEX)
                     {
                         weaponType = 1;
                     }
-                    CreateEffect(BITMAP_FLARE_FORCE, Position, o->Angle, o->Light, 1, o, weaponType, c->Weapon[1].LinkBone);
+                    CreateEffect(BITMAP_FLARE_FORCE, Position, o->Angle, o->Light, 1, o, weaponType,
+                                 c->Weapon[1].LinkBone);
                     if (renderSkillWave == false)
                     {
                         CreateEffect(MODEL_DARKLORD_SKILL, Position, o->Angle, Light, 1);
@@ -9881,7 +10162,8 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
             PART_t* w = &c->Weapon[i];
             if (w->Type != -1 && w->Type != MODEL_BOLT && w->Type != MODEL_ARROWS && w->Type != MODEL_DARK_RAVEN_ITEM)
             {
-                if (o->CurrentAction == PLAYER_ATTACK_BOW || o->CurrentAction == PLAYER_ATTACK_CROSSBOW || o->CurrentAction == PLAYER_ATTACK_FLY_BOW || o->CurrentAction == PLAYER_ATTACK_FLY_CROSSBOW)
+                if (o->CurrentAction == PLAYER_ATTACK_BOW || o->CurrentAction == PLAYER_ATTACK_CROSSBOW ||
+                    o->CurrentAction == PLAYER_ATTACK_FLY_BOW || o->CurrentAction == PLAYER_ATTACK_FLY_CROSSBOW)
                 {
                     if (w->Type == MODEL_STINGER_BOW)
                     {
@@ -9895,7 +10177,8 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
                 }
                 else if (w->Type == MODEL_FLAIL)
                 {
-                    if (o->CurrentAction >= PLAYER_ATTACK_SWORD_RIGHT1 && o->CurrentAction <= PLAYER_ATTACK_SWORD_RIGHT2)
+                    if (o->CurrentAction >= PLAYER_ATTACK_SWORD_RIGHT1 &&
+                        o->CurrentAction <= PLAYER_ATTACK_SWORD_RIGHT2)
                     {
                         w->CurrentAction = 2;
                         w->PlaySpeed = Models[MODEL_PLAYER].Actions[PLAYER_ATTACK_SWORD_RIGHT1].PlaySpeed;
@@ -9916,8 +10199,10 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
                     w->CurrentAction = 0;
                     w->PlaySpeed = Models[MODEL_PLAYER].Actions[PLAYER_STOP_MALE].PlaySpeed * 15.f;
                 }
-                else if (w->Type == MODEL_PHOENIX_SOUL_STAR) {
-                    if (w->AnimationFrame < 2.f) {
+                else if (w->Type == MODEL_PHOENIX_SOUL_STAR)
+                {
+                    if (w->AnimationFrame < 2.f)
+                    {
                         w->CurrentAction = 0;
                         w->PlaySpeed = Models[MODEL_PLAYER].Actions[PLAYER_STOP_RAGEFIGHTER].PlaySpeed * 1.5f;
                         PlayBuffer(SOUND_EMPIREGUARDIAN_DEFENDER_ATTACK02);
@@ -10008,7 +10293,7 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
                         Success = false;
                         Scale = sinf(WorldTime * 0.004f) * 10.f + 20.f;
                         {
-                            vec3_t  pos1, pos2;
+                            vec3_t pos1, pos2;
 
                             Vector(0.f, -20.f, -40.f, Position);
                             Models[o->Type].TransformPosition(o->BoneTransform[w->LinkBone], Position, pos1, true);
@@ -10098,7 +10383,8 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
 
                         for (int j = 0; j < 4; j++)
                         {
-                            Vector((float)(rand() % 20 - 10), (float)(rand() % 20 - 10 - 90.f), (float)(rand() % 20 - 10), Position);
+                            Vector((float)(rand() % 20 - 10), (float)(rand() % 20 - 10 - 90.f),
+                                   (float)(rand() % 20 - 10), Position);
                             Models[o->Type].TransformPosition(o->BoneTransform[w->LinkBone], Position, p, true);
                             if (rand_fps_check(1))
                             {
@@ -10190,7 +10476,7 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
                             CreateParticle(BITMAP_SPARK + 1, p, o->Angle, Light, 20, 1.0f);
                         Vector(1.0f, 0.0f, 0.0f, Light);
                         RenderBrightEffect(b, BITMAP_LIGHT, 2, 3.0f, Light, o);
-#endif	// ASG_ADD_ETERNALWING_STICK_EFFECT
+#endif // ASG_ADD_ETERNALWING_STICK_EFFECT
                         break;
                     case MODEL_SAINT_CROSSBOW:
                         Success = false;
@@ -10267,10 +10553,14 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
         }
     }
 
-    else {
-        for (int i = 0; i < 2; i++) {
-            if (c->Weapon[i].Type == MODEL_PHOENIX_SOUL_STAR) {
-                if (c->Weapon[i].AnimationFrame != 0.f);
+    else
+    {
+        for (int i = 0; i < 2; i++)
+        {
+            if (c->Weapon[i].Type == MODEL_PHOENIX_SOUL_STAR)
+            {
+                if (c->Weapon[i].AnimationFrame != 0.f)
+                    ;
                 PlayBuffer(SOUND_EMPIREGUARDIAN_DEFENDER_ATTACK02);
                 c->Weapon[i].CurrentAction = 0;
                 c->Weapon[i].AnimationFrame = 0;
@@ -10287,20 +10577,23 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
 
         if (c->Class == CLASS_SOULMASTER)
         {
-            if( !g_isCharacterBuff(o, eBuff_Cloaking) )
-   {
-      Vector(-4.f,11.f,0.f,p);
-      Vector(1.f,1.f,1.f,Light);
-          b->TransformPosition(o->BoneTransform[19],p,Position,true);
-      //CreateSprite(BITMAP_SPARK+1,Position,0.6f,Light,NULL); //Effect Point Armor SM
+            if (!g_isCharacterBuff(o, eBuff_Cloaking))
+            {
+                Vector(-4.f, 11.f, 0.f, p);
+                Vector(1.f, 1.f, 1.f, Light);
+                b->TransformPosition(o->BoneTransform[19], p, Position, true);
+                // CreateSprite(BITMAP_SPARK+1,Position,0.6f,Light,NULL); //Effect Point Armor SM
 
-      float scale = sinf(WorldTime*0.001f)*0.4f;
-      //CreateSprite(BITMAP_SHINY+1,Position,scale,Light,NULL); //Effect Point Armor SM
+                float scale = sinf(WorldTime * 0.001f) * 0.4f;
+                // CreateSprite(BITMAP_SHINY+1,Position,scale,Light,NULL); //Effect Point Armor SM
+            }
         }
-     }
-        if (o->CurrentAction == PLAYER_SKILL_FLASH || o->CurrentAction == PLAYER_ATTACK_RIDE_ATTACK_FLASH || o->CurrentAction == PLAYER_FENRIR_ATTACK_DARKLORD_FLASH)
+        if (o->CurrentAction == PLAYER_SKILL_FLASH || o->CurrentAction == PLAYER_ATTACK_RIDE_ATTACK_FLASH ||
+            o->CurrentAction == PLAYER_FENRIR_ATTACK_DARKLORD_FLASH)
         {
-            if (gCharacterManager.GetBaseClass(c->Class) == CLASS_DARK_LORD || o->CurrentAction == PLAYER_ATTACK_RIDE_ATTACK_FLASH || o->CurrentAction == PLAYER_FENRIR_ATTACK_DARKLORD_FLASH)
+            if (gCharacterManager.GetBaseClass(c->Class) == CLASS_DARK_LORD ||
+                o->CurrentAction == PLAYER_ATTACK_RIDE_ATTACK_FLASH ||
+                o->CurrentAction == PLAYER_FENRIR_ATTACK_DARKLORD_FLASH)
             {
                 if (o->AnimationFrame >= 1.2f && o->AnimationFrame < 1.6f)
                 {
@@ -10321,7 +10614,8 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
                         for (int i = 0; i < PartyNumber; ++i)
                         {
                             PARTY_t* p = &Party[i];
-                            if (p->index < 0) continue;
+                            if (p->index < 0)
+                                continue;
 
                             CHARACTER* tc = &CharactersClient[p->index];
                             if (tc != c)
@@ -10362,11 +10656,9 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
                 }
             }
         }
-        else if (o->CurrentAction == PLAYER_SKILL_LIGHTNING_ORB
-            || o->CurrentAction == PLAYER_SKILL_LIGHTNING_ORB_UNI
-            || o->CurrentAction == PLAYER_SKILL_LIGHTNING_ORB_DINO
-            || o->CurrentAction == PLAYER_SKILL_LIGHTNING_ORB_FENRIR
-            )
+        else if (o->CurrentAction == PLAYER_SKILL_LIGHTNING_ORB || o->CurrentAction == PLAYER_SKILL_LIGHTNING_ORB_UNI ||
+                 o->CurrentAction == PLAYER_SKILL_LIGHTNING_ORB_DINO ||
+                 o->CurrentAction == PLAYER_SKILL_LIGHTNING_ORB_FENRIR)
         {
             vec3_t vLight, vRelativePos, vWorldPos;
             Vector(1.0f, 1.0f, 1.0f, vLight);
@@ -10387,14 +10679,12 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
             Vector(1.0f, 1.0f, 1.0f, vLight);
             Vector(0.f, 0.f, 0.f, vRelativePos);
             Vector(0.f, 0.f, 0.f, vWorldPos);
-            b->TransformPosition(o->BoneTransform[37], vRelativePos, vWorldPos, true);	// "Bip01 L Hand"
+            b->TransformPosition(o->BoneTransform[37], vRelativePos, vWorldPos, true); // "Bip01 L Hand"
 
             float fRot = (WorldTime * 0.0006f) * 360.0f;
 
             // shiny
-            if (iSkillType == AT_SKILL_ALICE_SLEEP
-                || iSkillType == AT_SKILL_ALICE_SLEEP_STR
-                )
+            if (iSkillType == AT_SKILL_ALICE_SLEEP || iSkillType == AT_SKILL_ALICE_SLEEP_STR)
             {
                 Vector(0.5f, 0.2f, 0.8f, vLight);
             }
@@ -10419,14 +10709,10 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
                 Vector(0.25f, 1.0f, 0.7f, Light);
             }
 
-            if (iSkillType == AT_SKILL_ALICE_SLEEP
-                || iSkillType == AT_SKILL_ALICE_SLEEP_STR
-                || iSkillType == AT_SKILL_ALICE_THORNS
-                || iSkillType == AT_SKILL_ALICE_BERSERKER
-                || iSkillType == AT_SKILL_ALICE_BERSERKER_STR
-                || iSkillType == AT_SKILL_ALICE_WEAKNESS
-                || iSkillType == AT_SKILL_ALICE_ENERVATION
-                )
+            if (iSkillType == AT_SKILL_ALICE_SLEEP || iSkillType == AT_SKILL_ALICE_SLEEP_STR ||
+                iSkillType == AT_SKILL_ALICE_THORNS || iSkillType == AT_SKILL_ALICE_BERSERKER ||
+                iSkillType == AT_SKILL_ALICE_BERSERKER_STR || iSkillType == AT_SKILL_ALICE_WEAKNESS ||
+                iSkillType == AT_SKILL_ALICE_ENERVATION)
             {
                 CreateSprite(BITMAP_SHINY + 5, vWorldPos, 1.0f, vLight, o, fRot);
                 CreateSprite(BITMAP_SHINY + 5, vWorldPos, 0.7f, vLight, o, -fRot);
@@ -10438,9 +10724,7 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
             }
 
             // pin_light
-            if (iSkillType == AT_SKILL_ALICE_SLEEP
-                || iSkillType == AT_SKILL_ALICE_SLEEP_STR
-                )
+            if (iSkillType == AT_SKILL_ALICE_SLEEP || iSkillType == AT_SKILL_ALICE_SLEEP_STR)
             {
                 Vector(0.7f, 0.0f, 0.8f, vLight);
             }
@@ -10465,14 +10749,10 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
                 Vector(0.25f, 1.f, 0.7f, vLight);
             }
 
-            if (iSkillType == AT_SKILL_ALICE_SLEEP
-                || iSkillType == AT_SKILL_ALICE_SLEEP_STR
-                || iSkillType == AT_SKILL_ALICE_THORNS
-                || iSkillType == AT_SKILL_ALICE_BERSERKER
-                || iSkillType == AT_SKILL_ALICE_BERSERKER_STR
-                || iSkillType == AT_SKILL_ALICE_WEAKNESS
-                || iSkillType == AT_SKILL_ALICE_ENERVATION
-                )
+            if (iSkillType == AT_SKILL_ALICE_SLEEP || iSkillType == AT_SKILL_ALICE_SLEEP_STR ||
+                iSkillType == AT_SKILL_ALICE_THORNS || iSkillType == AT_SKILL_ALICE_BERSERKER ||
+                iSkillType == AT_SKILL_ALICE_BERSERKER_STR || iSkillType == AT_SKILL_ALICE_WEAKNESS ||
+                iSkillType == AT_SKILL_ALICE_ENERVATION)
             {
                 CreateSprite(BITMAP_PIN_LIGHT, vWorldPos, 1.7f, vLight, o, (float)(rand() % 360));
                 CreateSprite(BITMAP_PIN_LIGHT, vWorldPos, 1.5f, vLight, o, (float)(rand() % 360));
@@ -10484,9 +10764,7 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
             }
 
             // cra04, clud64
-            if (iSkillType == AT_SKILL_ALICE_SLEEP
-                || iSkillType == AT_SKILL_ALICE_SLEEP_STR
-                )
+            if (iSkillType == AT_SKILL_ALICE_SLEEP || iSkillType == AT_SKILL_ALICE_SLEEP_STR)
             {
                 Vector(0.6f, 0.1f, 0.8f, vLight);
             }
@@ -10512,14 +10790,10 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
             }
             if (rand_fps_check(1))
             {
-                if (iSkillType == AT_SKILL_ALICE_SLEEP
-                    || iSkillType == AT_SKILL_ALICE_SLEEP_STR
-                    || iSkillType == AT_SKILL_ALICE_THORNS
-                    || iSkillType == AT_SKILL_ALICE_BERSERKER
-                    || iSkillType == AT_SKILL_ALICE_BERSERKER_STR
-                    || iSkillType == AT_SKILL_ALICE_WEAKNESS
-                    || iSkillType == AT_SKILL_ALICE_ENERVATION
-                    )
+                if (iSkillType == AT_SKILL_ALICE_SLEEP || iSkillType == AT_SKILL_ALICE_SLEEP_STR ||
+                    iSkillType == AT_SKILL_ALICE_THORNS || iSkillType == AT_SKILL_ALICE_BERSERKER ||
+                    iSkillType == AT_SKILL_ALICE_BERSERKER_STR || iSkillType == AT_SKILL_ALICE_WEAKNESS ||
+                    iSkillType == AT_SKILL_ALICE_ENERVATION)
                 {
                     CreateParticle(BITMAP_LIGHT + 2, vWorldPos, o->Angle, vLight, 0, 1.0f);
                     CreateParticle(BITMAP_CLUD64, vWorldPos, o->Angle, vLight, 3, 0.5f);
@@ -10538,7 +10812,7 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
             Vector(0.f, 0.f, 0.f, vRelativePos);
             Vector(0.4f, 0.4f, 0.8f, vLight);
 
-            b->TransformPosition(o->BoneTransform[37], vRelativePos, vWorldPos, true);	// "Bip01 L Hand"
+            b->TransformPosition(o->BoneTransform[37], vRelativePos, vWorldPos, true); // "Bip01 L Hand"
 
             if (rand_fps_check(1))
             {
@@ -10548,7 +10822,7 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
 
             CreateSprite(BITMAP_LIGHT, vWorldPos, 1.5f, vLight, o, 0.f);
 
-            b->TransformPosition(o->BoneTransform[28], vRelativePos, vWorldPos, true);	// "Bip01 R Hand"
+            b->TransformPosition(o->BoneTransform[28], vRelativePos, vWorldPos, true); // "Bip01 R Hand"
             if (rand_fps_check(1))
             {
                 CreateEffect(MODEL_FENRIR_THUNDER, vWorldPos, o->Angle, vLight, 2, o);
@@ -10573,12 +10847,12 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
                     b->TransformPosition(o->BoneTransform[c->Weapon[i].LinkBone - 7], p, Position, true);
                     CreateSprite(BITMAP_SHINY + 1, Position, 1.5f, Light, o);
                 }
-                if (!SearchJoint(MODEL_SPEARSKILL, o, 4)
-                    && !SearchJoint(MODEL_SPEARSKILL, o, 9))
+                if (!SearchJoint(MODEL_SPEARSKILL, o, 4) && !SearchJoint(MODEL_SPEARSKILL, o, 9))
                 {
                     for (int i = 0; i < 5; i++)
                     {
-                        CreateJoint(MODEL_SPEARSKILL, o->Position, o->Position, o->Angle, 4, o, 20.0f, -1, 0, 0, c->TargetCharacter);
+                        CreateJoint(MODEL_SPEARSKILL, o->Position, o->Position, o->Angle, 4, o, 20.0f, -1, 0, 0,
+                                    c->TargetCharacter);
                     }
                 }
             }
@@ -10591,22 +10865,19 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
                 {
                     for (int i = 0; i < 5; ++i)
                     {
-                        CreateJoint(MODEL_SPEARSKILL, o->Position, o->Position, o->Angle, 4, o, 20.0f, -1, 0, 0, c->TargetCharacter);
+                        CreateJoint(MODEL_SPEARSKILL, o->Position, o->Position, o->Angle, 4, o, 20.0f, -1, 0, 0,
+                                    c->TargetCharacter);
                     }
                 }
             }
         }
 
-        if (g_isCharacterBuff((&c->Object), eBuff_PcRoomSeal1)
-            || g_isCharacterBuff((&c->Object), eBuff_PcRoomSeal2)
-            || g_isCharacterBuff((&c->Object), eBuff_PcRoomSeal3)
-            || g_isCharacterBuff((&c->Object), eBuff_Seal1)
-            || g_isCharacterBuff((&c->Object), eBuff_Seal2)
-            || g_isCharacterBuff((&c->Object), eBuff_Seal3)
-            || g_isCharacterBuff((&c->Object), eBuff_Seal4))
+        if (g_isCharacterBuff((&c->Object), eBuff_PcRoomSeal1) || g_isCharacterBuff((&c->Object), eBuff_PcRoomSeal2) ||
+            g_isCharacterBuff((&c->Object), eBuff_PcRoomSeal3) || g_isCharacterBuff((&c->Object), eBuff_Seal1) ||
+            g_isCharacterBuff((&c->Object), eBuff_Seal2) || g_isCharacterBuff((&c->Object), eBuff_Seal3) ||
+            g_isCharacterBuff((&c->Object), eBuff_Seal4))
         {
-            if (SearchJoint(MODEL_SPEARSKILL, o, 10) == false
-                && SearchJoint(MODEL_SPEARSKILL, o, 11) == false)
+            if (SearchJoint(MODEL_SPEARSKILL, o, 10) == false && SearchJoint(MODEL_SPEARSKILL, o, 11) == false)
             {
                 for (int i = 0; i < 3; ++i)
                 {
@@ -10759,11 +11030,9 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
         {
             if (c->ExtendState)
             {
-                if ((o->CurrentAction < PLAYER_WALK_MALE ||
-                    o->CurrentAction == PLAYER_DARKLORD_STAND ||
-                    o->CurrentAction == PLAYER_STOP_RIDE_HORSE ||
-                    o->CurrentAction == PLAYER_STOP_TWO_HAND_SWORD_TWO
-                    ) &&
+                if ((o->CurrentAction < PLAYER_WALK_MALE || o->CurrentAction == PLAYER_DARKLORD_STAND ||
+                     o->CurrentAction == PLAYER_STOP_RIDE_HORSE ||
+                     o->CurrentAction == PLAYER_STOP_TWO_HAND_SWORD_TWO) &&
                     c->ExtendStateTime >= 100)
                 {
                     Vector(0.2f, 0.7f, 0.9f, Light);
@@ -10790,19 +11059,26 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
                         CreateSprite(BITMAP_LIGHT, Position, 1.3f, Light, o);
                     }
                 }
-                if ((c->BodyPart[BODYPART_BOOTS].Type >= MODEL_DRAGON_KNIGHT_BOOTS && c->BodyPart[BODYPART_BOOTS].Type <= MODEL_SUNLIGHT_BOOTS)
-                    || c->BodyPart[BODYPART_BOOTS].Type == MODEL_AURA_BOOTS)
+                if ((c->BodyPart[BODYPART_BOOTS].Type >= MODEL_DRAGON_KNIGHT_BOOTS &&
+                     c->BodyPart[BODYPART_BOOTS].Type <= MODEL_SUNLIGHT_BOOTS) ||
+                    c->BodyPart[BODYPART_BOOTS].Type == MODEL_AURA_BOOTS)
                 {
                     if (EquipmentLevelSet > 9)
                     {
                         VectorCopy(o->Light, Light);
 
-                        if (c->BodyPart[BODYPART_BOOTS].Type == MODEL_DRAGON_KNIGHT_BOOTS) Vector(0.65f, 0.3f, 0.1f, o->Light);
-                        if (c->BodyPart[BODYPART_BOOTS].Type == MODEL_VENOM_MIST_BOOTS) Vector(0.1f, 0.1f, 0.9f, o->Light);
-                        if (c->BodyPart[BODYPART_BOOTS].Type == MODEL_SYLPHID_RAY_BOOTS) Vector(0.0f, 0.32f, 0.24f, o->Light);
-                        if (c->BodyPart[BODYPART_BOOTS].Type == MODEL_VOLCANO_BOOTS) Vector(0.5f, 0.24f, 0.8f, o->Light);
-                        if (c->BodyPart[BODYPART_BOOTS].Type == MODEL_SUNLIGHT_BOOTS) Vector(0.6f, 0.4f, 0.0f, o->Light);
-                        if (c->BodyPart[BODYPART_BOOTS].Type == MODEL_AURA_BOOTS) Vector(0.6f, 0.3f, 0.4f, o->Light);
+                        if (c->BodyPart[BODYPART_BOOTS].Type == MODEL_DRAGON_KNIGHT_BOOTS)
+                            Vector(0.65f, 0.3f, 0.1f, o->Light);
+                        if (c->BodyPart[BODYPART_BOOTS].Type == MODEL_VENOM_MIST_BOOTS)
+                            Vector(0.1f, 0.1f, 0.9f, o->Light);
+                        if (c->BodyPart[BODYPART_BOOTS].Type == MODEL_SYLPHID_RAY_BOOTS)
+                            Vector(0.0f, 0.32f, 0.24f, o->Light);
+                        if (c->BodyPart[BODYPART_BOOTS].Type == MODEL_VOLCANO_BOOTS)
+                            Vector(0.5f, 0.24f, 0.8f, o->Light);
+                        if (c->BodyPart[BODYPART_BOOTS].Type == MODEL_SUNLIGHT_BOOTS)
+                            Vector(0.6f, 0.4f, 0.0f, o->Light);
+                        if (c->BodyPart[BODYPART_BOOTS].Type == MODEL_AURA_BOOTS)
+                            Vector(0.6f, 0.3f, 0.4f, o->Light);
                         if (EquipmentLevelSet == 10 && rand_fps_check(4))
                         {
                             Vector(0.0f, -18.0f, 50.0f, p);
@@ -10882,7 +11158,8 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
 
                 if (EquipmentLevelSet > 9)
                 {
-                    if (rand_fps_check(20))//(o->CurrentAction<PLAYER_WALK_MALE || o->CurrentAction>PLAYER_RUN_RIDE_WEAPON) && rand_fps_check(6))
+                    if (rand_fps_check(20)) //(o->CurrentAction<PLAYER_WALK_MALE ||
+                                            // o->CurrentAction>PLAYER_RUN_RIDE_WEAPON) && rand_fps_check(6))
                     {
                         VectorCopy(o->Light, Light);
                         Vector(1.f, 1.f, 1.f, o->Light);
@@ -10961,14 +11238,15 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
 
                     if (EquipmentLevelSet == 15 && g_pOption->GetRenderLevel() >= 4 && rand_fps_check(1))
                     {
-                        //left
+                        // left
                         vec3_t vColor;
                         Vector(13.0f, 10.0f, 3.0f, p);
                         b->TransformPosition(o->BoneTransform[20], p, Position, true);
                         VectorCopy(Position, o->EyeLeft);
 
                         Vector(0.09f, 0.09f, 0.8f, vColor);
-                        CreateJoint(BITMAP_JOINT_ENERGY, Position, o->Position, o->Angle, 55, o, 6.0f, -1, 0, 0, -1, vColor);
+                        CreateJoint(BITMAP_JOINT_ENERGY, Position, o->Position, o->Angle, 55, o, 6.0f, -1, 0, 0, -1,
+                                    vColor);
                         auto fRad = (float)sinf((WorldTime) * 0.002f);
                         Vector(0.2f, 0.4f, 0.8f, vColor);
                         CreateSprite(BITMAP_SHINY + 6, Position, 0.5f * fRad, vColor, o);
@@ -10982,7 +11260,8 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
                         VectorCopy(Position, o->EyeRight);
 
                         Vector(0.09f, 0.09f, 0.8f, vColor);
-                        CreateJoint(BITMAP_JOINT_ENERGY, Position, o->Position, o->Angle, 56, o, 6.0f, -1, 0, 0, -1, vColor);
+                        CreateJoint(BITMAP_JOINT_ENERGY, Position, o->Position, o->Angle, 56, o, 6.0f, -1, 0, 0, -1,
+                                    vColor);
 
                         Vector(0.2f, 0.4f, 0.8f, vColor);
                         CreateSprite(BITMAP_SHINY + 6, Position, 0.5f * fRad, vColor, o);
@@ -11081,8 +11360,7 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
         if (rand_fps_check(4))
         {
             Vector(-20.0f, 10.0f, 0.0f, vRelative);
-            b->TransformPosition(
-                o->BoneTransform[3], vRelative, vPos, true);
+            b->TransformPosition(o->BoneTransform[3], vRelative, vPos, true);
 
             vec3_t Angle;
             VectorCopy(o->Angle, Angle);
@@ -11091,8 +11369,7 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
 
             Vector(1.0f, 1.0f, 1.0f, Light);
 
-            CreateParticle(
-                BITMAP_FLAME, vPos, Angle, Light, 10, o->Scale / 2);
+            CreateParticle(BITMAP_FLAME, vPos, Angle, Light, 10, o->Scale / 2);
         }
     }
     break;
@@ -11123,11 +11400,12 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
                         CreateSprite(BITMAP_SHINY + 1, Position, 2.5f, Light, o, 0.f, 1);
                     else
                         CreateSprite(BITMAP_MAGIC + 1, Position, 0.8f, Light, o, 0.f);
-                    if (rand_fps_check(4) && o->CurrentAction >= MONSTER01_ATTACK1 && o->CurrentAction <= MONSTER01_ATTACK2)
+                    if (rand_fps_check(4) && o->CurrentAction >= MONSTER01_ATTACK1 &&
+                        o->CurrentAction <= MONSTER01_ATTACK2)
                     {
                         CreateParticle(BITMAP_ENERGY, Position, o->Angle, Light);
                     }
-                    //CreateParticle(BITMAP_SMOKE,Position,o->Angle,Light,1);
+                    // CreateParticle(BITMAP_SMOKE,Position,o->Angle,Light,1);
                 }
             }
         }
@@ -11159,29 +11437,41 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
     break;
     default:
     {
-        if (RenderHellasMonsterVisual(c, o, b)) break;
-        if (battleCastle::RenderBattleCastleMonsterVisual(c, o, b)) break;
-        if (M31HuntingGround::RenderHuntingGroundMonsterVisual(c, o, b)) break;
-        if (M34CryingWolf2nd::RenderCryingWolf2ndMonsterVisual(c, o, b)) break;
-        if (M34CryWolf1st::RenderCryWolf1stMonsterVisual(c, o, b)) break;
-        if (M33Aida::RenderAidaMonsterVisual(c, o, b)) break;
-        if (M37Kanturu1st::RenderKanturu1stMonsterVisual(c, o, b)) break;
-        if (M38Kanturu2nd::Render_Kanturu2nd_MonsterVisual(c, o, b)) break;
-        if (M39Kanturu3rd::RenderKanturu3rdMonsterVisual(c, o, b)) break;
-        if (SEASON3A::CGM3rdChangeUp::Instance().RenderBalgasBarrackMonsterVisual(c, o, b))	break;
-        if (g_CursedTemple->RenderMonsterVisual(c, o, b)) break;
-        if (SEASON3B::GMNewTown::RenderMonsterVisual(c, o, b)) break;
-        if (SEASON3C::GMSwampOfQuiet::RenderMonsterVisual(c, o, b)) break;
-        if (TheMapProcess().RenderMonsterVisual(c, o, b) == true) break;
+        if (RenderHellasMonsterVisual(c, o, b))
+            break;
+        if (battleCastle::RenderBattleCastleMonsterVisual(c, o, b))
+            break;
+        if (M31HuntingGround::RenderHuntingGroundMonsterVisual(c, o, b))
+            break;
+        if (M34CryingWolf2nd::RenderCryingWolf2ndMonsterVisual(c, o, b))
+            break;
+        if (M34CryWolf1st::RenderCryWolf1stMonsterVisual(c, o, b))
+            break;
+        if (M33Aida::RenderAidaMonsterVisual(c, o, b))
+            break;
+        if (M37Kanturu1st::RenderKanturu1stMonsterVisual(c, o, b))
+            break;
+        if (M38Kanturu2nd::Render_Kanturu2nd_MonsterVisual(c, o, b))
+            break;
+        if (M39Kanturu3rd::RenderKanturu3rdMonsterVisual(c, o, b))
+            break;
+        if (SEASON3A::CGM3rdChangeUp::Instance().RenderBalgasBarrackMonsterVisual(c, o, b))
+            break;
+        if (g_CursedTemple->RenderMonsterVisual(c, o, b))
+            break;
+        if (SEASON3B::GMNewTown::RenderMonsterVisual(c, o, b))
+            break;
+        if (SEASON3C::GMSwampOfQuiet::RenderMonsterVisual(c, o, b))
+            break;
+        if (TheMapProcess().RenderMonsterVisual(c, o, b) == true)
+            break;
     }
     }
 
     if (SceneFlag == MAIN_SCENE)
     {
-        if ((o->Kind == KIND_PLAYER
-            && gMapManager.InBloodCastle() == false
-            && gMapManager.InChaosCastle() == false
-            && gMapManager.InBattleCastle()) == false)
+        if ((o->Kind == KIND_PLAYER && gMapManager.InBloodCastle() == false && gMapManager.InChaosCastle() == false &&
+             gMapManager.InBattleCastle()) == false)
         {
             RenderProtectGuildMark(c);
         }
@@ -11214,36 +11504,33 @@ void RenderCharactersClient()
                     continue;
                 }
             }
-            else
-                if ((Hero->EtcPart == PARTS_ATTACK_KING_TEAM_MARK2 || Hero->EtcPart == PARTS_ATTACK_TEAM_MARK2))
+            else if ((Hero->EtcPart == PARTS_ATTACK_KING_TEAM_MARK2 || Hero->EtcPart == PARTS_ATTACK_TEAM_MARK2))
+            {
+                if (!(c->EtcPart == PARTS_ATTACK_KING_TEAM_MARK2 || c->EtcPart == PARTS_ATTACK_TEAM_MARK2))
                 {
-                    if (!(c->EtcPart == PARTS_ATTACK_KING_TEAM_MARK2 || c->EtcPart == PARTS_ATTACK_TEAM_MARK2))
-                    {
-                        if (Hero->TargetCharacter == c->Key)
-                            Hero->TargetCharacter = -1;
-                        continue;
-                    }
+                    if (Hero->TargetCharacter == c->Key)
+                        Hero->TargetCharacter = -1;
+                    continue;
                 }
-                else
-                    if ((Hero->EtcPart == PARTS_ATTACK_KING_TEAM_MARK3 || Hero->EtcPart == PARTS_ATTACK_TEAM_MARK3))
-                    {
-                        if (!(c->EtcPart == PARTS_ATTACK_KING_TEAM_MARK3 || c->EtcPart == PARTS_ATTACK_TEAM_MARK3))
-                        {
-                            if (Hero->TargetCharacter == c->Key)
-                                Hero->TargetCharacter = -1;
-                            continue;
-                        }
-                    }
-                    else
-                        if (Hero->EtcPart == PARTS_DEFENSE_KING_TEAM_MARK || Hero->EtcPart == PARTS_DEFENSE_TEAM_MARK)
-                        {
-                            if (!(c->EtcPart == PARTS_DEFENSE_KING_TEAM_MARK || c->EtcPart == PARTS_DEFENSE_TEAM_MARK))
-                            {
-                                if (Hero->TargetCharacter == c->Key)
-                                    Hero->TargetCharacter = -1;
-                                continue;
-                            }
-                        }
+            }
+            else if ((Hero->EtcPart == PARTS_ATTACK_KING_TEAM_MARK3 || Hero->EtcPart == PARTS_ATTACK_TEAM_MARK3))
+            {
+                if (!(c->EtcPart == PARTS_ATTACK_KING_TEAM_MARK3 || c->EtcPart == PARTS_ATTACK_TEAM_MARK3))
+                {
+                    if (Hero->TargetCharacter == c->Key)
+                        Hero->TargetCharacter = -1;
+                    continue;
+                }
+            }
+            else if (Hero->EtcPart == PARTS_DEFENSE_KING_TEAM_MARK || Hero->EtcPart == PARTS_DEFENSE_TEAM_MARK)
+            {
+                if (!(c->EtcPart == PARTS_DEFENSE_KING_TEAM_MARK || c->EtcPart == PARTS_DEFENSE_TEAM_MARK))
+                {
+                    if (Hero->TargetCharacter == c->Key)
+                        Hero->TargetCharacter = -1;
+                    continue;
+                }
+            }
         }
         if (c == Hero && (0x04 & Hero->CtlCode) && SceneFlag == MAIN_SCENE)
         {
@@ -11709,7 +11996,8 @@ void CreateCharacterPointer(CHARACTER* c, int Type, unsigned char PositionX, uns
     c->Level = 0;
     c->Item = -1;
 
-    for (int i = 0; i < 32; ++i) c->OwnerID[i] = 0;
+    for (int i = 0; i < 32; ++i)
+        c->OwnerID[i] = 0;
 
     o->BlendMesh = -1;
     o->BlendMeshLight = 1.f;
@@ -11844,8 +12132,10 @@ void CreateCharacterPointer(CHARACTER* c, int Type, unsigned char PositionX, uns
         c->Weapon[1].LinkBone = 33;
         break;
     default:
-        if (SettingHellasMonsterLinkBone(c, Type)) return;
-        if (battleCastle::SettingBattleCastleMonsterLinkBone(c, Type)) return;
+        if (SettingHellasMonsterLinkBone(c, Type))
+            return;
+        if (battleCastle::SettingBattleCastleMonsterLinkBone(c, Type))
+            return;
         c->Weapon[0].LinkBone = 33;
         c->Weapon[1].LinkBone = 42;
         break;
@@ -11891,12 +12181,9 @@ void SetCharacterScale(CHARACTER* c)
     if (c->Change)
         return;
 
-    if (c->BodyPart[BODYPART_HELM].Type == MODEL_HELM ||
-        c->BodyPart[BODYPART_HELM].Type == MODEL_PAD_HELM ||
-        c->BodyPart[BODYPART_HELM].Type == MODEL_HELM + 63 ||
-        c->BodyPart[BODYPART_HELM].Type == MODEL_HELM + 68 ||
-        c->BodyPart[BODYPART_HELM].Type == MODEL_HELM + 65 ||
-        c->BodyPart[BODYPART_HELM].Type == MODEL_HELM + 70 ||
+    if (c->BodyPart[BODYPART_HELM].Type == MODEL_HELM || c->BodyPart[BODYPART_HELM].Type == MODEL_PAD_HELM ||
+        c->BodyPart[BODYPART_HELM].Type == MODEL_HELM + 63 || c->BodyPart[BODYPART_HELM].Type == MODEL_HELM + 68 ||
+        c->BodyPart[BODYPART_HELM].Type == MODEL_HELM + 65 || c->BodyPart[BODYPART_HELM].Type == MODEL_HELM + 70 ||
         (c->BodyPart[BODYPART_HELM].Type >= MODEL_VINE_HELM && c->BodyPart[BODYPART_HELM].Type <= MODEL_SPIRIT_HELM))
     {
         c->BodyPart[BODYPART_HEAD].Type = MODEL_BODY_HELM + c->SkinIndex;
@@ -11910,8 +12197,12 @@ void SetCharacterScale(CHARACTER* c)
     {
         switch (gCharacterManager.GetBaseClass(c->Class))
         {
-        case CLASS_RAGEFIGHTER:	c->Object.Scale = 1.35f; break;
-        default: c->Object.Scale = 1.2f; break;
+        case CLASS_RAGEFIGHTER:
+            c->Object.Scale = 1.35f;
+            break;
+        default:
+            c->Object.Scale = 1.2f;
+            break;
         }
     }
     else
@@ -11920,26 +12211,54 @@ void SetCharacterScale(CHARACTER* c)
         {
             switch (gCharacterManager.GetBaseClass(c->Class))
             {
-            case CLASS_WIZARD:    c->Object.Scale = 0.9f; break;
-            case CLASS_KNIGHT:    c->Object.Scale = 0.9f; break;
-            case CLASS_ELF:    c->Object.Scale = 0.88f; break;
-            case CLASS_DARK:    c->Object.Scale = 0.95f; break;
-            case CLASS_DARK_LORD: c->Object.Scale = 0.92f; break;
-            case CLASS_SUMMONER:	c->Object.Scale = 0.90f; break;
-            case CLASS_RAGEFIGHTER:	c->Object.Scale = 1.03f; break;
+            case CLASS_WIZARD:
+                c->Object.Scale = 0.9f;
+                break;
+            case CLASS_KNIGHT:
+                c->Object.Scale = 0.9f;
+                break;
+            case CLASS_ELF:
+                c->Object.Scale = 0.88f;
+                break;
+            case CLASS_DARK:
+                c->Object.Scale = 0.95f;
+                break;
+            case CLASS_DARK_LORD:
+                c->Object.Scale = 0.92f;
+                break;
+            case CLASS_SUMMONER:
+                c->Object.Scale = 0.90f;
+                break;
+            case CLASS_RAGEFIGHTER:
+                c->Object.Scale = 1.03f;
+                break;
             }
         }
         else
         {
             switch (gCharacterManager.GetBaseClass(c->Class))
             {
-            case CLASS_WIZARD:    c->Object.Scale = 0.93f; break;
-            case CLASS_KNIGHT:    c->Object.Scale = 0.93f; break;
-            case CLASS_ELF:    c->Object.Scale = 0.86f; break;
-            case CLASS_DARK:    c->Object.Scale = 0.95f; break;
-            case CLASS_DARK_LORD: c->Object.Scale = 0.92f; break;
-            case CLASS_SUMMONER:	c->Object.Scale = 0.90f; break;
-            case CLASS_RAGEFIGHTER:	c->Object.Scale = 1.03f; break;
+            case CLASS_WIZARD:
+                c->Object.Scale = 0.93f;
+                break;
+            case CLASS_KNIGHT:
+                c->Object.Scale = 0.93f;
+                break;
+            case CLASS_ELF:
+                c->Object.Scale = 0.86f;
+                break;
+            case CLASS_DARK:
+                c->Object.Scale = 0.95f;
+                break;
+            case CLASS_DARK_LORD:
+                c->Object.Scale = 0.92f;
+                break;
+            case CLASS_SUMMONER:
+                c->Object.Scale = 0.90f;
+                break;
+            case CLASS_RAGEFIGHTER:
+                c->Object.Scale = 1.03f;
+                break;
             }
         }
     }
@@ -12163,11 +12482,11 @@ DWORD GetGuildRelationShipTextColor(BYTE GuildRelationShip)
     DWORD dwColor = 0;
 
     if (GuildRelationShip == GR_NONE)
-        dwColor = (255 << 24) + (255 << 16) + (230 << 8) + (230);
+        dwColor = (255u << 24) + (255 << 16) + (230 << 8) + (230);
     else if (GuildRelationShip == GR_RIVAL || GuildRelationShip == GR_RIVALUNION)
-        dwColor = (255 << 24) + (0 << 16) + (30 << 8) + (255);
+        dwColor = (255u << 24) + (0 << 16) + (30 << 8) + (255);
     else
-        dwColor = (255 << 24) + (0 << 16) + (255 << 8) + (200);
+        dwColor = (255u << 24) + (0 << 16) + (255 << 8) + (200);
 
     return dwColor;
 }
@@ -12199,8 +12518,6 @@ CHARACTER* FindCharacterByID(wchar_t* szName)
     return NULL;
 }
 
-
-
 CHARACTER* FindCharacterByKey(int Key)
 {
     for (int i = 0; i < MAX_CHARACTERS_CLIENT; i++)
@@ -12218,14 +12535,30 @@ int LevelConvert(BYTE Level)
 {
     switch (Level)
     {
-    case 0:return 0; break;
-    case 1:return 3; break;
-    case 2:return 5; break;
-    case 3:return 7; break;
-    case 4:return 9; break;
-    case 5:return 11; break;
-    case 6:return 13; break;
-    case 7:return 15; break;
+    case 0:
+        return 0;
+        break;
+    case 1:
+        return 3;
+        break;
+    case 2:
+        return 5;
+        break;
+    case 3:
+        return 7;
+        break;
+    case 4:
+        return 9;
+        break;
+    case 5:
+        return 11;
+        break;
+    case 6:
+        return 13;
+        break;
+    case 7:
+        return 15;
+        break;
     }
     return 0;
 }
@@ -12299,7 +12632,8 @@ void ChangeCharacterExt(int Key, BYTE* Equipment, CHARACTER* pCharacter, OBJECT*
     }
     else
     {
-        if (gCharacterManager.GetBaseClass(c->Class) == CLASS_DARK_LORD && ((MODEL_LEGENDARY_STAFF) - MODEL_SWORD) == ExtType)
+        if (gCharacterManager.GetBaseClass(c->Class) == CLASS_DARK_LORD &&
+            ((MODEL_LEGENDARY_STAFF)-MODEL_SWORD) == ExtType)
         {
             ITEM* pEquipmentItemSlot = &CharacterMachine->Equipment[EQUIPMENT_WEAPON_LEFT];
             PET_INFO* pPetInfo = giPetManager::GetPetInfo(pEquipmentItemSlot);
@@ -12319,8 +12653,8 @@ void ChangeCharacterExt(int Key, BYTE* Equipment, CHARACTER* pCharacter, OBJECT*
 
     Type = (Equipment[4] >> 2) & 3;
 
-    //신규캐릭터 추가로 인한 날개 인덱스 확장 구조변경
-    if (Type == 1)			//1차 날개
+    // 신규캐릭터 추가로 인한 날개 인덱스 확장 구조변경
+    if (Type == 1) // 1차 날개
     {
         Type = Equipment[8] & 0x07;
         switch (Type)
@@ -12333,32 +12667,42 @@ void ChangeCharacterExt(int Key, BYTE* Equipment, CHARACTER* pCharacter, OBJECT*
             break;
         }
     }
-    else if (Type == 2)		//2차 날개
+    else if (Type == 2) // 2차 날개
     {
         Type = Equipment[8] & 0x07;
         switch (Type)
         {
-        case 5:		c->Wing.Type = MODEL_CAPE_OF_LORD; break;
-        case 6:		c->Wing.Type = MODEL_WINGS_OF_DESPAIR; break;
-        case 7:		c->Wing.Type = MODEL_CAPE_OF_FIGHTER; break;
+        case 5:
+            c->Wing.Type = MODEL_CAPE_OF_LORD;
+            break;
+        case 6:
+            c->Wing.Type = MODEL_WINGS_OF_DESPAIR;
+            break;
+        case 7:
+            c->Wing.Type = MODEL_CAPE_OF_FIGHTER;
+            break;
         default:
             c->Wing.Type = MODEL_WINGS_OF_SATAN + Type;
             break;
         }
     }
-    else if (Type == 3)		//3차 날개
+    else if (Type == 3) // 3차 날개
     {
         Type = Equipment[8] & 0x07;
         switch (Type)
         {
-        case 0:				//작은날개
+        case 0: // 작은날개
         {
             Type = (Equipment[16] >> 5);
             c->Wing.Type = MODEL_SEED_SPHERE_EARTH_5 + Type;
         }
         break;
-        case 6:		c->Wing.Type = MODEL_WING_OF_DIMENSION; break;
-        case 7:		c->Wing.Type = MODEL_CAPE_OF_OVERRULE; break;
+        case 6:
+            c->Wing.Type = MODEL_WING_OF_DIMENSION;
+            break;
+        case 7:
+            c->Wing.Type = MODEL_CAPE_OF_OVERRULE;
+            break;
         default:
             c->Wing.Type = MODEL_SCROLL_OF_FIRE_SCREAM + Type;
             break;
@@ -12408,12 +12752,24 @@ void ChangeCharacterExt(int Key, BYTE* Equipment, CHARACTER* pCharacter, OBJECT*
             short _type = 0;
             switch (_temp)
             {
-            case MONSTER_STONE_GOLEM: _type = 64; break;
-            case MONSTER_ORC_ARCHER: _type = 65; break;
-            case MONSTER_GIANT_OGRE_6: _type = 67; break;
-            case MONSTER_GUARDSMAN: _type = 80; break;
-            case MONSTER_SCHRIKER_1: _type = 106; break;
-            case MONSTER_CHIEF_SKELETON_WARRIOR_3: _type = 123; break;
+            case MONSTER_STONE_GOLEM:
+                _type = 64;
+                break;
+            case MONSTER_ORC_ARCHER:
+                _type = 65;
+                break;
+            case MONSTER_GIANT_OGRE_6:
+                _type = 67;
+                break;
+            case MONSTER_GUARDSMAN:
+                _type = 80;
+                break;
+            case MONSTER_SCHRIKER_1:
+                _type = 106;
+                break;
+            case MONSTER_CHIEF_SKELETON_WARRIOR_3:
+                _type = 123;
+                break;
             }
 
             c->Helper.Type = MODEL_HELPER + _type;
@@ -12427,10 +12783,18 @@ void ChangeCharacterExt(int Key, BYTE* Equipment, CHARACTER* pCharacter, OBJECT*
             BOOL bCreateHelper = TRUE;
             switch (Type)
             {
-            case 0:HelperType = MODEL_HELPER; break;
-            case 2:HelperType = MODEL_UNICON; break;
-            case 3:HelperType = MODEL_PEGASUS; break;
-            default:bCreateHelper = FALSE; break;
+            case 0:
+                HelperType = MODEL_HELPER;
+                break;
+            case 2:
+                HelperType = MODEL_UNICON;
+                break;
+            case 3:
+                HelperType = MODEL_PEGASUS;
+                break;
+            default:
+                bCreateHelper = FALSE;
+                break;
             }
             if (bCreateHelper == TRUE)
             {
@@ -12530,7 +12894,6 @@ void ChangeCharacterExt(int Key, BYTE* Equipment, CHARACTER* pCharacter, OBJECT*
         c->BodyPart[BODYPART_HELM].Level = LevelConvert((ItemLevels >> 6) & 7);
         c->BodyPart[BODYPART_HELM].ExcellentFlags = (Equipment[9] & 128) / 128;
         c->BodyPart[BODYPART_HELM].AncientDiscriminator = (Equipment[10] & 128) / 128;
-        
     }
 
     ExtType = (Equipment[2] & 15) + ((Equipment[8] >> 6) & 1) * 16 + ((Equipment[13] >> 4) & 15) * 32;
@@ -12661,7 +13024,7 @@ void ReadEquipmentExtended(int Key, BYTE flags, BYTE* Equipment, CHARACTER* pCha
         return;
     }
 
-    short bodyParts[] = { 0, MODEL_BODY_HELM, MODEL_BODY_ARMOR, MODEL_BODY_PANTS, MODEL_BODY_GLOVES, MODEL_BODY_BOOTS};
+    short bodyParts[] = {0, MODEL_BODY_HELM, MODEL_BODY_ARMOR, MODEL_BODY_PANTS, MODEL_BODY_GLOVES, MODEL_BODY_BOOTS};
     for (int i = 1; i < MAX_BODYPART; i++)
     {
         c->BodyPart[i].Type = bodyParts[i] + c->SkinIndex;
@@ -12698,7 +13061,7 @@ void ReadEquipmentExtended(int Key, BYTE flags, BYTE* Equipment, CHARACTER* pCha
     {
         c->Wing.Type = -1;
         c->Wing.Level = 0;
-        
+
         if (Equipment[offset] != 0xFF && Equipment[offset + 1] != 0xFF)
         {
             short number = Equipment[offset + 1] + ((Equipment[offset] & 0xF) << 4);
@@ -12726,7 +13089,7 @@ void ReadEquipmentExtended(int Key, BYTE flags, BYTE* Equipment, CHARACTER* pCha
         if (Equipment[offset] != 0xFF && Equipment[offset + 1] != 0xFF)
         {
             short number = Equipment[offset + 1] + ((Equipment[offset] & 0xF) << 8);
-            short itemNumber = number & (MAX_ITEM_INDEX-1);
+            short itemNumber = number & (MAX_ITEM_INDEX - 1);
             HelperVariant = (Equipment[offset] & 0xE) >> 1;
             BYTE group = (Equipment[offset] & 0xF0) >> 4;
             auto modelOffset = group * MAX_ITEM_INDEX + itemNumber;
@@ -12756,11 +13119,14 @@ void ReadEquipmentExtended(int Key, BYTE flags, BYTE* Equipment, CHARACTER* pCha
         switch (c->Helper.Type)
         {
         case MODEL_GUARDIAN_ANGEL:
-            modelType = MODEL_HELPER; break;
+            modelType = MODEL_HELPER;
+            break;
         case MODEL_HORN_OF_UNIRIA:
-            modelType = MODEL_UNICON; break;
+            modelType = MODEL_UNICON;
+            break;
         case MODEL_HORN_OF_DINORANT:
-            modelType = MODEL_PEGASUS; break;
+            modelType = MODEL_PEGASUS;
+            break;
         }
 
         if (pHelper == NULL)
@@ -12785,11 +13151,17 @@ void ReadEquipmentExtended(int Key, BYTE flags, BYTE* Equipment, CHARACTER* pCha
         break;
     case MODEL_HORN_OF_FENRIR:
         int type = MODEL_FENRIR_RED;
-        switch(HelperVariant)
+        switch (HelperVariant)
         {
-        case 1: type = MODEL_FENRIR_BLACK; break;
-        case 2: type = MODEL_FENRIR_BLUE; break;
-        case 3: type = MODEL_FENRIR_GOLD; break;
+        case 1:
+            type = MODEL_FENRIR_BLACK;
+            break;
+        case 2:
+            type = MODEL_FENRIR_BLUE;
+            break;
+        case 3:
+            type = MODEL_FENRIR_GOLD;
+            break;
         }
         if (pHelper == NULL)
             CreateMount(type, o->Position, o);
@@ -12853,44 +13225,18 @@ void Setting_Monster(CHARACTER* c, EMonsterType Type, int PositionX, int Positio
             o->Kind = KIND_TRAP;
         else
             o->Kind = KIND_MONSTER;
-        //c->Object.Kind = KIND_EDIT;
-        //mu_swprintf(c->ID,"%x",Key);
+        // c->Object.Kind = KIND_EDIT;
+        // mu_swprintf(c->ID,"%x",Key);
         if (Type == 368 || Type == 369 || Type == 370)
             o->Kind = KIND_NPC;
-        if (Type == 367
-            || Type == 371
-            || Type == 375
-            || Type == 376 || Type == 377
-            || Type == 379
-            || Type == 380 || Type == 381 || Type == 382
-            || Type == 383 || Type == 384 || Type == 385
-            || Type == 406
-            || Type == 407
-            || Type == 408
-            || Type == 414
-            || Type == 415 || Type == 416 || Type == 417
-            || Type == 450
-            || Type == 452 || Type == 453
-            || Type == 464
-            || Type == 465
-            || Type == 467
-            || Type == 468 || Type == 469 || Type == 470	//NPC 1~8
-            || Type == 471 || Type == 472 || Type == 473
-            || Type == 474 || Type == 475
-            || Type == 478
-            || Type == 479
-            || Type == 492
-            || Type == 540
-            || Type == 541
-            || Type == 542
-            || Type == 522
-            || Type == 543 || Type == 544
-            || Type == 545
-            || Type == 546
-            || Type == 547
-            || Type == 577 || Type == 578
-            || Type == 579
-            )
+        if (Type == 367 || Type == 371 || Type == 375 || Type == 376 || Type == 377 || Type == 379 || Type == 380 ||
+            Type == 381 || Type == 382 || Type == 383 || Type == 384 || Type == 385 || Type == 406 || Type == 407 ||
+            Type == 408 || Type == 414 || Type == 415 || Type == 416 || Type == 417 || Type == 450 || Type == 452 ||
+            Type == 453 || Type == 464 || Type == 465 || Type == 467 || Type == 468 || Type == 469 ||
+            Type == 470 // NPC 1~8
+            || Type == 471 || Type == 472 || Type == 473 || Type == 474 || Type == 475 || Type == 478 || Type == 479 ||
+            Type == 492 || Type == 540 || Type == 541 || Type == 542 || Type == 522 || Type == 543 || Type == 544 ||
+            Type == 545 || Type == 546 || Type == 547 || Type == 577 || Type == 578 || Type == 579)
         {
             o->Kind = KIND_NPC;
         }
@@ -13025,7 +13371,7 @@ CHARACTER* CreateMonster(EMonsterType Type, int PositionX, int PositionY, int Ke
     switch (Type)
     {
     case MONSTER_GUARDSMAN:
-        LOG_CALL(OpenNpc, MODEL_NPC_CLERK);        //
+        LOG_CALL(OpenNpc, MODEL_NPC_CLERK); //
         c = CreateCharacter(Key, MODEL_NPC_CLERK, PositionX, PositionY);
         c->NotRotateOnMagicHit = true;
         c->Object.Scale = 1.f;
@@ -13039,7 +13385,7 @@ CHARACTER* CreateMonster(EMonsterType Type, int PositionX, int PositionY, int Ke
         LOG_CALL(OpenMonsterModel, MONSTER_MODEL_GOLDEN_TITAN);
         c = CreateCharacter(Key, MODEL_GOLDEN_TITAN, PositionX, PositionY);
         c->Object.Scale = 1.45f;
-        c->Weapon[0].Type = MODEL_DARK_BREAKER;//MODEL_SWORD+15;
+        c->Weapon[0].Type = MODEL_DARK_BREAKER; // MODEL_SWORD+15;
         c->Weapon[0].Level = 5;
         break;
 #endif // ADD_ELF_SUMMON
@@ -13289,7 +13635,7 @@ CHARACTER* CreateMonster(EMonsterType Type, int PositionX, int PositionY, int Ke
         c->Object.Scale = 1.4f;
         c->Weapon[0].Type = MODEL_AQUAGOLD_CROSSBOW;
         c->Weapon[0].ExcellentFlags = 63;
-        //c->Weapon[0].Type = MODEL_BOW+16;
+        // c->Weapon[0].Type = MODEL_BOW+16;
         o = &c->Object;
         CreateJoint(BITMAP_JOINT_ENERGY, o->Position, o->Position, o->Angle, 2, o, 30.f);
         CreateJoint(BITMAP_JOINT_ENERGY, o->Position, o->Position, o->Angle, 3, o, 30.f);
@@ -13337,14 +13683,14 @@ CHARACTER* CreateMonster(EMonsterType Type, int PositionX, int PositionY, int Ke
         }
         c->Object.BlendMesh = 1;
         c->Object.BlendMeshLight = 1.f;
-        //Models[MODEL_MONSTER01+52].StreamMesh = 1;
+        // Models[MODEL_MONSTER01+52].StreamMesh = 1;
         break;
 
     case MONSTER_PHANTOM_KNIGHT:
         LOG_CALL(OpenMonsterModel, MONSTER_MODEL_PHANTOM_KNIGHT);
         c = CreateCharacter(Key, MODEL_PHANTOM_KNIGHT, PositionX, PositionY);
         c->Object.Scale = 1.45f;
-        c->Weapon[0].Type = MODEL_DARK_BREAKER;//MODEL_SWORD+15;
+        c->Weapon[0].Type = MODEL_DARK_BREAKER; // MODEL_SWORD+15;
         c->Weapon[0].Level = 5;
         break;
 
@@ -13491,7 +13837,7 @@ CHARACTER* CreateMonster(EMonsterType Type, int PositionX, int PositionY, int Ke
         c = CreateCharacter(Key, MODEL_GOLDEN_WHEEL, PositionX, PositionY);
         c->Object.Scale = 1.4f;
         c->Weapon[0].Type = MODEL_AQUAGOLD_CROSSBOW;
-        //c->Weapon[0].Type = MODEL_BOW+16;
+        // c->Weapon[0].Type = MODEL_BOW+16;
         o = &c->Object;
         CreateJoint(BITMAP_JOINT_ENERGY, o->Position, o->Position, o->Angle, 2, o, 30.f);
         CreateJoint(BITMAP_JOINT_ENERGY, o->Position, o->Position, o->Angle, 3, o, 30.f);
@@ -13574,9 +13920,9 @@ CHARACTER* CreateMonster(EMonsterType Type, int PositionX, int PositionY, int Ke
         c = CreateCharacter(Key, MODEL_DEATH_COW, PositionX, PositionY);
         wcscpy(c->ID, L"데쓰 카우");
         c->Weapon[0].Type = MODEL_GREAT_HAMMER;
-        //c->Weapon[0].Type = MODEL_SWORD+14;
+        // c->Weapon[0].Type = MODEL_SWORD+14;
         c->Object.Scale = 1.1f;
-        //c->Level = 1;
+        // c->Level = 1;
         break;
     case MONSTER_DEATH_KNIGHT:
         LOG_CALL(OpenMonsterModel, MONSTER_MODEL_DEATH_KNIGHT);
@@ -13584,9 +13930,9 @@ CHARACTER* CreateMonster(EMonsterType Type, int PositionX, int PositionY, int Ke
         wcscpy(c->ID, L"데쓰 나이트");
         c->Weapon[0].Type = MODEL_GIANT_SWORD;
         c->Weapon[0].Type = MODEL_LIGHTING_SWORD;
-        //c->Weapon[1].Type = MODEL_SHIELD+8;
+        // c->Weapon[1].Type = MODEL_SHIELD+8;
         c->Object.Scale = 1.3f;
-        //c->Level = 1;
+        // c->Level = 1;
         break;
     case MONSTER_POISON_SHADOW:
         LOG_CALL(OpenMonsterModel, MONSTER_MODEL_SHADOW);
@@ -13596,7 +13942,7 @@ CHARACTER* CreateMonster(EMonsterType Type, int PositionX, int PositionY, int Ke
         c->Level = 1;
         break;
     case MONSTER_BALROG:
-    case MONSTER_METAL_BALROG:	//발록2
+    case MONSTER_METAL_BALROG: // 발록2
         LOG_CALL(OpenMonsterModel, MONSTER_MODEL_BALROG);
         c = CreateCharacter(Key, MODEL_BALROG, PositionX, PositionY);
         wcscpy(c->ID, L"발록");
@@ -13651,8 +13997,8 @@ CHARACTER* CreateMonster(EMonsterType Type, int PositionX, int PositionY, int Ke
         c->BodyPart[BODYPART_PANTS].Level = Level;
         c->BodyPart[BODYPART_GLOVES].Level = Level;
         c->BodyPart[BODYPART_BOOTS].Level = Level;
-        //c->Weapon[0].Level = Level;
-        //c->Weapon[1].Level = Level;
+        // c->Weapon[0].Level = Level;
+        // c->Weapon[1].Level = Level;
         c->PK = PVP_MURDERER2;
         SetCharacterScale(c);
         if (gMapManager.InDevilSquare() == true)
@@ -13793,8 +14139,8 @@ CHARACTER* CreateMonster(EMonsterType Type, int PositionX, int PositionY, int Ke
         c = CreateCharacter(Key, MODEL_CYCLOPS, PositionX, PositionY);
         wcscpy(c->ID, L"싸이크롭스");
         c->Weapon[0].Type = MODEL_CRESCENT_AXE;
-        //c->Weapon[1].Type = MODEL_MACE+2;
-        //c->Object.HiddenMesh = 2;
+        // c->Weapon[1].Type = MODEL_MACE+2;
+        // c->Object.HiddenMesh = 2;
         break;
     case MONSTER_BULL_FIGHTER:
     case MONSTER_ELITE_BULL_FIGHTER:
@@ -14041,7 +14387,7 @@ CHARACTER* CreateMonster(EMonsterType Type, int PositionX, int PositionY, int Ke
         c = CreateCharacter(Key, MODEL_HERO_SHOP, PositionX, PositionY);
         wcscpy(c->ID, L"영웅상점");
         break;
-#endif	// _PVP_MURDERER_HERO_ITEM
+#endif // _PVP_MURDERER_HERO_ITEM
 
     case MONSTER_MARLON:
         c = CreateCharacter(Key, MODEL_PLAYER, PositionX, PositionY);
@@ -14128,7 +14474,7 @@ CHARACTER* CreateMonster(EMonsterType Type, int PositionX, int PositionY, int Ke
         c = CreateCharacter(Key, MODEL_REFINERY_NPC, PositionX, PositionY);
         o = &c->Object;
         break;
-    case MONSTER_JERRIDON://환원
+    case MONSTER_JERRIDON: // 환원
         LOG_CALL(OpenNpc, MODEL_RECOVERY_NPC);
         c = CreateCharacter(Key, MODEL_RECOVERY_NPC, PositionX, PositionY);
         o = &c->Object;
@@ -14422,10 +14768,10 @@ CHARACTER* CreateMonster(EMonsterType Type, int PositionX, int PositionY, int Ke
         c->Object.SubType = rand() % 3;
         c->Object.m_iAnimation = 0;
 
-        BoneManager::RegisterBone(c, L"Rabbit_1", 3);		// Bip01 Spine
-        BoneManager::RegisterBone(c, L"Rabbit_2", 16);		// Bip01 Head
-        BoneManager::RegisterBone(c, L"Rabbit_3", 15);		// Bip01 Neck1
-        BoneManager::RegisterBone(c, L"Rabbit_4", 2);		// Bip01 Pelvis
+        BoneManager::RegisterBone(c, L"Rabbit_1", 3);  // Bip01 Spine
+        BoneManager::RegisterBone(c, L"Rabbit_2", 16); // Bip01 Head
+        BoneManager::RegisterBone(c, L"Rabbit_3", 15); // Bip01 Neck1
+        BoneManager::RegisterBone(c, L"Rabbit_4", 2);  // Bip01 Pelvis
     }
 
     break;
@@ -14476,13 +14822,13 @@ CHARACTER* CreateMonster(EMonsterType Type, int PositionX, int PositionY, int Ke
         wcscpy(c->ID, L"시드연구가");
         c->Object.Scale = 0.9f;
         c->Object.m_fEdgeScale = 1.15f;
-        //Models[MODEL_SEED_INVESTIGATOR].Actions[0].PlaySpeed = 0.2f;
-        //Models[MODEL_SEED_INVESTIGATOR].Actions[1].PlaySpeed = 0.1f;
+        // Models[MODEL_SEED_INVESTIGATOR].Actions[0].PlaySpeed = 0.2f;
+        // Models[MODEL_SEED_INVESTIGATOR].Actions[1].PlaySpeed = 0.1f;
         break;
     case MONSTER_REINIT_HELPER:
     {
         c = CreateCharacter(Key, MODEL_PLAYER, PositionX, PositionY);
-        //c->Class = 2;
+        // c->Class = 2;
         wcscpy(c->ID, L"초기화 도우미");
 
         c->BodyPart[BODYPART_HELM].Type = MODEL_PLATE_HELM;
@@ -14510,7 +14856,7 @@ CHARACTER* CreateMonster(EMonsterType Type, int PositionX, int PositionY, int Ke
         ::wcscpy(c->ID, L"Unknown");
         c->Object.SubType = MODEL_PANDA;
         break;
-#endif //PJH_ADD_PANDA_CHANGERING
+#endif // PJH_ADD_PANDA_CHANGERING
     case MONSTER_TRANSFORMED_SKELETON:
         c = CreateCharacter(Key, MODEL_PLAYER, PositionX, PositionY);
         ::wcscpy(c->ID, L"Unknown");
@@ -14537,12 +14883,12 @@ CHARACTER* CreateMonster(EMonsterType Type, int PositionX, int PositionY, int Ke
         {
             if (i < 2 || i == 4)
             {
-                //xmassanta_stand_1~2 || xmassanta_idle3
+                // xmassanta_stand_1~2 || xmassanta_idle3
                 Models[_Model_NpcIndex].Actions[i].PlaySpeed = 0.4f;
             }
-            else// if(i >= 2 && i < 4)
+            else // if(i >= 2 && i < 4)
             {
-                //xmassanta_idle1~2
+                // xmassanta_idle1~2
                 Models[_Model_NpcIndex].Actions[i].PlaySpeed = 0.5f;
             }
         }
@@ -14550,7 +14896,7 @@ CHARACTER* CreateMonster(EMonsterType Type, int PositionX, int PositionY, int Ke
     }
     break;
     case MONSTER_DELGADO:
-        //델가도
+        // 델가도
         LOG_CALL(OpenNpc, MODEL_NPC_SERBIS);
         c = CreateCharacter(Key, MODEL_NPC_SERBIS, PositionX, PositionY);
         wcscpy(c->ID, L"Unknown");
@@ -14746,7 +15092,6 @@ CHARACTER* CreateMonster(EMonsterType Type, int PositionX, int PositionY, int Ke
         wcscpy(c->ID, L"무기상인 볼로");
         c->Object.Scale = 0.9f;
         break;
-
     }
 
     Setting_Monster(c, Type, PositionX, PositionY);
@@ -14786,7 +15131,7 @@ CHARACTER* CreateHero(int Index, CLASS_TYPE Class, int Skin, float x, float y, f
         c->Weapon[0].Level = 13;
         c->Wing.Type = MODEL_CAPE_OF_LORD;
         c->Helper.Type = MODEL_DARK_HORSE_ITEM;
-        //c->Helper.Level = 13;
+        // c->Helper.Level = 13;
     }
     else
     {
@@ -14827,10 +15172,14 @@ CHARACTER* CreateHellGate(char* ID, int Key, EMonsterType Index, int x, int y, i
 
     if (CreateFlag)
     {
-        CreateJoint(BITMAP_JOINT_THUNDER + 1, portal->Object.Position, portal->Object.Position, portal->Object.Angle, 1, NULL, 60.f + rand() % 10);
-        CreateJoint(BITMAP_JOINT_THUNDER + 1, portal->Object.Position, portal->Object.Position, portal->Object.Angle, 1, NULL, 50.f + rand() % 10);
-        CreateJoint(BITMAP_JOINT_THUNDER + 1, portal->Object.Position, portal->Object.Position, portal->Object.Angle, 1, NULL, 50.f + rand() % 10);
-        CreateJoint(BITMAP_JOINT_THUNDER + 1, portal->Object.Position, portal->Object.Position, portal->Object.Angle, 1, NULL, 60.f + rand() % 10);
+        CreateJoint(BITMAP_JOINT_THUNDER + 1, portal->Object.Position, portal->Object.Position, portal->Object.Angle, 1,
+                    NULL, 60.f + rand() % 10);
+        CreateJoint(BITMAP_JOINT_THUNDER + 1, portal->Object.Position, portal->Object.Position, portal->Object.Angle, 1,
+                    NULL, 50.f + rand() % 10);
+        CreateJoint(BITMAP_JOINT_THUNDER + 1, portal->Object.Position, portal->Object.Position, portal->Object.Angle, 1,
+                    NULL, 50.f + rand() % 10);
+        CreateJoint(BITMAP_JOINT_THUNDER + 1, portal->Object.Position, portal->Object.Position, portal->Object.Angle, 1,
+                    NULL, 60.f + rand() % 10);
     }
     return portal;
 }
@@ -14842,7 +15191,8 @@ BOOL PlayMonsterSoundGlobal(OBJECT* pObject)
     fDis_y = pObject->Position[1] - Hero->Object.Position[1];
     float fDistance = sqrtf(fDis_x * fDis_x + fDis_y * fDis_y);
 
-    if (fDistance > 500.0f) return true;
+    if (fDistance > 500.0f)
+        return true;
 
     switch (pObject->Type)
     {
@@ -14859,7 +15209,7 @@ BOOL PlayMonsterSoundGlobal(OBJECT* pObject)
         }
         else if (pObject->CurrentAction == MONSTER01_WALK)
         {
-            //if (rand_fps_check(10))
+            // if (rand_fps_check(10))
             {
                 if (rand_fps_check(2))
                     PlayBuffer(SOUND_XMAS_SANTA_WALK_1);
@@ -14947,7 +15297,8 @@ bool IsBackItem(CHARACTER* c, int iType)
         return true;
     }
 
-    if (iType >= MODEL_SWORD && iType < MODEL_SHIELD + MAX_ITEM_INDEX && !(iType >= MODEL_BOOK_OF_SAHAMUTT && iType <= MODEL_STAFF + 29))
+    if (iType >= MODEL_SWORD && iType < MODEL_SHIELD + MAX_ITEM_INDEX &&
+        !(iType >= MODEL_BOOK_OF_SAHAMUTT && iType <= MODEL_STAFF + 29))
     {
         return true;
     }
@@ -14967,7 +15318,9 @@ bool RenderCharacterBackItem(CHARACTER* c, OBJECT* o, bool bTranslate)
     {
         bBindBack = true;
     }
-    if ((gMapManager.WorldActive == WD_7ATLANSE || gMapManager.InHellas() || gMapManager.WorldActive == WD_67DOPPLEGANGER3) && (o->CurrentAction == PLAYER_WALK_SWIM || o->CurrentAction == PLAYER_RUN_SWIM))
+    if ((gMapManager.WorldActive == WD_7ATLANSE || gMapManager.InHellas() ||
+         gMapManager.WorldActive == WD_67DOPPLEGANGER3) &&
+        (o->CurrentAction == PLAYER_WALK_SWIM || o->CurrentAction == PLAYER_RUN_SWIM))
     {
         bBindBack = true;
     }
@@ -14999,7 +15352,8 @@ bool RenderCharacterBackItem(CHARACTER* c, OBJECT* o, bool bTranslate)
             if (iType < 0)
                 continue;
 
-            if (o->Kind == KIND_NPC && gMapManager.WorldActive == WD_0LORENCIA && o->Type == MODEL_PLAYER && (o->SubType >= MODEL_SKELETON1 && o->SubType <= MODEL_SKELETON3))
+            if (o->Kind == KIND_NPC && gMapManager.WorldActive == WD_0LORENCIA && o->Type == MODEL_PLAYER &&
+                (o->SubType >= MODEL_SKELETON1 && o->SubType <= MODEL_SKELETON3))
             {
                 if (i == 0)
                 {
@@ -15075,7 +15429,8 @@ bool RenderCharacterBackItem(CHARACTER* c, OBJECT* o, bool bTranslate)
                     bool bRightHandItem = false;
                     if (i == 0)
                         bRightHandItem = true;
-                    RenderLinkObject(0.f, 0.f, 15.f, c, &t_Part, iType, iLevel, iOption1, true, bTranslate, 0, bRightHandItem);
+                    RenderLinkObject(0.f, 0.f, 15.f, c, &t_Part, iType, iLevel, iOption1, true, bTranslate, 0,
+                                     bRightHandItem);
                 }
 
                 w->AnimationFrame = fAnimationFrameBackUp;
@@ -15100,9 +15455,15 @@ bool RenderCharacterBackItem(CHARACTER* c, OBJECT* o, bool bTranslate)
 
             switch (c->EtcPart)
             {
-            case 1: iType = MODEL_DIVINE_STAFF_OF_ARCHANGEL; break;
-            case 2: iType = MODEL_DIVINE_SWORD_OF_ARCHANGEL; break;
-            case 3: iType = MODEL_DIVINE_CB_OF_ARCHANGEL; break;
+            case 1:
+                iType = MODEL_DIVINE_STAFF_OF_ARCHANGEL;
+                break;
+            case 2:
+                iType = MODEL_DIVINE_SWORD_OF_ARCHANGEL;
+                break;
+            case 3:
+                iType = MODEL_DIVINE_CB_OF_ARCHANGEL;
+                break;
             }
 
             RenderLinkObject(0.f, 0.f, 15.f, c, w, iType, iLevel, iOption1, true, bTranslate);
@@ -15157,11 +15518,11 @@ bool RenderCharacterBackItem(CHARACTER* c, OBJECT* o, bool bTranslate)
                 w->PlaySpeed = 0.5f;
                 iOption1 = w->ExcellentFlags;
                 vec3_t vRelativePos;
-                if (gCharacterManager.GetBaseClass(c->Class) == CLASS_RAGEFIGHTER
-                    && (c->BodyPart[BODYPART_ARMOR].Type == MODEL_SACRED_ARMOR
-                        || c->BodyPart[BODYPART_ARMOR].Type == MODEL_STORM_HARD_ARMOR
-                        || c->BodyPart[BODYPART_ARMOR].Type == MODEL_PIERCING_ARMOR
-                        || c->BodyPart[BODYPART_ARMOR].Type == MODEL_PHOENIX_SOUL_ARMOR))
+                if (gCharacterManager.GetBaseClass(c->Class) == CLASS_RAGEFIGHTER &&
+                    (c->BodyPart[BODYPART_ARMOR].Type == MODEL_SACRED_ARMOR ||
+                     c->BodyPart[BODYPART_ARMOR].Type == MODEL_STORM_HARD_ARMOR ||
+                     c->BodyPart[BODYPART_ARMOR].Type == MODEL_PIERCING_ARMOR ||
+                     c->BodyPart[BODYPART_ARMOR].Type == MODEL_PHOENIX_SOUL_ARMOR))
                 {
                     RenderLinkObject(20.f, -5.f, 20.f, c, w, iType, iLevel, iOption1, false, bTranslate);
                     Vector(20.f, -5.f, 35.f, vRelativePos);

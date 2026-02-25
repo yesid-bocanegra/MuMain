@@ -86,9 +86,12 @@ bool CNewUIDoppelGangerFrame::Render()
     EnableAlphaTest();
     glColor4f(1.f, 1.f, 1.f, 1.f);
 
-    RenderImage(IMAGE_DOPPELGANGER_FRAME_WINDOW, m_Pos.x, m_Pos.y, float(DOPPELGANGER_FRAME_WINDOW_WIDTH), float(DOPPELGANGER_FRAME_WINDOW_HEIGHT));
+    RenderImage(IMAGE_DOPPELGANGER_FRAME_WINDOW, m_Pos.x, m_Pos.y, float(DOPPELGANGER_FRAME_WINDOW_WIDTH),
+                float(DOPPELGANGER_FRAME_WINDOW_HEIGHT));
 
-    wchar_t szText[256] = { NULL, };
+    wchar_t szText[256] = {
+        NULL,
+    };
     g_pRenderText->SetFont(g_hFont);
     g_pRenderText->SetBgColor(0);
 
@@ -139,21 +142,24 @@ bool CNewUIDoppelGangerFrame::Render()
     if (m_iEnteredMonsters == 0)
     {
         RenderImage(IMAGE_DOPPELGANGER_GUAGE_YELLOW, m_Pos.x + 59 + 167.f * (1.0f - m_fMonsterGauge), m_Pos.y + 78,
-            167.f * m_fMonsterGauge, 8.f - 1, 165.f / 256.f * (1.0f - m_fMonsterGauge), 0, 165.f / 256.f * m_fMonsterGauge, 6.f / 8.f);
+                    167.f * m_fMonsterGauge, 8.f - 1, 165.f / 256.f * (1.0f - m_fMonsterGauge), 0,
+                    165.f / 256.f * m_fMonsterGauge, 6.f / 8.f);
     }
     else if (m_iEnteredMonsters == 1)
     {
-        RenderImage(IMAGE_DOPPELGANGER_GUAGE_YELLOW, m_Pos.x + 59, m_Pos.y + 78,
-            167.f, 8.f - 1, 0, 0, 165.f / 256.f, 6.f / 8.f);
+        RenderImage(IMAGE_DOPPELGANGER_GUAGE_YELLOW, m_Pos.x + 59, m_Pos.y + 78, 167.f, 8.f - 1, 0, 0, 165.f / 256.f,
+                    6.f / 8.f);
         RenderImage(IMAGE_DOPPELGANGER_GUAGE_ORANGE, m_Pos.x + 59 + 167.f * (1.0f - m_fMonsterGauge), m_Pos.y + 78,
-            167.f * m_fMonsterGauge, 8.f - 1, 165.f / 256.f * (1.0f - m_fMonsterGauge), 0, 165.f / 256.f * m_fMonsterGauge, 6.f / 8.f);
+                    167.f * m_fMonsterGauge, 8.f - 1, 165.f / 256.f * (1.0f - m_fMonsterGauge), 0,
+                    165.f / 256.f * m_fMonsterGauge, 6.f / 8.f);
     }
     else if (m_iEnteredMonsters >= 2)
     {
-        RenderImage(IMAGE_DOPPELGANGER_GUAGE_ORANGE, m_Pos.x + 59, m_Pos.y + 78,
-            167.f, 8.f - 1, 0, 0, 165.f / 256.f, 6.f / 8.f);
+        RenderImage(IMAGE_DOPPELGANGER_GUAGE_ORANGE, m_Pos.x + 59, m_Pos.y + 78, 167.f, 8.f - 1, 0, 0, 165.f / 256.f,
+                    6.f / 8.f);
         RenderImage(IMAGE_DOPPELGANGER_GUAGE_RED, m_Pos.x + 59 + 167.f * (1.0f - m_fMonsterGauge), m_Pos.y + 78,
-            167.f * m_fMonsterGauge, 8.f - 1, 165.f / 256.f * (1.0f - m_fMonsterGauge), 0, 165.f / 256.f * m_fMonsterGauge, 6.f / 8.f);
+                    167.f * m_fMonsterGauge, 8.f - 1, 165.f / 256.f * (1.0f - m_fMonsterGauge), 0,
+                    165.f / 256.f * m_fMonsterGauge, 6.f / 8.f);
     }
 
     if (m_bIceWalkerEnabled == TRUE)
@@ -171,12 +177,15 @@ bool CNewUIDoppelGangerFrame::Render()
             m_fIceWalkerPosition = m_fIceWalkerPositionRcvd;
         }
 
-        RenderImage(IMAGE_DOPPELGANGER_GUAGE_ICEWALKER, m_Pos.x + 59 - 6.5f + 167 * m_fIceWalkerPosition, m_Pos.y + 78 - 1, 13.0f, 7.0f);
+        RenderImage(IMAGE_DOPPELGANGER_GUAGE_ICEWALKER, m_Pos.x + 59 - 6.5f + 167 * m_fIceWalkerPosition,
+                    m_Pos.y + 78 - 1, 13.0f, 7.0f);
     }
 
-    for (std::map<WORD, PARTY_POSITION>::iterator iter = m_PartyPositionMap.begin(); iter != m_PartyPositionMap.end(); ++iter)
+    for (std::map<WORD, PARTY_POSITION>::iterator iter = m_PartyPositionMap.begin(); iter != m_PartyPositionMap.end();
+         ++iter)
     {
-        if (iter->second.m_fPositionRcvd == -1) continue;
+        if (iter->second.m_fPositionRcvd == -1)
+            continue;
 
         float fPartyPositionSpeed = 0.01f;
         if (iter->second.m_fPosition + fPartyPositionSpeed <= iter->second.m_fPositionRcvd)
@@ -194,11 +203,13 @@ bool CNewUIDoppelGangerFrame::Render()
 
         if (iter->first == Hero->Key)
         {
-            RenderImage(IMAGE_DOPPELGANGER_GUAGE_PLAYER, m_Pos.x + 59 - 4.5f + 167 * iter->second.m_fPosition, m_Pos.y + 78 + 1, 9.0f, 8.0f);
+            RenderImage(IMAGE_DOPPELGANGER_GUAGE_PLAYER, m_Pos.x + 59 - 4.5f + 167 * iter->second.m_fPosition,
+                        m_Pos.y + 78 + 1, 9.0f, 8.0f);
         }
         else
         {
-            RenderImage(IMAGE_DOPPELGANGER_GUAGE_PARTY_MEMBER, m_Pos.x + 59 - 4.5f + 167 * iter->second.m_fPosition, m_Pos.y + 78 + 1, 9.0f, 8.0f);
+            RenderImage(IMAGE_DOPPELGANGER_GUAGE_PARTY_MEMBER, m_Pos.x + 59 - 4.5f + 167 * iter->second.m_fPosition,
+                        m_Pos.y + 78 + 1, 9.0f, 8.0f);
         }
     }
 
@@ -276,7 +287,8 @@ void CNewUIDoppelGangerFrame::ResetPartyMemberInfo()
 
 void CNewUIDoppelGangerFrame::SetPartyMemberRcvd()
 {
-    for (std::map<WORD, PARTY_POSITION>::iterator iter = m_PartyPositionMap.begin(); iter != m_PartyPositionMap.end(); ++iter)
+    for (std::map<WORD, PARTY_POSITION>::iterator iter = m_PartyPositionMap.begin(); iter != m_PartyPositionMap.end();
+         ++iter)
     {
         iter->second.m_fPositionRcvd = -1.0f;
     }

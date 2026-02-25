@@ -22,7 +22,7 @@ GameConfig::GameConfig()
     wchar_t* lastSlash = wcsrchr(exePath, L'\\');
     if (lastSlash)
     {
-        *(lastSlash + 1) = L'\0';  // Keep the trailing backslash
+        *(lastSlash + 1) = L'\0'; // Keep the trailing backslash
     }
 
     m_configPath = exePath;
@@ -37,24 +37,24 @@ void GameConfig::Load()
     using namespace CfgKeys;
     using namespace CfgDefaults;
 
-    m_windowWidth  = ReadInt(CfgSectionWindow, CfgKeyWidth, CfgDefaultWindowWidth);
+    m_windowWidth = ReadInt(CfgSectionWindow, CfgKeyWidth, CfgDefaultWindowWidth);
     m_windowHeight = ReadInt(CfgSectionWindow, CfgKeyHeight, CfgDefaultWindowHeight);
-    m_windowMode   = ReadBool(CfgSectionWindow, CfgKeyWindowed, CfgDefaultWindowed);
+    m_windowMode = ReadBool(CfgSectionWindow, CfgKeyWindowed, CfgDefaultWindowed);
 
     m_colorDepth = ReadInt(CfgSectionGraphics, CfgKeyColorDepth, CfgDefaultColorDepth);
 
     m_soundEnabled = ReadBool(CfgSectionAudio, CfgKeySoundEnabled, CfgDefaultSoundEnabled);
     m_musicEnabled = ReadBool(CfgSectionAudio, CfgKeyMusicEnabled, CfgDefaultMusicEnabled);
-    m_volumeLevel  = ReadInt(CfgSectionAudio, CfgKeyVolumeLevel, CfgDefaultVolumeLevel);
+    m_volumeLevel = ReadInt(CfgSectionAudio, CfgKeyVolumeLevel, CfgDefaultVolumeLevel);
 
     m_renderTextType = ReadInt(CfgSectionGraphics, CfgKeyRenderTextType, CfgDefaultRenderTextType);
 
-    m_rememberMe        = ReadBool(CfgSectionLogin, CfgKeyRememberMe, CfgDefaultRememberMe);
+    m_rememberMe = ReadBool(CfgSectionLogin, CfgKeyRememberMe, CfgDefaultRememberMe);
     m_languageSelection = ReadString(CfgSectionLogin, CfgKeyLanguage, CfgDefaultLanguage);
     m_encryptedUsername = ReadString(CfgSectionLogin, CfgKeyEncryptedUsername, CfgDefaultEncryptedUsername);
     m_encryptedPassword = ReadString(CfgSectionLogin, CfgKeyEncryptedPassword, CfgDefaultEncryptedPassword);
 
-    m_serverIP   = ReadString(CfgSectionConnectionSettings, CfgKeyServerIP, CfgDefaultServerIP);
+    m_serverIP = ReadString(CfgSectionConnectionSettings, CfgKeyServerIP, CfgDefaultServerIP);
     m_serverPort = ReadInt(CfgSectionConnectionSettings, CfgKeyServerPort, CfgDefaultServerPort);
 }
 
@@ -175,9 +175,12 @@ std::vector<BYTE> GameConfig::HexToBinary(const std::wstring& hex)
 
     binary.reserve(hex.length() / 2);
 
-    auto hex_char_to_byte = [](wchar_t c) -> BYTE {
-        if (c >= L'0' && c <= L'9') return (c - L'0');
-        if (c >= L'a' && c <= L'f') return (c - L'a' + 10);
+    auto hex_char_to_byte = [](wchar_t c) -> BYTE
+    {
+        if (c >= L'0' && c <= L'9')
+            return (c - L'0');
+        if (c >= L'a' && c <= L'f')
+            return (c - L'a' + 10);
         return (c - L'A' + 10);
     };
 
@@ -202,13 +205,15 @@ void GameConfig::DecryptCredentials(wchar_t* outUser, wchar_t* outPass, size_t u
 {
     // Decrypt Username
     std::wstring user = DecryptSetting(GetEncryptedUsername());
-    if (!user.empty()) {
+    if (!user.empty())
+    {
         wcsncpy_s(outUser, userBufSize, user.c_str(), _TRUNCATE);
     }
 
     // Decrypt Password
     std::wstring pass = DecryptSetting(GetEncryptedPassword());
-    if (!pass.empty()) {
+    if (!pass.empty())
+    {
         wcsncpy_s(outPass, passBufSize, pass.c_str(), _TRUNCATE);
     }
 }
@@ -242,7 +247,8 @@ std::wstring GameConfig::ReadString(const wchar_t* section, const wchar_t* key, 
     std::vector<wchar_t> buffer(2048);
     while (true)
     {
-        DWORD charsRead = GetPrivateProfileStringW(section, key, defaultValue.c_str(), buffer.data(), static_cast<DWORD>(buffer.size()), m_configPath.c_str());
+        DWORD charsRead = GetPrivateProfileStringW(section, key, defaultValue.c_str(), buffer.data(),
+                                                   static_cast<DWORD>(buffer.size()), m_configPath.c_str());
         if (charsRead < buffer.size() - 1)
         {
             return std::wstring(buffer.data());
@@ -258,11 +264,13 @@ void GameConfig::WriteString(const wchar_t* section, const wchar_t* key, const s
 
 std::wstring GameConfig::DecryptSetting(const std::wstring& hexInput)
 {
-    if (hexInput.empty()) return L"";
+    if (hexInput.empty())
+        return L"";
 
     // Convert Hex String back to Binary Blob
     std::vector<BYTE> encryptedData = HexToBinary(hexInput);
-    if (encryptedData.empty()) return L"";
+    if (encryptedData.empty())
+        return L"";
 
     DATA_BLOB dataIn, dataOut;
     dataIn.pbData = encryptedData.data();
@@ -274,7 +282,8 @@ std::wstring GameConfig::DecryptSetting(const std::wstring& hexInput)
         std::wstring result(reinterpret_cast<wchar_t*>(dataOut.pbData), dataOut.cbData / sizeof(wchar_t));
         LocalFree(dataOut.pbData); // Safety: Windows allocated this, we free it
         // The decrypted string might contain the null terminator, let's remove it if it exists.
-        if (!result.empty() && result.back() == L'\0') {
+        if (!result.empty() && result.back() == L'\0')
+        {
             result.pop_back();
         }
         return result;
@@ -285,7 +294,8 @@ std::wstring GameConfig::DecryptSetting(const std::wstring& hexInput)
 
 std::wstring GameConfig::EncryptSetting(const wchar_t* input)
 {
-    if (!input || wcslen(input) == 0) return L"";
+    if (!input || wcslen(input) == 0)
+        return L"";
 
     DATA_BLOB dataIn, dataOut;
     dataIn.cbData = static_cast<DWORD>((wcslen(input) + 1) * sizeof(wchar_t));

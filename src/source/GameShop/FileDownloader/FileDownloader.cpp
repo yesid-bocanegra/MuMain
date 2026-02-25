@@ -17,9 +17,8 @@
 
 #include <process.h>
 
-FileDownloader::FileDownloader(IDownloaderStateEvent* pStateEvent,
-    DownloadServerInfo* pServerInfo,
-    DownloadFileInfo* pFileInfo) // OK
+FileDownloader::FileDownloader(IDownloaderStateEvent* pStateEvent, DownloadServerInfo* pServerInfo,
+                               DownloadFileInfo* pFileInfo) // OK
 {
     this->m_bBreak = 0;
     this->m_pStateEvent = pStateEvent;
@@ -117,7 +116,7 @@ IConnecter* FileDownloader::CreateConnecter() // OK
     }
 }
 
-WZResult 			FileDownloader::CreateConnection()
+WZResult FileDownloader::CreateConnection()
 {
     DWORD dwMilliseconds = this->m_pServerInfo->GetConnectTimeout();
 
@@ -129,7 +128,9 @@ WZResult 			FileDownloader::CreateConnection()
 
         if (hHandle == INVALID_HANDLE_VALUE)
         {
-            this->m_Result.SetResult(DL_BEGIN_THREAD_CONNECTION, GetLastError(), L"[FileDownloader::CreateConnection] Fail : _beginthreadex, FileName = %ls", this->m_pFileInfo->GetRemoteFilePath());
+            this->m_Result.SetResult(DL_BEGIN_THREAD_CONNECTION, GetLastError(),
+                                     L"[FileDownloader::CreateConnection] Fail : _beginthreadex, FileName = %ls",
+                                     this->m_pFileInfo->GetRemoteFilePath());
         }
         else
         {
@@ -142,7 +143,9 @@ WZResult 			FileDownloader::CreateConnection()
 
                 CloseHandle(hHandle);
 
-                this->m_Result.SetResult(DL_CONNECTION_TIMEOUT, 0, L"[FileDownloader::CreateConnection] Fail : WAIT_TIMEOUT, FileName = %ls", this->m_pFileInfo->GetRemoteFilePath());
+                this->m_Result.SetResult(DL_CONNECTION_TIMEOUT, 0,
+                                         L"[FileDownloader::CreateConnection] Fail : WAIT_TIMEOUT, FileName = %ls",
+                                         this->m_pFileInfo->GetRemoteFilePath());
             }
             else
             {
@@ -170,14 +173,14 @@ unsigned int WINAPI FileDownloader::RunConnectThread(LPVOID pParam)
     return 0;
 }
 
-WZResult 			FileDownloader::Connection()
+WZResult FileDownloader::Connection()
 {
     this->m_Result = this->m_pConnecter->CreateConnection(this->m_hSession, this->m_hConnection);
 
     return this->m_Result;
 }
 
-WZResult 			FileDownloader::TransferRemoteFile()
+WZResult FileDownloader::TransferRemoteFile()
 {
     DWORD CbSize = this->m_pServerInfo->GetReadBufferSize();
 
@@ -216,7 +219,10 @@ WZResult 			FileDownloader::TransferRemoteFile()
                     }
                     else
                     {
-                        this->m_Result.SetResult(DL_DIFFERENT_FILE_LENGTH, 0, L"[FileDownloader::TransferRemoteFile] Fail : Different Down File Size, FileName = %ls", this->m_pFileInfo->GetRemoteFilePath());
+                        this->m_Result.SetResult(
+                            DL_DIFFERENT_FILE_LENGTH, 0,
+                            L"[FileDownloader::TransferRemoteFile] Fail : Different Down File Size, FileName = %ls",
+                            this->m_pFileInfo->GetRemoteFilePath());
                     }
                 }
 
@@ -232,7 +238,7 @@ WZResult 			FileDownloader::TransferRemoteFile()
     return this->m_Result;
 }
 
-WZResult 			FileDownloader::CreateLocalFile()
+WZResult FileDownloader::CreateLocalFile()
 {
     TCHAR* path = this->m_pFileInfo->GetLocalFilePath();
 
@@ -251,7 +257,9 @@ WZResult 			FileDownloader::CreateLocalFile()
 
         if (this->m_hLocalFile == INVALID_HANDLE_VALUE)
         {
-            this->m_Result.SetResult(DL_CREATE_LOCALFILE, GetLastError(), L"[FileDownloader::CreateLocalFile] Fail : CreateFile, FileName = %ls", this->m_pFileInfo->GetRemoteFilePath());
+            this->m_Result.SetResult(DL_CREATE_LOCALFILE, GetLastError(),
+                                     L"[FileDownloader::CreateLocalFile] Fail : CreateFile, FileName = %ls",
+                                     this->m_pFileInfo->GetRemoteFilePath());
         }
         else
         {
@@ -260,13 +268,15 @@ WZResult 			FileDownloader::CreateLocalFile()
     }
     else
     {
-        this->m_Result.SetResult(DL_LOCALFILE_EXISTS, 0, L"[FileDownloader::CreateLocalFile] Fail : Local File Exists, FileName = %ls", this->m_pFileInfo->GetRemoteFilePath());
+        this->m_Result.SetResult(DL_LOCALFILE_EXISTS, 0,
+                                 L"[FileDownloader::CreateLocalFile] Fail : Local File Exists, FileName = %ls",
+                                 this->m_pFileInfo->GetRemoteFilePath());
     }
 
     return this->m_Result;
 }
 
-WZResult 			FileDownloader::ReadRemoteFile(BYTE* byReadBuffer, DWORD* dwBytesRead)
+WZResult FileDownloader::ReadRemoteFile(BYTE* byReadBuffer, DWORD* dwBytesRead)
 {
     if (this->m_hRemoteFile)
     {
@@ -274,29 +284,34 @@ WZResult 			FileDownloader::ReadRemoteFile(BYTE* byReadBuffer, DWORD* dwBytesRea
     }
     else
     {
-        this->m_Result.SetResult(DL_READ_REMOTEFILE, 0, L"[FileDownloader::ReadRemoteFile] Fail : ReadRemoteFile, FileName = %ls", this->m_pFileInfo->GetRemoteFilePath());
+        this->m_Result.SetResult(DL_READ_REMOTEFILE, 0,
+                                 L"[FileDownloader::ReadRemoteFile] Fail : ReadRemoteFile, FileName = %ls",
+                                 this->m_pFileInfo->GetRemoteFilePath());
     }
 
     return this->m_Result;
 }
 
-WZResult 			FileDownloader::WriteLocalFile(BYTE* byReadBuffer, DWORD dwBytesRead)
+WZResult FileDownloader::WriteLocalFile(BYTE* byReadBuffer, DWORD dwBytesRead)
 {
     DWORD NumberOfBytesWritten = 0;
 
-    if (WriteFile(this->m_hLocalFile, byReadBuffer, dwBytesRead, &NumberOfBytesWritten, 0) && dwBytesRead == NumberOfBytesWritten)
+    if (WriteFile(this->m_hLocalFile, byReadBuffer, dwBytesRead, &NumberOfBytesWritten, 0) &&
+        dwBytesRead == NumberOfBytesWritten)
     {
         this->m_Result.SetSuccessResult();
     }
     else
     {
-        this->m_Result.SetResult(DL_WRITE_LOCALFILE, GetLastError(), L"[FileDownloader::WriteLocalFile] Fail : WriteFile, FileName = %ls", this->m_pFileInfo->GetRemoteFilePath());
+        this->m_Result.SetResult(DL_WRITE_LOCALFILE, GetLastError(),
+                                 L"[FileDownloader::WriteLocalFile] Fail : WriteFile, FileName = %ls",
+                                 this->m_pFileInfo->GetRemoteFilePath());
     }
 
     return this->m_Result;
 }
 
-void				FileDownloader::SendStartedDownloadFileEvent(ULONGLONG nFileLength)
+void FileDownloader::SendStartedDownloadFileEvent(ULONGLONG nFileLength)
 {
     if (this->m_pStateEvent != NULL)
     {
@@ -304,7 +319,7 @@ void				FileDownloader::SendStartedDownloadFileEvent(ULONGLONG nFileLength)
     }
 }
 
-void				FileDownloader::SendCompletedDownloadFileEvent(WZResult wzResult)
+void FileDownloader::SendCompletedDownloadFileEvent(WZResult wzResult)
 {
     if (this->m_pStateEvent != NULL)
     {
@@ -312,7 +327,7 @@ void				FileDownloader::SendCompletedDownloadFileEvent(WZResult wzResult)
     }
 }
 
-void				FileDownloader::SendProgressDownloadFileEvent(ULONGLONG nTotalBytesRead)
+void FileDownloader::SendProgressDownloadFileEvent(ULONGLONG nTotalBytesRead)
 {
     if (this->m_pStateEvent != NULL)
     {

@@ -18,7 +18,7 @@ enum MASTER_SKILL_TREE_CLASS : WORD
     MASTER_SKILL_TREE_CLASS_NONE = 0,
     MASTER_SKILL_TREE_CLASS_BLADEMASTER = 1,
     MASTER_SKILL_TREE_CLASS_GRANDMASTER = 2,
-    
+
     MASTER_SKILL_TREE_CLASS_HIGHELF = 4,
     MASTER_SKILL_TREE_CLASS_DIMENSIONMASTER = 8,
     MASTER_SKILL_TREE_CLASS_DUELMASTER = 16,
@@ -69,85 +69,85 @@ struct _MASTER_SKILL_TOOLTIP_FILE
 
 namespace SEASON3B
 {
-    //size = 404
-    class CNewUIMasterLevel : public CNewUIObj
+// size = 404
+class CNewUIMasterLevel : public CNewUIObj
+{
+public:
+    enum IMAGE_LIST
     {
-    public:
-        enum IMAGE_LIST
-        {
-            IMAGE_MASTER_INTERFACE = BITMAP_INTERFACE_MASTER_BEGIN,
-        };
-
-        CNewUIMasterLevel();
-        ~CNewUIMasterLevel() override;
-
-        BYTE GetConsumePoint() const;
-        int GetCurSkillID() const;
-        bool Create(CNewUIManager* pNewUIMng);
-        void Release();
-        
-        void OpenMasterSkillTreeData(const wchar_t* path);
-        void OpenMasterSkillTooltip(const wchar_t* path);
-        void InitMasterSkillPoint();
-        void SetMasterType(CLASS_TYPE Class);
-
-        bool SetMasterSkillTreeInfo(int index, BYTE skillLevel, float value, float nextValue);
-        void SkillUpgrade(int index, BYTE skillLevel, float value, float nextValue);
-
-        bool Render() override;
-        bool Update() override;
-        bool UpdateMouseEvent() override;
-        bool UpdateKeyEvent() override;
-        float GetLayerDepth() override;
-
-    private:
-        int PosX;
-        int PosY;
-        int width;
-        int height;
-
-        DWORD ButtonX[MAX_MASTER_SKILL_CATEGORY];
-        DWORD ButtonY[MAX_MASTER_SKILL_CATEGORY];
-        CNewUIButton m_CloseBT;
-        int CategoryPoint[MAX_MASTER_SKILL_CATEGORY];
-        int skillPoint[MAX_MASTER_SKILL_CATEGORY][MAX_MASTER_TREE_RANK];
-        BYTE ConsumePoint;
-        int CurSkillID;
-        MASTER_SKILL_TREE_CLASS classCode;
-        POINT categoryPos[MAX_MASTER_SKILL_CATEGORY];
-        DWORD CategoryTextIndex;
-        DWORD ClassNameTextIndex;
-
-        std::map<ActionSkillType, _MASTER_SKILL_TOOLTIP> map_masterSkillToolTip;
-        std::map<BYTE, _MASTER_SKILLTREE_DATA> map_masterData;
-        
-        CNewUIManager* m_pNewUIMng;
-
-        void SetPos();
-        int SetDivideString(wchar_t* text, int isItemTollTip, int TextNum, int iTextColor, int iTextBold, bool isPercent);
-        void LoadImages();
-        void UnloadImages();
-
-        bool CheckAttributeArea(const _MASTER_SKILLTREE_DATA& skillData);
-        bool CheckSkillPoint(WORD mLevelUpPoint, const _MASTER_SKILLTREE_DATA& skillData, BYTE skillLevel);
-        bool CheckParentSkill(const _MASTER_SKILLTREE_DATA& masterSkill);
-        bool CheckRankPoint(BYTE group, BYTE rank, BYTE skillLevel);
-        bool CheckBeforeSkill(ActionSkillType skill, BYTE skillLevel);
-
-        int GetBeforeSkillID(int index);
-
-        void SetMasterSkillTreeData();
-        void SetMasterSkillToolTipData();
-
-        void ClearSkillTreeData();
-        void ClearSkillTooltipData();
-
-        void RenderText() const;
-        void RenderIcon();
-        void RenderToolTip();
-        bool CheckMouse(int posx, int posy);
-        bool CheckBtn();
+        IMAGE_MASTER_INTERFACE = BITMAP_INTERFACE_MASTER_BEGIN,
     };
-}
+
+    CNewUIMasterLevel();
+    ~CNewUIMasterLevel() override;
+
+    BYTE GetConsumePoint() const;
+    int GetCurSkillID() const;
+    bool Create(CNewUIManager* pNewUIMng);
+    void Release();
+
+    void OpenMasterSkillTreeData(const wchar_t* path);
+    void OpenMasterSkillTooltip(const wchar_t* path);
+    void InitMasterSkillPoint();
+    void SetMasterType(CLASS_TYPE Class);
+
+    bool SetMasterSkillTreeInfo(int index, BYTE skillLevel, float value, float nextValue);
+    void SkillUpgrade(int index, BYTE skillLevel, float value, float nextValue);
+
+    bool Render() override;
+    bool Update() override;
+    bool UpdateMouseEvent() override;
+    bool UpdateKeyEvent() override;
+    float GetLayerDepth() override;
+
+private:
+    int PosX;
+    int PosY;
+    int width;
+    int height;
+
+    DWORD ButtonX[MAX_MASTER_SKILL_CATEGORY];
+    DWORD ButtonY[MAX_MASTER_SKILL_CATEGORY];
+    CNewUIButton m_CloseBT;
+    int CategoryPoint[MAX_MASTER_SKILL_CATEGORY];
+    int skillPoint[MAX_MASTER_SKILL_CATEGORY][MAX_MASTER_TREE_RANK];
+    BYTE ConsumePoint;
+    int CurSkillID;
+    MASTER_SKILL_TREE_CLASS classCode;
+    POINT categoryPos[MAX_MASTER_SKILL_CATEGORY];
+    DWORD CategoryTextIndex;
+    DWORD ClassNameTextIndex;
+
+    std::map<ActionSkillType, _MASTER_SKILL_TOOLTIP> map_masterSkillToolTip;
+    std::map<BYTE, _MASTER_SKILLTREE_DATA> map_masterData;
+
+    CNewUIManager* m_pNewUIMng;
+
+    void SetPos();
+    int SetDivideString(wchar_t* text, int isItemTollTip, int TextNum, int iTextColor, int iTextBold, bool isPercent);
+    void LoadImages();
+    void UnloadImages();
+
+    bool CheckAttributeArea(const _MASTER_SKILLTREE_DATA& skillData);
+    bool CheckSkillPoint(WORD mLevelUpPoint, const _MASTER_SKILLTREE_DATA& skillData, BYTE skillLevel);
+    bool CheckParentSkill(const _MASTER_SKILLTREE_DATA& masterSkill);
+    bool CheckRankPoint(BYTE group, BYTE rank, BYTE skillLevel);
+    bool CheckBeforeSkill(ActionSkillType skill, BYTE skillLevel);
+
+    int GetBeforeSkillID(int index);
+
+    void SetMasterSkillTreeData();
+    void SetMasterSkillToolTipData();
+
+    void ClearSkillTreeData();
+    void ClearSkillTooltipData();
+
+    void RenderText() const;
+    void RenderIcon();
+    void RenderToolTip();
+    bool CheckMouse(int posx, int posy);
+    bool CheckBtn();
+};
+} // namespace SEASON3B
 
 #endif

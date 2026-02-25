@@ -47,7 +47,8 @@ bool SEASON3B::CNewUINPCShop::Create(CNewUIManager* pNewUIMng, int x, int y)
     m_pNewUIMng->AddUIObj(SEASON3B::INTERFACE_NPCSHOP, this);
 
     m_pNewInventoryCtrl = new CNewUIInventoryCtrl;
-    if (false == m_pNewInventoryCtrl->Create(STORAGE_TYPE::UNDEFINED, g_pNewUI3DRenderMng, g_pNewItemMng, this, x + 15, y + 50, 8, 15))
+    if (false == m_pNewInventoryCtrl->Create(STORAGE_TYPE::UNDEFINED, g_pNewUI3DRenderMng, g_pNewItemMng, this, x + 15,
+                                             y + 50, 8, 15))
     {
         SAFE_DELETE(m_pNewInventoryCtrl);
         return false;
@@ -321,14 +322,19 @@ bool SEASON3B::CNewUINPCShop::InventoryProcess()
 {
     CNewUIPickedItem* pPickedItem = CNewUIInventoryCtrl::GetPickedItem();
 
-    if (!m_pNewInventoryCtrl)	return false;
-    if (!pPickedItem)			return false;
+    if (!m_pNewInventoryCtrl)
+        return false;
+    if (!pPickedItem)
+        return false;
     ITEM* pItem = pPickedItem->GetItem();
 
-    if (IsSellingBan(pItem))	m_pNewInventoryCtrl->SetSquareColorNormal(1.0f, 0.0f, 0.0f);
-    else	m_pNewInventoryCtrl->SetSquareColorNormal(0.1f, 0.4f, 0.8f);
+    if (IsSellingBan(pItem))
+        m_pNewInventoryCtrl->SetSquareColorNormal(1.0f, 0.0f, 0.0f);
+    else
+        m_pNewInventoryCtrl->SetSquareColorNormal(0.1f, 0.4f, 0.8f);
 
-    if (SEASON3B::IsRelease(VK_LBUTTON) == true && m_pNewInventoryCtrl->CheckPtInRect(MouseX, MouseY) == true && m_bSellingItem == false)
+    if (SEASON3B::IsRelease(VK_LBUTTON) == true && m_pNewInventoryCtrl->CheckPtInRect(MouseX, MouseY) == true &&
+        m_bSellingItem == false)
     {
         if (CharacterMachine->Gold + ItemValue(pItem) > 2000000000)
         {
@@ -373,7 +379,7 @@ bool SEASON3B::CNewUINPCShop::InventoryProcess()
 
 bool SEASON3B::CNewUINPCShop::BtnProcess()
 {
-    POINT ptExitBtn1 = { m_Pos.x + 169, m_Pos.y + 7 };
+    POINT ptExitBtn1 = {m_Pos.x + 169, m_Pos.y + 7};
 
     if (SEASON3B::IsPress(VK_LBUTTON) && CheckMouseIn(ptExitBtn1.x, ptExitBtn1.y, 13, 12) && m_bSellingItem == false)
     {

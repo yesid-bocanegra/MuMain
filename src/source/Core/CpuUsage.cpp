@@ -4,7 +4,7 @@
 #include "CpuUsage.h"
 
 // Implementation for Windows
-class CpuUsage::Impl 
+class CpuUsage::Impl
 {
 public:
     Impl()
@@ -17,7 +17,7 @@ public:
         m_lastSystemTime = 0;
     }
 
-    double GetUsage() 
+    double GetUsage()
     {
         // Get the current process times
         FILETIME creationTime, exitTime, kernelTime, userTime;
@@ -73,7 +73,7 @@ private:
     }
 };
 
-CpuUsage* CpuUsage::Instance() 
+CpuUsage* CpuUsage::Instance()
 {
     static CpuUsage instance;
     return &instance;

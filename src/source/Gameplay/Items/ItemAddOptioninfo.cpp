@@ -9,7 +9,6 @@
 
 #include "ItemAddOptioninfo.h"
 
-
 #define ITEMADDOPTION_DATA_FILE L"Data\\Local\\ItemAddOption.bmd"
 
 ItemAddOptioninfo* ItemAddOptioninfo::MakeInfo()
@@ -34,9 +33,7 @@ ItemAddOptioninfo::ItemAddOptioninfo()
     }
 }
 
-ItemAddOptioninfo::~ItemAddOptioninfo()
-{
-}
+ItemAddOptioninfo::~ItemAddOptioninfo() {}
 
 const bool ItemAddOptioninfo::OpenItemAddOptionInfoFile(const std::wstring& filename)
 {
@@ -46,6 +43,7 @@ const bool ItemAddOptioninfo::OpenItemAddOptionInfoFile(const std::wstring& file
         int nSize = sizeof(ITEM_ADD_OPTION) * MAX_ITEM;
 
         ::fread(m_ItemAddOption, nSize, 1, fp);
+        // cppcheck-suppress dangerousTypeCast
         ::BuxConvert((BYTE*)m_ItemAddOption, nSize);
         ::fclose(fp);
 
@@ -77,21 +75,29 @@ void ItemAddOptioninfo::GetItemAddOtioninfoText(std::vector<std::wstring>& outte
 
         switch (optiontype)
         {
-        case 1: mu_swprintf(TempText, GlobalText[2184], optionvalue);
+        case 1:
+            mu_swprintf(TempText, GlobalText[2184], optionvalue);
             break;
-        case 2: mu_swprintf(TempText, GlobalText[2185], optionvalue);
+        case 2:
+            mu_swprintf(TempText, GlobalText[2185], optionvalue);
             break;
-        case 3: mu_swprintf(TempText, GlobalText[2186], optionvalue);
+        case 3:
+            mu_swprintf(TempText, GlobalText[2186], optionvalue);
             break;
-        case 4: mu_swprintf(TempText, GlobalText[2187], optionvalue);
+        case 4:
+            mu_swprintf(TempText, GlobalText[2187], optionvalue);
             break;
-        case 5: mu_swprintf(TempText, GlobalText[2188], optionvalue);
+        case 5:
+            mu_swprintf(TempText, GlobalText[2188], optionvalue);
             break;
-        case 6: mu_swprintf(TempText, GlobalText[2189], optionvalue);
+        case 6:
+            mu_swprintf(TempText, GlobalText[2189], optionvalue);
             break;
-        case 7: mu_swprintf(TempText, GlobalText[2190]);
+        case 7:
+            mu_swprintf(TempText, GlobalText[2190]);
             break;
-        case 8: mu_swprintf(TempText, GlobalText[2191], optionvalue);
+        case 8:
+            mu_swprintf(TempText, GlobalText[2191], optionvalue);
             break;
         }
 

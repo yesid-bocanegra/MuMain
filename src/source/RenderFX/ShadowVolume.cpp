@@ -26,7 +26,7 @@ void RenderShadowVolumesAsFrame(void)
     glDepthMask(true);
     DisableAlphaBlend();
     DisableTexture();
-    vec3_t vLight = { 0.4f, 0.f, 0.f };
+    vec3_t vLight = {0.4f, 0.f, 0.f};
     glColor3fv(vLight);
 
     while (m_qSV.GetCount() > 0)
@@ -77,17 +77,22 @@ void RenderShadowToScreen(void)
 
     EnableAlphaBlendMinus();
     DisableTexture();
-    vec3_t vLight = { .7f,0.7f,0.5f };
+    vec3_t vLight = {.7f, 0.7f, 0.5f};
 
-    //RenderTerrainAlphaBitmap(BITMAP_HIDE, Hero->Object.Position[0],Hero->Object.Position[1],20.f,20.f,vLight,0.f,fAlpha);
+    // RenderTerrainAlphaBitmap(BITMAP_HIDE,
+    // Hero->Object.Position[0],Hero->Object.Position[1],20.f,20.f,vLight,0.f,fAlpha);
     float p[4][2];
     auto Width = (float)WindowWidth;
     auto Height = (float)WindowHeight;
-    p[0][0] = 0.f; p[0][1] = 0.f;
-    p[1][0] = 0.f; p[1][1] = Height;
-    p[2][0] = 0.f + Width; p[2][1] = Height;
-    p[3][0] = 0.f + Width; p[3][1] = 0.f;
-    //BeginBitmap();
+    p[0][0] = 0.f;
+    p[0][1] = 0.f;
+    p[1][0] = 0.f;
+    p[1][1] = Height;
+    p[2][0] = 0.f + Width;
+    p[2][1] = Height;
+    p[3][0] = 0.f + Width;
+    p[3][1] = 0.f;
+    // BeginBitmap();
     glBegin(GL_TRIANGLE_FAN);
     glColor3fv(vLight);
     for (int i = 0; i < 4; i++)
@@ -105,9 +110,7 @@ CShadowVolume::CShadowVolume()
     Clear();
 }
 
-CShadowVolume::~CShadowVolume()
-{
-}
+CShadowVolume::~CShadowVolume() {}
 
 void CShadowVolume::Clear(void)
 {
@@ -117,7 +120,8 @@ void CShadowVolume::Clear(void)
     m_pEdges = NULL;
 }
 
-BOOL CShadowVolume::GetReadyToCreate(vec3_t ppVertexTransformed[MAX_MESH][MAX_VERTICES], BMD* b, OBJECT* o, bool SkipTga)
+BOOL CShadowVolume::GetReadyToCreate(vec3_t ppVertexTransformed[MAX_MESH][MAX_VERTICES], BMD* b, OBJECT* o,
+                                     bool SkipTga)
 {
     if (o->Alpha < 0.01f)
     {
@@ -140,7 +144,8 @@ BOOL CShadowVolume::GetReadyToCreate(vec3_t ppVertexTransformed[MAX_MESH][MAX_VE
 
         if (Bitmaps[b->IndexTexture[i]].Components == 4)
         {
-            if (SkipTga) continue;
+            if (SkipTga)
+                continue;
         }
         iNumTriangles += std::max<int>(0, b->Meshs[i].NumTriangles);
     }
@@ -158,7 +163,8 @@ BOOL CShadowVolume::GetReadyToCreate(vec3_t ppVertexTransformed[MAX_MESH][MAX_VE
         if (Bitmaps[b->IndexTexture[i]].Components == 4)
         {
             Tga = true;
-            if (SkipTga) continue;
+            if (SkipTga)
+                continue;
         }
         DeterminateSilhouette(i, ppVertexTransformed, b->Meshs[i].NumTriangles, b->Meshs[i].Triangles, Tga);
     }
@@ -168,7 +174,9 @@ BOOL CShadowVolume::GetReadyToCreate(vec3_t ppVertexTransformed[MAX_MESH][MAX_VE
 
 void CShadowVolume::Create(vec3_t ppVertexTransformed[MAX_MESH][MAX_VERTICES], BMD* b, OBJECT* o, bool SkipTga)
 {
-    m_vLight[0] = -1.f; m_vLight[1] = 0.03f; m_vLight[2] = -1.f;
+    m_vLight[0] = -1.f;
+    m_vLight[1] = 0.03f;
+    m_vLight[2] = -1.f;
     VectorNormalize(m_vLight);
 
     if (!GetReadyToCreate(ppVertexTransformed, b, o, SkipTga))
@@ -226,7 +234,8 @@ void CShadowVolume::AddEdgeFast(short nV1, short nV2, short nMesh, int iTriangle
     }
 }
 
-void CShadowVolume::DeterminateSilhouette(short nMesh, vec3_t ppVertexTransformed[MAX_MESH][MAX_VERTICES], short nNumTriangles, Triangle_t* pTriangles, bool Tga)
+void CShadowVolume::DeterminateSilhouette(short nMesh, vec3_t ppVertexTransformed[MAX_MESH][MAX_VERTICES],
+                                          short nNumTriangles, Triangle_t* pTriangles, bool Tga)
 {
     for (int iTriangle = 0; iTriangle < nNumTriangles; ++iTriangle)
     {
@@ -252,9 +261,9 @@ void CShadowVolume::DeterminateSilhouette(short nMesh, vec3_t ppVertexTransforme
         if (pTriangle->Front)
         {
             short* pnVertexIndex = pTriangle->VertexIndex;
-            //AddEdge( pnVertexIndex[0], pnVertexIndex[1], nMesh);
-            //AddEdge( pnVertexIndex[1], pnVertexIndex[2], nMesh);
-            //AddEdge( pnVertexIndex[2], pnVertexIndex[0], nMesh);
+            // AddEdge( pnVertexIndex[0], pnVertexIndex[1], nMesh);
+            // AddEdge( pnVertexIndex[1], pnVertexIndex[2], nMesh);
+            // AddEdge( pnVertexIndex[2], pnVertexIndex[0], nMesh);
             AddEdgeFast(pnVertexIndex[0], pnVertexIndex[1], nMesh, iTriangle, 0, pTriangles);
             AddEdgeFast(pnVertexIndex[1], pnVertexIndex[2], nMesh, iTriangle, 1, pTriangles);
             AddEdgeFast(pnVertexIndex[2], pnVertexIndex[0], nMesh, iTriangle, 2, pTriangles);
@@ -274,18 +283,24 @@ void CShadowVolume::GenerateSidePolygon(vec3_t ppVertexTransformed[MAX_MESH][MAX
     {
         VectorCopy(ppVertexTransformed[m_pEdges[i].m_nMesh][m_pEdges[i].m_nVertexIndex[0]], Vertex[0]);
         VectorCopy(ppVertexTransformed[m_pEdges[i].m_nMesh][m_pEdges[i].m_nVertexIndex[1]], Vertex[1]);
-        //float fLength = ( std::max<float>( GROUND_HEIGHT, max( Vertex[0][2], Vertex[1][2])) / -m_vLight[2]);
+        // float fLength = ( std::max<float>( GROUND_HEIGHT, max( Vertex[0][2], Vertex[1][2])) / -m_vLight[2]);
         float fLength = (std::max<float>(GROUND_HEIGHT, Vertex[0][2]) / -m_vLight[2]);
         VectorMA(Vertex[0], fLength, m_vLight, Vertex[2]);
         fLength = (std::max<float>(GROUND_HEIGHT, Vertex[1][2]) / -m_vLight[2]);
         VectorMA(Vertex[1], fLength, m_vLight, Vertex[3]);
 
-        VectorCopy(Vertex[0], m_pVertices[m_nNumVertices]); m_nNumVertices++;
-        VectorCopy(Vertex[2], m_pVertices[m_nNumVertices]); m_nNumVertices++;
-        VectorCopy(Vertex[1], m_pVertices[m_nNumVertices]); m_nNumVertices++;
-        VectorCopy(Vertex[1], m_pVertices[m_nNumVertices]); m_nNumVertices++;
-        VectorCopy(Vertex[2], m_pVertices[m_nNumVertices]); m_nNumVertices++;
-        VectorCopy(Vertex[3], m_pVertices[m_nNumVertices]); m_nNumVertices++;
+        VectorCopy(Vertex[0], m_pVertices[m_nNumVertices]);
+        m_nNumVertices++;
+        VectorCopy(Vertex[2], m_pVertices[m_nNumVertices]);
+        m_nNumVertices++;
+        VectorCopy(Vertex[1], m_pVertices[m_nNumVertices]);
+        m_nNumVertices++;
+        VectorCopy(Vertex[1], m_pVertices[m_nNumVertices]);
+        m_nNumVertices++;
+        VectorCopy(Vertex[2], m_pVertices[m_nNumVertices]);
+        m_nNumVertices++;
+        VectorCopy(Vertex[3], m_pVertices[m_nNumVertices]);
+        m_nNumVertices++;
     }
 }
 

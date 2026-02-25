@@ -21,6 +21,7 @@ using namespace SEASON3B;
 
 extern DWORD g_dwActiveUIID;
 
+// cppcheck-suppress uninitMemberVar
 CNewUIGuardWindow::CNewUIGuardWindow()
 {
     m_pNewUIMng = NULL;
@@ -276,7 +277,9 @@ void CNewUIGuardWindow::RenderFrame()
     RenderImage(IMAGE_GUARDWINDOW_RIGHT, m_Pos.x + INVENTORY_WIDTH - 21, m_Pos.y + 64, 21.f, 320.f);
     RenderImage(IMAGE_GUARDWINDOW_BOTTOM, m_Pos.x, m_Pos.y + INVENTORY_HEIGHT - 45, 190.f, 45.f);
 
-    wchar_t szText[256] = { 0, };
+    wchar_t szText[256] = {
+        0,
+    };
     float fPos_x = m_Pos.x + 15.0f, fPos_y = m_Pos.y;
     float fLine_y = 13.0f;
 
@@ -287,7 +290,7 @@ void CNewUIGuardWindow::RenderFrame()
     mu_swprintf(szText, L"%ls", GlobalText[1445]);
     g_pRenderText->RenderText(fPos_x, fPos_y + fLine_y, szText, 160.0f, 0, RT3_SORT_CENTER);
 
-    POINT ptOrigin = { m_Pos.x, m_Pos.y + 50 };
+    POINT ptOrigin = {m_Pos.x, m_Pos.y + 50};
     g_pRenderText->SetFont(g_hFontBold);
 
     if (m_szOwnerGuildMaster[0])
@@ -315,7 +318,7 @@ void CNewUIGuardWindow::RenderFrame()
 
 bool CNewUIGuardWindow::BtnProcess()
 {
-    POINT ptExitBtn1 = { m_Pos.x + 169, m_Pos.y + 7 };
+    POINT ptExitBtn1 = {m_Pos.x + 169, m_Pos.y + 7};
 
     if (SEASON3B::IsPress(VK_LBUTTON) && CheckMouseIn(ptExitBtn1.x, ptExitBtn1.y, 13, 12))
     {
@@ -331,9 +334,7 @@ bool CNewUIGuardWindow::BtnProcess()
     return false;
 }
 
-void CNewUIGuardWindow::UpdateSeigeInfoTab()
-{
-}
+void CNewUIGuardWindow::UpdateSeigeInfoTab() {}
 
 void CNewUIGuardWindow::UpdateRegisterTab()
 {
@@ -369,9 +370,9 @@ void CNewUIGuardWindow::UpdateRegisterInfoTab()
 {
     if (m_eTimeType == CASTLESIEGE_STATE_REGSIEGE || m_eTimeType == CASTLESIEGE_STATE_REGMARK)
     {
-        //g_dwActiveUIID = m_DeclareGuildListBox.GetUIID();
+        // g_dwActiveUIID = m_DeclareGuildListBox.GetUIID();
         m_DeclareGuildListBox.DoAction();
-        //g_dwActiveUIID = 0;
+        // g_dwActiveUIID = 0;
         if (PressKey(VK_PRIOR))
             m_DeclareGuildListBox.Scrolling(-1 * m_DeclareGuildListBox.GetBoxSize());
         if (PressKey(VK_NEXT))
@@ -379,18 +380,17 @@ void CNewUIGuardWindow::UpdateRegisterInfoTab()
     }
     else if (m_eTimeType == CASTLESIEGE_STATE_NOTIFY || m_eTimeType == CASTLESIEGE_STATE_READYSIEGE)
     {
-        //g_dwActiveUIID = m_DeclareGuildListBox.GetUIID();
+        // g_dwActiveUIID = m_DeclareGuildListBox.GetUIID();
         m_GuildListBox.DoAction();
-        //g_dwActiveUIID = 0;
+        // g_dwActiveUIID = 0;
         if (PressKey(VK_PRIOR))
             m_GuildListBox.Scrolling(-1 * m_GuildListBox.GetBoxSize());
         if (PressKey(VK_NEXT))
             m_GuildListBox.Scrolling(m_GuildListBox.GetBoxSize());
     }
 
-    if (g_GuardsMan.HasRegistered() &&
-        CASTLESIEGE_STATE_REGSIEGE <= m_eTimeType && m_eTimeType <= CASTLESIEGE_STATE_REGMARK
-        && Hero->GuildStatus == G_MASTER)
+    if (g_GuardsMan.HasRegistered() && CASTLESIEGE_STATE_REGSIEGE <= m_eTimeType &&
+        m_eTimeType <= CASTLESIEGE_STATE_REGMARK && Hero->GuildStatus == G_MASTER)
     {
         if (m_BtnGiveUp.UpdateMouseEvent() == true)
         {
@@ -401,7 +401,7 @@ void CNewUIGuardWindow::UpdateRegisterInfoTab()
 
 void CNewUIGuardWindow::RenderSeigeInfoTab()
 {
-    POINT ptOrigin = { m_Pos.x, m_Pos.y + 125 };
+    POINT ptOrigin = {m_Pos.x, m_Pos.y + 125};
     wchar_t szTemp[256];
 
     g_pRenderText->SetFont(g_hFont);
@@ -454,18 +454,20 @@ void CNewUIGuardWindow::RenderSeigeInfoTab()
         g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, GlobalText[1545], 190, 0, RT3_SORT_CENTER);
 
         ptOrigin.y += 14;
-        mu_swprintf(szTemp, GlobalText[1546], m_wSiegeStartYear, m_bySiegeStartMonth, m_bySiegeStartDay, m_bySiegeStartHour, m_bySiegeStartMinute);
+        mu_swprintf(szTemp, GlobalText[1546], m_wSiegeStartYear, m_bySiegeStartMonth, m_bySiegeStartDay,
+                    m_bySiegeStartHour, m_bySiegeStartMinute);
         g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, szTemp, 190, 0, RT3_SORT_CENTER);
 
         ptOrigin.y += 35;
-        mu_swprintf(szTemp, GlobalText[1421], m_dwStateLeftSec / 3600, (m_dwStateLeftSec % 3600) / 60, (m_dwStateLeftSec % 3600) % 60);
+        mu_swprintf(szTemp, GlobalText[1421], m_dwStateLeftSec / 3600, (m_dwStateLeftSec % 3600) / 60,
+                    (m_dwStateLeftSec % 3600) % 60);
         g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, szTemp, 190, 0, RT3_SORT_CENTER);
     }
 }
 
 void CNewUIGuardWindow::RenderRegisterTab()
 {
-    POINT ptOrigin = { m_Pos.x, m_Pos.y + 125 };
+    POINT ptOrigin = {m_Pos.x, m_Pos.y + 125};
     g_pRenderText->SetFont(g_hFont);
 
     switch (m_eTimeType)
@@ -479,8 +481,8 @@ void CNewUIGuardWindow::RenderRegisterTab()
         {
             if (!g_GuardsMan.HasRegistered())
             {
-                if (!wcscmp(GuildMark[Hero->GuildMarkIndex].UnionName, m_szOwnerGuild)
-                    || !wcscmp(GuildMark[Hero->GuildMarkIndex].GuildName, m_szOwnerGuild))
+                if (!wcscmp(GuildMark[Hero->GuildMarkIndex].UnionName, m_szOwnerGuild) ||
+                    !wcscmp(GuildMark[Hero->GuildMarkIndex].GuildName, m_szOwnerGuild))
                 {
                     m_BtnProclaim.Lock();
                     m_BtnProclaim.ChangeImgColor(BUTTON_STATE_UP, RGBA(100, 100, 100, 255));
@@ -570,7 +572,7 @@ void CNewUIGuardWindow::RenderRegisterTab()
 
 void CNewUIGuardWindow::RenderRegisterInfoTab()
 {
-    POINT ptOrigin = { m_Pos.x, m_Pos.y + 125 };
+    POINT ptOrigin = {m_Pos.x, m_Pos.y + 125};
     g_pRenderText->SetFont(g_hFontBold);
 
     if (m_eTimeType == CASTLESIEGE_STATE_REGSIEGE || m_eTimeType == CASTLESIEGE_STATE_REGMARK)
@@ -613,9 +615,8 @@ void CNewUIGuardWindow::RenderRegisterInfoTab()
         g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, GlobalText[1442], 190, 0, RT3_SORT_CENTER);
     }
 
-    if (g_GuardsMan.HasRegistered() &&
-        CASTLESIEGE_STATE_REGSIEGE <= m_eTimeType && m_eTimeType <= CASTLESIEGE_STATE_REGMARK
-        && Hero->GuildStatus == G_MASTER)
+    if (g_GuardsMan.HasRegistered() && CASTLESIEGE_STATE_REGSIEGE <= m_eTimeType &&
+        m_eTimeType <= CASTLESIEGE_STATE_REGMARK && Hero->GuildStatus == G_MASTER)
     {
         m_BtnGiveUp.Render();
     }
@@ -623,7 +624,8 @@ void CNewUIGuardWindow::RenderRegisterInfoTab()
 
 void CNewUIGuardWindow::SetData(LPPMSG_ANS_CASTLESIEGESTATE Info)
 {
-    if (!Info)	return;
+    if (!Info)
+        return;
 
     memset(m_szOwnerGuild, 0, sizeof(char) * 9);
     memset(m_szOwnerGuildMaster, 0, sizeof(char) * 11);
@@ -647,8 +649,10 @@ void CNewUIGuardWindow::SetData(LPPMSG_ANS_CASTLESIEGESTATE Info)
     m_bySiegeStartDay = Info->btSiegeStartDay;
     m_bySiegeStartHour = Info->btSiegeStartHour;
     m_bySiegeStartMinute = Info->btSiegeStartMinute;
-    m_dwStateLeftSec = MAKELONG(MAKEWORD(Info->btStateLeftSec4, Info->btStateLeftSec3), MAKEWORD(Info->btStateLeftSec2, Info->btStateLeftSec1));
-    //m_dwStateLeftSec = Info->btStateLeftSec1<<24 | Info->btStateLeftSec2<<16 | Info->btStateLeftSec3<<8 | Info->btStateLeftSec4;
+    m_dwStateLeftSec = MAKELONG(MAKEWORD(Info->btStateLeftSec4, Info->btStateLeftSec3),
+                                MAKEWORD(Info->btStateLeftSec2, Info->btStateLeftSec1));
+    // m_dwStateLeftSec = Info->btStateLeftSec1<<24 | Info->btStateLeftSec2<<16 | Info->btStateLeftSec3<<8 |
+    // Info->btStateLeftSec4;
 }
 
 void CNewUIGuardWindow::AddDeclareGuildList(wchar_t* szGuildName, int nMarkCount, BYTE byIsGiveUP, BYTE bySeqNum)
@@ -690,10 +694,11 @@ void CNewUIGuardWindow::RenderScrollBarFrame(int iPos_x, int iPos_y, int iHeight
     for (int i = 0; i < _iMiddle_Cnt; i++)
         RenderImage(IMAGE_GUARDWINDOW_SCROLL_MIDDLE, iPos_x, iPos_y + (float)(i * _Temp + 3), 7, _Temp);
 
-    RenderImage(IMAGE_GUARDWINDOW_SCROLL_MIDDLE, iPos_x, iPos_y + (float)(_iMiddle_Cnt * _Temp + 3), 7, _Temp * _Middle_rest);
-#else //PBG_ADD_INGAMESHOP_UI_ITEMSHOP
+    RenderImage(IMAGE_GUARDWINDOW_SCROLL_MIDDLE, iPos_x, iPos_y + (float)(_iMiddle_Cnt * _Temp + 3), 7,
+                _Temp * _Middle_rest);
+#else  // PBG_ADD_INGAMESHOP_UI_ITEMSHOP
     RenderBitmap(IMAGE_GUARDWINDOW_SCROLL_MIDDLE, iPos_x, iPos_y + 3, 7.f, iHeight - 6, 0, 0, 7.f / 8.f, 15.f / 16.f);
-#endif //PBG_ADD_INGAMESHOP_UI_ITEMSHOP
+#endif // PBG_ADD_INGAMESHOP_UI_ITEMSHOP
     RenderImage(IMAGE_GUARDWINDOW_SCROLL_BOTTOM, iPos_x, iPos_y + iHeight - 3, 7, 3);
 }
 

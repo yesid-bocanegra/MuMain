@@ -14,12 +14,10 @@
 #include "DSPlaySound.h"
 #include "ZzzInventory.h"
 
+extern int DeleteGuildIndex;
+extern DWORD g_dwActiveUIID;
 
-
-extern int			DeleteGuildIndex;
-extern DWORD		g_dwActiveUIID;
-
-wchar_t	s_szTargetID[MAX_USERNAME_SIZE + 1];
+wchar_t s_szTargetID[MAX_USERNAME_SIZE + 1];
 extern int s_nTargetFireMemberIndex = 0;
 
 char Guild_Skill_Button = 0;
@@ -62,12 +60,16 @@ int DoFireAction(POPUP_RESULT Result)
     return 1;
 }
 
-POINT			s_ptAppointWindow;
-enum eAppointType { APPOINT_SUBGUILDMASTER = 64, APPOINT_BATTLEMASTSER = 32 };
-eAppointType	s_eAppointType;
-CUIButton		s_PopupAppointOkButton;
-CUIButton		s_PopupAppointCancelButton;
-GUILD_STATUS	s_eAppointStatus;
+POINT s_ptAppointWindow;
+enum eAppointType
+{
+    APPOINT_SUBGUILDMASTER = 64,
+    APPOINT_BATTLEMASTSER = 32
+};
+eAppointType s_eAppointType;
+CUIButton s_PopupAppointOkButton;
+CUIButton s_PopupAppointCancelButton;
+GUILD_STATUS s_eAppointStatus;
 
 void DoAppointAction()
 {
@@ -84,7 +86,8 @@ void DoAppointAction()
 
     if (s_PopupAppointOkButton.DoMouseAction())
     {
-        SocketClient->ToGameServer()->SendGuildRoleAssignRequest(s_eAppointStatus, s_szTargetID, s_eAppointStatus == G_PERSON ? 0x01 : 0x02);
+        SocketClient->ToGameServer()->SendGuildRoleAssignRequest(s_eAppointStatus, s_szTargetID,
+                                                                 s_eAppointStatus == G_PERSON ? 0x01 : 0x02);
 
         SocketClient->ToGameServer()->SendGuildListRequest();
 
@@ -100,18 +103,25 @@ void RenderAppoint()
 
     EnableAlphaTest();
 
-    RenderGoldRect(s_ptAppointWindow.x + 20, s_ptAppointWindow.y + 19, 170, 20.f, (s_eAppointType == APPOINT_SUBGUILDMASTER ? 1 : 0));
+    RenderGoldRect(s_ptAppointWindow.x + 20, s_ptAppointWindow.y + 19, 170, 20.f,
+                   (s_eAppointType == APPOINT_SUBGUILDMASTER ? 1 : 0));
     g_pRenderText->SetBgColor(0);
-    g_pRenderText->RenderText(s_ptAppointWindow.x + 20, s_ptAppointWindow.y + 24, GlobalText[1311], 170, 0, RT3_SORT_CENTER);
+    g_pRenderText->RenderText(s_ptAppointWindow.x + 20, s_ptAppointWindow.y + 24, GlobalText[1311], 170, 0,
+                              RT3_SORT_CENTER);
 
-    RenderGoldRect(s_ptAppointWindow.x + 20, s_ptAppointWindow.y + 19 + 25 - 5, 170, 20.f, (s_eAppointType == APPOINT_BATTLEMASTSER ? 1 : 0));
-    g_pRenderText->RenderText(s_ptAppointWindow.x + 20, s_ptAppointWindow.y + 24 + 25 - 3, GlobalText[1312], 170, 0, RT3_SORT_CENTER);
+    RenderGoldRect(s_ptAppointWindow.x + 20, s_ptAppointWindow.y + 19 + 25 - 5, 170, 20.f,
+                   (s_eAppointType == APPOINT_BATTLEMASTSER ? 1 : 0));
+    g_pRenderText->RenderText(s_ptAppointWindow.x + 20, s_ptAppointWindow.y + 24 + 25 - 3, GlobalText[1312], 170, 0,
+                              RT3_SORT_CENTER);
 
     wchar_t Text[64];
-    mu_swprintf(Text, GlobalText[1314], s_szTargetID, (s_eAppointType == APPOINT_SUBGUILDMASTER ? GlobalText[1301] : GlobalText[1302]));
+    mu_swprintf(Text, GlobalText[1314], s_szTargetID,
+                (s_eAppointType == APPOINT_SUBGUILDMASTER ? GlobalText[1301] : GlobalText[1302]));
 
-    g_pRenderText->RenderText(s_ptAppointWindow.x + 20, s_ptAppointWindow.y + 24 + 25 * 2 + 1, Text, 170, 0, RT3_SORT_CENTER);
-    g_pRenderText->RenderText(s_ptAppointWindow.x + 20, s_ptAppointWindow.y + 24 + 25 * 2 + 1 + 18, GlobalText[1315], 170, 0, RT3_SORT_CENTER);
+    g_pRenderText->RenderText(s_ptAppointWindow.x + 20, s_ptAppointWindow.y + 24 + 25 * 2 + 1, Text, 170, 0,
+                              RT3_SORT_CENTER);
+    g_pRenderText->RenderText(s_ptAppointWindow.x + 20, s_ptAppointWindow.y + 24 + 25 * 2 + 1 + 18, GlobalText[1315],
+                              170, 0, RT3_SORT_CENTER);
 
     s_PopupAppointOkButton.SetPosition(s_ptAppointWindow.x + 15 + 40, s_ptAppointWindow.y + 117);
     s_PopupAppointOkButton.Render();
@@ -136,7 +146,8 @@ CUIGuildInfo::CUIGuildInfo()
     m_BreakUpGuildButton.Init(nButtonID++, L"");
     m_BreakUpGuildButton.SetParentUIID(GetUIID());
     m_BreakUpGuildButton.SetSize(50, 18);
-    m_BreakUpGuildButton.SetPosition(GetPosition_x() + 70, GetPosition_y() + m_iHeight - m_BreakUpGuildButton.GetHeight());
+    m_BreakUpGuildButton.SetPosition(GetPosition_x() + 70,
+                                     GetPosition_y() + m_iHeight - m_BreakUpGuildButton.GetHeight());
 
     s_ptAppointWindow.x = s_ptAppointWindow.y = 0;
     m_AppointButton.Init(nButtonID++, GlobalText[1307]);
@@ -175,9 +186,7 @@ CUIGuildInfo::CUIGuildInfo()
     m_BanUnionButton.SetPosition(GetPosition_x() + 15 + 55, GetPosition_y() + 220);
 }
 
-CUIGuildInfo::~CUIGuildInfo()
-{
-}
+CUIGuildInfo::~CUIGuildInfo() {}
 
 int CUIGuildInfo::GetGuildMemberIndex(wchar_t* szName)
 {
@@ -272,16 +281,18 @@ void CUIGuildInfo::DoGuildInfoTabMouseAction()
 
 void CUIGuildInfo::RenderGuildInfoTab()
 {
-    POINT ptOrigin = { GetPosition_x() + 15 + 54, GetPosition_y() + 75 + 29 };
+    POINT ptOrigin = {GetPosition_x() + 15 + 54, GetPosition_y() + 75 + 29};
 
     RenderGoldRect(ptOrigin.x, ptOrigin.y, 53, 53);
-    ptOrigin.x += 3;	ptOrigin.y += 3;
+    ptOrigin.x += 3;
+    ptOrigin.y += 3;
     CreateGuildMark(Hero->GuildMarkIndex);
     RenderBitmap(BITMAP_GUILD, ptOrigin.x, ptOrigin.y, 48, 48);
 
     wchar_t szTemp[64];
 
-    ptOrigin.x = GetPosition_x() + 15 + 10;	ptOrigin.y = GetPosition_y() + 170;
+    ptOrigin.x = GetPosition_x() + 15 + 10;
+    ptOrigin.y = GetPosition_y() + 170;
     RenderGoldRect(ptOrigin.x, ptOrigin.y, 140, 62);
     ptOrigin.x += 5;
     ptOrigin.y += 8;
@@ -298,7 +309,8 @@ void CUIGuildInfo::RenderGuildInfoTab()
         if (Class == CLASS_DARK_LORD)
         {
             int nCount = CharacterAttribute->Level / 10 + CharacterAttribute->Charisma / 10;
-            if (nCount > 80)	nCount = 80;
+            if (nCount > 80)
+                nCount = 80;
             mu_swprintf(szTemp, GlobalText[1362], g_nGuildMemberCount, nCount);
         }
         else
@@ -468,7 +480,7 @@ void CUIGuildInfo::DoGuildUnionMouseAction()
 
 void CUIGuildInfo::RenderGuildUnionTab()
 {
-    POINT ptOrigin = { GetPosition_x() + 15, GetPosition_y() + 98 };
+    POINT ptOrigin = {GetPosition_x() + 15, GetPosition_y() + 98};
 
     if (GuildMark[Hero->GuildMarkIndex].UnionName[0] == NULL)
     {
@@ -536,7 +548,7 @@ void CUIGuildInfo::SetRivalGuildName(wchar_t* szName)
 
 void CUIGuildInfo::AddGuildNotice(wchar_t* szText)
 {
-    wchar_t szTemp[5][MAX_TEXT_LENGTH + 1] = { {0}, {0}, {0}, {0}, {0} };
+    wchar_t szTemp[5][MAX_TEXT_LENGTH + 1] = {{0}, {0}, {0}, {0}, {0}};
     CutText3(szText, szTemp[0], 110, 5, MAX_TEXT_LENGTH + 1);
 
     for (int i = 0; i < 5; ++i)
@@ -591,7 +603,8 @@ BOOL CUIGuildInfo::DoMouseAction()
         Close();
     }
 
-    if (Hero->GuildStatus == G_NONE) return FALSE;
+    if (Hero->GuildStatus == G_NONE)
+        return FALSE;
 
     if (MouseLButton)
     {
@@ -638,7 +651,7 @@ void CUIGuildInfo::Render()
 {
     glColor4f(1.f, 1.f, 1.f, 1.f);
 
-    POINT ptOrigin = { GetPosition_x(), GetPosition_y() };
+    POINT ptOrigin = {GetPosition_x(), GetPosition_y()};
 
     DisableAlphaBlend();
     RenderBitmap(BITMAP_INVENTORY, ptOrigin.x, ptOrigin.y, 190, 256, 0.f, 0.f, 190.f / 256.f, 256.f / 256.f);
@@ -696,11 +709,14 @@ void CUIGuildInfo::Render()
     ptOrigin.x = GetPosition_x() + 15;
     ptOrigin.y = GetPosition_y() + 91;
     glColor4ub(146, 144, 141, 255);
-    if (m_nCurrentTab != 0) RenderColor(ptOrigin.x, ptOrigin.y, 54, 1);
+    if (m_nCurrentTab != 0)
+        RenderColor(ptOrigin.x, ptOrigin.y, 54, 1);
     ptOrigin.x += 54;
-    if (m_nCurrentTab != 1) RenderColor(ptOrigin.x, ptOrigin.y, 54, 1);
+    if (m_nCurrentTab != 1)
+        RenderColor(ptOrigin.x, ptOrigin.y, 54, 1);
     ptOrigin.x += 54;
-    if (m_nCurrentTab != 2) RenderColor(ptOrigin.x, ptOrigin.y, 54, 1);
+    if (m_nCurrentTab != 2)
+        RenderColor(ptOrigin.x, ptOrigin.y, 54, 1);
     EndRenderColor();
 
     g_pRenderText->SetFont(g_hFontBold);
@@ -709,25 +725,34 @@ void CUIGuildInfo::Render()
 
     ptOrigin.x = GetPosition_x() + 15;
     ptOrigin.y = GetPosition_y() + 75;
-    if (m_nCurrentTab == 0) glColor4f(1.f, 1.f, 1.f, 1.f);
-    else glColor4f(0.6f, 0.6f, 0.6f, 1.f);
-    RenderBitmap(BITMAP_INTERFACE_EX + 9, ptOrigin.x, ptOrigin.y - (m_nCurrentTab == 0 ? 2 : 0),
-        (float)52, (float)16 + (m_nCurrentTab == 0 ? 2 : 0), 0.f, 0.f, 48.f / 64.f, 15.f / 16.f);
-    g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y + 4 - (m_nCurrentTab == 0 ? 1 : 0), GlobalText[946], 52, 0, RT3_SORT_CENTER);
+    if (m_nCurrentTab == 0)
+        glColor4f(1.f, 1.f, 1.f, 1.f);
+    else
+        glColor4f(0.6f, 0.6f, 0.6f, 1.f);
+    RenderBitmap(BITMAP_INTERFACE_EX + 9, ptOrigin.x, ptOrigin.y - (m_nCurrentTab == 0 ? 2 : 0), (float)52,
+                 (float)16 + (m_nCurrentTab == 0 ? 2 : 0), 0.f, 0.f, 48.f / 64.f, 15.f / 16.f);
+    g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y + 4 - (m_nCurrentTab == 0 ? 1 : 0), GlobalText[946], 52, 0,
+                              RT3_SORT_CENTER);
 
     ptOrigin.x += 54;
-    if (m_nCurrentTab == 1) glColor4f(1.f, 1.f, 1.f, 1.f);
-    else glColor4f(0.6f, 0.6f, 0.6f, 1.f);
-    RenderBitmap(BITMAP_INTERFACE_EX + 9, ptOrigin.x, ptOrigin.y - (m_nCurrentTab == 1 ? 2 : 0),
-        (float)52, (float)16 + (m_nCurrentTab == 1 ? 2 : 0), 0.f, 0.f, 48.f / 64.f, 15.f / 16.f);
-    g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y + 4 - (m_nCurrentTab == 1 ? 1 : 0), GlobalText[1330], 52, 0, RT3_SORT_CENTER);
+    if (m_nCurrentTab == 1)
+        glColor4f(1.f, 1.f, 1.f, 1.f);
+    else
+        glColor4f(0.6f, 0.6f, 0.6f, 1.f);
+    RenderBitmap(BITMAP_INTERFACE_EX + 9, ptOrigin.x, ptOrigin.y - (m_nCurrentTab == 1 ? 2 : 0), (float)52,
+                 (float)16 + (m_nCurrentTab == 1 ? 2 : 0), 0.f, 0.f, 48.f / 64.f, 15.f / 16.f);
+    g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y + 4 - (m_nCurrentTab == 1 ? 1 : 0), GlobalText[1330], 52, 0,
+                              RT3_SORT_CENTER);
 
     ptOrigin.x += 54;
-    if (m_nCurrentTab == 2) glColor4f(1.f, 1.f, 1.f, 1.f);
-    else glColor4f(0.6f, 0.6f, 0.6f, 1.f);
-    RenderBitmap(BITMAP_INTERFACE_EX + 9, ptOrigin.x, ptOrigin.y - (m_nCurrentTab == 2 ? 2 : 0),
-        (float)52, (float)16 + (m_nCurrentTab == 2 ? 2 : 0), 0.f, 0.f, 48.f / 64.f, 15.f / 16.f);
-    g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y + 4 - (m_nCurrentTab == 2 ? 1 : 0), GlobalText[1352], 52, 0, RT3_SORT_CENTER);
+    if (m_nCurrentTab == 2)
+        glColor4f(1.f, 1.f, 1.f, 1.f);
+    else
+        glColor4f(0.6f, 0.6f, 0.6f, 1.f);
+    RenderBitmap(BITMAP_INTERFACE_EX + 9, ptOrigin.x, ptOrigin.y - (m_nCurrentTab == 2 ? 2 : 0), (float)52,
+                 (float)16 + (m_nCurrentTab == 2 ? 2 : 0), 0.f, 0.f, 48.f / 64.f, 15.f / 16.f);
+    g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y + 4 - (m_nCurrentTab == 2 ? 1 : 0), GlobalText[1352], 52, 0,
+                              RT3_SORT_CENTER);
 
     glColor4f(1.f, 1.f, 1.f, 1.f);
 
@@ -749,7 +774,8 @@ void CUIGuildInfo::Render()
 
 void CUIGuildInfo::Open()
 {
-    if (m_bOpened)	return;
+    if (m_bOpened)
+        return;
 
     m_bOpened = TRUE;
 }
@@ -761,7 +787,8 @@ bool CUIGuildInfo::IsOpen()
 
 void CUIGuildInfo::Close()
 {
-    if (!m_bOpened)	return;
+    if (!m_bOpened)
+        return;
 
     m_bOpened = FALSE;
 
@@ -793,10 +820,8 @@ bool CheckUseMasterSkill(CHARACTER* c, int Index)
 
 void UseBattleMasterSkill(void)
 {
-    if (!(Hero->EtcPart == PARTS_ATTACK_TEAM_MARK
-        || Hero->EtcPart == PARTS_ATTACK_TEAM_MARK2
-        || Hero->EtcPart == PARTS_ATTACK_TEAM_MARK3
-        || Hero->EtcPart == PARTS_DEFENSE_TEAM_MARK))
+    if (!(Hero->EtcPart == PARTS_ATTACK_TEAM_MARK || Hero->EtcPart == PARTS_ATTACK_TEAM_MARK2 ||
+          Hero->EtcPart == PARTS_ATTACK_TEAM_MARK3 || Hero->EtcPart == PARTS_DEFENSE_TEAM_MARK))
     {
         return;
     }

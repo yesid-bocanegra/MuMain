@@ -50,7 +50,8 @@ ULONGLONG DownloadFileInfo::GetFileLength() // OK
     return this->m_uFileLength;
 }
 
-void DownloadFileInfo::SetFilePath(TCHAR* szFileName, TCHAR* szLocalFilePath, TCHAR* szRemoteFilePath, TCHAR* szTargerDirPath) // OK
+void DownloadFileInfo::SetFilePath(TCHAR* szFileName, TCHAR* szLocalFilePath, TCHAR* szRemoteFilePath,
+                                   TCHAR* szTargerDirPath) // OK
 {
     StringCchCopy(this->m_szFileName, sizeof(this->m_szFileName), szFileName);
     StringCchCopy(this->m_szLocalFilePath, sizeof(this->m_szLocalFilePath), szLocalFilePath);
@@ -59,7 +60,7 @@ void DownloadFileInfo::SetFilePath(TCHAR* szFileName, TCHAR* szLocalFilePath, TC
         StringCchCopy(this->m_szTargerDirPath, sizeof(this->m_szTargerDirPath), szTargerDirPath);
 }
 
-void  DownloadFileInfo::SetFileLength(ULONGLONG uFileLength) // OK
+void DownloadFileInfo::SetFileLength(ULONGLONG uFileLength) // OK
 {
     this->m_uFileLength = uFileLength;
 }
@@ -126,7 +127,8 @@ BOOL DownloadServerInfo::IsPassive() // OK
     return this->m_bPassive;
 }
 
-void DownloadServerInfo::SetServerInfo(TCHAR* szServerURL, INTERNET_PORT nPort, TCHAR* szUserID, TCHAR* szPassword) // OK
+void DownloadServerInfo::SetServerInfo(TCHAR* szServerURL, INTERNET_PORT nPort, TCHAR* szUserID,
+                                       TCHAR* szPassword) // OK
 {
     auto* search = wcschr(szServerURL, ':');
     if (search && search[1] == '/' && search[2] == '/')

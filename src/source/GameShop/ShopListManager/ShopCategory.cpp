@@ -13,6 +13,7 @@
 #include "ShopCategory.h"
 #include "StringToken.h"
 
+// cppcheck-suppress uninitMemberVar
 CShopCategory::CShopCategory() // OK
 {
     this->CategoryList.clear();

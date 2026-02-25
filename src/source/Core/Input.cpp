@@ -11,6 +11,7 @@
 
 extern CTimer* g_pTimer;
 
+// cppcheck-suppress uninitMemberVar
 CInput::CInput() {}
 
 CInput::~CInput() {}

@@ -12,6 +12,7 @@
 
 using namespace SEASON3B;
 
+// cppcheck-suppress uninitMemberVar
 CNewUIPartyInfoWindow::CNewUIPartyInfoWindow()
 {
     m_pNewUIMng = NULL;
@@ -73,13 +74,11 @@ void CNewUIPartyInfoWindow::OpenningProcess()
     SocketClient->ToGameServer()->SendPartyListRequest();
 }
 
-void CNewUIPartyInfoWindow::ClosingProcess()
-{
-}
+void CNewUIPartyInfoWindow::ClosingProcess() {}
 
 bool CNewUIPartyInfoWindow::BtnProcess()
 {
-    POINT ptExitBtn1 = { m_Pos.x + 169, m_Pos.y + 7 };
+    POINT ptExitBtn1 = {m_Pos.x + 169, m_Pos.y + 7};
 
     if (SEASON3B::IsPress(VK_LBUTTON) && CheckMouseIn(ptExitBtn1.x, ptExitBtn1.y, 13, 12))
     {
@@ -162,11 +161,15 @@ bool CNewUIPartyInfoWindow::Render()
     DWORD dwPreBGColor = g_pRenderText->GetBgColor();
     g_pRenderText->SetBgColor(RGBA(0, 0, 0, 0));
 
-    RenderImage(IMAGE_PARTY_BASE_WINDOW_BACK, m_Pos.x, m_Pos.y, float(PARTY_INFO_WINDOW_WIDTH), float(PARTY_INFO_WINDOW_HEIGHT));
+    RenderImage(IMAGE_PARTY_BASE_WINDOW_BACK, m_Pos.x, m_Pos.y, float(PARTY_INFO_WINDOW_WIDTH),
+                float(PARTY_INFO_WINDOW_HEIGHT));
     RenderImage(IMAGE_PARTY_BASE_WINDOW_TOP, m_Pos.x, m_Pos.y, float(PARTY_INFO_WINDOW_WIDTH), 64.f);
-    RenderImage(IMAGE_PARTY_BASE_WINDOW_LEFT, m_Pos.x, m_Pos.y + 64.f, 21.f, float(PARTY_INFO_WINDOW_HEIGHT) - 64.f - 45.f);
-    RenderImage(IMAGE_PARTY_BASE_WINDOW_RIGHT, m_Pos.x + float(PARTY_INFO_WINDOW_WIDTH) - 21.f, m_Pos.y + 64.f, 21.f, float(PARTY_INFO_WINDOW_HEIGHT) - 64.f - 45.f);
-    RenderImage(IMAGE_PARTY_BASE_WINDOW_BOTTOM, m_Pos.x, m_Pos.y + float(PARTY_INFO_WINDOW_HEIGHT) - 45.f, float(PARTY_INFO_WINDOW_WIDTH), 45.f);
+    RenderImage(IMAGE_PARTY_BASE_WINDOW_LEFT, m_Pos.x, m_Pos.y + 64.f, 21.f,
+                float(PARTY_INFO_WINDOW_HEIGHT) - 64.f - 45.f);
+    RenderImage(IMAGE_PARTY_BASE_WINDOW_RIGHT, m_Pos.x + float(PARTY_INFO_WINDOW_WIDTH) - 21.f, m_Pos.y + 64.f, 21.f,
+                float(PARTY_INFO_WINDOW_HEIGHT) - 64.f - 45.f);
+    RenderImage(IMAGE_PARTY_BASE_WINDOW_BOTTOM, m_Pos.x, m_Pos.y + float(PARTY_INFO_WINDOW_HEIGHT) - 45.f,
+                float(PARTY_INFO_WINDOW_WIDTH), 45.f);
 
     m_BtnExit.Render();
     g_pRenderText->SetFont(g_hFontBold);
@@ -209,14 +212,16 @@ bool CNewUIPartyInfoWindow::Render()
     return true;
 }
 
-void CNewUIPartyInfoWindow::RenderGroupBox(int iPosX, int iPosY, int iWidth, int iHeight, int iTitleWidth/* =60 */, int iTitleHeight/* =20  */)
+void CNewUIPartyInfoWindow::RenderGroupBox(int iPosX, int iPosY, int iWidth, int iHeight, int iTitleWidth /* =60 */,
+                                           int iTitleHeight /* =20  */)
 {
     EnableAlphaTest();
 
     glColor4f(0.f, 0.f, 0.f, 0.9f);
     RenderColor(float(iPosX + 3), float(iPosY + 2), float(iTitleWidth - 8), float(iTitleHeight));
     glColor4f(0.f, 0.f, 0.f, 0.6f);
-    RenderColor(float(iPosX + 3), float(iPosY + 2 + iTitleHeight), float(iWidth - 7), float(iHeight - iTitleHeight - 7));
+    RenderColor(float(iPosX + 3), float(iPosY + 2 + iTitleHeight), float(iWidth - 7),
+                float(iHeight - iTitleHeight - 7));
 
     EndRenderColor();
 
@@ -228,15 +233,19 @@ void CNewUIPartyInfoWindow::RenderGroupBox(int iPosX, int iPosY, int iWidth, int
 
     RenderImage(IMAGE_PARTY_TABLE_TOP_PIXEL, iPosX + 6, iPosY, iTitleWidth - 12, 14);
     RenderImage(IMAGE_PARTY_TABLE_RIGHT_PIXEL, iPosX + iTitleWidth - 14, iPosY + 6, 14, iTitleHeight - 6);
-    RenderImage(IMAGE_PARTY_TABLE_TOP_PIXEL, iPosX + iTitleWidth - 5, iPosY + iTitleHeight, iWidth - iTitleWidth - 6, 14);
-    RenderImage(IMAGE_PARTY_TABLE_RIGHT_PIXEL, iPosX + iWidth - 14, iPosY + iTitleHeight + 6, 14, iHeight - iTitleHeight - 14);
+    RenderImage(IMAGE_PARTY_TABLE_TOP_PIXEL, iPosX + iTitleWidth - 5, iPosY + iTitleHeight, iWidth - iTitleWidth - 6,
+                14);
+    RenderImage(IMAGE_PARTY_TABLE_RIGHT_PIXEL, iPosX + iWidth - 14, iPosY + iTitleHeight + 6, 14,
+                iHeight - iTitleHeight - 14);
     RenderImage(IMAGE_PARTY_TABLE_BOTTOM_PIXEL, iPosX + 6, iPosY + iHeight - 14, iWidth - 12, 14);
     RenderImage(IMAGE_PARTY_TABLE_LEFT_PIXEL, iPosX, iPosY + 6, 14, iHeight - 14);
 }
 
 void CNewUIPartyInfoWindow::RenderMemberStatue(int iIndex, PARTY_t* pMember, bool bExitBtnRender /*= false*/)
 {
-    wchar_t szText[256] = { 0, };
+    wchar_t szText[256] = {
+        0,
+    };
 
     int iVal = iIndex * 71;
     int iPosX = m_Pos.x + 10;
@@ -324,7 +333,7 @@ void CNewUIPartyInfoWindow::LoadImages()
     LoadBitmap(L"Interface\\newui_item_back02-L.tga", IMAGE_PARTY_BASE_WINDOW_LEFT, GL_LINEAR);
     LoadBitmap(L"Interface\\newui_item_back02-R.tga", IMAGE_PARTY_BASE_WINDOW_RIGHT, GL_LINEAR);
     LoadBitmap(L"Interface\\newui_item_back03.tga", IMAGE_PARTY_BASE_WINDOW_BOTTOM, GL_LINEAR);
-    LoadBitmap(L"Interface\\newui_exit_00.tga", IMAGE_PARTY_BASE_WINDOW_BTN_EXIT, GL_LINEAR);		// Exit Button
+    LoadBitmap(L"Interface\\newui_exit_00.tga", IMAGE_PARTY_BASE_WINDOW_BTN_EXIT, GL_LINEAR); // Exit Button
 
     LoadBitmap(L"Interface\\newui_item_table01(L).tga", IMAGE_PARTY_TABLE_TOP_LEFT);
     LoadBitmap(L"Interface\\newui_item_table01(R).tga", IMAGE_PARTY_TABLE_TOP_RIGHT);

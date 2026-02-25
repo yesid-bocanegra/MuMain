@@ -12,10 +12,11 @@
 
 using namespace SEASON3B;
 
-#define QPE_NPC_MAX_LINE_PER_PAGE	7
-#define QPE_TEXT_GAP				15
-#define QPE_LIST_BOX_LINE_NUM		12
+#define QPE_NPC_MAX_LINE_PER_PAGE 7
+#define QPE_TEXT_GAP 15
+#define QPE_LIST_BOX_LINE_NUM 12
 
+// cppcheck-suppress uninitMemberVar
 CNewUIQuestProgressByEtc::CNewUIQuestProgressByEtc()
 {
     m_pNewUIMng = NULL;
@@ -44,7 +45,7 @@ bool CNewUIQuestProgressByEtc::Create(CNewUIManager* pNewUIMng, int x, int y)
     m_btnProgressR.ChangeButtonImgState(true, IMAGE_QPE_BTN_R);
     m_btnProgressR.ChangeButtonInfo(x + 153, y + 165, 17, 18);
 
-    m_btnComplete.ChangeText(GlobalText[2811]);	// "Ȯ     ��"
+    m_btnComplete.ChangeText(GlobalText[2811]); // "Ȯ     ��"
     m_btnComplete.ChangeButtonImgState(true, IMAGE_QPE_BTN_COMPLETE, true);
     m_btnComplete.ChangeButtonInfo(x + (QPE_WIDTH - 108) / 2, y + 362, 108, 29);
 
@@ -280,19 +281,22 @@ void CNewUIQuestProgressByEtc::RenderText()
     g_pRenderText->SetTextColor(230, 230, 230, 255);
     g_pRenderText->RenderText(m_Pos.x, m_Pos.y + 12, L"Quest", QPE_WIDTH, 0, RT3_SORT_CENTER);
     g_pRenderText->SetTextColor(36, 242, 252, 255);
-    g_pRenderText->RenderText(m_Pos.x, m_Pos.y + 27, g_QuestMng.GetSubject(m_dwCurQuestIndex), QPE_WIDTH, 0, RT3_SORT_CENTER);
+    g_pRenderText->RenderText(m_Pos.x, m_Pos.y + 27, g_QuestMng.GetSubject(m_dwCurQuestIndex), QPE_WIDTH, 0,
+                              RT3_SORT_CENTER);
 
     g_pRenderText->SetFont(g_hFont);
     g_pRenderText->SetTextColor(255, 230, 210, 255);
     int i;
     for (i = 0; i < QPE_NPC_MAX_LINE_PER_PAGE; ++i)
-        g_pRenderText->RenderText(m_Pos.x + 13, m_Pos.y + 59 + (QPE_TEXT_GAP * i), m_aszNPCWords[i + QPE_NPC_MAX_LINE_PER_PAGE * m_nSelNPCPage], 0, 0, RT3_SORT_LEFT);
+        g_pRenderText->RenderText(m_Pos.x + 13, m_Pos.y + 59 + (QPE_TEXT_GAP * i),
+                                  m_aszNPCWords[i + QPE_NPC_MAX_LINE_PER_PAGE * m_nSelNPCPage], 0, 0, RT3_SORT_LEFT);
 
     if (PLAYER_WORDS_MODE == m_eLowerView)
     {
         g_pRenderText->SetTextColor(255, 230, 210, 255);
         for (i = 0; i < QPE_PLAYER_LINE_MAX; ++i)
-            g_pRenderText->RenderText(m_Pos.x + 13, m_Pos.y + 207 + (QPE_TEXT_GAP * i), m_aszPlayerWords[i], 0, 0, RT3_SORT_LEFT);
+            g_pRenderText->RenderText(m_Pos.x + 13, m_Pos.y + 207 + (QPE_TEXT_GAP * i), m_aszPlayerWords[i], 0, 0,
+                                      RT3_SORT_LEFT);
     }
 }
 
@@ -390,8 +394,8 @@ void CNewUIQuestProgressByEtc::SetCurNPCWords()
     ::memset(m_aszNPCWords[0], 0, sizeof(char) * QPE_NPC_LINE_MAX * QPE_WORDS_ROW_MAX);
 
     g_pRenderText->SetFont(g_hFont);
-    int nLine = ::DivideStringByPixel(&m_aszNPCWords[0][0],
-        QPE_NPC_LINE_MAX, QPE_WORDS_ROW_MAX, g_QuestMng.GetNPCWords(m_dwCurQuestIndex), 160);
+    int nLine = ::DivideStringByPixel(&m_aszNPCWords[0][0], QPE_NPC_LINE_MAX, QPE_WORDS_ROW_MAX,
+                                      g_QuestMng.GetNPCWords(m_dwCurQuestIndex), 160);
 
     if (1 > nLine)
         return;
@@ -422,7 +426,8 @@ void CNewUIQuestProgressByEtc::SetCurPlayerWords()
             break;
         ::wcscat(szAnswer, pszAnswer);
 
-        m_anAnswerLine[i] = ::DivideStringByPixel(&m_aszPlayerWords[nPlayerWordsRow][0], 2, QPE_WORDS_ROW_MAX, szAnswer, 160, false);
+        m_anAnswerLine[i] =
+            ::DivideStringByPixel(&m_aszPlayerWords[nPlayerWordsRow][0], 2, QPE_WORDS_ROW_MAX, szAnswer, 160, false);
 
         nPlayerWordsRow += m_anAnswerLine[i];
 
@@ -436,16 +441,14 @@ void CNewUIQuestProgressByEtc::SetCurRequestReward()
     if (0 == m_dwCurQuestIndex)
         return;
 
-    const SQuestRequestReward* pQuestRequestReward
-        = g_QuestMng.GetRequestReward(m_dwCurQuestIndex);
+    const SQuestRequestReward* pQuestRequestReward = g_QuestMng.GetRequestReward(m_dwCurQuestIndex);
     if (NULL == pQuestRequestReward)
         return;
 
     m_RequestRewardListBox.Clear();
 
     SRequestRewardText aRequestRewardText[13];
-    m_bRequestComplete
-        = g_QuestMng.GetRequestRewardText(aRequestRewardText, 13, m_dwCurQuestIndex);
+    m_bRequestComplete = g_QuestMng.GetRequestRewardText(aRequestRewardText, 13, m_dwCurQuestIndex);
 
     int i = 0;
     int j, nLoop;

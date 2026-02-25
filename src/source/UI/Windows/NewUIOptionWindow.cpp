@@ -188,23 +188,19 @@ bool SEASON3B::CNewUIOptionWindow::Render()
     return true;
 }
 
-float SEASON3B::CNewUIOptionWindow::GetLayerDepth()	//. 10.5f
+float SEASON3B::CNewUIOptionWindow::GetLayerDepth() //. 10.5f
 {
     return 10.5f;
 }
 
-float SEASON3B::CNewUIOptionWindow::GetKeyEventOrder()	// 10.f;
+float SEASON3B::CNewUIOptionWindow::GetKeyEventOrder() // 10.f;
 {
     return 10.0f;
 }
 
-void SEASON3B::CNewUIOptionWindow::OpenningProcess()
-{
-}
+void SEASON3B::CNewUIOptionWindow::OpenningProcess() {}
 
-void SEASON3B::CNewUIOptionWindow::ClosingProcess()
-{
-}
+void SEASON3B::CNewUIOptionWindow::ClosingProcess() {}
 
 void SEASON3B::CNewUIOptionWindow::LoadImages()
 {
@@ -295,7 +291,7 @@ void SEASON3B::CNewUIOptionWindow::RenderContents()
     g_pRenderText->RenderText(m_Pos.x + 40, m_Pos.y + 92, GlobalText[389]);
     g_pRenderText->RenderText(m_Pos.x + 40, m_Pos.y + 132, GlobalText[919]);
     g_pRenderText->RenderText(m_Pos.x + 40, m_Pos.y + 154, GlobalText[1840]);
-    g_pRenderText->RenderText(m_Pos.x + 40, m_Pos.y + 154+60, L"Render Full Effects");
+    g_pRenderText->RenderText(m_Pos.x + 40, m_Pos.y + 154 + 60, L"Render Full Effects");
 }
 
 void SEASON3B::CNewUIOptionWindow::RenderButtons()

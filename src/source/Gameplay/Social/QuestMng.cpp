@@ -5,17 +5,16 @@
 #include "stdafx.h"
 #include "QuestMng.h"
 
-
-
 #include <crtdbg.h>
 
 #include "NewUISystem.h"
 #include "UsefulDef.h"
 
-#define	QM_NPCDIALOGUE_FILE			L"Data\\Local\\NPCDialogue.bmd"
-#define	QM_QUESTPROGRESS_FILE		L"Data\\Local\\QuestProgress.bmd"
+#define QM_NPCDIALOGUE_FILE L"Data\\Local\\NPCDialogue.bmd"
+#define QM_QUESTPROGRESS_FILE L"Data\\Local\\QuestProgress.bmd"
 
-#define	QM_QUESTWORDS_FILE			std::wstring(L"Data\\Local\\"+g_strSelectedML+L"\\QuestWords_"+g_strSelectedML+L".bmd").c_str()
+#define QM_QUESTWORDS_FILE                                                                                             \
+    std::wstring(L"Data\\Local\\" + g_strSelectedML + L"\\QuestWords_" + g_strSelectedML + L".bmd").c_str()
 
 CQuestMng g_QuestMng;
 
@@ -25,9 +24,7 @@ CQuestMng::CQuestMng()
     m_szNPCName = nullptr;
 }
 
-CQuestMng::~CQuestMng()
-{
-}
+CQuestMng::~CQuestMng() {}
 
 void CQuestMng::LoadQuestScript()
 {
@@ -114,21 +111,23 @@ void CQuestMng::LoadQuestWordsScript()
 #pragma pack(push, 1)
     struct SQuestWordsHeader
     {
-        int		m_nIndex;
-        short	m_nWordsLen;
+        int m_nIndex;
+        short m_nWordsLen;
     };
 #pragma pack(pop)
 
     int nSize = sizeof(SQuestWordsHeader);
     SQuestWordsHeader sQuestWordsHeader;
-    char rawWords[1024] { };
-    wchar_t szWords[1024] { };
+    char rawWords[1024]{};
+    wchar_t szWords[1024]{};
 
     while (0 != ::fread(&sQuestWordsHeader, nSize, 1, fp))
     {
+        // cppcheck-suppress dangerousTypeCast
         ::BuxConvert((BYTE*)&sQuestWordsHeader, nSize);
 
         ::fread(rawWords, sQuestWordsHeader.m_nWordsLen, 1, fp);
+        // cppcheck-suppress dangerousTypeCast
         ::BuxConvert((BYTE*)rawWords, sQuestWordsHeader.m_nWordsLen);
         CMultiLanguage::ConvertFromUtf8(szWords, rawWords, 1024);
 
@@ -141,8 +140,7 @@ void CQuestMng::LoadQuestWordsScript()
 
 void CQuestMng::SetQuestRequestReward(const BYTE* pbyRequestRewardPacket)
 {
-    auto pRequestRewardPacket
-        = (LPPMSG_NPC_QUESTEXP_INFO)pbyRequestRewardPacket;
+    auto pRequestRewardPacket = (LPPMSG_NPC_QUESTEXP_INFO)pbyRequestRewardPacket;
     DWORD dwQuestIndex = pRequestRewardPacket->m_dwQuestIndex;
     int i;
 
@@ -151,8 +149,7 @@ void CQuestMng::SetQuestRequestReward(const BYTE* pbyRequestRewardPacket)
     {
         for (i = 0; i < pOldRequestReward->m_byRequestCount; ++i)
             g_pNewItemMng->DeleteItem(pOldRequestReward->m_aRequest[i].m_pItem);
-        BYTE byRewardCount
-            = pOldRequestReward->m_byGeneralRewardCount + pOldRequestReward->m_byRandRewardCount;
+        BYTE byRewardCount = pOldRequestReward->m_byGeneralRewardCount + pOldRequestReward->m_byRandRewardCount;
         for (i = 0; i < byRewardCount; ++i)
             g_pNewItemMng->DeleteItem(pOldRequestReward->m_aReward[i].m_pItem);
     }
@@ -160,8 +157,7 @@ void CQuestMng::SetQuestRequestReward(const BYTE* pbyRequestRewardPacket)
     SQuestRequestReward sRequestReward;
     ::memset(&sRequestReward, 0, sizeof(SQuestRequestReward));
 
-    auto pRequestPacket
-        = (LPNPC_QUESTEXP_REQUEST_INFO)(pbyRequestRewardPacket + sizeof(PMSG_NPC_QUESTEXP_INFO));
+    auto pRequestPacket = (LPNPC_QUESTEXP_REQUEST_INFO)(pbyRequestRewardPacket + sizeof(PMSG_NPC_QUESTEXP_INFO));
 
     if (pRequestPacket->m_dwType == QUEST_REQUEST_NONE || pRequestRewardPacket->m_byRequestCount == 0)
     {
@@ -177,17 +173,17 @@ void CQuestMng::SetQuestRequestReward(const BYTE* pbyRequestRewardPacket)
             sRequestReward.m_aRequest[i].m_dwValue = pRequestPacket->m_dwValue;
 #ifdef ASG_ADD_TIME_LIMIT_QUEST
             sRequestReward.m_aRequest[i].m_dwCurValue = pRequestPacket->m_dwCurValue;
-#else	// ASG_ADD_TIME_LIMIT_QUEST
+#else  // ASG_ADD_TIME_LIMIT_QUEST
             sRequestReward.m_aRequest[i].m_wCurValue = pRequestPacket->m_wCurValue;
-#endif	// ASG_ADD_TIME_LIMIT_QUEST
+#endif // ASG_ADD_TIME_LIMIT_QUEST
             if (pRequestPacket->m_dwType == QUEST_REQUEST_ITEM)
-                sRequestReward.m_aRequest[i].m_pItem
-                = g_pNewItemMng->CreateItemOld(pRequestPacket->m_byItemInfo);
+                sRequestReward.m_aRequest[i].m_pItem = g_pNewItemMng->CreateItemOld(pRequestPacket->m_byItemInfo);
             ++pRequestPacket;
         }
     }
 
-    auto pRewardPacket = (LPNPC_QUESTEXP_REWARD_INFO)(pbyRequestRewardPacket + sizeof(PMSG_NPC_QUESTEXP_INFO) + sizeof(NPC_QUESTEXP_REQUEST_INFO) * 5);
+    auto pRewardPacket = (LPNPC_QUESTEXP_REWARD_INFO)(pbyRequestRewardPacket + sizeof(PMSG_NPC_QUESTEXP_INFO) +
+                                                      sizeof(NPC_QUESTEXP_REQUEST_INFO) * 5);
 
     if (pRewardPacket->m_dwType == QUEST_REWARD_NONE || pRequestRewardPacket->m_byRewardCount == 0)
     {
@@ -210,8 +206,7 @@ void CQuestMng::SetQuestRequestReward(const BYTE* pbyRequestRewardPacket)
                 aTempRandReward[byRandCount].m_wIndex = pRewardPacket->m_wIndex;
                 aTempRandReward[byRandCount].m_dwValue = pRewardPacket->m_dwValue;
                 if (aTempRandReward[byRandCount].m_dwType == QUEST_REWARD_ITEM)
-                    aTempRandReward[byRandCount].m_pItem
-                    = g_pNewItemMng->CreateItemOld(pRewardPacket->m_byItemInfo);
+                    aTempRandReward[byRandCount].m_pItem = g_pNewItemMng->CreateItemOld(pRewardPacket->m_byItemInfo);
                 ++byRandCount;
             }
             else
@@ -220,7 +215,8 @@ void CQuestMng::SetQuestRequestReward(const BYTE* pbyRequestRewardPacket)
                 sRequestReward.m_aReward[byGeneralCount].m_wIndex = pRewardPacket->m_wIndex;
                 sRequestReward.m_aReward[byGeneralCount].m_dwValue = pRewardPacket->m_dwValue;
                 if (pRewardPacket->m_dwType == QUEST_REWARD_ITEM)
-                    sRequestReward.m_aReward[byGeneralCount].m_pItem = g_pNewItemMng->CreateItemOld(pRewardPacket->m_byItemInfo);
+                    sRequestReward.m_aReward[byGeneralCount].m_pItem =
+                        g_pNewItemMng->CreateItemOld(pRewardPacket->m_byItemInfo);
                 ++byGeneralCount;
             }
 
@@ -421,7 +417,9 @@ bool CQuestMng::GetRequestRewardText(SRequestRewardText* aDest, int nDestCount, 
 {
     SQuestRequestReward* pRequestReward = &m_mapQuestRequestReward[dwQuestIndex];
 
-    if (pRequestReward->m_byRequestCount + pRequestReward->m_byGeneralRewardCount + pRequestReward->m_byRandRewardCount + 3 > nDestCount)
+    if (pRequestReward->m_byRequestCount + pRequestReward->m_byGeneralRewardCount +
+            pRequestReward->m_byRandRewardCount + 3 >
+        nDestCount)
         return false;
 
     ::memset(aDest, 0, sizeof(SRequestRewardText) * nDestCount);
@@ -470,13 +468,13 @@ bool CQuestMng::GetRequestRewardText(SRequestRewardText* aDest, int nDestCount, 
             {
             case QUEST_REQUEST_MONSTER:
                 ::mu_swprintf(aDest[nLine].m_szText, L"Mon.: %ls x %lu/%lu",
-                    ::getMonsterName(int(pRequestInfo->m_wIndex)),
-                    MIN(pRequestInfo->m_dwCurValue, pRequestInfo->m_dwValue),
-                    pRequestInfo->m_dwValue);
+                              ::getMonsterName(int(pRequestInfo->m_wIndex)),
+                              MIN(pRequestInfo->m_dwCurValue, pRequestInfo->m_dwValue), pRequestInfo->m_dwValue);
                 break;
             case QUEST_REQUEST_ITEM:
             {
                 wchar_t szItemName[32];
+                // cppcheck-suppress syntaxError
                 ::GetItemName((int)pRequestInfo->m_pItem->Type,
                     (pRequestInfo->m_pItem->Level, szItemName);
                 ::mu_swprintf(aDest[nLine].m_szText, L"Item: %ls x %lu/%lu", szItemName,
@@ -485,20 +483,18 @@ bool CQuestMng::GetRequestRewardText(SRequestRewardText* aDest, int nDestCount, 
             }
             break;
             case QUEST_REQUEST_LEVEL:
-                ::mu_swprintf(aDest[nLine].m_szText, L"Level: %lu %ls",
-                    pRequestInfo->m_dwValue, GlobalText[2812]);
+                ::mu_swprintf(aDest[nLine].m_szText, L"Level: %lu %ls", pRequestInfo->m_dwValue, GlobalText[2812]);
                 break;
             case QUEST_REQUEST_ZEN:
                 ::mu_swprintf(aDest[nLine].m_szText, L"Zen : %lu", pRequestInfo->m_dwValue);
                 break;
             case QUEST_REQUEST_PVP_POINT:
                 mu_swprintf(aDest[nLine].m_szText, GlobalText[3278],
-                    MIN(pRequestInfo->m_dwCurValue, pRequestInfo->m_dwValue),
-                    pRequestInfo->m_dwValue);
+                            MIN(pRequestInfo->m_dwCurValue, pRequestInfo->m_dwValue), pRequestInfo->m_dwValue);
                 break;
             }
             break;
-#endif	// ASG_ADD_TIME_LIMIT_QUEST
+#endif // ASG_ADD_TIME_LIMIT_QUEST
 
 #ifndef ASG_ADD_TIME_LIMIT_QUEST
         case QUEST_REQUEST_MONSTER:
@@ -514,20 +510,18 @@ bool CQuestMng::GetRequestRewardText(SRequestRewardText* aDest, int nDestCount, 
 
             {
                 auto text = getMonsterName(int(pRequestInfo->m_wIndex));
-                mu_swprintf(aDest[nLine].m_szText, L"Mon.: %ls x %lu/%lu",
-                    text,
-                    MIN((DWORD)pRequestInfo->m_wCurValue, pRequestInfo->m_dwValue),
-                    pRequestInfo->m_dwValue);
+                mu_swprintf(aDest[nLine].m_szText, L"Mon.: %ls x %lu/%lu", text,
+                            MIN((DWORD)pRequestInfo->m_wCurValue, pRequestInfo->m_dwValue), pRequestInfo->m_dwValue);
             }
             break;
-#endif	// ASG_ADD_TIME_LIMIT_QUEST
+#endif // ASG_ADD_TIME_LIMIT_QUEST
 
         case QUEST_REQUEST_SKILL:
 #ifdef ASG_ADD_TIME_LIMIT_QUEST
             if (0 == pRequestInfo->m_dwCurValue)
-#else	// ASG_ADD_TIME_LIMIT_QUEST
+#else  // ASG_ADD_TIME_LIMIT_QUEST
             if (0 == pRequestInfo->m_wCurValue)
-#endif	// ASG_ADD_TIME_LIMIT_QUEST
+#endif // ASG_ADD_TIME_LIMIT_QUEST
             {
                 aDest[nLine].m_dwColor = ARGB(255, 255, 30, 30);
                 bRequestComplete = false;
@@ -535,8 +529,7 @@ bool CQuestMng::GetRequestRewardText(SRequestRewardText* aDest, int nDestCount, 
             else
                 aDest[nLine].m_dwColor = ARGB(255, 223, 191, 103);
 
-            ::mu_swprintf(aDest[nLine].m_szText, L"Skill: %ls",
-                SkillAttribute[pRequestInfo->m_wIndex].Name);
+            ::mu_swprintf(aDest[nLine].m_szText, L"Skill: %ls", SkillAttribute[pRequestInfo->m_wIndex].Name);
             break;
 
 #ifndef ASG_ADD_TIME_LIMIT_QUEST
@@ -550,11 +543,9 @@ bool CQuestMng::GetRequestRewardText(SRequestRewardText* aDest, int nDestCount, 
                 aDest[nLine].m_dwColor = ARGB(255, 223, 191, 103);
 
             wchar_t szItemName[32];
-            ::GetItemName((int)pRequestInfo->m_pItem->Type, pRequestInfo->m_pItem->Level,
-                szItemName);
+            ::GetItemName((int)pRequestInfo->m_pItem->Type, pRequestInfo->m_pItem->Level, szItemName);
             ::mu_swprintf(aDest[nLine].m_szText, L"Item: %ls x %lu/%lu", szItemName,
-                MIN((DWORD)pRequestInfo->m_wCurValue, pRequestInfo->m_dwValue),
-                pRequestInfo->m_dwValue);
+                          MIN((DWORD)pRequestInfo->m_wCurValue, pRequestInfo->m_dwValue), pRequestInfo->m_dwValue);
             break;
 
         case QUEST_REQUEST_LEVEL:
@@ -566,17 +557,16 @@ bool CQuestMng::GetRequestRewardText(SRequestRewardText* aDest, int nDestCount, 
             else
                 aDest[nLine].m_dwColor = ARGB(255, 223, 191, 103);
 
-            ::mu_swprintf(aDest[nLine].m_szText, L"Level: %lu %ls",
-                pRequestInfo->m_dwValue, GlobalText[2812]);
+            ::mu_swprintf(aDest[nLine].m_szText, L"Level: %lu %ls", pRequestInfo->m_dwValue, GlobalText[2812]);
             break;
-#endif	// ASG_ADD_TIME_LIMIT_QUEST
+#endif // ASG_ADD_TIME_LIMIT_QUEST
 
         case QUEST_REQUEST_TUTORIAL:
 #ifdef ASG_ADD_TIME_LIMIT_QUEST
             if (pRequestInfo->m_dwCurValue == 1)
-#else	// ASG_ADD_TIME_LIMIT_QUEST
+#else  // ASG_ADD_TIME_LIMIT_QUEST
             if (pRequestInfo->m_wCurValue == 1)
-#endif	// ASG_ADD_TIME_LIMIT_QUEST
+#endif // ASG_ADD_TIME_LIMIT_QUEST
                 aDest[nLine].m_dwColor = ARGB(255, 223, 191, 103);
             else
             {
@@ -599,9 +589,9 @@ bool CQuestMng::GetRequestRewardText(SRequestRewardText* aDest, int nDestCount, 
         {
 #ifdef ASG_ADD_TIME_LIMIT_QUEST
             if (pRequestInfo->m_dwCurValue == 0)
-#else	// ASG_ADD_TIME_LIMIT_QUEST
+#else  // ASG_ADD_TIME_LIMIT_QUEST
             if (pRequestInfo->m_wCurValue == 0)
-#endif	// ASG_ADD_TIME_LIMIT_QUEST
+#endif // ASG_ADD_TIME_LIMIT_QUEST
             {
                 aDest[nLine].m_dwColor = ARGB(255, 255, 30, 30);
                 bRequestComplete = false;
@@ -621,9 +611,9 @@ bool CQuestMng::GetRequestRewardText(SRequestRewardText* aDest, int nDestCount, 
         {
 #ifdef ASG_ADD_TIME_LIMIT_QUEST
             if (pRequestInfo->m_dwCurValue < pRequestInfo->m_dwValue)
-#else	// ASG_ADD_TIME_LIMIT_QUEST
+#else  // ASG_ADD_TIME_LIMIT_QUEST
             if ((DWORD)pRequestInfo->m_wCurValue < pRequestInfo->m_dwValue)
-#endif	// ASG_ADD_TIME_LIMIT_QUEST
+#endif // ASG_ADD_TIME_LIMIT_QUEST
             {
                 aDest[nLine].m_dwColor = ARGB(255, 255, 30, 30);
                 bRequestComplete = false;
@@ -649,11 +639,11 @@ bool CQuestMng::GetRequestRewardText(SRequestRewardText* aDest, int nDestCount, 
             }
 #ifdef ASG_ADD_TIME_LIMIT_QUEST
             DWORD curValue = MIN(pRequestInfo->m_dwCurValue, pRequestInfo->m_dwValue);
-#else	// ASG_ADD_TIME_LIMIT_QUEST
+#else  // ASG_ADD_TIME_LIMIT_QUEST
             DWORD curValue = MIN((DWORD)pRequestInfo->m_wCurValue, pRequestInfo->m_dwValue);
-#endif	// ASG_ADD_TIME_LIMIT_QUEST
-            mu_swprintf(aDest[nLine].m_szText, GlobalText[nTextIndex], pRequestInfo->m_wIndex,
-                curValue, pRequestInfo->m_dwValue);
+#endif // ASG_ADD_TIME_LIMIT_QUEST
+            mu_swprintf(aDest[nLine].m_szText, GlobalText[nTextIndex], pRequestInfo->m_wIndex, curValue,
+                        pRequestInfo->m_dwValue);
         }
         break;
 
@@ -664,9 +654,9 @@ bool CQuestMng::GetRequestRewardText(SRequestRewardText* aDest, int nDestCount, 
         {
 #ifdef ASG_ADD_TIME_LIMIT_QUEST
             if (pRequestInfo->m_dwCurValue == 0)
-#else	// ASG_ADD_TIME_LIMIT_QUEST
+#else  // ASG_ADD_TIME_LIMIT_QUEST
             if (pRequestInfo->m_wCurValue == 0)
-#endif	// ASG_ADD_TIME_LIMIT_QUEST
+#endif // ASG_ADD_TIME_LIMIT_QUEST
             {
                 aDest[nLine].m_dwColor = ARGB(255, 255, 30, 30);
                 bRequestComplete = false;
@@ -712,9 +702,8 @@ bool CQuestMng::GetRequestRewardText(SRequestRewardText* aDest, int nDestCount, 
         aDest[nLine].m_hFont = g_hFontBold;
         aDest[nLine++].m_dwColor = ARGB(255, 179, 230, 77);
 
-        byRewardCount = 0 == j
-            ? pRequestReward->m_byGeneralRewardCount
-            : pRequestReward->m_byGeneralRewardCount + pRequestReward->m_byRandRewardCount;
+        byRewardCount = 0 == j ? pRequestReward->m_byGeneralRewardCount
+                               : pRequestReward->m_byGeneralRewardCount + pRequestReward->m_byRandRewardCount;
         for (; i < byRewardCount; ++i, ++nLine)
         {
             pRewardInfo = &pRequestReward->m_aReward[i];
@@ -742,17 +731,15 @@ bool CQuestMng::GetRequestRewardText(SRequestRewardText* aDest, int nDestCount, 
 
             case QUEST_REWARD_ITEM:
                 wchar_t szItemName[32];
-                ::GetItemName((int)pRewardInfo->m_pItem->Type, pRewardInfo->m_pItem->Level,
-                    szItemName);
-                ::mu_swprintf(aDest[nLine].m_szText, L"Item: %ls x %lu",
-                    szItemName, pRewardInfo->m_dwValue);
+                ::GetItemName((int)pRewardInfo->m_pItem->Type, pRewardInfo->m_pItem->Level, szItemName);
+                ::mu_swprintf(aDest[nLine].m_szText, L"Item: %ls x %lu", szItemName, pRewardInfo->m_dwValue);
                 break;
 
             case QUEST_REWARD_BUFF:
             {
                 const BuffInfo buffinfo = g_BuffInfo((eBuffState)pRewardInfo->m_wIndex);
                 ::mu_swprintf(aDest[nLine].m_szText, L"Bonus: %ls x %lu%ls", buffinfo.s_BuffName,
-                    pRewardInfo->m_dwValue, GlobalText[2300]);
+                              pRewardInfo->m_dwValue, GlobalText[2300]);
             }
             break;
 
@@ -760,7 +747,7 @@ bool CQuestMng::GetRequestRewardText(SRequestRewardText* aDest, int nDestCount, 
             case QUEST_REWARD_CONTRIBUTE:
                 mu_swprintf(aDest[nLine].m_szText, GlobalText[2994], pRewardInfo->m_dwValue);
                 break;
-#endif	// ASG_ADD_GENS_SYSTEM
+#endif // ASG_ADD_GENS_SYSTEM
             }
             aDest[nLine].m_szText[QM_MAX_REQUEST_REWARD_TEXT_LEN - 1] = 0;
         }

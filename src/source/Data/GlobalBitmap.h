@@ -62,17 +62,18 @@ class CBitmapCache
     };
     using type_cache_map = std::map<GLuint, BITMAP_t*>;
 
-    type_cache_map		m_mapCacheMain;
-    type_cache_map		m_mapCachePlayer;
-    type_cache_map		m_mapCacheInterface;
-    type_cache_map		m_mapCacheEffect;
+    type_cache_map m_mapCacheMain;
+    type_cache_map m_mapCachePlayer;
+    type_cache_map m_mapCacheInterface;
+    type_cache_map m_mapCacheEffect;
 
-    QUICK_CACHE			m_QuickCache[NUMBER_OF_QUICK_CACHE];
+    QUICK_CACHE m_QuickCache[NUMBER_OF_QUICK_CACHE];
     BITMAP_t* m_pNullBitmap;
 
-    CTimer2				m_ManageTimer;
+    CTimer2 m_ManageTimer;
 
 public:
+    // cppcheck-suppress uninitMemberVar
     CBitmapCache();
     ~CBitmapCache();
 
@@ -102,15 +103,15 @@ class CGlobalBitmap
     using type_bitmap_map = std::map<GLuint, BitmapPtr>;
     using type_index_list = std::list<GLuint>;
 
-    type_bitmap_map	m_mapBitmap;
+    type_bitmap_map m_mapBitmap;
     type_index_list m_listNonamedIndex;
 
     GLuint m_uiAlternate, m_uiTextureIndexStream;
     std::uint32_t m_dwUsedTextureMemory;
 
-    CBitmapCache	m_BitmapCache;
+    CBitmapCache m_BitmapCache;
 #ifdef DEBUG_BITMAP_CACHE
-    CTimer2				m_DebugOutputTimer;
+    CTimer2 m_DebugOutputTimer;
 #endif // DEBUG_BITMAP_CACHE
 
     void Init();
@@ -120,7 +121,8 @@ public:
     virtual ~CGlobalBitmap();
 
     GLuint LoadImage(const std::wstring& filename, GLuint uiFilter = GL_NEAREST, GLuint uiWrapMode = GL_CLAMP_TO_EDGE);
-    bool LoadImage(GLuint uiBitmapIndex, const std::wstring& filename, GLuint uiFilter = GL_NEAREST, GLuint uiWrapMode = GL_CLAMP_TO_EDGE);
+    bool LoadImage(GLuint uiBitmapIndex, const std::wstring& filename, GLuint uiFilter = GL_NEAREST,
+                   GLuint uiWrapMode = GL_CLAMP_TO_EDGE);
     void UnloadImage(GLuint uiBitmapIndex, bool bForce = false);
     void UnloadAllImages();
 
@@ -136,14 +138,19 @@ public:
 
     void Manage();
 
-    inline BITMAP_t& operator [] (GLuint uiBitmapIndex) { return *GetTexture(uiBitmapIndex); }
+    inline BITMAP_t& operator[](GLuint uiBitmapIndex)
+    {
+        return *GetTexture(uiBitmapIndex);
+    }
 
 protected:
     GLuint GenerateTextureIndex();
     GLuint FindAvailableTextureIndex(GLuint uiSeed);
 
-    bool OpenJpegTurbo(GLuint uiBitmapIndex, const std::wstring& filename, GLuint uiFilter = GL_NEAREST, GLuint uiWrapMode = GL_CLAMP_TO_EDGE);
-    bool OpenTga(GLuint uiBitmapIndex, const std::wstring& filename, GLuint uiFilter = GL_NEAREST, GLuint uiWrapMode = GL_CLAMP_TO_EDGE);
+    bool OpenJpegTurbo(GLuint uiBitmapIndex, const std::wstring& filename, GLuint uiFilter = GL_NEAREST,
+                       GLuint uiWrapMode = GL_CLAMP_TO_EDGE);
+    bool OpenTga(GLuint uiBitmapIndex, const std::wstring& filename, GLuint uiFilter = GL_NEAREST,
+                 GLuint uiWrapMode = GL_CLAMP_TO_EDGE);
     void SplitFileName(IN const std::wstring& filepath, OUT std::wstring& filename, bool bIncludeExt);
     void SplitExt(IN const std::wstring& filepath, OUT std::wstring& ext, bool bIncludeDot);
     void ExchangeExt(IN const std::wstring& in_filepath, IN const std::wstring& ext, OUT std::wstring& out_filepath);

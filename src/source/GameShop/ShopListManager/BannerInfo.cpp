@@ -16,8 +16,9 @@
 
 #include <urlmon.h>
 
-#pragma comment(lib,"Urlmon.lib")
+#pragma comment(lib, "Urlmon.lib")
 
+// cppcheck-suppress uninitMemberVar
 CBannerInfo::CBannerInfo() // OK
 {
     memset(this->BannerName, 0, sizeof(this->BannerName));
@@ -60,7 +61,8 @@ bool CBannerInfo::SetBanner(std::wstring strdata, std::wstring strDirPath, bool 
     {
         std::wstring sub = url.substr(pos + 1, url.length() - pos - 1);
 
-        StringCchPrintf(this->BannerImagePath, sizeof(this->BannerImagePath), L"%ls%ls", strDirPath.c_str(), sub.c_str());
+        StringCchPrintf(this->BannerImagePath, sizeof(this->BannerImagePath), L"%ls%ls", strDirPath.c_str(),
+                        sub.c_str());
 
         if (bDonwLoad || GetFileAttributes(this->BannerImagePath) == INVALID_FILE_ATTRIBUTES)
         {

@@ -120,7 +120,7 @@ void SEASON3B::CNewUINameWindow::RenderName()
     {
         return;
     }
-#endif//GUILD_WAR_EVENT
+#endif // GUILD_WAR_EVENT
 
     if (SelectedItem != -1 || SelectedNpc != -1 || SelectedCharacter != -1)
     {
@@ -147,12 +147,11 @@ void SEASON3B::CNewUINameWindow::RenderName()
                     const auto borderWidth = 2.f;
                     const auto widthPerStep = 4;
                     const auto stepSeparatorWidth = 1;
-                    const auto stepsWidth = steps * widthPerStep - 2 * stepSeparatorWidth; //38.f;
+                    const auto stepsWidth = steps * widthPerStep - 2 * stepSeparatorWidth; // 38.f;
                     const auto totalWidth = stepsWidth + borderWidth * 2;
-                    
+
                     auto ScreenX = 320 - totalWidth / 2;
                     auto ScreenY = 15;
-                    
 
                     EnableAlphaTest();
                     glColor4f(0.f, 0.f, 0.f, 0.5f);
@@ -170,11 +169,8 @@ void SEASON3B::CNewUINameWindow::RenderName()
                     glColor3f(250.f / 255.f, 10 / 255.f, 0.f);
                     for (int k = 0; k < stepHP; ++k)
                     {
-                        RenderColor(
-                            (float)(ScreenX + borderWidth + (k * widthPerStep)),
-                            (float)(ScreenY + borderWidth),
-                            widthPerStep - stepSeparatorWidth,
-                            2.f);
+                        RenderColor((float)(ScreenX + borderWidth + (k * widthPerStep)), (float)(ScreenY + borderWidth),
+                                    widthPerStep - stepSeparatorWidth, 2.f);
                     }
                     DisableAlphaBlend();
                 }
@@ -183,14 +179,14 @@ void SEASON3B::CNewUINameWindow::RenderName()
 #ifdef ASG_ADD_GENS_SYSTEM
 #ifndef PBG_MOD_STRIFE_GENSMARKRENDER
                 if (!::IsStrifeMap(World) || Hero->m_byGensInfluence == c->m_byGensInfluence)
-#endif //PBG_MOD_STRIFE_GENSMARKRENDER
-#endif	// ASG_ADD_GENS_SYSTEM
+#endif // PBG_MOD_STRIFE_GENSMARKRENDER
+#endif // ASG_ADD_GENS_SYSTEM
+            {
+                if (IsShopTitleVisible(c) == false)
                 {
-                    if (IsShopTitleVisible(c) == false)
-                    {
-                        CreateChat(c->ID, L"", c);
-                    }
+                    CreateChat(c->ID, L"", c);
                 }
+            }
         }
         else if (SelectedItem != -1)
         {

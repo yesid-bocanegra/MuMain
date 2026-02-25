@@ -72,12 +72,17 @@ static float CalculateCameraViewFar(int sceneFlag)
         {
             return 2000.f;
         }
-    case 1: return 2500.f;
-    case 2: return 2600.f;
-    case 3: return 2950.f;
+    case 1:
+        return 2500.f;
+    case 2:
+        return 2600.f;
+    case 3:
+        return 2950.f;
     case 4:
-    case 5: return 3200.f;
-    default: return 2000.f;
+    case 5:
+        return 3200.f;
+    default:
+        return 2000.f;
     }
 }
 
@@ -147,11 +152,12 @@ static void CalculateCameraPosition(vec3_t outCameraPosition)
     {
         g_shCameraLevel = 5;
     }
-    else g_shCameraLevel = 0;
+    else
+        g_shCameraLevel = 0;
 
     if (CCameraMove::GetInstancePtr()->IsTourMode())
     {
-        vec3_t temp = { 0.0f, 0.0f, -100.0f };
+        vec3_t temp = {0.0f, 0.0f, -100.0f};
         VectorAdd(TransformPosition, temp, TransformPosition);
     }
 
@@ -175,7 +181,7 @@ static void CalculateCameraPosition(vec3_t outCameraPosition)
     // Apply custom camera distance for special terrain
     if (g_fCameraCustomDistance != 0.f)
     {
-        vec3_t angle = { 0.f, 0.f, -45.f };
+        vec3_t angle = {0.f, 0.f, -45.f};
         Vector(0.f, g_fCameraCustomDistance, 0.f, Position);
         AngleMatrix(angle, Matrix);
         VectorIRotate(Position, Matrix, TransformPosition);
@@ -261,12 +267,24 @@ static void UpdateCameraDistance()
         {
             switch (g_shCameraLevel)
             {
-            case 0: CameraDistanceTarget = 1000.f; break;
-            case 1: CameraDistanceTarget = 1100.f; break;
-            case 2: CameraDistanceTarget = 1200.f; break;
-            case 3: CameraDistanceTarget = 1300.f; break;
-            case 4: CameraDistanceTarget = 1400.f; break;
-            case 5: CameraDistanceTarget = g_Direction.m_fCameraViewFar; break;
+            case 0:
+                CameraDistanceTarget = 1000.f;
+                break;
+            case 1:
+                CameraDistanceTarget = 1100.f;
+                break;
+            case 2:
+                CameraDistanceTarget = 1200.f;
+                break;
+            case 3:
+                CameraDistanceTarget = 1300.f;
+                break;
+            case 4:
+                CameraDistanceTarget = 1400.f;
+                break;
+            case 5:
+                CameraDistanceTarget = g_Direction.m_fCameraViewFar;
+                break;
             }
             CameraDistance += (CameraDistanceTarget - CameraDistance) / 3;
         }
@@ -278,8 +296,7 @@ static void UpdateCameraDistance()
  */
 static void SetCameraFOV()
 {
-    if (gMapManager.WorldActive == WD_73NEW_LOGIN_SCENE
-        && CCameraMove::GetInstancePtr()->IsTourMode())
+    if (gMapManager.WorldActive == WD_73NEW_LOGIN_SCENE && CCameraMove::GetInstancePtr()->IsTourMode())
     {
         CameraFOV = 65.0f;
     }
@@ -315,18 +332,17 @@ static bool HandleEditorMode()
         Vector(0.f, 0.f, 0.f, p1);
         FLOAT Velocity = TERRAIN_SCALE * 1.25f * FPS_ANIMATION_FACTOR;
 
-        struct KeyMapping {
+        struct KeyMapping
+        {
             int vKey;
             float x;
             float y;
         };
 
-        const KeyMapping keyMappings[] = {
-            {VK_LEFT,  -Velocity, -Velocity},
-            {VK_RIGHT,  Velocity,  Velocity},
-            {VK_UP,    -Velocity,  Velocity},
-            {VK_DOWN,   Velocity, -Velocity}
-        };
+        const KeyMapping keyMappings[] = {{VK_LEFT, -Velocity, -Velocity},
+                                          {VK_RIGHT, Velocity, Velocity},
+                                          {VK_UP, -Velocity, Velocity},
+                                          {VK_DOWN, Velocity, -Velocity}};
 
         for (const auto& mapping : keyMappings)
         {
@@ -365,7 +381,7 @@ static bool HandleEditorMode()
 
     return EditMove;
 }
-#endif //ENABLE_EDIT2
+#endif // ENABLE_EDIT2
 
 /**
  * @brief Main camera controller - updates camera position, angle, and distance.

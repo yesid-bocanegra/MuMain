@@ -5,6 +5,7 @@
 #include "stdafx.h"
 #include "ServerListManager.h"
 
+// cppcheck-suppress uninitMemberVar
 CServerListManager::CServerListManager()
 {
     m_iTotalServer = 0;
@@ -52,12 +53,12 @@ void CServerListManager::LoadServerListScript()
 #pragma pack(push, 1)
     typedef struct _SERVER_GROUP_INFO
     {
-        WORD	m_wIndex;
-        char	m_szName[SLM_MAX_SERVER_NAME_LENGTH];
-        BYTE	m_byPos;
-        BYTE	m_bySequence;
-        BYTE	m_abyNonPVP[SLM_MAX_SERVER_COUNT];
-        short	m_nDescriptLen;
+        WORD m_wIndex;
+        char m_szName[SLM_MAX_SERVER_NAME_LENGTH];
+        BYTE m_byPos;
+        BYTE m_bySequence;
+        BYTE m_abyNonPVP[SLM_MAX_SERVER_COUNT];
+        short m_nDescriptLen;
     } SERVER_GROUP_INFO;
 #pragma pack(pop)
 
@@ -69,8 +70,10 @@ void CServerListManager::LoadServerListScript()
 
     while (0 != ::fread(&sServerGroupScript, nSize, 1, fp))
     {
+        // cppcheck-suppress dangerousTypeCast
         BuxConvert((BYTE*)&sServerGroupScript, nSize);
         ::fread(szDescript, sServerGroupScript.m_nDescriptLen, 1, fp);
+        // cppcheck-suppress dangerousTypeCast
         BuxConvert((BYTE*)szDescript, sServerGroupScript.m_nDescriptLen);
 
         CMultiLanguage::ConvertFromUtf8(sServerGroupInfo.m_szName, sServerGroupScript.m_szName);
@@ -183,23 +186,23 @@ void CServerListManager::InsertServer(CServerGroup* pServerGroup, int iConnectIn
     switch (pServerInfo->m_byNonPvP)
     {
     case 0:
-        mu_swprintf(pServerInfo->m_bName, L"%ls-%d %ls", pServerGroup->m_szName,
-            pServerInfo->m_iIndex, GlobalText[iTextIndex]);
+        mu_swprintf(pServerInfo->m_bName, L"%ls-%d %ls", pServerGroup->m_szName, pServerInfo->m_iIndex,
+                    GlobalText[iTextIndex]);
         break;
 
     case 1:
-        mu_swprintf(pServerInfo->m_bName, L"%ls-%d(Non-PVP) %ls", pServerGroup->m_szName,
-            pServerInfo->m_iIndex, GlobalText[iTextIndex]);
+        mu_swprintf(pServerInfo->m_bName, L"%ls-%d(Non-PVP) %ls", pServerGroup->m_szName, pServerInfo->m_iIndex,
+                    GlobalText[iTextIndex]);
         break;
 
     case 2:
-        mu_swprintf(pServerInfo->m_bName, L"%ls-%d(Gold PVP) %ls", pServerGroup->m_szName,
-            pServerInfo->m_iIndex, GlobalText[iTextIndex]);
+        mu_swprintf(pServerInfo->m_bName, L"%ls-%d(Gold PVP) %ls", pServerGroup->m_szName, pServerInfo->m_iIndex,
+                    GlobalText[iTextIndex]);
         break;
 
     case 3:
-        mu_swprintf(pServerInfo->m_bName, L"%ls-%d(Gold) %ls", pServerGroup->m_szName,
-            pServerInfo->m_iIndex, GlobalText[iTextIndex]);
+        mu_swprintf(pServerInfo->m_bName, L"%ls-%d(Gold) %ls", pServerGroup->m_szName, pServerInfo->m_iIndex,
+                    GlobalText[iTextIndex]);
         break;
     }
 
@@ -263,7 +266,6 @@ int CServerListManager::GetSelectServerIndex()
 {
     return m_iSelectServerIndex;
 }
-
 
 BYTE CServerListManager::GetNonPVPInfo()
 {

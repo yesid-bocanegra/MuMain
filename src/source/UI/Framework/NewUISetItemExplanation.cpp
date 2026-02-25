@@ -105,10 +105,6 @@ float SEASON3B::CNewUISetItemExplanation::GetKeyEventOrder()
     return 10.f;
 }
 
-void SEASON3B::CNewUISetItemExplanation::OpenningProcess()
-{
-}
+void SEASON3B::CNewUISetItemExplanation::OpenningProcess() {}
 
-void SEASON3B::CNewUISetItemExplanation::ClosingProcess()
-{
-}
+void SEASON3B::CNewUISetItemExplanation::ClosingProcess() {}

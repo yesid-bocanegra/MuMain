@@ -6,7 +6,6 @@ extern bool g_bShowPath;
 #include <math.h>
 #include "BaseCls.h"
 
-
 class PATH
 {
 public:
@@ -17,7 +16,7 @@ public:
     void SetMapDimensions(int iWidth, int iHeight, WORD* pbyMap);
 
 private:
-    int	m_iWidth, m_iHeight;
+    int m_iWidth, m_iHeight;
     int m_iSize;
     WORD* m_pbyMap;
 
@@ -25,14 +24,34 @@ private:
     int m_iNumPath;
     BYTE m_xPath[MAX_COUNT_PATH];
     BYTE m_yPath[MAX_COUNT_PATH];
-public:
-    int GetPath(void) { return (std::min<int>(m_iNumPath, MAX_PATH_FIND)); }
-    BYTE* GetPathX(void) { return (m_xPath + MAX_COUNT_PATH - m_iNumPath); }
-    BYTE* GetPathY(void) { return (m_yPath + MAX_COUNT_PATH - m_iNumPath); }
 
-    int GetIndex(int xPos, int yPos) { return (xPos + yPos * m_iWidth); }
-    void GetXYPos(int iIndex, int* pxPos, int* pyPos) { *pxPos = iIndex % m_iWidth; *pyPos = iIndex / m_iWidth; }
-    BOOL CheckXYPos(int xPos, int yPos) { return (xPos >= 0 && yPos >= 0 && xPos < m_iWidth && yPos < m_iHeight); }
+public:
+    int GetPath(void)
+    {
+        return (std::min<int>(m_iNumPath, MAX_PATH_FIND));
+    }
+    BYTE* GetPathX(void)
+    {
+        return (m_xPath + MAX_COUNT_PATH - m_iNumPath);
+    }
+    BYTE* GetPathY(void)
+    {
+        return (m_yPath + MAX_COUNT_PATH - m_iNumPath);
+    }
+
+    int GetIndex(int xPos, int yPos)
+    {
+        return (xPos + yPos * m_iWidth);
+    }
+    void GetXYPos(int iIndex, int* pxPos, int* pyPos)
+    {
+        *pxPos = iIndex % m_iWidth;
+        *pyPos = iIndex / m_iWidth;
+    }
+    BOOL CheckXYPos(int xPos, int yPos)
+    {
+        return (xPos >= 0 && yPos >= 0 && xPos < m_iWidth && yPos < m_iHeight);
+    }
     static int s_iDir[8][2];
 
 private:
@@ -49,7 +68,8 @@ private:
     int GetNewNodeToTest(void);
 
 public:
-    bool FindPath(int xStart, int yStart, int xEnd, int yEnd, bool bErrorCheck, int iWall, bool Value, float fDistance = 0.0f);
+    bool FindPath(int xStart, int yStart, int xEnd, int yEnd, bool bErrorCheck, int iWall, bool Value,
+                  float fDistance = 0.0f);
 
 private:
     void SetEndNodes(bool bErrorCheck, int iWall, int xEnd, int yEnd, float fDistance);
@@ -59,10 +79,14 @@ private:
 
 #ifdef SHOW_PATH_INFO
 public:
-    BYTE GetClosedStatus(int iIndex) { return (m_pbyClosed[iIndex]); }
+    BYTE GetClosedStatus(int iIndex)
+    {
+        return (m_pbyClosed[iIndex]);
+    }
 #endif // SHOW_PATH_INFO
 };
 
+// cppcheck-suppress uninitMemberVar
 inline PATH::PATH()
 {
     m_pbyClosed = NULL;
@@ -162,7 +186,8 @@ inline int PATH::GetNewNodeToTest(void)
     return iIndex;
 }
 
-inline bool PATH::FindPath(int xStart, int yStart, int xEnd, int yEnd, bool bErrorCheck, int iWall, bool Value, float fDistance)
+inline bool PATH::FindPath(int xStart, int yStart, int xEnd, int yEnd, bool bErrorCheck, int iWall, bool Value,
+                           float fDistance)
 {
     Init();
 
@@ -269,9 +294,12 @@ inline bool PATH::FindPath(int xStart, int yStart, int xEnd, int yEnd, bool bErr
             int iNewIndex = GetIndex(xNew, yNew);
             int byMapAttribute = m_pbyMap[iNewIndex];
 
-            if ((byMapAttribute & TW_ACTION) == TW_ACTION) byMapAttribute -= TW_ACTION;
-            if ((byMapAttribute & TW_HEIGHT) == TW_HEIGHT) byMapAttribute -= TW_HEIGHT;
-            if ((byMapAttribute & TW_CAMERA_UP) == TW_CAMERA_UP) byMapAttribute -= TW_CAMERA_UP;
+            if ((byMapAttribute & TW_ACTION) == TW_ACTION)
+                byMapAttribute -= TW_ACTION;
+            if ((byMapAttribute & TW_HEIGHT) == TW_HEIGHT)
+                byMapAttribute -= TW_HEIGHT;
+            if ((byMapAttribute & TW_CAMERA_UP) == TW_CAMERA_UP)
+                byMapAttribute -= TW_CAMERA_UP;
 
             if (!(PATH_INTESTLIST & m_pbyClosed[iNewIndex]) && iWall > byMapAttribute)
             {
@@ -423,14 +451,34 @@ inline POINT MovePoint(EPathDirection direction, POINT position)
 {
     switch (direction)
     {
-    case EPathDirection::WEST:       position.x--; position.y--; break;
-    case EPathDirection::SOUTHWEST:  position.y--; break;
-    case EPathDirection::SOUTH:      position.x++; position.y--; break;
-    case EPathDirection::SOUTHEAST:  position.x++; break;
-    case EPathDirection::EAST:       position.x++; position.y++; break;
-    case EPathDirection::NORTHEAST:  position.y++; break;
-    case EPathDirection::NORTH:      position.x--; position.y++; break;
-    case EPathDirection::NORTHWEST:  position.x--; break;
+    case EPathDirection::WEST:
+        position.x--;
+        position.y--;
+        break;
+    case EPathDirection::SOUTHWEST:
+        position.y--;
+        break;
+    case EPathDirection::SOUTH:
+        position.x++;
+        position.y--;
+        break;
+    case EPathDirection::SOUTHEAST:
+        position.x++;
+        break;
+    case EPathDirection::EAST:
+        position.x++;
+        position.y++;
+        break;
+    case EPathDirection::NORTHEAST:
+        position.y++;
+        break;
+    case EPathDirection::NORTH:
+        position.x--;
+        position.y++;
+        break;
+    case EPathDirection::NORTHWEST:
+        position.x--;
+        break;
     }
     return position;
 }

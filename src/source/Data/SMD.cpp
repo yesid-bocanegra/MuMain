@@ -4,11 +4,10 @@
 #include "SMD.h"
 #include "ReadScript.h"
 
-
-NodeGroup_t     NodeGroup;
+NodeGroup_t NodeGroup;
 SkeletonGroup_t SkeletonGroup;
 TriangleGroup_t TriangleGroup;
-SMDMeshGroup_t  MeshGroup;
+SMDMeshGroup_t MeshGroup;
 
 void ParseNodes()
 {
@@ -19,35 +18,45 @@ void ParseNodes()
     while (true)
     {
         Token = (*GetToken)();
-        if (Token == END) break;
-        if (Token == NAME && strcmp("nodes", TokenString) == NULL) break;
+        if (Token == END)
+            break;
+        if (Token == NAME && strcmp("nodes", TokenString) == NULL)
+            break;
     }
     while (true)
     {
         Token = (*GetToken)();
-        if (Token == END) break;
-        if (Token == NAME && strcmp("end", TokenString) == NULL) break;
+        if (Token == END)
+            break;
+        if (Token == NAME && strcmp("end", TokenString) == NULL)
+            break;
         if (Token == NUMBER)
         {
             Node_t* n = &ng->Node[ng->NodeNum];
-            Token = (*GetToken)(); strcpy(n->Name, TokenString);
-            Token = (*GetToken)(); n->Parent = (short)TokenNumber;
+            Token = (*GetToken)();
+            strcpy(n->Name, TokenString);
+            Token = (*GetToken)();
+            n->Parent = (short)TokenNumber;
         }
         ng->NodeNum++;
     }
     while (true)
     {
         Token = (*GetToken)();
-        if (Token == END) break;
-        if (Token == NAME && strcmp("skeleton", TokenString) == NULL) break;
+        if (Token == END)
+            break;
+        if (Token == NAME && strcmp("skeleton", TokenString) == NULL)
+            break;
     }
     while (true)
     {
         Token = (*GetToken)();
-        if (Token == END) break;
+        if (Token == END)
+            break;
         if (Token == NAME)
         {
-            if (strcmp("end", TokenString) == NULL) break;
+            if (strcmp("end", TokenString) == NULL)
+                break;
             if (strcmp("time", TokenString) == NULL)
             {
                 Token = (*GetToken)();
@@ -55,12 +64,18 @@ void ParseNodes()
                 for (int i = 0; i < ng->NodeNum; i++)
                 {
                     Token = (*GetToken)();
-                    Token = (*GetToken)(); s->Position[i][0] = TokenNumber;
-                    Token = (*GetToken)(); s->Position[i][1] = TokenNumber;
-                    Token = (*GetToken)(); s->Position[i][2] = TokenNumber;
-                    Token = (*GetToken)(); s->Rotation[i][0] = TokenNumber;
-                    Token = (*GetToken)(); s->Rotation[i][1] = TokenNumber;
-                    Token = (*GetToken)(); s->Rotation[i][2] = TokenNumber;
+                    Token = (*GetToken)();
+                    s->Position[i][0] = TokenNumber;
+                    Token = (*GetToken)();
+                    s->Position[i][1] = TokenNumber;
+                    Token = (*GetToken)();
+                    s->Position[i][2] = TokenNumber;
+                    Token = (*GetToken)();
+                    s->Rotation[i][0] = TokenNumber;
+                    Token = (*GetToken)();
+                    s->Rotation[i][1] = TokenNumber;
+                    Token = (*GetToken)();
+                    s->Rotation[i][2] = TokenNumber;
                 }
             }
         }
@@ -73,8 +88,10 @@ void ParseSkeleton()
     while (true)
     {
         Token = (*GetToken)();
-        if (Token == END) break;
-        if (Token == NAME && strcmp("skeleton", TokenString) == NULL) break;
+        if (Token == END)
+            break;
+        if (Token == NAME && strcmp("skeleton", TokenString) == NULL)
+            break;
     }
 
     SkeletonGroup_t* sg = &SkeletonGroup;
@@ -82,10 +99,12 @@ void ParseSkeleton()
     while (true)
     {
         Token = (*GetToken)();
-        if (Token == END) break;
+        if (Token == END)
+            break;
         if (Token == NAME)
         {
-            if (strcmp("end", TokenString) == NULL) break;
+            if (strcmp("end", TokenString) == NULL)
+                break;
             if (strcmp("time", TokenString) == NULL)
             {
                 Token = (*GetToken)();
@@ -94,12 +113,18 @@ void ParseSkeleton()
                 for (int i = 0; i < NodeGroup.NodeNum; i++)
                 {
                     Token = (*GetToken)();
-                    Token = (*GetToken)(); s->Position[i][0] = TokenNumber;
-                    Token = (*GetToken)(); s->Position[i][1] = TokenNumber;
-                    Token = (*GetToken)(); s->Position[i][2] = TokenNumber;
-                    Token = (*GetToken)(); s->Rotation[i][0] = TokenNumber;
-                    Token = (*GetToken)(); s->Rotation[i][1] = TokenNumber;
-                    Token = (*GetToken)(); s->Rotation[i][2] = TokenNumber;
+                    Token = (*GetToken)();
+                    s->Position[i][0] = TokenNumber;
+                    Token = (*GetToken)();
+                    s->Position[i][1] = TokenNumber;
+                    Token = (*GetToken)();
+                    s->Position[i][2] = TokenNumber;
+                    Token = (*GetToken)();
+                    s->Rotation[i][0] = TokenNumber;
+                    Token = (*GetToken)();
+                    s->Rotation[i][1] = TokenNumber;
+                    Token = (*GetToken)();
+                    s->Rotation[i][2] = TokenNumber;
                 }
                 sg->TimeNum++;
             }
@@ -113,8 +138,10 @@ void ParseTriangles(bool Flip)
     while (true)
     {
         Token = (*GetToken)();
-        if (Token == END) break;
-        if (Token == NAME && strcmp("triangles", TokenString) == NULL) break;
+        if (Token == END)
+            break;
+        if (Token == NAME && strcmp("triangles", TokenString) == NULL)
+            break;
     }
 
     TriangleGroup_t* tg = &TriangleGroup;
@@ -122,25 +149,36 @@ void ParseTriangles(bool Flip)
     while (true)
     {
         Token = (*GetToken)();
-        if (Token == END) break;
+        if (Token == END)
+            break;
         if (Token == NAME)
         {
-            if (strcmp("end", TokenString) == NULL) break;
+            if (strcmp("end", TokenString) == NULL)
+                break;
             strcpy(tg->TextureName[tg->TriangleNum], TokenString);
             if (!Flip)
             {
                 for (int i = 0; i < 3; i++)
                 {
                     SMDVertex_t* v = &tg->Vertex[tg->TriangleNum][i];
-                    Token = (*GetToken)(); v->Node = (short)TokenNumber;
-                    Token = (*GetToken)(); v->Position[0] = TokenNumber;
-                    Token = (*GetToken)(); v->Position[1] = TokenNumber;
-                    Token = (*GetToken)(); v->Position[2] = TokenNumber;
-                    Token = (*GetToken)(); v->Normal[0] = TokenNumber;
-                    Token = (*GetToken)(); v->Normal[1] = TokenNumber;
-                    Token = (*GetToken)(); v->Normal[2] = TokenNumber;
-                    Token = (*GetToken)(); v->TexCoordU = TokenNumber;
-                    Token = (*GetToken)(); v->TexCoordV = 1.f - TokenNumber;
+                    Token = (*GetToken)();
+                    v->Node = (short)TokenNumber;
+                    Token = (*GetToken)();
+                    v->Position[0] = TokenNumber;
+                    Token = (*GetToken)();
+                    v->Position[1] = TokenNumber;
+                    Token = (*GetToken)();
+                    v->Position[2] = TokenNumber;
+                    Token = (*GetToken)();
+                    v->Normal[0] = TokenNumber;
+                    Token = (*GetToken)();
+                    v->Normal[1] = TokenNumber;
+                    Token = (*GetToken)();
+                    v->Normal[2] = TokenNumber;
+                    Token = (*GetToken)();
+                    v->TexCoordU = TokenNumber;
+                    Token = (*GetToken)();
+                    v->TexCoordV = 1.f - TokenNumber;
                 }
             }
             else
@@ -148,15 +186,24 @@ void ParseTriangles(bool Flip)
                 for (int i = 2; i >= 0; i--)
                 {
                     SMDVertex_t* v = &tg->Vertex[tg->TriangleNum][i];
-                    Token = (*GetToken)(); v->Node = (short)TokenNumber;
-                    Token = (*GetToken)(); v->Position[0] = TokenNumber;
-                    Token = (*GetToken)(); v->Position[1] = TokenNumber;
-                    Token = (*GetToken)(); v->Position[2] = TokenNumber;
-                    Token = (*GetToken)(); v->Normal[0] = TokenNumber;
-                    Token = (*GetToken)(); v->Normal[1] = TokenNumber;
-                    Token = (*GetToken)(); v->Normal[2] = TokenNumber;
-                    Token = (*GetToken)(); v->TexCoordU = TokenNumber;
-                    Token = (*GetToken)(); v->TexCoordV = 1.f - TokenNumber;
+                    Token = (*GetToken)();
+                    v->Node = (short)TokenNumber;
+                    Token = (*GetToken)();
+                    v->Position[0] = TokenNumber;
+                    Token = (*GetToken)();
+                    v->Position[1] = TokenNumber;
+                    Token = (*GetToken)();
+                    v->Position[2] = TokenNumber;
+                    Token = (*GetToken)();
+                    v->Normal[0] = TokenNumber;
+                    Token = (*GetToken)();
+                    v->Normal[1] = TokenNumber;
+                    Token = (*GetToken)();
+                    v->Normal[2] = TokenNumber;
+                    Token = (*GetToken)();
+                    v->TexCoordU = TokenNumber;
+                    Token = (*GetToken)();
+                    v->TexCoordV = 1.f - TokenNumber;
                 }
             }
             tg->TriangleNum++;
@@ -166,7 +213,8 @@ void ParseTriangles(bool Flip)
 
 bool OpenSMDFile(wchar_t* FileName, int Type, bool Flip)
 {
-    if (FileName == NULL) return false;
+    if (FileName == NULL)
+        return false;
     if ((SMDFile = _wfopen(FileName, L"rb")) == NULL)
     {
         g_ErrorReport.Write(L"OpenSMDFile failed: %ls\r\n", FileName);
@@ -203,7 +251,8 @@ void SMD2BMDAnimation(int ID, bool LockPosition);
 
 bool OpenSMDModel(int ID, wchar_t* FileName1, int Actions, bool Flip)
 {
-    if (Models[ID].NumMeshs > 0) return false;
+    if (Models[ID].NumMeshs > 0)
+        return false;
 
     if (OpenSMDFile(FileName1, REFERENCE_FRAME, Flip))
     {

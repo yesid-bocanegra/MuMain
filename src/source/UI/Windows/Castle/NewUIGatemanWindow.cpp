@@ -160,9 +160,7 @@ bool CNewUIGatemanWindow::Render()
     return true;
 }
 
-void CNewUIGatemanWindow::OpeningProcess()
-{
-}
+void CNewUIGatemanWindow::OpeningProcess() {}
 
 void CNewUIGatemanWindow::ClosingProcess()
 {
@@ -207,7 +205,9 @@ void CNewUIGatemanWindow::RenderFrame()
     RenderImage(IMAGE_GATEMANWINDOW_RIGHT, m_Pos.x + INVENTORY_WIDTH - 21, m_Pos.y + 64, 21.f, 320.f);
     RenderImage(IMAGE_GATEMANWINDOW_BOTTOM, m_Pos.x, m_Pos.y + INVENTORY_HEIGHT - 45, 190.f, 45.f);
 
-    wchar_t szText[256] = { 0, };
+    wchar_t szText[256] = {
+        0,
+    };
     float fPos_x = m_Pos.x + 15.0f, fPos_y = m_Pos.y;
     float fLine_y = 13.0f;
 
@@ -221,7 +221,7 @@ void CNewUIGatemanWindow::RenderFrame()
 
 bool CNewUIGatemanWindow::BtnProcess()
 {
-    POINT ptExitBtn1 = { m_Pos.x + 169, m_Pos.y + 7 };
+    POINT ptExitBtn1 = {m_Pos.x + 169, m_Pos.y + 7};
 
     if (SEASON3B::IsPress(VK_LBUTTON) && CheckMouseIn(ptExitBtn1.x, ptExitBtn1.y, 13, 12))
     {
@@ -239,7 +239,7 @@ bool CNewUIGatemanWindow::BtnProcess()
 
 void CNewUIGatemanWindow::UpdateGuildMasterMode()
 {
-    POINT ptOrigin = { m_Pos.x, m_Pos.y + 50 };
+    POINT ptOrigin = {m_Pos.x, m_Pos.y + 50};
 
     if (SEASON3B::IsPress(VK_LBUTTON) && SEASON3B::CheckMouseIn(ptOrigin.x + 35, ptOrigin.y + 60, 100, 16))
     {
@@ -291,7 +291,7 @@ void CNewUIGatemanWindow::UpdateGuestMode()
 
 void CNewUIGatemanWindow::RenderGuildMasterMode()
 {
-    POINT ptOrigin = { m_Pos.x, m_Pos.y + 50 };
+    POINT ptOrigin = {m_Pos.x, m_Pos.y + 50};
     g_pRenderText->SetFont(g_hFontBold);
     g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, GlobalText[1597], 190, 0, RT3_SORT_CENTER);
     g_pRenderText->SetFont(g_hFont);
@@ -359,7 +359,7 @@ void CNewUIGatemanWindow::RenderGuildMasterMode()
 
 void CNewUIGatemanWindow::RenderGuildMemeberMode()
 {
-    POINT ptOrigin = { m_Pos.x, m_Pos.y + 50 };
+    POINT ptOrigin = {m_Pos.x, m_Pos.y + 50};
     g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, GlobalText[1634], 190, 0, RT3_SORT_CENTER);
 
     ptOrigin.y += 50;
@@ -369,7 +369,7 @@ void CNewUIGatemanWindow::RenderGuildMemeberMode()
 
 void CNewUIGatemanWindow::RenderGuestMode()
 {
-    POINT ptOrigin = { m_Pos.x, m_Pos.y + 50 };
+    POINT ptOrigin = {m_Pos.x, m_Pos.y + 50};
     if (g_pUIGateKeeper->IsPublic())
     {
         wchar_t szText[256];

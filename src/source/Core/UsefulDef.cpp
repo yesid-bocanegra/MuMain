@@ -10,8 +10,6 @@
 #include "UsefulDef.h"
 #include "UIControls.h"
 
-
-
 bool ReduceStringByPixel(LPTSTR lpszDst, int nDstSize, LPCTSTR lpszSrc, int nPixel)
 {
     SIZE size;
@@ -30,12 +28,13 @@ bool ReduceStringByPixel(LPTSTR lpszDst, int nDstSize, LPCTSTR lpszSrc, int nPix
     return true;
 }
 
-int DivideStringByPixel(wchar_t* alpszDst, int nDstRow, int nDstColumn, const wchar_t* lpszSrc, int nPixelPerLine, bool bSpaceInsert, const wchar_t szNewlineChar)
+int DivideStringByPixel(wchar_t* alpszDst, int nDstRow, int nDstColumn, const wchar_t* lpszSrc, int nPixelPerLine,
+                        bool bSpaceInsert, const wchar_t szNewlineChar)
 {
     if (nullptr == alpszDst || 0 >= nDstRow || 0 >= nDstColumn || nullptr == lpszSrc || 16 > nPixelPerLine)
         return 0;
 
-    std::wstring szWorkSrc(lpszSrc);  // Convert lpszSrc to std::wstring
+    std::wstring szWorkSrc(lpszSrc); // Convert lpszSrc to std::wstring
 
     wchar_t szWorkToken[1024];
     int nLine = 0;

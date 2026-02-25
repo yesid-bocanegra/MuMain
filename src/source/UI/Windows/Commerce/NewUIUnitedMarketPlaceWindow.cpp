@@ -57,7 +57,8 @@ bool CNewUIUnitedMarketPlaceWindow::Create(CNewUIManager* pNewUIMng, CNewUI3DRen
     return true;
 }
 
-void CNewUIUnitedMarketPlaceWindow::InitButton(CNewUIButton* pNewUIButton, int iPos_x, int iPos_y, const wchar_t* pCaption)
+void CNewUIUnitedMarketPlaceWindow::InitButton(CNewUIButton* pNewUIButton, int iPos_x, int iPos_y,
+                                               const wchar_t* pCaption)
 {
     pNewUIButton->ChangeText(pCaption);
     pNewUIButton->ChangeTextBackColor(RGBA(255, 255, 255, 0));
@@ -156,8 +157,8 @@ bool CNewUIUnitedMarketPlaceWindow::Render()
 
     RenderFrame();
 
-    POINT ptOrigin = { m_Pos.x, m_Pos.y + 50 };
-    //char szText[256];
+    POINT ptOrigin = {m_Pos.x, m_Pos.y + 50};
+    // char szText[256];
 
     if (gMapManager.WorldActive == WD_79UNITEDMARKETPLACE)
     {
@@ -205,7 +206,7 @@ bool CNewUIUnitedMarketPlaceWindow::Render()
 
 void CNewUIUnitedMarketPlaceWindow::Render3D()
 {
-    //RenderItem3D();
+    // RenderItem3D();
 }
 
 void CNewUIUnitedMarketPlaceWindow::RenderItem3D()
@@ -264,7 +265,9 @@ void CNewUIUnitedMarketPlaceWindow::RenderFrame()
     RenderImage(IMAGE_UNITEDMARKETPLACEWINDOW_RIGHT, m_Pos.x + INVENTORY_WIDTH - 21, m_Pos.y + 64, 21.f, 320.f);
     RenderImage(IMAGE_UNITEDMARKETPLACEWINDOW_BOTTOM, m_Pos.x, m_Pos.y + INVENTORY_HEIGHT - 45, 190.f, 45.f);
 
-    wchar_t szText[256] = { 0, };
+    wchar_t szText[256] = {
+        0,
+    };
     float fPos_x = m_Pos.x + 15.0f, fPos_y = m_Pos.y;
     float fLine_y = 13.0f;
 
@@ -278,7 +281,7 @@ void CNewUIUnitedMarketPlaceWindow::RenderFrame()
 
 bool CNewUIUnitedMarketPlaceWindow::BtnProcess()
 {
-    POINT ptExitBtn1 = { m_Pos.x + 169, m_Pos.y + 7 };
+    POINT ptExitBtn1 = {m_Pos.x + 169, m_Pos.y + 7};
 
     if (SEASON3B::IsPress(VK_LBUTTON) && CheckMouseIn(ptExitBtn1.x, ptExitBtn1.y, 13, 12))
     {

@@ -20,13 +20,9 @@
 #include "NewUIInventoryCtrl.h"
 #include "MapManager.h"
 
-
-
-
 extern int TextNum;
 extern wchar_t TextList[50][100];
-extern int  TextListColor[50];
-
+extern int TextListColor[50];
 
 using namespace SEASON3A;
 
@@ -53,7 +49,8 @@ void CursedTemple::Initialize()
 
 void CursedTemple::Destroy()
 {
-    if (m_TerrainWaterIndex.size() != 0) m_TerrainWaterIndex.clear();
+    if (m_TerrainWaterIndex.size() != 0)
+        m_TerrainWaterIndex.clear();
 }
 
 void CursedTemple::ResetCursedTemple()
@@ -76,8 +73,7 @@ void CursedTemple::SetInterfaceState(bool state, int subtype)
     }
     else if (subtype == 0)
     {
-        if (m_CursedTempleState == eCursedTempleState_Wait
-            || m_CursedTempleState == eCursedTempleState_Ready)
+        if (m_CursedTempleState == eCursedTempleState_Wait || m_CursedTempleState == eCursedTempleState_Ready)
         {
             m_InterfaceState = state;
         }
@@ -95,7 +91,8 @@ void CursedTemple::SetInterfaceState(bool state, int subtype)
 
 bool CursedTemple::GetInterfaceState(int type, int subtype)
 {
-    if (!gMapManager.IsCursedTemple()) return true;
+    if (!gMapManager.IsCursedTemple())
+        return true;
 
     bool result = m_InterfaceState;
 
@@ -107,7 +104,8 @@ bool CursedTemple::GetInterfaceState(int type, int subtype)
         {
             return false;
         }
-        else if (tempSubtype == COMMAND_TRADE || tempSubtype == COMMAND_PURCHASE || tempSubtype == COMMAND_BATTLE || tempSubtype == COMMAND_END)
+        else if (tempSubtype == COMMAND_TRADE || tempSubtype == COMMAND_PURCHASE || tempSubtype == COMMAND_BATTLE ||
+                 tempSubtype == COMMAND_END)
         {
             return result;
         }
@@ -122,16 +120,19 @@ bool CursedTemple::GetInterfaceState(int type, int subtype)
 
 bool CursedTemple::IsPartyMember(DWORD selectcharacterindex)
 {
-    if (PartyNumber == 0) return false;
+    if (PartyNumber == 0)
+        return false;
 
     CHARACTER* c = &CharactersClient[selectcharacterindex];
-    if (c == NULL) return false;
+    if (c == NULL)
+        return false;
 
     for (int i = 0; i < PartyNumber; ++i)
     {
         PARTY_t* p = &Party[i];
         int length = std::max<int>(1, wcslen(c->ID));
-        if (!wcsncmp(p->Name, c->ID, length)) return true;
+        if (!wcsncmp(p->Name, c->ID, length))
+            return true;
     }
     return false;
 }
@@ -305,7 +306,7 @@ bool CursedTemple::AttackEffectMonster(CHARACTER* c, OBJECT* o, BMD* b)
             }
         }
     }
-    return true;
+        return true;
     }
 
     return false;
@@ -313,14 +314,16 @@ bool CursedTemple::AttackEffectMonster(CHARACTER* c, OBJECT* o, BMD* b)
 
 bool CursedTemple::CreateObject(OBJECT* o)
 {
-    if (!gMapManager.IsCursedTemple()) return false;
+    if (!gMapManager.IsCursedTemple())
+        return false;
 
     return false;
 }
 
 bool CursedTemple::MoveObject(OBJECT* o)
 {
-    if (!gMapManager.IsCursedTemple()) return false;
+    if (!gMapManager.IsCursedTemple())
+        return false;
 
     if (m_bGaugebarEnabled == true && WorldTime - m_fGaugebarCloseTimer > 3000.0f)
     {
@@ -357,7 +360,7 @@ bool CursedTemple::MoveObject(OBJECT* o)
             break;
         }
     }
-    return true;
+        return true;
     }
 
     return false;
@@ -365,7 +368,8 @@ bool CursedTemple::MoveObject(OBJECT* o)
 
 void CursedTemple::MoveMonsterSoundVisual(OBJECT* o, BMD* b)
 {
-    if (!gMapManager.IsCursedTemple()) return;
+    if (!gMapManager.IsCursedTemple())
+        return;
 
     float fActionSpeed = b->Actions[o->CurrentAction].PlaySpeed * static_cast<float>(FPS_ANIMATION_FACTOR);
 
@@ -445,7 +449,8 @@ void CursedTemple::MoveMonsterSoundVisual(OBJECT* o, BMD* b)
 
 bool CursedTemple::MoveMonsterVisual(OBJECT* o, BMD* b)
 {
-    if (!gMapManager.IsCursedTemple()) return false;
+    if (!gMapManager.IsCursedTemple())
+        return false;
 
     switch (o->Type)
     {
@@ -453,19 +458,20 @@ bool CursedTemple::MoveMonsterVisual(OBJECT* o, BMD* b)
     {
         o->Position[2] = 225.f;
     }
-    return true;
+        return true;
     case MODEL_CURSEDTEMPLE_ILLUSION_NPC:
     {
         o->Position[2] = 250.f;
     }
-    return true;
+        return true;
     }
     return false;
 }
 
 void CursedTemple::MoveBlurEffect(CHARACTER* c, OBJECT* o, BMD* b)
 {
-    if (!gMapManager.IsCursedTemple()) return;
+    if (!gMapManager.IsCursedTemple())
+        return;
 
     switch (o->Type)
     {
@@ -473,7 +479,7 @@ void CursedTemple::MoveBlurEffect(CHARACTER* c, OBJECT* o, BMD* b)
     {
         if (o->CurrentAction == MONSTER01_ATTACK1 || o->CurrentAction == MONSTER01_ATTACK2)
         {
-            vec3_t  Light;
+            vec3_t Light;
             Vector(1.0f, 0.2f, 0.5f, Light);
 
             vec3_t StartPos, StartRelative;
@@ -484,7 +490,8 @@ void CursedTemple::MoveBlurEffect(CHARACTER* c, OBJECT* o, BMD* b)
             float fAnimationFrame = o->AnimationFrame - fActionSpeed;
             for (int i = 0; i < 10; i++)
             {
-                b->Animation(BoneTransform, fAnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle, o->HeadAngle);
+                b->Animation(BoneTransform, fAnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle,
+                             o->HeadAngle);
 
                 Vector(0.f, 0.f, 0.f, StartRelative);
                 Vector(0.f, 0.f, 0.f, EndRelative);
@@ -505,7 +512,8 @@ void CursedTemple::MoveBlurEffect(CHARACTER* c, OBJECT* o, BMD* b)
 
             for (int j = 0; j < 10; j++)
             {
-                b->Animation(BoneTransform, fAnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle, o->HeadAngle);
+                b->Animation(BoneTransform, fAnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle,
+                             o->HeadAngle);
 
                 Vector(0.f, 0.f, 0.f, StartRelative);
                 Vector(0.f, 0.f, 0.f, EndRelative);
@@ -524,7 +532,8 @@ void CursedTemple::MoveBlurEffect(CHARACTER* c, OBJECT* o, BMD* b)
 
 bool CursedTemple::RenderObjectVisual(OBJECT* o, BMD* b)
 {
-    if (!gMapManager.IsCursedTemple()) return false;
+    if (!gMapManager.IsCursedTemple())
+        return false;
 
     vec3_t Light;
 
@@ -561,7 +570,7 @@ bool CursedTemple::RenderObjectVisual(OBJECT* o, BMD* b)
                 CreateParticleFpsChecked(BITMAP_CLOUD, o->Position, o->Angle, Light, 15, o->Scale, o);
             }
         }
-        return true;
+            return true;
         case 71:
         {
             if (rand_fps_check(3))
@@ -571,7 +580,7 @@ bool CursedTemple::RenderObjectVisual(OBJECT* o, BMD* b)
                 CreateParticleFpsChecked(BITMAP_CLOUD, o->Position, o->Angle, Light, 15, o->Scale, o);
             }
         }
-        return true;
+            return true;
         case 72:
         {
             if (rand_fps_check(3))
@@ -583,7 +592,7 @@ bool CursedTemple::RenderObjectVisual(OBJECT* o, BMD* b)
                 CreateParticleFpsChecked(BITMAP_CLOUD, o->Position, o->Angle, Light, 15, o->Scale, o);
             }
         }
-        return true;
+            return true;
         case 73:
         {
             if (rand_fps_check(3))
@@ -593,7 +602,7 @@ bool CursedTemple::RenderObjectVisual(OBJECT* o, BMD* b)
                 CreateParticleFpsChecked(BITMAP_CLOUD, o->Position, o->Angle, Light, 15, o->Scale, o);
             }
         }
-        return true;
+            return true;
         case 74:
         {
             if (rand_fps_check(2))
@@ -602,7 +611,7 @@ bool CursedTemple::RenderObjectVisual(OBJECT* o, BMD* b)
                 CreateParticleFpsChecked(BITMAP_CLOUD, o->Position, o->Angle, Light, 16, o->Scale, o);
             }
         }
-        return true;
+            return true;
         case 75:
         {
             if (rand() % 35 == 5)
@@ -612,11 +621,11 @@ bool CursedTemple::RenderObjectVisual(OBJECT* o, BMD* b)
                 CreateParticleFpsChecked(BITMAP_GHOST_CLOUD1, o->Position, o->Angle, Light, 0, o->Scale, o);
             }
         }
-        return true;
+            return true;
         case 76:
         {
             float fLumi = (rand() % 100) * 0.01;
-            //Vector(180.f/255.f+fLumi, 71.f/255.f, 55.f/255.f, Light);
+            // Vector(180.f/255.f+fLumi, 71.f/255.f, 55.f/255.f, Light);
             Vector(180.f / 255.f + fLumi, 71.f / 255.f, 55.f / 255.f, Light);
             vec3_t vPos;
             VectorCopy(o->Position, vPos);
@@ -628,12 +637,12 @@ bool CursedTemple::RenderObjectVisual(OBJECT* o, BMD* b)
             vPos[2] += 20.f;
             CreateSprite(BITMAP_LIGHT, vPos, o->Scale * 6.f, Light, o);
         }
-        return true;
+            return true;
         case 77:
         {
             float fLumi = (rand() % 100) * 0.005;
             Vector(55.f / 256.f, 71.f / 256.f, 180.f / 256.f + fLumi, Light);
-            //Vector(54.f/256.f, 177.f/256.f+fLumi, 150.f/256.f, Light);
+            // Vector(54.f/256.f, 177.f/256.f+fLumi, 150.f/256.f, Light);
             vec3_t vPos;
             VectorCopy(o->Position, vPos);
             for (int i = 0; i < 1; ++i)
@@ -644,7 +653,7 @@ bool CursedTemple::RenderObjectVisual(OBJECT* o, BMD* b)
             vPos[2] += 20.f;
             CreateSprite(BITMAP_LIGHT, vPos, o->Scale * 6.f, Light, o);
         }
-        return true;
+            return true;
         case 78:
         {
             int iTime = timeGetTime() % 500;
@@ -667,7 +676,7 @@ bool CursedTemple::RenderObjectVisual(OBJECT* o, BMD* b)
                 CreateParticleFpsChecked(BITMAP_SMOKE, o->Position, o->Angle, Light, 0, 1.5f);
             }
         }
-        return true;
+            return true;
         case 79:
         {
             if (rand_fps_check(1))
@@ -680,17 +689,18 @@ bool CursedTemple::RenderObjectVisual(OBJECT* o, BMD* b)
                 }
             }
         }
-        return true;
+            return true;
         }
     }
-    return true;
+        return true;
     }
     return false;
 }
 
 bool CursedTemple::RenderObject_AfterCharacter(OBJECT* o, BMD* b)
 {
-    if (!gMapManager.IsCursedTemple()) return false;
+    if (!gMapManager.IsCursedTemple())
+        return false;
 
     switch (o->Type)
     {
@@ -701,10 +711,11 @@ bool CursedTemple::RenderObject_AfterCharacter(OBJECT* o, BMD* b)
     {
         if (o->Type == 64 || o->Type == 65 || o->Type == 66 || o->Type == 80)
         {
-            b->RenderBody(RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
+            b->RenderBody(RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight,
+                          o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
         }
     }
-    return true;
+        return true;
     }
 
     return false;
@@ -721,13 +732,13 @@ bool CursedTemple::RenderMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
     case MODEL_CURSEDTEMPLE_ILLUSION_NPC:
     {
         vec3_t vRelativePos, vWorldPos;
-        int boneindex[11] = { 34, 48, 49, 20, 45, 19, 44, 22, 21, 47, 46 };
+        int boneindex[11] = {34, 48, 49, 20, 45, 19, 44, 22, 21, 47, 46};
         for (int i = 0; i < 11; ++i)
         {
             Vector(0.f, 0.f, 0.f, vRelativePos);
             b->TransformPosition(o->BoneTransform[boneindex[i]], vRelativePos, vWorldPos, true);
             Vector(0.4f, 0.4f, 1.0f, Light);
-            CreateSprite(BITMAP_LIGHT, vWorldPos, 0.7f, Light, o);	// flare01.jpg
+            CreateSprite(BITMAP_LIGHT, vWorldPos, 0.7f, Light, o); // flare01.jpg
         }
 
         Vector(0.f, 0.f, 0.f, Light);
@@ -737,19 +748,23 @@ bool CursedTemple::RenderMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
             int randtemp = rand() % 4;
             if (randtemp == 0)
             {
-                Vector(static_cast<float>(rand() % 120), static_cast<float>(rand() % 70), static_cast<float>(rand() % 50), vRelativePos);
+                Vector(static_cast<float>(rand() % 120), static_cast<float>(rand() % 70),
+                       static_cast<float>(rand() % 50), vRelativePos);
             }
             else if (randtemp == 1)
             {
-                Vector(-static_cast<float>(rand() % 120), -static_cast<float>(rand() % 70), static_cast<float>(rand() % 50), vRelativePos);
+                Vector(-static_cast<float>(rand() % 120), -static_cast<float>(rand() % 70),
+                       static_cast<float>(rand() % 50), vRelativePos);
             }
             else if (randtemp == 2)
             {
-                Vector(static_cast<float>(rand() % 120), -static_cast<float>(rand() % 70), static_cast<float>(rand() % 50), vRelativePos);
+                Vector(static_cast<float>(rand() % 120), -static_cast<float>(rand() % 70),
+                       static_cast<float>(rand() % 50), vRelativePos);
             }
             else if (randtemp == 3)
             {
-                Vector(-static_cast<float>(rand() % 120), static_cast<float>(rand() % 70), static_cast<float>(rand() % 50), vRelativePos);
+                Vector(-static_cast<float>(rand() % 120), static_cast<float>(rand() % 70),
+                       static_cast<float>(rand() % 50), vRelativePos);
             }
 
             b->TransformPosition(o->BoneTransform[1], vRelativePos, vWorldPos, true);
@@ -787,7 +802,7 @@ bool CursedTemple::RenderMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
             }
         }
     }
-    return true;
+        return true;
 
     case MODEL_ILLUSION_SORCERER_SPIRIT_POISON:
     {
@@ -795,7 +810,7 @@ bool CursedTemple::RenderMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
         Vector(0.f, 0.f, 0.f, vRelativePos);
         if (o->CurrentAction == MONSTER01_DIE)
         {
-            int boneindex[6] = { 6, 2, 19, 25, 35, 40 };
+            int boneindex[6] = {6, 2, 19, 25, 35, 40};
 
             for (int i = 0; i < 6; ++i)
             {
@@ -804,7 +819,7 @@ bool CursedTemple::RenderMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
             }
         }
     }
-    return true;
+        return true;
     case MODEL_ILLUSION_SORCERER_SPIRIT_ICE:
     {
         vec3_t vRelativePos, vWorldPos;
@@ -835,7 +850,7 @@ bool CursedTemple::RenderMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
         }
         else if (o->CurrentAction == MONSTER01_DIE)
         {
-            int boneindex[6] = { 7, 2, 14, 38, 73, 78 };
+            int boneindex[6] = {7, 2, 14, 38, 73, 78};
 
             for (int i = 0; i < 4; ++i)
             {
@@ -844,7 +859,7 @@ bool CursedTemple::RenderMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
             }
         }
     }
-    return true;
+        return true;
     case MODEL_ILLUSION_SORCERER_SPIRIT_LIGHTNING:
     {
         vec3_t vRelativePos, vWorldPos;
@@ -877,7 +892,7 @@ bool CursedTemple::RenderMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
         }
         else if (o->CurrentAction == MONSTER01_DIE)
         {
-            int boneindex[6] = { 7, 2, 14, 38, 73, 78 };
+            int boneindex[6] = {7, 2, 14, 38, 73, 78};
 
             for (int i = 0; i < 6; ++i)
             {
@@ -886,7 +901,7 @@ bool CursedTemple::RenderMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
             }
         }
     }
-    return true;
+        return true;
     case MODEL_CURSEDTEMPLE_STATUE:
         if (o->CurrentAction == MONSTER01_DIE)
         {
@@ -953,7 +968,7 @@ bool CursedTemple::RenderMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
             m_ShowAlliedPointEffect = false;
         }
     }
-    return true;
+        return true;
     case MODEL_CURSEDTEMPLE_ILLUSION__BASKET:
     {
         vec3_t vRelativePos, vWorldPos, Light;
@@ -970,14 +985,16 @@ bool CursedTemple::RenderMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
             m_ShowIllusionPointEffect = false;
         }
     }
-    return true;
+        return true;
     }
     return false;
 }
 
 void CursedTemple::UpdateTempleSystemMsg(int _Value)
 {
-    wchar_t szText[256] = { 0, };
+    wchar_t szText[256] = {
+        0,
+    };
     mu_swprintf(szText, GlobalText[2367]);
     switch (_Value)
     {
@@ -1026,89 +1043,123 @@ bool CursedTemple::IsGaugebarEnabled()
 
 bool CursedTemple::RenderObjectMesh(OBJECT* o, BMD* b, bool ExtraMon)
 {
-    if (!gMapManager.IsCursedTemple()) return false;
+    if (!gMapManager.IsCursedTemple())
+        return false;
 
     switch (o->Type)
     {
     case MODEL_CURSEDTEMPLE_STATUE:
         if (o->CurrentAction != MONSTER01_DIE)
         {
-            b->RenderMesh(0, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
-            b->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
-            b->RenderMesh(1, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
-            b->RenderMesh(1, RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
-            b->RenderMesh(3, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
-            b->RenderMesh(3, RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
-            b->RenderMesh(2, RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
-            b->RenderMesh(4, RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
-            b->RenderMesh(5, RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
+            b->RenderMesh(0, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                          o->BlendMeshTexCoordV, o->HiddenMesh);
+            b->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight,
+                          o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
+            b->RenderMesh(1, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                          o->BlendMeshTexCoordV, o->HiddenMesh);
+            b->RenderMesh(1, RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight,
+                          o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
+            b->RenderMesh(3, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                          o->BlendMeshTexCoordV, o->HiddenMesh);
+            b->RenderMesh(3, RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight,
+                          o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
+            b->RenderMesh(2, RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight,
+                          o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
+            b->RenderMesh(4, RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight,
+                          o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
+            b->RenderMesh(5, RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight,
+                          o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
         }
         return true;
     case MODEL_CURSEDTEMPLE_ALLIED_BASKET:
-        b->RenderMesh(0, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
-        b->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
-        b->RenderMesh(1, RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
-        b->RenderMesh(2, RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
-        b->RenderMesh(2, RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
+        b->RenderMesh(0, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                      o->BlendMeshTexCoordV, o->HiddenMesh);
+        b->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight,
+                      o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
+        b->RenderMesh(1, RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight,
+                      o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
+        b->RenderMesh(2, RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight,
+                      o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
+        b->RenderMesh(2, RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight,
+                      o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
         return true;
     case MODEL_CURSEDTEMPLE_ILLUSION__BASKET:
-        b->RenderMesh(1, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
-        b->RenderMesh(1, RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
-        b->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
-        b->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
+        b->RenderMesh(1, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                      o->BlendMeshTexCoordV, o->HiddenMesh);
+        b->RenderMesh(1, RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight,
+                      o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
+        b->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight,
+                      o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
+        b->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight,
+                      o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, o->HiddenMesh);
         return true;
     case MODEL_CURSEDTEMPLE_ILLUSION_NPC:
     {
         float fLumi = (sinf(WorldTime * 0.002f) + 1.f) * 0.5f;
         float fLumi2 = (sinf(WorldTime * 0.002f) + 1.f);
 
-        b->RenderMesh(2, RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, 5, fLumi2, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, BITMAP_CURSEDTEMPLE_NPC_MESH_EFFECT);
+        b->RenderMesh(2, RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, 5, fLumi2, o->BlendMeshTexCoordU,
+                      o->BlendMeshTexCoordV, BITMAP_CURSEDTEMPLE_NPC_MESH_EFFECT);
         b->RenderMesh(3, RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, 2, fLumi);
     }
     break;
     case MODEL_CURSEDTEMPLE_ENTER_NPC:
     {
         Vector(1.f, 1.f, 1.f, b->BodyLight);
-        b->RenderMesh(0, RENDER_CHROME, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
-        b->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
+        b->RenderMesh(0, RENDER_CHROME, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                      o->BlendMeshTexCoordV);
+        b->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight,
+                      o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
 
         Vector(10.f, 10.f, 10.f, b->BodyLight);
-        b->RenderMesh(0, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
-        b->RenderMesh(1, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
-        b->RenderMesh(2, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
-        b->RenderMesh(3, RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, 3, o->BlendMeshLight, o->BlendMeshTexCoordU, (int)WorldTime % 2000 * 0.001f);
+        b->RenderMesh(0, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                      o->BlendMeshTexCoordV);
+        b->RenderMesh(1, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                      o->BlendMeshTexCoordV);
+        b->RenderMesh(2, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                      o->BlendMeshTexCoordV);
+        b->RenderMesh(3, RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, 3, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                      (int)WorldTime % 2000 * 0.001f);
     }
-    return true;
+        return true;
     case MODEL_ILLUSION_SORCERER_SPIRIT_LIGHTNING:
     case MODEL_ILLUSION_SORCERER_SPIRIT_ICE:
     {
-        b->RenderMesh(2, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
+        b->RenderMesh(2, RENDER_TEXTURE, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                      o->BlendMeshTexCoordV);
         float fLumi = (sinf(WorldTime * 0.002f) + 1.f) * 0.8f;
-        b->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT, WorldTime * 0.02f, 0, fLumi * 4.f, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
+        b->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT, WorldTime * 0.02f, 0, fLumi * 4.f, o->BlendMeshTexCoordU,
+                      o->BlendMeshTexCoordV);
         fLumi = (sinf(WorldTime * 0.006f) + 1.f) * 0.9f;
-        b->RenderMesh(1, RENDER_TEXTURE | RENDER_BRIGHT, WorldTime * 0.02f, 0, fLumi * 3.f, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
-        b->RenderMesh(3, RENDER_TEXTURE | RENDER_BRIGHT, WorldTime * 0.002f, 0, o->BlendMeshLight * 2.f, -WorldTime * 0.002f, WorldTime * 0.02f);
+        b->RenderMesh(1, RENDER_TEXTURE | RENDER_BRIGHT, WorldTime * 0.02f, 0, fLumi * 3.f, o->BlendMeshTexCoordU,
+                      o->BlendMeshTexCoordV);
+        b->RenderMesh(3, RENDER_TEXTURE | RENDER_BRIGHT, WorldTime * 0.002f, 0, o->BlendMeshLight * 2.f,
+                      -WorldTime * 0.002f, WorldTime * 0.02f);
     }
-    return true;
+        return true;
     case 54:
     {
         float fLumi = (sinf(WorldTime * 0.002f) + 1.f) * 0.4f;
-        b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, fLumi + 0.3f, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV, 2);
-        b->RenderMesh(2, RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
+        b->RenderBody(RENDER_TEXTURE, o->Alpha, o->BlendMesh, fLumi + 0.3f, o->BlendMeshTexCoordU,
+                      o->BlendMeshTexCoordV, 2);
+        b->RenderMesh(2, RENDER_TEXTURE | RENDER_BRIGHT, o->Alpha, o->BlendMesh, o->BlendMeshLight,
+                      o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
     }
-    return true;
+        return true;
     }
     return false;
 }
 
 void CursedTemple::Process()
 {
-    if (!gMapManager.IsCursedTemple()) return;
+    if (!gMapManager.IsCursedTemple())
+        return;
 }
 
 void CursedTemple::Draw()
 {
-    if (!gMapManager.IsCursedTemple()) return;
+    if (!gMapManager.IsCursedTemple())
+        return;
 }
 
 void CursedTemple::PlayBGM()
@@ -1117,15 +1168,16 @@ void CursedTemple::PlayBGM()
     {
         ::PlayMp3(MUSIC_CURSEDTEMPLE_WAIT);
 
-        if (::IsEndMp3()) ::StopMp3(MUSIC_CURSEDTEMPLE_WAIT);
+        if (::IsEndMp3())
+            ::StopMp3(MUSIC_CURSEDTEMPLE_WAIT);
     }
-    else if (m_CursedTempleState == eCursedTempleState_Ready
-        || m_CursedTempleState == eCursedTempleState_Play)
+    else if (m_CursedTempleState == eCursedTempleState_Ready || m_CursedTempleState == eCursedTempleState_Play)
     {
         ::StopMp3(MUSIC_CURSEDTEMPLE_WAIT);
         ::PlayMp3(MUSIC_CURSEDTEMPLE_GAME);
 
-        if (::IsEndMp3()) ::StopMp3(MUSIC_CURSEDTEMPLE_GAME);
+        if (::IsEndMp3())
+            ::StopMp3(MUSIC_CURSEDTEMPLE_GAME);
     }
     else if (m_CursedTempleState == eCursedTempleState_None)
     {
@@ -1136,7 +1188,8 @@ void CursedTemple::PlayBGM()
 
 bool CursedTemple::IsHolyItemPickState()
 {
-    if (!gMapManager.IsCursedTemple()) return false;
+    if (!gMapManager.IsCursedTemple())
+        return false;
 
     if (m_CursedTempleState != eCursedTempleState_Play)
     {
@@ -1219,7 +1272,8 @@ void CursedTemple::ReceiveCursedTempleInfo(const BYTE* ReceiveBuffer)
 
                 float fAnimationFrame = o->AnimationFrame - fActionSpeed;
 
-                b->Animation(BoneTransform, fAnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle, o->HeadAngle);
+                b->Animation(BoneTransform, fAnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle,
+                             o->HeadAngle);
 
                 b->TransformPosition(BoneTransform[20], p, tempPosition, true);
                 CreateEffect(MODEL_CURSEDTEMPLE_HOLYITEM, tempPosition, o->Angle, o->Light, 0, o);

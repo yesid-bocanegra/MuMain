@@ -43,29 +43,38 @@ public:
     virtual ~CUIGuildInfo();
 
 protected:
-    bool			m_bOpened;
-    int				m_nCurrentTab;
+    bool m_bOpened;
+    int m_nCurrentTab;
 
-    BOOL			m_bRequestUnionList;
+    BOOL m_bRequestUnionList;
 
-    wchar_t			m_szRivalGuildName[MAX_GUILDNAME + 1];
+    wchar_t m_szRivalGuildName[MAX_GUILDNAME + 1];
 
-    CUINewGuildMemberListBox	m_GuildMemberListBox;
-    CUIGuildNoticeListBox		m_GuildNoticeListBox;
-    CUIUnionGuildListBox		m_UnionListBox;
+    CUINewGuildMemberListBox m_GuildMemberListBox;
+    CUIGuildNoticeListBox m_GuildNoticeListBox;
+    CUIUnionGuildListBox m_UnionListBox;
 
-    DWORD			m_dwPopupID;
-    CUIButton		m_BreakUpGuildButton;
-    CUIButton		m_AppointButton;
-    CUIButton		m_DisbandButton;
-    CUIButton		m_FireButton;
-    CUIButton		m_BreakUnionButton;
-    CUIButton		m_BanUnionButton;
+    DWORD m_dwPopupID;
+    CUIButton m_BreakUpGuildButton;
+    CUIButton m_AppointButton;
+    CUIButton m_DisbandButton;
+    CUIButton m_FireButton;
+    CUIButton m_BreakUnionButton;
+    CUIButton m_BanUnionButton;
 
 protected:
-    BOOL IsGuildMaster() { return (Hero->GuildStatus == G_MASTER); }
-    BOOL IsSubGuildMaster() { return (Hero->GuildStatus == G_SUB_MASTER); }
-    BOOL IsBattleMaster() { return (Hero->GuildStatus == G_BATTLE_MASTER); }
+    BOOL IsGuildMaster()
+    {
+        return (Hero->GuildStatus == G_MASTER);
+    }
+    BOOL IsSubGuildMaster()
+    {
+        return (Hero->GuildStatus == G_SUB_MASTER);
+    }
+    BOOL IsBattleMaster()
+    {
+        return (Hero->GuildStatus == G_BATTLE_MASTER);
+    }
 
     int GetGuildMemberIndex(wchar_t* szName);
     const wchar_t* GetGuildMasterName();
@@ -103,4 +112,4 @@ public:
     virtual void Close();
 };
 
-void    UseBattleMasterSkill(void);
+void UseBattleMasterSkill(void);

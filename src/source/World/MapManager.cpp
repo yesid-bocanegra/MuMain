@@ -20,7 +20,6 @@
 #include "w_CursedTemple.h"
 #include "WSclient.h"
 
-
 CMapManager gMapManager;
 
 CMapManager::CMapManager() // OK
@@ -66,9 +65,11 @@ void CMapManager::Load() // OK
 
         Vector(0.f, 0.f, 0.f, Ang);
         Vector(0.f, 0.f, 270.f, Pos);
-        Pos[0] = 191 * TERRAIN_SCALE; Pos[1] = 16 * TERRAIN_SCALE;
+        Pos[0] = 191 * TERRAIN_SCALE;
+        Pos[1] = 16 * TERRAIN_SCALE;
         CreateObject(MODEL_NPC_SERBIS_DONKEY, Pos, Ang);
-        Pos[0] = 191 * TERRAIN_SCALE; Pos[1] = 17 * TERRAIN_SCALE;
+        Pos[0] = 191 * TERRAIN_SCALE;
+        Pos[1] = 17 * TERRAIN_SCALE;
         CreateObject(MODEL_NPC_SERBIS_FLAG, Pos, Ang);
 
         gLoadData.AccessModel(MODEL_WARP, L"Data\\Npc\\", L"warp01");
@@ -98,7 +99,8 @@ void CMapManager::Load() // OK
         vec3_t Pos, Ang;
         Vector(0.f, 0.f, 10.f, Ang);
         Vector(0.f, 0.f, 0.f, Pos);
-        Pos[0] = 223 * TERRAIN_SCALE; Pos[1] = 30 * TERRAIN_SCALE;
+        Pos[0] = 223 * TERRAIN_SCALE;
+        Pos[1] = 30 * TERRAIN_SCALE;
         CreateObject(MODEL_WARP, Pos, Ang);
         break;
     case WD_5UNKNOWN:
@@ -523,21 +525,21 @@ void CMapManager::Load() // OK
         LoadBitmap(L"Effect\\torchfire.jpg", BITMAP_TORCH_FIRE, GL_LINEAR, GL_CLAMP_TO_EDGE);
         LoadBitmap(L"Effect\\clouds2.jpg", BITMAP_EVENT_CLOUD, GL_LINEAR, GL_CLAMP_TO_EDGE);
 
-        //EFFECT
+        // EFFECT
         gLoadData.AccessModel(MODEL_FALL_STONE_EFFECT, L"Data\\Object47\\", L"Stoneeffec");
         gLoadData.OpenTexture(MODEL_FALL_STONE_EFFECT, L"Object47\\");
-        //game system sound
+        // game system sound
         LoadWaveFile(SOUND_CURSEDTEMPLE_GAMESYSTEM1, L"Data\\Sound\\w47\\cursedtemple_start01.wav", 1);
         LoadWaveFile(SOUND_CURSEDTEMPLE_GAMESYSTEM2, L"Data\\Sound\\w47\\cursedtemple_statue01.wav", 1);
         LoadWaveFile(SOUND_CURSEDTEMPLE_GAMESYSTEM3, L"Data\\Sound\\w47\\cursedtemple_holy01.wav", 1);
         LoadWaveFile(SOUND_CURSEDTEMPLE_GAMESYSTEM4, L"Data\\Sound\\w47\\cursedtemple_score01.wav", 1);
         LoadWaveFile(SOUND_CURSEDTEMPLE_GAMESYSTEM5, L"Data\\Sound\\w47\\cursedtemple_end01.wav", 1);
-        //moster 1 - 2 effect sound
+        // moster 1 - 2 effect sound
         LoadWaveFile(SOUND_CURSEDTEMPLE_MONSTER1_IDLE, L"Data\\Sound\\w47\\cursedtemple_idle01.wav", 1);
         LoadWaveFile(SOUND_CURSEDTEMPLE_MONSTER_MOVE, L"Data\\Sound\\w47\\cursedtemple_move01.wav", 1);
         LoadWaveFile(SOUND_CURSEDTEMPLE_MONSTER1_DAMAGE, L"Data\\Sound\\w47\\cursedtemple_damage01.wav", 1);
         LoadWaveFile(SOUND_CURSEDTEMPLE_MONSTER1_DEATH, L"Data\\Sound\\w47\\cursedtemple_death01.wav", 1);
-        //moster 3 effect sound
+        // moster 3 effect sound
         LoadWaveFile(SOUND_CURSEDTEMPLE_MONSTER2_IDLE, L"Data\\Sound\\w47\\cursedtemple_idle02.wav", 1);
         LoadWaveFile(SOUND_CURSEDTEMPLE_MONSTER2_ATTACK, L"Data\\Sound\\w47\\cursedtemple_Attack01.wav", 1);
         LoadWaveFile(SOUND_CURSEDTEMPLE_MONSTER2_DAMAGE, L"Data\\Sound\\w47\\cursedtemple_damage02.wav", 1);
@@ -547,7 +549,7 @@ void CMapManager::Load() // OK
     case WD_41CHANGEUP3RD_1ST:
         LoadBitmap(L"Effect\\clouds.jpg", BITMAP_CLOUD, GL_LINEAR, GL_CLAMP_TO_EDGE);
         LoadBitmap(L"Effect\\firered.jpg", BITMAP_FIRE_RED, GL_LINEAR, GL_CLAMP_TO_EDGE);
-        LoadBitmap(L"Effect\\FireSnuff.jpg", BITMAP_FIRE_SNUFF, GL_LINEAR, GL_CLAMP_TO_EDGE);      //  불씨.
+        LoadBitmap(L"Effect\\FireSnuff.jpg", BITMAP_FIRE_SNUFF, GL_LINEAR, GL_CLAMP_TO_EDGE); //  불씨.
 
         LoadWaveFile(SOUND_3RD_CHANGE_UP_BG_CAGE1, L"Data\\Sound\\w42\\cage01.wav", 1);
         LoadWaveFile(SOUND_3RD_CHANGE_UP_BG_CAGE2, L"Data\\Sound\\w42\\cage02.wav", 1);
@@ -697,7 +699,8 @@ void CMapManager::Load() // OK
         gLoadData.OpenTexture(MODEL_SHADOW_ROOK_WRIST_RIGHT, L"Monster\\");
         gLoadData.AccessModel(MODEL_EX01_SHADOW_MASTER_ANKLE_LEFT, L"Data\\Monster\\", L"ex01shadow_rock_7_ankle_left");
         gLoadData.OpenTexture(MODEL_EX01_SHADOW_MASTER_ANKLE_LEFT, L"Monster\\");
-        gLoadData.AccessModel(MODEL_EX01_SHADOW_MASTER_ANKLE_RIGHT, L"Data\\Monster\\", L"ex01shadow_rock_7_ankle_right");
+        gLoadData.AccessModel(MODEL_EX01_SHADOW_MASTER_ANKLE_RIGHT, L"Data\\Monster\\",
+                              L"ex01shadow_rock_7_ankle_right");
         gLoadData.OpenTexture(MODEL_EX01_SHADOW_MASTER_ANKLE_RIGHT, L"Monster\\");
         gLoadData.AccessModel(MODEL_EX01_SHADOW_MASTER_BELT, L"Data\\Monster\\", L"ex01shadow_rock_7_belt");
         gLoadData.OpenTexture(MODEL_EX01_SHADOW_MASTER_BELT, L"Monster\\");
@@ -711,7 +714,8 @@ void CMapManager::Load() // OK
         gLoadData.OpenTexture(MODEL_EX01_SHADOW_MASTER_KNEE_RIGHT, L"Monster\\");
         gLoadData.AccessModel(MODEL_EX01_SHADOW_MASTER_WRIST_LEFT, L"Data\\Monster\\", L"ex01shadow_rock_7_wrist_left");
         gLoadData.OpenTexture(MODEL_EX01_SHADOW_MASTER_WRIST_LEFT, L"Monster\\");
-        gLoadData.AccessModel(MODEL_EX01_SHADOW_MASTER_WRIST_RIGHT, L"Data\\Monster\\", L"ex01shadow_rock_7_wrist_right");
+        gLoadData.AccessModel(MODEL_EX01_SHADOW_MASTER_WRIST_RIGHT, L"Data\\Monster\\",
+                              L"ex01shadow_rock_7_wrist_right");
         gLoadData.OpenTexture(MODEL_EX01_SHADOW_MASTER_WRIST_RIGHT, L"Monster\\");
         break;
     case WD_65DOPPLEGANGER1:
@@ -829,7 +833,8 @@ void CMapManager::Load() // OK
         LoadWaveFile(SOUND_EMPIREGUARDIAN_INDOOR_SOUND, L"Data\\Sound\\w69w70w71w72\\ImperialGuardianFort_in.wav");
         LoadWaveFile(SOUND_EMPIREGUARDIAN_BOSS_GAION_MONSTER_MOVE, L"Data\\Sound\\w69w70w71w72\\GaionKalein_move.wav");
         LoadWaveFile(SOUND_EMPIREGUARDIAN_BOSS_GAION_MONSTER_RAGE, L"Data\\Sound\\w69w70w71w72\\GaionKalein_rage.wav");
-        LoadWaveFile(SOUND_EMPIREGUARDIAN_BOSS_GAION_MONSTER_DEATH, L"Data\\Sound\\w69w70w71w72\\GrandWizard_death.wav");
+        LoadWaveFile(SOUND_EMPIREGUARDIAN_BOSS_GAION_MONSTER_DEATH,
+                     L"Data\\Sound\\w69w70w71w72\\GrandWizard_death.wav");
         LoadWaveFile(SOUND_EMPIREGUARDIAN_JERINT_MONSTER_ATTACK01, L"Data\\Sound\\w69w70w71w72\\Jelint_attack1.wav");
         LoadWaveFile(SOUND_EMPIREGUARDIAN_JERINT_MONSTER_ATTACK03, L"Data\\Sound\\w69w70w71w72\\Jelint_attack3.wav");
         LoadWaveFile(SOUND_EMPIREGUARDIAN_JERINT_MONSTER_MOVE01, L"Data\\Sound\\w69w70w71w72\\Jelint_move01.wav");
@@ -839,22 +844,33 @@ void CMapManager::Load() // OK
         LoadWaveFile(SOUND_EMPIREGUARDIAN_RAYMOND_MONSTER_ATTACK02, L"Data\\Sound\\w69w70w71w72\\Raymond_attack2.wav");
         LoadWaveFile(SOUND_EMPIREGUARDIAN_RAYMOND_MONSTER_RAGE, L"Data\\Sound\\w69w70w71w72\\Raymond_rage.wav");
         LoadWaveFile(SOUND_EMPIREGUARDIAN_ERCANNE_MONSTER_ATTACK03, L"Data\\Sound\\w69w70w71w72\\Ercanne_attack3.wav");
-        LoadWaveFile(SOUND_EMPIREGUARDIAN_1CORP_DEASULER_MONSTER_ATTACK02, L"Data\\Sound\\w69w70w71w72\\1Deasuler_attack2.wav");
-        LoadWaveFile(SOUND_EMPIREGUARDIAN_1CORP_DEASULER_MONSTER_ATTACK03, L"Data\\Sound\\w69w70w71w72\\1Deasuler_attack3.wav");
-        LoadWaveFile(SOUND_EMPIREGUARDIAN_2CORP_VERMONT_MONSTER_ATTACK01, L"Data\\Sound\\w69w70w71w72\\2Vermont_attack1.wav");
-        LoadWaveFile(SOUND_EMPIREGUARDIAN_2CORP_VERMONT_MONSTER_ATTACK02, L"Data\\Sound\\w69w70w71w72\\2Vermont_attack2.wav");
-        LoadWaveFile(SOUND_EMPIREGUARDIAN_2CORP_VERMONT_MONSTER_DEATH, L"Data\\Sound\\w69w70w71w72\\2Vermont_death.wav");
+        LoadWaveFile(SOUND_EMPIREGUARDIAN_1CORP_DEASULER_MONSTER_ATTACK02,
+                     L"Data\\Sound\\w69w70w71w72\\1Deasuler_attack2.wav");
+        LoadWaveFile(SOUND_EMPIREGUARDIAN_1CORP_DEASULER_MONSTER_ATTACK03,
+                     L"Data\\Sound\\w69w70w71w72\\1Deasuler_attack3.wav");
+        LoadWaveFile(SOUND_EMPIREGUARDIAN_2CORP_VERMONT_MONSTER_ATTACK01,
+                     L"Data\\Sound\\w69w70w71w72\\2Vermont_attack1.wav");
+        LoadWaveFile(SOUND_EMPIREGUARDIAN_2CORP_VERMONT_MONSTER_ATTACK02,
+                     L"Data\\Sound\\w69w70w71w72\\2Vermont_attack2.wav");
+        LoadWaveFile(SOUND_EMPIREGUARDIAN_2CORP_VERMONT_MONSTER_DEATH,
+                     L"Data\\Sound\\w69w70w71w72\\2Vermont_death.wav");
         LoadWaveFile(SOUND_EMPIREGUARDIAN_3CORP_CATO_ATTACK02, L"Data\\Sound\\w69w70w71w72\\3Cato_attack2.wav");
         LoadWaveFile(SOUND_EMPIREGUARDIAN_3CORP_CATO_MOVE, L"Data\\Sound\\w69w70w71w72\\3Cato_move.wav");
         LoadWaveFile(SOUND_EMPIREGUARDIAN_4CORP_GALLIA_ATTACK02, L"Data\\Sound\\w69w70w71w72\\4Gallia_attack2.wav");
-        LoadWaveFile(SOUND_EMPIREGUARDIAN_QUATERMASTER_ATTACK02, L"Data\\Sound\\w69w70w71w72\\QuaterMaster_attack2.wav");
-        LoadWaveFile(SOUND_EMPIREGUARDIAN_COMBATMASTER_ATTACK01, L"Data\\Sound\\w69w70w71w72\\CombatMaster_attack1.wav");
-        LoadWaveFile(SOUND_EMPIREGUARDIAN_COMBATMASTER_ATTACK02, L"Data\\Sound\\w69w70w71w72\\CombatMaster_attack2.wav");
-        LoadWaveFile(SOUND_EMPIREGUARDIAN_COMBATMASTER_ATTACK03, L"Data\\Sound\\w69w70w71w72\\CombatMaster_attack3.wav");
+        LoadWaveFile(SOUND_EMPIREGUARDIAN_QUATERMASTER_ATTACK02,
+                     L"Data\\Sound\\w69w70w71w72\\QuaterMaster_attack2.wav");
+        LoadWaveFile(SOUND_EMPIREGUARDIAN_COMBATMASTER_ATTACK01,
+                     L"Data\\Sound\\w69w70w71w72\\CombatMaster_attack1.wav");
+        LoadWaveFile(SOUND_EMPIREGUARDIAN_COMBATMASTER_ATTACK02,
+                     L"Data\\Sound\\w69w70w71w72\\CombatMaster_attack2.wav");
+        LoadWaveFile(SOUND_EMPIREGUARDIAN_COMBATMASTER_ATTACK03,
+                     L"Data\\Sound\\w69w70w71w72\\CombatMaster_attack3.wav");
         LoadWaveFile(SOUND_EMPIREGUARDIAN_GRANDWIZARD_DEATH, L"Data\\Sound\\w69w70w71w72\\GrandWizard_death.wav");
         LoadWaveFile(SOUND_EMPIREGUARDIAN_ASSASSINMASTER_DEATH, L"Data\\Sound\\w69w70w71w72\\AssassinMaster_Death.wav");
-        LoadWaveFile(SOUND_EMPIREGUARDIAN_CAVALRYLEADER_ATTACK01, L"Data\\Sound\\w69w70w71w72\\CavalryLeader_attack1.wav");
-        LoadWaveFile(SOUND_EMPIREGUARDIAN_CAVALRYLEADER_ATTACK02, L"Data\\Sound\\w69w70w71w72\\CavalryLeader_attack2.wav");
+        LoadWaveFile(SOUND_EMPIREGUARDIAN_CAVALRYLEADER_ATTACK01,
+                     L"Data\\Sound\\w69w70w71w72\\CavalryLeader_attack1.wav");
+        LoadWaveFile(SOUND_EMPIREGUARDIAN_CAVALRYLEADER_ATTACK02,
+                     L"Data\\Sound\\w69w70w71w72\\CavalryLeader_attack2.wav");
         LoadWaveFile(SOUND_EMPIREGUARDIAN_CAVALRYLEADER_MOVE01, L"Data\\Sound\\w69w70w71w72\\CavalryLeader_move01.wav");
         LoadWaveFile(SOUND_EMPIREGUARDIAN_CAVALRYLEADER_MOVE02, L"Data\\Sound\\w69w70w71w72\\CavalryLeader_move02.wav");
         LoadWaveFile(SOUND_EMPIREGUARDIAN_DEFENDER_ATTACK02, L"Data\\Sound\\w69w70w71w72\\GrandWizard_death.wav");
@@ -873,7 +889,8 @@ void CMapManager::Load() // OK
 
         Vector(0.f, 0.f, 0.f, Ang);
         Vector(0.f, 0.f, 0.f, Pos);
-        Pos[0] = 56 * TERRAIN_SCALE; Pos[1] = 230 * TERRAIN_SCALE;
+        Pos[0] = 56 * TERRAIN_SCALE;
+        Pos[1] = 230 * TERRAIN_SCALE;
         CreateObject(MODEL_DRAGON, Pos, Ang);
         break;
 
@@ -940,7 +957,7 @@ void CMapManager::Load() // OK
         LoadWaveFile(SOUND_KARUTAN_INSECT_ENV, L"Data\\Sound\\Karutan\\Karutan_insect_env.wav", 1);
         LoadWaveFile(SOUND_KARUTAN_KARDAMAHAL_ENV, L"Data\\Sound\\Karutan\\Kardamahal_entrance_env.wav", 1);
         break;
-#endif	// ASG_ADD_KARUTAN_MONSTERS
+#endif // ASG_ADD_KARUTAN_MONSTERS
     }
 
     if (this->InChaosCastle() == true)
@@ -1140,8 +1157,7 @@ void CMapManager::Load() // OK
             Models[75].StreamMesh = 0;
             Models[79].StreamMesh = 0;
         }
-        if (this->WorldActive == WD_51HOME_6TH_CHAR
-            )
+        if (this->WorldActive == WD_51HOME_6TH_CHAR)
         {
             Models[MODEL_EAGLE].Actions[0].PlaySpeed = 0.5f;
             if (this->WorldActive == WD_51HOME_6TH_CHAR)
@@ -1168,7 +1184,7 @@ void CMapManager::Load() // OK
 
             Models[107].Actions[0].PlaySpeed = 5.f;
         }
-#endif	// ASG_ADD_MAP_KARUTAN
+#endif // ASG_ADD_MAP_KARUTAN
     }
 }
 
@@ -1201,7 +1217,7 @@ void CMapManager::LoadWorld(int Map)
 
     wchar_t FileName[64];
     wchar_t WorldName[32];
-    int  iMapWorld = this->WorldActive + 1;
+    int iMapWorld = this->WorldActive + 1;
 
     if (InBloodCastle(Map) == true)
     {
@@ -1260,35 +1276,35 @@ void CMapManager::LoadWorld(int Map)
     else
 
         if (this->WorldActive == WD_34CRYWOLF_1ST)
+    {
+        switch (CryWolfState)
         {
-            switch (CryWolfState)
-            {
-            case CRYWOLF_OCCUPATION_STATE_PEACE:
-                mu_swprintf(FileName, L"Data\\%ls\\EncTerrain%d.att", WorldName, iMapWorld);
-                break;
-            case CRYWOLF_OCCUPATION_STATE_OCCUPIED:
-                mu_swprintf(FileName, L"Data\\%ls\\EncTerrain%d.att", WorldName, iMapWorld * 10 + 1);
-                break;
-            case CRYWOLF_OCCUPATION_STATE_WAR:
-                mu_swprintf(FileName, L"Data\\%ls\\EncTerrain%d.att", WorldName, iMapWorld * 10 + 2);
-                break;
-            }
+        case CRYWOLF_OCCUPATION_STATE_PEACE:
+            mu_swprintf(FileName, L"Data\\%ls\\EncTerrain%d.att", WorldName, iMapWorld);
+            break;
+        case CRYWOLF_OCCUPATION_STATE_OCCUPIED:
+            mu_swprintf(FileName, L"Data\\%ls\\EncTerrain%d.att", WorldName, iMapWorld * 10 + 1);
+            break;
+        case CRYWOLF_OCCUPATION_STATE_WAR:
+            mu_swprintf(FileName, L"Data\\%ls\\EncTerrain%d.att", WorldName, iMapWorld * 10 + 2);
+            break;
         }
-        else if (this->WorldActive == WD_39KANTURU_3RD)
+    }
+    else if (this->WorldActive == WD_39KANTURU_3RD)
+    {
+        if (M39Kanturu3rd::IsSuccessBattle())
         {
-            if (M39Kanturu3rd::IsSuccessBattle())
-            {
-                mu_swprintf(FileName, L"Data\\%ls\\EncTerrain%d.att", WorldName, iMapWorld * 10 + 1);
-            }
-            else
-            {
-                mu_swprintf(FileName, L"Data\\%ls\\EncTerrain%d.att", WorldName, iMapWorld);
-            }
+            mu_swprintf(FileName, L"Data\\%ls\\EncTerrain%d.att", WorldName, iMapWorld * 10 + 1);
         }
         else
         {
             mu_swprintf(FileName, L"Data\\%ls\\EncTerrain%d.att", WorldName, iMapWorld);
         }
+    }
+    else
+    {
+        mu_swprintf(FileName, L"Data\\%ls\\EncTerrain%d.att", WorldName, iMapWorld);
+    }
     iResult = OpenTerrainAttribute(FileName);
     if (iMapWorld != iResult && -1 != iResult)
     {
@@ -1336,26 +1352,25 @@ void CMapManager::LoadWorld(int Map)
             mu_swprintf(FileName, L"%ls\\TerrainLight.jpg", WorldName);
         }
     }
-    else
-        if (this->WorldActive == WD_34CRYWOLF_1ST)
+    else if (this->WorldActive == WD_34CRYWOLF_1ST)
+    {
+        switch (CryWolfState)
         {
-            switch (CryWolfState)
-            {
-            case CRYWOLF_OCCUPATION_STATE_PEACE:
-                mu_swprintf(FileName, L"%ls\\TerrainLight.jpg", WorldName);
-                break;
-            case CRYWOLF_OCCUPATION_STATE_OCCUPIED:
-                mu_swprintf(FileName, L"%ls\\TerrainLight1.jpg", WorldName);
-                break;
-            case CRYWOLF_OCCUPATION_STATE_WAR:
-                mu_swprintf(FileName, L"%ls\\TerrainLight2.jpg", WorldName);
-                break;
-            }
-        }
-        else
-        {
+        case CRYWOLF_OCCUPATION_STATE_PEACE:
             mu_swprintf(FileName, L"%ls\\TerrainLight.jpg", WorldName);
+            break;
+        case CRYWOLF_OCCUPATION_STATE_OCCUPIED:
+            mu_swprintf(FileName, L"%ls\\TerrainLight1.jpg", WorldName);
+            break;
+        case CRYWOLF_OCCUPATION_STATE_WAR:
+            mu_swprintf(FileName, L"%ls\\TerrainLight2.jpg", WorldName);
+            break;
         }
+    }
+    else
+    {
+        mu_swprintf(FileName, L"%ls\\TerrainLight.jpg", WorldName);
+    }
 
     OpenTerrainLight(FileName);
 
@@ -1365,8 +1380,7 @@ void CMapManager::LoadWorld(int Map)
         LoadBitmap(FileName, BITMAP_MAPTILE, GL_NEAREST, GL_REPEAT, false);
         mu_swprintf(FileName, L"%ls\\TileGrass02.jpg", WorldName);
         LoadBitmap(FileName, BITMAP_MAPTILE + 1, GL_NEAREST, GL_REPEAT, false);
-        if (this->WorldActive == WD_51HOME_6TH_CHAR
-            )
+        if (this->WorldActive == WD_51HOME_6TH_CHAR)
         {
             mu_swprintf(FileName, L"%ls\\AlphaTileGround01.Tga", WorldName);
             LoadBitmap(FileName, BITMAP_MAPTILE + 2, GL_NEAREST, GL_REPEAT, false);
@@ -1437,12 +1451,12 @@ void CMapManager::LoadWorld(int Map)
         }
         else
         {
-#endif	// ASG_ADD_MAP_KARUTAN
+#endif // ASG_ADD_MAP_KARUTAN
             mu_swprintf(FileName, L"%ls\\TileRock06.jpg", WorldName);
             LoadBitmap(FileName, BITMAP_MAPTILE + 12, GL_NEAREST, GL_REPEAT, false);
 #ifdef ASG_ADD_MAP_KARUTAN
         }
-#endif	// ASG_ADD_MAP_KARUTAN
+#endif // ASG_ADD_MAP_KARUTAN
         mu_swprintf(FileName, L"%ls\\TileRock07.jpg", WorldName);
         LoadBitmap(FileName, BITMAP_MAPTILE + 13, GL_NEAREST, GL_REPEAT, false);
 
@@ -1470,10 +1484,9 @@ void CMapManager::LoadWorld(int Map)
         mu_swprintf(FileName, L"%ls\\TileGrass03.tga", WorldName);
         LoadBitmap(FileName, BITMAP_MAPGRASS + 2, GL_NEAREST, GL_REPEAT, false);
 
-        
         mu_swprintf(FileName, L"%ls\\leaf01.tga", WorldName);
         LoadBitmap(FileName, BITMAP_LEAF1, GL_NEAREST, GL_CLAMP_TO_EDGE, false);
-        mu_swprintf(FileName,(Map==0||Map==3||Map==63)? L"%ls\\leaf01.tga": L"%ls\\leaf01.jpg",WorldName);
+        mu_swprintf(FileName, (Map == 0 || Map == 3 || Map == 63) ? L"%ls\\leaf01.tga" : L"%ls\\leaf01.jpg", WorldName);
         LoadBitmap(FileName, BITMAP_LEAF1, GL_NEAREST, GL_CLAMP_TO_EDGE, false);
         mu_swprintf(FileName, L"%ls\\leaf02.jpg", WorldName);
         LoadBitmap(FileName, BITMAP_LEAF2, GL_NEAREST, GL_CLAMP_TO_EDGE, false);
@@ -1526,10 +1539,12 @@ void CMapManager::DeleteObjects()
                 {
                     OBJECT* Temp = o->Prior;
                     DeleteObject(o, ob);
-                    if (Temp == NULL) break;
+                    if (Temp == NULL)
+                        break;
                     o = Temp;
                 }
-                else break;
+                else
+                    break;
             }
             ob->Head = NULL;
             ob->Tail = NULL;
@@ -1603,8 +1618,7 @@ bool CMapManager::InHellas(int iMap)
         iMap = this->WorldActive;
     }
 
-    return ((iMap >= WD_24HELLAS && iMap <= WD_24HELLAS_END)
-        || (iMap == WD_24HELLAS_7));
+    return ((iMap >= WD_24HELLAS && iMap <= WD_24HELLAS_END) || (iMap == WD_24HELLAS_7));
 }
 
 bool CMapManager::InHiddenHellas(int iMap)
@@ -1644,7 +1658,8 @@ bool CMapManager::IsEmpireGuardian3()
 
 bool CMapManager::IsEmpireGuardian4()
 {
-    if (this->WorldActive == WD_72EMPIREGUARDIAN4 || this->WorldActive == WD_73NEW_LOGIN_SCENE || this->WorldActive == WD_74NEW_CHARACTER_SCENE)
+    if (this->WorldActive == WD_72EMPIREGUARDIAN4 || this->WorldActive == WD_73NEW_LOGIN_SCENE ||
+        this->WorldActive == WD_74NEW_CHARACTER_SCENE)
     {
         return true;
     }
@@ -1653,10 +1668,8 @@ bool CMapManager::IsEmpireGuardian4()
 
 bool CMapManager::IsEmpireGuardian()
 {
-    if (this->IsEmpireGuardian1() == false &&
-        this->IsEmpireGuardian2() == false &&
-        this->IsEmpireGuardian3() == false &&
-        this->IsEmpireGuardian4() == false)
+    if (this->IsEmpireGuardian1() == false && this->IsEmpireGuardian2() == false &&
+        this->IsEmpireGuardian3() == false && this->IsEmpireGuardian4() == false)
     {
         return false;
     }
@@ -1678,39 +1691,39 @@ const wchar_t* CMapManager::GetMapName(int iMap)
 {
     if (iMap == WD_34CRYWOLF_1ST)
     {
-        return(GlobalText[1851]);
+        return (GlobalText[1851]);
     }
     else if (iMap == WD_33AIDA)
     {
-        return(GlobalText[1850]);
+        return (GlobalText[1850]);
     }
     else if (iMap == WD_37KANTURU_1ST)
     {
-        return(GlobalText[2177]);
+        return (GlobalText[2177]);
     }
     else if (iMap == WD_38KANTURU_2ND)
     {
-        return(GlobalText[2178]);
+        return (GlobalText[2178]);
     }
     else if (iMap == WD_39KANTURU_3RD)
     {
-        return(GlobalText[2179]);
+        return (GlobalText[2179]);
     }
     else if (iMap == WD_40AREA_FOR_GM)
     {
-        return(GlobalText[2324]);
+        return (GlobalText[2324]);
     }
     else if (iMap == WD_51HOME_6TH_CHAR)
     {
-        return(GlobalText[1853]);
+        return (GlobalText[1853]);
     }
     else if (iMap == WD_57ICECITY)
     {
-        return(GlobalText[1855]);
+        return (GlobalText[1855]);
     }
     else if (iMap == WD_58ICECITY_BOSS)
     {
-        return(GlobalText[1856]);
+        return (GlobalText[1856]);
     }
 
     if (gMapManager.InBattleCastle(iMap) == true)

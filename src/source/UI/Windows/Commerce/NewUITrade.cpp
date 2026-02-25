@@ -13,6 +13,7 @@
 
 using namespace SEASON3B;
 
+// cppcheck-suppress uninitMemberVar
 CNewUITrade::CNewUITrade()
 {
     m_pNewUIMng = NULL;
@@ -27,24 +28,23 @@ CNewUITrade::~CNewUITrade()
 
 bool CNewUITrade::Create(CNewUIManager* pNewUIMng, int x, int y)
 {
-    if (NULL == pNewUIMng || NULL == g_pNewUI3DRenderMng
-        || NULL == g_pNewItemMng)
+    if (NULL == pNewUIMng || NULL == g_pNewUI3DRenderMng || NULL == g_pNewItemMng)
         return false;
 
     m_pNewUIMng = pNewUIMng;
     m_pNewUIMng->AddUIObj(SEASON3B::INTERFACE_TRADE, this);
 
     m_pYourInvenCtrl = new CNewUIInventoryCtrl;
-    if (false == m_pYourInvenCtrl->Create(STORAGE_TYPE::UNDEFINED, g_pNewUI3DRenderMng, g_pNewItemMng,
-        this, x + 16, y + 68, COLUMN_TRADE_INVEN, ROW_TRADE_INVEN))
+    if (false == m_pYourInvenCtrl->Create(STORAGE_TYPE::UNDEFINED, g_pNewUI3DRenderMng, g_pNewItemMng, this, x + 16,
+                                          y + 68, COLUMN_TRADE_INVEN, ROW_TRADE_INVEN))
     {
         SAFE_DELETE(m_pYourInvenCtrl);
         return false;
     }
 
     m_pMyInvenCtrl = new CNewUIInventoryCtrl;
-    if (false == m_pMyInvenCtrl->Create(STORAGE_TYPE::TRADE, g_pNewUI3DRenderMng, g_pNewItemMng,
-        this, x + 16, y + 274, COLUMN_TRADE_INVEN, ROW_TRADE_INVEN))
+    if (false == m_pMyInvenCtrl->Create(STORAGE_TYPE::TRADE, g_pNewUI3DRenderMng, g_pNewItemMng, this, x + 16, y + 274,
+                                        COLUMN_TRADE_INVEN, ROW_TRADE_INVEN))
     {
         SAFE_DELETE(m_pMyInvenCtrl);
         return false;
@@ -117,12 +117,11 @@ void CNewUITrade::SetPos(int x, int y)
 
 bool CNewUITrade::UpdateMouseEvent()
 {
-    if ((m_pYourInvenCtrl && false == m_pYourInvenCtrl->UpdateMouseEvent())
-        || (m_pMyInvenCtrl && false == m_pMyInvenCtrl->UpdateMouseEvent()))
+    if ((m_pYourInvenCtrl && false == m_pYourInvenCtrl->UpdateMouseEvent()) ||
+        (m_pMyInvenCtrl && false == m_pMyInvenCtrl->UpdateMouseEvent()))
     {
-        if (SEASON3B::IsPress(VK_LBUTTON)
-            && CNewUIInventoryCtrl::GetPickedItem()->GetOwnerInventory() == m_pMyInvenCtrl
-            && m_bMyConfirm)
+        if (SEASON3B::IsPress(VK_LBUTTON) &&
+            CNewUIInventoryCtrl::GetPickedItem()->GetOwnerInventory() == m_pMyInvenCtrl && m_bMyConfirm)
         {
             m_bMyConfirm = false;
             SocketClient->ToGameServer()->SendTradeButtonStateChange(m_bMyConfirm);
@@ -173,8 +172,8 @@ bool CNewUITrade::UpdateKeyEvent()
 
 bool CNewUITrade::Update()
 {
-    if ((m_pYourInvenCtrl && false == m_pYourInvenCtrl->Update())
-        || (m_pMyInvenCtrl && false == m_pMyInvenCtrl->Update()))
+    if ((m_pYourInvenCtrl && false == m_pYourInvenCtrl->Update()) ||
+        (m_pMyInvenCtrl && false == m_pMyInvenCtrl->Update()))
         return false;
 
     return true;
@@ -198,8 +197,7 @@ bool CNewUITrade::Render()
         m_abtn[i].Render();
 
     if (g_pNewUI3DRenderMng)
-        g_pNewUI3DRenderMng->RenderUI2DEffect(INVENTORY_CAMERA_Z_ORDER,
-            UI2DEffectCallback, this, 0, 0);
+        g_pNewUI3DRenderMng->RenderUI2DEffect(INVENTORY_CAMERA_Z_ORDER, UI2DEffectCallback, this, 0, 0);
 
     ::DisableAlphaBlend();
 
@@ -217,15 +215,11 @@ void CNewUITrade::UI2DEffectCallback(LPVOID pClass, DWORD dwParamA, DWORD dwPara
 
 void CNewUITrade::RenderBackImage()
 {
-    RenderImage(IMAGE_TRADE_BACK,
-        m_Pos.x, m_Pos.y, float(TRADE_WIDTH), float(TRADE_HEIGHT));
-    RenderImage(IMAGE_TRADE_TOP,
-        m_Pos.x, m_Pos.y, float(TRADE_WIDTH), 64.f);
+    RenderImage(IMAGE_TRADE_BACK, m_Pos.x, m_Pos.y, float(TRADE_WIDTH), float(TRADE_HEIGHT));
+    RenderImage(IMAGE_TRADE_TOP, m_Pos.x, m_Pos.y, float(TRADE_WIDTH), 64.f);
     RenderImage(IMAGE_TRADE_LEFT, m_Pos.x, m_Pos.y + 64, 21.f, 320.f);
-    RenderImage(IMAGE_TRADE_RIGHT,
-        m_Pos.x + TRADE_WIDTH - 21, m_Pos.y + 64, 21.f, 320.f);
-    RenderImage(IMAGE_TRADE_BOTTOM,
-        m_Pos.x, m_Pos.y + TRADE_HEIGHT - 45, float(TRADE_WIDTH), 45.f);
+    RenderImage(IMAGE_TRADE_RIGHT, m_Pos.x + TRADE_WIDTH - 21, m_Pos.y + 64, 21.f, 320.f);
+    RenderImage(IMAGE_TRADE_BOTTOM, m_Pos.x, m_Pos.y + TRADE_HEIGHT - 45, float(TRADE_WIDTH), 45.f);
 
     RenderImage(IMAGE_TRADE_LINE, m_Pos.x + 1, m_Pos.y + 220, 188.f, 21.f);
     RenderImage(IMAGE_TRADE_NICK_BACK, m_Pos.x + 11, m_Pos.y + 37, 171.f, 26.f);
@@ -236,8 +230,7 @@ void CNewUITrade::RenderBackImage()
     float fSrcY = m_bYourConfirm ? 29.f : 0.f;
     RenderImage(IMAGE_TRADE_CONFIRM, m_Pos.x + 146, m_Pos.y + 186, CONFIRM_WIDTH, CONFIRM_HEIGHT, 0.f, fSrcY);
 
-    DWORD dwColor = m_nMyTradeWait > 0
-        ? RGBA(255, 0, 0, 255) : RGBA(255, 255, 255, 255);
+    DWORD dwColor = m_nMyTradeWait > 0 ? RGBA(255, 0, 0, 255) : RGBA(255, 255, 255, 255);
     fSrcY = m_bMyConfirm ? 29.f : 0.f;
     RenderImage(IMAGE_TRADE_CONFIRM, m_Pos.x + 144, m_Pos.y + 390, CONFIRM_WIDTH, CONFIRM_HEIGHT, 0.f, fSrcY, dwColor);
 }
@@ -250,8 +243,7 @@ void CNewUITrade::RenderText()
     g_pRenderText->SetBgColor(0);
 
     g_pRenderText->SetTextColor(216, 216, 216, 255);
-    g_pRenderText->RenderText(
-        m_Pos.x, m_Pos.y + 11, GlobalText[226], TRADE_WIDTH, 0, RT3_SORT_CENTER);
+    g_pRenderText->RenderText(m_Pos.x, m_Pos.y + 11, GlobalText[226], TRADE_WIDTH, 0, RT3_SORT_CENTER);
 
     for (int i = 0; i < MAX_MARKS; ++i)
     {
@@ -288,13 +280,11 @@ void CNewUITrade::RenderText()
 
     ::ConvertGold(m_nYourTradeGold, szTemp);
     g_pRenderText->SetTextColor(::getGoldColor(m_nYourTradeGold));
-    g_pRenderText->RenderText(
-        m_Pos.x + 170, m_Pos.y + 150 + 8, szTemp, 0, 0, RT3_WRITE_RIGHT_TO_LEFT);
+    g_pRenderText->RenderText(m_Pos.x + 170, m_Pos.y + 150 + 8, szTemp, 0, 0, RT3_WRITE_RIGHT_TO_LEFT);
 
     ::ConvertGold(m_nMyTradeGold, szTemp);
     g_pRenderText->SetTextColor(::getGoldColor(m_nMyTradeGold));
-    g_pRenderText->RenderText(
-        m_Pos.x + 170, m_Pos.y + 356 + 8, szTemp, 0, 0, RT3_WRITE_RIGHT_TO_LEFT);
+    g_pRenderText->RenderText(m_Pos.x + 170, m_Pos.y + 356 + 8, szTemp, 0, 0, RT3_WRITE_RIGHT_TO_LEFT);
 
     g_pRenderText->SetTextColor(210, 230, 255, 255);
     g_pRenderText->RenderText(m_Pos.x + 20, m_Pos.y + 253, Hero->ID);
@@ -323,24 +313,18 @@ void CNewUITrade::RenderWarningArrow()
         pYourItemObj = m_pYourInvenCtrl->GetItem(i);
         if (ITEM_COLOR_TRADE_WARNING == pYourItemObj->byColorState)
         {
-            fX = (float)ptYourInvenCtrl.x
-                + (pYourItemObj->x * INVENTORY_SQUARE_WIDTH);
-            fY = (float)ptYourInvenCtrl.y
-                + (pYourItemObj->y * INVENTORY_SQUARE_WIDTH)
-                + sinf(WorldTime * 0.015f);
+            fX = (float)ptYourInvenCtrl.x + (pYourItemObj->x * INVENTORY_SQUARE_WIDTH);
+            fY = (float)ptYourInvenCtrl.y + (pYourItemObj->y * INVENTORY_SQUARE_WIDTH) + sinf(WorldTime * 0.015f);
 
             ::glColor3f(0.f, 1.f, 1.f);
-            ::RenderBitmap(IMAGE_TRADE_WARNING_ARROW, fX, fY + 5, 24.f, 24.f,
-                0.f, 0.4f);
+            ::RenderBitmap(IMAGE_TRADE_WARNING_ARROW, fX, fY + 5, 24.f, 24.f, 0.f, 0.4f);
             ::glColor3f(1.f, 1.f, 1.f);
 
             g_pRenderText->SetFont(g_hFontBold);
             g_pRenderText->SetTextColor(255, 255, 255, 255);
             g_pRenderText->SetBgColor(210, 0, 0, 255);
-            nWidth = (int)ItemAttribute[pYourItemObj->Type].Width
-                * INVENTORY_SQUARE_WIDTH;
-            g_pRenderText->RenderText((int)fX, (int)fY, GlobalText[370],
-                nWidth, 0, RT3_SORT_CENTER);
+            nWidth = (int)ItemAttribute[pYourItemObj->Type].Width * INVENTORY_SQUARE_WIDTH;
+            g_pRenderText->RenderText((int)fX, (int)fY, GlobalText[370], nWidth, 0, RT3_SORT_CENTER);
         }
     }
 
@@ -352,32 +336,32 @@ void CNewUITrade::ConvertYourLevel(int& rnLevel, DWORD& rdwColor)
     if (m_nYourLevel >= 400)
     {
         rnLevel = 400;
-        rdwColor = (255 << 24) + (153 << 16) + (153 << 8) + (255);
+        rdwColor = (255u << 24) + (153 << 16) + (153 << 8) + (255);
     }
     else if (m_nYourLevel >= 300)
     {
         rnLevel = 300;
-        rdwColor = (255 << 24) + (255 << 16) + (153 << 8) + (255);
+        rdwColor = (255u << 24) + (255 << 16) + (153 << 8) + (255);
     }
     else if (m_nYourLevel >= 200)
     {
         rnLevel = 200;
-        rdwColor = (255 << 24) + (255 << 16) + (230 << 8) + (210);
+        rdwColor = (255u << 24) + (255 << 16) + (230 << 8) + (210);
     }
     else if (m_nYourLevel >= 100)
     {
         rnLevel = 100;
-        rdwColor = (255 << 24) + (24 << 16) + (201 << 8) + (0);
+        rdwColor = (255u << 24) + (24 << 16) + (201 << 8) + (0);
     }
     else if (m_nYourLevel >= 50)
     {
         rnLevel = 50;
-        rdwColor = (255 << 24) + (0 << 16) + (150 << 8) + (255);
+        rdwColor = (255u << 24) + (0 << 16) + (150 << 8) + (255);
     }
-    else							//  빨간색.
+    else //  빨간색.
     {
         rnLevel = 10;
-        rdwColor = (255 << 24) + (0 << 16) + (0 << 8) + (255);
+        rdwColor = (255u << 24) + (0 << 16) + (0 << 8) + (255);
     }
 }
 
@@ -465,8 +449,7 @@ void CNewUITrade::ProcessMyInvenCtrl()
     }
 }
 
-void CNewUITrade::SendRequestItemToTrade(ITEM* pItemObj, int nInvenIndex,
-    int nTradeIndex)
+void CNewUITrade::SendRequestItemToTrade(ITEM* pItemObj, int nInvenIndex, int nTradeIndex)
 {
     if (::IsTradeBan(pItemObj))
     {
@@ -477,8 +460,7 @@ void CNewUITrade::SendRequestItemToTrade(ITEM* pItemObj, int nInvenIndex,
         m_bMyConfirm = false;
         SocketClient->ToGameServer()->SendTradeButtonStateChange(m_bMyConfirm);
 
-        SendRequestEquipmentItem(STORAGE_TYPE::INVENTORY, nInvenIndex,
-            pItemObj, STORAGE_TYPE::TRADE, nTradeIndex);
+        SendRequestEquipmentItem(STORAGE_TYPE::INVENTORY, nInvenIndex, pItemObj, STORAGE_TYPE::TRADE, nTradeIndex);
     }
 }
 
@@ -535,8 +517,7 @@ bool CNewUITrade::ProcessBtns()
         ProcessCloseBtn();
         return true;
     }
-    else if (SEASON3B::IsPress(VK_LBUTTON)
-        && CheckMouseIn(m_Pos.x + 169, m_Pos.y + 7, 13, 12))
+    else if (SEASON3B::IsPress(VK_LBUTTON) && CheckMouseIn(m_Pos.x + 169, m_Pos.y + 7, 13, 12))
     {
         ::PlayBuffer(SOUND_CLICK01);
         ProcessCloseBtn();
@@ -544,13 +525,12 @@ bool CNewUITrade::ProcessBtns()
     }
     else if (m_abtn[BTN_ZEN_INPUT].UpdateMouseEvent())
     {
-        SEASON3B::CreateMessageBox(
-            MSGBOX_LAYOUT_CLASS(SEASON3B::CTradeZenMsgBoxLayout));
+        SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CTradeZenMsgBoxLayout));
         ::PlayBuffer(SOUND_CLICK01);
         return true;
     }
-    else if (SEASON3B::IsRelease(VK_LBUTTON)
-        && CheckMouseIn(m_posMyConfirm.x, m_posMyConfirm.y, CONFIRM_WIDTH, CONFIRM_HEIGHT))
+    else if (SEASON3B::IsRelease(VK_LBUTTON) &&
+             CheckMouseIn(m_posMyConfirm.x, m_posMyConfirm.y, CONFIRM_WIDTH, CONFIRM_HEIGHT))
     {
         if (0 == m_nMyTradeWait && CNewUIInventoryCtrl::GetPickedItem() == NULL)
         {
@@ -558,8 +538,7 @@ bool CNewUITrade::ProcessBtns()
 
             if (m_bTradeAlert && !m_bMyConfirm)
             {
-                SEASON3B::CreateMessageBox(
-                    MSGBOX_LAYOUT_CLASS(SEASON3B::CTradeAlertMsgBoxLayout));
+                SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CTradeAlertMsgBoxLayout));
             }
             else
             {
@@ -620,7 +599,7 @@ void CNewUITrade::ProcessToReceiveTradeResult(LPPTRADE pTradeData)
         int x = 260 * MouseX / 640;
         SetCursorPos(x * WindowWidth / 640, MouseY * WindowHeight / 480);
 
-        wchar_t szTempID[MAX_USERNAME_SIZE + 1]{ };
+        wchar_t szTempID[MAX_USERNAME_SIZE + 1]{};
         CMultiLanguage::ConvertFromUtf8(szTempID, pTradeData->ID, MAX_USERNAME_SIZE);
 
         if (!m_bTradeAlert && ::wcscmp(m_szYourID, szTempID))
@@ -629,7 +608,7 @@ void CNewUITrade::ProcessToReceiveTradeResult(LPPTRADE pTradeData)
         m_bTradeAlert = false;
         m_nYourGuildType = pTradeData->GuildKey;
         wcsncpy(m_szYourID, szTempID, MAX_USERNAME_SIZE);
-        m_nYourLevel = pTradeData->Level;   //  상대방 레벨.
+        m_nYourLevel = pTradeData->Level; //  상대방 레벨.
         break;
     }
 }
@@ -651,16 +630,16 @@ void CNewUITrade::BackUpYourInven(int nYourInvenIndex)
 
 void CNewUITrade::BackUpYourInven(ITEM* pYourItemObj)
 {
-    if ((pYourItemObj->Type >= ITEM_HELPER && pYourItemObj->Type <= ITEM_DARK_HORSE_ITEM)
-        || (pYourItemObj->Type == ITEM_JEWEL_OF_BLESS || pYourItemObj->Type == ITEM_JEWEL_OF_SOUL || pYourItemObj->Type == ITEM_JEWEL_OF_LIFE)
-        || (pYourItemObj->Type >= ITEM_JEWEL_OF_GUARDIAN)
-        || (COMGEM::isCompiledGem(pYourItemObj))
-        || (pYourItemObj->Type >= ITEM_WING && pYourItemObj->Type <= ITEM_WINGS_OF_DARKNESS)
-        || (pYourItemObj->Type >= ITEM_CAPE_OF_LORD)
-        || (pYourItemObj->Type >= ITEM_WING_OF_STORM && pYourItemObj->Type <= ITEM_WING_OF_DIMENSION)
-        || (pYourItemObj->Type == ITEM_JEWEL_OF_CHAOS)
-        || (pYourItemObj->Type >= ITEM_CAPE_OF_FIGHTER && pYourItemObj->Type <= ITEM_CAPE_OF_OVERRULE)
-        || ((pYourItemObj->Level > 4 && pYourItemObj->Type < ITEM_WING) || pYourItemObj->ExcellentFlags > 0))
+    if ((pYourItemObj->Type >= ITEM_HELPER && pYourItemObj->Type <= ITEM_DARK_HORSE_ITEM) ||
+        (pYourItemObj->Type == ITEM_JEWEL_OF_BLESS || pYourItemObj->Type == ITEM_JEWEL_OF_SOUL ||
+         pYourItemObj->Type == ITEM_JEWEL_OF_LIFE) ||
+        (pYourItemObj->Type >= ITEM_JEWEL_OF_GUARDIAN) || (COMGEM::isCompiledGem(pYourItemObj)) ||
+        (pYourItemObj->Type >= ITEM_WING && pYourItemObj->Type <= ITEM_WINGS_OF_DARKNESS) ||
+        (pYourItemObj->Type >= ITEM_CAPE_OF_LORD) ||
+        (pYourItemObj->Type >= ITEM_WING_OF_STORM && pYourItemObj->Type <= ITEM_WING_OF_DIMENSION) ||
+        (pYourItemObj->Type == ITEM_JEWEL_OF_CHAOS) ||
+        (pYourItemObj->Type >= ITEM_CAPE_OF_FIGHTER && pYourItemObj->Type <= ITEM_CAPE_OF_OVERRULE) ||
+        ((pYourItemObj->Level > 4 && pYourItemObj->Type < ITEM_WING) || pYourItemObj->ExcellentFlags > 0))
     {
         int nCompareValue;
         bool bSameItem = false;
@@ -827,8 +806,7 @@ void CNewUITrade::ProcessToReceiveTradeItems(int nIndex, std::span<const BYTE> p
 {
     SEASON3B::CNewUIInventoryCtrl::DeletePickedItem();
 
-    if (nIndex >= 0 && nIndex < (m_pMyInvenCtrl->GetNumberOfColumn()
-        * m_pMyInvenCtrl->GetNumberOfRow()))
+    if (nIndex >= 0 && nIndex < (m_pMyInvenCtrl->GetNumberOfColumn() * m_pMyInvenCtrl->GetNumberOfRow()))
         m_pMyInvenCtrl->AddItem(nIndex, pbyItemPacket);
 }
 

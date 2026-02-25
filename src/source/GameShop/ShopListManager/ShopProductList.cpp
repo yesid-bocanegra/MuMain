@@ -12,6 +12,7 @@
 #ifdef KJH_ADD_INGAMESHOP_UI_SYSTEM
 #include "ShopProductList.h"
 
+// cppcheck-suppress uninitMemberVar
 CShopProductList::CShopProductList() // OK
 {
     this->PriceSeqKey = -1;

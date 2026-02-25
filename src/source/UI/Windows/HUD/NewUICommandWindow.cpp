@@ -65,7 +65,9 @@ void SEASON3B::CNewUICommandWindow::Release()
 
 void SEASON3B::CNewUICommandWindow::InitButtons()
 {
-    wchar_t szText[256] = { NULL, };
+    wchar_t szText[256] = {
+        NULL,
+    };
     mu_swprintf(szText, GlobalText[927], L"D");
 
     m_BtnExit.ChangeButtonImgState(true, IMAGE_COMMAND_BASE_WINDOW_BTN_EXIT);
@@ -75,7 +77,8 @@ void SEASON3B::CNewUICommandWindow::InitButtons()
     for (int i = COMMAND_TRADE; i < COMMAND_END; i++)
     {
         m_BtnCommand[i].ChangeButtonImgState(true, IMAGE_COMMAND_BTN, true);
-        m_BtnCommand[i].ChangeButtonInfo(m_Pos.x + (COMMAND_WINDOW_WIDTH / 2 - 108 / 2), (m_Pos.y + 33) + (i * (29 + COMMAND_BTN_INTERVAL_SIZE)), 108, 29);
+        m_BtnCommand[i].ChangeButtonInfo(m_Pos.x + (COMMAND_WINDOW_WIDTH / 2 - 108 / 2),
+                                         (m_Pos.y + 33) + (i * (29 + COMMAND_BTN_INTERVAL_SIZE)), 108, 29);
     }
 
     m_BtnCommand[COMMAND_TRADE].ChangeText(GlobalText[943]);
@@ -111,7 +114,7 @@ void SEASON3B::CNewUICommandWindow::ClosingProcess()
 
 bool SEASON3B::CNewUICommandWindow::BtnProcess()
 {
-    POINT ptExitBtn1 = { m_Pos.x + 169, m_Pos.y + 7 };
+    POINT ptExitBtn1 = {m_Pos.x + 169, m_Pos.y + 7};
 
     if (SEASON3B::IsPress(VK_LBUTTON) && CheckMouseIn(ptExitBtn1.x, ptExitBtn1.y, 13, 12))
     {
@@ -219,7 +222,10 @@ bool SEASON3B::CNewUICommandWindow::Render()
         CHARACTER* c = &CharactersClient[SelectedCharacter];
         if (c != NULL && c->Object.Kind == KIND_PLAYER && c != Hero && (c->Object.Type == MODEL_PLAYER || c->Change))
         {
-            int Width = 128; int Height = 32; int x = (float)MouseX + 5; int y = (float)MouseY + 5;
+            int Width = 128;
+            int Height = 32;
+            int x = (float)MouseX + 5;
+            int y = (float)MouseY + 5;
             RenderBitmap(BITMAP_COMMAND_WINDOW_BEGIN, x, y, Width, Height);
 
             g_pRenderText->SetFont(g_hFontBig);
@@ -246,11 +252,15 @@ bool SEASON3B::CNewUICommandWindow::Render()
 
 void SEASON3B::CNewUICommandWindow::RenderBaseWindow()
 {
-    RenderImage(IMAGE_COMMAND_BASE_WINDOW_BACK, m_Pos.x, m_Pos.y, float(COMMAND_WINDOW_WIDTH), float(COMMAND_WINDOW_HEIGHT));
+    RenderImage(IMAGE_COMMAND_BASE_WINDOW_BACK, m_Pos.x, m_Pos.y, float(COMMAND_WINDOW_WIDTH),
+                float(COMMAND_WINDOW_HEIGHT));
     RenderImage(IMAGE_COMMAND_BASE_WINDOW_TOP, m_Pos.x, m_Pos.y, float(COMMAND_WINDOW_WIDTH), 64.f);
-    RenderImage(IMAGE_COMMAND_BASE_WINDOW_LEFT, m_Pos.x, m_Pos.y + 64.f, 21.f, float(COMMAND_WINDOW_HEIGHT) - 64.f - 45.f);
-    RenderImage(IMAGE_COMMAND_BASE_WINDOW_RIGHT, m_Pos.x + float(COMMAND_WINDOW_WIDTH) - 21.f, m_Pos.y + 64.f, 21.f, float(COMMAND_WINDOW_HEIGHT) - 64.f - 45.f);
-    RenderImage(IMAGE_COMMAND_BASE_WINDOW_BOTTOM, m_Pos.x, m_Pos.y + float(COMMAND_WINDOW_HEIGHT) - 45.f, float(COMMAND_WINDOW_WIDTH), 45.f);
+    RenderImage(IMAGE_COMMAND_BASE_WINDOW_LEFT, m_Pos.x, m_Pos.y + 64.f, 21.f,
+                float(COMMAND_WINDOW_HEIGHT) - 64.f - 45.f);
+    RenderImage(IMAGE_COMMAND_BASE_WINDOW_RIGHT, m_Pos.x + float(COMMAND_WINDOW_WIDTH) - 21.f, m_Pos.y + 64.f, 21.f,
+                float(COMMAND_WINDOW_HEIGHT) - 64.f - 45.f);
+    RenderImage(IMAGE_COMMAND_BASE_WINDOW_BOTTOM, m_Pos.x, m_Pos.y + float(COMMAND_WINDOW_HEIGHT) - 45.f,
+                float(COMMAND_WINDOW_WIDTH), 45.f);
 }
 
 void SEASON3B::CNewUICommandWindow::SetPos(int x, int y)
@@ -261,7 +271,8 @@ void SEASON3B::CNewUICommandWindow::SetPos(int x, int y)
     m_BtnExit.ChangeButtonInfo(m_Pos.x + 13, m_Pos.y + 392, 36, 29);
     for (int i = COMMAND_TRADE; i < COMMAND_END; i++)
     {
-        m_BtnCommand[i].ChangeButtonInfo(m_Pos.x + (COMMAND_WINDOW_WIDTH / 2 - 108 / 2), (m_Pos.y + 33) + ((i - 1) * (29 + COMMAND_BTN_INTERVAL_SIZE)), 108, 29);
+        m_BtnCommand[i].ChangeButtonInfo(m_Pos.x + (COMMAND_WINDOW_WIDTH / 2 - 108 / 2),
+                                         (m_Pos.y + 33) + ((i - 1) * (29 + COMMAND_BTN_INTERVAL_SIZE)), 108, 29);
     }
 }
 
@@ -292,9 +303,13 @@ void SEASON3B::CNewUICommandWindow::RunCommand()
         {
             distX = abs((pSelectedCha->PositionX) - (Hero->PositionX));
             distY = abs((pSelectedCha->PositionY) - (Hero->PositionY));
-            if (pSelectedCha->Object.Kind == KIND_PLAYER && pSelectedCha != Hero && (pSelectedCha->Object.Type == MODEL_PLAYER || pSelectedCha->Change) && (distX <= MAX_DISTANCE_TILE && distY <= MAX_DISTANCE_TILE))
+            if (pSelectedCha->Object.Kind == KIND_PLAYER && pSelectedCha != Hero &&
+                (pSelectedCha->Object.Type == MODEL_PLAYER || pSelectedCha->Change) &&
+                (distX <= MAX_DISTANCE_TILE && distY <= MAX_DISTANCE_TILE))
             {
-                if ((pSelectedCha->Object.SubType != MODEL_XMAS_EVENT_CHA_DEER) && (pSelectedCha->Object.SubType != MODEL_XMAS_EVENT_CHA_SNOWMAN) && (pSelectedCha->Object.SubType != MODEL_XMAS_EVENT_CHA_SSANTA))
+                if ((pSelectedCha->Object.SubType != MODEL_XMAS_EVENT_CHA_DEER) &&
+                    (pSelectedCha->Object.SubType != MODEL_XMAS_EVENT_CHA_SNOWMAN) &&
+                    (pSelectedCha->Object.SubType != MODEL_XMAS_EVENT_CHA_SSANTA))
                 {
                     Selectindex = SelectedCharacter;
                     m_bCanCommand = true;
@@ -317,57 +332,68 @@ void SEASON3B::CNewUICommandWindow::RunCommand()
             case COMMAND_TRADE:
             {
                 CommandTrade(pSelectedCha);
-            }break;
+            }
+            break;
 
             case COMMAND_PURCHASE:
             {
                 CommandPurchase(pSelectedCha);
-            }break;
+            }
+            break;
 
             case COMMAND_PARTY:
             {
                 CommandParty(pSelectedCha->Key);
-            }break;
+            }
+            break;
 
             case COMMAND_WHISPER:
             {
                 CommandWhisper(pSelectedCha);
-            }break;
+            }
+            break;
 
             case COMMAND_GUILD:
             {
                 CommandGuild(pSelectedCha);
-            }break;
+            }
+            break;
 
             case COMMAND_GUILDUNION:
             {
                 CommandGuildUnion(pSelectedCha);
-            }break;
+            }
+            break;
 
             case COMMAND_RIVAL:
             {
                 CommandGuildRival(pSelectedCha);
-            }break;
+            }
+            break;
 
             case COMMAND_RIVALOFF:
             {
                 CommandCancelGuildRival(pSelectedCha);
-            }break;
+            }
+            break;
 
             case COMMAND_ADD_FRIEND:
             {
                 CommandAddFriend(pSelectedCha);
-            }break;
+            }
+            break;
 
             case COMMAND_FOLLOW:
             {
                 CommandFollow(Selectindex);
-            }break;
+            }
+            break;
 
             case COMMAND_BATTLE:
             {
                 CommandDual(pSelectedCha);
-            }break;
+            }
+            break;
             }
         }
         if (m_iCurSelectCommand != COMMAND_NONE)
@@ -396,9 +422,7 @@ void SEASON3B::CNewUICommandWindow::SetBtnState(int iBtnType, bool bStateDown)
     }
 }
 
-void SEASON3B::CNewUICommandWindow::SelectCommand()
-{
-}
+void SEASON3B::CNewUICommandWindow::SelectCommand() {}
 
 int SEASON3B::CNewUICommandWindow::GetCurCommandType()
 {

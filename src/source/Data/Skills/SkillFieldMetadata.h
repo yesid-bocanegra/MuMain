@@ -19,23 +19,21 @@ using ESkillFieldType = EFieldType;
 using SkillFieldDescriptor = FieldDescriptor<SKILL_ATTRIBUTE>;
 
 // Macros for descriptor generation
-#define MAKE_SKILL_FIELD_DESCRIPTOR(name, type, arraySize, width) \
-    { #name, EFieldType::type, offsetof(SKILL_ATTRIBUTE, name), width },
+#define MAKE_SKILL_FIELD_DESCRIPTOR(name, type, arraySize, width)                                                      \
+    {#name, EFieldType::type, offsetof(SKILL_ATTRIBUTE, name), width},
 
-#define MAKE_SKILL_ARRAY_DESCRIPTOR(nameWithIndex, baseName, index, type, width) \
-    { #nameWithIndex, EFieldType::type, offsetof(SKILL_ATTRIBUTE, baseName[index]), width },
+#define MAKE_SKILL_ARRAY_DESCRIPTOR(nameWithIndex, baseName, index, type, width)                                       \
+    {#nameWithIndex, EFieldType::type, offsetof(SKILL_ATTRIBUTE, baseName[index]), width},
 
 // Static descriptor array - automatically generated from X-macros
 namespace SkillFieldMetadataInternal
 {
-    static const SkillFieldDescriptor s_descriptors[] = {
-        // Name field is special (UTF-16 string)
-        { "Name", EFieldType::WCharArray, offsetof(SKILL_ATTRIBUTE, Name), 150.0f },
-        // All other fields from X-macros
-        SKILL_FIELDS_SIMPLE(MAKE_SKILL_FIELD_DESCRIPTOR)
-        SKILL_FIELDS_ARRAYS(MAKE_SKILL_ARRAY_DESCRIPTOR)
-        SKILL_FIELDS_AFTER_ARRAYS(MAKE_SKILL_FIELD_DESCRIPTOR)
-    };
+static const SkillFieldDescriptor s_descriptors[] = {
+    // Name field is special (UTF-16 string)
+    {"Name", EFieldType::WCharArray, offsetof(SKILL_ATTRIBUTE, Name), 150.0f},
+    // All other fields from X-macros
+    SKILL_FIELDS_SIMPLE(MAKE_SKILL_FIELD_DESCRIPTOR) SKILL_FIELDS_ARRAYS(MAKE_SKILL_ARRAY_DESCRIPTOR)
+        SKILL_FIELDS_AFTER_ARRAYS(MAKE_SKILL_FIELD_DESCRIPTOR)};
 }
 
 // Accessor functions
@@ -56,9 +54,9 @@ inline const char* GetSkillFieldDisplayName(const char* fieldName)
 }
 
 // Helper to render a skill field by descriptor (uses generic helper)
-template<typename TColumns>
+template <typename TColumns>
 inline void RenderSkillFieldByDescriptor(const SkillFieldDescriptor& desc, TColumns* cols, SKILL_ATTRIBUTE& skill,
-                                          int& colIdx, int skillIndex, bool& rowInteracted, bool isVisible)
+                                         int& colIdx, int skillIndex, bool& rowInteracted, bool isVisible)
 {
     ::RenderFieldByDescriptor(desc, cols, skill, colIdx, skillIndex, rowInteracted, isVisible, MAX_SKILL_NAME);
 }

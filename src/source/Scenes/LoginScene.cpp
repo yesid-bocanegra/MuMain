@@ -46,9 +46,11 @@ extern HWND g_hWnd;
 //=============================================================================
 // LoginScene Camera State (local to this file)
 //=============================================================================
-namespace {
+namespace
+{
 
-struct LoginCameraState {
+struct LoginCameraState
+{
     int walkCut = 0;
     int currentCount = -1;
     int currentNumber = 0;
@@ -59,15 +61,12 @@ struct LoginCameraState {
 
     // Predefined camera animation paths (6 paths × 6 values each)
     static constexpr float WALK_PATHS[6][6] = {
-        {0.f, -1000.f, 500.f, -80.f, 0.f, 0.f},
-        {0.f, -1100.f, 500.f, -80.f, 0.f, 0.f},
-        {0.f, -1100.f, 500.f, -80.f, 0.f, 0.f},
-        {0.f, -1100.f, 500.f, -80.f, 0.f, 0.f},
-        {0.f, -1100.f, 500.f, -80.f, 0.f, 0.f},
-        {200.f, -800.f, 250.f, -87.f, 0.f, -10.f}
-    };
+        {0.f, -1000.f, 500.f, -80.f, 0.f, 0.f}, {0.f, -1100.f, 500.f, -80.f, 0.f, 0.f},
+        {0.f, -1100.f, 500.f, -80.f, 0.f, 0.f}, {0.f, -1100.f, 500.f, -80.f, 0.f, 0.f},
+        {0.f, -1100.f, 500.f, -80.f, 0.f, 0.f}, {200.f, -800.f, 250.f, -87.f, 0.f, -10.f}};
 
-    void Reset() {
+    void Reset()
+    {
         currentCount = -1;
         walkCut = 0;
         currentNumber = 0;
@@ -78,17 +77,19 @@ struct LoginCameraState {
 // File-local camera state instance
 LoginCameraState g_loginCamera;
 
-}  // namespace
+} // namespace
 
 //=============================================================================
 // Accessor functions for external use
 //=============================================================================
 
-int GetLoginCameraCount() {
+int GetLoginCameraCount()
+{
     return g_loginCamera.currentCount;
 }
 
-int GetLoginCameraWalkCut() {
+int GetLoginCameraWalkCut()
+{
     return g_loginCamera.walkCut;
 }
 
@@ -150,8 +151,10 @@ static void InitializeLoginCamera()
 
     for (int i = 0; i < 3; i++)
     {
-        g_loginCamera.currentWalkDelta[i] = (LoginCameraState::WALK_PATHS[g_loginCamera.currentNumber][i] - g_loginCamera.currentPosition[i]) / 128;
-        g_loginCamera.currentWalkDelta[i + 3] = (LoginCameraState::WALK_PATHS[g_loginCamera.currentNumber][i + 3] - g_loginCamera.currentAngle[i]) / 128;
+        g_loginCamera.currentWalkDelta[i] =
+            (LoginCameraState::WALK_PATHS[g_loginCamera.currentNumber][i] - g_loginCamera.currentPosition[i]) / 128;
+        g_loginCamera.currentWalkDelta[i + 3] =
+            (LoginCameraState::WALK_PATHS[g_loginCamera.currentNumber][i + 3] - g_loginCamera.currentAngle[i]) / 128;
     }
 }
 
@@ -162,8 +165,10 @@ static void CalculateWalkDelta()
 {
     for (int i = 0; i < 3; i++)
     {
-        g_loginCamera.currentWalkDelta[i] = (LoginCameraState::WALK_PATHS[g_loginCamera.currentNumber][i] - g_loginCamera.currentPosition[i]) / 128;
-        g_loginCamera.currentWalkDelta[i + 3] = (LoginCameraState::WALK_PATHS[g_loginCamera.currentNumber][i + 3] - g_loginCamera.currentAngle[i]) / 128;
+        g_loginCamera.currentWalkDelta[i] =
+            (LoginCameraState::WALK_PATHS[g_loginCamera.currentNumber][i] - g_loginCamera.currentPosition[i]) / 128;
+        g_loginCamera.currentWalkDelta[i + 3] =
+            (LoginCameraState::WALK_PATHS[g_loginCamera.currentNumber][i + 3] - g_loginCamera.currentAngle[i]) / 128;
     }
 }
 
@@ -192,7 +197,7 @@ static void UpdateCameraWaypoint()
     g_loginCamera.currentCount++;
 
     bool shouldTransition = (g_loginCamera.walkCut == 0 && g_loginCamera.currentCount >= 40) ||
-                           (g_loginCamera.walkCut > 0 && g_loginCamera.currentCount >= 128);
+                            (g_loginCamera.walkCut > 0 && g_loginCamera.currentCount >= 128);
 
     if (shouldTransition)
     {
@@ -221,8 +226,10 @@ static void InterpolateCameraMovement()
         // Smooth interpolation
         for (int i = 0; i < 3; i++)
         {
-            g_loginCamera.currentPosition[i] += (LoginCameraState::WALK_PATHS[g_loginCamera.currentNumber][i] - g_loginCamera.currentPosition[i]) / 6;
-            g_loginCamera.currentAngle[i] += (LoginCameraState::WALK_PATHS[g_loginCamera.currentNumber][i + 3] - g_loginCamera.currentAngle[i]) / 6;
+            g_loginCamera.currentPosition[i] +=
+                (LoginCameraState::WALK_PATHS[g_loginCamera.currentNumber][i] - g_loginCamera.currentPosition[i]) / 6;
+            g_loginCamera.currentAngle[i] +=
+                (LoginCameraState::WALK_PATHS[g_loginCamera.currentNumber][i + 3] - g_loginCamera.currentAngle[i]) / 6;
         }
     }
     else
@@ -284,8 +291,10 @@ void CreateLogInScene()
         wcscpy_s(InputText[0], 256, m_Username);
         InputLength[0] = wcslen(InputText[0]);
         InputTextMax[0] = MAX_USERNAME_SIZE;
-        if (InputLength[0] == 0)	InputIndex = 0;
-        else InputIndex = 1;
+        if (InputLength[0] == 0)
+            InputIndex = 0;
+        else
+            InputIndex = 1;
     }
     InputNumber = 2;
     InputTextHide[1] = 1;
@@ -328,12 +337,9 @@ void NewMoveLogInScene()
     if (CInput::Instance().IsKeyDown(VK_ESCAPE))
     {
         CUIMng& rUIMng = CUIMng::Instance();
-        if (!(rUIMng.m_MsgWin.IsShow() || rUIMng.m_LoginWin.IsShow()
-            || rUIMng.m_SysMenuWin.IsShow() || rUIMng.m_OptionWin.IsShow()
-            || rUIMng.m_CreditWin.IsShow()
-            )
-            && rUIMng.m_LoginMainWin.IsShow() && rUIMng.m_ServerSelWin.IsShow()
-            && rUIMng.IsSysMenuWinShow())
+        if (!(rUIMng.m_MsgWin.IsShow() || rUIMng.m_LoginWin.IsShow() || rUIMng.m_SysMenuWin.IsShow() ||
+              rUIMng.m_OptionWin.IsShow() || rUIMng.m_CreditWin.IsShow()) &&
+            rUIMng.m_LoginMainWin.IsShow() && rUIMng.m_ServerSelWin.IsShow() && rUIMng.IsSysMenuWinShow())
         {
             ::PlayBuffer(SOUND_CLICK01);
             rUIMng.ShowWin(&rUIMng.m_SysMenuWin);
@@ -359,7 +365,8 @@ void NewMoveLogInScene()
 
 bool NewRenderLogInScene(HDC hDC)
 {
-    if (!InitLogIn) return false;
+    if (!InitLogIn)
+        return false;
 
     FogEnable = false;
 
@@ -410,7 +417,8 @@ bool NewRenderLogInScene(HDC hDC)
     if (CCameraMove::GetInstancePtr()->IsTourMode())
     {
         g_fMULogoAlpha += 0.02f;
-        if (g_fMULogoAlpha > 10.0f) g_fMULogoAlpha = 10.0f;
+        if (g_fMULogoAlpha > 10.0f)
+            g_fMULogoAlpha = 10.0f;
 
         EnableAlphaBlend();
         glColor4f(g_fMULogoAlpha - 0.3f, g_fMULogoAlpha - 0.3f, g_fMULogoAlpha - 0.3f, g_fMULogoAlpha - 0.3f);

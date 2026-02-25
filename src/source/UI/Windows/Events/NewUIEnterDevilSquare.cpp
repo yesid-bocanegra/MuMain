@@ -22,21 +22,35 @@ CNewUIEnterDevilSquare::CNewUIEnterDevilSquare()
     m_dwBtnTextColor[0] = RGBA(150, 150, 150, 255);
     m_dwBtnTextColor[1] = RGBA(255, 255, 255, 255);
 
-    m_iDevilSquareLimitLevel[0][0] = 15; m_iDevilSquareLimitLevel[0][1] = 130;
-    m_iDevilSquareLimitLevel[1][0] = 131; m_iDevilSquareLimitLevel[1][1] = 180;
-    m_iDevilSquareLimitLevel[2][0] = 181; m_iDevilSquareLimitLevel[2][1] = 230;
-    m_iDevilSquareLimitLevel[3][0] = 231; m_iDevilSquareLimitLevel[3][1] = 280;
-    m_iDevilSquareLimitLevel[4][0] = 281; m_iDevilSquareLimitLevel[4][1] = 330;
-    m_iDevilSquareLimitLevel[5][0] = 331; m_iDevilSquareLimitLevel[5][1] = 400;
-    m_iDevilSquareLimitLevel[6][0] = 0; m_iDevilSquareLimitLevel[6][1] = 0;
+    m_iDevilSquareLimitLevel[0][0] = 15;
+    m_iDevilSquareLimitLevel[0][1] = 130;
+    m_iDevilSquareLimitLevel[1][0] = 131;
+    m_iDevilSquareLimitLevel[1][1] = 180;
+    m_iDevilSquareLimitLevel[2][0] = 181;
+    m_iDevilSquareLimitLevel[2][1] = 230;
+    m_iDevilSquareLimitLevel[3][0] = 231;
+    m_iDevilSquareLimitLevel[3][1] = 280;
+    m_iDevilSquareLimitLevel[4][0] = 281;
+    m_iDevilSquareLimitLevel[4][1] = 330;
+    m_iDevilSquareLimitLevel[5][0] = 331;
+    m_iDevilSquareLimitLevel[5][1] = 400;
+    m_iDevilSquareLimitLevel[6][0] = 0;
+    m_iDevilSquareLimitLevel[6][1] = 0;
 
-    m_iDevilSquareLimitLevel[7][0] = 15; m_iDevilSquareLimitLevel[7][1] = 110;
-    m_iDevilSquareLimitLevel[8][0] = 111; m_iDevilSquareLimitLevel[8][1] = 160;
-    m_iDevilSquareLimitLevel[9][0] = 161; m_iDevilSquareLimitLevel[9][1] = 210;
-    m_iDevilSquareLimitLevel[10][0] = 211; m_iDevilSquareLimitLevel[10][1] = 260;
-    m_iDevilSquareLimitLevel[11][0] = 261; m_iDevilSquareLimitLevel[11][1] = 310;
-    m_iDevilSquareLimitLevel[12][0] = 311; m_iDevilSquareLimitLevel[12][1] = 400;
-    m_iDevilSquareLimitLevel[13][0] = 0; m_iDevilSquareLimitLevel[13][1] = 0;
+    m_iDevilSquareLimitLevel[7][0] = 15;
+    m_iDevilSquareLimitLevel[7][1] = 110;
+    m_iDevilSquareLimitLevel[8][0] = 111;
+    m_iDevilSquareLimitLevel[8][1] = 160;
+    m_iDevilSquareLimitLevel[9][0] = 161;
+    m_iDevilSquareLimitLevel[9][1] = 210;
+    m_iDevilSquareLimitLevel[10][0] = 211;
+    m_iDevilSquareLimitLevel[10][1] = 260;
+    m_iDevilSquareLimitLevel[11][0] = 261;
+    m_iDevilSquareLimitLevel[11][1] = 310;
+    m_iDevilSquareLimitLevel[12][0] = 311;
+    m_iDevilSquareLimitLevel[12][1] = 400;
+    m_iDevilSquareLimitLevel[13][0] = 0;
+    m_iDevilSquareLimitLevel[13][1] = 0;
 }
 
 CNewUIEnterDevilSquare::~CNewUIEnterDevilSquare()
@@ -148,11 +162,15 @@ bool CNewUIEnterDevilSquare::Render()
 {
     EnableAlphaTest();
 
-    RenderImage(IMAGE_ENTERDS_BASE_WINDOW_BACK, m_Pos.x, m_Pos.y, float(ENTERDS_BASE_WINDOW_WIDTH), float(ENTERDS_BASE_WINDOW_HEIGHT));
+    RenderImage(IMAGE_ENTERDS_BASE_WINDOW_BACK, m_Pos.x, m_Pos.y, float(ENTERDS_BASE_WINDOW_WIDTH),
+                float(ENTERDS_BASE_WINDOW_HEIGHT));
     RenderImage(IMAGE_ENTERDS_BASE_WINDOW_TOP, m_Pos.x, m_Pos.y, float(ENTERDS_BASE_WINDOW_WIDTH), 64.f);
-    RenderImage(IMAGE_ENTERDS_BASE_WINDOW_LEFT, m_Pos.x, m_Pos.y + 64.f, 21.f, float(ENTERDS_BASE_WINDOW_HEIGHT) - 64.f - 45.f);
-    RenderImage(IMAGE_ENTERDS_BASE_WINDOW_RIGHT, m_Pos.x + float(ENTERDS_BASE_WINDOW_WIDTH) - 21.f, m_Pos.y + 64.f, 21.f, float(ENTERDS_BASE_WINDOW_HEIGHT) - 64.f - 45.f);
-    RenderImage(IMAGE_ENTERDS_BASE_WINDOW_BOTTOM, m_Pos.x, m_Pos.y + float(ENTERDS_BASE_WINDOW_HEIGHT) - 45.f, float(ENTERDS_BASE_WINDOW_WIDTH), 45.f);
+    RenderImage(IMAGE_ENTERDS_BASE_WINDOW_LEFT, m_Pos.x, m_Pos.y + 64.f, 21.f,
+                float(ENTERDS_BASE_WINDOW_HEIGHT) - 64.f - 45.f);
+    RenderImage(IMAGE_ENTERDS_BASE_WINDOW_RIGHT, m_Pos.x + float(ENTERDS_BASE_WINDOW_WIDTH) - 21.f, m_Pos.y + 64.f,
+                21.f, float(ENTERDS_BASE_WINDOW_HEIGHT) - 64.f - 45.f);
+    RenderImage(IMAGE_ENTERDS_BASE_WINDOW_BOTTOM, m_Pos.x, m_Pos.y + float(ENTERDS_BASE_WINDOW_HEIGHT) - 45.f,
+                float(ENTERDS_BASE_WINDOW_WIDTH), 45.f);
 
     g_pRenderText->SetFont(g_hFontBold);
     g_pRenderText->SetTextColor(0xFFFFFFFF);
@@ -183,7 +201,7 @@ bool CNewUIEnterDevilSquare::Render()
 // BtnProcess
 bool CNewUIEnterDevilSquare::BtnProcess()
 {
-    POINT ptExitBtn1 = { m_Pos.x + 169, m_Pos.y + 7 };
+    POINT ptExitBtn1 = {m_Pos.x + 169, m_Pos.y + 7};
 
     if (SEASON3B::IsPress(VK_LBUTTON) && CheckMouseIn(ptExitBtn1.x, ptExitBtn1.y, 13, 12))
     {
@@ -213,7 +231,7 @@ float CNewUIEnterDevilSquare::GetLayerDepth()
 
 int CNewUIEnterDevilSquare::CheckLimitLV(int iIndex)
 {
-    int	iVal = 0;
+    int iVal = 0;
     int iRet = 0;
 
     if (iIndex == 1)
@@ -226,14 +244,14 @@ int CNewUIEnterDevilSquare::CheckLimitLV(int iIndex)
         iLevel = Master_Level_Data.nMLevel;
     else
         iLevel = CharacterAttribute->Level;
-    //Master_Level_Data.nMLevel
+    // Master_Level_Data.nMLevel
 
     if (gCharacterManager.IsMasterLevel(CharacterAttribute->Class) == false)
     {
         for (int iCastleLV = 0; iCastleLV < MAX_ENTER_GRADE - 1; ++iCastleLV)
         {
-            if (iLevel >= m_iDevilSquareLimitLevel[iVal + iCastleLV][0]
-                && iLevel <= m_iDevilSquareLimitLevel[iVal + iCastleLV][1])
+            if (iLevel >= m_iDevilSquareLimitLevel[iVal + iCastleLV][0] &&
+                iLevel <= m_iDevilSquareLimitLevel[iVal + iCastleLV][1])
             {
                 iRet = iCastleLV;
                 break;
@@ -257,8 +275,9 @@ void CNewUIEnterDevilSquare::OpenningProcess()
     }
 
     int iLimitLVIndex = 0;
-    if (gCharacterManager.GetBaseClass(Hero->Class) == CLASS_DARK || gCharacterManager.GetBaseClass(Hero->Class) == CLASS_DARK_LORD
-        || gCharacterManager.GetBaseClass(Hero->Class) == CLASS_RAGEFIGHTER)
+    if (gCharacterManager.GetBaseClass(Hero->Class) == CLASS_DARK ||
+        gCharacterManager.GetBaseClass(Hero->Class) == CLASS_DARK_LORD ||
+        gCharacterManager.GetBaseClass(Hero->Class) == CLASS_RAGEFIGHTER)
     {
         iLimitLVIndex = 1;
     }
@@ -268,13 +287,15 @@ void CNewUIEnterDevilSquare::OpenningProcess()
     m_BtnEnter[m_iNumActiveBtn].UnLock();
     m_BtnEnter[m_iNumActiveBtn].ChangeTextColor(m_dwBtnTextColor[ENTERBTN_ENABLE]);
 
-    wchar_t sztext[255] = { 0, };
+    wchar_t sztext[255] = {
+        0,
+    };
 
     for (int i = 0; i < MAX_ENTER_GRADE - 1; i++)
     {
-        mu_swprintf(sztext, GlobalText[645], i + 1
-            , m_iDevilSquareLimitLevel[(iLimitLVIndex * (MAX_ENTER_GRADE)) + i][0]
-            , m_iDevilSquareLimitLevel[(iLimitLVIndex * (MAX_ENTER_GRADE)) + i][1]);
+        mu_swprintf(sztext, GlobalText[645], i + 1,
+                    m_iDevilSquareLimitLevel[(iLimitLVIndex * (MAX_ENTER_GRADE)) + i][0],
+                    m_iDevilSquareLimitLevel[(iLimitLVIndex * (MAX_ENTER_GRADE)) + i][1]);
         m_BtnEnter[i].SetFont(g_hFontBold);
         m_BtnEnter[i].ChangeText(sztext);
     }
@@ -296,8 +317,8 @@ void CNewUIEnterDevilSquare::LoadImages()
     LoadBitmap(L"Interface\\newui_item_back02-L.tga", IMAGE_ENTERDS_BASE_WINDOW_LEFT, GL_LINEAR);
     LoadBitmap(L"Interface\\newui_item_back02-R.tga", IMAGE_ENTERDS_BASE_WINDOW_RIGHT, GL_LINEAR);
     LoadBitmap(L"Interface\\newui_item_back03.tga", IMAGE_ENTERDS_BASE_WINDOW_BOTTOM, GL_LINEAR);
-    LoadBitmap(L"Interface\\newui_exit_00.tga", IMAGE_ENTERDS_BASE_WINDOW_BTN_EXIT, GL_LINEAR);				// Exit Button
-    LoadBitmap(L"Interface\\newui_btn_empty_big.tga", IMAGE_ENTERDS_BASE_WINDOW_BTN_ENTER, GL_LINEAR);		// Enter Button
+    LoadBitmap(L"Interface\\newui_exit_00.tga", IMAGE_ENTERDS_BASE_WINDOW_BTN_EXIT, GL_LINEAR);        // Exit Button
+    LoadBitmap(L"Interface\\newui_btn_empty_big.tga", IMAGE_ENTERDS_BASE_WINDOW_BTN_ENTER, GL_LINEAR); // Enter Button
 }
 
 //---------------------------------------------------------------------------------------------
@@ -309,6 +330,6 @@ void CNewUIEnterDevilSquare::UnloadImages()
     DeleteBitmap(IMAGE_ENTERDS_BASE_WINDOW_LEFT);
     DeleteBitmap(IMAGE_ENTERDS_BASE_WINDOW_RIGHT);
     DeleteBitmap(IMAGE_ENTERDS_BASE_WINDOW_BOTTOM);
-    DeleteBitmap(IMAGE_ENTERDS_BASE_WINDOW_BTN_EXIT);		// Exit Button
-    DeleteBitmap(IMAGE_ENTERDS_BASE_WINDOW_BTN_ENTER);	// Enter Button
+    DeleteBitmap(IMAGE_ENTERDS_BASE_WINDOW_BTN_EXIT);  // Exit Button
+    DeleteBitmap(IMAGE_ENTERDS_BASE_WINDOW_BTN_ENTER); // Enter Button
 }

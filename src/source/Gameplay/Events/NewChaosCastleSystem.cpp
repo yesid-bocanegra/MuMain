@@ -19,16 +19,16 @@ using namespace SEASON3B;
 
 extern int g_iChatInputType;
 extern int g_iCustomMessageBoxButton[NUM_BUTTON_CMB][NUM_PAR_BUTTON_CMB];
-extern  int g_iActionObjectType;
-extern  int g_iActionWorld;
-extern  int g_iActionTime;
-extern  float g_fActionObjectVelocity;
+extern int g_iActionObjectType;
+extern int g_iActionWorld;
+extern int g_iActionTime;
+extern float g_fActionObjectVelocity;
 
 CNewChaosCastleSystem::CNewChaosCastleSystem()
 {
-    int iChaosCastleLimitArea1[16] = { 23, 75, 44, 76, 43, 77, 44, 108, 23, 107, 42, 108, 23, 77, 24, 106 };
-    int iChaosCastleLimitArea2[16] = { 25, 77, 42, 78, 41, 79, 42, 106, 25, 105, 40, 106, 25, 79, 26, 104 };
-    int iChaosCastleLimitArea3[16] = { 27, 79, 40, 80, 39, 81, 40, 104, 27, 103, 38, 104, 27, 81, 28, 102 };
+    int iChaosCastleLimitArea1[16] = {23, 75, 44, 76, 43, 77, 44, 108, 23, 107, 42, 108, 23, 77, 24, 106};
+    int iChaosCastleLimitArea2[16] = {25, 77, 42, 78, 41, 79, 42, 106, 25, 105, 40, 106, 25, 79, 26, 104};
+    int iChaosCastleLimitArea3[16] = {27, 79, 40, 80, 39, 81, 40, 104, 27, 103, 38, 104, 27, 81, 28, 102};
     memcpy(m_iChaosCastleLimitArea1, iChaosCastleLimitArea1, sizeof(int) * 16);
     memcpy(m_iChaosCastleLimitArea2, iChaosCastleLimitArea2, sizeof(int) * 16);
     memcpy(m_iChaosCastleLimitArea3, iChaosCastleLimitArea3, sizeof(int) * 16);
@@ -37,11 +37,10 @@ CNewChaosCastleSystem::CNewChaosCastleSystem()
     m_bActionMatch = true;
 }
 
-CNewChaosCastleSystem::~CNewChaosCastleSystem()
-{
-}
+CNewChaosCastleSystem::~CNewChaosCastleSystem() {}
 
-void CNewChaosCastleSystem::SetMatchResult(const int iNumDevilRank, const int iMyRank, const MatchResult* pMatchResult, const int Success)
+void CNewChaosCastleSystem::SetMatchResult(const int iNumDevilRank, const int iMyRank, const MatchResult* pMatchResult,
+                                           const int Success)
 {
     if (iNumDevilRank != 254)
     {
@@ -68,7 +67,8 @@ void CNewChaosCastleSystem::SetMatchGameCommand(const LPPRECEIVE_MATCH_GAME_STAT
         PlayBuffer(SOUND_CHAOSCASTLE, NULL, true);
         break;
     case 6:
-        SetMatchInfo(data->m_byPlayState + 1, 15 * 60, data->m_wRemainSec, data->m_wMaxKillMonster, data->m_wCurKillMonster);
+        SetMatchInfo(data->m_byPlayState + 1, 15 * 60, data->m_wRemainSec, data->m_wMaxKillMonster,
+                     data->m_wCurKillMonster);
         break;
     case 7:
         clearMatchInfo();
@@ -173,7 +173,9 @@ void CNewChaosCastleSystem::RenderMatchResult(void)
 {
     int x = 640 / 2;
     int yPos = m_PosResult.y + 40;
-    wchar_t lpszStr[256] = { NULL, };
+    wchar_t lpszStr[256] = {
+        NULL,
+    };
 
     EnableAlphaTest();
 
@@ -203,13 +205,16 @@ void CNewChaosCastleSystem::RenderMatchResult(void)
     g_pRenderText->SetTextColor(210, 255, 210, 255);
 
     mu_swprintf(lpszStr, GlobalText[861], pResult->m_dwExp);
-    g_pRenderText->RenderText(x, yPos, lpszStr, 0, 0, RT3_WRITE_CENTER); yPos += 20;
+    g_pRenderText->RenderText(x, yPos, lpszStr, 0, 0, RT3_WRITE_CENTER);
+    yPos += 20;
 
     mu_swprintf(lpszStr, GlobalText[1162], pResult->m_iScore);
-    g_pRenderText->RenderText(x, yPos, lpszStr, 0, 0, RT3_WRITE_CENTER); yPos += 20;
+    g_pRenderText->RenderText(x, yPos, lpszStr, 0, 0, RT3_WRITE_CENTER);
+    yPos += 20;
 
     mu_swprintf(lpszStr, GlobalText[1163], pResult->m_iZen);
-    g_pRenderText->RenderText(x, yPos, lpszStr, 0, 0, RT3_WRITE_CENTER); yPos += 24;
+    g_pRenderText->RenderText(x, yPos, lpszStr, 0, 0, RT3_WRITE_CENTER);
+    yPos += 24;
 
     DisableAlphaBlend();
 }

@@ -51,38 +51,20 @@ static bool RequireLeavesEffect()
 {
     return (gMapManager.WorldActive == WD_0LORENCIA && HeroTile != 4) ||
            (gMapManager.WorldActive == WD_2DEVIAS && HeroTile != 3 && HeroTile < 10) ||
-           gMapManager.WorldActive == WD_3NORIA ||
-           gMapManager.WorldActive == WD_7ATLANSE ||
-           gMapManager.InDevilSquare() ||
-           gMapManager.WorldActive == WD_10HEAVEN ||
-           gMapManager.InChaosCastle() ||
-           gMapManager.InBattleCastle() ||
-           M31HuntingGround::IsInHuntingGround() ||
-           M33Aida::IsInAida() ||
-           M34CryWolf1st::IsCyrWolf1st() ||
-           gMapManager.WorldActive == WD_42CHANGEUP3RD_2ND ||
-           IsIceCity() ||
-           IsSantaTown() ||
-           gMapManager.IsPKField() ||
-           IsDoppelGanger2() ||
-           gMapManager.IsEmpireGuardian1() ||
-           gMapManager.IsEmpireGuardian2() ||
-           gMapManager.IsEmpireGuardian3() ||
-           gMapManager.IsEmpireGuardian4() ||
+           gMapManager.WorldActive == WD_3NORIA || gMapManager.WorldActive == WD_7ATLANSE ||
+           gMapManager.InDevilSquare() || gMapManager.WorldActive == WD_10HEAVEN || gMapManager.InChaosCastle() ||
+           gMapManager.InBattleCastle() || M31HuntingGround::IsInHuntingGround() || M33Aida::IsInAida() ||
+           M34CryWolf1st::IsCyrWolf1st() || gMapManager.WorldActive == WD_42CHANGEUP3RD_2ND || IsIceCity() ||
+           IsSantaTown() || gMapManager.IsPKField() || IsDoppelGanger2() || gMapManager.IsEmpireGuardian1() ||
+           gMapManager.IsEmpireGuardian2() || gMapManager.IsEmpireGuardian3() || gMapManager.IsEmpireGuardian4() ||
            IsUnitedMarketPlace();
 }
 
 static bool ShouldRenderLeaves()
 {
-    return (gMapManager.WorldActive == WD_2DEVIAS && HeroTile != 3 && HeroTile < 10) ||
-           IsIceCity() ||
-           IsSantaTown() ||
-           gMapManager.IsPKField() ||
-           IsDoppelGanger2() ||
-           gMapManager.IsEmpireGuardian1() ||
-           gMapManager.IsEmpireGuardian2() ||
-           gMapManager.IsEmpireGuardian3() ||
-           gMapManager.IsEmpireGuardian4() ||
+    return (gMapManager.WorldActive == WD_2DEVIAS && HeroTile != 3 && HeroTile < 10) || IsIceCity() || IsSantaTown() ||
+           gMapManager.IsPKField() || IsDoppelGanger2() || gMapManager.IsEmpireGuardian1() ||
+           gMapManager.IsEmpireGuardian2() || gMapManager.IsEmpireGuardian3() || gMapManager.IsEmpireGuardian4() ||
            IsUnitedMarketPlace();
 }
 
@@ -102,7 +84,8 @@ static void InitializeMainScene()
 {
     g_pMainFrame->ResetSkillHotKey();
 
-    g_ConsoleDebug->Write(MCD_NORMAL, L"Join the game with the following character: %ls", CharactersClient[SelectedHero].ID);
+    g_ConsoleDebug->Write(MCD_NORMAL, L"Join the game with the following character: %ls",
+                          CharactersClient[SelectedHero].ID);
     g_ErrorReport.Write(L"> Character selected <%d> \"%ls\"\r\n", SelectedHero + 1, CharactersClient[SelectedHero].ID);
 
     InitMainScene = true;
@@ -197,9 +180,7 @@ static void UpdateUIAndInput()
     g_pPartyManager->Update();
     g_pNewUISystem->Update();
 
-    if (MouseLButton == true &&
-        false == g_pNewUISystem->CheckMouseUse() &&
-        g_dwMouseUseUIID == 0 &&
+    if (MouseLButton == true && false == g_pNewUISystem->CheckMouseUse() && g_dwMouseUseUIID == 0 &&
         g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_CHATINPUTBOX) == false)
     {
         g_pWindowMgr->SetWindowsEnable(FALSE);
@@ -264,7 +245,7 @@ static void UpdateGameEntities()
 
 #ifdef ENABLE_EDIT
     EditObjects();
-#endif //ENABLE_EDIT
+#endif // ENABLE_EDIT
 }
 
 /**
@@ -370,7 +351,7 @@ static void SetupMainSceneViewport(int& outWidth, int& outHeight, BYTE& outByWat
     {
         if (battleCastle::InBattleCastle2(Hero->Object.Position))
         {
-            vec3_t Color = { 0.f, 0.f, 0.f };
+            vec3_t Color = {0.f, 0.f, 0.f};
             battleCastle::StartFog(Color);
         }
         else
@@ -398,15 +379,14 @@ static void RenderGameWorld(BYTE& byWaterMap, int width, int height)
             if (!g_Direction.m_CKanturu.IsMayaScene())
                 RenderTerrain(false);
         }
-        else
-            if (gMapManager.WorldActive != WD_10HEAVEN && gMapManager.WorldActive != -1)
+        else if (gMapManager.WorldActive != WD_10HEAVEN && gMapManager.WorldActive != -1)
+        {
+            if (gMapManager.IsPKField() || IsDoppelGanger2())
             {
-                if (gMapManager.IsPKField() || IsDoppelGanger2())
-                {
-                    RenderObjects();
-                }
-                RenderTerrain(false);
+                RenderObjects();
             }
+            RenderTerrain(false);
+        }
     }
 
     if (!gMapManager.IsPKField() && !IsDoppelGanger2())
@@ -516,7 +496,7 @@ static void RenderMainSceneUI()
 
 #ifdef ENABLE_EDIT
     RenderDebugWindow();
-#endif //ENABLE_EDIT
+#endif // ENABLE_EDIT
 
     EndBitmap();
     BeginBitmap();

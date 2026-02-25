@@ -12,49 +12,52 @@
 #include "NewUISystem.h"
 #include "wglext.h"
 
-int     OpenglWindowX;
-int     OpenglWindowY;
-int     OpenglWindowWidth;
-int     OpenglWindowHeight;
-bool    CameraTopViewEnable = false;
-float   CameraViewNear = 20.f;
-float   CameraViewFar = 2000.f;
-float   CameraFOV = 55.f;
-vec3_t  CameraPosition;
-vec3_t  CameraAngle;
-float   CameraMatrix[3][4];
-vec3_t  MousePosition;
-vec3_t  MouseTarget;
-float   g_fCameraCustomDistance = 0.f;
-bool    FogEnable = false;
+int OpenglWindowX;
+int OpenglWindowY;
+int OpenglWindowWidth;
+int OpenglWindowHeight;
+bool CameraTopViewEnable = false;
+float CameraViewNear = 20.f;
+float CameraViewFar = 2000.f;
+float CameraFOV = 55.f;
+vec3_t CameraPosition;
+vec3_t CameraAngle;
+float CameraMatrix[3][4];
+vec3_t MousePosition;
+vec3_t MouseTarget;
+float g_fCameraCustomDistance = 0.f;
+bool FogEnable = false;
 GLfloat FogDensity = 0.0004f;
-GLfloat FogColor[4] = { 30 / 256.f,20 / 256.f,10 / 256.f, };
+GLfloat FogColor[4] = {
+    30 / 256.f,
+    20 / 256.f,
+    10 / 256.f,
+};
 
 bool _isVSyncAvailable = false;
 bool _isVSyncEnabled = false;
-PFNWGLSWAPINTERVALEXTPROC       wglSwapIntervalEXT = nullptr;
-
+PFNWGLSWAPINTERVALEXTPROC wglSwapIntervalEXT = nullptr;
 
 unsigned int WindowWidth = 1024;
 unsigned int WindowHeight = 768;
-int          MouseX = WindowWidth / 2;
-int          MouseY = WindowHeight / 2;
-int          BackMouseX = MouseX;
-int          BackMouseY = MouseY;
-bool         MouseLButton;
-bool 		 MouseLButtonPop;
-bool 		 MouseLButtonPush;
-bool         MouseRButton;
-bool 		 MouseRButtonPop;
-bool 		 MouseRButtonPush;
-bool 	   	 MouseLButtonDBClick;
-bool         MouseMButton;
-bool         MouseMButtonPop;
-bool         MouseMButtonPush;
-int          MouseWheel;
-DWORD		 MouseRButtonPress = 0;
+int MouseX = WindowWidth / 2;
+int MouseY = WindowHeight / 2;
+int BackMouseX = MouseX;
+int BackMouseY = MouseY;
+bool MouseLButton;
+bool MouseLButtonPop;
+bool MouseLButtonPush;
+bool MouseRButton;
+bool MouseRButtonPop;
+bool MouseRButtonPush;
+bool MouseLButtonDBClick;
+bool MouseMButton;
+bool MouseMButtonPop;
+bool MouseMButtonPush;
+int MouseWheel;
+DWORD MouseRButtonPress = 0;
 
-//bool    showShoppingMall = false;
+// bool    showShoppingMall = false;
 
 void OpenExploper(wchar_t* Name, wchar_t* para)
 {
@@ -63,18 +66,18 @@ void OpenExploper(wchar_t* Name, wchar_t* para)
 
 bool CheckID_HistoryDay(wchar_t* Name, WORD day)
 {
-    typedef struct  __day_history__
+    typedef struct __day_history__
     {
         wchar_t ID[MAX_USERNAME_SIZE + 1];
         WORD date;
-    }dayHistory;
+    } dayHistory;
 
     FILE* fp;
     dayHistory days[100];
-    int   count = 0;
-    WORD  num = 0;
-    bool  sameName = false;
-    bool  update = true;
+    int count = 0;
+    WORD num = 0;
+    bool sameName = false;
+    bool update = true;
 
     if ((fp = _wfopen(L"dconfig.ini", L"rb")) != NULL)
     {
@@ -131,18 +134,18 @@ bool CheckID_HistoryDay(wchar_t* Name, WORD day)
 
     //    showShoppingMall = update;
 
-    return  update;
+    return update;
 }
 
 bool GrabEnable = false;
 wchar_t GrabFileName[MAX_PATH];
-int  GrabScreen = 0;
+int GrabScreen = 0;
 
 float PerspectiveX;
 float PerspectiveY;
-int   ScreenCenterX;
-int   ScreenCenterY;
-int   ScreenCenterYFlip;
+int ScreenCenterX;
+int ScreenCenterY;
+int ScreenCenterYFlip;
 
 void GetOpenGLMatrix(float Matrix[3][4])
 {
@@ -222,16 +225,16 @@ bool TestDepthBuffer(vec3_t Position)
     vec3_t WorldPosition;
     int x, y;
     TransformPosition(Position, WorldPosition, &x, &y);
-    if (x < OpenglWindowX ||
-        y < OpenglWindowY ||
-        x >= (int)OpenglWindowX + OpenglWindowWidth ||
-        y >= (int)OpenglWindowY + OpenglWindowHeight) return false;
+    if (x < OpenglWindowX || y < OpenglWindowY || x >= (int)OpenglWindowX + OpenglWindowWidth ||
+        y >= (int)OpenglWindowY + OpenglWindowHeight)
+        return false;
 
     GLfloat key[3];
     glReadPixels(x, y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, key);
 
     float z = 1.f - CameraViewNear / -WorldPosition[2] + CameraViewNear / CameraViewFar;
-    if (key[0] >= z) return true;
+    if (key[0] >= z)
+        return true;
     return false;
 }
 
@@ -239,13 +242,13 @@ bool TestDepthBuffer(vec3_t Position)
 // opengl render util
 ///////////////////////////////////////////////////////////////////////////////
 
-int  CachTexture = -1;
+int CachTexture = -1;
 bool TextureEnable;
 bool DepthTestEnable;
 bool CullFaceEnable;
 bool DepthMaskEnable;
 bool AlphaTestEnable;
-int  AlphaBlendType;
+int AlphaBlendType;
 
 void BindTexture(int tex)
 {
@@ -266,7 +269,7 @@ void BindTexture(int tex)
 
 bool TextureStream = false;
 
-extern  int test;
+extern int test;
 void BindTextureStream(int tex)
 {
     if (CachTexture != tex)
@@ -659,7 +662,7 @@ BOOL IsGLExtensionSupported(const wchar_t* extension)
     auto wglGetExtString = wglGetProcAddress("wglGetExtensionsStringARB");
 
     if (wglGetExtString)
-        supported = ((wchar_t* (__stdcall*)(HDC))wglGetExtString)(wglGetCurrentDC());
+        supported = ((wchar_t * (__stdcall*)(HDC)) wglGetExtString)(wglGetCurrentDC());
 
     // If That Failed, Try Standard Opengl Extensions String
     if (supported == NULL)
@@ -670,23 +673,24 @@ BOOL IsGLExtensionSupported(const wchar_t* extension)
         return FALSE;
 
     // Begin Examination At Start Of String, Increment By 1 On False Match
-    for (const wchar_t* p = supported; ; p++)
+    for (const wchar_t* p = supported;; p++)
     {
         // Advance p Up To The Next Possible Match
         p = wcsstr(p, extension);
 
         if (p == NULL)
-            return FALSE;															// No Match
+            return FALSE; // No Match
 
         if ((p == supported || p[-1] == ' ') && (p[extlen] == '\0' || p[extlen] == ' '))
-            return TRUE;															// Match
+            return TRUE; // Match
     }
 }
 
 bool WGLExtensionSupported(const char* extension_name)
 {
     // this is pointer to function which returns pointer to string with list of all wgl extensions
-     PFNWGLGETEXTENSIONSSTRINGEXTPROC _wglGetExtensionsStringEXT = reinterpret_cast<PFNWGLGETEXTENSIONSSTRINGEXTPROC>(wglGetProcAddress("wglGetExtensionsStringEXT"));
+    PFNWGLGETEXTENSIONSSTRINGEXTPROC _wglGetExtensionsStringEXT =
+        reinterpret_cast<PFNWGLGETEXTENSIONSSTRINGEXTPROC>(wglGetProcAddress("wglGetExtensionsStringEXT"));
 
     if (strstr(_wglGetExtensionsStringEXT(), extension_name) == nullptr)
     {
@@ -754,7 +758,8 @@ int GetFPSLimit()
 }
 
 #ifdef LDS_ADD_MULTISAMPLEANTIALIASING
-BOOL InitGLMultisample(HINSTANCE hInstance, HWND hWnd, PIXELFORMATDESCRIPTOR pfd, int iRequestMSAAValue, int& OutiPixelFormat)
+BOOL InitGLMultisample(HINSTANCE hInstance, HWND hWnd, PIXELFORMATDESCRIPTOR pfd, int iRequestMSAAValue,
+                       int& OutiPixelFormat)
 {
     BOOL bIsGLMultisampleSupported = FALSE;
 
@@ -773,7 +778,8 @@ BOOL InitGLMultisample(HINSTANCE hInstance, HWND hWnd, PIXELFORMATDESCRIPTOR pfd
     CheckGLError(__FILE__, __LINE__);
 #endif // defined(_DEBUG)
     // Get Our Pixel Format
-    PFNWGLCHOOSEPIXELFORMATARBPROC wglChoosePixelFormatARB = (PFNWGLCHOOSEPIXELFORMATARBPROC)wglGetProcAddress(L"wglChoosePixelFormatARB");
+    PFNWGLCHOOSEPIXELFORMATARBPROC wglChoosePixelFormatARB =
+        (PFNWGLCHOOSEPIXELFORMATARBPROC)wglGetProcAddress(L"wglChoosePixelFormatARB");
     if (!wglChoosePixelFormatARB)
     {
         bIsGLMultisampleSupported = FALSE;
@@ -787,29 +793,37 @@ BOOL InitGLMultisample(HINSTANCE hInstance, HWND hWnd, PIXELFORMATDESCRIPTOR pfd
     // Get Our Current Device Context
     HDC hDC = GetDC(hWnd);
 
-    int		valid;
-    UINT	numFormats;
-    float	fAttributes[] = { 0,0 };
+    int valid;
+    UINT numFormats;
+    float fAttributes[] = {0, 0};
 
     // These Attributes Are The Bits We Want To Test For In Our Sample
     // Everything Is Pretty Standard, The Only One We Want To
     // Really Focus On Is The SAMPLE BUFFERS ARB And WGL SAMPLES
     // These Two Are Going To Do The Main Testing For Whether Or Not
     // We Support Multisampling On This Hardware.
-    int iAttributes[] =
-    {
-        WGL_DRAW_TO_WINDOW_ARB,GL_TRUE,
-            WGL_SUPPORT_OPENGL_ARB,GL_TRUE,
-            WGL_ACCELERATION_ARB,WGL_FULL_ACCELERATION_ARB,
-            WGL_COLOR_BITS_ARB,24,
-            WGL_ALPHA_BITS_ARB,8,
-            WGL_DEPTH_BITS_ARB,16,
-            WGL_STENCIL_BITS_ARB,0,
-            WGL_DOUBLE_BUFFER_ARB,GL_TRUE,
-            WGL_SAMPLE_BUFFERS_ARB,GL_TRUE,
-            WGL_SAMPLES_ARB, iRequestMSAAValue,					// xN MultiSampling (N=4,2,1)
-            0,0
-    };
+    int iAttributes[] = {WGL_DRAW_TO_WINDOW_ARB,
+                         GL_TRUE,
+                         WGL_SUPPORT_OPENGL_ARB,
+                         GL_TRUE,
+                         WGL_ACCELERATION_ARB,
+                         WGL_FULL_ACCELERATION_ARB,
+                         WGL_COLOR_BITS_ARB,
+                         24,
+                         WGL_ALPHA_BITS_ARB,
+                         8,
+                         WGL_DEPTH_BITS_ARB,
+                         16,
+                         WGL_STENCIL_BITS_ARB,
+                         0,
+                         WGL_DOUBLE_BUFFER_ARB,
+                         GL_TRUE,
+                         WGL_SAMPLE_BUFFERS_ARB,
+                         GL_TRUE,
+                         WGL_SAMPLES_ARB,
+                         iRequestMSAAValue, // xN MultiSampling (N=4,2,1)
+                         0,
+                         0};
 
 #if defined(_DEBUG)
     CheckGLError(__FILE__, __LINE__);
@@ -847,14 +861,14 @@ BOOL InitGLMultisample(HINSTANCE hInstance, HWND hWnd, PIXELFORMATDESCRIPTOR pfd
 #endif // defined(_DEBUG)
 
     // Return The Valid Format
-    return  bIsGLMultisampleSupported;
+    return bIsGLMultisampleSupported;
 }
 
 void SetEnableMultisample()
 {
     if (TRUE == g_bSupportedMSAA)
     {
-        glEnable(GL_MULTISAMPLE_ARB);							// Enable Multisampling
+        glEnable(GL_MULTISAMPLE_ARB); // Enable Multisampling
     }
 
 #if defined(_DEBUG)
@@ -866,7 +880,7 @@ void SetDisableMultisample()
 {
     if (TRUE == g_bSupportedMSAA)
     {
-        glDisable(GL_MULTISAMPLE_ARB);							// Enable Multisampling
+        glDisable(GL_MULTISAMPLE_ARB); // Enable Multisampling
     }
 
 #if defined(_DEBUG)
@@ -904,42 +918,66 @@ void RenderBox(float Matrix[3][4])
     }
 
     glBegin(GL_QUADS);
-    //glBegin(GL_LINES);
+    // glBegin(GL_LINES);
     glColor3f(0.2f, 0.2f, 0.2f);
-    glTexCoord2f(1.0F, 1.0F); glVertex3fv(TransformVertices[7]);
-    glTexCoord2f(1.0F, 0.0F); glVertex3fv(TransformVertices[6]);
-    glTexCoord2f(0.0F, 0.0F); glVertex3fv(TransformVertices[4]);
-    glTexCoord2f(0.0F, 1.0F); glVertex3fv(TransformVertices[5]);
+    glTexCoord2f(1.0F, 1.0F);
+    glVertex3fv(TransformVertices[7]);
+    glTexCoord2f(1.0F, 0.0F);
+    glVertex3fv(TransformVertices[6]);
+    glTexCoord2f(0.0F, 0.0F);
+    glVertex3fv(TransformVertices[4]);
+    glTexCoord2f(0.0F, 1.0F);
+    glVertex3fv(TransformVertices[5]);
 
     glColor3f(0.2f, 0.2f, 0.2f);
-    glTexCoord2f(0.0F, 1.0F); glVertex3fv(TransformVertices[0]);
-    glTexCoord2f(1.0F, 1.0F); glVertex3fv(TransformVertices[2]);
-    glTexCoord2f(1.0F, 0.0F); glVertex3fv(TransformVertices[3]);
-    glTexCoord2f(0.0F, 0.0F); glVertex3fv(TransformVertices[1]);
+    glTexCoord2f(0.0F, 1.0F);
+    glVertex3fv(TransformVertices[0]);
+    glTexCoord2f(1.0F, 1.0F);
+    glVertex3fv(TransformVertices[2]);
+    glTexCoord2f(1.0F, 0.0F);
+    glVertex3fv(TransformVertices[3]);
+    glTexCoord2f(0.0F, 0.0F);
+    glVertex3fv(TransformVertices[1]);
 
     glColor3f(0.6f, 0.6f, 0.6f);
-    glTexCoord2f(1.0F, 1.0F); glVertex3fv(TransformVertices[7]);
-    glTexCoord2f(1.0F, 0.0F); glVertex3fv(TransformVertices[3]);
-    glTexCoord2f(0.0F, 0.0F); glVertex3fv(TransformVertices[2]);
-    glTexCoord2f(0.0F, 1.0F); glVertex3fv(TransformVertices[6]);
+    glTexCoord2f(1.0F, 1.0F);
+    glVertex3fv(TransformVertices[7]);
+    glTexCoord2f(1.0F, 0.0F);
+    glVertex3fv(TransformVertices[3]);
+    glTexCoord2f(0.0F, 0.0F);
+    glVertex3fv(TransformVertices[2]);
+    glTexCoord2f(0.0F, 1.0F);
+    glVertex3fv(TransformVertices[6]);
 
     glColor3f(0.6f, 0.6f, 0.6f);
-    glTexCoord2f(0.0F, 1.0F); glVertex3fv(TransformVertices[0]);
-    glTexCoord2f(1.0F, 1.0F); glVertex3fv(TransformVertices[1]);
-    glTexCoord2f(1.0F, 0.0F); glVertex3fv(TransformVertices[5]);
-    glTexCoord2f(0.0F, 0.0F); glVertex3fv(TransformVertices[4]);
+    glTexCoord2f(0.0F, 1.0F);
+    glVertex3fv(TransformVertices[0]);
+    glTexCoord2f(1.0F, 1.0F);
+    glVertex3fv(TransformVertices[1]);
+    glTexCoord2f(1.0F, 0.0F);
+    glVertex3fv(TransformVertices[5]);
+    glTexCoord2f(0.0F, 0.0F);
+    glVertex3fv(TransformVertices[4]);
 
     glColor3f(0.4f, 0.4f, 0.4f);
-    glTexCoord2f(1.0F, 1.0F); glVertex3fv(TransformVertices[7]);
-    glTexCoord2f(1.0F, 0.0F); glVertex3fv(TransformVertices[5]);
-    glTexCoord2f(0.0F, 0.0F); glVertex3fv(TransformVertices[1]);
-    glTexCoord2f(0.0F, 1.0F); glVertex3fv(TransformVertices[3]);
+    glTexCoord2f(1.0F, 1.0F);
+    glVertex3fv(TransformVertices[7]);
+    glTexCoord2f(1.0F, 0.0F);
+    glVertex3fv(TransformVertices[5]);
+    glTexCoord2f(0.0F, 0.0F);
+    glVertex3fv(TransformVertices[1]);
+    glTexCoord2f(0.0F, 1.0F);
+    glVertex3fv(TransformVertices[3]);
 
     glColor3f(0.4f, 0.4f, 0.4f);
-    glTexCoord2f(0.0F, 1.0F); glVertex3fv(TransformVertices[0]);
-    glTexCoord2f(1.0F, 1.0F); glVertex3fv(TransformVertices[4]);
-    glTexCoord2f(1.0F, 0.0F); glVertex3fv(TransformVertices[6]);
-    glTexCoord2f(0.0F, 0.0F); glVertex3fv(TransformVertices[2]);
+    glTexCoord2f(0.0F, 1.0F);
+    glVertex3fv(TransformVertices[0]);
+    glTexCoord2f(1.0F, 1.0F);
+    glVertex3fv(TransformVertices[4]);
+    glTexCoord2f(1.0F, 0.0F);
+    glVertex3fv(TransformVertices[6]);
+    glTexCoord2f(0.0F, 0.0F);
+    glVertex3fv(TransformVertices[2]);
     glEnd();
 }
 
@@ -958,10 +996,14 @@ void RenderPlane3D(float Width, float Height, float Matrix[3][4])
     }
 
     glBegin(GL_QUADS);
-    glTexCoord2f(0.f, 1.f); glVertex3fv(TransformVertices[0]);
-    glTexCoord2f(1.f, 1.f); glVertex3fv(TransformVertices[1]);
-    glTexCoord2f(1.f, 0.f); glVertex3fv(TransformVertices[2]);
-    glTexCoord2f(0.f, 0.f); glVertex3fv(TransformVertices[3]);
+    glTexCoord2f(0.f, 1.f);
+    glVertex3fv(TransformVertices[0]);
+    glTexCoord2f(1.f, 1.f);
+    glVertex3fv(TransformVertices[1]);
+    glTexCoord2f(1.f, 0.f);
+    glVertex3fv(TransformVertices[2]);
+    glTexCoord2f(0.f, 0.f);
+    glVertex3fv(TransformVertices[3]);
     glEnd();
 }
 
@@ -976,13 +1018,14 @@ void EndSprite()
     glPopMatrix();
 }
 
-void RenderSprite(int Texture, vec3_t Position, float Width, float Height, vec3_t Light, float Rotation, float u, float v, float uWidth, float vHeight)
+void RenderSprite(int Texture, vec3_t Position, float Width, float Height, vec3_t Light, float Rotation, float u,
+                  float v, float uWidth, float vHeight)
 {
     BindTexture(Texture);
 
     vec3_t p2;
     VectorTransform(Position, CameraMatrix, p2);
-    //VectorCopy(Position,p2);
+    // VectorCopy(Position,p2);
     float x = p2[0];
     float y = p2[1];
     float z = p2[2];
@@ -1041,7 +1084,8 @@ void RenderSprite(int Texture, vec3_t Position, float Width, float Height, vec3_
     glEnd();
 }
 
-void RenderSpriteUV(int Texture, vec3_t Position, float Width, float Height, float(*UV)[2], vec3_t Light[4], float Alpha)
+void RenderSpriteUV(int Texture, vec3_t Position, float Width, float Height, float (*UV)[2], vec3_t Light[4],
+                    float Alpha)
 {
     BindTexture(Texture);
 
@@ -1123,7 +1167,7 @@ float RenderNumber2D(float x, float y, int Num, float Width, float Height)
     for (int i = 0; i < Length; i++)
     {
         float u = (float)(Text[i] - 48) * 16.f / 256.f;
-        //glColor3fv(Color);
+        // glColor3fv(Color);
         RenderBitmap(BITMAP_FONT + 1, x, y, Width, Height, u, 0.f, 16.f / 256.f, 16.f / 32.f);
         x += Width * 0.7f;
     }
@@ -1169,10 +1213,14 @@ void RenderColor(float x, float y, float Width, float Height, float Alpha, int F
     float p[4][2];
     y = WindowHeight - y;
 
-    p[0][0] = x; p[0][1] = y;
-    p[1][0] = x; p[1][1] = y - Height;
-    p[2][0] = x + Width; p[2][1] = y - Height;
-    p[3][0] = x + Width; p[3][1] = y;
+    p[0][0] = x;
+    p[0][1] = y;
+    p[1][0] = x;
+    p[1][1] = y - Height;
+    p[2][0] = x + Width;
+    p[2][1] = y - Height;
+    p[3][0] = x + Width;
+    p[3][1] = y;
 
     glBegin(GL_TRIANGLE_FAN);
     for (int i = 0; i < 4; i++)
@@ -1181,9 +1229,8 @@ void RenderColor(float x, float y, float Width, float Height, float Alpha, int F
         {
             if (Flag == 0)
                 glColor4f(1.f, 1.f, 1.f, Alpha);
-            else
-                if (Flag == 1)
-                    glColor4f(0.f, 0.f, 0.f, Alpha);
+            else if (Flag == 1)
+                glColor4f(0.f, 0.f, 0.f, Alpha);
         }
         glVertex2f(p[i][0], p[i][1]);
         if (Alpha > 0.f)
@@ -1199,7 +1246,8 @@ void EndRenderColor()
     glEnable(GL_TEXTURE_2D);
 }
 
-void RenderColorBitmap(int Texture, float x, float y, float Width, float Height, float u, float v, float uWidth, float vHeight, unsigned int color)
+void RenderColorBitmap(int Texture, float x, float y, float Width, float Height, float u, float v, float uWidth,
+                       float vHeight, unsigned int color)
 {
     x = ConvertX(x);
     y = ConvertY(y);
@@ -1213,10 +1261,14 @@ void RenderColorBitmap(int Texture, float x, float y, float Width, float Height,
 
     y = WindowHeight - y;
 
-    p[0][0] = x; p[0][1] = y;
-    p[1][0] = x; p[1][1] = y - Height;
-    p[2][0] = x + Width; p[2][1] = y - Height;
-    p[3][0] = x + Width; p[3][1] = y;
+    p[0][0] = x;
+    p[0][1] = y;
+    p[1][0] = x;
+    p[1][1] = y - Height;
+    p[2][0] = x + Width;
+    p[2][1] = y - Height;
+    p[3][0] = x + Width;
+    p[3][1] = y;
 
     float c[4][2];
     TEXCOORD(c[0], u, v);
@@ -1228,10 +1280,10 @@ void RenderColorBitmap(int Texture, float x, float y, float Width, float Height,
 
     for (int i = 0; i < 4; i++)
     {
-        glColor4ub(static_cast<GLubyte>((color & 0xff)),         //Rad
-            static_cast<GLubyte>((color >> 8) & 0xff),      //Green
-            static_cast<GLubyte>((color >> 16) & 0xff),     //Blue
-            static_cast<GLubyte>((color >> 24) & 0xff));   //Alpha
+        glColor4ub(static_cast<GLubyte>((color & 0xff)),        // Rad
+                   static_cast<GLubyte>((color >> 8) & 0xff),   // Green
+                   static_cast<GLubyte>((color >> 16) & 0xff),  // Blue
+                   static_cast<GLubyte>((color >> 24) & 0xff)); // Alpha
 
         glTexCoord2f(c[i][0], c[i][1]);
         glVertex2f(p[i][0], p[i][1]);
@@ -1241,7 +1293,8 @@ void RenderColorBitmap(int Texture, float x, float y, float Width, float Height,
     glEnd();
 }
 
-void RenderBitmap(int Texture, float x, float y, float Width, float Height, float u, float v, float uWidth, float vHeight, bool Scale, bool StartScale, float Alpha)
+void RenderBitmap(int Texture, float x, float y, float Width, float Height, float u, float v, float uWidth,
+                  float vHeight, bool Scale, bool StartScale, float Alpha)
 {
     if (StartScale)
     {
@@ -1260,10 +1313,14 @@ void RenderBitmap(int Texture, float x, float y, float Width, float Height, floa
 
     y = WindowHeight - y;
 
-    p[0][0] = x; p[0][1] = y;
-    p[1][0] = x; p[1][1] = y - Height;
-    p[2][0] = x + Width; p[2][1] = y - Height;
-    p[3][0] = x + Width; p[3][1] = y;
+    p[0][0] = x;
+    p[0][1] = y;
+    p[1][0] = x;
+    p[1][1] = y - Height;
+    p[2][0] = x + Width;
+    p[2][1] = y - Height;
+    p[3][0] = x + Width;
+    p[3][1] = y;
 
     float c[4][2];
     TEXCOORD(c[0], u, v);
@@ -1288,14 +1345,15 @@ void RenderBitmap(int Texture, float x, float y, float Width, float Height, floa
     glEnd();
 }
 
-void RenderBitmapRotate(int Texture, float x, float y, float Width, float Height, float Rotate, float u, float v, float uWidth, float vHeight)
+void RenderBitmapRotate(int Texture, float x, float y, float Width, float Height, float Rotate, float u, float v,
+                        float uWidth, float vHeight)
 {
     x = ConvertX(x);
     y = ConvertY(y);
     Width = ConvertX(Width);
     Height = ConvertY(Height);
-    //x -= Width *0.5f;
-    //y -= Height*0.5f;
+    // x -= Width *0.5f;
+    // y -= Height*0.5f;
     BindTexture(Texture);
 
     vec3_t p[4], p2[4];
@@ -1375,7 +1433,8 @@ void RenderBitRotate(int Texture, float x, float y, float Width, float Height, f
     glEnd();
 }
 
-void RenderPointRotate(int Texture, float ix, float iy, float iWidth, float iHeight, float x, float y, float Width, float Height, float Rotate, float Rotate_Loc, float uWidth, float vHeight, int Num)
+void RenderPointRotate(int Texture, float ix, float iy, float iWidth, float iHeight, float x, float y, float Width,
+                       float Height, float Rotate, float Rotate_Loc, float uWidth, float vHeight, int Num)
 {
     int i = 0;
     vec3_t p, p2[4], p3, p4[4], Angle;
@@ -1393,7 +1452,8 @@ void RenderPointRotate(int Texture, float ix, float iy, float iWidth, float iHei
     y = Height - y;
     iy = Height - iy;
 
-    Vector((ix - (Width * 0.5f)) + ((Width / 2.f) - (Width - x)), (iy - (Height * 0.5f)) + ((Height / 2.f) - (Height - y)), 0.f, p);
+    Vector((ix - (Width * 0.5f)) + ((Width / 2.f) - (Width - x)),
+           (iy - (Height * 0.5f)) + ((Height / 2.f) - (Height - y)), 0.f, p);
 
     Vector(0.f, 0.f, Rotate, Angle);
     AngleMatrix(Angle, Matrix);
@@ -1444,7 +1504,8 @@ void RenderPointRotate(int Texture, float ix, float iy, float iWidth, float iHei
     }
 }
 
-void RenderBitmapLocalRotate(int Texture, float x, float y, float Width, float Height, float Rotate, float u, float v, float uWidth, float vHeight)
+void RenderBitmapLocalRotate(int Texture, float x, float y, float Width, float Height, float Rotate, float u, float v,
+                             float uWidth, float vHeight)
 {
     BindTexture(Texture);
 
@@ -1493,10 +1554,14 @@ void RenderBitmapAlpha(int Texture, float sx, float sy, float Width, float Heigh
         for (int x = 0; x < 4; x++)
         {
             float p[4][2];
-            p[0][0] = sx + ((x)*Width) * 0.25f; p[0][1] = sy - ((y)*Height) * 0.25f;
-            p[1][0] = sx + ((x)*Width) * 0.25f; p[1][1] = sy - ((y + 1) * Height) * 0.25f;
-            p[2][0] = sx + ((x + 1) * Width) * 0.25f; p[2][1] = sy - ((y + 1) * Height) * 0.25f;
-            p[3][0] = sx + ((x + 1) * Width) * 0.25f; p[3][1] = sy - ((y)*Height) * 0.25f;
+            p[0][0] = sx + ((x)*Width) * 0.25f;
+            p[0][1] = sy - ((y)*Height) * 0.25f;
+            p[1][0] = sx + ((x)*Width) * 0.25f;
+            p[1][1] = sy - ((y + 1) * Height) * 0.25f;
+            p[2][0] = sx + ((x + 1) * Width) * 0.25f;
+            p[2][1] = sy - ((y + 1) * Height) * 0.25f;
+            p[3][0] = sx + ((x + 1) * Width) * 0.25f;
+            p[3][1] = sy - ((y)*Height) * 0.25f;
 
             float c[4][2];
             TEXCOORD(c[0], (x) * 0.25f, (y) * 0.25f);
@@ -1504,11 +1569,27 @@ void RenderBitmapAlpha(int Texture, float sx, float sy, float Width, float Heigh
             TEXCOORD(c[2], (x + 1) * 0.25f, (y + 1) * 0.25f);
             TEXCOORD(c[3], (x + 1) * 0.25f, (y) * 0.25f);
 
-            float Alpha[4] = { 1.f,1.f,1.f,1.f };
-            if (x == 0) { Alpha[0] = 0.f; Alpha[1] = 0.f; }
-            if (x == 3) { Alpha[2] = 0.f; Alpha[3] = 0.f; }
-            if (y == 0) { Alpha[0] = 0.f; Alpha[3] = 0.f; }
-            if (y == 3) { Alpha[1] = 0.f; Alpha[2] = 0.f; }
+            float Alpha[4] = {1.f, 1.f, 1.f, 1.f};
+            if (x == 0)
+            {
+                Alpha[0] = 0.f;
+                Alpha[1] = 0.f;
+            }
+            if (x == 3)
+            {
+                Alpha[2] = 0.f;
+                Alpha[3] = 0.f;
+            }
+            if (y == 0)
+            {
+                Alpha[0] = 0.f;
+                Alpha[3] = 0.f;
+            }
+            if (y == 3)
+            {
+                Alpha[1] = 0.f;
+                Alpha[2] = 0.f;
+            }
             /*if(x==0&&y==0) Alpha[0] = 0.f;
             if(x==0&&y==3) Alpha[1] = 0.f;
             if(x==3&&y==3) Alpha[2] = 0.f;
@@ -1526,7 +1607,8 @@ void RenderBitmapAlpha(int Texture, float sx, float sy, float Width, float Heigh
     }
 }
 
-void RenderBitmapUV(int Texture, float x, float y, float Width, float Height, float u, float v, float uWidth, float vHeight)
+void RenderBitmapUV(int Texture, float x, float y, float Width, float Height, float u, float v, float uWidth,
+                    float vHeight)
 {
     x = ConvertX(x);
     y = ConvertY(y);
@@ -1536,10 +1618,14 @@ void RenderBitmapUV(int Texture, float x, float y, float Width, float Height, fl
 
     float p[4][2];
     y = WindowHeight - y;
-    p[0][0] = x; p[0][1] = y;
-    p[1][0] = x; p[1][1] = y - Height;
-    p[2][0] = x + Width; p[2][1] = y - Height;
-    p[3][0] = x + Width; p[3][1] = y;
+    p[0][0] = x;
+    p[0][1] = y;
+    p[1][0] = x;
+    p[1][1] = y - Height;
+    p[2][0] = x + Width;
+    p[2][1] = y - Height;
+    p[3][0] = x + Width;
+    p[3][1] = y;
 
     float c[4][2];
     TEXCOORD(c[0], u, v + vHeight * 0.25f);
@@ -1562,19 +1648,22 @@ void RenderBitmapUV(int Texture, float x, float y, float Width, float Height, fl
 
 float absf(float a)
 {
-    if (a < 0.f) return -a;
+    if (a < 0.f)
+        return -a;
     return a;
 }
 
 float minf(float a, float b)
 {
-    if (a > b) return b;
+    if (a > b)
+        return b;
     return a;
 }
 
 float maxf(float a, float b)
 {
-    if (a > b) return a;
+    if (a > b)
+        return a;
     return b;
 }
 
@@ -1585,9 +1674,13 @@ int InsideTest(float x, float y, float z, int n, float* v1, float* v2, float* v3
 
     int i;
     vec3_t* vtx[4];
+    // cppcheck-suppress dangerousTypeCast
     vtx[0] = (vec3_t*)v1;
+    // cppcheck-suppress dangerousTypeCast
     vtx[1] = (vec3_t*)v2;
+    // cppcheck-suppress dangerousTypeCast
     vtx[2] = (vec3_t*)v3;
+    // cppcheck-suppress dangerousTypeCast
     vtx[3] = (vec3_t*)v4;
 
     int j = n - 1;
@@ -1655,12 +1748,14 @@ void InitCollisionDetectLineToFace()
 
 vec3_t CollisionPosition;
 
-bool CollisionDetectLineToFace(vec3_t Position, vec3_t Target, int Polygon, float* v1, float* v2, float* v3, float* v4, vec3_t Normal, bool Collision)
+bool CollisionDetectLineToFace(vec3_t Position, vec3_t Target, int Polygon, float* v1, float* v2, float* v3, float* v4,
+                               vec3_t Normal, bool Collision)
 {
     vec3_t Direction;
     VectorSubtract(Target, Position, Direction);
     float a = DotProduct(Direction, Normal);
-    if (a >= 0.f) return false;
+    if (a >= 0.f)
+        return false;
     float b = DotProduct(Position, Normal) - DotProduct(v1, Normal);
     float t = -b / a;
     if (t >= 0.f && t <= Distance)
@@ -1673,19 +1768,23 @@ bool CollisionDetectLineToFace(vec3_t Position, vec3_t Target, int Polygon, floa
         if (MIN == absf(Direction[0]))
         {
             if ((Y >= minf(Position[1], Target[1]) && Y <= maxf(Position[1], Target[1])) &&
-                (Z >= minf(Position[2], Target[2]) && Z <= maxf(Position[2], Target[2]))) Count++;
+                (Z >= minf(Position[2], Target[2]) && Z <= maxf(Position[2], Target[2])))
+                Count++;
         }
         else if (MIN == absf(Direction[1]))
         {
             if ((Z >= minf(Position[2], Target[2]) && Z <= maxf(Position[2], Target[2])) &&
-                (X >= minf(Position[0], Target[0]) && X <= maxf(Position[0], Target[0]))) Count++;
+                (X >= minf(Position[0], Target[0]) && X <= maxf(Position[0], Target[0])))
+                Count++;
         }
         else
         {
             if ((X >= minf(Position[0], Target[0]) && X <= maxf(Position[0], Target[0])) &&
-                (Y >= minf(Position[1], Target[1]) && Y <= maxf(Position[1], Target[1]))) Count++;
+                (Y >= minf(Position[1], Target[1]) && Y <= maxf(Position[1], Target[1])))
+                Count++;
         }
-        if (Count == 0) return false;
+        if (Count == 0)
+            return false;
         Count = 0;
         if (Normal[0] <= -0.5f || Normal[0] >= 0.5f)
         {
@@ -1699,7 +1798,8 @@ bool CollisionDetectLineToFace(vec3_t Position, vec3_t Target, int Polygon, floa
         {
             Count += InsideTest(X, Y, Z, Polygon, v1, v2, v3, v4, 4, Normal[2]);
         }
-        if (Count == 0) return false;
+        if (Count == 0)
+            return false;
         if (Collision)
         {
             Distance = t;
@@ -1726,12 +1826,23 @@ bool ProjectLineBox(vec3_t ax, vec3_t p1, vec3_t p2, OBB_t obb)
     float mx2 = ST;
     float mn2 = ST;
 
-    if (Q1 > 0)	mx2 += Q1; else mn2 += Q1;
-    if (Q2 > 0)	mx2 += Q2; else mn2 += Q2;
-    if (Q3 > 0) mx2 += Q3; else mn2 += Q3;
+    if (Q1 > 0)
+        mx2 += Q1;
+    else
+        mn2 += Q1;
+    if (Q2 > 0)
+        mx2 += Q2;
+    else
+        mn2 += Q2;
+    if (Q3 > 0)
+        mx2 += Q3;
+    else
+        mn2 += Q3;
 
-    if (mn1 > mx2) return false;
-    if (mn2 > mx1) return false;
+    if (mn1 > mx2)
+        return false;
+    if (mn2 > mx1)
+        return false;
 
     return true;
 }
@@ -1747,13 +1858,19 @@ bool CollisionDetectLineToOBB(vec3_t p1, vec3_t p2, OBB_t obb)
     CrossProduct(e1, obb.YAxis, eq12);
     CrossProduct(e1, obb.ZAxis, eq13);
 
-    if (!ProjectLineBox(eq11, p1, p2, obb)) return false;
-    if (!ProjectLineBox(eq12, p1, p2, obb)) return false;
-    if (!ProjectLineBox(eq13, p1, p2, obb)) return false;
+    if (!ProjectLineBox(eq11, p1, p2, obb))
+        return false;
+    if (!ProjectLineBox(eq12, p1, p2, obb))
+        return false;
+    if (!ProjectLineBox(eq13, p1, p2, obb))
+        return false;
 
-    if (!ProjectLineBox(obb.XAxis, p1, p2, obb)) return false;
-    if (!ProjectLineBox(obb.YAxis, p1, p2, obb)) return false;
-    if (!ProjectLineBox(obb.ZAxis, p1, p2, obb)) return false;
+    if (!ProjectLineBox(obb.XAxis, p1, p2, obb))
+        return false;
+    if (!ProjectLineBox(obb.YAxis, p1, p2, obb))
+        return false;
+    if (!ProjectLineBox(obb.ZAxis, p1, p2, obb))
+        return false;
 
     return true;
 }

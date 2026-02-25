@@ -15,26 +15,27 @@
 
 namespace
 {
-    void PointSet(POINT& p, int x, int y)
-    {
-        p.x = x; p.y = y;
-    }
+void PointSet(POINT& p, int x, int y)
+{
+    p.x = x;
+    p.y = y;
+}
 
-    void RenderText(const wchar_t* text, int x, int y, int sx, int sy, HFONT hFont, DWORD color, DWORD backcolor, int sort)
-    {
-        g_pRenderText->SetFont(hFont);
+void RenderText(const wchar_t* text, int x, int y, int sx, int sy, HFONT hFont, DWORD color, DWORD backcolor, int sort)
+{
+    g_pRenderText->SetFont(hFont);
 
-        DWORD backuptextcolor = g_pRenderText->GetTextColor();
-        DWORD backuptextbackcolor = g_pRenderText->GetBgColor();
+    DWORD backuptextcolor = g_pRenderText->GetTextColor();
+    DWORD backuptextbackcolor = g_pRenderText->GetBgColor();
 
-        g_pRenderText->SetTextColor(color);
-        g_pRenderText->SetBgColor(backcolor);
-        g_pRenderText->RenderText(x, y, text, sx, sy, sort);
+    g_pRenderText->SetTextColor(color);
+    g_pRenderText->SetBgColor(backcolor);
+    g_pRenderText->RenderText(x, y, text, sx, sy, sort);
 
-        g_pRenderText->SetTextColor(backuptextcolor);
-        g_pRenderText->SetBgColor(backuptextbackcolor);
-    }
-};
+    g_pRenderText->SetTextColor(backuptextcolor);
+    g_pRenderText->SetBgColor(backuptextbackcolor);
+}
+}; // namespace
 
 using namespace SEASON3B;
 
@@ -48,9 +49,7 @@ CNewUIBaseButton::CNewUIBaseButton() : m_Lock(false), m_EventState(BUTTON_STATE_
     PointSet(m_Size, 0, 0);
 }
 
-CNewUIBaseButton::~CNewUIBaseButton()
-{
-}
+CNewUIBaseButton::~CNewUIBaseButton() {}
 
 void CNewUIBaseButton::SetPos(int x, int y)
 {
@@ -92,7 +91,7 @@ bool CNewUIBaseButton::RadioProcess()
             m_EventState = BUTTON_STATE_UP;
         }
     }
-#else // KJH_MOD_RADIOBTN_MOUSE_OVER_IMAGE
+#else  // KJH_MOD_RADIOBTN_MOUSE_OVER_IMAGE
     if (SEASON3B::IsPress(VK_LBUTTON) && isMousein)
     {
         if (m_EventState == BUTTON_STATE_UP)
@@ -138,14 +137,14 @@ bool CNewUIBaseButton::Process()
 //////////////////////////////////////////////////////////////////////
 // CNewUIButton
 //////////////////////////////////////////////////////////////////////
-CNewUIButton::CNewUIButton() : CNewUIBaseButton(), m_CurImgIndex(0),
-m_CurImgState(0), m_ImgWidth(0), m_ImgHeight(0),
-m_NameColor(0xFFFFFFFF), m_NameBackColor(0x00000000),
-m_CurImgColor(0xFFFFFFFF), m_TooltipTextColor(0xFFFFFFFF), m_IsTopPos(false),
-#ifndef KJH_MOD_RADIOBTN_MOUSE_OVER_IMAGE			// #ifndef
-m_IsImgWidth(false),
+// cppcheck-suppress uninitMemberVar
+CNewUIButton::CNewUIButton()
+    : CNewUIBaseButton(), m_CurImgIndex(0), m_CurImgState(0), m_ImgWidth(0), m_ImgHeight(0), m_NameColor(0xFFFFFFFF),
+      m_NameBackColor(0x00000000), m_CurImgColor(0xFFFFFFFF), m_TooltipTextColor(0xFFFFFFFF), m_IsTopPos(false),
+#ifndef KJH_MOD_RADIOBTN_MOUSE_OVER_IMAGE // #ifndef
+      m_IsImgWidth(false),
 #endif // KJH_MOD_RADIOBTN_MOUSE_OVER_IMAGE
-m_fAlpha(1.0f)
+      m_fAlpha(1.0f)
 {
     Initialize();
 }
@@ -177,7 +176,7 @@ void SEASON3B::CNewUIButton::Destroy()
 
 #ifdef KJH_MOD_RADIOBTN_MOUSE_OVER_IMAGE
 void SEASON3B::CNewUIButton::ChangeButtonImgState(bool imgregister, int imgindex, bool overflg /* = false */,
-    bool bLockImage /* = false */, bool bClickEffect /* = false  */)
+                                                  bool bLockImage /* = false */, bool bClickEffect /* = false  */)
 {
     m_bClickEffect = bClickEffect;
 
@@ -210,8 +209,9 @@ void SEASON3B::CNewUIButton::ChangeButtonImgState(bool imgregister, int imgindex
 }
 #else // KJH_MOD_RADIOBTN_MOUSE_OVER_IMAGE
 #ifdef KJH_ADD_INGAMESHOP_UI_SYSTEM
-void SEASON3B::CNewUIButton::ChangeButtonImgState(bool imgregister, int imgindex, bool overflg, bool isimgwidth, bool bClickEffect)
-#else // KJH_ADD_INGAMESHOP_UI_SYSTEM
+void SEASON3B::CNewUIButton::ChangeButtonImgState(bool imgregister, int imgindex, bool overflg, bool isimgwidth,
+                                                  bool bClickEffect)
+#else  // KJH_ADD_INGAMESHOP_UI_SYSTEM
 void SEASON3B::CNewUIButton::ChangeButtonImgState(bool imgregister, int imgindex, bool overflg, bool isimgwidth)
 #endif // KJH_ADD_INGAMESHOP_UI_SYSTEM
 {
@@ -399,17 +399,21 @@ bool SEASON3B::CNewUIButton::Render(bool RendOption)
     {
 #ifdef KJH_ADD_INGAMESHOP_UI_SYSTEM
         if (RendOption == true)
-            RenderImage(m_CurImgIndex, m_Pos.x, m_Pos.y, m_Size.x, m_Size.y, 0.f, m_CurImgState * m_Size.y, 36.f / 64.f, (29.f / 32.f) / 2.f);
+            RenderImage(m_CurImgIndex, m_Pos.x, m_Pos.y, m_Size.x, m_Size.y, 0.f, m_CurImgState * m_Size.y, 36.f / 64.f,
+                        (29.f / 32.f) / 2.f);
         else
-            RenderImage(m_CurImgIndex, m_Pos.x, m_Pos.y, m_Size.x, m_Size.y, 0.0f, m_CurImgState * m_Size.y, m_CurImgColor);
-#else // KJH_ADD_INGAMESHOP_UI_SYSTEM
+            RenderImage(m_CurImgIndex, m_Pos.x, m_Pos.y, m_Size.x, m_Size.y, 0.0f, m_CurImgState * m_Size.y,
+                        m_CurImgColor);
+#else  // KJH_ADD_INGAMESHOP_UI_SYSTEM
         if (m_IsImgWidth)
         {
-            RenderImage(m_CurImgIndex, m_Pos.x, m_Pos.y, m_Size.x, m_Size.y, m_CurImgState * m_Size.x, 0.0f, m_CurImgColor);
+            RenderImage(m_CurImgIndex, m_Pos.x, m_Pos.y, m_Size.x, m_Size.y, m_CurImgState * m_Size.x, 0.0f,
+                        m_CurImgColor);
         }
         else
         {
-            RenderImage(m_CurImgIndex, m_Pos.x, m_Pos.y, m_Size.x, m_Size.y, 0.0f, m_CurImgState * m_Size.y, m_CurImgColor);
+            RenderImage(m_CurImgIndex, m_Pos.x, m_Pos.y, m_Size.x, m_Size.y, 0.0f, m_CurImgState * m_Size.y,
+                        m_CurImgColor);
         }
 #endif // KJH_ADD_INGAMESHOP_UI_SYSTEM
     }
@@ -429,13 +433,15 @@ bool SEASON3B::CNewUIButton::Render(bool RendOption)
 #ifdef KJH_ADD_INGAMESHOP_UI_SYSTEM
         if ((m_bClickEffect == true) && (GetBTState() == BUTTON_STATE_DOWN))
         {
-            RenderText(m_Name.c_str(), x + m_iMoveTextPosX + 1, y + m_iMoveTextPosY + 1, m_Size.x, 0, m_hTextFont, m_NameColor, m_NameBackColor, RT3_SORT_LEFT);
+            RenderText(m_Name.c_str(), x + m_iMoveTextPosX + 1, y + m_iMoveTextPosY + 1, m_Size.x, 0, m_hTextFont,
+                       m_NameColor, m_NameBackColor, RT3_SORT_LEFT);
         }
         else
         {
-            RenderText(m_Name.c_str(), x + m_iMoveTextPosX, y + m_iMoveTextPosY, m_Size.x, 0, m_hTextFont, m_NameColor, m_NameBackColor, RT3_SORT_LEFT);
+            RenderText(m_Name.c_str(), x + m_iMoveTextPosX, y + m_iMoveTextPosY, m_Size.x, 0, m_hTextFont, m_NameColor,
+                       m_NameBackColor, RT3_SORT_LEFT);
         }
-#else // KJH_ADD_INGAMESHOP_UI_SYSTEM
+#else  // KJH_ADD_INGAMESHOP_UI_SYSTEM
         RenderText(m_Name.c_str(), x, y, m_Size.x, 0, m_hTextFont, m_NameColor, m_NameBackColor, RT3_SORT_LEFT);
 #endif // KJH_ADD_INGAMESHOP_UI_SYSTEM
     }
@@ -457,18 +463,23 @@ bool SEASON3B::CNewUIButton::Render(bool RendOption)
             int _iTempWidth = x + Fontsize.cx + 6;
             x = (_iTempWidth > 640) ? (x - (_iTempWidth - 640)) : x;
 
-            if (m_IsTopPos) y = m_Pos.y - (Fontsize.cy + 2);
+            if (m_IsTopPos)
+                y = m_Pos.y - (Fontsize.cy + 2);
 
-            RenderText(m_TooltipText.c_str(), x + m_iMoveTextTipPosX, y + m_iMoveTextTipPosY, Fontsize.cx + 6, 0, m_hToolTipFont, m_TooltipTextColor, RGBA(0, 0, 0, 180), RT3_SORT_CENTER);
-            //RenderText( m_TooltipText.c_str(), x, y, Fontsize.cx+6, 0, m_hToolTipFont, m_TooltipTextColor, RGBA(0, 0, 0, 180), RT3_SORT_CENTER );
+            RenderText(m_TooltipText.c_str(), x + m_iMoveTextTipPosX, y + m_iMoveTextTipPosY, Fontsize.cx + 6, 0,
+                       m_hToolTipFont, m_TooltipTextColor, RGBA(0, 0, 0, 180), RT3_SORT_CENTER);
+            // RenderText( m_TooltipText.c_str(), x, y, Fontsize.cx+6, 0, m_hToolTipFont, m_TooltipTextColor, RGBA(0, 0,
+            // 0, 180), RT3_SORT_CENTER );
         }
     }
 
     return true;
 }
 
-CNewUIRadioButton::CNewUIRadioButton() : m_NameColor(0xffB5B5B5), m_NameBackColor(0x00000000),
-m_CurImgIndex(0), m_CurImgState(0), m_ImgWidth(0), m_ImgHeight(0), m_CurImgColor(0xffffffff)
+// cppcheck-suppress uninitMemberVar
+CNewUIRadioButton::CNewUIRadioButton()
+    : m_NameColor(0xffB5B5B5), m_NameBackColor(0x00000000), m_CurImgIndex(0), m_CurImgState(0), m_ImgWidth(0),
+      m_ImgHeight(0), m_CurImgColor(0xffffffff)
 {
     Initialize();
 }
@@ -516,7 +527,7 @@ void CNewUIRadioButton::ChangeRadioButtonImgState(int imgindex, bool bMouseOnIma
         RegisterButtonState(BUTTON_STATE_LOCK, imgindex, btState++);
     }
 }
-#else // KJH_MOD_RADIOBTN_MOUSE_OVER_IMAGE
+#else  // KJH_MOD_RADIOBTN_MOUSE_OVER_IMAGE
 void CNewUIRadioButton::ChangeRadioButtonImgState(int imgindex, bool isDown, bool bClickEffect)
 {
     m_bClickEffect = bClickEffect;
@@ -529,7 +540,7 @@ void CNewUIRadioButton::ChangeRadioButtonImgState(int imgindex, bool isDown, boo
     }
 }
 #endif // KJH_MOD_RADIOBTN_MOUSE_OVER_IMAGE
-#else // KJH_ADD_INGAMESHOP_UI_SYSTEM
+#else  // KJH_ADD_INGAMESHOP_UI_SYSTEM
 void CNewUIRadioButton::ChangeRadioButtonImgState(int imgindex, bool isDown)
 {
     RegisterButtonState(BUTTON_STATE_UP, imgindex, 0);
@@ -587,7 +598,7 @@ void CNewUIRadioButton::ChangeImgIndex(int imgindex, int curimgstate)
 
 #ifdef KJH_ADD_INGAMESHOP_UI_SYSTEM
     if (m_CurImgIndex != -1 && m_CurImgIndex != BITMAP_UNKNOWN)
-#else // KJH_ADD_INGAMESHOP_UI_SYSTEM
+#else  // KJH_ADD_INGAMESHOP_UI_SYSTEM
     if (m_CurImgIndex != -1)
 #endif // KJH_ADD_INGAMESHOP_UI_SYSTEM
     {
@@ -722,16 +733,19 @@ bool CNewUIRadioButton::Render()
 #ifdef KJH_ADD_INGAMESHOP_UI_SYSTEM
         if (m_CurImgIndex != BITMAP_UNKNOWN)
         {
-            RenderImage(m_CurImgIndex, m_Pos.x, m_Pos.y, m_Size.x, m_Size.y, 0.0f, m_CurImgState * m_Size.y, m_CurImgColor);
+            RenderImage(m_CurImgIndex, m_Pos.x, m_Pos.y, m_Size.x, m_Size.y, 0.0f, m_CurImgState * m_Size.y,
+                        m_CurImgColor);
         }
-#else // KJH_ADD_INGAMESHOP_UI_SYSTEM
+#else  // KJH_ADD_INGAMESHOP_UI_SYSTEM
         if (m_ImgWidth < m_ImgHeight)
         {
-            RenderImage(m_CurImgIndex, m_Pos.x, m_Pos.y, m_Size.x, m_Size.y, m_CurImgState * m_Size.x, 0.0f, m_CurImgColor);
+            RenderImage(m_CurImgIndex, m_Pos.x, m_Pos.y, m_Size.x, m_Size.y, m_CurImgState * m_Size.x, 0.0f,
+                        m_CurImgColor);
         }
         else
         {
-            RenderImage(m_CurImgIndex, m_Pos.x, m_Pos.y, m_Size.x, m_Size.y, 0.0f, m_CurImgState * m_Size.y, m_CurImgColor);
+            RenderImage(m_CurImgIndex, m_Pos.x, m_Pos.y, m_Size.x, m_Size.y, 0.0f, m_CurImgState * m_Size.y,
+                        m_CurImgColor);
         }
 #endif // KJH_ADD_INGAMESHOP_UI_SYSTEM
     }
@@ -742,7 +756,7 @@ bool CNewUIRadioButton::Render()
 
 #ifdef KJH_ADD_INGAMESHOP_UI_SYSTEM
         g_pRenderText->SetFont(m_hTextFont);
-#else // KJH_ADD_INGAMESHOP_UI_SYSTEM
+#else  // KJH_ADD_INGAMESHOP_UI_SYSTEM
         g_pRenderText->SetFont(g_hFont);
 #endif // KJH_ADD_INGAMESHOP_UI_SYSTEM
 
@@ -757,13 +771,14 @@ bool CNewUIRadioButton::Render()
 #ifdef KJH_ADD_INGAMESHOP_UI_SYSTEM
         if ((m_bClickEffect == true) && GetBTState() == BUTTON_STATE_DOWN)
         {
-            RenderText(m_Name.c_str(), x + 1, y + 1, m_Size.x, 0, m_hTextFont, m_NameColor, m_NameBackColor, RT3_SORT_LEFT);
+            RenderText(m_Name.c_str(), x + 1, y + 1, m_Size.x, 0, m_hTextFont, m_NameColor, m_NameBackColor,
+                       RT3_SORT_LEFT);
         }
         else
         {
             RenderText(m_Name.c_str(), x, y, m_Size.x, 0, m_hTextFont, m_NameColor, m_NameBackColor, RT3_SORT_LEFT);
         }
-#else // KJH_ADD_INGAMESHOP_UI_SYSTEM
+#else  // KJH_ADD_INGAMESHOP_UI_SYSTEM
         RenderText(m_Name.c_str(), x, y, m_Size.x, 0, g_hFont, m_NameColor, m_NameBackColor, RT3_SORT_LEFT);
 #endif // KJH_ADD_INGAMESHOP_UI_SYSTEM
     }
@@ -800,7 +815,8 @@ void CNewUIRadioGroupButton::Destroy()
 #ifdef KJH_ADD_INGAMESHOP_UI_SYSTEM
 #ifdef KJH_MOD_RADIOBTN_MOUSE_OVER_IMAGE
 void CNewUIRadioGroupButton::CreateRadioGroup(int radiocount, int imgindex, bool bFirstIndexBtnDown /* = true */,
-    bool bMouseOnImage /* = false */, bool bLockImage, bool bClickEffect /* = false  */)
+                                              bool bMouseOnImage /* = false */, bool bLockImage,
+                                              bool bClickEffect /* = false  */)
 {
     for (int i = 0; i < radiocount; ++i)
     {
@@ -821,7 +837,7 @@ void CNewUIRadioGroupButton::CreateRadioGroup(int radiocount, int imgindex, bool
     ChangeFrame(iCurIndex);
     SetCurButtonIndex(iCurIndex);
 }
-#else // KJH_MOD_RADIOBTN_MOUSE_OVER_IMAGE
+#else  // KJH_MOD_RADIOBTN_MOUSE_OVER_IMAGE
 void CNewUIRadioGroupButton::CreateRadioGroup(int radiocount, int imgindex, bool bClickEffect)
 {
     for (int i = 0; i < radiocount; ++i)
@@ -836,7 +852,7 @@ void CNewUIRadioGroupButton::CreateRadioGroup(int radiocount, int imgindex, bool
     SetCurButtonIndex(0);
 }
 #endif // KJH_MOD_RADIOBTN_MOUSE_OVER_IMAGE
-#else // KJH_ADD_INGAMESHOP_UI_SYSTEM
+#else  // KJH_ADD_INGAMESHOP_UI_SYSTEM
 void CNewUIRadioGroupButton::CreateRadioGroup(int radiocount, int imgindex)
 {
     for (int i = 0; i < radiocount; ++i)
@@ -852,13 +868,13 @@ void CNewUIRadioGroupButton::CreateRadioGroup(int radiocount, int imgindex)
 #endif // KJH_ADD_INGAMESHOP_UI_SYSTEM
 
 #ifdef KJH_ADD_INGAMESHOP_UI_SYSTEM
-void CNewUIRadioGroupButton::ChangeRadioButtonInfo(bool iswidth, int x, int y, int sx, int sy, int iDistance/* = 1*/)
+void CNewUIRadioGroupButton::ChangeRadioButtonInfo(bool iswidth, int x, int y, int sx, int sy, int iDistance /* = 1*/)
 {
     int i = 0;
 
     m_iButtonDistance = iDistance;
 
-    for (auto iter = m_RadioList.begin(); iter != m_RadioList.end(); )
+    for (auto iter = m_RadioList.begin(); iter != m_RadioList.end();)
     {
         auto curiter = iter;
         ++iter;
@@ -866,8 +882,10 @@ void CNewUIRadioGroupButton::ChangeRadioButtonInfo(bool iswidth, int x, int y, i
 
         if (button)
         {
-            if (iswidth) button->SetPos(x + ((sx + m_iButtonDistance) * i), y);
-            else button->SetPos(x, y + ((sy + m_iButtonDistance) * i));
+            if (iswidth)
+                button->SetPos(x + ((sx + m_iButtonDistance) * i), y);
+            else
+                button->SetPos(x, y + ((sy + m_iButtonDistance) * i));
             button->SetSize(sx, sy);
         }
 
@@ -878,7 +896,7 @@ void CNewUIRadioGroupButton::ChangeRadioButtonInfo(bool iswidth, int x, int y, i
 void CNewUIRadioGroupButton::ChangeButtonState(BUTTON_STATE eventstate, int iButtonState)
 {
     int i = 0;
-    for (auto iter = m_RadioList.begin(); iter != m_RadioList.end(); )
+    for (auto iter = m_RadioList.begin(); iter != m_RadioList.end();)
     {
         auto curiter = iter;
         ++iter;
@@ -893,7 +911,7 @@ void CNewUIRadioGroupButton::ChangeButtonState(BUTTON_STATE eventstate, int iBut
 void CNewUIRadioGroupButton::ChangeButtonState(int iBtnIndex, int iImgIndex, BUTTON_STATE eventstate, int iButtonState)
 {
     int i = 0;
-    for (auto iter = m_RadioList.begin(); iter != m_RadioList.end(); )
+    for (auto iter = m_RadioList.begin(); iter != m_RadioList.end();)
     {
         auto curiter = iter;
         ++iter;
@@ -909,12 +927,12 @@ void CNewUIRadioGroupButton::ChangeButtonState(int iBtnIndex, int iImgIndex, BUT
     }
 }
 
-#else // KJH_ADD_INGAMESHOP_UI_SYSTEM
+#else  // KJH_ADD_INGAMESHOP_UI_SYSTEM
 void CNewUIRadioGroupButton::ChangeRadioButtonInfo(bool iswidth, int x, int y, int sx, int sy)
 {
     int i = 0;
 
-    for (RadioButtonList::iterator iter = m_RadioList.begin(); iter != m_RadioList.end(); )
+    for (RadioButtonList::iterator iter = m_RadioList.begin(); iter != m_RadioList.end();)
     {
         RadioButtonList::iterator curiter = iter;
         ++iter;
@@ -922,8 +940,10 @@ void CNewUIRadioGroupButton::ChangeRadioButtonInfo(bool iswidth, int x, int y, i
 
         if (button)
         {
-            if (iswidth) button->SetPos(x + ((sx + 1) * i), y);
-            else button->SetPos(x, y + ((sy + 1) * i));
+            if (iswidth)
+                button->SetPos(x + ((sx + 1) * i), y);
+            else
+                button->SetPos(x, y + ((sy + 1) * i));
             button->SetSize(sx, sy);
         }
 
@@ -936,7 +956,7 @@ void CNewUIRadioGroupButton::ChangeRadioText(std::list<std::wstring>& textlist)
 {
     auto textiter = textlist.begin();
 
-    for (auto iter = m_RadioList.begin(); iter != m_RadioList.end(); )
+    for (auto iter = m_RadioList.begin(); iter != m_RadioList.end();)
     {
         auto curiter = iter;
         ++iter;
@@ -944,18 +964,19 @@ void CNewUIRadioGroupButton::ChangeRadioText(std::list<std::wstring>& textlist)
 
         auto curtextiter = textiter;
         ++textiter;
-       std::wstring text = (*curtextiter);
+        std::wstring text = (*curtextiter);
 
         button->ChangeText(text);
 
-        if (textiter == textlist.end()) break;
+        if (textiter == textlist.end())
+            break;
     }
 }
 
 void CNewUIRadioGroupButton::ChangeFrame(int buttonIndex)
 {
     int i = 0;
-    for (auto iter = m_RadioList.begin(); iter != m_RadioList.end(); )
+    for (auto iter = m_RadioList.begin(); iter != m_RadioList.end();)
     {
         auto curiter = iter;
         ++iter;
@@ -974,11 +995,11 @@ void CNewUIRadioGroupButton::ChangeFrame(int buttonIndex)
     }
 }
 
-// Ãß°¡ : Pruarin(07.09.03)
+// ï¿½ß°ï¿½ : Pruarin(07.09.03)
 void CNewUIRadioGroupButton::LockButtonindex(int buttonIndex)
 {
     int i = 0;
-    for (auto iter = m_RadioList.begin(); iter != m_RadioList.end(); )
+    for (auto iter = m_RadioList.begin(); iter != m_RadioList.end();)
     {
         auto curiter = iter;
         ++iter;
@@ -998,7 +1019,7 @@ void CNewUIRadioGroupButton::LockButtonindex(int buttonIndex)
 void CNewUIRadioGroupButton::UnLockButtonIndex(int buttonIndex)
 {
     int i = 0;
-    for (RadioButtonList::iterator iter = m_RadioList.begin(); iter != m_RadioList.end(); )
+    for (RadioButtonList::iterator iter = m_RadioList.begin(); iter != m_RadioList.end();)
     {
         RadioButtonList::iterator curiter = iter;
         ++iter;
@@ -1022,7 +1043,7 @@ void CNewUIRadioGroupButton::RegisterRadioButton(CNewUIRadioButton* button)
 
 void CNewUIRadioGroupButton::UnRegisterRadioButton()
 {
-    for (auto iter = m_RadioList.rbegin(); iter != m_RadioList.rend(); )
+    for (auto iter = m_RadioList.rbegin(); iter != m_RadioList.rend();)
     {
         auto curiter = iter;
         ++iter;
@@ -1038,7 +1059,7 @@ int CNewUIRadioGroupButton::UpdateMouseEvent()
 {
     int i = 0;
 
-    for (auto iter = m_RadioList.begin(); iter != m_RadioList.end(); )
+    for (auto iter = m_RadioList.begin(); iter != m_RadioList.end();)
     {
         auto curiter = iter;
         ++iter;
@@ -1059,7 +1080,7 @@ int CNewUIRadioGroupButton::UpdateMouseEvent()
 #ifdef KJH_ADD_INGAMESHOP_UI_SYSTEM
 void CNewUIRadioGroupButton::SetFont(HFONT hFont)
 {
-    for (auto iter = m_RadioList.begin(); iter != m_RadioList.end(); )
+    for (auto iter = m_RadioList.begin(); iter != m_RadioList.end();)
     {
         auto curiter = iter;
         ++iter;
@@ -1072,7 +1093,7 @@ void CNewUIRadioGroupButton::SetFont(HFONT hFont)
 void CNewUIRadioGroupButton::SetFont(HFONT hFont, int iButtonIndex)
 {
     int i = 0;
-    for (auto iter = m_RadioList.begin(); iter != m_RadioList.end(); )
+    for (auto iter = m_RadioList.begin(); iter != m_RadioList.end();)
     {
         auto curiter = iter;
         ++iter;
@@ -1091,7 +1112,7 @@ void CNewUIRadioGroupButton::SetFont(HFONT hFont, int iButtonIndex)
 POINT CNewUIRadioGroupButton::GetPos(int iButtonIndex)
 {
     int i = 0;
-    for (auto iter = m_RadioList.begin(); iter != m_RadioList.end(); )
+    for (auto iter = m_RadioList.begin(); iter != m_RadioList.end();)
     {
         auto curiter = iter;
         ++iter;
@@ -1115,7 +1136,7 @@ POINT CNewUIRadioGroupButton::GetPos(int iButtonIndex)
 
 bool CNewUIRadioGroupButton::Render()
 {
-    for (auto iter = m_RadioList.begin(); iter != m_RadioList.end(); )
+    for (auto iter = m_RadioList.begin(); iter != m_RadioList.end();)
     {
         auto curiter = iter;
         ++iter;
@@ -1130,8 +1151,10 @@ bool CNewUIRadioGroupButton::Render()
 SEASON3B::CNewUICheckBox::CNewUICheckBox()
 {
     s_ImgIndex = -1;
-    m_Pos.x = 0; m_Pos.y = 0;
-    m_Size.x = 15; m_Size.y = 15;
+    m_Pos.x = 0;
+    m_Pos.y = 0;
+    m_Size.x = 15;
+    m_Size.y = 15;
     m_Name.clear();
     m_hTextFont = g_hFont;
     m_NameColor = 0xFFFFFFFF;
@@ -1141,9 +1164,7 @@ SEASON3B::CNewUICheckBox::CNewUICheckBox()
     State = 0;
 }
 
-SEASON3B::CNewUICheckBox::~CNewUICheckBox()
-{
-}
+SEASON3B::CNewUICheckBox::~CNewUICheckBox() {}
 
 void SEASON3B::CNewUICheckBox::CheckBoxImgState(int imgindex)
 {
@@ -1162,8 +1183,10 @@ void SEASON3B::CNewUICheckBox::ChangeText(std::wstring btname)
 
 void SEASON3B::CNewUICheckBox::CheckBoxInfo(int x, int y, int sx, int sy)
 {
-    m_Pos.x = x; m_Pos.y = y;
-    m_Size.x = sx; m_Size.y = sy;
+    m_Pos.x = x;
+    m_Pos.y = y;
+    m_Size.x = sx;
+    m_Size.y = sy;
 }
 
 bool SEASON3B::CNewUICheckBox::GetBoxState()

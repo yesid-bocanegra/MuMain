@@ -14,7 +14,6 @@
 #include "../MuEditor/Core/MuEditorCore.h"
 #endif
 
-
 using namespace SEASON3B;
 
 SEASON3B::CNewUIChatInputBox::CNewUIChatInputBox()
@@ -81,12 +80,8 @@ void SEASON3B::CNewUIChatInputBox::UnloadImages()
     DeleteBitmap(IMAGE_INPUTBOX_BACK);
 }
 
-bool SEASON3B::CNewUIChatInputBox::Create(
-    CNewUIManager* pNewUIMng,
-    CNewUIChatLogWindow* pNewUIChatLogWnd,
-    CNewUISystemLogWindow* pNewUISystemLogWnd,
-    int x,
-    int y)
+bool SEASON3B::CNewUIChatInputBox::Create(CNewUIManager* pNewUIMng, CNewUIChatLogWindow* pNewUIChatLogWnd,
+                                          CNewUISystemLogWindow* pNewUISystemLogWnd, int x, int y)
 {
     Release();
 
@@ -161,8 +156,10 @@ void SEASON3B::CNewUIChatInputBox::SetButtonInfo()
 
 void SEASON3B::CNewUIChatInputBox::SetWndPos(int x, int y)
 {
-    m_WndPos.x = x; m_WndPos.y = y;
-    m_WndSize.cx = CHATBOX_WIDTH; m_WndSize.cy = CHATBOX_HEIGHT;
+    m_WndPos.x = x;
+    m_WndPos.y = y;
+    m_WndSize.cx = CHATBOX_WIDTH;
+    m_WndSize.cy = CHATBOX_HEIGHT;
 
     if (m_pChatInputBox && m_pWhsprIDInputBox)
     {
@@ -259,10 +256,8 @@ bool SEASON3B::CNewUIChatInputBox::UpdateMouseEvent()
     {
         auto const character = &CharactersClient[SelectedCharacter];
 
-        if (character->Object.Kind == KIND_PLAYER
-            && !gMapManager.InChaosCastle()
-            && !(::IsStrifeMap(gMapManager.WorldActive)
-                && Hero->m_byGensInfluence != character->m_byGensInfluence))
+        if (character->Object.Kind == KIND_PLAYER && !gMapManager.InChaosCastle() &&
+            !(::IsStrifeMap(gMapManager.WorldActive) && Hero->m_byGensInfluence != character->m_byGensInfluence))
         {
             SetWhsprID(character->ID);
         }
@@ -297,7 +292,6 @@ bool SEASON3B::CNewUIChatInputBox::UpdateMouseEvent()
             return false;
         }
     }
-
 
     if (CheckMouseIn(m_WndPos.x + SYSTEM_ON_START_X, m_WndPos.y, BUTTON_WIDTH, BUTTON_HEIGHT))
     {
@@ -465,12 +459,14 @@ bool SEASON3B::CNewUIChatInputBox::UpdateKeyEvent()
     {
         if (IsPress(VK_PRIOR))
         {
-            m_pNewUIChatLogWnd->Scrolling(m_pNewUIChatLogWnd->GetCurrentRenderEndLine() - m_pNewUIChatLogWnd->GetNumberOfShowingLines());
+            m_pNewUIChatLogWnd->Scrolling(m_pNewUIChatLogWnd->GetCurrentRenderEndLine() -
+                                          m_pNewUIChatLogWnd->GetNumberOfShowingLines());
             return false;
         }
         if (IsPress(VK_NEXT))
         {
-            m_pNewUIChatLogWnd->Scrolling(m_pNewUIChatLogWnd->GetCurrentRenderEndLine() + m_pNewUIChatLogWnd->GetNumberOfShowingLines());
+            m_pNewUIChatLogWnd->Scrolling(m_pNewUIChatLogWnd->GetCurrentRenderEndLine() +
+                                          m_pNewUIChatLogWnd->GetNumberOfShowingLines());
             return false;
         }
     }
@@ -489,7 +485,8 @@ bool SEASON3B::CNewUIChatInputBox::UpdateKeyEvent()
         }
 #endif // _EDITOR
 
-        if (gMapManager.InChaosCastle() == true && g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_CHAOSCASTLE_TIME) == false)
+        if (gMapManager.InChaosCastle() == true &&
+            g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_CHAOSCASTLE_TIME) == false)
         {
             g_pNewUISystem->Show(SEASON3B::INTERFACE_CHATINPUTBOX);
         }
@@ -503,24 +500,25 @@ bool SEASON3B::CNewUIChatInputBox::UpdateKeyEvent()
     }
 
     const uint64_t currentTickCount = GetTickCount64();
-    if (IsVisible() && HaveFocus() && SEASON3B::IsPress(VK_RETURN)
-        && m_lastChatTime < currentTickCount - ChatCooldownMs)
+    if (IsVisible() && HaveFocus() && SEASON3B::IsPress(VK_RETURN) &&
+        m_lastChatTime < currentTickCount - ChatCooldownMs)
     {
         m_lastChatTime = currentTickCount;
-        wchar_t	szChatText[MAX_CHAT_SIZE + 1] = { '\0' };
-        wchar_t	szWhisperID[MAX_USERNAME_SIZE + 1] = { '\0' };
+        wchar_t szChatText[MAX_CHAT_SIZE + 1] = {'\0'};
+        wchar_t szWhisperID[MAX_USERNAME_SIZE + 1] = {'\0'};
 
         m_pChatInputBox->GetText(szChatText, MAX_CHAT_SIZE);
         m_pWhsprIDInputBox->GetText(szWhisperID, MAX_USERNAME_SIZE + 1);
 
-        //for (int i = 0; i < MAX_CHAT_SIZE; i++)
-        //    szReceivedChat[i] = g_pMultiLanguage->ConvertFulltoHalfWidthChar(szReceivedChat[i]);
+        // for (int i = 0; i < MAX_CHAT_SIZE; i++)
+        //     szReceivedChat[i] = g_pMultiLanguage->ConvertFulltoHalfWidthChar(szReceivedChat[i]);
 
         std::wstring wstrText = L"";
 
         if (szChatText[0] != 0x002F)
         {
-            switch (m_iInputMsgType) {
+            switch (m_iInputMsgType)
+            {
             case INPUT_PARTY_MESSAGE:
                 wstrText = L"~";
                 break;
@@ -541,12 +539,13 @@ bool SEASON3B::CNewUIChatInputBox::UpdateKeyEvent()
             if (!CheckCommand(szChatText))
             {
                 {
-                    //if (CheckAbuseFilter(szChatText))
+                    // if (CheckAbuseFilter(szChatText))
                     //{
-                    //    wstrText = GlobalText[570];
-                    //}
+                    //     wstrText = GlobalText[570];
+                    // }
 
-                    if (m_pWhsprIDInputBox->GetState() == UISTATE_NORMAL && wcslen(szChatText) && wcslen(szWhisperID) > 0)
+                    if (m_pWhsprIDInputBox->GetState() == UISTATE_NORMAL && wcslen(szChatText) &&
+                        wcslen(szWhisperID) > 0)
                     {
                         SocketClient->ToGameServer()->SendWhisperMessage(szWhisperID, wstrText.c_str());
                         g_pChatListBox->AddText(Hero->ID, szChatText, SEASON3B::TYPE_WHISPER_MESSAGE);
@@ -562,11 +561,14 @@ bool SEASON3B::CNewUIChatInputBox::UpdateKeyEvent()
                             SaveOptions();
                         }
 
-                        SocketClient->ToGameServer()->SendWarpCommandRequest(g_pMoveCommandWindow->GetMoveCommandKey(), iMapIndex);
+                        SocketClient->ToGameServer()->SendWarpCommandRequest(g_pMoveCommandWindow->GetMoveCommandKey(),
+                                                                             iMapIndex);
                     }
                     else
                     {
-                        if (Hero->SafeZone || (Hero->Helper.Type != MODEL_HORN_OF_UNIRIA && Hero->Helper.Type != MODEL_HORN_OF_DINORANT && Hero->Helper.Type != MODEL_DARK_HORSE_ITEM && Hero->Helper.Type != MODEL_HORN_OF_FENRIR))
+                        if (Hero->SafeZone ||
+                            (Hero->Helper.Type != MODEL_HORN_OF_UNIRIA && Hero->Helper.Type != MODEL_HORN_OF_DINORANT &&
+                             Hero->Helper.Type != MODEL_DARK_HORSE_ITEM && Hero->Helper.Type != MODEL_HORN_OF_FENRIR))
                         {
                             CheckChatText(szChatText);
                         }
@@ -609,8 +611,7 @@ bool SEASON3B::CNewUIChatInputBox::UpdateKeyEvent()
         }
     }
 
-    if (IsVisible() && m_pWhsprIDInputBox->HaveFocus()
-        && m_pWhsprIDInputBox->GetState() == UISTATE_NORMAL)
+    if (IsVisible() && m_pWhsprIDInputBox->HaveFocus() && m_pWhsprIDInputBox->GetState() == UISTATE_NORMAL)
     {
         if (SEASON3B::IsPress(VK_UP) && false == m_vecWhsprIDHistory.empty())
         {
@@ -701,7 +702,8 @@ bool SEASON3B::CNewUIChatInputBox::Render()
         wchar_t szWhisperID[32];
         m_pWhsprIDInputBox->GetText(szWhisperID, 32);
         g_pRenderText->SetTextColor(255, 255, 255, 100);
-        g_pRenderText->RenderText(m_pWhsprIDInputBox->GetPosition_x(), m_pWhsprIDInputBox->GetPosition_y(), szWhisperID);
+        g_pRenderText->RenderText(m_pWhsprIDInputBox->GetPosition_x(), m_pWhsprIDInputBox->GetPosition_y(),
+                                  szWhisperID);
 
         EnableAlphaTest();
         glColor4f(0.5f, 0.2f, 0.2f, 0.2f);
@@ -726,7 +728,8 @@ void SEASON3B::CNewUIChatInputBox::RenderButtons()
     auto windowX = static_cast<float>(m_WndPos.x);
     auto windowY = static_cast<float>(m_WndPos.y);
 
-    RenderImage(IMAGE_INPUTBOX_NORMAL_ON + m_iInputMsgType, windowX + BUTTON_WIDTH * m_iInputMsgType, windowY, BUTTON_WIDTH, BUTTON_HEIGHT);
+    RenderImage(IMAGE_INPUTBOX_NORMAL_ON + m_iInputMsgType, windowX + BUTTON_WIDTH * m_iInputMsgType, windowY,
+                BUTTON_WIDTH, BUTTON_HEIGHT);
 
     if (m_bBlockWhisper)
     {
@@ -761,9 +764,7 @@ void SEASON3B::CNewUIChatInputBox::RenderTooltip()
 
     wchar_t strTooltip[256];
 
-    const int iTextIndex[10] = {
-        1681, 1682, 1683, 3321,
-        1684, 1685, 750, 1686, 751, 752 };
+    const int iTextIndex[10] = {1681, 1682, 1683, 3321, 1684, 1685, 750, 1686, 751, 752};
 
     mu_swprintf(strTooltip, L"%ls", GlobalText[iTextIndex[m_iTooltipType]]);
 
@@ -775,10 +776,8 @@ void SEASON3B::CNewUIChatInputBox::RenderTooltip()
     fontsize.cx = fontsize.cx / multiplier;
     fontsize.cy = fontsize.cy / multiplier;
 
-    int x = m_WndPos.x
-        + (m_iTooltipType * BUTTON_WIDTH)
-        + (m_iTooltipType / 3 * GROUP_SEPARATING_WIDTH)
-        + 10 - (fontsize.cx / 2);
+    int x = m_WndPos.x + (m_iTooltipType * BUTTON_WIDTH) + (m_iTooltipType / 3 * GROUP_SEPARATING_WIDTH) + 10 -
+            (fontsize.cx / 2);
     if (x < 0)
     {
         x = 0;

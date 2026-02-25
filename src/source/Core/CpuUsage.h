@@ -2,7 +2,8 @@
 
 #include <memory>
 
-class CpuUsage {
+class CpuUsage
+{
 public:
     static CpuUsage* Instance();
 

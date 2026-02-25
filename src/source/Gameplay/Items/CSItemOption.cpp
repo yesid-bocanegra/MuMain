@@ -27,9 +27,9 @@
 #include <string>
 #include <vector>
 
-extern	wchar_t TextList[50][100];
-extern	int  TextListColor[50];
-extern	int  TextBold[50];
+extern wchar_t TextList[50][100];
+extern int TextListColor[50];
+extern int TextBold[50];
 
 namespace
 {
@@ -50,15 +50,19 @@ void ReportFileIssue(const wchar_t* filename, const wchar_t* issue)
     MessageBox(g_hWnd, text, nullptr, MB_OK);
     SendMessage(g_hWnd, WM_DESTROY, 0, 0);
 }
-}
+} // namespace
 
-static  CSItemOption csItemOption; // do not delete, required for singleton initialization.
+static CSItemOption csItemOption; // do not delete, required for singleton initialization.
 
 struct ITEM_SET_OPTION_FILE
 {
-    char	strSetName[MAX_ITEM_SET_NAME];
-    std::array<std::array<std::uint8_t, MAX_ITEM_SET_STANDARD_OPTION_PER_ITEM_COUNT>, MAX_ITEM_SET_STANDARD_OPTION_COUNT> byStandardOption{};
-    std::array<std::array<std::uint8_t, MAX_ITEM_SET_STANDARD_OPTION_PER_ITEM_COUNT>, MAX_ITEM_SET_STANDARD_OPTION_COUNT> byStandardOptionValue{};
+    char strSetName[MAX_ITEM_SET_NAME];
+    std::array<std::array<std::uint8_t, MAX_ITEM_SET_STANDARD_OPTION_PER_ITEM_COUNT>,
+               MAX_ITEM_SET_STANDARD_OPTION_COUNT>
+        byStandardOption{};
+    std::array<std::array<std::uint8_t, MAX_ITEM_SET_STANDARD_OPTION_PER_ITEM_COUNT>,
+               MAX_ITEM_SET_STANDARD_OPTION_COUNT>
+        byStandardOptionValue{};
     std::array<std::uint8_t, MAX_ITEM_SET_EXT_OPTION_COUNT> byExtOption{};
     std::array<std::uint8_t, MAX_ITEM_SET_EXT_OPTION_COUNT> byExtOptionValue{};
     std::uint8_t byOptionCount;
@@ -67,17 +71,18 @@ struct ITEM_SET_OPTION_FILE
     std::array<std::uint8_t, MAX_CLASS> byRequireClass{};
 };
 
-
 bool CSItemOption::OpenItemSetScript()
 {
     std::wstring strFileName = L"";
     const std::wstring strTest = L"";
 
     strFileName = L"Data\\Local\\ItemSetType" + strTest + L".bmd";
-    if (!OpenItemSetType(strFileName.c_str()))		return false;
+    if (!OpenItemSetType(strFileName.c_str()))
+        return false;
 
     strFileName = L"Data\\Local\\" + g_strSelectedML + L"\\ItemSetOption" + strTest + L"_" + g_strSelectedML + L".bmd";
-    if (!OpenItemSetOption(strFileName.c_str()))	 	return false;
+    if (!OpenItemSetOption(strFileName.c_str()))
+        return false;
     return true;
 }
 
@@ -207,28 +212,64 @@ bool CSItemOption::IsDisableSkill(ActionSkillType Type, int Energy, int Charisma
 
     switch (Type)
     {
-    case 17:SkillEnergy = 0; break;
-    case 30:SkillEnergy = 30; break;
-    case 31:SkillEnergy = 60; break;
-    case 32:SkillEnergy = 90; break;
-    case 33:SkillEnergy = 130; break;
-    case 34:SkillEnergy = 170; break;
-    case 35:SkillEnergy = 210; break;
-    case 36:SkillEnergy = 300; break;
-    case 37:SkillEnergy = 500; break;
-    case 60:SkillEnergy = 15; break;
+    case 17:
+        SkillEnergy = 0;
+        break;
+    case 30:
+        SkillEnergy = 30;
+        break;
+    case 31:
+        SkillEnergy = 60;
+        break;
+    case 32:
+        SkillEnergy = 90;
+        break;
+    case 33:
+        SkillEnergy = 130;
+        break;
+    case 34:
+        SkillEnergy = 170;
+        break;
+    case 35:
+        SkillEnergy = 210;
+        break;
+    case 36:
+        SkillEnergy = 300;
+        break;
+    case 37:
+        SkillEnergy = 500;
+        break;
+    case 60:
+        SkillEnergy = 15;
+        break;
     case AT_SKILL_EARTHSHAKE_STR:
     case AT_SKILL_EARTHSHAKE_MASTERY:
-    case AT_SKILL_EARTHSHAKE:    SkillEnergy = 0; break;
-    case AT_PET_COMMAND_DEFAULT: SkillEnergy = 0; break;
-    case AT_PET_COMMAND_RANDOM:  SkillEnergy = 0; break;
-    case AT_PET_COMMAND_OWNER:   SkillEnergy = 0; break;
-    case AT_PET_COMMAND_TARGET:  SkillEnergy = 0; break;
-    case AT_SKILL_PLASMA_STORM_FENRIR: SkillEnergy = 0; break;
+    case AT_SKILL_EARTHSHAKE:
+        SkillEnergy = 0;
+        break;
+    case AT_PET_COMMAND_DEFAULT:
+        SkillEnergy = 0;
+        break;
+    case AT_PET_COMMAND_RANDOM:
+        SkillEnergy = 0;
+        break;
+    case AT_PET_COMMAND_OWNER:
+        SkillEnergy = 0;
+        break;
+    case AT_PET_COMMAND_TARGET:
+        SkillEnergy = 0;
+        break;
+    case AT_SKILL_PLASMA_STORM_FENRIR:
+        SkillEnergy = 0;
+        break;
     case AT_SKILL_INFINITY_ARROW:
-    case AT_SKILL_INFINITY_ARROW_STR: SkillEnergy = 0; break;
-    case AT_SKILL_STRIKE_OF_DESTRUCTION: 
-    case AT_SKILL_STRIKE_OF_DESTRUCTION_STR: SkillEnergy = 0; break;
+    case AT_SKILL_INFINITY_ARROW_STR:
+        SkillEnergy = 0;
+        break;
+    case AT_SKILL_STRIKE_OF_DESTRUCTION:
+    case AT_SKILL_STRIKE_OF_DESTRUCTION_STR:
+        SkillEnergy = 0;
+        break;
     case AT_SKILL_RECOVER:
     case AT_SKILL_GAOTIC:
     case AT_SKILL_MULTI_SHOT:
@@ -246,15 +287,15 @@ bool CSItemOption::IsDisableSkill(ActionSkillType Type, int Energy, int Charisma
     {
         SkillEnergy = 0;
     }
-    else
-        if ((Type >= 18 && Type <= 23) || (Type >= 41 && Type <= 43) || (Type >= 47 && Type <= 49) || Type == 24 || Type == 51 || Type == 52 || Type == 55 || Type == 56)
-        {
-            SkillEnergy = 0;
-        }
-        else if (Type == 44 || Type == 45 || Type == 46 || Type == 57 || Type == 73 || Type == 74)
-        {
-            SkillEnergy = 0;
-        }
+    else if ((Type >= 18 && Type <= 23) || (Type >= 41 && Type <= 43) || (Type >= 47 && Type <= 49) || Type == 24 ||
+             Type == 51 || Type == 52 || Type == 55 || Type == 56)
+    {
+        SkillEnergy = 0;
+    }
+    else if (Type == 44 || Type == 45 || Type == 46 || Type == 57 || Type == 73 || Type == 74)
+    {
+        SkillEnergy = 0;
+    }
 
     if (Charisma > 0)
     {
@@ -287,11 +328,13 @@ std::uint8_t CSItemOption::IsChangeSetItem(const int Type, const int SubType)
 
 std::uint16_t CSItemOption::GetMixItemLevel(const int Type) const
 {
-    if (Type < 0) return 0;
+    if (Type < 0)
+        return 0;
 
     const ITEM_SET_TYPE& itemSType = m_ItemSetType[Type];
 
-    return static_cast<std::uint16_t>(itemSType.byMixItemLevel[0] | (static_cast<std::uint16_t>(itemSType.byMixItemLevel[1]) << 8));
+    return static_cast<std::uint16_t>(itemSType.byMixItemLevel[0] |
+                                      (static_cast<std::uint16_t>(itemSType.byMixItemLevel[1]) << 8));
 }
 
 bool CSItemOption::GetSetItemName(wchar_t* strName, const int iType, const int setType) const
@@ -305,7 +348,6 @@ bool CSItemOption::GetSetItemName(wchar_t* strName, const int iType, const int s
         {
             const ITEM_SET_OPTION& itemOption = m_ItemSetOption[itemSType.byOption[setItemType - 1]];
 
-            
             memcpy(strName, itemOption.strSetName, sizeof itemOption.strSetName);
 
             const int length = wcslen(strName);
@@ -318,7 +360,6 @@ bool CSItemOption::GetSetItemName(wchar_t* strName, const int iType, const int s
     return false;
 }
 
-
 void CSItemOption::checkItemType(SET_SEARCH_RESULT* optionList, const int iType, const int ancientDiscriminator) const
 {
     if (ancientDiscriminator <= 0)
@@ -330,7 +371,7 @@ void CSItemOption::checkItemType(SET_SEARCH_RESULT* optionList, const int iType,
 
     const ITEM_SET_TYPE& itemSetType = m_ItemSetType[iType];
     const auto itemSetNumber = itemSetType.byOption[setTypeIndex];
-    
+
     if (itemSetNumber != 255 && itemSetNumber != 0)
     {
         // add set item to list
@@ -358,7 +399,6 @@ void CSItemOption::checkItemType(SET_SEARCH_RESULT* optionList, const int iType,
     }
 }
 
-
 bool CSItemOption::isClassRequirementFulfilled(const ITEM_SET_OPTION& setOptions, const int firstClass, int secondClass)
 {
     bool RequireClass = false;
@@ -378,12 +418,13 @@ bool CSItemOption::isClassRequirementFulfilled(const ITEM_SET_OPTION& setOptions
     return RequireClass;
 }
 
-void CSItemOption::TryAddSetOption(std::uint8_t option, int value, int optionIndex, SET_SEARCH_RESULT_OPT& set, const ITEM_SET_OPTION& setOptions, bool isThisSetComplete, bool isFullOption, bool isExtOption, bool fulfillsClassRequirement, int firstClass, int secondClass)
+void CSItemOption::TryAddSetOption(std::uint8_t option, int value, int optionIndex, SET_SEARCH_RESULT_OPT& set,
+                                   const ITEM_SET_OPTION& setOptions, bool isThisSetComplete, bool isFullOption,
+                                   bool isExtOption, bool fulfillsClassRequirement, int firstClass, int secondClass)
 {
-    if (option == EMPTY_OPTION
-        || value == 0
-        || (option >= MASTERY_OPTION 
-            && (setOptions.byRequireClass[firstClass] && secondClass >= setOptions.byRequireClass[firstClass] - 1)))
+    if (option == EMPTY_OPTION || value == 0 ||
+        (option >= MASTERY_OPTION &&
+         (setOptions.byRequireClass[firstClass] && secondClass >= setOptions.byRequireClass[firstClass] - 1)))
     {
         return;
     }
@@ -440,23 +481,27 @@ void CSItemOption::calcSetOptionList(const SET_SEARCH_RESULT* optionList)
         }
 
         const auto requireClass = isClassRequirementFulfilled(setOptions, firstClass, secondClass);
-        const auto standardOptionCount = std::min<int>(set.CompleteSetItemCount - 1, MAX_ITEM_SET_STANDARD_OPTION_COUNT);
+        const auto standardOptionCount =
+            std::min<int>(set.CompleteSetItemCount - 1, MAX_ITEM_SET_STANDARD_OPTION_COUNT);
         for (int o = 0; o < standardOptionCount; ++o)
         {
             for (int n = 0; n < MAX_ITEM_SET_STANDARD_OPTION_PER_ITEM_COUNT; ++n)
             {
-                TryAddSetOption(setOptions.byStandardOption[o][n], setOptions.byStandardOptionValue[o][n], o, set, setOptions, isThisSetComplete, false, false, requireClass, firstClass, secondClass);
+                TryAddSetOption(setOptions.byStandardOption[o][n], setOptions.byStandardOptionValue[o][n], o, set,
+                                setOptions, isThisSetComplete, false, false, requireClass, firstClass, secondClass);
             }
         }
 
         for (int o = 0; o < MAX_ITEM_SET_EXT_OPTION_COUNT; ++o)
         {
-            TryAddSetOption(setOptions.byExtOption[o], setOptions.byExtOptionValue[o], 0, set, setOptions, isThisSetComplete, false, true, requireClass, firstClass, secondClass);
+            TryAddSetOption(setOptions.byExtOption[o], setOptions.byExtOptionValue[o], 0, set, setOptions,
+                            isThisSetComplete, false, true, requireClass, firstClass, secondClass);
         }
 
         for (int o = 0; o < MAX_ITEM_SET_FULL_OPTION_COUNT; ++o)
         {
-            TryAddSetOption(setOptions.byFullOption[o], setOptions.byFullOptionValue[o], 255, set, setOptions, isThisSetComplete, true, false, requireClass, firstClass, secondClass);
+            TryAddSetOption(setOptions.byFullOption[o], setOptions.byFullOptionValue[o], 255, set, setOptions,
+                            isThisSetComplete, true, false, requireClass, firstClass, secondClass);
         }
     }
 }
@@ -526,7 +571,8 @@ bool CSItemOption::getExplainText(wchar_t* text, std::uint8_t option, int value)
     case AT_SET_OPTION_WATER_MASTERY:
     case AT_SET_OPTION_WIND_MASTERY:
     case AT_SET_OPTION_EARTH_MASTERY:
-        mu_swprintf(text, GlobalText[971 + (option + AT_SET_OPTION_IMPROVE_STRENGTH - AT_SET_OPTION_IMPROVE_ATTACK_2)], value);
+        mu_swprintf(text, GlobalText[971 + (option + AT_SET_OPTION_IMPROVE_STRENGTH - AT_SET_OPTION_IMPROVE_ATTACK_2)],
+                    value);
         return true;
     default:
         return false;
@@ -543,9 +589,7 @@ int CSItemOption::AggregateOptionValue(int optionNumber) const
         {
             const auto& option = set.SetOption[j];
 
-            if (option.IsActive
-                && option.OptionNumber == optionNumber
-                && option.Value != 0)
+            if (option.IsActive && option.OptionNumber == optionNumber && option.Value != 0)
             {
                 result += option.Value;
             }
@@ -587,9 +631,7 @@ void CSItemOption::PlusSpecialLevel(std::uint16_t* Value, std::uint16_t SrcValue
         for (int j = 0; j < set.SetOptionCount; j++)
         {
             const auto& option = set.SetOption[j];
-            if (option.IsActive
-                && option.OptionNumber == Special
-                && option.Value != 0)
+            if (option.IsActive && option.OptionNumber == Special && option.Value != 0)
             {
                 optionValue += option.Value;
                 count++;
@@ -614,10 +656,8 @@ void CSItemOption::PlusMastery(int* Value, std::uint8_t MasteryType) const
         for (int j = 0; j < set.SetOptionCount; j++)
         {
             const auto& option = set.SetOption[j];
-            if (option.IsActive
-                && option.OptionNumber >= MASTERY_OPTION
-                && (option.OptionNumber - MASTERY_OPTION - 5) == MasteryType
-                && option.Value != 0)
+            if (option.IsActive && option.OptionNumber >= MASTERY_OPTION &&
+                (option.OptionNumber - MASTERY_OPTION - 5) == MasteryType && option.Value != 0)
             {
                 optionValue += option.Value;
             }
@@ -733,7 +773,9 @@ int CSItemOption::RenderDefaultOptionText(const ITEM* ip, int TextNum)
         TextListColor[TNum] = TEXT_COLOR_BLUE;
         TNum++;
 
-        if ((ip->Type >= ITEM_RING_OF_ICE && ip->Type <= ITEM_RING_OF_POISON) || (ip->Type >= ITEM_PENDANT_OF_LIGHTING && ip->Type <= ITEM_PENDANT_OF_FIRE) || (ip->Type >= ITEM_RING_OF_FIRE && ip->Type <= ITEM_PENDANT_OF_WATER))
+        if ((ip->Type >= ITEM_RING_OF_ICE && ip->Type <= ITEM_RING_OF_POISON) ||
+            (ip->Type >= ITEM_PENDANT_OF_LIGHTING && ip->Type <= ITEM_PENDANT_OF_FIRE) ||
+            (ip->Type >= ITEM_RING_OF_FIRE && ip->Type <= ITEM_PENDANT_OF_WATER))
         {
             mu_swprintf(TextList[TNum], GlobalText[1165]); // "Increase Attribute Damage"
             TextListColor[TNum] = TEXT_COLOR_BLUE;
@@ -744,7 +786,8 @@ int CSItemOption::RenderDefaultOptionText(const ITEM* ip, int TextNum)
     return TNum;
 }
 
-void CSItemOption::getAllAddState(std::uint16_t* Strength, std::uint16_t* Dexterity, std::uint16_t* Energy, std::uint16_t* Vitality, std::uint16_t* Charisma) const
+void CSItemOption::getAllAddState(std::uint16_t* Strength, std::uint16_t* Dexterity, std::uint16_t* Energy,
+                                  std::uint16_t* Vitality, std::uint16_t* Charisma) const
 {
     for (int i = EQUIPMENT_WEAPON_RIGHT; i < MAX_EQUIPMENT; ++i)
     {
@@ -779,7 +822,8 @@ void CSItemOption::getAllAddState(std::uint16_t* Strength, std::uint16_t* Dexter
     AddStatsBySetOptions(Strength, Dexterity, Energy, Vitality, Charisma);
 }
 
-void    CSItemOption::AddStatsBySetOptions(std::uint16_t* Strength, std::uint16_t* Dexterity, std::uint16_t* Energy, std::uint16_t* Vitality, std::uint16_t* Charisma) const
+void CSItemOption::AddStatsBySetOptions(std::uint16_t* Strength, std::uint16_t* Dexterity, std::uint16_t* Energy,
+                                        std::uint16_t* Vitality, std::uint16_t* Charisma) const
 {
     for (int i = 0; i < m_SetSearchResultCount; i++)
     {
@@ -821,20 +865,25 @@ void    CSItemOption::AddStatsBySetOptions(std::uint16_t* Strength, std::uint16_
     }
 }
 
-void CSItemOption::getAllAddStateOnlyAddValue(std::uint16_t* AddStrength, std::uint16_t* AddDexterity, std::uint16_t* AddEnergy, std::uint16_t* AddVitality, std::uint16_t* AddCharisma) const
+void CSItemOption::getAllAddStateOnlyAddValue(std::uint16_t* AddStrength, std::uint16_t* AddDexterity,
+                                              std::uint16_t* AddEnergy, std::uint16_t* AddVitality,
+                                              std::uint16_t* AddCharisma) const
 {
     *AddStrength = *AddDexterity = *AddEnergy = *AddVitality = *AddCharisma = 0;
     getAllAddState(AddStrength, AddDexterity, AddEnergy, AddVitality, AddCharisma);
 }
 
-void CSItemOption::getAllAddOptionStatesbyCompare(std::uint16_t* Strength, std::uint16_t* Dexterity, std::uint16_t* Energy, std::uint16_t* Vitality, std::uint16_t* Charisma, std::uint16_t iCompareStrength, std::uint16_t iCompareDexterity, std::uint16_t iCompareEnergy, std::uint16_t iCompareVitality, std::uint16_t iCompareCharisma)
+void CSItemOption::getAllAddOptionStatesbyCompare(std::uint16_t* Strength, std::uint16_t* Dexterity,
+                                                  std::uint16_t* Energy, std::uint16_t* Vitality,
+                                                  std::uint16_t* Charisma, std::uint16_t iCompareStrength,
+                                                  std::uint16_t iCompareDexterity, std::uint16_t iCompareEnergy,
+                                                  std::uint16_t iCompareVitality, std::uint16_t iCompareCharisma)
 {
     for (int i = EQUIPMENT_WEAPON_RIGHT; i < MAX_EQUIPMENT; ++i)
     {
         ITEM* item = &CharacterMachine->Equipment[i];
 
-        if (item->RequireStrength > iCompareStrength ||
-            item->RequireDexterity > iCompareDexterity ||
+        if (item->RequireStrength > iCompareStrength || item->RequireDexterity > iCompareDexterity ||
             item->RequireEnergy > iCompareEnergy)
         {
             continue;
@@ -871,7 +920,7 @@ void CSItemOption::getAllAddOptionStatesbyCompare(std::uint16_t* Strength, std::
 
 void CSItemOption::CheckItemSetOptions()
 {
-    SET_SEARCH_RESULT byOptionList[MAX_EQUIPPED_SET_ITEMS] = { };
+    SET_SEARCH_RESULT byOptionList[MAX_EQUIPPED_SET_ITEMS] = {};
 
     const ITEM* itemRight = nullptr;
 
@@ -891,9 +940,8 @@ void CSItemOption::CheckItemSetOptions()
             continue;
         }
 
-        if ((i == EQUIPMENT_WEAPON_LEFT || i == EQUIPMENT_RING_LEFT)
-            && itemRight != nullptr && itemRight->Type == item->Type
-            && (itemRight->AncientDiscriminator == item->AncientDiscriminator))
+        if ((i == EQUIPMENT_WEAPON_LEFT || i == EQUIPMENT_RING_LEFT) && itemRight != nullptr &&
+            itemRight->Type == item->Type && (itemRight->AncientDiscriminator == item->AncientDiscriminator))
         {
             // same item of a set should only count once
             continue;
@@ -911,10 +959,13 @@ void CSItemOption::CheckItemSetOptions()
     }
 
     calcSetOptionList(byOptionList);
-    getAllAddStateOnlyAddValue(&CharacterAttribute->AddStrength, &CharacterAttribute->AddDexterity, &CharacterAttribute->AddEnergy, &CharacterAttribute->AddVitality, &CharacterAttribute->AddCharisma);
+    getAllAddStateOnlyAddValue(&CharacterAttribute->AddStrength, &CharacterAttribute->AddDexterity,
+                               &CharacterAttribute->AddEnergy, &CharacterAttribute->AddVitality,
+                               &CharacterAttribute->AddCharisma);
 
     const auto AllStrength = static_cast<std::uint16_t>(CharacterAttribute->Strength + CharacterAttribute->AddStrength);
-    const auto AllDexterity = static_cast<std::uint16_t>(CharacterAttribute->Dexterity + CharacterAttribute->AddDexterity);
+    const auto AllDexterity =
+        static_cast<std::uint16_t>(CharacterAttribute->Dexterity + CharacterAttribute->AddDexterity);
     const auto AllEnergy = static_cast<std::uint16_t>(CharacterAttribute->Energy + CharacterAttribute->AddEnergy);
     auto AllVitality = static_cast<std::uint16_t>(CharacterAttribute->Vitality + CharacterAttribute->AddVitality);
     const auto AllCharisma = static_cast<std::uint16_t>(CharacterAttribute->Charisma + CharacterAttribute->AddCharisma);
@@ -935,13 +986,15 @@ void CSItemOption::CheckItemSetOptions()
 
         ITEM* ip = &CharacterMachine->Equipment[i];
 
-        if (ip->RequireDexterity > AllDexterity || ip->RequireEnergy > AllEnergy || ip->RequireStrength > AllStrength || ip->RequireLevel > AllLevel || ip->RequireCharisma > AllCharisma || ip->Durability <= 0 || (IsRequireEquipItem(ip) == false)) {
+        if (ip->RequireDexterity > AllDexterity || ip->RequireEnergy > AllEnergy || ip->RequireStrength > AllStrength ||
+            ip->RequireLevel > AllLevel || ip->RequireCharisma > AllCharisma || ip->Durability <= 0 ||
+            (IsRequireEquipItem(ip) == false))
+        {
             continue;
         }
 
-        if ((i == EQUIPMENT_WEAPON_LEFT || i == EQUIPMENT_RING_LEFT)
-            && itemRight != nullptr && itemRight->Type == ip->Type &&
-            itemRight->AncientDiscriminator == ip->AncientDiscriminator)
+        if ((i == EQUIPMENT_WEAPON_LEFT || i == EQUIPMENT_RING_LEFT) && itemRight != nullptr &&
+            itemRight->Type == ip->Type && itemRight->AncientDiscriminator == ip->AncientDiscriminator)
         {
             continue;
         }
@@ -964,7 +1017,10 @@ void CSItemOption::MoveSetOptionList(const int StartX, const int StartY)
 {
     int x, y, Width, Height;
 
-    Width = 162; Height = 20; x = StartX + 14; y = StartY + 22;
+    Width = 162;
+    Height = 20;
+    x = StartX + 14;
+    y = StartY + 22;
     if (MouseX >= x && MouseX < x + Width && MouseY >= y && MouseY < y + Height)
     {
         m_bViewOptionList = true;
@@ -978,9 +1034,12 @@ void CSItemOption::MoveSetOptionList(const int StartX, const int StartY)
 void CSItemOption::RenderSetOptionButton(const int StartX, const int StartY)
 {
     float x, y, Width, Height;
-    wchar_t  Text[100];
+    wchar_t Text[100];
 
-    Width = 162.f; Height = 20.f; x = (float)StartX + 14; y = (float)StartY + 22;
+    Width = 162.f;
+    Height = 20.f;
+    x = (float)StartX + 14;
+    y = (float)StartY + 22;
     RenderBitmap(BITMAP_INTERFACE_EX + 21, x, y, Width, Height, 0.f, 0.f, Width / 256.f, Height / 32.f);
 
     g_pRenderText->SetFont(g_hFontBold);
@@ -1014,11 +1073,23 @@ void CSItemOption::RenderSetOptionList(const int StartX, const int StartY)
         std::uint8_t SkipNum = 0;
         std::uint8_t setIndex = 0;
 
-        mu_swprintf(TextList[TextNum], L"\n"); TextListColor[TextNum] = 0; TextBold[TextNum] = false; TextNum++; SkipNum++;
-        mu_swprintf(TextList[TextNum], L"\n"); TextListColor[TextNum] = 0; TextBold[TextNum] = false; TextNum++; SkipNum++;
-        mu_swprintf(TextList[TextNum], L"\n"); TextListColor[TextNum] = 0; TextBold[TextNum] = false; TextNum++; SkipNum++;
+        mu_swprintf(TextList[TextNum], L"\n");
+        TextListColor[TextNum] = 0;
+        TextBold[TextNum] = false;
+        TextNum++;
+        SkipNum++;
+        mu_swprintf(TextList[TextNum], L"\n");
+        TextListColor[TextNum] = 0;
+        TextBold[TextNum] = false;
+        TextNum++;
+        SkipNum++;
+        mu_swprintf(TextList[TextNum], L"\n");
+        TextListColor[TextNum] = 0;
+        TextBold[TextNum] = false;
+        TextNum++;
+        SkipNum++;
 
-        int		iCurSetItemTypeSequence = 0, iCurSetItemType = -1;
+        int iCurSetItemTypeSequence = 0, iCurSetItemType = -1;
 
         for (int i = 0; i < m_SetSearchResultCount; i++)
         {
@@ -1042,7 +1113,8 @@ void CSItemOption::CheckRenderOptionHelper(const wchar_t* FilterName)
 {
     wchar_t Name[256];
 
-    if (FilterName[0] != '/') return;
+    if (FilterName[0] != '/')
+        return;
 
     const auto Length1 = wcslen(FilterName);
     for (int i = 0; i < MAX_SET_OPTION; ++i)
@@ -1070,7 +1142,8 @@ void CSItemOption::CheckRenderOptionHelper(const wchar_t* FilterName)
 
 void CSItemOption::RenderOptionHelper(void)
 {
-    if (m_byRenderOptionList == 0) return;
+    if (m_byRenderOptionList == 0)
+        return;
 
     int TextNum = 0;
     int sx = 0, sy = 0;
@@ -1087,19 +1160,23 @@ void CSItemOption::RenderOptionHelper(void)
         return;
     }
 
-    mu_swprintf(TextList[TextNum], L"\n"); TextNum++;
+    mu_swprintf(TextList[TextNum], L"\n");
+    TextNum++;
     mu_swprintf(TextList[TextNum], L"%ls %ls %ls", setOption.strSetName, GlobalText[1089], GlobalText[159]);
     TextListColor[TextNum] = TEXT_COLOR_YELLOW;
     TextNum++;
 
-    mu_swprintf(TextList[TextNum], L"\n"); TextNum++;
-    mu_swprintf(TextList[TextNum], L"\n"); TextNum++;
+    mu_swprintf(TextList[TextNum], L"\n");
+    TextNum++;
+    mu_swprintf(TextList[TextNum], L"\n");
+    TextNum++;
 
     for (int o = 0; o < MAX_ITEM_SET_STANDARD_OPTION_COUNT; ++o)
     {
         for (int n = 0; n < MAX_ITEM_SET_STANDARD_OPTION_PER_ITEM_COUNT; ++n)
         {
-            if (getExplainText(TextList[TextNum], setOption.byStandardOption[o][n], setOption.byStandardOptionValue[o][n]))
+            if (getExplainText(TextList[TextNum], setOption.byStandardOption[o][n],
+                               setOption.byStandardOptionValue[o][n]))
             {
                 TextListColor[TextNum] = TEXT_COLOR_BLUE;
                 TextBold[TextNum] = false;
@@ -1128,10 +1205,12 @@ void CSItemOption::RenderOptionHelper(void)
         }
     }
 
-    mu_swprintf(TextList[TextNum], L"\n"); TextNum++;
-    mu_swprintf(TextList[TextNum], L"\n"); TextNum++;
+    mu_swprintf(TextList[TextNum], L"\n");
+    TextNum++;
+    mu_swprintf(TextList[TextNum], L"\n");
+    TextNum++;
 
-    SIZE TextSize = { 0, 0 };
+    SIZE TextSize = {0, 0};
     GetTextExtentPoint32(g_pRenderText->GetFontDC(), TextList[0], 1, &TextSize);
     RenderTipTextList(sx, sy, TextNum, 0);
 }
@@ -1147,7 +1226,8 @@ int CSItemOption::RenderSetOptionListInItem(const ITEM* ip, int TextNum, bool bI
 
     m_bySelectedItemOption = itemSType.byOption[ip->AncientDiscriminator - 1];
 
-    if (m_bySelectedItemOption <= 0 || m_bySelectedItemOption == 255) return TextNum;
+    if (m_bySelectedItemOption <= 0 || m_bySelectedItemOption == 255)
+        return TextNum;
 
     int TNum = TextNum;
 
@@ -1158,15 +1238,16 @@ int CSItemOption::RenderSetOptionListInItem(const ITEM* ip, int TextNum, bool bI
         return TNum;
     }
 
-
-    mu_swprintf(TextList[TNum], L"\n"); TNum++;
+    mu_swprintf(TextList[TNum], L"\n");
+    TNum++;
     mu_swprintf(TextList[TNum], L"%ls %ls", GlobalText[1089], GlobalText[159]);
     TextListColor[TNum] = TEXT_COLOR_YELLOW;
     TNum++;
 
-    mu_swprintf(TextList[TNum], L"\n"); TNum++;
-    mu_swprintf(TextList[TNum], L"\n"); TNum++;
-
+    mu_swprintf(TextList[TNum], L"\n");
+    TNum++;
+    mu_swprintf(TextList[TNum], L"\n");
+    TNum++;
 
     for (int i = 0; i < m_SetSearchResultCount; i++)
     {
@@ -1179,13 +1260,16 @@ int CSItemOption::RenderSetOptionListInItem(const ITEM* ip, int TextNum, bool bI
         }
     }
 
-    mu_swprintf(TextList[TNum], L"\n"); TNum++;
-    mu_swprintf(TextList[TNum], L"\n"); TNum++;
+    mu_swprintf(TextList[TNum], L"\n");
+    TNum++;
+    mu_swprintf(TextList[TNum], L"\n");
+    TNum++;
 
     return TNum;
 }
 
-std::uint8_t  CSItemOption::RenderSetOptionList(const SET_SEARCH_RESULT_OPT& set, std::uint8_t textIndex, bool bIsEquippedItem, bool bShowInactive)
+std::uint8_t CSItemOption::RenderSetOptionList(const SET_SEARCH_RESULT_OPT& set, std::uint8_t textIndex,
+                                               bool bIsEquippedItem, bool bShowInactive)
 {
     for (int j = 0; j < set.SetOptionCount; j++)
     {
@@ -1208,9 +1292,9 @@ std::uint8_t  CSItemOption::RenderSetOptionList(const SET_SEARCH_RESULT_OPT& set
             }
             else
             {
-                TextListColor[textIndex] = option.IsFullOption ? TEXT_COLOR_YELLOW
-                                            : option.IsExtOption ? TEXT_COLOR_GREEN
-                                            : TEXT_COLOR_BLUE;
+                TextListColor[textIndex] = option.IsFullOption  ? TEXT_COLOR_YELLOW
+                                           : option.IsExtOption ? TEXT_COLOR_GREEN
+                                                                : TEXT_COLOR_BLUE;
             }
 
             TextBold[textIndex] = false;

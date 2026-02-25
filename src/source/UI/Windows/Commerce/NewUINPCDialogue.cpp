@@ -11,10 +11,11 @@
 
 using namespace SEASON3B;
 
-#define ND_NPC_MAX_LINE_PER_PAGE		7
-#define ND_SEL_TEXT_MAX_LINE_PER_PAGE	11
-#define ND_TEXT_GAP						15
+#define ND_NPC_MAX_LINE_PER_PAGE 7
+#define ND_SEL_TEXT_MAX_LINE_PER_PAGE 11
+#define ND_TEXT_GAP 15
 
+// cppcheck-suppress uninitMemberVar
 CNewUINPCDialogue::CNewUINPCDialogue()
 {
     m_pNewUIMng = NULL;
@@ -301,8 +302,7 @@ void CNewUINPCDialogue::RenderText()
     int i;
     for (i = 0; i < ND_NPC_MAX_LINE_PER_PAGE; ++i)
         g_pRenderText->RenderText(m_Pos.x + 13, m_Pos.y + 59 + (ND_TEXT_GAP * i),
-            m_aszNPCWords[i + ND_NPC_MAX_LINE_PER_PAGE * m_nSelNPCPage],
-            0, 0, RT3_SORT_LEFT);
+                                  m_aszNPCWords[i + ND_NPC_MAX_LINE_PER_PAGE * m_nSelNPCPage], 0, 0, RT3_SORT_LEFT);
 
     if (SEL_TEXTS_MODE == m_eLowerView)
     {
@@ -314,18 +314,19 @@ void CNewUINPCDialogue::RenderText()
 
         for (i = 0; i < m_anSelTextLinePerPage[m_nSelSelTextPage]; ++i)
             g_pRenderText->RenderText(m_Pos.x + 13, m_Pos.y + 207 + (ND_TEXT_GAP * i),
-                m_aszSelTexts[nStartSelTextLine + i], 0, 0, RT3_SORT_LEFT);
+                                      m_aszSelTexts[nStartSelTextLine + i], 0, 0, RT3_SORT_LEFT);
     }
 }
 
 void CNewUINPCDialogue::RenderContributePoint()
 {
-    if ((543 == g_QuestMng.GetNPCIndex() && 1 == Hero->m_byGensInfluence)
-        || (544 == g_QuestMng.GetNPCIndex() && 2 == Hero->m_byGensInfluence))
+    if ((543 == g_QuestMng.GetNPCIndex() && 1 == Hero->m_byGensInfluence) ||
+        (544 == g_QuestMng.GetNPCIndex() && 2 == Hero->m_byGensInfluence))
     {
         RenderImage(IMAGE_ND_CONTRIBUTE_BG, m_Pos.x + 11, m_Pos.y + 27, 168.f, 18.f);
 
         wchar_t szContribute[32];
+        // cppcheck-suppress uninitvar
         ::wprintf(szContribute, GlobalText[2986], m_dwContributePoint);
         g_pRenderText->SetTextColor(255, 230, 210, 255);
         g_pRenderText->RenderText(m_Pos.x, m_Pos.y + 30, szContribute, ND_WIDTH, 0, RT3_SORT_CENTER);
@@ -411,8 +412,7 @@ void CNewUINPCDialogue::SetCurNPCWords(int nQuestListCount)
     else
         pszSrc = g_QuestMng.GetNPCDlgNPCWords(m_dwCurDlgIndex);
 
-    int nLine = ::DivideStringByPixel(&m_aszNPCWords[0][0], ND_NPC_LINE_MAX, ND_WORDS_ROW_MAX,
-        pszSrc, 160);
+    int nLine = ::DivideStringByPixel(&m_aszNPCWords[0][0], ND_NPC_LINE_MAX, ND_WORDS_ROW_MAX, pszSrc, 160);
 
     if (1 > nLine)
         return;
@@ -451,7 +451,8 @@ void CNewUINPCDialogue::SetCurSelTexts()
             break;
         ::wcscat(szAnswer, pszAnswer);
 
-        m_anSelTextLine[i] = ::DivideStringByPixel(&m_aszSelTexts[nSelTextLineSum][0], 2, ND_WORDS_ROW_MAX, szAnswer, 160, false);
+        m_anSelTextLine[i] =
+            ::DivideStringByPixel(&m_aszSelTexts[nSelTextLineSum][0], 2, ND_WORDS_ROW_MAX, szAnswer, 160, false);
 
         nSelTextLineSum += m_anSelTextLine[i];
 
@@ -528,8 +529,8 @@ void CNewUINPCDialogue::SetQuestListText(DWORD* adwSrcQuestIndex, int nIndexCoun
             break;
         ::wcscat(szSelText, pszSelText);
 
-        m_anSelTextLine[i] = ::DivideStringByPixel(&m_aszSelTexts[nSelTextRow][0],
-            2, ND_WORDS_ROW_MAX, szSelText, 160, false);
+        m_anSelTextLine[i] =
+            ::DivideStringByPixel(&m_aszSelTexts[nSelTextRow][0], 2, ND_WORDS_ROW_MAX, szSelText, 160, false);
 
         nSelTextRow += m_anSelTextLine[i];
 

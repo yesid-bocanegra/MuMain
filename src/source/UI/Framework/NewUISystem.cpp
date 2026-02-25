@@ -5,9 +5,9 @@
 #include "PersonalShopTitleImp.h"
 #include "MapManager.h"
 
-
 using namespace SEASON3B;
 
+// cppcheck-suppress uninitMemberVar
 CNewUISystem::CNewUISystem()
 {
     m_pNewUIMng = nullptr;
@@ -70,7 +70,7 @@ CNewUISystem::CNewUISystem()
     m_pNewDuelWatchWindow = nullptr;
 #ifdef PBG_ADD_INGAMESHOP_UI_MAINFRAME
     m_pNewInGameShop = nullptr;
-#endif //PBG_ADD_INGAMESHOP_UI_MAINFRAME
+#endif // PBG_ADD_INGAMESHOP_UI_MAINFRAME
     m_pNewDoppelGangerWindow = nullptr;
     m_pNewDoppelGangerFrame = nullptr;
     m_pNewNPCDialogue = nullptr;
@@ -81,10 +81,10 @@ CNewUISystem::CNewUISystem()
     m_pNewMiniMap = nullptr;
 #ifdef PBG_MOD_STAMINA_UI
     m_pNewUIStamina = NULL;
-#endif //PBG_MOD_STAMINA_UI
+#endif // PBG_MOD_STAMINA_UI
 #ifdef PBG_ADD_GENSRANKING
     m_pNewGensRanking = nullptr;
-#endif //PBG_ADD_GENSRANKING
+#endif // PBG_ADD_GENSRANKING
     m_pNewUnitedMarketPlaceWindow = nullptr;
 }
 
@@ -95,6 +95,7 @@ CNewUISystem::~CNewUISystem()
 
 bool CNewUISystem::Create()
 {
+    // cppcheck-suppress publicAllocationError
     m_pNewUIMng = new CNewUIManager;
 
     m_pNewUI3DRenderMng = new CNewUI3DRenderMng;
@@ -433,7 +434,7 @@ bool CNewUISystem::LoadMainSceneInterface()
     m_pNewInGameShop = new CNewUIInGameShop;
     if (m_pNewInGameShop->Create(m_pNewUIMng, 0, 0) == false)
         return false;
-#endif //PBG_ADD_INGAMESHOP_UI_MAINFRAME
+#endif // PBG_ADD_INGAMESHOP_UI_MAINFRAME
 
     m_pNewDoppelGangerWindow = new CNewUIDoppelGangerWindow;
     if (m_pNewDoppelGangerWindow->Create(m_pNewUIMng, m_pNewUI3DRenderMng, 640 - 190, 0) == false)
@@ -467,7 +468,7 @@ bool CNewUISystem::LoadMainSceneInterface()
     m_pNewUIStamina = new CNewUIStamina;
     if (m_pNewUIStamina->Create(m_pNewUIMng, 640, 480) == false)
         return false;
-#endif //PBG_MOD_STAMINA_UI
+#endif // PBG_MOD_STAMINA_UI
 
     m_pNewGensRanking = new CNewUIGensRanking;
     if (m_pNewGensRanking->Create(m_pNewUIMng, 640, 480) == false)
@@ -562,7 +563,7 @@ void CNewUISystem::UnloadMainSceneInterface()
     SAFE_DELETE(m_pNewDuelWatchUserListWindow);
 #ifdef PBG_ADD_INGAMESHOP_UI_MAINFRAME
     SAFE_DELETE(m_pNewInGameShop);
-#endif //PBG_ADD_INGAMESHOP_UI_MAINFRAME
+#endif // PBG_ADD_INGAMESHOP_UI_MAINFRAME
     SAFE_DELETE(m_pNewDoppelGangerWindow);
     SAFE_DELETE(m_pNewDoppelGangerFrame);
     SAFE_DELETE(m_pNewNPCDialogue);
@@ -574,7 +575,7 @@ void CNewUISystem::UnloadMainSceneInterface()
     SAFE_DELETE(m_pNewItemMng);
 #ifdef PBG_MOD_STAMINA_UI
     SAFE_DELETE(m_pNewUIStamina);
-#endif //PBG_MOD_STAMINA_UI
+#endif // PBG_MOD_STAMINA_UI
     SAFE_DELETE(m_pNewGensRanking);
     SAFE_DELETE(m_pNewUnitedMarketPlaceWindow);
 #ifdef LEM_FIX_LUCKYITEM_UICLASS_SAFEDELETE
@@ -594,17 +595,17 @@ bool CNewUISystem::IsVisible(DWORD dwKey)
     return false;
 }
 
-//bool SortUiObj(const INewUIBase& lhs, const INewUIBase& rhs)
+// bool SortUiObj(const INewUIBase& lhs, const INewUIBase& rhs)
 //{
 //	return lhs.GetDisplayOrder() > rhs.GetDisplayOrder();
-//}
+// }
 
 void CNewUISystem::Show(DWORD dwKey)
 {
 #ifdef PBG_ADD_INGAMESHOP_UI_ITEMSHOP
     if (g_pInGameShop->IsInGameShop())
         return;
-#endif //PBG_ADD_INGAMESHOP_UI_ITEMSHOP
+#endif // PBG_ADD_INGAMESHOP_UI_ITEMSHOP
     if (!m_pNewUIMng)
     {
         return;
@@ -1027,7 +1028,7 @@ void CNewUISystem::Show(DWORD dwKey)
         g_pMainFrame->SetBtnState(MAINFRAME_BTN_PARTCHARGE, true);
 #endif // KJH_MOD_SHOP_SCRIPT_DOWNLOAD
     }
-#endif //PBG_ADD_INGAMESHOP_UI_MAINFRAME
+#endif // PBG_ADD_INGAMESHOP_UI_MAINFRAME
     else if (dwKey == INTERFACE_DOPPELGANGER_NPC)
     {
         m_pNewDoppelGangerWindow->OpeningProcess();
@@ -1248,8 +1249,7 @@ void CNewUISystem::Hide(DWORD dwKey)
         g_pMainFrame->SetBtnState(MAINFRAME_BTN_MYINVEN, false);
         m_pNewUIMng->ShowInterface(INTERFACE_INVENTORY, false);
     }
-    else if (dwKey == INTERFACE_MYSHOP_INVENTORY
-        || dwKey == INTERFACE_PURCHASESHOP_INVENTORY)
+    else if (dwKey == INTERFACE_MYSHOP_INVENTORY || dwKey == INTERFACE_PURCHASESHOP_INVENTORY)
     {
         if (dwKey == INTERFACE_MYSHOP_INVENTORY)
         {
@@ -1450,7 +1450,7 @@ void CNewUISystem::Hide(DWORD dwKey)
         g_pInGameShop->ClosingProcess();
         g_pMainFrame->SetBtnState(MAINFRAME_BTN_PARTCHARGE, false);
     }
-#endif //PBG_ADD_INGAMESHOP_UI_MAINFRAME
+#endif // PBG_ADD_INGAMESHOP_UI_MAINFRAME
     else if (dwKey == INTERFACE_DOPPELGANGER_NPC)
     {
         m_pNewDoppelGangerWindow->ClosingProcess();
@@ -1542,11 +1542,10 @@ void CNewUISystem::HideAllGroupA()
     Hide(INTERFACE_INVENTORY);
     Hide(INTERFACE_CHARACTER);
 
-    DWORD dwGroupA[] =
-    {
-        //SEASON3B::INTERFACE_INVENTORY,
-        //SEASON3B::INTERFACE_CHARACTER,
-        //SEASON3B::INTERFACE_WINDOW_MENU,
+    DWORD dwGroupA[] = {
+        // SEASON3B::INTERFACE_INVENTORY,
+        // SEASON3B::INTERFACE_CHARACTER,
+        // SEASON3B::INTERFACE_WINDOW_MENU,
         INTERFACE_MUHELPER,
         INTERFACE_MUHELPER_EXT,
         INTERFACE_MUHELPER_SKILL_LIST,
@@ -1566,9 +1565,9 @@ void CNewUISystem::HideAllGroupA()
         INTERFACE_KANTURU2ND_ENTERNPC,
         INTERFACE_DUELWATCH,
         INTERFACE_DOPPELGANGER_NPC,
-        //SEASON3B::INTERFACE_HELP,
-        //SEASON3B::INTERFACE_ITEM_EXPLANATION,
-        //SEASON3B::INTERFACE_SETITEM_EXPLANATION,
+        // SEASON3B::INTERFACE_HELP,
+        // SEASON3B::INTERFACE_ITEM_EXPLANATION,
+        // SEASON3B::INTERFACE_SETITEM_EXPLANATION,
         INTERFACE_GOLD_BOWMAN,
         INTERFACE_GOLD_BOWMAN_LENA,
         INTERFACE_NPC_DIALOGUE,
@@ -1577,10 +1576,10 @@ void CNewUISystem::HideAllGroupA()
         INTERFACE_EMPIREGUARDIAN_NPC,
 #ifdef PBG_MOD_STAMINA_UI
         SEASON3B::INTERFACE_STAMINA_GAUGE,
-#endif //PBG_MOD_STAMINA_UI
+#endif // PBG_MOD_STAMINA_UI
 #ifdef PBG_ADD_GENSRANKING
         INTERFACE_GENSRANKING,
-#endif //PBG_ADD_GENSRANKING
+#endif // PBG_ADD_GENSRANKING
         INTERFACE_UNITEDMARKETPLACE_NPC_JULIA,
 
         SEASON3B::INTERFACE_LUCKYITEMWND,
@@ -1603,12 +1602,11 @@ void CNewUISystem::HideAllGroupB()
     Hide(INTERFACE_INVENTORY);
     Hide(INTERFACE_CHARACTER);
 
-    DWORD dwGroupB[] =
-    {
-        //SEASON3B::INTERFACE_FRIEND,
-        //SEASON3B::INTERFACE_INVENTORY,
-        //SEASON3B::INTERFACE_CHARACTER,
-        //SEASON3B::INTERFACE_WINDOW_MENU,
+    DWORD dwGroupB[] = {
+        // SEASON3B::INTERFACE_FRIEND,
+        // SEASON3B::INTERFACE_INVENTORY,
+        // SEASON3B::INTERFACE_CHARACTER,
+        // SEASON3B::INTERFACE_WINDOW_MENU,
 
         INTERFACE_MIXINVENTORY,
         INTERFACE_STORAGE,
@@ -1627,9 +1625,9 @@ void CNewUISystem::HideAllGroupB()
         INTERFACE_CURSEDTEMPLE_NPC,
         INTERFACE_DUELWATCH,
         INTERFACE_DOPPELGANGER_NPC,
-        //SEASON3B::INTERFACE_HELP,
-        //SEASON3B::INTERFACE_ITEM_EXPLANATION,
-        //SEASON3B::INTERFACE_SETITEM_EXPLANATION,
+        // SEASON3B::INTERFACE_HELP,
+        // SEASON3B::INTERFACE_ITEM_EXPLANATION,
+        // SEASON3B::INTERFACE_SETITEM_EXPLANATION,
         INTERFACE_GOLD_BOWMAN,
         INTERFACE_GOLD_BOWMAN_LENA,
         INTERFACE_NPC_DIALOGUE,
@@ -1638,10 +1636,10 @@ void CNewUISystem::HideAllGroupB()
         INTERFACE_EMPIREGUARDIAN_NPC,
 #ifdef PBG_MOD_STAMINA_UI
         SEASON3B::INTERFACE_STAMINA_GAUGE,
-#endif //PBG_MOD_STAMINA_UI
+#endif // PBG_MOD_STAMINA_UI
 #ifdef PBG_ADD_GENSRANKING
         INTERFACE_GENSRANKING,
-#endif //PBG_ADD_GENSRANKING
+#endif // PBG_ADD_GENSRANKING
         INTERFACE_UNITEDMARKETPLACE_NPC_JULIA,
         SEASON3B::INTERFACE_LUCKYITEMWND,
 
@@ -1658,8 +1656,7 @@ void CNewUISystem::HideAllGroupB()
 }
 void CNewUISystem::HideGroupBeforeOpenInterface()
 {
-    DWORD dwGroupC[] =
-    {
+    DWORD dwGroupC[] = {
         INTERFACE_PARTY,
         INTERFACE_COMMAND,
         INTERFACE_GUILDINFO,
@@ -1762,10 +1759,8 @@ CNewUIHotKey* CNewUISystem::GetNewUIHotKey() const
 
 bool CNewUISystem::IsImpossibleSendMoveInterface()
 {
-    if (IsVisible(INTERFACE_MIXINVENTORY)
-        || IsVisible(INTERFACE_KANTURU2ND_ENTERNPC)
-        || IsVisible(SEASON3B::INTERFACE_LUCKYITEMWND)
-        )
+    if (IsVisible(INTERFACE_MIXINVENTORY) || IsVisible(INTERFACE_KANTURU2ND_ENTERNPC) ||
+        IsVisible(SEASON3B::INTERFACE_LUCKYITEMWND))
     {
         return true;
     }
@@ -1775,15 +1770,12 @@ bool CNewUISystem::IsImpossibleSendMoveInterface()
 
 bool CNewUISystem::IsImpossibleTradeInterface()
 {
-    if (IsVisible(INTERFACE_MIXINVENTORY)
-        || IsVisible(INTERFACE_KANTURU2ND_ENTERNPC)
-        || IsVisible(INTERFACE_STORAGE)
-        || IsVisible(INTERFACE_INGAMESHOP)
+    if (IsVisible(INTERFACE_MIXINVENTORY) || IsVisible(INTERFACE_KANTURU2ND_ENTERNPC) || IsVisible(INTERFACE_STORAGE) ||
+        IsVisible(INTERFACE_INGAMESHOP)
 #ifdef PBG_ADD_INGAMESHOP_UI_MAINFRAME
         || IsVisible(INTERFACE_INGAMESHOP)
-#endif //PBG_ADD_INGAMESHOP_UI_MAINFRAME
-        || IsVisible(SEASON3B::INTERFACE_LUCKYITEMWND)
-        )
+#endif // PBG_ADD_INGAMESHOP_UI_MAINFRAME
+        || IsVisible(SEASON3B::INTERFACE_LUCKYITEMWND))
     {
         return true;
     }
@@ -1793,15 +1785,12 @@ bool CNewUISystem::IsImpossibleTradeInterface()
 
 bool CNewUISystem::IsImpossibleDuelInterface()
 {
-    if (IsVisible(INTERFACE_MIXINVENTORY)
-        || IsVisible(INTERFACE_KANTURU2ND_ENTERNPC)
-        || IsVisible(INTERFACE_STORAGE)
-        || IsVisible(INTERFACE_INGAMESHOP)
+    if (IsVisible(INTERFACE_MIXINVENTORY) || IsVisible(INTERFACE_KANTURU2ND_ENTERNPC) || IsVisible(INTERFACE_STORAGE) ||
+        IsVisible(INTERFACE_INGAMESHOP)
 #ifdef PBG_ADD_INGAMESHOP_UI_MAINFRAME
         || IsVisible(INTERFACE_INGAMESHOP)
-#endif //PBG_ADD_INGAMESHOP_UI_MAINFRAME
-        || IsVisible(SEASON3B::INTERFACE_LUCKYITEMWND)
-        )
+#endif // PBG_ADD_INGAMESHOP_UI_MAINFRAME
+        || IsVisible(SEASON3B::INTERFACE_LUCKYITEMWND))
     {
         return true;
     }
@@ -1811,35 +1800,18 @@ bool CNewUISystem::IsImpossibleDuelInterface()
 
 bool CNewUISystem::IsImpossibleHideInterface(DWORD dwKey)
 {
-    if (dwKey == INTERFACE_MAINFRAME
-        || dwKey == INTERFACE_SKILL_LIST
-        || dwKey == INTERFACE_SLIDEWINDOW
-        || dwKey == INTERFACE_MESSAGEBOX
-        || dwKey == INTERFACE_CHATLOGWINDOW
-        || dwKey == INTERFACE_SYSTEMLOGWINDOW
-        || dwKey == INTERFACE_PARTY_INFO_WINDOW
-        || dwKey == INTERFACE_KANTURU_INFO
-        || dwKey == INTERFACE_BLOODCASTLE_TIME
-        || dwKey == INTERFACE_CHAOSCASTLE_TIME
-        || dwKey == INTERFACE_BATTLE_SOCCER_SCORE
-        || dwKey == INTERFACE_DUEL_WINDOW
-        || dwKey == INTERFACE_CRYWOLF
-        || dwKey == INTERFACE_HERO_POSITION_INFO
-        || dwKey == INTERFACE_NAME_WINDOW
-        || dwKey == INTERFACE_SIEGEWARFARE
-        || dwKey == INTERFACE_ITEM_TOOLTIP
-        || dwKey == INTERFACE_HOTKEY
-        || dwKey == INTERFACE_CURSEDTEMPLE_GAMESYSTEM
-        || dwKey == INTERFACE_ITEM_ENDURANCE_INFO
-        || dwKey == INTERFACE_BUFF_WINDOW
-        || (dwKey >= INTERFACE_3DRENDERING_CAMERA_BEGIN && dwKey <= INTERFACE_3DRENDERING_CAMERA_END)
-        || dwKey == INTERFACE_DUELWATCH_MAINFRAME
-        || dwKey == INTERFACE_DUELWATCH_USERLIST
-        || dwKey == INTERFACE_DOPPELGANGER_FRAME
-        || dwKey == INTERFACE_GOLD_BOWMAN
-        || dwKey == INTERFACE_GOLD_BOWMAN_LENA
-        || dwKey == INTERFACE_EMPIREGUARDIAN_TIMER
-        )
+    if (dwKey == INTERFACE_MAINFRAME || dwKey == INTERFACE_SKILL_LIST || dwKey == INTERFACE_SLIDEWINDOW ||
+        dwKey == INTERFACE_MESSAGEBOX || dwKey == INTERFACE_CHATLOGWINDOW || dwKey == INTERFACE_SYSTEMLOGWINDOW ||
+        dwKey == INTERFACE_PARTY_INFO_WINDOW || dwKey == INTERFACE_KANTURU_INFO ||
+        dwKey == INTERFACE_BLOODCASTLE_TIME || dwKey == INTERFACE_CHAOSCASTLE_TIME ||
+        dwKey == INTERFACE_BATTLE_SOCCER_SCORE || dwKey == INTERFACE_DUEL_WINDOW || dwKey == INTERFACE_CRYWOLF ||
+        dwKey == INTERFACE_HERO_POSITION_INFO || dwKey == INTERFACE_NAME_WINDOW || dwKey == INTERFACE_SIEGEWARFARE ||
+        dwKey == INTERFACE_ITEM_TOOLTIP || dwKey == INTERFACE_HOTKEY || dwKey == INTERFACE_CURSEDTEMPLE_GAMESYSTEM ||
+        dwKey == INTERFACE_ITEM_ENDURANCE_INFO || dwKey == INTERFACE_BUFF_WINDOW ||
+        (dwKey >= INTERFACE_3DRENDERING_CAMERA_BEGIN && dwKey <= INTERFACE_3DRENDERING_CAMERA_END) ||
+        dwKey == INTERFACE_DUELWATCH_MAINFRAME || dwKey == INTERFACE_DUELWATCH_USERLIST ||
+        dwKey == INTERFACE_DOPPELGANGER_FRAME || dwKey == INTERFACE_GOLD_BOWMAN ||
+        dwKey == INTERFACE_GOLD_BOWMAN_LENA || dwKey == INTERFACE_EMPIREGUARDIAN_TIMER)
     {
         return true;
     }
@@ -2273,7 +2245,7 @@ CNewUIInGameShop* CNewUISystem::GetUI_pNewInGameShop() const
 {
     return m_pNewInGameShop;
 }
-#endif //PBG_ADD_INGAMESHOP_UI_MAINFRAME
+#endif // PBG_ADD_INGAMESHOP_UI_MAINFRAME
 
 CNewUIDoppelGangerWindow* CNewUISystem::GetUI_pNewDoppelGangerWindow() const
 {
@@ -2315,14 +2287,14 @@ CNewUIStamina* SEASON3B::CNewUISystem::GetUI_pNewUIStamina() const
 {
     return m_pNewUIStamina;
 }
-#endif //PBG_MOD_STAMINA_UI
+#endif // PBG_MOD_STAMINA_UI
 
 #ifdef PBG_ADD_GENSRANKING
 CNewUIGensRanking* CNewUISystem::GetUI_NewGensRanking() const
 {
     return m_pNewGensRanking;
 }
-#endif //PBG_ADD_GENSRANKING
+#endif // PBG_ADD_GENSRANKING
 
 CNewUIUnitedMarketPlaceWindow* CNewUISystem::GetUI_pNewUnitedMarketPlaceWindow() const
 {

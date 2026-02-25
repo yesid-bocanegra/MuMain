@@ -12,141 +12,141 @@
 #include "Local.h"
 #include "NewUISystem.h"
 
-extern MARK_t		GuildMark[MAX_MARKS];
-extern int			SelectMarkColor;
+extern MARK_t GuildMark[MAX_MARKS];
+extern int SelectMarkColor;
 
 namespace
 {
-    BOOL IsGuildName(const wchar_t* szName)
-    {
-        if (wcslen(szName) >= 4)
-            return TRUE;
-        else
-            return FALSE;
-    }
-
-    BOOL IsGuildMark()
-    {
-        BOOL bDraw = FALSE;
-
-        for (int i = 0; i < 64; i++)
-        {
-            if (GuildMark[MARK_EDIT].Mark[i] != 0)
-                return TRUE;
-        }
-
+BOOL IsGuildName(const wchar_t* szName)
+{
+    if (wcslen(szName) >= 4)
+        return TRUE;
+    else
         return FALSE;
+}
+
+BOOL IsGuildMark()
+{
+    BOOL bDraw = FALSE;
+
+    for (int i = 0; i < 64; i++)
+    {
+        if (GuildMark[MARK_EDIT].Mark[i] != 0)
+            return TRUE;
     }
 
-    void UpdateEditGuildMark(int iPos_x, int iPos_y)
+    return FALSE;
+}
+
+void UpdateEditGuildMark(int iPos_x, int iPos_y)
+{
+    int i, j;
+    float x, y;
+    Hero->Object.Angle[2] = 90.f + 22.5f;
+    for (i = 0; i < 8; ++i)
     {
-        int i, j;
-        float x, y;
-        Hero->Object.Angle[2] = 90.f + 22.5f;
-        for (i = 0; i < 8; ++i)
+        for (j = 0; j < 8; ++j)
         {
-            for (j = 0; j < 8; ++j)
+            x = iPos_x + j * 15 + 50;
+            y = iPos_y + i * 15 + 100;
+            if (MouseX >= x && MouseX < x + 15 && MouseY >= y && MouseY < y + 15)
             {
-                x = iPos_x + j * 15 + 50;
-                y = iPos_y + i * 15 + 100;
-                if (MouseX >= x && MouseX < x + 15 && MouseY >= y && MouseY < y + 15)
+                if (MouseLButton)
+                    GuildMark[MARK_EDIT].Mark[i * 8 + j] = SelectMarkColor;
+                if (MouseRButton)
+                    GuildMark[MARK_EDIT].Mark[i * 8 + j] = 0;
+            }
+        }
+    }
+    for (i = 0; i < 2; ++i)
+    {
+        for (j = 0; j < 8; ++j)
+        {
+            x = iPos_x + j * 20 + 15;
+            y = iPos_y + i * 20 + 260;
+            if (MouseX >= x && MouseX < x + 20 && MouseY >= y && MouseY < y + 20)
+            {
+                if (MouseLButtonPush)
                 {
-                    if (MouseLButton)
-                        GuildMark[MARK_EDIT].Mark[i * 8 + j] = SelectMarkColor;
-                    if (MouseRButton)
-                        GuildMark[MARK_EDIT].Mark[i * 8 + j] = 0;
+                    MouseLButtonPush = FALSE;
+                    PlayBuffer(SOUND_CLICK01);
+                    SelectMarkColor = i * 8 + j;
                 }
             }
         }
-        for (i = 0; i < 2; ++i)
+    }
+}
+
+void RenderEditGuildMark(int iPos_x, int iPos_y)
+{
+    int i, j;
+    float x, y;
+    for (i = 0; i < 8; ++i)
+    {
+        for (j = 0; j < 8; ++j)
         {
-            for (j = 0; j < 8; ++j)
-            {
-                x = iPos_x + j * 20 + 15;
-                y = iPos_y + i * 20 + 260;
-                if (MouseX >= x && MouseX < x + 20 && MouseY >= y && MouseY < y + 20)
-                {
-                    if (MouseLButtonPush)
-                    {
-                        MouseLButtonPush = FALSE;
-                        PlayBuffer(SOUND_CLICK01);
-                        SelectMarkColor = i * 8 + j;
-                    }
-                }
-            }
+            x = (float)iPos_x + j * 15 + 50;
+            y = (float)iPos_y + i * 15 + 100;
+            RenderGuildColor(x + 1, y + 1, 13, 13, GuildMark[MARK_EDIT].Mark[i * 8 + j]);
         }
     }
-
-    void RenderEditGuildMark(int iPos_x, int iPos_y)
+    for (i = 0; i < 2; ++i)
     {
-        int i, j;
-        float x, y;
-        for (i = 0; i < 8; ++i)
+        for (j = 0; j < 8; ++j)
         {
-            for (j = 0; j < 8; ++j)
-            {
-                x = (float)iPos_x + j * 15 + 50;
-                y = (float)iPos_y + i * 15 + 100;
-                RenderGuildColor(x + 1, y + 1, 13, 13, GuildMark[MARK_EDIT].Mark[i * 8 + j]);
-            }
+            x = (float)iPos_x + j * 20 + 15;
+            y = (float)iPos_y + i * 20 + 260;
+            RenderGuildColor(x + 1, y + 1, 18, 18, i * 8 + j);
         }
-        for (i = 0; i < 2; ++i)
-        {
-            for (j = 0; j < 8; ++j)
-            {
-                x = (float)iPos_x + j * 20 + 15;
-                y = (float)iPos_y + i * 20 + 260;
-                RenderGuildColor(x + 1, y + 1, 18, 18, i * 8 + j);
-            }
-        }
-        x = (float)iPos_x + 15;
-        y = (float)iPos_y + 230;
-        RenderGuildColor(x + 1, y + 1, 23, 23, SelectMarkColor);
-
-        g_pRenderText->SetFont(g_hFont);
-        g_pRenderText->SetTextColor(230, 230, 230, 255);
-        g_pRenderText->SetBgColor(0, 0, 0, 0);
-        g_pRenderText->RenderText(iPos_x + 50, iPos_y + 230, GlobalText[183]);
-        g_pRenderText->RenderText(iPos_x + 50, iPos_y + 245, GlobalText[184]);
     }
+    x = (float)iPos_x + 15;
+    y = (float)iPos_y + 230;
+    RenderGuildColor(x + 1, y + 1, 23, 23, SelectMarkColor);
 
-    void RenderGoldRect(float x, float y, float sx, float sy, int fill = 0)
+    g_pRenderText->SetFont(g_hFont);
+    g_pRenderText->SetTextColor(230, 230, 230, 255);
+    g_pRenderText->SetBgColor(0, 0, 0, 0);
+    g_pRenderText->RenderText(iPos_x + 50, iPos_y + 230, GlobalText[183]);
+    g_pRenderText->RenderText(iPos_x + 50, iPos_y + 245, GlobalText[184]);
+}
+
+void RenderGoldRect(float x, float y, float sx, float sy, int fill = 0)
+{
+    switch (fill)
     {
-        switch (fill)
-        {
-        case 1:
-            glColor4ub(146, 144, 141, 200);
-            RenderColor(x, y, sx, sy);
-            EndRenderColor();
-            break;
-        };
+    case 1:
+        glColor4ub(146, 144, 141, 200);
+        RenderColor(x, y, sx, sy);
+        EndRenderColor();
+        break;
+    };
 
-        RenderBitmap(BITMAP_INVENTORY + 19, x, y, sx, 2, 10 / 256.f, 5 / 16.f, 170.f / 256.f, 2.f / 16.f);
-        RenderBitmap(BITMAP_INVENTORY + 19, x, y + sy, sx + 1, 2, 10 / 256.f, 5 / 16.f, 170.f / 256.f, 2.f / 16.f);
-        RenderBitmap(BITMAP_INVENTORY, x, y, 2, sy, 1.f / 256.f, 5 / 16.f, 2.f / 256.f, 125.f / 256.f);
-        RenderBitmap(BITMAP_INVENTORY, x + sx, y, 2, sy, 1.f / 256.f, 5 / 16.f, 2.f / 256.f, 125.f / 256.f);
-    }
+    RenderBitmap(BITMAP_INVENTORY + 19, x, y, sx, 2, 10 / 256.f, 5 / 16.f, 170.f / 256.f, 2.f / 16.f);
+    RenderBitmap(BITMAP_INVENTORY + 19, x, y + sy, sx + 1, 2, 10 / 256.f, 5 / 16.f, 170.f / 256.f, 2.f / 16.f);
+    RenderBitmap(BITMAP_INVENTORY, x, y, 2, sy, 1.f / 256.f, 5 / 16.f, 2.f / 256.f, 125.f / 256.f);
+    RenderBitmap(BITMAP_INVENTORY, x + sx, y, 2, sy, 1.f / 256.f, 5 / 16.f, 2.f / 256.f, 125.f / 256.f);
+}
 
-    void RenderText(wchar_t* text, int x, int y, int sx, int sy, DWORD color, DWORD backcolor, int sort)
-    {
-        g_pRenderText->SetFont(g_hFont);
+void RenderText(wchar_t* text, int x, int y, int sx, int sy, DWORD color, DWORD backcolor, int sort)
+{
+    g_pRenderText->SetFont(g_hFont);
 
-        DWORD backuptextcolor = g_pRenderText->GetTextColor();
-        DWORD backuptextbackcolor = g_pRenderText->GetBgColor();
+    DWORD backuptextcolor = g_pRenderText->GetTextColor();
+    DWORD backuptextbackcolor = g_pRenderText->GetBgColor();
 
-        g_pRenderText->SetTextColor(color);
-        g_pRenderText->SetBgColor(backcolor);
-        g_pRenderText->RenderText(x, y, text, sx, sy, sort);
+    g_pRenderText->SetTextColor(color);
+    g_pRenderText->SetBgColor(backcolor);
+    g_pRenderText->RenderText(x, y, text, sx, sy, sort);
 
-        g_pRenderText->SetTextColor(backuptextcolor);
-        g_pRenderText->SetBgColor(backuptextbackcolor);
-    }
-};
+    g_pRenderText->SetTextColor(backuptextcolor);
+    g_pRenderText->SetBgColor(backuptextbackcolor);
+}
+}; // namespace
 
 using namespace SEASON3B;
 
-CNewUIGuildMakeWindow::CNewUIGuildMakeWindow() : m_pNewUIMng(NULL), m_EditBox(NULL), m_Button(NULL),
-m_GuildMakeState(GUILDMAKE_INFO)
+CNewUIGuildMakeWindow::CNewUIGuildMakeWindow()
+    : m_pNewUIMng(NULL), m_EditBox(NULL), m_Button(NULL), m_GuildMakeState(GUILDMAKE_INFO)
 {
 }
 
@@ -320,7 +320,7 @@ bool CNewUIGuildMakeWindow::UpdateGMMark()
 
     UpdateEditGuildMark(m_Pos.x, m_Pos.y);
 
-    //button
+    // button
     m_Button[GUILDMAKEBUTTON_MARK_LNEXT].SetPos(m_Pos.x + 15, m_Pos.y + 379);
     m_Button[GUILDMAKEBUTTON_MARK_LNEXT].ChangeText(GlobalText[1306]);
 
@@ -424,7 +424,7 @@ void CNewUIGuildMakeWindow::RenderGMInfo()
 
 void CNewUIGuildMakeWindow::RenderGMMark()
 {
-    //edit box
+    // edit box
     wchar_t Text[100];
     memset(&Text, 0, sizeof(char) * 100);
     mu_swprintf(Text, GlobalText[182]);
@@ -497,7 +497,7 @@ bool CNewUIGuildMakeWindow::UpdateMouseEvent()
         return true;
     }
 
-    POINT ptExitBtn1 = { m_Pos.x + 169, m_Pos.y + 7 };
+    POINT ptExitBtn1 = {m_Pos.x + 169, m_Pos.y + 7};
 
     if (SEASON3B::IsPress(VK_LBUTTON) && CheckMouseIn(ptExitBtn1.x, ptExitBtn1.y, 13, 12))
     {
@@ -509,11 +509,14 @@ bool CNewUIGuildMakeWindow::UpdateMouseEvent()
 
     switch (m_GuildMakeState)
     {
-    case GUILDMAKE_INFO: bResult = UpdateGMInfo();
+    case GUILDMAKE_INFO:
+        bResult = UpdateGMInfo();
         break;
-    case GUILDMAKE_MARK: bResult = UpdateGMMark();
+    case GUILDMAKE_MARK:
+        bResult = UpdateGMMark();
         break;
-    case GUILDMAKE_RESULTINFO: bResult = UpdateGMResultInfo();
+    case GUILDMAKE_RESULTINFO:
+        bResult = UpdateGMResultInfo();
         break;
     }
 
@@ -546,9 +549,15 @@ bool CNewUIGuildMakeWindow::Render()
 
     switch (m_GuildMakeState)
     {
-    case GUILDMAKE_INFO: RenderGMInfo(); break;
-    case GUILDMAKE_MARK: RenderGMMark(); break;
-    case GUILDMAKE_RESULTINFO: RenderGMResultInfo(); break;
+    case GUILDMAKE_INFO:
+        RenderGMInfo();
+        break;
+    case GUILDMAKE_MARK:
+        RenderGMMark();
+        break;
+    case GUILDMAKE_RESULTINFO:
+        RenderGMResultInfo();
+        break;
     }
 
     DisableAlphaBlend();

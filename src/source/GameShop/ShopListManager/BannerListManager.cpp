@@ -14,6 +14,7 @@
 
 CBannerListManager::CBannerListManager() // OK
 {
+    // cppcheck-suppress [noCopyConstructor, noOperatorEq]
     this->m_BannerInfoList = new CBannerInfoList();
 
     this->m_vScriptFiles.push_back(BANNER_SCRIPT_FILENAME);
@@ -24,7 +25,7 @@ CBannerListManager::~CBannerListManager() // OK
     SAFE_DELETE(m_BannerInfoList);
 }
 
-WZResult			CBannerListManager::LoadScript(bool bDonwLoad) // OK
+WZResult CBannerListManager::LoadScript(bool bDonwLoad) // OK
 {
     std::wstring path = this->GetScriptPath();
 

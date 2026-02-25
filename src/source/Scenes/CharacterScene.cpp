@@ -168,7 +168,7 @@ void NewMoveCharacterScene()
     MoveCamera();
 
 #if defined _DEBUG || defined FOR_WORK
-    std::wstring lpszTemp = { 0 };
+    std::wstring lpszTemp = {0};
     if (::Util_CheckOption(::GetCommandLine(), L'c', lpszTemp))
     {
         SelectedHero = ::_wtoi(lpszTemp.c_str());
@@ -181,9 +181,9 @@ void NewMoveCharacterScene()
 
     if (rInput.IsKeyDown(VK_RETURN))
     {
-        if (!(rUIMng.m_MsgWin.IsShow() || rUIMng.m_CharMakeWin.IsShow()
-            || rUIMng.m_SysMenuWin.IsShow() || rUIMng.m_OptionWin.IsShow())
-            && SelectedHero > -1 && SelectedHero < MAX_CHARACTERS_PER_ACCOUNT)
+        if (!(rUIMng.m_MsgWin.IsShow() || rUIMng.m_CharMakeWin.IsShow() || rUIMng.m_SysMenuWin.IsShow() ||
+              rUIMng.m_OptionWin.IsShow()) &&
+            SelectedHero > -1 && SelectedHero < MAX_CHARACTERS_PER_ACCOUNT)
         {
             ::PlayBuffer(SOUND_CLICK01);
 
@@ -195,10 +195,9 @@ void NewMoveCharacterScene()
     }
     else if (rInput.IsKeyDown(VK_ESCAPE))
     {
-        if (!(rUIMng.m_MsgWin.IsShow() || rUIMng.m_CharMakeWin.IsShow()
-            || rUIMng.m_SysMenuWin.IsShow() || rUIMng.m_OptionWin.IsShow()
-            )
-            && rUIMng.IsSysMenuWinShow())
+        if (!(rUIMng.m_MsgWin.IsShow() || rUIMng.m_CharMakeWin.IsShow() || rUIMng.m_SysMenuWin.IsShow() ||
+              rUIMng.m_OptionWin.IsShow()) &&
+            rUIMng.IsSysMenuWinShow())
         {
             ::PlayBuffer(SOUND_CLICK01);
             rUIMng.ShowWin(&rUIMng.m_SysMenuWin);

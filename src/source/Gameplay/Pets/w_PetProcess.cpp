@@ -11,20 +11,13 @@
 #include "w_PetProcess.h"
 #include "ReadScript.h"
 
-
 PetInfoPtr PetInfo::Make()
 {
     PetInfoPtr petInfo(new PetInfo);
     return petInfo;
 }
 
-PetInfo::PetInfo() :
-    m_scale(0.0f),
-    m_actions(NULL),
-    m_speeds(NULL),
-    m_count(0)
-{
-}
+PetInfo::PetInfo() : m_scale(0.0f), m_actions(NULL), m_speeds(NULL), m_count(0) {}
 
 PetInfo::~PetInfo()
 {
@@ -70,9 +63,7 @@ PetProcessPtr PetProcess::Make()
     return petprocess;
 }
 
-PetProcess::PetProcess()
-{
-}
+PetProcess::PetProcess() {}
 
 PetProcess::~PetProcess()
 {
@@ -83,7 +74,7 @@ void PetProcess::Init()
 {
     PetActionStandPtr actionStand = PetActionStand::Make();
     m_petsAction.insert(make_pair(PC4_ELF, actionStand));
-    //m_petsAction.insert( make_pair( 4, actionStand ) );
+    // m_petsAction.insert( make_pair( 4, actionStand ) );
 
     PetActionRoundPtr actionRound = PetActionRound::Make();
     m_petsAction.insert(make_pair(PC4_TEST, actionRound));
@@ -97,7 +88,7 @@ void PetProcess::Init()
 #ifdef PJH_ADD_PANDA_PET
     PetActionCollecterAddPtr actionCollecter_Add = PetActionCollecterAdd::Make();
     m_petsAction.insert(make_pair(PANDA, actionCollecter_Add));
-#endif //#ifdef PJH_ADD_PANDA_PET
+#endif // #ifdef PJH_ADD_PANDA_PET
 
     PetActionUnicornPtr actionUnicorn = PetActionUnicorn::Make();
     m_petsAction.insert(make_pair(UNICORN, actionUnicorn));
@@ -110,7 +101,7 @@ void PetProcess::Init()
 
 void PetProcess::Destroy()
 {
-    for (auto iter = m_petsList.begin(); iter != m_petsList.end(); )
+    for (auto iter = m_petsList.begin(); iter != m_petsList.end();)
     {
         auto tempiter = iter;
         ++iter;
@@ -148,9 +139,10 @@ void PetProcess::Register(Smart_Ptr(PetObject) pPet)
 
 void PetProcess::UnRegister(CHARACTER* Owner, int itemType, bool isUnregistAll)
 {
-    if (NULL == Owner) return;
+    if (NULL == Owner)
+        return;
 
-    for (auto iter = m_petsList.begin(); iter != m_petsList.end(); )
+    for (auto iter = m_petsList.begin(); iter != m_petsList.end();)
     {
         auto tempiter = iter;
         ++iter;
@@ -158,13 +150,14 @@ void PetProcess::UnRegister(CHARACTER* Owner, int itemType, bool isUnregistAll)
 
         if (basepet.expired() == FALSE)
         {
-            if ((-1 == itemType && basepet.lock()->IsSameOwner(&Owner->Object))
-                || basepet.lock()->IsSameObject(&Owner->Object, itemType))
+            if ((-1 == itemType && basepet.lock()->IsSameOwner(&Owner->Object)) ||
+                basepet.lock()->IsSameObject(&Owner->Object, itemType))
             {
                 basepet.lock()->Release();
                 m_petsList.erase(tempiter);
 
-                if (-1 == itemType || !isUnregistAll) return;
+                if (-1 == itemType || !isUnregistAll)
+                    return;
             }
         }
     }
@@ -271,23 +264,27 @@ bool PetProcess::LoadData()
 bool PetProcess::IsPet(int itemType)
 {
     auto iter = m_petsInfo.find(itemType);
-    if (iter == m_petsInfo.end()) return FALSE;
+    if (iter == m_petsInfo.end())
+        return FALSE;
 
     Weak_Ptr(PetInfo) petInfo = (*iter).second;
-    if (petInfo.expired()) return FALSE;
+    if (petInfo.expired())
+        return FALSE;
 
     return TRUE;
 }
 
 bool PetProcess::CreatePet(int itemType, int modelType, vec3_t Position, CHARACTER* Owner, int SubType, int LinkBone)
 {
-    if (NULL == Owner) return FALSE;
+    if (NULL == Owner)
+        return FALSE;
 
     PetObjectPtr _tempPet = PetObject::Make();
     if (_tempPet->Create(itemType, modelType, Position, Owner, SubType, LinkBone))
     {
         auto iter = m_petsInfo.find(itemType);
-        if (iter == m_petsInfo.end()) return FALSE;
+        if (iter == m_petsInfo.end())
+            return FALSE;
 
         Weak_Ptr(PetInfo) petInfo = (*iter).second;
 
@@ -317,16 +314,18 @@ bool PetProcess::CreatePet(int itemType, int modelType, vec3_t Position, CHARACT
 
 void PetProcess::DeletePet(CHARACTER* Owner, int itemType, bool allDelete)
 {
-    if (NULL == Owner) return;
+    if (NULL == Owner)
+        return;
 
     UnRegister(Owner, itemType, allDelete);
 }
 
 void PetProcess::SetCommandPet(CHARACTER* Owner, int targetKey, PetObject::ActionType cmdType)
 {
-    if (NULL == Owner) return;
+    if (NULL == Owner)
+        return;
 
-    for (auto iter = m_petsList.begin(); iter != m_petsList.end(); )
+    for (auto iter = m_petsList.begin(); iter != m_petsList.end();)
     {
         auto tempiter = iter;
         ++iter;
@@ -344,7 +343,7 @@ void PetProcess::SetCommandPet(CHARACTER* Owner, int targetKey, PetObject::Actio
 
 void PetProcess::UpdatePets()
 {
-    for (auto iter = m_petsList.begin(); iter != m_petsList.end(); )
+    for (auto iter = m_petsList.begin(); iter != m_petsList.end();)
     {
         auto tempiter = iter;
         ++iter;
@@ -359,7 +358,7 @@ void PetProcess::UpdatePets()
 
 void PetProcess::RenderPets()
 {
-    for (auto iter = m_petsList.begin(); iter != m_petsList.end(); )
+    for (auto iter = m_petsList.begin(); iter != m_petsList.end();)
     {
         auto tempiter = iter;
         ++iter;
