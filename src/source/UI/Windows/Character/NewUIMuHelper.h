@@ -6,7 +6,7 @@
 #include "NewUIBase.h"
 #include "NewUIManager.h"
 #include "NewUIButton.h"
-#include "Gameplay/MuHelper.h"
+#include "MuHelper.h"
 
 namespace SEASON3B
 {

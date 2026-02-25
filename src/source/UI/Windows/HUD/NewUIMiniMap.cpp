@@ -9,7 +9,7 @@
 #include "NewUICustomMessageBox.h"
 #include "DSPlaySound.h"
 
-#include "UI/Windows/NewUIGuildInfoWindow.h"
+#include "NewUIGuildInfoWindow.h"
 #include "NewUIButton.h"
 #include "NewUIMyInventory.h"
 #include "CSItemOption.h"

@@ -4,7 +4,7 @@
 
 #include "ItemDataExportS6E3.h"
 #include "Data/DataFileIO.h"
-#include "Data/ItemStructs.h"
+#include "ItemStructs.h"
 #include "_struct.h"
 #include "_define.h"
 #include "ZzzInfomation.h"

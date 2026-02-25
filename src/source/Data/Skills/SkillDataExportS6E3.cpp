@@ -4,7 +4,7 @@
 
 #include "SkillDataExportS6E3.h"
 #include "Data/DataFileIO.h"
-#include "Data/SkillStructs.h"
+#include "SkillStructs.h"
 #include "_struct.h"
 #include "_define.h"
 #include "ZzzInfomation.h"

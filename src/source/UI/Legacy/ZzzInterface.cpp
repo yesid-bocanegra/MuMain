@@ -46,7 +46,7 @@
 #include "MonkSystem.h"
 #include "CharacterManager.h"
 #include "SkillManager.h"
-#include "Gameplay/MuHelper.h"
+#include "MuHelper.h"
 
 #include "ZzzInterface.h"
 

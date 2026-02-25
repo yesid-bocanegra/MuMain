@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "Data/SkillStructs.h"
+#include "SkillStructs.h"
 
 // Skill Data Handler - Singleton Facade
 // Provides centralized access to skill data operations

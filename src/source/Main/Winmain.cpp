@@ -33,7 +33,7 @@
 #include "UIMapName.h" // rozy
 #include "Core/CpuUsage.h"
 
-#include "Gameplay/MuHelper.h"
+#include "MuHelper.h"
 
 #include "CBTMessageBox.h"
 #include "ThirdParty/regkey.h"

@@ -3,8 +3,8 @@
 #ifdef _EDITOR
 
 #include "SkillDataExportAsCSV.h"
-#include "Data/SkillStructs.h"
-#include "Data/SkillFieldDefs.h"
+#include "SkillStructs.h"
+#include "SkillFieldDefs.h"
 #include "_struct.h"
 #include "_define.h"
 #include "ZzzInfomation.h"

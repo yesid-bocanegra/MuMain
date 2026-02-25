@@ -3,7 +3,7 @@
 #ifdef _EDITOR
 
 #include "SkillDataSaver.h"
-#include "Data/SkillStructs.h"
+#include "SkillStructs.h"
 #include "_struct.h"
 #include "_define.h"
 #include "ZzzInfomation.h"
@@ -17,7 +17,7 @@
 #include "Data/ChangeTracker.h"
 #include "Data/CommonDataSaver.h"
 #include "Data/FieldMetadata.h"
-#include "Data/SkillComparisonMetadata.h"
+#include "SkillComparisonMetadata.h"
 
 // External references
 extern SKILL_ATTRIBUTE* SkillAttribute;

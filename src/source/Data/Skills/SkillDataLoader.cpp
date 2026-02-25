@@ -1,8 +1,8 @@
 #include "stdafx.h"
 
-#include "Data/SkillDataLoader.h"
+#include "SkillDataLoader.h"
 #include "Data/DataFileIO.h"
-#include "Data/SkillStructs.h"
+#include "SkillStructs.h"
 #include "_struct.h"
 #include "_define.h"
 #include "ZzzInfomation.h"

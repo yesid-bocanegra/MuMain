@@ -8,7 +8,7 @@
 #include "NewUISystem.h"
 #include "NewUIMuHelper.h"
 #include "CharacterManager.h"
-#include "Gameplay/MuHelper.h"
+#include "MuHelper.h"
 
 using namespace MUHelper;
 

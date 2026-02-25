@@ -26,7 +26,7 @@
 #include "UIManager.h"
 #include "ZzzInventory.h"
 #include "PortalMgr.h"
-#include "Gameplay/GuildCache.h"
+#include "GuildCache.h"
 #include "UIMapName.h"
 
 // External declarations

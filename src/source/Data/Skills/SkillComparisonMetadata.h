@@ -3,7 +3,7 @@
 #ifdef _EDITOR
 
 #include "Data/FieldMetadata.h"
-#include "Data/SkillStructs.h"
+#include "SkillStructs.h"
 
 /**
  * Skill field metadata for comparison - C++20 constexpr arrays

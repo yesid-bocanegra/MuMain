@@ -1,7 +1,7 @@
 ﻿#include "stdafx.h"
 #include <memory>
 #include "UIManager.h"
-#include "Gameplay/GuildCache.h"
+#include "GuildCache.h"
 #include "ZzzBMD.h"
 #include "ZzzInfomation.h"
 #include "ZzzObject.h"
@@ -71,7 +71,7 @@
 
 #include "Dotnet/Connection.h"
 
-#include "Gameplay/MuHelper.h"
+#include "MuHelper.h"
 
 #define MAX_DEBUG_MAX 10
 

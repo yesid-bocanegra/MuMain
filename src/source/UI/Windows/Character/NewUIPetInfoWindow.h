@@ -11,7 +11,7 @@
 #include "NewUIMessageBox.h"
 #include "NewUIMyInventory.h"
 #include "NewUIInventoryCtrl.h"
-#include "UI/Windows/NewUIGuildInfoWindow.h"
+#include "NewUIGuildInfoWindow.h"
 #include "NewUIMainFrameWindow.h"
 
 namespace SEASON3B

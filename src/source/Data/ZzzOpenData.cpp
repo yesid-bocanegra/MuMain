@@ -28,9 +28,9 @@
 #include "QuestMng.h"
 #include "ServerListManager.h"
 #include "MonkSystem.h"
-#include "Data/SkillDataHandler.h"
+#include "SkillDataHandler.h"
 
-#include "Data/ItemDataHandler.h"
+#include "ItemDataHandler.h"
 #include "SocketSystem.h"
 
 ///////////////////////////////////////////

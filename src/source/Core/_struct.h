@@ -9,7 +9,7 @@
 class OBJECT;
 #include "w_CharacterInfo.h"
 class CHARACTER;
-#include "Gameplay/GuildConstants.h"
+#include "GuildConstants.h"
 
 namespace SEASON3B
 {
@@ -145,7 +145,7 @@ typedef struct
 } DIALOG_SCRIPT; // Script_Dialog
 
 // Item attribute structures moved to GameData/ItemData/ItemStructs.h
-#include "Data/ItemStructs.h"
+#include "ItemStructs.h"
 
 typedef struct _MASTER_LEVEL_DATA
 {
@@ -273,7 +273,7 @@ typedef struct
 
 // SKILL_ATTRIBUTE_FILE and SKILL_ATTRIBUTE definitions moved to GameData/SkillData/SkillStructs.h
 // This is now the single source of truth for ALL builds (editor and release)
-#include "Data/SkillStructs.h"
+#include "SkillStructs.h"
 /*
 typedef struct
 {

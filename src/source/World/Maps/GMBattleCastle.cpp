@@ -21,7 +21,7 @@
 #include "GIPetManager.h"
 #include "BoneManager.h"
 
-#include "Gameplay/GuildCache.h"
+#include "GuildCache.h"
 #include "ZzzInterface.h"
 
 extern int WaterTextureNumber;

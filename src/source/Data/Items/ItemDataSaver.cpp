@@ -3,7 +3,7 @@
 #ifdef _EDITOR
 
 #include "ItemDataSaver.h"
-#include "Data/ItemStructs.h"
+#include "ItemStructs.h"
 #include "Translation/i18n.h"
 #include "_struct.h"
 #include "_define.h"
@@ -16,7 +16,7 @@
 #include "Data/ChangeTracker.h"
 #include "Data/CommonDataSaver.h"
 #include "Data/FieldMetadata.h"
-#include "Data/ItemComparisonMetadata.h"
+#include "ItemComparisonMetadata.h"
 #include "UI/Console/MuEditorConsoleUI.h"
 #include "Core/StringUtils.h"
 

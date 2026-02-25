@@ -3,7 +3,7 @@
 #ifdef _EDITOR
 
 #include "Data/FieldMetadata.h"
-#include "Data/ItemStructs.h"
+#include "ItemStructs.h"
 
 /**
  * Item field metadata for comparison - C++20 constexpr arrays

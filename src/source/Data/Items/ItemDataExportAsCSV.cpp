@@ -6,7 +6,7 @@
 #include "_struct.h"
 #include "_define.h"
 #include "ZzzInfomation.h"
-#include "Data/ItemFieldDefs.h"
+#include "ItemFieldDefs.h"
 #include "Core/StringUtils.h"
 #include <string>
 
