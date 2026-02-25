@@ -1,6 +1,6 @@
 ﻿# MU Online Client Sources
 
-[![MinGW Build](https://github.com/sven-n/MuMain/actions/workflows/mingw-build.yml/badge.svg?branch=main)](https://github.com/sven-n/MuMain/actions/workflows/mingw-build.yml)
+[![CI](https://github.com/sven-n/MuMain/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/sven-n/MuMain/actions/workflows/ci.yml)
 
 This is my special fork of the Season 5.2 client sources [uploaded by Luois](https://github.com/LouisEmulator/Main5.2).
 
