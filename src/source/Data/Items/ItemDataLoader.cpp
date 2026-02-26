@@ -37,7 +37,6 @@ bool ItemDataLoader::Load(wchar_t* fileName)
     const int LegacySize = sizeof(ITEM_ATTRIBUTE_FILE_LEGACY);
     const int NewSize = sizeof(ITEM_ATTRIBUTE_FILE);
     const long expectedLegacySize = LegacySize * MAX_ITEM + sizeof(DWORD);
-    const long expectedNewSize = NewSize * MAX_ITEM + sizeof(DWORD);
 
     bool isLegacyFormat = (fileSize == expectedLegacySize);
     bool success = false;

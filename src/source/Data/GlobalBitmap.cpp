@@ -463,11 +463,10 @@ void CGlobalBitmap::UnloadAllImages()
         g_ErrorReport.Write(L"Unload Images\r\n");
 #endif // _DEBUG
 
-    for (auto& pair : m_mapBitmap)
+    for ([[maybe_unused]] auto& pair : m_mapBitmap)
     {
-        BITMAP_t* pBitmap = pair.second.get();
-
 #ifdef _DEBUG
+        BITMAP_t* pBitmap = pair.second.get();
         if (pBitmap->Ref > 1)
         {
             g_ErrorReport.Write(L"Bitmap %ls(RefCount= %d)\r\n", pBitmap->FileName, pBitmap->Ref);

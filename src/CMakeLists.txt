@@ -217,6 +217,8 @@ else()
     -Wno-conversion-null
     # Manual sizeof(wchar_t)*N in memset — matches actual buffer size
     -Wno-memset-elt-size
+    # GCC -O2/-O3 false positives from inlined wmemcpy/std::wstring (MinGW wchar.h)
+    -Wno-array-bounds
   )
 endif()
 
