@@ -286,7 +286,7 @@ void AddObjectDescription(wchar_t* Text, vec3_t position)
 {
     ObjectDescript QD;
 
-    memcpy(QD.m_strName, Text, sizeof(char) * 64);
+    memcpy(QD.m_strName, Text, sizeof(wchar_t) * 64);
     VectorCopy(position, QD.m_vPos);
 
     g_qObjDes.push(QD);

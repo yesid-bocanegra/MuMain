@@ -201,6 +201,22 @@ else()
     -Wall
     -Wextra
     -Werror
+    # Suppress cross-compiler noise from MSVC-specific pragmas (14+ headers)
+    -Wno-unknown-pragmas
+    # Virtual interface contracts intentionally leave parameters unnamed (100+ instances)
+    -Wno-unused-parameter
+    # CUITextListBox and derived classes intentionally hide base AddText() overloads
+    -Wno-overloaded-virtual
+    # Win32 GetProcAddress casts require function-type reinterpretation
+    -Wno-cast-function-type
+    # False positive on AdjustHeroHeight() and similar conditionally-used functions
+    -Wno-unused-function
+    # Harmless const qualifiers on primitive return types (17+ instances)
+    -Wno-ignored-qualifiers
+    # Legacy memset(ptr, NULL, size) pattern in packet structs
+    -Wno-conversion-null
+    # Manual sizeof(wchar_t)*N in memset — matches actual buffer size
+    -Wno-memset-elt-size
   )
 endif()
 
@@ -243,6 +259,8 @@ file(GLOB MU_THIRDPARTY_SOURCES CONFIGURE_DEPENDS "${MU_SOURCE_DIR}/ThirdParty/*
 add_library(MUThirdParty STATIC ${MU_THIRDPARTY_SOURCES})
 target_link_libraries(MUThirdParty PRIVATE MUCommon)
 target_precompile_headers(MUThirdParty REUSE_FROM MUCore)
+# ThirdParty code: keep warnings visible but don't fail the build
+target_compile_options(MUThirdParty PRIVATE -Wno-error)
 
 # Platform abstraction (empty now, populated by Phase 0 SDL3 migration)
 file(GLOB MU_PLATFORM_SOURCES CONFIGURE_DEPENDS "${MU_SOURCE_DIR}/Platform/*.cpp")

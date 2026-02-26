@@ -974,7 +974,7 @@ void SEASON3B::CNewUIGuildInfoWindow::NoticeClear()
 
 void SEASON3B::CNewUIGuildInfoWindow::SetRivalGuildName(wchar_t* szName)
 {
-    memcpy(m_RivalGuildName, szName, sizeof(char) * MAX_GUILDNAME);
+    memcpy(m_RivalGuildName, szName, sizeof(wchar_t) * MAX_GUILDNAME);
     m_RivalGuildName[MAX_GUILDNAME] = NULL;
 }
 

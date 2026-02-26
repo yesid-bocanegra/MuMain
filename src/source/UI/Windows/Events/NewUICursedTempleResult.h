@@ -44,7 +44,7 @@ public:
         CursedTempleGameResult()
             : s_mapnumber(-1), s_team(SEASON3A::eTeam_Count), s_point(0xff), s_class(CLASS_UNDEFINED), s_addexp(0xff)
         {
-            memset(&s_characterId, 0, sizeof(char) * (MAX_USERNAME_SIZE + 1));
+            memset(&s_characterId, 0, sizeof(s_characterId));
         }
     };
 

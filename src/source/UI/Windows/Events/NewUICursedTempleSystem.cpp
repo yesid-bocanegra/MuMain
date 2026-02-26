@@ -803,7 +803,7 @@ void SEASON3B::CNewUICursedTempleSystem::RenderSkill()
         }
 
         wchar_t skillname[100];
-        memset(&skillname, 0, sizeof(char));
+        memset(skillname, 0, sizeof(skillname));
 
         SKILL_ATTRIBUTE* p = &SkillAttribute[CursedTempleCurSkillType];
         wcscpy(skillname, p->Name);
@@ -1424,7 +1424,7 @@ void SEASON3B::CNewUICursedTempleSystem::ReceiveCursedTempleInfo(const BYTE* Rec
 
     if (data->btUserIndex == 0xffff)
     {
-        memset(&m_HolyItemPlayerName, 0, sizeof(char));
+        memset(m_HolyItemPlayerName, 0, sizeof(m_HolyItemPlayerName));
     }
 
     m_HolyItemPlayerIndex = data->btUserIndex;
@@ -1433,7 +1433,7 @@ void SEASON3B::CNewUICursedTempleSystem::ReceiveCursedTempleInfo(const BYTE* Rec
     m_MyTeam = static_cast<SEASON3A::eCursedTempleTeam>(data->btMyTeam);
 
     wchar_t message[200];
-    memset(&message, 0, sizeof(char));
+    memset(message, 0, sizeof(message));
 
     if (m_MyTeam == SEASON3A::eTeam_Allied)
     {
@@ -1498,7 +1498,7 @@ void SEASON3B::CNewUICursedTempleSystem::ReceiveCursedTempSkillPoint(const BYTE*
     if (m_SkillPoint < data->btSkillPoint)
     {
         wchar_t message[100];
-        memset(&message, 0, sizeof(char));
+        memset(message, 0, sizeof(message));
         mu_swprintf(message, GlobalText[2391], data->btSkillPoint - m_SkillPoint);
         g_pSystemLogBox->AddText(message, SEASON3B::TYPE_SYSTEM_MESSAGE);
     }

@@ -108,7 +108,7 @@ bool CNewUITextBox::Render()
 void CNewUITextBox::AddText(wchar_t* strText)
 {
     wchar_t strTemp[iMAX_TEXT_LINE][iMAX_TEXT_LINE];
-    ::memset(strTemp[0], 0, sizeof(char) * iMAX_TEXT_LINE * iMAX_TEXT_LINE);
+    ::memset(strTemp[0], 0, sizeof(wchar_t) * iMAX_TEXT_LINE * iMAX_TEXT_LINE);
 
     int iTextLine = ::DivideStringByPixel(&strTemp[0][0], iMAX_TEXT_LINE, iMAX_TEXT_LINE, strText, m_iWidth, true, '#');
 

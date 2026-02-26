@@ -542,7 +542,7 @@ void CUIGuildInfo::RenderGuildUnionTab()
 
 void CUIGuildInfo::SetRivalGuildName(wchar_t* szName)
 {
-    memcpy(m_szRivalGuildName, szName, sizeof(char) * MAX_GUILDNAME);
+    memcpy(m_szRivalGuildName, szName, sizeof(wchar_t) * MAX_GUILDNAME);
     m_szRivalGuildName[MAX_GUILDNAME] = NULL;
 }
 

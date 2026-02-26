@@ -20,7 +20,7 @@ void CServerMsgWin::Create()
                                      {BITMAP_LOG_IN + 13, 3, 0, 3, 4}};
     CWinEx::Create(aiiDescBg, 1, SMW_MSG_LINE_MAX * 5);
 
-    ::memset(m_aszMsg, 0, sizeof(char) * SMW_MSG_LINE_MAX * SMW_MSG_ROW_MAX);
+    ::memset(m_aszMsg, 0, sizeof(wchar_t) * SMW_MSG_LINE_MAX * SMW_MSG_ROW_MAX);
     m_nMsgLine = 0;
 }
 

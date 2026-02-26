@@ -114,7 +114,7 @@ bool CheckID_HistoryDay(wchar_t* Name, WORD day)
     {
         if (!sameName)
         {
-            memcpy(days[num].ID, Name, (MAX_USERNAME_SIZE + 1) * sizeof(char));
+            memcpy(days[num].ID, Name, (MAX_USERNAME_SIZE + 1) * sizeof(wchar_t));
             days[num].date = day;
 
             num++;

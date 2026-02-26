@@ -33,7 +33,7 @@ CNewUIGoldBowmanWindow::CNewUIGoldBowmanWindow()
 {
     m_pNewUIMng = NULL;
     m_Pos.x = m_Pos.y = 0;
-    ZeroMemory(g_strGiftName, sizeof(char) * 64);
+    ZeroMemory(g_strGiftName, sizeof(wchar_t) * 64);
 }
 
 CNewUIGoldBowmanWindow::~CNewUIGoldBowmanWindow()
@@ -91,13 +91,13 @@ void CNewUIGoldBowmanWindow::Release()
 
 void CNewUIGoldBowmanWindow::OpeningProcess()
 {
-    ZeroMemory(g_strGiftName, sizeof(char) * 64);
+    ZeroMemory(g_strGiftName, sizeof(wchar_t) * 64);
     ChangeEditBox(UISTATE_NORMAL);
 }
 
 void CNewUIGoldBowmanWindow::ClosingProcess()
 {
-    ZeroMemory(g_strGiftName, sizeof(char) * 64);
+    ZeroMemory(g_strGiftName, sizeof(wchar_t) * 64);
     ChangeEditBox(UISTATE_HIDE);
     SocketClient->ToGameServer()->SendEventChipExitDialog();
 }
@@ -150,19 +150,19 @@ bool CNewUIGoldBowmanWindow::UpdateMouseEvent()
         else
         {
             wchar_t strSerial[12];
-            memset(&strSerial, 0, sizeof(char) * 12);
+            memset(&strSerial, 0, sizeof(wchar_t) * 12);
             m_EditBox->GetText(strSerial);
 
             wchar_t strSerial1[5] = L"0,";
-            memcpy(strSerial1, strSerial, sizeof(char) * 4);
+            memcpy(strSerial1, strSerial, sizeof(wchar_t) * 4);
             strSerial1[4] = 0;
 
             wchar_t strSerial2[5] = L"0,";
-            memcpy(strSerial2, strSerial + 4, sizeof(char) * 4);
+            memcpy(strSerial2, strSerial + 4, sizeof(wchar_t) * 4);
             strSerial2[4] = 0;
 
             wchar_t strSerial3[5] = L"0,";
-            memcpy(strSerial3, strSerial + 8, sizeof(char) * 4);
+            memcpy(strSerial3, strSerial + 8, sizeof(wchar_t) * 4);
             strSerial3[4] = 0;
 
             SocketClient->ToGameServer()->SendLuckyNumberRequest(strSerial1, strSerial2, strSerial3);
@@ -250,37 +250,37 @@ void CNewUIGoldBowmanWindow::RenderTexts()
     auto name = getMonsterName(236); // npc Name file
     RenderText(name, m_Pos.x, m_Pos.y + 15, 190, 0, 0xFFFFFFFF, 0x00000000, RT3_SORT_CENTER);
 
-    memset(&Text, 0, sizeof(char) * 100);
+    memset(&Text, 0, sizeof(wchar_t) * 100);
     mu_swprintf(Text, GlobalText[891]); //"100%%
     RenderText(Text, m_Pos.x, m_Pos.y + 80, 190, 0, 0xFFFFFFFF, 0x00000000, RT3_SORT_CENTER);
 
-    memset(&Text, 0, sizeof(char) * 100);
+    memset(&Text, 0, sizeof(wchar_t) * 100);
     mu_swprintf(Text, GlobalText[892]);
     RenderText(Text, m_Pos.x, m_Pos.y + 95, 190, 0, 0xFFFFFFFF, 0x00000000, RT3_SORT_CENTER);
 
-    memset(&Text, 0, sizeof(char) * 100);
+    memset(&Text, 0, sizeof(wchar_t) * 100);
     mu_swprintf(Text, GlobalText[897]);
     RenderText(Text, m_Pos.x, m_Pos.y + 110, 190, 0, 0xFFFFFFFF, 0x00000000, RT3_SORT_CENTER);
 
-    memset(&Text, 0, sizeof(char) * 100);
+    memset(&Text, 0, sizeof(wchar_t) * 100);
     mu_swprintf(Text, GlobalText[898]);
     RenderText(Text, m_Pos.x, m_Pos.y + 125, 190, 0, 0xFFFFFFFF, 0x00000000, RT3_SORT_CENTER);
 
     /////////////////////////////// bottom text /////////////////////////////////////////////////////
 
-    memset(&Text, 0, sizeof(char) * 100);
+    memset(&Text, 0, sizeof(wchar_t) * 100);
     mu_swprintf(Text, GlobalText[893]);
     RenderText(Text, m_Pos.x, m_Pos.y + 180, 190, 0, 0xFFFFFFFF, 0x00000000, RT3_SORT_CENTER);
 
-    memset(&Text, 0, sizeof(char) * 100);
+    memset(&Text, 0, sizeof(wchar_t) * 100);
     mu_swprintf(Text, GlobalText[894]);
     RenderText(Text, m_Pos.x, m_Pos.y + 195, 190, 0, 0xFF18FF00, 0x00000000, RT3_SORT_CENTER);
 
-    memset(&Text, 0, sizeof(char) * 100);
+    memset(&Text, 0, sizeof(wchar_t) * 100);
     mu_swprintf(Text, GlobalText[916]);
     RenderText(Text, m_Pos.x, m_Pos.y + 210, 190, 0, 0xFFFFFFFF, 0x00000000, RT3_SORT_CENTER);
 
-    memset(&Text, 0, sizeof(char) * 100);
+    memset(&Text, 0, sizeof(wchar_t) * 100);
     mu_swprintf(Text, GlobalText[917]);
     RenderText(Text, m_Pos.x, m_Pos.y + 225, 190, 0, 0xFFFFFFFF, 0x00000000, RT3_SORT_CENTER);
 

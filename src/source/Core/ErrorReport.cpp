@@ -442,7 +442,7 @@ __int64 GetCPUFrequency(unsigned int uiMeasureMSecs)
 
 void GetCPUInfo(ER_SystemInfo* si)
 {
-    if (si == nullptr || si->m_lpszCPU == nullptr)
+    if (si == nullptr)
         return;
 
     wcscpy(si->m_lpszCPU, L"Unknown CPU");

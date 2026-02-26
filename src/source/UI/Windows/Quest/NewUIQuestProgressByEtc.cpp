@@ -391,7 +391,7 @@ void CNewUIQuestProgressByEtc::SetCurNPCWords()
     if (0 == m_dwCurQuestIndex)
         return;
 
-    ::memset(m_aszNPCWords[0], 0, sizeof(char) * QPE_NPC_LINE_MAX * QPE_WORDS_ROW_MAX);
+    ::memset(m_aszNPCWords[0], 0, sizeof(wchar_t) * QPE_NPC_LINE_MAX * QPE_WORDS_ROW_MAX);
 
     g_pRenderText->SetFont(g_hFont);
     int nLine = ::DivideStringByPixel(&m_aszNPCWords[0][0], QPE_NPC_LINE_MAX, QPE_WORDS_ROW_MAX,
@@ -409,7 +409,7 @@ void CNewUIQuestProgressByEtc::SetCurPlayerWords()
     if (0 == m_dwCurQuestIndex)
         return;
 
-    ::memset(m_aszPlayerWords[0], 0, sizeof(char) * QPE_PLAYER_LINE_MAX * QPE_WORDS_ROW_MAX);
+    ::memset(m_aszPlayerWords[0], 0, sizeof(wchar_t) * QPE_PLAYER_LINE_MAX * QPE_WORDS_ROW_MAX);
     ::memset(m_anAnswerLine, 0, sizeof(int) * QM_MAX_ANSWER);
 
     g_pRenderText->SetFont(g_hFont);

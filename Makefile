@@ -1,7 +1,7 @@
 # Developer convenience targets for code quality tooling.
 # Usage: make <target> from the MuMain/ directory.
 
-SOURCES := $(shell find src/source -name '*.cpp' -o -name '*.h' -o -name '*.hpp' | grep -v ThirdParty/)
+SOURCES := $(shell find src/source -name '*.cpp' -o -name '*.h' -o -name '*.hpp' | grep -v ThirdParty/ | grep -v 'src/source/Dotnet/')
 
 .PHONY: format format-check lint tidy hooks test
 

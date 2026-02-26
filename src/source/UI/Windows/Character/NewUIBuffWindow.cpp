@@ -291,7 +291,7 @@ void SEASON3B::CNewUIBuffWindow::RenderBuffIcon(eBuffState& eBuffType, float x, 
 void SEASON3B::CNewUIBuffWindow::RenderBuffTooltip(eBuffClass& eBuffClassType, eBuffState& eBuffType, float x, float y)
 {
     int TextNum = 0;
-    ::memset(TextList[0], 0, sizeof(char) * 30 * 100);
+    ::memset(TextList[0], 0, sizeof(wchar_t) * 30 * 100);
     ::memset(TextListColor, 0, sizeof(int) * 30);
     ::memset(TextBold, 0, sizeof(int) * 30);
 

@@ -413,7 +413,7 @@ void CNewUIGuildMakeWindow::RenderGMInfo()
 {
     wchar_t Text[100];
 
-    memset(&Text, 0, sizeof(char) * 100);
+    memset(&Text, 0, sizeof(wchar_t) * 100);
     mu_swprintf(Text, GlobalText[181]);
     RenderText(Text, m_Pos.x, m_Pos.y + 50, 190, 0, 0xFFFFFFFF, 0x00000000, RT3_SORT_CENTER);
 
@@ -426,7 +426,7 @@ void CNewUIGuildMakeWindow::RenderGMMark()
 {
     // edit box
     wchar_t Text[100];
-    memset(&Text, 0, sizeof(char) * 100);
+    memset(&Text, 0, sizeof(wchar_t) * 100);
     mu_swprintf(Text, GlobalText[182]);
     RenderText(Text, m_Pos.x + 10, m_Pos.y + 66, 190, 0, 0xFF49B0FF, 0x00000000, RT3_SORT_LEFT);
 
@@ -448,7 +448,7 @@ void CNewUIGuildMakeWindow::RenderGMResultInfo()
     RenderBitmap(BITMAP_GUILD, m_Pos.x + 72, m_Pos.y + 74, 48, 48);
 
     wchar_t Text[100];
-    memset(&Text, 0, sizeof(char) * 100);
+    memset(&Text, 0, sizeof(wchar_t) * 100);
     mu_swprintf(Text, L"%ls : %ls", GlobalText[182], GuildMark[MARK_EDIT].GuildName);
     RenderText(Text, m_Pos.x, m_Pos.y + 140, 190, 0, 0xFF49B0FF, 0x00000000, RT3_SORT_CENTER);
 
@@ -465,7 +465,7 @@ void CNewUIGuildMakeWindow::RenderFrame()
     RenderImage(IMAGE_GUILDMAKE_BACK_BOTTOM, m_Pos.x, m_Pos.y + 429 - 45, 190.f, 45.f);
 
     wchar_t Text[100];
-    memset(&Text, 0, sizeof(char) * 100);
+    memset(&Text, 0, sizeof(wchar_t) * 100);
     mu_swprintf(Text, GlobalText[180]);
     RenderText(Text, m_Pos.x, m_Pos.y + 15, 190, 0, 0xFF49B0FF, 0x00000000, RT3_SORT_CENTER);
 }

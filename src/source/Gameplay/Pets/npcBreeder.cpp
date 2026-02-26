@@ -70,7 +70,7 @@ int CalcRecoveryZen(BYTE type, wchar_t* Text)
     default:
     {
         wchar_t Text2[100];
-        memset(Text2, 0, sizeof(char) * 100);
+        memset(Text2, 0, sizeof(wchar_t) * 100);
 
         if ((int)CharacterMachine->Gold < Gold)
         {
@@ -83,7 +83,7 @@ int CalcRecoveryZen(BYTE type, wchar_t* Text)
         }
 
         int Length = wcslen(Text2);
-        memcpy(Text, Text2, sizeof(char) * Length);
+        memcpy(Text, Text2, sizeof(wchar_t) * Length);
         Text[Length] = 0;
     }
     break;

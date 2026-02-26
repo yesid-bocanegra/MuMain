@@ -241,7 +241,7 @@ void CServerSelWin::UpdateDisplay()
     ShowServerGBtns();
     ShowDecoSprite();
 
-    memset(m_szDescription, 0, sizeof(char) * SSW_DESC_LINE_MAX * SSW_DESC_ROW_MAX);
+    memset(m_szDescription, 0, sizeof(wchar_t) * SSW_DESC_LINE_MAX * SSW_DESC_ROW_MAX);
 
     if (m_iSelectServerBtnIndex != -1)
     {

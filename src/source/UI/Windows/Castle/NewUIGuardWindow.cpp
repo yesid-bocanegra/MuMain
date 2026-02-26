@@ -627,8 +627,8 @@ void CNewUIGuardWindow::SetData(LPPMSG_ANS_CASTLESIEGESTATE Info)
     if (!Info)
         return;
 
-    memset(m_szOwnerGuild, 0, sizeof(char) * 9);
-    memset(m_szOwnerGuildMaster, 0, sizeof(char) * 11);
+    memset(m_szOwnerGuild, 0, sizeof(wchar_t) * 9);
+    memset(m_szOwnerGuildMaster, 0, sizeof(wchar_t) * 11);
 
     m_eTimeType = (CASTLESIEGE_STATE)Info->cCastleSiegeState;
     CMultiLanguage::ConvertFromUtf8(m_szOwnerGuild, Info->cOwnerGuild, MAX_GUILDNAME);

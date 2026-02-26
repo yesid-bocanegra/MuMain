@@ -290,14 +290,14 @@ void SEASON3B::CNewUICursedTempleEnter::RenderText()
             }
         }
 
-        memset(&Text, 0, sizeof(char));
+        memset(Text, 0, sizeof(Text));
         mu_swprintf(Text, GlobalText[2373], m_EnterCount);
         DrawText(Text, m_Pos.x + 3, m_Pos.y + 70 + ((EnterLevelCount + 1) * 15), 0xff0000ff, 0x00000000,
                  RT3_SORT_CENTER, CURSEDTEMPLE_ENTER_WINDOW_WIDTH - 10, false);
     }
     else
     {
-        memset(&Text, 0, sizeof(char));
+        memset(Text, 0, sizeof(Text));
         mu_swprintf(Text, GlobalText[2366]);
         DrawText(Text, m_Pos.x, m_Pos.y + 52, 0xff0000ff, 0x00000000, RT3_SORT_CENTER, CURSEDTEMPLE_ENTER_WINDOW_WIDTH,
                  false);

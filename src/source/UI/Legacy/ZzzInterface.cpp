@@ -4104,7 +4104,7 @@ bool CheckMacroLimit(wchar_t* Text)
     wchar_t string[256];
     int length;
 
-    memcpy(string, Text + 3, sizeof(char) * (256 - 2));
+    memcpy(string, Text + 3, sizeof(wchar_t) * (256 - 2));
     length = GlobalText.GetStringSize(258);
     if (wcscmp(string, GlobalText[258]) == 0 || wcscmp(string, GlobalText[259]) == 0 || wcsicmp(string, L"/trade") == 0)
     {
