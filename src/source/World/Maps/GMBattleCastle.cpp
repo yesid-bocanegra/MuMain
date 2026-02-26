@@ -435,11 +435,11 @@ bool SettingBattleFormation(CHARACTER* c, eBuffState state)
 
 bool GetGuildMaster(CHARACTER* c)
 {
-    if (wcscmp(GuildMark[c->GuildMarkIndex].GuildName, L"") == NULL)
+    if (wcscmp(GuildMark[c->GuildMarkIndex].GuildName, L"") == 0)
         return false;
-    if (wcscmp(GuildMark[c->GuildMarkIndex].UnionName, L"") == NULL && c->GuildStatus != G_MASTER)
+    if (wcscmp(GuildMark[c->GuildMarkIndex].UnionName, L"") == 0 && c->GuildStatus != G_MASTER)
         return false;
-    if (wcscmp(GuildMark[c->GuildMarkIndex].UnionName, GuildMark[c->GuildMarkIndex].GuildName) == NULL &&
+    if (wcscmp(GuildMark[c->GuildMarkIndex].UnionName, GuildMark[c->GuildMarkIndex].GuildName) == 0 &&
         c->GuildStatus != G_MASTER)
         return false;
 
@@ -508,7 +508,7 @@ void ChangeBattleFormation(wchar_t* GuildName, bool bEffect)
         if (o->Live && o->Visible)
         {
             DeleteParts(c);
-            if (wcscmp(GuildMark[c->GuildMarkIndex].UnionName, GuildName) == NULL)
+            if (wcscmp(GuildMark[c->GuildMarkIndex].UnionName, GuildName) == 0)
             {
                 // _buffwani_
                 g_TokenCharacterBuff(o, eBuff_CastleRegimentDefense);

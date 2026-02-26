@@ -938,6 +938,7 @@ CPhysicsClothMesh::CPhysicsClothMesh() {}
 
 CPhysicsClothMesh::~CPhysicsClothMesh()
 {
+    // cppcheck-suppress virtualCallInConstructor
     Clear();
 }
 

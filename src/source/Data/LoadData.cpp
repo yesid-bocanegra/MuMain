@@ -43,8 +43,8 @@ void CLoadData::AccessModel(int Type, const wchar_t* Dir, const wchar_t* FileNam
     {
         g_ErrorReport.Write(L"AccessModel failed: %ls%ls (Type=%d)\r\n", Dir, Name, Type);
 
-        if (wcscmp(FileName, L"Monster") == NULL || wcscmp(FileName, L"Player") == NULL ||
-            wcscmp(FileName, L"PlayerTest") == NULL || wcscmp(FileName, L"Angel") == NULL)
+        if (wcscmp(FileName, L"Monster") == 0 || wcscmp(FileName, L"Player") == 0 ||
+            wcscmp(FileName, L"PlayerTest") == 0 || wcscmp(FileName, L"Angel") == 0)
         {
             wchar_t Text[256];
             mu_swprintf(Text, L"%ls file does not exist.", Name);

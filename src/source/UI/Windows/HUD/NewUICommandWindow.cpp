@@ -498,7 +498,7 @@ bool SEASON3B::CNewUICommandWindow::CommandPurchase(CHARACTER* pSelectedCha)
 
 bool SEASON3B::CNewUICommandWindow::CommandParty(SHORT iChaKey)
 {
-    if (PartyNumber > 0 && wcscmp(Party[0].Name, Hero->ID) != NULL)
+    if (PartyNumber > 0 && wcscmp(Party[0].Name, Hero->ID) != 0)
     {
         g_pSystemLogBox->AddText(GlobalText[257], SEASON3B::TYPE_ERROR_MESSAGE);
         return false;

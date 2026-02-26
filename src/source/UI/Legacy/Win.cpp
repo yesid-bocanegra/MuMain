@@ -12,6 +12,7 @@ CWin::CWin() : m_psprBg(NULL) {}
 
 CWin::~CWin()
 {
+    // cppcheck-suppress virtualCallInConstructor
     Release();
 }
 

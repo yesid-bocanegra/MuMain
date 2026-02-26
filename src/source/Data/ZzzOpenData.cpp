@@ -52,7 +52,7 @@ void OpenModel(int Type, wchar_t* Dir, wchar_t* ModelFileName, ...)
     while (1)
     {
         wchar_t* Temp = va_arg(Marker, wchar_t*);
-        if (Temp == NULL || wcscmp(Temp, L"end") == NULL)
+        if (Temp == NULL || wcscmp(Temp, L"end") == 0)
         {
             break;
         }

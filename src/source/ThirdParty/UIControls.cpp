@@ -1147,7 +1147,7 @@ void CUIGuildListBox::AddText(const wchar_t* pszID, BYTE Number, BYTE Server)
 
     if (GetLineNum() == 0)
     {
-        if (wcscmp(pszID, Hero->ID) == NULL) m_bIsGuildMaster = TRUE;
+        if (wcscmp(pszID, Hero->ID) == 0) m_bIsGuildMaster = TRUE;
         else m_bIsGuildMaster = FALSE;
     }
 
@@ -1236,7 +1236,7 @@ BOOL CUIGuildListBox::RenderDataLine(int iLineNumber)
         g_pRenderText->RenderText(m_iPos_x + m_iWidth - 60, iPos_y, Text);
     }
 
-    if (m_bIsGuildMaster == TRUE || wcscmp(m_TextListIter->m_szID, Hero->ID) == NULL)
+    if (m_bIsGuildMaster == TRUE || wcscmp(m_TextListIter->m_szID, Hero->ID) == 0)
     {
         float fWidth = 13;
         float fHeight = 11;
@@ -1253,7 +1253,7 @@ BOOL CUIGuildListBox::RenderDataLine(int iLineNumber)
             g_pRenderText->SetTextColor(255, 255, 255, 255);
             g_pRenderText->SetBgColor(0, 0, 0, 255);
 
-            if (wcscmp(m_TextListIter->m_szID, Hero->ID) == NULL && wcscmp(GuildList[0].Name, Hero->ID) == NULL)
+            if (wcscmp(m_TextListIter->m_szID, Hero->ID) == 0 && wcscmp(GuildList[0].Name, Hero->ID) == 0)
                 RenderTipText((int)x - 20, (int)y, GlobalText[188]);
             else
                 RenderTipText((int)x - 20, (int)y, GlobalText[189]);
@@ -1274,7 +1274,7 @@ BOOL CUIGuildListBox::DoSubMouseAction()
     {
         if (m_TextListIter == m_TextList.end()) break;
 
-        if (m_bIsGuildMaster == TRUE || wcscmp(m_TextListIter->m_szID, Hero->ID) == NULL)
+        if (m_bIsGuildMaster == TRUE || wcscmp(m_TextListIter->m_szID, Hero->ID) == 0)
         {
             int iPos_y;
             if (GetLineNum() > m_iNumRenderLine) iPos_y = m_iPos_y - 16 - i * 13;
@@ -4690,7 +4690,7 @@ void CUINewGuildMemberListBox::AddText(const wchar_t* pszID, BYTE Number, BYTE S
 
     if (GetLineNum() == 0)
     {
-        if (wcscmp(pszID, Hero->ID) == NULL) m_bIsGuildMaster = TRUE;
+        if (wcscmp(pszID, Hero->ID) == 0) m_bIsGuildMaster = TRUE;
         else m_bIsGuildMaster = FALSE;
     }
 
@@ -5354,7 +5354,7 @@ BOOL CUIBCDeclareGuildListBox::RenderDataLine(int iLineNumber)
 
     mu_swprintf(Text, L"%ls", m_TextListIter->szName);
 
-    if ((wcscmp(GuildMark[Hero->GuildMarkIndex].UnionName, Text) != NULL && wcscmp(GuildMark[Hero->GuildMarkIndex].GuildName, Text) != NULL))
+    if ((wcscmp(GuildMark[Hero->GuildMarkIndex].UnionName, Text) != 0 && wcscmp(GuildMark[Hero->GuildMarkIndex].GuildName, Text) != 0))
     {
         return FALSE;
     }

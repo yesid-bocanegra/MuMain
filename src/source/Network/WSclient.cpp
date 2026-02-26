@@ -212,7 +212,7 @@ int FindGuildName(wchar_t* Name)
     for (int i = 0; i < MARK_EDIT; i++)
     {
         MARK_t* p = &GuildMark[i];
-        if (wcscmp(p->GuildName, Name) == NULL)
+        if (wcscmp(p->GuildName, Name) == 0)
         {
             return i;
         }
@@ -1535,7 +1535,7 @@ void ReceiveChat(const BYTE* ReceiveBuffer)
                     (g_isCharacterBuff((&c->Object), eBuff_GMEffect) || (c->CtlCode == CTLCODE_20OPERATOR) ||
                      (c->CtlCode == CTLCODE_08OPERATOR)))
                 {
-                    if (wcscmp(c->ID, ID) == NULL)
+                    if (wcscmp(c->ID, ID) == 0)
                     {
                         pFindGm = c;
                         break;
@@ -1562,7 +1562,7 @@ void ReceiveChat(const BYTE* ReceiveBuffer)
                 if (o->Live && o->Kind == KIND_PLAYER && g_isCharacterBuff((&c->Object), eBuff_GMEffect) ||
                     (c->CtlCode == CTLCODE_20OPERATOR) || (c->CtlCode == CTLCODE_08OPERATOR))
                 {
-                    if (wcscmp(c->ID, ID) == NULL)
+                    if (wcscmp(c->ID, ID) == 0)
                     {
                         pFindGm = c;
                         break;
@@ -7007,7 +7007,7 @@ void ReceivePartyLeave(const BYTE* ReceiveBuffer)
         CHARACTER* c = &CharactersClient[g_iFollowCharacter];
         for (int i = 0; i < PartyNumber; ++i)
         {
-            if (wcscmp(Party[i].Name, c->ID) == NULL && wcslen(Party[i].Name) == wcslen(c->ID))
+            if (wcscmp(Party[i].Name, c->ID) == 0 && wcslen(Party[i].Name) == wcslen(c->ID))
             {
                 IsParty = true;
             }
@@ -7339,7 +7339,7 @@ void ReceiveGuildBeginWar(const BYTE* ReceiveBuffer)
         memset(Temp, 0, 8);
         memcpy(Temp, (wchar_t*)Data->Name, 8);
         Temp[8] = NULL;
-        if (wcscmp(p->GuildName, Temp) == NULL)
+        if (wcscmp(p->GuildName, Temp) == 0)
         {
             GuildWarIndex = i;
             break;

@@ -9193,7 +9193,7 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
     {
         if (EnableSoccer)
         {
-            if (wcscmp(GuildMark[Hero->GuildMarkIndex].GuildName, GuildMark[c->GuildMarkIndex].GuildName) == NULL)
+            if (wcscmp(GuildMark[Hero->GuildMarkIndex].GuildName, GuildMark[c->GuildMarkIndex].GuildName) == 0)
             {
                 bCloak = true;
                 if (HeroSoccerTeam == 0)
@@ -9205,7 +9205,7 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
                     Vector(0.f, 0.2f, 1.f, CloakLight);
                 }
             }
-            if (wcscmp(GuildWarName, GuildMark[c->GuildMarkIndex].GuildName) == NULL)
+            if (wcscmp(GuildWarName, GuildMark[c->GuildMarkIndex].GuildName) == 0)
             {
                 bCloak = true;
                 if (HeroSoccerTeam == 0)
@@ -9220,12 +9220,12 @@ void RenderCharacter(CHARACTER* c, OBJECT* o, int Select)
         }
         if (SoccerObserver)
         {
-            if (wcscmp(SoccerTeamName[0], GuildMark[c->GuildMarkIndex].GuildName) == NULL)
+            if (wcscmp(SoccerTeamName[0], GuildMark[c->GuildMarkIndex].GuildName) == 0)
             {
                 bCloak = true;
                 Vector(1.f, 0.2f, 0.f, CloakLight);
             }
-            if (wcscmp(SoccerTeamName[1], GuildMark[c->GuildMarkIndex].GuildName) == NULL)
+            if (wcscmp(SoccerTeamName[1], GuildMark[c->GuildMarkIndex].GuildName) == 0)
             {
                 bCloak = true;
                 Vector(0.f, 0.2f, 1.f, CloakLight);

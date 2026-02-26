@@ -230,7 +230,7 @@ void OpenNpcScript(wchar_t* FileName)
         Token = (*GetToken)();
         if (Token == END)
             break;
-        if (Token == NAME && strcmp("end", TokenString) == NULL)
+        if (Token == NAME && strcmp("end", TokenString) == 0)
             break;
         if (Token == NUMBER)
         {
@@ -2584,7 +2584,7 @@ void OpenMonsterScript(wchar_t* FileName)
         SMDToken token = GetToken();
         if (token == END)
             break;
-        if (token == NAME && strcmp("end", TokenString) == NULL)
+        if (token == NAME && strcmp("end", TokenString) == 0)
             break;
         MONSTER_SCRIPT* m = &MonsterScript[EditMonsterNumber++];
         m->Type = static_cast<int>(TokenNumber);

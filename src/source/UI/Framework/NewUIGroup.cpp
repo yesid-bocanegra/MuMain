@@ -15,6 +15,7 @@ CNewUIGroup::CNewUIGroup()
 
 CNewUIGroup::~CNewUIGroup()
 {
+    // cppcheck-suppress virtualCallInConstructor
     Release();
 }
 

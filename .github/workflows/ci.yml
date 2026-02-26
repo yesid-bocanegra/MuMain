@@ -39,51 +39,52 @@ jobs:
           which cppcheck || { sudo apt-get update && sudo apt-get install -y cppcheck; }
           pip install clang-format==21.1.8
 
-      - name: Check formatting (changed files)
-        if: github.ref != 'refs/heads/main'
+      - name: Detect changed C++ files
+        id: changed
         run: |
-          CHANGED=$(git diff --name-only --diff-filter=d origin/main...HEAD -- 'src/source/*.cpp' 'src/source/*.h' 'src/source/*.hpp' \
-            | grep -v ThirdParty/ | grep -v 'src/source/Dotnet/' || true)
-          if [ -z "$CHANGED" ]; then
-            echo "No C++ files changed — skipping format check"
+          if [ "${{ github.event_name }}" = "push" ] && [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            # On main push, diff against the previous commit
+            CHANGED=$(git diff --name-only --diff-filter=d HEAD~1...HEAD -- 'src/source/*.cpp' 'src/source/*.h' 'src/source/*.hpp' \
+              | grep -v ThirdParty/ | grep -v 'src/source/Dotnet/' || true)
           else
-            echo "Checking $(echo "$CHANGED" | wc -l) changed files..."
-            echo "$CHANGED" | xargs clang-format --dry-run --Werror
+            CHANGED=$(git diff --name-only --diff-filter=d origin/main...HEAD -- 'src/source/*.cpp' 'src/source/*.h' 'src/source/*.hpp' \
+              | grep -v ThirdParty/ | grep -v 'src/source/Dotnet/' || true)
+          fi
+          if [ -z "$CHANGED" ]; then
+            echo "count=0" >> "$GITHUB_OUTPUT"
+            echo "No C++ files changed"
+          else
+            COUNT=$(echo "$CHANGED" | wc -l | tr -d ' ')
+            echo "count=$COUNT" >> "$GITHUB_OUTPUT"
+            echo "$CHANGED" > /tmp/changed-cpp-files.txt
+            echo "$COUNT C++ files changed"
           fi
 
-      - name: Check formatting (all files)
-        if: github.ref == 'refs/heads/main'
-        run: make format-check
-
-      - name: Static analysis (changed files)
-        if: github.ref != 'refs/heads/main'
+      - name: Check formatting
+        if: steps.changed.outputs.count != '0'
         run: |
-          CHANGED=$(git diff --name-only --diff-filter=d origin/main...HEAD -- 'src/source/*.cpp' 'src/source/*.h' 'src/source/*.hpp' \
-            | grep -v ThirdParty/ | grep -v 'src/source/Dotnet/' || true)
-          if [ -z "$CHANGED" ]; then
-            echo "No C++ files changed — skipping static analysis"
-          else
-            echo "Linting $(echo "$CHANGED" | wc -l) changed files..."
-            echo "$CHANGED" | xargs cppcheck \
-              -j$(nproc) \
-              --error-exitcode=1 \
-              --enable=warning,performance,portability \
-              --std=c++20 \
-              --language=c++ \
-              --suppress=missingInclude \
-              --suppress=unmatchedSuppression \
-              --suppress=unusedFunction \
-              --suppress=*:*/ThirdParty/* \
-              --suppress=useInitializationList \
-              --suppress=passedByValue \
-              --suppress=postfixOperator \
-              --suppress=returnByReference \
-              --inline-suppr
-          fi
+          echo "Checking ${{ steps.changed.outputs.count }} files..."
+          cat /tmp/changed-cpp-files.txt | xargs clang-format --dry-run --Werror
 
-      - name: Static analysis (all files)
-        if: github.ref == 'refs/heads/main'
-        run: make lint
+      - name: Static analysis
+        if: steps.changed.outputs.count != '0'
+        run: |
+          echo "Linting ${{ steps.changed.outputs.count }} files..."
+          cat /tmp/changed-cpp-files.txt | xargs cppcheck \
+            -j$(nproc) \
+            --error-exitcode=1 \
+            --enable=warning,performance,portability \
+            --std=c++20 \
+            --language=c++ \
+            --suppress=missingInclude \
+            --suppress=unmatchedSuppression \
+            --suppress=unusedFunction \
+            --suppress=*:*/ThirdParty/* \
+            --suppress=useInitializationList \
+            --suppress=passedByValue \
+            --suppress=postfixOperator \
+            --suppress=returnByReference \
+            --inline-suppr
 
   build:
     name: MinGW Build

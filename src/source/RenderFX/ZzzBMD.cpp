@@ -2863,8 +2863,10 @@ bool BMD::Open2(const wchar_t* DirName, const wchar_t* ModelFileName, bool bReAl
     if (Version == 0xC)
     {
         //// wprintf(L"[Open2] Version: %d\n", Version);
+        // cppcheck-suppress arithOperationsOnVoidPointer
         long encSize = *(long*)(fileData.get() + ptr);
         ptr += sizeof(long);
+        // cppcheck-suppress arithOperationsOnVoidPointer
         unsigned char* encData = fileData.get() + ptr;
         //// wprintf(L"[Open2] Encrypted Size: %ld\n", encSize);
 

@@ -948,7 +948,7 @@ void RenderBoolean(int x, int y, CHAT* c)
 
     if (c->x <= MouseX && MouseX < (int)(c->x + c->Width * 640 / WindowWidth) && c->y <= MouseY &&
         MouseY < (int)(c->y + c->Height * 480 / WindowHeight) && InputEnable && Hero->SafeZone &&
-        wcscmp(c->ID, Hero->ID) != NULL && (DWORD)WorldTime % 24 < 12)
+        wcscmp(c->ID, Hero->ID) != 0 && (DWORD)WorldTime % 24 < 12)
     {
         unsigned int Temp = g_pRenderText->GetBgColor();
         g_pRenderText->SetBgColor(g_pRenderText->GetTextColor());
@@ -1226,7 +1226,7 @@ void AssignChat(wchar_t* character_name, const wchar_t* chat_text, int flag)
         OBJECT* o = &c->Object;
         if (o->Live && o->Kind == KIND_PLAYER)
         {
-            if (wcscmp(c->ID, character_name) == NULL)
+            if (wcscmp(c->ID, character_name) == 0)
             {
                 CreateChat(character_name, chat_text, c, flag);
                 return;
@@ -1240,7 +1240,7 @@ void AssignChat(wchar_t* character_name, const wchar_t* chat_text, int flag)
         OBJECT* o = &c->Object;
         if (o->Live && o->Kind == KIND_MONSTER)
         {
-            if (wcscmp(c->ID, character_name) == NULL)
+            if (wcscmp(c->ID, character_name) == 0)
             {
                 CreateChat(character_name, chat_text, c, flag);
                 return;
@@ -1474,13 +1474,13 @@ bool CheckAttack_Fenrir(CHARACTER* c)
     }
     else if (::IsStrifeMap(gMapManager.WorldActive) && c != Hero && c->m_byGensInfluence != Hero->m_byGensInfluence)
     {
-        if (((wcscmp(GuildMark[Hero->GuildMarkIndex].GuildName, GuildMark[c->GuildMarkIndex].GuildName) == NULL) ||
+        if (((wcscmp(GuildMark[Hero->GuildMarkIndex].GuildName, GuildMark[c->GuildMarkIndex].GuildName) == 0) ||
              (g_pPartyManager->IsPartyMember(SelectedCharacter))) &&
             (HIBYTE(GetAsyncKeyState(VK_CONTROL)) == 128))
         {
             return true;
         }
-        else if ((wcscmp(GuildMark[Hero->GuildMarkIndex].GuildName, GuildMark[c->GuildMarkIndex].GuildName) != NULL) &&
+        else if ((wcscmp(GuildMark[Hero->GuildMarkIndex].GuildName, GuildMark[c->GuildMarkIndex].GuildName) != 0) &&
                  !g_pPartyManager->IsPartyMember(SelectedCharacter))
         {
             return true;
@@ -1574,7 +1574,7 @@ bool CheckAttack_Fenrir(CHARACTER* c)
         }
 
         if (EnableGuildWar && c->PK >= PVP_MURDERER2 && c->GuildMarkIndex != -1 &&
-            wcscmp(GuildMark[Hero->GuildMarkIndex].GuildName, GuildMark[c->GuildMarkIndex].GuildName) == NULL)
+            wcscmp(GuildMark[Hero->GuildMarkIndex].GuildName, GuildMark[c->GuildMarkIndex].GuildName) == 0)
         {
             return false;
         }
@@ -1673,7 +1673,7 @@ bool CheckAttack()
             else
                 return true;
         }
-        else if (wcscmp(GuildMark[Hero->GuildMarkIndex].GuildName, GuildMark[c->GuildMarkIndex].GuildName) == NULL)
+        else if (wcscmp(GuildMark[Hero->GuildMarkIndex].GuildName, GuildMark[c->GuildMarkIndex].GuildName) == 0)
         {
             if (g_pPartyManager->IsPartyMember(SelectedCharacter))
             {
@@ -1810,7 +1810,7 @@ bool CheckAttack()
         }
 
         if (EnableGuildWar && c->PK >= PVP_MURDERER2 && c->GuildMarkIndex != -1 &&
-            wcscmp(GuildMark[Hero->GuildMarkIndex].GuildName, GuildMark[c->GuildMarkIndex].GuildName) == NULL)
+            wcscmp(GuildMark[Hero->GuildMarkIndex].GuildName, GuildMark[c->GuildMarkIndex].GuildName) == 0)
         {
             return false;
         }
@@ -1886,7 +1886,7 @@ int getTargetCharacterKey(CHARACTER* c, int selected)
     }
 
     if (EnableGuildWar && sc->PK >= PVP_MURDERER2 && sc->GuildMarkIndex != -1 &&
-        wcscmp(GuildMark[Hero->GuildMarkIndex].GuildName, GuildMark[sc->GuildMarkIndex].GuildName) == NULL)
+        wcscmp(GuildMark[Hero->GuildMarkIndex].GuildName, GuildMark[sc->GuildMarkIndex].GuildName) == 0)
     {
         return -1;
     }
@@ -1924,7 +1924,7 @@ int getTargetCharacterKey(CHARACTER* c, int selected)
             return sc->Key;
         }
 
-        if ((wcscmp(GuildMark[Hero->GuildMarkIndex].GuildName, GuildMark[c->GuildMarkIndex].GuildName) == NULL) ||
+        if ((wcscmp(GuildMark[Hero->GuildMarkIndex].GuildName, GuildMark[c->GuildMarkIndex].GuildName) == 0) ||
             g_pPartyManager->IsPartyMember(SelectedCharacter))
         {
             if (HIBYTE(GetAsyncKeyState(VK_CONTROL)) == 128)
@@ -4150,8 +4150,8 @@ bool CheckCommand(wchar_t* Text, bool bMacroText)
 
         if (!g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_STORAGE))
         {
-            if (wcscmp(Name, GlobalText[258]) == NULL || wcscmp(Name, GlobalText[259]) == NULL ||
-                wcsicmp(Text, L"/trade") == NULL)
+            if (wcscmp(Name, GlobalText[258]) == 0 || wcscmp(Name, GlobalText[259]) == 0 ||
+                wcsicmp(Text, L"/trade") == 0)
             {
                 if (gMapManager.InChaosCastle() == true)
                 {
@@ -4403,7 +4403,7 @@ bool CheckCommand(wchar_t* Text, bool bMacroText)
                 SocketClient->ToGameServer()->SendDuelStopRequest();
             }
         }
-        if (wcscmp(Text, GlobalText[254]) == NULL || wcsicmp(Text, L"/guild") == NULL)
+        if (wcscmp(Text, GlobalText[254]) == 0 || wcsicmp(Text, L"/guild") == 0)
         {
             if (gMapManager.InChaosCastle() == true)
             {
@@ -4536,14 +4536,14 @@ bool CheckCommand(wchar_t* Text, bool bMacroText)
                 }
             return true;
         }
-        if (wcscmp(Text, GlobalText[256]) == NULL || wcsicmp(Text, L"/party") == NULL || wcsicmp(Text, L"/pt") == NULL)
+        if (wcscmp(Text, GlobalText[256]) == 0 || wcsicmp(Text, L"/party") == 0 || wcsicmp(Text, L"/pt") == 0)
         {
             if (gMapManager.InChaosCastle() == true)
             {
                 g_pSystemLogBox->AddText(GlobalText[1150], SEASON3B::TYPE_SYSTEM_MESSAGE);
                 return false;
             }
-            if (PartyNumber > 0 && wcscmp(Party[0].Name, Hero->ID) != NULL)
+            if (PartyNumber > 0 && wcscmp(Party[0].Name, Hero->ID) != 0)
             {
                 g_pSystemLogBox->AddText(GlobalText[257], SEASON3B::TYPE_SYSTEM_MESSAGE);
                 return true;
@@ -4586,7 +4586,7 @@ bool CheckCommand(wchar_t* Text, bool bMacroText)
                 }
             return true;
         }
-        if (wcsicmp(Text, L"/charactername") == NULL)
+        if (wcsicmp(Text, L"/charactername") == 0)
         {
             if (IsGMCharacter() == true)
             {
@@ -4665,7 +4665,7 @@ bool CheckCommand(wchar_t* Text, bool bMacroText)
             wchar_t Name[256];
             mu_swprintf(Name, L"/%ls", p->Name);
 
-            if (wcsicmp(Text, Name) == NULL)
+            if (wcsicmp(Text, Name) == 0)
             {
                 g_csItemOption.ClearOptionHelper();
 

@@ -16,11 +16,13 @@ using namespace SEASON3B;
 // cppcheck-suppress uninitMemberVar
 SEASON3B::CNewUIMessageBoxBase::CNewUIMessageBoxBase()
 {
+    // cppcheck-suppress virtualCallInConstructor
     Release();
 }
 
 SEASON3B::CNewUIMessageBoxBase::~CNewUIMessageBoxBase()
 {
+    // cppcheck-suppress virtualCallInConstructor
     Release();
 }
 

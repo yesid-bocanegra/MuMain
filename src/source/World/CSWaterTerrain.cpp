@@ -375,6 +375,7 @@ void CSWaterTerrain::RenderWaterAlphaBitmap(int Texture, float xf, float yf, flo
     float TexU = (((float)mxi - mxf) + 0.5f * sizeMax);
     float TexV = (((float)myi - myf) + 0.5f * sizeMax);
     float TexScaleU = 1.f / sizeMax;
+    // cppcheck-suppress duplicateAssignExpression
     float TexScaleV = 1.f / sizeMax;
     sizeMax = static_cast<float>(static_cast<int>(sizeMax) + 1);
     float Aspect = SizeX / SizeY;

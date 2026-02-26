@@ -79,7 +79,7 @@ void FixupSMD()
         int MeshNum = 0;
         for (int k = 0; k < mg->MeshNum; k++)
         {
-            if (strcmp(tg->TextureName[i], mg->Texture[k].FileName) == NULL)
+            if (strcmp(tg->TextureName[i], mg->Texture[k].FileName) == 0)
             {
                 MeshNum = k;
                 break;

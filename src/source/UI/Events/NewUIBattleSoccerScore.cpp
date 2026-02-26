@@ -148,7 +148,7 @@ int SEASON3B::CNewUIBattleSoccerScore::FindGuildMark(wchar_t* pszGuildName)
     for (int i = 0; i < MARK_EDIT; ++i)
     {
         MARK_t* p = &GuildMark[i];
-        if (wcscmp(p->GuildName, pszGuildName) == NULL)
+        if (wcscmp(p->GuildName, pszGuildName) == 0)
         {
             return i;
         }
