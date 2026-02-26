@@ -23,13 +23,14 @@
 class PacketFunctions_ConnectServer : public PacketFunctions_ConnectServer_Custom
 {
 public:
+
     /// <summary>
     /// Sends a ConnectionInfoRequest075 to this connection.
     /// </summary>
     /// <param name="serverId">The server id.</param>
     /// <remarks>
-    /// Is sent by the client when: This packet is sent by the client after the user clicked on an entry of the server
-    /// list. Causes reaction on server side: The server will send a ConnectionInfo back to the client.
+    /// Is sent by the client when: This packet is sent by the client after the user clicked on an entry of the server list.
+    /// Causes reaction on server side: The server will send a ConnectionInfo back to the client.
     /// </remarks>
     void SendConnectionInfoRequest075(BYTE serverId);
 
@@ -38,8 +39,8 @@ public:
     /// </summary>
     /// <param name="serverId">The server id.</param>
     /// <remarks>
-    /// Is sent by the client when: This packet is sent by the client after the user clicked on an entry of the server
-    /// list. Causes reaction on server side: The server will send a ConnectionInfo back to the client.
+    /// Is sent by the client when: This packet is sent by the client after the user clicked on an entry of the server list.
+    /// Causes reaction on server side: The server will send a ConnectionInfo back to the client.
     /// </remarks>
     void SendConnectionInfoRequest(uint16_t serverId);
 
@@ -49,9 +50,8 @@ public:
     /// <param name="ipAddress">The ip address.</param>
     /// <param name="port">The port.</param>
     /// <remarks>
-    /// Is sent by the server when: This packet is sent by the server after the client requested the connection
-    /// information of a server. This happens after the user clicked on a server. Causes reaction on client side: The
-    /// client will try to connect to the server with the specified information.
+    /// Is sent by the server when: This packet is sent by the server after the client requested the connection information of a server. This happens after the user clicked on a server.
+    /// Causes reaction on client side: The client will try to connect to the server with the specified information.
     /// </remarks>
     void SendConnectionInfo(const wchar_t* ipAddress, uint16_t port);
 
@@ -59,8 +59,8 @@ public:
     /// Sends a ServerListRequest to this connection.
     /// </summary>
     /// <remarks>
-    /// Is sent by the client when: This packet is sent by the client after it connected and received the 'Hello'
-    /// message. Causes reaction on server side: The server will send a ServerListResponse back to the client.
+    /// Is sent by the client when: This packet is sent by the client after it connected and received the 'Hello' message.
+    /// Causes reaction on server side: The server will send a ServerListResponse back to the client.
     /// </remarks>
     void SendServerListRequest();
 
@@ -68,9 +68,8 @@ public:
     /// Sends a ServerListRequestOld to this connection.
     /// </summary>
     /// <remarks>
-    /// Is sent by the client when: This packet is sent by the client (below season 1) after it connected and received
-    /// the 'Hello' message. Causes reaction on server side: The server will send a ServerListResponseOld back to the
-    /// client.
+    /// Is sent by the client when: This packet is sent by the client (below season 1) after it connected and received the 'Hello' message.
+    /// Causes reaction on server side: The server will send a ServerListResponseOld back to the client.
     /// </remarks>
     void SendServerListRequestOld();
 
@@ -79,8 +78,7 @@ public:
     /// </summary>
     /// <remarks>
     /// Is sent by the server when: This packet is sent by the server after the client connected to the server.
-    /// Causes reaction on client side: A game client will request the server list. The launcher would request the patch
-    /// state.
+    /// Causes reaction on client side: A game client will request the server list. The launcher would request the patch state.
     /// </remarks>
     void SendHello();
 
@@ -91,9 +89,8 @@ public:
     /// <param name="minorVersion">The minor version.</param>
     /// <param name="patchVersion">The patch version.</param>
     /// <remarks>
-    /// Is sent by the client when: This packet is sent by the client (launcher) to check if the patch version is high
-    /// enough to be able to connect to the server. Causes reaction on server side: The connect server will check the
-    /// version and sends a 'PatchVersionOkay' or a 'ClientNeedsPatch' message.
+    /// Is sent by the client when: This packet is sent by the client (launcher) to check if the patch version is high enough to be able to connect to the server.
+    /// Causes reaction on server side: The connect server will check the version and sends a 'PatchVersionOkay' or a 'ClientNeedsPatch' message.
     /// </remarks>
     void SendPatchCheckRequest(BYTE majorVersion, BYTE minorVersion, BYTE patchVersion);
 
@@ -101,9 +98,8 @@ public:
     /// Sends a PatchVersionOkay to this connection.
     /// </summary>
     /// <remarks>
-    /// Is sent by the server when: This packet is sent by the server after the client (launcher) requested the to check
-    /// the patch version and it was high enough. Causes reaction on client side: The launcher will activate its start
-    /// button.
+    /// Is sent by the server when: This packet is sent by the server after the client (launcher) requested the to check the patch version and it was high enough.
+    /// Causes reaction on client side: The launcher will activate its start button.
     /// </remarks>
     void SendPatchVersionOkay();
 
@@ -111,10 +107,10 @@ public:
     /// Sends a ClientNeedsPatch to this connection.
     /// </summary>
     /// <param name="patchVersion">The patch version.</param>
-    /// <param name="patchAddress">The patch address, usually to a ftp server. The address is usually "encrypted" with
-    /// the 3-byte XOR key (FC CF AB).</param> <remarks> Is sent by the server when: This packet is sent by the server
-    /// after the client (launcher) requested to check the patch version and it requires an update. Causes reaction on
-    /// client side: The launcher will download the required patches and then activate the start button.
+    /// <param name="patchAddress">The patch address, usually to a ftp server. The address is usually "encrypted" with the 3-byte XOR key (FC CF AB).</param>
+    /// <remarks>
+    /// Is sent by the server when: This packet is sent by the server after the client (launcher) requested to check the patch version and it requires an update.
+    /// Causes reaction on client side: The launcher will download the required patches and then activate the start button.
     /// </remarks>
     void SendClientNeedsPatch(BYTE patchVersion, const wchar_t* patchAddress);
 };
