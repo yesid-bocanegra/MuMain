@@ -219,6 +219,7 @@ else()
     -Wno-memset-elt-size
     # GCC -O2/-O3 false positives from inlined wmemcpy/std::wstring (MinGW wchar.h)
     -Wno-array-bounds
+    -Wno-stringop-overread
   )
 endif()
 

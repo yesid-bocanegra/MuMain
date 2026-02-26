@@ -42,6 +42,7 @@ format-check:
 lint:
 	@echo "Running cppcheck..."
 	@echo $(SOURCES) | xargs cppcheck \
+		-j$$(nproc) \
 		--error-exitcode=1 \
 		--enable=warning,performance,portability \
 		--std=c++20 \

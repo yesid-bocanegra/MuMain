@@ -21,17 +21,68 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Cache quality tools
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/pip
+            /usr/bin/cppcheck
+            /usr/share/cppcheck
+          key: quality-tools-cppcheck-${{ runner.os }}-v2
+          restore-keys: quality-tools-cppcheck-${{ runner.os }}-
 
       - name: Install quality tools
         run: |
-          sudo apt-get update
-          sudo apt-get install -y cppcheck
+          which cppcheck || { sudo apt-get update && sudo apt-get install -y cppcheck; }
           pip install clang-format==21.1.8
 
-      - name: Check formatting
+      - name: Check formatting (changed files)
+        if: github.ref != 'refs/heads/main'
+        run: |
+          CHANGED=$(git diff --name-only --diff-filter=d origin/main...HEAD -- 'src/source/*.cpp' 'src/source/*.h' 'src/source/*.hpp' \
+            | grep -v ThirdParty/ | grep -v 'src/source/Dotnet/' || true)
+          if [ -z "$CHANGED" ]; then
+            echo "No C++ files changed — skipping format check"
+          else
+            echo "Checking $(echo "$CHANGED" | wc -l) changed files..."
+            echo "$CHANGED" | xargs clang-format --dry-run --Werror
+          fi
+
+      - name: Check formatting (all files)
+        if: github.ref == 'refs/heads/main'
         run: make format-check
 
-      - name: Static analysis
+      - name: Static analysis (changed files)
+        if: github.ref != 'refs/heads/main'
+        run: |
+          CHANGED=$(git diff --name-only --diff-filter=d origin/main...HEAD -- 'src/source/*.cpp' 'src/source/*.h' 'src/source/*.hpp' \
+            | grep -v ThirdParty/ | grep -v 'src/source/Dotnet/' || true)
+          if [ -z "$CHANGED" ]; then
+            echo "No C++ files changed — skipping static analysis"
+          else
+            echo "Linting $(echo "$CHANGED" | wc -l) changed files..."
+            echo "$CHANGED" | xargs cppcheck \
+              -j$(nproc) \
+              --error-exitcode=1 \
+              --enable=warning,performance,portability \
+              --std=c++20 \
+              --language=c++ \
+              --suppress=missingInclude \
+              --suppress=unmatchedSuppression \
+              --suppress=unusedFunction \
+              --suppress=*:*/ThirdParty/* \
+              --suppress=useInitializationList \
+              --suppress=passedByValue \
+              --suppress=postfixOperator \
+              --suppress=returnByReference \
+              --inline-suppr
+          fi
+
+      - name: Static analysis (all files)
+        if: github.ref == 'refs/heads/main'
         run: make lint
 
   build:
