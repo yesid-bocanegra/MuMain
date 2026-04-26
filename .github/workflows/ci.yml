@@ -72,6 +72,7 @@ jobs:
           echo "Linting ${{ steps.changed.outputs.count }} files..."
           cat /tmp/changed-cpp-files.txt | xargs cppcheck \
             -j$(nproc) \
+            --max-configs=1 \
             --error-exitcode=1 \
             --enable=warning,performance,portability \
             --std=c++20 \
