@@ -224,6 +224,29 @@ bool MiniAudioBackend::PlaySound(ESound buffer, const void* pObject, bool looped
         return false;
     }
 
+    // Dedupe ambient/positional SFX: when a caller passes a 3D-anchored
+    // pObject (the standard pattern for per-frame ambient triggers like
+    // MapProcess::MoveObject -> BaseMap::PlayObjectSound -> PlayBuffer
+    // (SOUND_X, pObject, false)), ignore the call if any channel is
+    // already playing this sound. Without this guard, uncapped SDL3 GPU
+    // frame rate produces 60-200 stop-seek-restart cycles per second on
+    // each ambient SFX (canonical reproducer: Lorencia anvil sounding
+    // "hundreds of times" instead of once per hammer cycle).
+    //
+    // Event-driven SFX (UI clicks, attack swings, item pickups, repair)
+    // pass pObject == nullptr and continue to overlap freely on the
+    // round-robin slots, so rapid swings still layer correctly.
+    if (pObject != nullptr)
+    {
+        for (int existingCh = 0; existingCh < m_loadedChannels[bufIdx]; ++existingCh)
+        {
+            if (ma_sound_is_playing(&m_sounds[bufIdx][existingCh]))
+            {
+                return true;
+            }
+        }
+    }
+
     // Round-robin channel selection — clamp to loaded channel count (CRITICAL-1 fix).
     // m_loadedChannels[bufIdx] >= 1 is guaranteed by the m_soundLoaded guard above.
     const int ch = m_activeChannel[bufIdx];
