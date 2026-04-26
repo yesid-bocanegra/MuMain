@@ -7,6 +7,8 @@
     {
       "name": "curl",
       "features": ["ssl"]
-    }
+    },
+    "glslang",
+    "spirv-cross"
   ]
 }
