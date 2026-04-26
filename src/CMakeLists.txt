@@ -456,6 +456,7 @@ if(NOT MSVC)
     -Wno-error=switch
     -Wno-error=unused-variable
     -Wno-error=unused-but-set-variable
+    -Wno-error=implicit-fallthrough
     -Wno-error=unused-private-field
     -Wno-error=null-conversion
     -Wno-error=null-arithmetic
@@ -488,6 +489,11 @@ if(NOT MSVC)
     list(APPEND MU_LEGACY_WARNING_RELAXATIONS -Wno-error=nontrivial-memcall)
   endif()
   target_compile_options(MUGame PRIVATE ${MU_LEGACY_WARNING_RELAXATIONS})
+  # MURenderFX (RenderFX/Zzz*.cpp) carries the same legacy patterns as MUGame —
+  # set-but-unused vec3_t locals and switch fallthroughs in 9000+ line files.
+  # GCC enforces these as errors where MSVC and Apple Clang don't, so without
+  # the relaxation the Linux job fails on code MSVC accepts.
+  target_compile_options(MURenderFX PRIVATE ${MU_LEGACY_WARNING_RELAXATIONS})
 endif()
 
 # Editor sources compiled as part of MUGame when enabled
