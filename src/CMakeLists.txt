@@ -449,44 +449,50 @@ target_precompile_headers(MUGame REUSE_FROM MUCore)
 # Story 7.6.1: Legacy game code — Clang-specific warnings that MSVC/MinGW tolerate.
 # Keep visible as warnings for gradual cleanup; don't block macOS native build.
 if(NOT MSVC)
+  # GCC-compatible flags: GCC and Clang both recognize these warning names.
+  # GCC silently ignores unknown -Wno-foo (no error) but DOES error on unknown
+  # -Wno-error=foo because it has to evaluate the underlying option name.
+  # Keep the lists separate so GCC never sees clang-only spellings.
   set(MU_LEGACY_WARNING_RELAXATIONS
-    -Wno-error=deprecated-anon-enum-enum-conversion
     -Wno-error=deprecated-enum-enum-conversion
-    -Wno-error=deprecated-enum-compare
     -Wno-error=switch
     -Wno-error=unused-variable
     -Wno-error=unused-but-set-variable
     -Wno-error=implicit-fallthrough
-    -Wno-error=unused-private-field
-    -Wno-error=null-conversion
-    -Wno-error=null-arithmetic
-    -Wno-error=logical-op-parentheses
     -Wno-error=sign-compare
     -Wno-error=missing-braces
-    -Wno-error=reorder-ctor
-    -Wno-error=pointer-bool-conversion
-    -Wno-error=tautological-constant-out-of-range-compare
-    -Wno-error=tautological-overlap-compare
     -Wno-error=sizeof-pointer-memaccess
     -Wno-error=missing-field-initializers
     -Wno-error=char-subscripts
-    -Wno-error=delete-non-abstract-non-virtual-dtor
-    -Wno-error=pragma-once-outside-header
     -Wno-error=int-in-bool-context
-    -Wno-error=bitwise-op-parentheses
-    -Wno-error=sometimes-uninitialized
-    -Wno-error=extern-initializer
-    -Wno-error=tautological-pointer-compare
-    -Wno-error=c++11-narrowing
-    -Wno-error=writable-strings
-    -Wno-error=constant-conversion
+    # Clang-only spellings — wrap so GCC never receives them.
+    $<$<CXX_COMPILER_ID:Clang,AppleClang>:-Wno-error=deprecated-anon-enum-enum-conversion>
+    $<$<CXX_COMPILER_ID:Clang,AppleClang>:-Wno-error=deprecated-enum-compare>
+    $<$<CXX_COMPILER_ID:Clang,AppleClang>:-Wno-error=unused-private-field>
+    $<$<CXX_COMPILER_ID:Clang,AppleClang>:-Wno-error=null-conversion>
+    $<$<CXX_COMPILER_ID:Clang,AppleClang>:-Wno-error=null-arithmetic>
+    $<$<CXX_COMPILER_ID:Clang,AppleClang>:-Wno-error=logical-op-parentheses>
+    $<$<CXX_COMPILER_ID:Clang,AppleClang>:-Wno-error=reorder-ctor>
+    $<$<CXX_COMPILER_ID:Clang,AppleClang>:-Wno-error=pointer-bool-conversion>
+    $<$<CXX_COMPILER_ID:Clang,AppleClang>:-Wno-error=tautological-constant-out-of-range-compare>
+    $<$<CXX_COMPILER_ID:Clang,AppleClang>:-Wno-error=tautological-overlap-compare>
+    $<$<CXX_COMPILER_ID:Clang,AppleClang>:-Wno-error=delete-non-abstract-non-virtual-dtor>
+    $<$<CXX_COMPILER_ID:Clang,AppleClang>:-Wno-error=pragma-once-outside-header>
+    $<$<CXX_COMPILER_ID:Clang,AppleClang>:-Wno-error=bitwise-op-parentheses>
+    $<$<CXX_COMPILER_ID:Clang,AppleClang>:-Wno-error=sometimes-uninitialized>
+    $<$<CXX_COMPILER_ID:Clang,AppleClang>:-Wno-error=extern-initializer>
+    $<$<CXX_COMPILER_ID:Clang,AppleClang>:-Wno-error=tautological-pointer-compare>
+    $<$<CXX_COMPILER_ID:Clang,AppleClang>:-Wno-error=c++11-narrowing>
+    $<$<CXX_COMPILER_ID:Clang,AppleClang>:-Wno-error=writable-strings>
+    $<$<CXX_COMPILER_ID:Clang,AppleClang>:-Wno-error=constant-conversion>
   )
   # -Wnontrivial-memcall is supported by Homebrew LLVM but not Apple Clang.
   # Probe at configure time so the flag doesn't cause -Werror=unknown-warning-option.
   include(CheckCXXCompilerFlag)
   check_cxx_compiler_flag(-Wnontrivial-memcall HAS_W_NONTRIVIAL_MEMCALL)
   if(HAS_W_NONTRIVIAL_MEMCALL)
-    list(APPEND MU_LEGACY_WARNING_RELAXATIONS -Wno-error=nontrivial-memcall)
+    list(APPEND MU_LEGACY_WARNING_RELAXATIONS
+      $<$<CXX_COMPILER_ID:Clang,AppleClang>:-Wno-error=nontrivial-memcall>)
   endif()
   target_compile_options(MUGame PRIVATE ${MU_LEGACY_WARNING_RELAXATIONS})
   # MURenderFX (RenderFX/Zzz*.cpp) carries the same legacy patterns as MUGame —
