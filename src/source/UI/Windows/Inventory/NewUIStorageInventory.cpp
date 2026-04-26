@@ -638,7 +638,8 @@ void CNewUIStorageInventory::ProcessToReceiveStorageItems(int nIndex, std::span<
             {
                 g_pMyInventory->DeleteItem(m_nBackupSourceInvenIndex);
             }
-            else if (m_nBackupSourceInvenIndex >= MAX_MY_INVENTORY_INDEX && m_nBackupSourceInvenIndex < MAX_MY_INVENTORY_EX_INDEX)
+            else if (m_nBackupSourceInvenIndex >= MAX_MY_INVENTORY_INDEX &&
+                     m_nBackupSourceInvenIndex < MAX_MY_INVENTORY_EX_INDEX)
             {
                 g_pMyInventoryExt->DeleteItem(m_nBackupSourceInvenIndex);
             }

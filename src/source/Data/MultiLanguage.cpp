@@ -71,13 +71,10 @@ int32_t CMultiLanguage::ConvertFromUtf8(wchar_t* target, const char* source, int
     }
 
     // Perform the conversion
-    int written = MultiByteToWideChar(
-        CP_UTF8,
-        0,
-        source,
-        maxSourceLength,    // read at most this many bytes
-        target,
-        requiredChars       // assume destination large enough
+    int written = MultiByteToWideChar(CP_UTF8, 0, source,
+                                      maxSourceLength, // read at most this many bytes
+                                      target,
+                                      requiredChars // assume destination large enough
     );
 
     if (written <= 0)

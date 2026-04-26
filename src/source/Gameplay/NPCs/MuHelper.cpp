@@ -267,12 +267,9 @@ int CMuHelper::ComputeDistanceFromTarget(CHARACTER* pTarget)
     const POINT posHero = {Hero->PositionX, Hero->PositionY};
 
     const POINT posCurrent = {pTarget->PositionX, pTarget->PositionY};
-    const POINT posNext    = {pTarget->TargetX,   pTarget->TargetY};
+    const POINT posNext = {pTarget->TargetX, pTarget->TargetY};
 
-    return std::min(
-        ComputeDistanceBetween(posHero, posCurrent),
-        ComputeDistanceBetween(posHero, posNext)
-    );
+    return std::min(ComputeDistanceBetween(posHero, posCurrent), ComputeDistanceBetween(posHero, posNext));
 }
 
 int CMuHelper::ComputeDistanceBetween(POINT posA, POINT posB)
@@ -1031,15 +1028,9 @@ ActionSkillType CMuHelper::GetHealingSkill()
 // Matches AttackWizard() behavior in ZzzInterface.cpp for these skill IDs.
 bool CMuHelper::IsSelfPositionSkill(ActionSkillType iSkill)
 {
-    return (
-        iSkill == AT_SKILL_NOVA_BEGIN ||
-        iSkill == AT_SKILL_NOVA ||
-        iSkill == AT_SKILL_HELL_FIRE ||
-        iSkill == AT_SKILL_HELL_FIRE_STR ||
-        iSkill == AT_SKILL_INFERNO ||
-        iSkill == AT_SKILL_INFERNO_STR ||
-        iSkill == AT_SKILL_INFERNO_STR_MG
-    );
+    return (iSkill == AT_SKILL_NOVA_BEGIN || iSkill == AT_SKILL_NOVA || iSkill == AT_SKILL_HELL_FIRE ||
+            iSkill == AT_SKILL_HELL_FIRE_STR || iSkill == AT_SKILL_INFERNO || iSkill == AT_SKILL_INFERNO_STR ||
+            iSkill == AT_SKILL_INFERNO_STR_MG);
 }
 
 ActionSkillType CMuHelper::GetDrainLifeSkill()

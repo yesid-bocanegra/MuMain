@@ -10,34 +10,34 @@ using namespace SEASON3B;
 
 namespace
 {
-    constexpr int kLayoutBaseX = 640;
-    constexpr int kLayoutPanelWidth = 190;
+constexpr int kLayoutBaseX = 640;
+constexpr int kLayoutPanelWidth = 190;
 
-    constexpr int PanelColumnX(int columns)
-    {
-        return kLayoutBaseX - (kLayoutPanelWidth * columns);
-    }
+constexpr int PanelColumnX(int columns)
+{
+    return kLayoutBaseX - (kLayoutPanelWidth * columns);
+}
 
-    bool IsHeroPositionLayoutInterface(DWORD dwKey)
+bool IsHeroPositionLayoutInterface(DWORD dwKey)
+{
+    switch (dwKey)
     {
-        switch (dwKey)
-        {
-        case INTERFACE_INVENTORY:
-        case INTERFACE_INVENTORY_EXT:
-        case INTERFACE_STORAGE:
-        case INTERFACE_STORAGE_EXT:
-        case INTERFACE_CHARACTER:
-        case INTERFACE_NPCSHOP:
-        case INTERFACE_MIXINVENTORY:
-        case INTERFACE_TRADE:
-        case INTERFACE_MYSHOP_INVENTORY:
-        case INTERFACE_PURCHASESHOP_INVENTORY:
-            return true;
-        default:
-            return false;
-        }
+    case INTERFACE_INVENTORY:
+    case INTERFACE_INVENTORY_EXT:
+    case INTERFACE_STORAGE:
+    case INTERFACE_STORAGE_EXT:
+    case INTERFACE_CHARACTER:
+    case INTERFACE_NPCSHOP:
+    case INTERFACE_MIXINVENTORY:
+    case INTERFACE_TRADE:
+    case INTERFACE_MYSHOP_INVENTORY:
+    case INTERFACE_PURCHASESHOP_INVENTORY:
+        return true;
+    default:
+        return false;
     }
 }
+} // namespace
 
 // cppcheck-suppress uninitMemberVar
 CNewUISystem::CNewUISystem()
@@ -1775,12 +1775,8 @@ bool CNewUISystem::ShouldHideHeroPositionInfo()
         return false;
     }
 
-    return IsVisible(INTERFACE_CHARACTER)
-        || IsVisible(INTERFACE_STORAGE)
-        || IsVisible(INTERFACE_MYSHOP_INVENTORY)
-        || IsVisible(INTERFACE_NPCSHOP)
-        || IsVisible(INTERFACE_MIXINVENTORY)
-        || IsVisible(INTERFACE_TRADE);
+    return IsVisible(INTERFACE_CHARACTER) || IsVisible(INTERFACE_STORAGE) || IsVisible(INTERFACE_MYSHOP_INVENTORY) ||
+           IsVisible(INTERFACE_NPCSHOP) || IsVisible(INTERFACE_MIXINVENTORY) || IsVisible(INTERFACE_TRADE);
 }
 
 void CNewUISystem::Enable(DWORD dwKey)

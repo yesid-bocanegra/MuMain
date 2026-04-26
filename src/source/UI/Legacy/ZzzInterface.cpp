@@ -8545,8 +8545,8 @@ void RenderBar(float x, float y, float Width, float Height, float Bar, bool Disa
     // Disabled: dark-red gradient  (outer 0.2,0,0 -> mid 50/255,10/255,0 -> bar 200/255,50/255,0)
     // Normal:   dark-cyan gradient (outer 0,0.2,0.2 -> mid 0,50/255,50/255 -> bar 0,200/255,50/255)
     const unsigned int outerColor = Disabled ? 0xFF330000u : 0xFF003333u;
-    const unsigned int midColor   = Disabled ? 0xFF320A00u : 0xFF003232u;
-    const unsigned int barColor   = Disabled ? 0xFFC83200u : 0xFF00C832u;
+    const unsigned int midColor = Disabled ? 0xFF320A00u : 0xFF003232u;
+    const unsigned int barColor = Disabled ? 0xFFC83200u : 0xFF00C832u;
 
     EnableAlphaTest();
     RenderColor(x + 1, y + 1, Width + 4, Height + 4);

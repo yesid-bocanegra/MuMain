@@ -21,44 +21,44 @@ using namespace SEASON3B;
 
 namespace
 {
-    float GetMasterSkillValue(ActionSkillType skill)
-    {
-        return CharacterAttribute->MasterSkillInfo[skill].GetSkillValue();
-    }
-
-    float GetMasterSkillValue(ActionSkillType firstSkill, ActionSkillType secondSkill)
-    {
-        const auto firstSkillInfo = CharacterAttribute->MasterSkillInfo[firstSkill];
-        const auto secondSkillInfo = CharacterAttribute->MasterSkillInfo[secondSkill];
-
-        if (secondSkillInfo.GetSkillLevel() > firstSkillInfo.GetSkillLevel())
-        {
-            return secondSkillInfo.GetSkillValue();
-        }
-
-        return firstSkillInfo.GetSkillValue();
-    }
-
-    int GetMasterSkillValueAsInt(ActionSkillType skill)
-    {
-        return static_cast<int>(GetMasterSkillValue(skill));
-    }
-
-    int GetMasterSkillValueAsInt(ActionSkillType firstSkill, ActionSkillType secondSkill)
-    {
-        return static_cast<int>(GetMasterSkillValue(firstSkill, secondSkill));
-    }
-
-    float ClampDefenseSuccessRateMultiplier(float multiplier)
-    {
-        if (multiplier < 1.0f)
-        {
-            return 1.0f;
-        }
-
-        return multiplier;
-    }
+float GetMasterSkillValue(ActionSkillType skill)
+{
+    return CharacterAttribute->MasterSkillInfo[skill].GetSkillValue();
 }
+
+float GetMasterSkillValue(ActionSkillType firstSkill, ActionSkillType secondSkill)
+{
+    const auto firstSkillInfo = CharacterAttribute->MasterSkillInfo[firstSkill];
+    const auto secondSkillInfo = CharacterAttribute->MasterSkillInfo[secondSkill];
+
+    if (secondSkillInfo.GetSkillLevel() > firstSkillInfo.GetSkillLevel())
+    {
+        return secondSkillInfo.GetSkillValue();
+    }
+
+    return firstSkillInfo.GetSkillValue();
+}
+
+int GetMasterSkillValueAsInt(ActionSkillType skill)
+{
+    return static_cast<int>(GetMasterSkillValue(skill));
+}
+
+int GetMasterSkillValueAsInt(ActionSkillType firstSkill, ActionSkillType secondSkill)
+{
+    return static_cast<int>(GetMasterSkillValue(firstSkill, secondSkill));
+}
+
+float ClampDefenseSuccessRateMultiplier(float multiplier)
+{
+    if (multiplier < 1.0f)
+    {
+        return 1.0f;
+    }
+
+    return multiplier;
+}
+} // namespace
 
 SEASON3B::CNewUICharacterInfoWindow::CNewUICharacterInfoWindow()
 {
@@ -497,10 +497,13 @@ void SEASON3B::CNewUICharacterInfoWindow::RenderAttribute()
     int add_magic_damage_min = 0;
     int add_magic_damage_max = 0;
 
-    add_attack_success_rate_pvm = GetMasterSkillValueAsInt(AT_SKILL_AttackSuccRateInc, AT_SKILL_IncreaseAttackSuccessRate);
+    add_attack_success_rate_pvm =
+        GetMasterSkillValueAsInt(AT_SKILL_AttackSuccRateInc, AT_SKILL_IncreaseAttackSuccessRate);
     add_attack_success_rate_pvp = GetMasterSkillValueAsInt(AT_SKILL_PvPAttackRate, AT_SKILL_IncreasePvPAttackRate);
-    add_defense_success_rate_pvm = GetMasterSkillValue(AT_SKILL_DefenseSuccessRateInc, AT_SKILL_IncreaseDefenseSuccessRate);
-    add_defense_success_rate_pvp = GetMasterSkillValueAsInt(AT_SKILL_PvPDefenceRateInc, AT_SKILL_IncreasePvPDefenseRate);
+    add_defense_success_rate_pvm =
+        GetMasterSkillValue(AT_SKILL_DefenseSuccessRateInc, AT_SKILL_IncreaseDefenseSuccessRate);
+    add_defense_success_rate_pvp =
+        GetMasterSkillValueAsInt(AT_SKILL_PvPDefenceRateInc, AT_SKILL_IncreasePvPDefenseRate);
     add_defense = GetMasterSkillValueAsInt(AT_SKILL_DefenseIncrease, AT_SKILL_IncreasesDefense);
     add_magic_damage_min = GetMasterSkillValueAsInt(AT_SKILL_MinimumWizardryInc);
 
@@ -959,7 +962,8 @@ void SEASON3B::CNewUICharacterInfoWindow::RenderAttribute()
     wchar_t strBlocking[256];
 
     const float defenseSuccessRateMultiplier = ClampDefenseSuccessRateMultiplier(add_defense_success_rate_pvm);
-    const int defenseSuccessRate = static_cast<int>(CharacterAttribute->SuccessfulBlocking * defenseSuccessRateMultiplier);
+    const int defenseSuccessRate =
+        static_cast<int>(CharacterAttribute->SuccessfulBlocking * defenseSuccessRateMultiplier);
 
     int nAdd_FulBlocking = 0;
     if (g_isCharacterBuff((&Hero->Object), eBuff_Def_up_Ourforces))

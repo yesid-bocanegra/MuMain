@@ -3609,8 +3609,7 @@ BOOL CUIFriendListTabWindow::HandleMessage()
             const uintptr_t addr = reinterpret_cast<uintptr_t>(pText);
             if (addr < 0x100000ULL || addr >= 0x800000000000ULL)
             {
-                mu::log::Get("ui")->warn("[FriendListTab] TXTRETURN iParam2={:#x} out of heap range — skipping",
-                                         addr);
+                mu::log::Get("ui")->warn("[FriendListTab] TXTRETURN iParam2={:#x} out of heap range — skipping", addr);
                 break;
             }
             SocketClient->ToGameServer()->SendFriendAddRequest(MU_C16(pText));

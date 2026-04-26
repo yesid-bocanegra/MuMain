@@ -238,9 +238,7 @@ static int64_t GetMasterLowerBound(const short masterLevel)
         };
 
         const bool isNegativeResult = (left < 0) != (right < 0);
-        const uint64_t resultLimit = isNegativeResult
-            ? (uint64_t{1} << 63)
-            : static_cast<uint64_t>(kInt64Max);
+        const uint64_t resultLimit = isNegativeResult ? (uint64_t{1} << 63) : static_cast<uint64_t>(kInt64Max);
         const uint64_t leftMagnitude = magnitude(left);
         const uint64_t rightMagnitude = magnitude(right);
 
@@ -270,14 +268,10 @@ static int64_t GetMasterLowerBound(const short masterLevel)
     const int64_t overLevel = saturatingSub(totalLevel, static_cast<int64_t>(255));
 
     const int64_t leftTerm = saturatingMul(
-        saturatingMul(
-            saturatingMul(saturatingAdd(static_cast<int64_t>(9), totalLevel), totalLevel),
-            totalLevel),
+        saturatingMul(saturatingMul(saturatingAdd(static_cast<int64_t>(9), totalLevel), totalLevel), totalLevel),
         static_cast<int64_t>(10));
     const int64_t rightTerm = saturatingMul(
-        saturatingMul(
-            saturatingMul(saturatingAdd(static_cast<int64_t>(9), overLevel), overLevel),
-            overLevel),
+        saturatingMul(saturatingMul(saturatingAdd(static_cast<int64_t>(9), overLevel), overLevel), overLevel),
         static_cast<int64_t>(1000));
     const int64_t dataMaster = saturatingAdd(leftTerm, rightTerm);
     const int64_t numerator = saturatingSub(dataMaster, static_cast<int64_t>(3892250000ll));
@@ -1183,10 +1177,12 @@ void ReceiveRevival(const BYTE* ReceiveBuffer)
         const bool rawConvertible = rawRevivalExperience <= static_cast<uint64_t>(kInt64Max);
         const bool swappedConvertible = swappedRevivalExperience <= static_cast<uint64_t>(kInt64Max);
         const auto rawCandidate = rawConvertible ? static_cast<int64_t>(rawRevivalExperience) : currentExperience;
-        const auto swappedCandidate = swappedConvertible ? static_cast<int64_t>(swappedRevivalExperience) : currentExperience;
+        const auto swappedCandidate =
+            swappedConvertible ? static_cast<int64_t>(swappedRevivalExperience) : currentExperience;
 
         const bool isRawPlausible = rawConvertible && (rawCandidate >= lowerBound && rawCandidate <= upperBound);
-        const bool isSwappedPlausible = swappedConvertible && (swappedCandidate >= lowerBound && swappedCandidate <= upperBound);
+        const bool isSwappedPlausible =
+            swappedConvertible && (swappedCandidate >= lowerBound && swappedCandidate <= upperBound);
 
         int64_t selectedExperience = currentExperience;
         if (isRawPlausible != isSwappedPlausible)
@@ -1209,7 +1205,8 @@ void ReceiveRevival(const BYTE* ReceiveBuffer)
         const auto swappedRevivalExperience = ntoh64(Data->CurrentExperience);
 
         const bool isRawPlausible = rawRevivalExperience >= lowerBound && rawRevivalExperience <= upperBound;
-        const bool isSwappedPlausible = swappedRevivalExperience >= lowerBound && swappedRevivalExperience <= upperBound;
+        const bool isSwappedPlausible =
+            swappedRevivalExperience >= lowerBound && swappedRevivalExperience <= upperBound;
 
         uint64_t selectedExperience = currentExperience;
         if (isRawPlausible != isSwappedPlausible)
@@ -5619,12 +5616,11 @@ BOOL ReceiveDieExp(const BYTE* ReceiveBuffer, BOOL bEncrypted)
 
         const auto lowerBound = GetMasterLowerBound(Master_Level_Data.nMLevel);
         const auto upperBound = Master_Level_Data.lNext_MasterLevel_Experince;
-        const auto currentExperience = ClampToInterval(Master_Level_Data.lMasterLevel_Experince, lowerBound, upperBound);
+        const auto currentExperience =
+            ClampToInterval(Master_Level_Data.lMasterLevel_Experince, lowerBound, upperBound);
         const auto addedExperience = static_cast<int64_t>(Exp);
         Master_Level_Data.lMasterLevel_Experince = ClampToInterval(
-            SaturatingAddToUpper(currentExperience, addedExperience, upperBound),
-            lowerBound,
-            upperBound);
+            SaturatingAddToUpper(currentExperience, addedExperience, upperBound), lowerBound, upperBound);
     }
     else
     {
@@ -5636,9 +5632,7 @@ BOOL ReceiveDieExp(const BYTE* ReceiveBuffer, BOOL bEncrypted)
         const auto currentExperience = ClampToInterval(CharacterAttribute->Experience, lowerBound, upperBound);
         const auto addedExperience = static_cast<uint64_t>(Exp);
         CharacterAttribute->Experience = ClampToInterval(
-            SaturatingAddToUpper(currentExperience, addedExperience, upperBound),
-            lowerBound,
-            upperBound);
+            SaturatingAddToUpper(currentExperience, addedExperience, upperBound), lowerBound, upperBound);
     }
 
     if (Exp > 0)
@@ -5721,11 +5715,11 @@ BOOL ReceiveDieExpLarge(const BYTE* ReceiveBuffer, BOOL bEncrypted)
 
         const auto lowerBound = GetMasterLowerBound(Master_Level_Data.nMLevel);
         const auto upperBound = Master_Level_Data.lNext_MasterLevel_Experince;
-        const auto currentExperience = ClampToInterval(Master_Level_Data.lMasterLevel_Experince, lowerBound, upperBound);
-        Master_Level_Data.lMasterLevel_Experince = ClampToInterval(
-            SaturatingAddToUpper(currentExperience, static_cast<int64_t>(addedExperience), upperBound),
-            lowerBound,
-            upperBound);
+        const auto currentExperience =
+            ClampToInterval(Master_Level_Data.lMasterLevel_Experince, lowerBound, upperBound);
+        Master_Level_Data.lMasterLevel_Experince =
+            ClampToInterval(SaturatingAddToUpper(currentExperience, static_cast<int64_t>(addedExperience), upperBound),
+                            lowerBound, upperBound);
     }
     else
     {
@@ -5735,10 +5729,9 @@ BOOL ReceiveDieExpLarge(const BYTE* ReceiveBuffer, BOOL bEncrypted)
         const auto lowerBound = GetNormalLowerBound(CharacterAttribute->Level);
         const auto upperBound = CharacterAttribute->NextExperience;
         const auto currentExperience = ClampToInterval(CharacterAttribute->Experience, lowerBound, upperBound);
-        CharacterAttribute->Experience = ClampToInterval(
-            SaturatingAddToUpper(currentExperience, static_cast<uint64_t>(addedExperience), upperBound),
-            lowerBound,
-            upperBound);
+        CharacterAttribute->Experience =
+            ClampToInterval(SaturatingAddToUpper(currentExperience, static_cast<uint64_t>(addedExperience), upperBound),
+                            lowerBound, upperBound);
     }
 
     if (addedExperience > 0)
@@ -5972,14 +5965,14 @@ static const BYTE GET_ITEM_MULTI = 0xfd; // received when item was added in a st
 
 namespace
 {
-    void RequestInventorySync()
+void RequestInventorySync()
+{
+    if (SocketClient != nullptr && SocketClient->ToGameServer() != nullptr)
     {
-        if (SocketClient != nullptr && SocketClient->ToGameServer() != nullptr)
-        {
-            SocketClient->ToGameServer()->SendInventoryRequest();
-        }
+        SocketClient->ToGameServer()->SendInventoryRequest();
     }
 }
+} // namespace
 
 extern int ItemKey;
 void ReceiveGetItem(std::span<const BYTE> ReceiveBuffer)

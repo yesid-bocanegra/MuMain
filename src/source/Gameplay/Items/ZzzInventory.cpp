@@ -149,20 +149,16 @@ static int iStateNum = 4;
 
 static bool IsDivineArchangelWeaponItem(int itemType)
 {
-    return itemType == ITEM_DIVINE_SWORD_OF_ARCHANGEL
-        || itemType == ITEM_DIVINE_CB_OF_ARCHANGEL
-        || itemType == ITEM_DIVINE_STAFF_OF_ARCHANGEL
-        || itemType == ITEM_DIVINE_STICK_OF_ARCHANGEL
-        || itemType == ITEM_DIVINE_SCEPTER_OF_ARCHANGEL;
+    return itemType == ITEM_DIVINE_SWORD_OF_ARCHANGEL || itemType == ITEM_DIVINE_CB_OF_ARCHANGEL ||
+           itemType == ITEM_DIVINE_STAFF_OF_ARCHANGEL || itemType == ITEM_DIVINE_STICK_OF_ARCHANGEL ||
+           itemType == ITEM_DIVINE_SCEPTER_OF_ARCHANGEL;
 }
 
 static bool IsDivineArchangelWeaponModel(int modelType)
 {
-    return modelType == MODEL_DIVINE_STAFF_OF_ARCHANGEL
-        || modelType == MODEL_DIVINE_STICK_OF_ARCHANGEL
-        || modelType == MODEL_DIVINE_SWORD_OF_ARCHANGEL
-        || modelType == MODEL_DIVINE_CB_OF_ARCHANGEL
-        || modelType == MODEL_DIVINE_SCEPTER_OF_ARCHANGEL;
+    return modelType == MODEL_DIVINE_STAFF_OF_ARCHANGEL || modelType == MODEL_DIVINE_STICK_OF_ARCHANGEL ||
+           modelType == MODEL_DIVINE_SWORD_OF_ARCHANGEL || modelType == MODEL_DIVINE_CB_OF_ARCHANGEL ||
+           modelType == MODEL_DIVINE_SCEPTER_OF_ARCHANGEL;
 }
 
 #ifdef _PVP_ADD_MOVE_SCROLL
@@ -1679,8 +1675,8 @@ WORD CalcMaxDurability(const ITEM* ip, ITEM_ATTRIBUTE* p, int Level)
         maxDurability += 20;
     }
     else if (ip->ExcellentFlags > 0 && (ip->Type < ITEM_WINGS_OF_SPIRITS || ip->Type > ITEM_WINGS_OF_DARKNESS) &&
-             !IsDivineArchangelWeaponItem(ip->Type) &&
-             ip->Type != ITEM_CAPE_OF_LORD && (ip->Type < ITEM_WING_OF_STORM || ip->Type > ITEM_CAPE_OF_EMPEROR) &&
+             !IsDivineArchangelWeaponItem(ip->Type) && ip->Type != ITEM_CAPE_OF_LORD &&
+             (ip->Type < ITEM_WING_OF_STORM || ip->Type > ITEM_CAPE_OF_EMPEROR) &&
              (ip->Type < ITEM_WINGS_OF_DESPAIR || ip->Type > ITEM_WING_OF_DIMENSION) &&
              !(ip->Type >= ITEM_CAPE_OF_FIGHTER && ip->Type <= ITEM_CAPE_OF_OVERRULE))
     {
@@ -4306,24 +4302,24 @@ void RenderItemInfo(int sx, int sy, ITEM* ip, bool Sell, int Inventype, bool bIt
         {
             mu_swprintf(TextList[TextNum], L"%ls: %d ~ %d", GlobalText[40 + 2], DamageMin, DamageMax);
         }
-            else if (ip->Type != ITEM_SCROLL_OF_TELEPORT && ip->Type != ITEM_SCROLL_OF_TELEPORT_ALLY && ip->Type != ITEM_SCROLL_OF_SOUL_BARRIER)
+        else if (ip->Type != ITEM_SCROLL_OF_TELEPORT && ip->Type != ITEM_SCROLL_OF_TELEPORT_ALLY &&
+                 ip->Type != ITEM_SCROLL_OF_SOUL_BARRIER)
+        {
+            if (ip->Type >= ITEM_ETC && ip->Type < ITEM_ETC + MAX_ITEM_INDEX)
             {
-                if (ip->Type >= ITEM_ETC && ip->Type < ITEM_ETC + MAX_ITEM_INDEX)
+                const ActionSkillType skillIndex = GetSkillByBook(ip->Type);
+                if (SkillAttribute != nullptr && skillIndex != AT_SKILL_UNDEFINED &&
+                    IsValidateSkillIdx(static_cast<INT>(skillIndex)))
                 {
-                    const ActionSkillType skillIndex = GetSkillByBook(ip->Type);
-                    if (SkillAttribute != nullptr
-                        && skillIndex != AT_SKILL_UNDEFINED
-                        && IsValidateSkillIdx(static_cast<INT>(skillIndex)))
-                    {
-                        const SKILL_ATTRIBUTE& skillAtt = SkillAttribute[skillIndex];
-                        DamageMin = skillAtt.Damage;
-                        DamageMax = skillAtt.Damage + skillAtt.Damage / 2;
-                    }
-
-                    mu_swprintf(TextList[TextNum], L"%ls: %d ~ %d", GlobalText[42], DamageMin, DamageMax);
+                    const SKILL_ATTRIBUTE& skillAtt = SkillAttribute[skillIndex];
+                    DamageMin = skillAtt.Damage;
+                    DamageMax = skillAtt.Damage + skillAtt.Damage / 2;
                 }
-                else
-                {
+
+                mu_swprintf(TextList[TextNum], L"%ls: %d ~ %d", GlobalText[42], DamageMin, DamageMax);
+            }
+            else
+            {
                 if (DamageMin + minindex >= DamageMax + maxindex)
                     mu_swprintf(TextList[TextNum], L"%ls: %d ~ %d", GlobalText[40 + p->TwoHand], DamageMax + maxindex,
                                 DamageMax + maxindex);
@@ -7402,11 +7398,8 @@ struct GroundItemLabelCacheKey
 
     bool operator==(const GroundItemLabelCacheKey& other) const
     {
-        return this->Type == other.Type
-            && this->Level == other.Level
-            && this->ExcellentFlags == other.ExcellentFlags
-            && this->AncientDiscriminator == other.AncientDiscriminator
-            && this->FeatureFlags == other.FeatureFlags;
+        return this->Type == other.Type && this->Level == other.Level && this->ExcellentFlags == other.ExcellentFlags &&
+               this->AncientDiscriminator == other.AncientDiscriminator && this->FeatureFlags == other.FeatureFlags;
     }
 };
 
@@ -7416,9 +7409,12 @@ struct GroundItemLabelCacheKeyHasher
     {
         size_t seed = std::hash<int>{}(key.Type);
         seed ^= std::hash<int>{}(key.Level) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
-        seed ^= std::hash<unsigned int>{}(static_cast<unsigned int>(key.ExcellentFlags)) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
-        seed ^= std::hash<unsigned int>{}(static_cast<unsigned int>(key.AncientDiscriminator)) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
-        seed ^= std::hash<unsigned int>{}(static_cast<unsigned int>(key.FeatureFlags)) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+        seed ^= std::hash<unsigned int>{}(static_cast<unsigned int>(key.ExcellentFlags)) + 0x9e3779b9 + (seed << 6) +
+                (seed >> 2);
+        seed ^= std::hash<unsigned int>{}(static_cast<unsigned int>(key.AncientDiscriminator)) + 0x9e3779b9 +
+                (seed << 6) + (seed >> 2);
+        seed ^= std::hash<unsigned int>{}(static_cast<unsigned int>(key.FeatureFlags)) + 0x9e3779b9 + (seed << 6) +
+                (seed >> 2);
         return seed;
     }
 };
@@ -7434,7 +7430,8 @@ struct GroundItemLabelCacheEntry
     DWORD LastUsedTick = 0;
 };
 
-std::unordered_map<GroundItemLabelCacheKey, GroundItemLabelCacheEntry, GroundItemLabelCacheKeyHasher> g_groundItemLabelCache;
+std::unordered_map<GroundItemLabelCacheKey, GroundItemLabelCacheEntry, GroundItemLabelCacheKeyHasher>
+    g_groundItemLabelCache;
 
 DWORD MakeRgba(BYTE red, BYTE green, BYTE blue, BYTE alpha = 255)
 {
@@ -7443,11 +7440,8 @@ DWORD MakeRgba(BYTE red, BYTE green, BYTE blue, BYTE alpha = 255)
 
 void SetDescriptorTextColor(GroundItemLabelDescriptor& descriptor, float red, float green, float blue)
 {
-    descriptor.TextColor = MakeRgba(
-        static_cast<BYTE>(red * 255.f),
-        static_cast<BYTE>(green * 255.f),
-        static_cast<BYTE>(blue * 255.f),
-        255);
+    descriptor.TextColor = MakeRgba(static_cast<BYTE>(red * 255.f), static_cast<BYTE>(green * 255.f),
+                                    static_cast<BYTE>(blue * 255.f), 255);
 }
 
 void SetDescriptorYellowTextColor(GroundItemLabelDescriptor& descriptor)
@@ -7466,19 +7460,18 @@ void SetDescriptorOrangeTextColor(GroundItemLabelDescriptor& descriptor)
 }
 
 template <size_t BufferSize, typename... Args>
-void FormatGroundItemLabelText(wchar_t(&buffer)[BufferSize], const wchar_t* format, Args... args)
+void FormatGroundItemLabelText(wchar_t (&buffer)[BufferSize], const wchar_t* format, Args... args)
 {
     mu_swprintf_s(buffer, BufferSize, format, args...);
 }
 
-template <size_t BufferSize>
-void CopyGroundItemLabelText(wchar_t(&buffer)[BufferSize], const wchar_t* value)
+template <size_t BufferSize> void CopyGroundItemLabelText(wchar_t (&buffer)[BufferSize], const wchar_t* value)
 {
     FormatGroundItemLabelText(buffer, L"%ls", value != nullptr ? value : L"");
 }
 
 template <size_t BufferSize, typename... Args>
-void AppendGroundItemLabelText(wchar_t(&buffer)[BufferSize], const wchar_t* format, Args... args)
+void AppendGroundItemLabelText(wchar_t (&buffer)[BufferSize], const wchar_t* format, Args... args)
 {
     const size_t currentLength = wcslen(buffer);
     if (currentLength >= BufferSize - 1)
@@ -7556,19 +7549,15 @@ void PruneGroundItemLabelCache(DWORD currentTick)
         std::vector<decltype(g_groundItemLabelCache.begin())> cacheEntryIterators;
         cacheEntryIterators.reserve(g_groundItemLabelCache.size());
 
-        for (auto cacheEntryIterator = g_groundItemLabelCache.begin(); cacheEntryIterator != g_groundItemLabelCache.end(); ++cacheEntryIterator)
+        for (auto cacheEntryIterator = g_groundItemLabelCache.begin();
+             cacheEntryIterator != g_groundItemLabelCache.end(); ++cacheEntryIterator)
         {
             cacheEntryIterators.push_back(cacheEntryIterator);
         }
 
-        std::nth_element(
-            cacheEntryIterators.begin(),
-            cacheEntryIterators.begin() + entryCountToEvict,
-            cacheEntryIterators.end(),
-            [](const auto& left, const auto& right)
-            {
-                return left->second.LastUsedTick < right->second.LastUsedTick;
-            });
+        std::nth_element(cacheEntryIterators.begin(), cacheEntryIterators.begin() + entryCountToEvict,
+                         cacheEntryIterators.end(), [](const auto& left, const auto& right)
+                         { return left->second.LastUsedTick < right->second.LastUsedTick; });
 
         for (size_t i = 0; i < entryCountToEvict; ++i)
         {
@@ -7646,28 +7635,55 @@ void BuildGroundItemLabelDescriptor(OBJECT* o, ITEM* ip, GroundItemLabelDescript
     {
         switch (ItemLevel)
         {
-        case 0: CopyGroundItemLabelText(descriptor.Name, GlobalText[100]); break;
-        case 1: CopyGroundItemLabelText(descriptor.Name, GlobalText[101]); break;
-        case 2: CopyGroundItemLabelText(descriptor.Name, GlobalText[104]); break;
+        case 0:
+            CopyGroundItemLabelText(descriptor.Name, GlobalText[100]);
+            break;
+        case 1:
+            CopyGroundItemLabelText(descriptor.Name, GlobalText[101]);
+            break;
+        case 2:
+            CopyGroundItemLabelText(descriptor.Name, GlobalText[104]);
+            break;
         }
     }
     else if (o->Type == MODEL_FRUITS)
     {
         switch (ItemLevel)
         {
-        case 0: FormatGroundItemLabelText(descriptor.Name, L"%ls %ls", GlobalText[168], ItemAttribute[o->Type - MODEL_ITEM].Name); break;
-        case 1: FormatGroundItemLabelText(descriptor.Name, L"%ls %ls", GlobalText[169], ItemAttribute[o->Type - MODEL_ITEM].Name); break;
-        case 2: FormatGroundItemLabelText(descriptor.Name, L"%ls %ls", GlobalText[167], ItemAttribute[o->Type - MODEL_ITEM].Name); break;
-        case 3: FormatGroundItemLabelText(descriptor.Name, L"%ls %ls", GlobalText[166], ItemAttribute[o->Type - MODEL_ITEM].Name); break;
-        case 4: FormatGroundItemLabelText(descriptor.Name, L"%ls %ls", GlobalText[1900], ItemAttribute[o->Type - MODEL_ITEM].Name); break;
+        case 0:
+            FormatGroundItemLabelText(descriptor.Name, L"%ls %ls", GlobalText[168],
+                                      ItemAttribute[o->Type - MODEL_ITEM].Name);
+            break;
+        case 1:
+            FormatGroundItemLabelText(descriptor.Name, L"%ls %ls", GlobalText[169],
+                                      ItemAttribute[o->Type - MODEL_ITEM].Name);
+            break;
+        case 2:
+            FormatGroundItemLabelText(descriptor.Name, L"%ls %ls", GlobalText[167],
+                                      ItemAttribute[o->Type - MODEL_ITEM].Name);
+            break;
+        case 3:
+            FormatGroundItemLabelText(descriptor.Name, L"%ls %ls", GlobalText[166],
+                                      ItemAttribute[o->Type - MODEL_ITEM].Name);
+            break;
+        case 4:
+            FormatGroundItemLabelText(descriptor.Name, L"%ls %ls", GlobalText[1900],
+                                      ItemAttribute[o->Type - MODEL_ITEM].Name);
+            break;
         }
     }
     else if (o->Type == MODEL_SPIRIT)
     {
         switch (ItemLevel)
         {
-        case 0: FormatGroundItemLabelText(descriptor.Name, L"%ls of %ls", ItemAttribute[o->Type - MODEL_ITEM].Name, GlobalText[1187]); break;
-        case 1: FormatGroundItemLabelText(descriptor.Name, L"%ls of %ls", ItemAttribute[o->Type - MODEL_ITEM].Name, GlobalText[1214]); break;
+        case 0:
+            FormatGroundItemLabelText(descriptor.Name, L"%ls of %ls", ItemAttribute[o->Type - MODEL_ITEM].Name,
+                                      GlobalText[1187]);
+            break;
+        case 1:
+            FormatGroundItemLabelText(descriptor.Name, L"%ls of %ls", ItemAttribute[o->Type - MODEL_ITEM].Name,
+                                      GlobalText[1214]);
+            break;
         }
     }
     else if (o->Type == MODEL_EVENT + 16)
@@ -7837,24 +7853,36 @@ void BuildGroundItemLabelDescriptor(OBJECT* o, ITEM* ip, GroundItemLabelDescript
     {
         switch (ItemLevel)
         {
-        case 0: CopyGroundItemLabelText(descriptor.Name, GlobalText[1413]); break;
-        case 1: CopyGroundItemLabelText(descriptor.Name, GlobalText[1414]); break;
+        case 0:
+            CopyGroundItemLabelText(descriptor.Name, GlobalText[1413]);
+            break;
+        case 1:
+            CopyGroundItemLabelText(descriptor.Name, GlobalText[1414]);
+            break;
         }
     }
     else if (o->Type == MODEL_HELPER + 7)
     {
         switch (ItemLevel)
         {
-        case 0: CopyGroundItemLabelText(descriptor.Name, GlobalText[1460]); break;
-        case 1: CopyGroundItemLabelText(descriptor.Name, GlobalText[1461]); break;
+        case 0:
+            CopyGroundItemLabelText(descriptor.Name, GlobalText[1460]);
+            break;
+        case 1:
+            CopyGroundItemLabelText(descriptor.Name, GlobalText[1461]);
+            break;
         }
     }
     else if (o->Type == MODEL_LIFE_STONE_ITEM)
     {
         switch (ItemLevel)
         {
-        case 0: CopyGroundItemLabelText(descriptor.Name, GlobalText[1416]); break;
-        case 1: CopyGroundItemLabelText(descriptor.Name, GlobalText[1462]); break;
+        case 0:
+            CopyGroundItemLabelText(descriptor.Name, GlobalText[1416]);
+            break;
+        case 1:
+            CopyGroundItemLabelText(descriptor.Name, GlobalText[1462]);
+            break;
         }
     }
     else if (o->Type == MODEL_EVENT + 18)
@@ -7993,7 +8021,7 @@ bool CreateGroundItemLabelTexture(const GroundItemLabelDescriptor& descriptor, G
     ::SetTextColor(fontDc, RGB(255, 255, 255));
     TextOut(fontDc, 0, 0, descriptor.Name, lstrlen(descriptor.Name));
 
-    SIZE fontDcSize = { static_cast<int>(640 * g_fScreenRate_x), static_cast<int>(480 * g_fScreenRate_y) };
+    SIZE fontDcSize = {static_cast<int>(640 * g_fScreenRate_x), static_cast<int>(480 * g_fScreenRate_y)};
     int sourcePitch = ((fontDcSize.cx * 24 + 31) & ~31) >> 3;
     int sourceBufferLength = sourcePitch * fontDcSize.cy;
 
@@ -8046,7 +8074,8 @@ bool CreateGroundItemLabelTexture(const GroundItemLabelDescriptor& descriptor, G
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textureWidth, textureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureBuffer.data());
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textureWidth, textureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                 textureBuffer.data());
 
     cacheEntry.TextureId = textureId;
     cacheEntry.TextWidth = textSize.cx;
@@ -8076,9 +8105,11 @@ void RenderGroundItemLabelTexture(OBJECT* o, const GroundItemLabelCacheEntry& ca
     if (cacheEntry.BgColor != 0)
     {
         EnableAlphaTest();
-        glColor4ub(GetRed(cacheEntry.BgColor), GetGreen(cacheEntry.BgColor), GetBlue(cacheEntry.BgColor), GetAlpha(cacheEntry.BgColor));
+        glColor4ub(GetRed(cacheEntry.BgColor), GetGreen(cacheEntry.BgColor), GetBlue(cacheEntry.BgColor),
+                   GetAlpha(cacheEntry.BgColor));
         RenderColor(renderX / g_fScreenRate_x, renderY / g_fScreenRate_y,
-            static_cast<float>(cacheEntry.TextWidth) / g_fScreenRate_x, static_cast<float>(cacheEntry.TextHeight) / g_fScreenRate_y);
+                    static_cast<float>(cacheEntry.TextWidth) / g_fScreenRate_x,
+                    static_cast<float>(cacheEntry.TextHeight) / g_fScreenRate_y);
         EndRenderColor();
     }
 
@@ -8086,7 +8117,7 @@ void RenderGroundItemLabelTexture(OBJECT* o, const GroundItemLabelCacheEntry& ca
     float textureUWidth = (cacheEntry.TextWidth + 0.01f) / static_cast<float>(cacheEntry.TextureWidth);
     float textureVHeight = (cacheEntry.TextHeight + 0.01f) / static_cast<float>(cacheEntry.TextureHeight);
     RenderBitmap(-static_cast<int>(cacheEntry.TextureId), renderX, renderY, static_cast<float>(cacheEntry.TextWidth),
-        static_cast<float>(cacheEntry.TextHeight), 0.f, 0.f, textureUWidth, textureVHeight, false, false);
+                 static_cast<float>(cacheEntry.TextHeight), 0.f, 0.f, textureUWidth, textureVHeight, false, false);
 #endif
 }
 
@@ -8138,7 +8169,7 @@ bool RenderGroundItemLabelCached(OBJECT* o, ITEM* ip)
 
     return false;
 }
-}
+} // namespace
 
 void SetGroundItemLabelBuildBudget(int buildBudget)
 {
@@ -8148,10 +8179,8 @@ void SetGroundItemLabelBuildBudget(int buildBudget)
     static DWORD lastPruneTick = 0;
     DWORD currentTick = timeGetTime();
 
-    if (!g_groundItemLabelCache.empty()
-        && (g_groundItemLabelCache.size() > GROUND_ITEM_LABEL_CACHE_MAX_ENTRIES
-            || lastPruneTick == 0
-            || currentTick - lastPruneTick >= pruneIntervalMs))
+    if (!g_groundItemLabelCache.empty() && (g_groundItemLabelCache.size() > GROUND_ITEM_LABEL_CACHE_MAX_ENTRIES ||
+                                            lastPruneTick == 0 || currentTick - lastPruneTick >= pruneIntervalMs))
     {
         PruneGroundItemLabelCache(currentTick);
         lastPruneTick = currentTick;
@@ -8180,8 +8209,7 @@ void RenderItemName(int i, OBJECT* o, ITEM* ip, bool Sort)
             GroundItemLabelDescriptor descriptor;
             BuildGroundItemLabelDescriptor(o, ip, descriptor);
             ApplyGroundItemLabelDescriptor(descriptor);
-            g_pRenderText->RenderText(o->ScreenX, o->ScreenY - 15,
-                descriptor.Name, 0, 0, RT3_WRITE_CENTER);
+            g_pRenderText->RenderText(o->ScreenX, o->ScreenY - 15, descriptor.Name, 0, 0, RT3_WRITE_CENTER);
         }
     }
 
@@ -8478,9 +8506,8 @@ bool IsHighValueItem(ITEM* pItem)
         pItem->Type == ITEM_DARK_RAVEN_ITEM || pItem->Type == ITEM_CAPE_OF_LORD ||
         (pItem->Type >= ITEM_WING_OF_STORM && pItem->Type <= ITEM_WING_OF_DIMENSION) ||
         pItem->AncientDiscriminator > 0 || IsDivineArchangelWeaponItem(pItem->Type) ||
-        pItem->Type == ITEM_LOCHS_FEATHER ||
-        pItem->Type == ITEM_FRUITS || pItem->Type == ITEM_WEAPON_OF_ARCHANGEL || pItem->Type == ITEM_SPIRIT ||
-        (pItem->Type >= ITEM_GEMSTONE && pItem->Type <= ITEM_HIGHER_REFINE_STONE) ||
+        pItem->Type == ITEM_LOCHS_FEATHER || pItem->Type == ITEM_FRUITS || pItem->Type == ITEM_WEAPON_OF_ARCHANGEL ||
+        pItem->Type == ITEM_SPIRIT || (pItem->Type >= ITEM_GEMSTONE && pItem->Type <= ITEM_HIGHER_REFINE_STONE) ||
         (iLevel > 6 && pItem->Type < ITEM_WING) || pItem->ExcellentFlags > 0 ||
         (pItem->Type >= ITEM_CLAW_OF_BEAST && pItem->Type <= ITEM_HORN_OF_FENRIR) ||
         pItem->Type == ITEM_FLAME_OF_CONDOR || pItem->Type == ITEM_FEATHER_OF_CONDOR ||
@@ -8690,12 +8717,14 @@ bool Check_ItemAction(ITEM* _pItem, ITEMSETOPTION _eAction, bool _bType)
     // Restricted ITEM_HELPER special items starting at local index 135.
     for (i = 0; i < RESTRICTED_SPECIAL_MISC_COUNT; i++)
     {
-        sItem.push_back(Set_ItemActOption(ITEM_HELPER + RESTRICTED_SPECIAL_MISC_START_INDEX + i, ITEM_ACTION_BLOCK_STORAGE_TRADE));
+        sItem.push_back(
+            Set_ItemActOption(ITEM_HELPER + RESTRICTED_SPECIAL_MISC_START_INDEX + i, ITEM_ACTION_BLOCK_STORAGE_TRADE));
     }
     // Restricted ITEM_POTION special jewels starting at local index 160.
     for (i = 0; i < RESTRICTED_SPECIAL_JEWEL_COUNT; i++)
     {
-        sItem.push_back(Set_ItemActOption(ITEM_POTION + RESTRICTED_SPECIAL_JEWEL_START_INDEX + i, ITEM_ACTION_BLOCK_STORAGE_TRADE));
+        sItem.push_back(
+            Set_ItemActOption(ITEM_POTION + RESTRICTED_SPECIAL_JEWEL_START_INDEX + i, ITEM_ACTION_BLOCK_STORAGE_TRADE));
     }
     for (i = 0; i < LUCKY_SET_ARMOR_COUNT; i++)
     {
@@ -8741,8 +8770,8 @@ bool IsLuckySetItem(int iType)
 #else  // LEM_FIX_SELL_LUCKYITEM_BOOTS_POPUP
     if ((iType >= ITEM_HELM && iType <= ITEM_BOOTS)
 #endif // LEM_FIX_SELL_LUCKYITEM_BOOTS_POPUP
-        && (iItemIndex >= LUCKY_SET_ARMOR_START_INDEX
-            && iItemIndex < LUCKY_SET_ARMOR_START_INDEX + LUCKY_SET_ARMOR_COUNT))
+        &&
+        (iItemIndex >= LUCKY_SET_ARMOR_START_INDEX && iItemIndex < LUCKY_SET_ARMOR_START_INDEX + LUCKY_SET_ARMOR_COUNT))
     {
         return true;
     }

@@ -994,9 +994,8 @@ void SEASON3B::CNewUIInventoryCtrl::Render()
                         tintARGB = 0x66FF331Au; // red-orange — not tradeable
                     }
 
-                    RenderColorQuadARGB(m_Pos.x + (x * INVENTORY_SQUARE_WIDTH),
-                                        m_Pos.y + (y * INVENTORY_SQUARE_HEIGHT), INVENTORY_SQUARE_WIDTH,
-                                        INVENTORY_SQUARE_HEIGHT, tintARGB);
+                    RenderColorQuadARGB(m_Pos.x + (x * INVENTORY_SQUARE_WIDTH), m_Pos.y + (y * INVENTORY_SQUARE_HEIGHT),
+                                        INVENTORY_SQUARE_WIDTH, INVENTORY_SQUARE_HEIGHT, tintARGB);
                 }
                 else
                 {

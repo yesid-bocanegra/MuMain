@@ -74,7 +74,7 @@ bool CNewUIMyInventory::Create(CNewUIManager* pNewUIMng, CNewUI3DRenderMng* pNew
         return false;
     }
 
-    m_ActionController.SetContext(this); 
+    m_ActionController.SetContext(this);
 
     SetPos(x, y);
     LoadImages();
@@ -519,8 +519,8 @@ bool CNewUIMyInventory::UpdateMouseEvent()
             const int iSourceIndex = pPickedItem->GetSourceLinealPos();
             const int tx = (int)(CollisionPosition[0] / TERRAIN_SCALE);
             const int ty = (int)(CollisionPosition[1] / TERRAIN_SCALE);
-            if (pPickedItem->GetOwnerInventory() == m_pNewInventoryCtrl
-                || g_pMyInventoryExt->GetOwnerOf(pPickedItem) != nullptr)
+            if (pPickedItem->GetOwnerInventory() == m_pNewInventoryCtrl ||
+                g_pMyInventoryExt->GetOwnerOf(pPickedItem) != nullptr)
             {
                 if (Hero->Dead == 0)
                 {

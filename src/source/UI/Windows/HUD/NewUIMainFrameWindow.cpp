@@ -470,8 +470,10 @@ void SEASON3B::CNewUIMainFrameWindow::RenderExperience()
         }
 
         const double fNeedExp = static_cast<double>(upperBound - lowerBound);
-        const double fClampedExp = std::clamp(static_cast<double>(dwExperience), static_cast<double>(lowerBound), static_cast<double>(upperBound));
-        const double fRatio = (fNeedExp > 0.0) ? std::clamp((fClampedExp - static_cast<double>(lowerBound)) / fNeedExp, 0.0, 1.0) : 0.0;
+        const double fClampedExp = std::clamp(static_cast<double>(dwExperience), static_cast<double>(lowerBound),
+                                              static_cast<double>(upperBound));
+        const double fRatio =
+            (fNeedExp > 0.0) ? std::clamp((fClampedExp - static_cast<double>(lowerBound)) / fNeedExp, 0.0, 1.0) : 0.0;
         int iExp = 0;
         double fProgress = 0.0;
         buildExpSegment(fRatio, iExp, fProgress);
@@ -494,8 +496,11 @@ void SEASON3B::CNewUIMainFrameWindow::RenderExperience()
                 int iPreExpBarNum = 0;
                 if (fNeedExp > 0.f)
                 {
-                    const double fPreClampedExp = std::clamp(static_cast<double>(m_loPreExp), static_cast<double>(lowerBound), static_cast<double>(upperBound));
-                    const double fPreRatio = std::clamp((fPreClampedExp - static_cast<double>(lowerBound)) / fNeedExp, 0.0, 1.0);
+                    const double fPreClampedExp =
+                        std::clamp(static_cast<double>(m_loPreExp), static_cast<double>(lowerBound),
+                                   static_cast<double>(upperBound));
+                    const double fPreRatio =
+                        std::clamp((fPreClampedExp - static_cast<double>(lowerBound)) / fNeedExp, 0.0, 1.0);
                     buildExpSegment(fPreRatio, iPreExpBarNum, fPreProgress);
                 }
 
@@ -581,8 +586,10 @@ void SEASON3B::CNewUIMainFrameWindow::RenderExperience()
         }
 
         const double fNeedExp = static_cast<double>(upperBound - lowerBound);
-        const double fClampedExp = std::clamp(static_cast<double>(dwExperience), static_cast<double>(lowerBound), static_cast<double>(upperBound));
-        const double fRatio = (fNeedExp > 0.0) ? std::clamp((fClampedExp - static_cast<double>(lowerBound)) / fNeedExp, 0.0, 1.0) : 0.0;
+        const double fClampedExp = std::clamp(static_cast<double>(dwExperience), static_cast<double>(lowerBound),
+                                              static_cast<double>(upperBound));
+        const double fRatio =
+            (fNeedExp > 0.0) ? std::clamp((fClampedExp - static_cast<double>(lowerBound)) / fNeedExp, 0.0, 1.0) : 0.0;
         int iExp = 0;
         double fProgress = 0.0;
         buildExpSegment(fRatio, iExp, fProgress);
@@ -605,8 +612,11 @@ void SEASON3B::CNewUIMainFrameWindow::RenderExperience()
                 int iPreExpBarNum = 0;
                 if (fNeedExp > 0.f)
                 {
-                    const double fPreClampedExp = std::clamp(static_cast<double>(m_dwPreExp), static_cast<double>(lowerBound), static_cast<double>(upperBound));
-                    const double fPreRatio = std::clamp((fPreClampedExp - static_cast<double>(lowerBound)) / fNeedExp, 0.0, 1.0);
+                    const double fPreClampedExp =
+                        std::clamp(static_cast<double>(m_dwPreExp), static_cast<double>(lowerBound),
+                                   static_cast<double>(upperBound));
+                    const double fPreRatio =
+                        std::clamp((fPreClampedExp - static_cast<double>(lowerBound)) / fNeedExp, 0.0, 1.0);
                     buildExpSegment(fPreRatio, iPreExpBarNum, fPreProgress);
                 }
 

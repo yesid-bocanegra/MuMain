@@ -497,8 +497,7 @@ void CMsgWin::ManageCancelClick()
     // If the delete-character password prompt is being cancelled, hide the shared
     // password input so it releases SDL3 focus (otherwise hotkeys remain suppressed
     // because IsAnyInputBoxFocused() keeps reporting the singleton as focused).
-    if (m_nMsgCode == MESSAGE_DELETE_CHARACTER_RESIDENT && g_iChatInputType == 1 &&
-        g_pSinglePasswdInputBox != nullptr)
+    if (m_nMsgCode == MESSAGE_DELETE_CHARACTER_RESIDENT && g_iChatInputType == 1 && g_pSinglePasswdInputBox != nullptr)
     {
         g_pSinglePasswdInputBox->SetText(NULL);
         g_pSinglePasswdInputBox->SetState(UISTATE_HIDE);

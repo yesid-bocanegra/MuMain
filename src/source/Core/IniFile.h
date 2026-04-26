@@ -46,7 +46,7 @@ inline std::locale MakeUtf8Locale()
 #pragma GCC diagnostic pop
 #endif
 }
-}  // namespace detail
+} // namespace detail
 
 class IniFile
 {
