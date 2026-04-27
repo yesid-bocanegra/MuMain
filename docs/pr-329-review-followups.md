@@ -57,62 +57,38 @@ technical issues — those remain valid feedback for the working branch
 - **Affects CLion / Visual Studio users locally**, not CI. Worth fixing
   before anyone else opens the project on Windows in those IDEs.
 
-### Real bugs CI hasn't reached yet (HIGHEST priority)
+### Closed since doc creation (verified 2026-04-27)
 
-#### #1 — Incomplete logging migration
-After `Story 7.10.1` deleted `CErrorReport` and `CmuConsoleDebug`, these
-symbols are still referenced:
-- `g_ConsoleDebug`
-- `g_ErrorReport`
-- `MCD_NORMAL`, `MCD_RECEIVE`, `MCD_ERROR`
-- `Utilities/Log/muConsoleDebug.h`
+#### #1 — Incomplete logging migration ✓ resolved
+After `Story 7.10.1` deleted `CErrorReport` and `CmuConsoleDebug`, this
+finding flagged surviving references in `Network/WSclient.cpp`,
+`Scenes/{Main,Character}Scene.cpp`, `Scenes/SceneManager.cpp`,
+`GameShop/NewUIInGameShop.cpp`. Re-grep on 2026-04-27 returns **zero
+hits** for `g_ConsoleDebug | g_ErrorReport | MCD_NORMAL | MCD_RECEIVE |
+MCD_ERROR | muConsoleDebug` outside resolution-tracking comments
+(`MuConsoleCommands.{cpp,h}`, `MuLogger.h`, one comment in
+`PlatformCompat.h:2149`). Cleanup landed between doc creation and
+verification.
 
-Files Mosch named (non-exhaustive):
-- `Network/WSclient.cpp` (lines 350, 354, 358, 467, 480, 482, 490, 534)
-- `Scenes/MainScene.cpp` — `extern CErrorReport g_ErrorReport;` declared,
-  never defined
-- `Scenes/CharacterScene.cpp` — same `extern`, plus
-  `#include "Utilities/Log/muConsoleDebug.h"`
-- `Scenes/SceneManager.cpp` — `g_ErrorReport.Write(...)` (~603-604)
-- `GameShop/NewUIInGameShop.cpp` — `g_ConsoleDebug.Write(...)` (~615, 705)
+#### #4 — Lingering OpenGL immediate-mode calls ✓ resolved
+`Story 7.9.6` removed the raw-GL backend; this finding flagged
+`glColor3f`/`glPushMatrix`/`glTranslatef`/`glMatrixMode`/`glLoadIdentity`/
+`glClear`/`glPopMatrix` survivors in `ZzzEffectFireLeave.cpp`,
+`ZzzObject.cpp`, `NewUIInGameShop.cpp`. Re-grep on 2026-04-27 returns
+**zero immediate-mode hits** outside the `wglGetProcAddress` /
+`wglGetCurrentDC` stubs in `PlatformCompat.h` (covered by 7-9-5's
+Category B deletion).
 
-**Why CI hasn't caught it**: every CI run so far has failed before reaching
-`MUGame`. Once configure + early targets pass, link of `MUGame` will have
-undefined references on every compiler — language-level, not platform.
+The only surviving raw-GL reference now is texture-object management
+in `Gameplay/Items/ZzzInventory.cpp:7524, 8066, 8072-8077`
+(`glGenTextures`, `glBindTexture`, `glTexParameteri`, `glDeleteTextures`,
+`glTexImage2D`) — but those calls live inside an `#else` branch of
+`#ifdef MU_ENABLE_SDL3` (block 7994-8087). On the SDL3 path the
+function returns false at line 7999 before the `gl*` calls. Vestigial
+legacy that **7-9-19** strips with the rest of the `MU_ENABLE_SDL3`
+axis. No additional story needed.
 
-**Pattern to match**: `Gameplay/Items/PersonalShopTitleImp.cpp` already uses
-`mu::log::Get("module")->info(...)` correctly.
-
-**Enumerate scope**:
-```bash
-grep -rn 'g_ConsoleDebug\|g_ErrorReport\|MCD_NORMAL\|MCD_RECEIVE\|MCD_ERROR\|muConsoleDebug.h' src/source/
-```
-
-#### #4 — Lingering OpenGL immediate-mode calls
-`Story 7.9.3` removed the GL backend, but several files still emit
-immediate-mode draw calls. Symbols don't exist anywhere in the build:
-- `RenderFX/ZzzEffectFireLeave.cpp:547,572,573,598` — `glColor3f`,
-  `glPushMatrix`, `glTranslatef`, `glPopMatrix`
-- `Gameplay/Characters/ZzzObject.cpp` — `glColor3f`/`glColor4f`/`glColor3fv`
-  at ~25 sites between lines 786-7840
-- `GameShop/NewUIInGameShop.cpp:85, 312-337` — `glColor4f`, `glMatrixMode`,
-  `glPushMatrix`, `glLoadIdentity`, `glClear`, `glPopMatrix`
-
-Same CI caveat as #1.
-
-**Fix path**: route through `mu::GetRenderer()`. Already exposes
-`SetMatrixMode`, `PushMatrix`, `LoadIdentity`, `MultMatrix`, `Translate`,
-`Rotate`, `ClearDepthBuffer`, `SetViewport`. Likely needs:
-- `SetVertexColor(r,g,b,a)` extension for the `glColor*` sites
-- A debug-primitive helper for `glBegin(GL_QUADS)`-style geometry (no
-  equivalent on the abstraction yet)
-
-**Enumerate scope**:
-```bash
-grep -rn 'gl[A-Z][a-zA-Z]*[(]' src/source/ | grep -v 'glm::' | grep -v '//'
-```
-
-### MinGW-only — low priority (we standardized on MSVC for Windows)
+### Cross-cutting `#ifdef` cleanup (subsumed by **7-9-19**)
 
 #### #2 — SDL3 helpers in wrong `#ifdef` branch
 `Platform/PlatformCompat.h` has `#ifdef _WIN32 ... #else ... #endif`
@@ -131,34 +107,42 @@ on `MU_ENABLE_SDL3`.
 used by `Data/GlobalText.h`'s template via GCC two-phase name lookup —
 could bite plain Linux GCC, not just MinGW. Reproduce before deferring.
 
+### Cross-platform type/header point-fixes (verified live 2026-04-27)
+
 #### #3 — POSIX-only types/headers in unconditional code
+All three sites confirmed live; will break MSVC even though MinGW
+support was deprioritized. **Now part of 7-9-18 scope** (cross-platform
+point-fixes — same shape as the existing `GetCurrentDirectory` /
+`ShellExecute` / `IsBadReadPtr` items in that story):
+
 - `RenderFX/ZzzBMD.cpp:1022` — `static_cast<u_char>(...)`. Fix: `unsigned char`.
-- `Network/WSclient.cpp:540-550` — `u_int64`. Fix: `uint64_t`.
+- `Network/WSclient.cpp:566-567` — `u_int64`. Fix: `uint64_t`.
 - `Core/MuSystemInfo.cpp:13` — unconditional `#include <sys/utsname.h>`
-  + `uname()`. Fix: wrap in `#ifndef _WIN32`, fall back to
-  `RtlGetVersion` or compile-time identifier on Windows.
+  + `uname()`. Fix: cross-platform `mu::platform::OsName()` wrapping
+  `RtlGetVersion` on Windows, `uname()` elsewhere.
 
-#### #5 — `MuPlatform::CreateWindow` Win32 macro collision
-`<windows.h>` defines `CreateWindow → CreateWindowW`/`A`. Class
-declaration becomes garbage on MinGW.
+### Effectively mitigated (verified 2026-04-27)
 
-**Fix**: either `#undef CreateWindow`/`A`/`W` at top of `MuPlatform.h`,
-or rename the method (`CreateGameWindow` / `CreateMainWindow`).
+#### #5 — `MuPlatform::CreateWindow` Win32 macro collision ✓ mitigated
+Risk only realises if a translation unit pulls in both `<windows.h>`
+and `MuPlatform.h`. Verified that **no current TU does**, and
+`PlatformCompat.h:2016` carries an explicit comment:
+*"CreateWindow macro NOT defined here — conflicts with MuPlatform::CreateWindow()"*.
+Belt-and-suspenders is a 1-line `#undef CreateWindow` at the top of
+`MuPlatform.h`; **added as a task to 7-9-14** (which owns Win32-backend
+cleanup) rather than a standalone story.
 
-#### #7 — Stale `../`-prefixed `#include` paths
-Pre-restructure paths still in:
-- `Scenes/SceneManager.cpp`, `MainScene.cpp`, `CharacterScene.cpp`,
-  `LoginScene.cpp`, `SceneCommon.cpp`
-- `Network/WSclient.cpp` — `Guild/GuildCache.h`, `MUHelper/MuHelper.h`
-- `UI/Legacy/ZzzInterface.cpp`
-- `UI/Windows/HUD/NewUIMiniMap.cpp`
-- `Gameplay/Items/PersonalShopTitleImp.cpp` — `Guild/UIGuildInfo.h`
-- `RenderFX/ZzzOpenglUtil.cpp` — uses `ShellExecute` without
-  `<shellapi.h>`
+#### #7 — Stale `../`-prefixed `#include` paths ✓ mostly resolved
+Most of Mosch's listed sites have been cleaned up. Re-grep on
+2026-04-27 finds **only one survivor**:
+`Scenes/SceneManager.cpp:51 → ../MuEditor/Core/MuEditorCore.h`
+(and only on the `_EDITOR` build path). Single-line follow-up; not
+worth a story. Either fold into the next ambient editor cleanup or
+fix opportunistically.
 
 Related: `Data/GlobalText.h` should `#include "Platform/PlatformCompat.h"`
 directly rather than rely on transitive includes — GCC two-phase name
-lookup needs `mu_narrow_path` visible.
+lookup needs `mu_narrow_path` visible. Not yet verified.
 
 ## Gemini bot inline comments
 
@@ -190,15 +174,28 @@ that's a meaningful CI coverage improvement, but as of this writing the
 Windows job hasn't reached green yet. The "MSVC" wording in the preset
 description is now accurate.
 
-## Suggested research order
+## Suggested research order (revised 2026-04-27)
 
-1. **Verify #1 and #4 scope** — run the grep commands above. If hits exist,
-   plan a sweep before the Linux/MSVC build can plausibly reach `MUGame`.
-2. **#8 graceful CURL fallback** — small CMake change, makes the project
-   bootstrappable without vcpkg, matches OpenSSL precedent.
-3. **#9 preset cleanup** — small CMake change, unblocks local CLion/VS
-   developers. Likely option 2 (delete toolchain files) is simplest.
-4. **#2 verification** — confirm whether `mu_narrow_path` two-phase
-   name lookup actually fires on Linux GCC. If yes, promote to high
-   priority. If MinGW-only, defer.
-5. **#3, #5, #7** — only if MinGW becomes a supported config again.
+Items 1 (#1, #4) verified and resolved; items now active:
+
+1. **#8 + #9 Mosch's preferred fixes** — graceful CURL fallback + preset
+   toolchain cleanup. Both small CMake changes; **filed as story 7-9-20**.
+2. **#3 partial** — three POSIX-only-types/headers point-fixes.
+   **Added to 7-9-18 scope** alongside the existing
+   `GetCurrentDirectory` / `ShellExecute` / `IsBadReadPtr` items.
+3. **#2 verification + cleanup** — confirm whether `mu_narrow_path`
+   two-phase name lookup actually fires on Linux GCC. **Subsumed by
+   7-9-19** (strip-conditional-compilation), which strips the
+   `PlatformCompat.h` `#ifdef _WIN32 ... #else` block that hides the
+   SDL3 helpers from MinGW. Verification step folded into 7-9-19's
+   tasks.
+4. **#5 belt-and-suspenders** — `#undef CreateWindow` at top of
+   `MuPlatform.h`. **Added as task to 7-9-14**.
+5. **#7 last survivor** — single `../`-prefixed include in
+   `SceneManager.cpp:51`. Opportunistic fix; no story.
+
+Forward-looking items (no story yet, file when triggered):
+- #6 GCC-flavoured relaxations (wait for actual GCC trip in CI)
+- #6 MUData/MUCore relaxations (wait for actual trip)
+- Gemini bot Rule-of-Three on `CList` / `CDimension` (code-hygiene
+  sweep candidate)
