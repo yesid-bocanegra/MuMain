@@ -26,7 +26,7 @@
 #include "Event.h"
 #include "ChangeRingManager.h"
 #include "NewUISystem.h"
-#include "CameraMove.h"
+#include "Camera/CameraMove.h"
 #include "QuestMng.h"
 #include "ServerListManager.h"
 #include "MonkSystem.h"

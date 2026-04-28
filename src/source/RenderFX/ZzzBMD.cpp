@@ -14,7 +14,7 @@
 #include "ZzzEffect.h"
 
 #include "UIMng.h"
-#include "CameraMove.h"
+#include "Camera/CameraMove.h"
 #include "PhysicsManager.h"
 #include "NewUISystem.h"
 #include "MuRenderer.h"

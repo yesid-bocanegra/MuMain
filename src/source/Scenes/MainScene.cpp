@@ -6,7 +6,7 @@
 #include "MuRenderer.h"
 #include "MainScene.h"
 #include "SceneCommon.h"
-#include "Core/CameraUtility.h"
+#include "Camera/CameraUtility.h"
 #include "ZzzOpenglUtil.h"
 #include "ZzzObject.h"
 #include "ZzzCharacter.h"

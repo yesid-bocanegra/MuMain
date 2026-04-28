@@ -25,7 +25,7 @@
 #include "MapManager.h"
 
 #include "w_MapHeaders.h"
-#include "CameraMove.h"
+#include "Camera/CameraMove.h"
 #include "MuRenderer.h"
 #include "RenderUtils.h"
 

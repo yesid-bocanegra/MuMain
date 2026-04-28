@@ -11,7 +11,7 @@
 #include <limits>
 #include <memory>
 
-#include "CameraMove.h"
+#include "Camera/CameraMove.h"
 #include "MuRenderer.h"
 #include "ZzzLodTerrain.h"
 #include "ZzzAI.h"

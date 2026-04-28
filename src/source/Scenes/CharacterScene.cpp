@@ -26,7 +26,7 @@
 #include "DSPlaySound.h"
 #include "MuMain.h"
 #include "SceneCommon.h"
-#include "Core/CameraUtility.h"
+#include "Camera/CameraUtility.h"
 #include "ZzzOpenData.h"
 #include "LoginScene.h"
 #include "Core/MuLogger.h"

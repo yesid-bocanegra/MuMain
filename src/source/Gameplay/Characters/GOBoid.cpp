@@ -18,7 +18,7 @@
 #include "CDirection.h"
 #include "DSPlaySound.h"
 #include "MapManager.h"
-#include "CameraMove.h"
+#include "Camera/CameraMove.h"
 #include "NewUISystem.h"
 #include "Scenes/SceneCore.h"
 #include "_GlobalFunctions.h"

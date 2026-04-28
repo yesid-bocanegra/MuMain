@@ -3,7 +3,7 @@
 
 #include "stdafx.h"
 #include "MuRenderer.h"
-#include "CameraUtility.h"
+#include "Camera/CameraUtility.h"
 #include "../Scenes/SceneCore.h"
 #include "ZzzInterface.h"
 #include "ZzzOpenglUtil.h"
@@ -11,7 +11,7 @@
 #include "ZzzCharacter.h"
 #include "ZzzLodTerrain.h"
 #include "MapManager.h"
-#include "CameraMove.h"
+#include "Camera/CameraMove.h"
 #include "NewUISystem.h"
 #include "CDirection.h"
 #include "GMBattleCastle.h"

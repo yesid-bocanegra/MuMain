@@ -7,10 +7,10 @@
 
 #ifndef _WIN32
 
-// From ZzzOpenglUtil.cpp — referenced by Core/CameraUtility.cpp
+// From ZzzOpenglUtil.cpp — referenced by Camera/CameraUtility.cpp
 float g_fCameraCustomDistance = 0.f;
 
-// From ZzzLodTerrain.cpp — referenced by Core/CameraUtility.cpp, Scenes/SceneCore.cpp
+// From ZzzLodTerrain.cpp — referenced by Camera/CameraUtility.cpp, Scenes/SceneCore.cpp
 float g_fSpecialHeight = 1200.f;
 
 #endif

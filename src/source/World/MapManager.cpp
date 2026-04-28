@@ -4,7 +4,7 @@
 #include "stdafx.h"
 #include "MapManager.h"
 #include "MuLogger.h"
-#include "CameraMove.h"
+#include "Camera/CameraMove.h"
 #include "CDirection.h"
 #include "DSPlaySound.h"
 #include "GlobalBitmap.h"

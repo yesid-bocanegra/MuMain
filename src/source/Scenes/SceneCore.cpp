@@ -27,7 +27,7 @@
 #include <chrono>
 #include <thread>
 
-#include "Core/CameraUtility.h"
+#include "Camera/CameraUtility.h"
 #include "Scenes/SceneManager.h"
 
 extern int g_iChatInputType;

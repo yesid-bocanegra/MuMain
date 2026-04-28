@@ -436,6 +436,7 @@ file(GLOB_RECURSE MU_GAME_SOURCES CONFIGURE_DEPENDS
   "${MU_SOURCE_DIR}/Dotnet/*.cpp"
   "${MU_SOURCE_DIR}/GameShop/*.cpp"
   "${MU_SOURCE_DIR}/Translation/*.cpp"
+  "${MU_SOURCE_DIR}/Camera/*.cpp"
 )
 # Story 7.6.1: ZzzLodTerrain.cpp uses GL/glu.h — compat headers redirect to
 # macOS OpenGL framework. File provides terrain rendering used throughout game.
