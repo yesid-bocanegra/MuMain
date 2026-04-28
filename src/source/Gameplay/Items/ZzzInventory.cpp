@@ -129,8 +129,6 @@ WORD g_wStoragePassword = 0;
 short g_nKeyPadMapping[10];
 wchar_t g_lpszKeyPadInput[2][MAX_KEYPADINPUT + 1];
 
-BYTE g_byItemUseType = 0;
-
 static const int DEFAULT_DEVILSQUARELEVEL[6][2] = {{15, 130},  {131, 180}, {181, 230},
                                                    {231, 280}, {281, 330}, {331, 99999}};
 static const int DARKCLASS_DEVILSQUARELEVEL[6][2] = {{15, 110},  {111, 160}, {161, 210},
@@ -469,7 +467,7 @@ void RenderTipTextList(const int sx, const int sy, int TextNum, int Tab, int iSo
     DisableAlphaBlend();
 }
 
-void SendRequestUse(int Index, int Target)
+void SendRequestUse(int Index, int Target, bool addPoints)
 {
     if (!IsCanUseItem())
     {
@@ -482,7 +480,7 @@ void SendRequestUse(int Index, int Target)
     }
 
     EnableUse = 10;
-    SocketClient->ToGameServer()->SendConsumeItemRequest(Index, Target, g_byItemUseType);
+    SocketClient->ToGameServer()->SendConsumeItemRequest(Index, Target, addPoints ? FruitUsage::AddPoints : FruitUsage::RemovePoints);
     mu::log::Get("gameplay")->debug("0x26 [SendRequestUse({})]", Index);
 }
 
@@ -523,8 +521,8 @@ bool SendRequestEquipmentItem(STORAGE_TYPE iSrcType, int iSrcIndex, ITEM* pItem,
     }
     (void)spareBits;
 
-    SocketClient->ToGameServer()->SendItemMoveRequestExtended((uint32_t)iSrcType, iSrcIndex, (uint32_t)iDstType,
-                                                              iDstIndex);
+    SocketClient->ToGameServer()->SendItemMoveRequestExtended(static_cast<ItemStorageKind>(iSrcType), iSrcIndex,
+                                                              static_cast<ItemStorageKind>(iDstType), iDstIndex);
 
     mu::log::Get("gameplay")
         ->debug("0x24 [SendRequestEquipmentItem({} {} {} {} {} {} {})]", iSrcIndex, iDstIndex, iSrcType, iDstType,
@@ -2264,19 +2262,19 @@ void RenderItemInfo(int sx, int sy, ITEM* ip, bool Sell, int Inventype, bool bIt
         static DebouncedAction debouncedPetInfoRequest(
             [ip, Inventype]()
             {
-                BYTE PetType = PET_TYPE_DARK_SPIRIT;
+                PetType PetType = PetType::DarkRaven;
                 if (ip->Type == ITEM_DARK_HORSE_ITEM)
                 {
-                    PetType = PET_TYPE_DARK_HORSE;
+                    PetType = PetType::DarkHorse;
 
                     if ((g_pMyInventory->GetPointedItemIndex()) == EQUIPMENT_HELPER)
                     {
-                        SocketClient->ToGameServer()->SendPetInfoRequest(PetType, Inventype, EQUIPMENT_HELPER);
+                        SocketClient->ToGameServer()->SendPetInfoRequest(PetType, static_cast<StorageType>(Inventype), EQUIPMENT_HELPER);
                     }
                 }
                 else if ((g_pMyInventory->GetPointedItemIndex()) == EQUIPMENT_WEAPON_LEFT)
                 {
-                    SocketClient->ToGameServer()->SendPetInfoRequest(PetType, Inventype, EQUIPMENT_WEAPON_LEFT);
+                    SocketClient->ToGameServer()->SendPetInfoRequest(PetType, static_cast<StorageType>(Inventype), EQUIPMENT_WEAPON_LEFT);
                 }
             },
             1000); // 1-second intervals

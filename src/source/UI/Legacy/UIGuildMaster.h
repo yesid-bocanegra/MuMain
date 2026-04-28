@@ -66,8 +66,8 @@ protected:
     void RenderGuildMasterMain();
 
 public:
-    void ReceiveGuildRelationShip(BYTE byRelationShipType, BYTE byRequestType, BYTE byTargetUserIndexH,
-                                  BYTE byTargetUserIndexL);
+    void ReceiveGuildRelationShip(GuildRelationshipType byRelationShipType, GuildRequestType byRequestType,
+                                  BYTE byTargetUserIndexH, BYTE byTargetUserIndexL);
 
     virtual BOOL DoMouseAction();
     virtual void Render();

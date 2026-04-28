@@ -21,7 +21,7 @@ class CNewUIQuestProgress : public CNewUIObj
 public:
     enum IMAGE_LIST
     {
-        // �⺻â
+        // �⺻â
         IMAGE_QP_BACK = CNewUIMessageBoxMng::IMAGE_MSGBOX_BACK,           // newui_msgbox_back.jpg
         IMAGE_QP_TOP = CNewUIMyInventory::IMAGE_INVENTORY_BACK_TOP2,      // newui_item_back04.tga	(190,64)
         IMAGE_QP_LEFT = CNewUIMyInventory::IMAGE_INVENTORY_BACK_LEFT,     // newui_item_back02-l.tga	(21,320)
@@ -65,7 +65,7 @@ private:
 
     wchar_t m_aszPlayerWords[QP_PLAYER_LINE_MAX][QP_WORDS_ROW_MAX];
     int m_anAnswerLine[QM_MAX_ANSWER];
-    int m_nSelAnswer;
+    QuestProceedAction m_nSelAnswer;
 
     CUIQuestContentsListBox m_RequestRewardListBox;
     bool m_bRequestComplete;

@@ -321,7 +321,7 @@ bool SEASON3B::CNewUIGuildInfoWindow::Check_Btn()
                 }
                 else
                 {
-                    SocketClient->ToGameServer()->SendGuildRelationshipChangeRequest(0x01, 0x02, Hero->Key);
+                    SocketClient->ToGameServer()->SendGuildRelationshipChangeRequest(GuildRelationshipType::Alliance, GuildRequestType::Leave, Hero->Key);
                 }
             }
         }
@@ -961,7 +961,8 @@ int SEASON3B::CNewUIGuildInfoWindow::GetUnionCount()
     return m_UnionListBox.GetTextCount();
 }
 
-void SEASON3B::CNewUIGuildInfoWindow::ReceiveGuildRelationShip(BYTE byRelationShipType, BYTE byRequestType,
+void SEASON3B::CNewUIGuildInfoWindow::ReceiveGuildRelationShip(GuildRelationshipType byRelationShipType,
+                                                               GuildRequestType byRequestType,
                                                                BYTE byTargetUserIndexH, BYTE byTargetUserIndexL)
 {
     if (!g_MessageBox->IsEmpty())
@@ -985,10 +986,9 @@ void SEASON3B::CNewUIGuildInfoWindow::ReceiveGuildRelationShip(BYTE byRelationSh
         wchar_t szText[3][64];
         ZeroMemory(szText, sizeof(szText));
 
-        if (m_MessageInfo.s_byRelationShipType == static_cast<BYTE>(GuildConstants::RelationshipType::UNION))
+        if (m_MessageInfo.s_byRelationShipType == GuildRelationshipType::Alliance)
         {
-            if (m_MessageInfo.s_byRelationShipRequestType ==
-                static_cast<BYTE>(GuildConstants::RelationshipRequestType::JOIN))
+            if (m_MessageInfo.s_byRelationShipRequestType == GuildRequestType::Join)
             {
                 mu_swprintf(szText[0], GlobalText[1280], pPlayer->ID);
                 mu_swprintf(szText[1], GlobalText[1281]);
@@ -1001,10 +1001,9 @@ void SEASON3B::CNewUIGuildInfoWindow::ReceiveGuildRelationShip(BYTE byRelationSh
                 mu_swprintf(szText[2], GlobalText[1283]);
             }
         }
-        else if (m_MessageInfo.s_byRelationShipType == static_cast<BYTE>(GuildConstants::RelationshipType::RIVAL))
+        else if (m_MessageInfo.s_byRelationShipType == GuildRelationshipType::Hostility)
         {
-            if (m_MessageInfo.s_byRelationShipRequestType ==
-                static_cast<BYTE>(GuildConstants::RelationshipRequestType::JOIN))
+            if (m_MessageInfo.s_byRelationShipRequestType == GuildRequestType::Join)
             {
                 mu_swprintf(szText[0], GlobalText[1284], pPlayer->ID);
                 mu_swprintf(szText[1], GlobalText[1286]);

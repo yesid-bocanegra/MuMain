@@ -1061,9 +1061,8 @@ CALLBACK_RESULT SEASON3B::CUseFruitCheckMsgBox::LButtonUp(class CNewUIMessageBox
 CALLBACK_RESULT SEASON3B::CUseFruitCheckMsgBox::AddBtnDown(class CNewUIMessageBoxBase* pOwner,
                                                            const leaf::xstreambuf& xParam)
 {
-    g_byItemUseType = 0x00;
     BYTE byIndex = g_pMyInventory->GetStandbyItemIndex();
-    SendRequestUse(byIndex, 0);
+    SendRequestUse(byIndex, 0, true);
 
     PlayBuffer(SOUND_CLICK01);
     g_MessageBox->SendEvent(pOwner, MSGBOX_EVENT_DESTROY);
@@ -1074,9 +1073,8 @@ CALLBACK_RESULT SEASON3B::CUseFruitCheckMsgBox::AddBtnDown(class CNewUIMessageBo
 CALLBACK_RESULT SEASON3B::CUseFruitCheckMsgBox::MinusBtnDown(class CNewUIMessageBoxBase* pOwner,
                                                              const leaf::xstreambuf& xParam)
 {
-    g_byItemUseType = 0x01;
     BYTE byIndex = g_pMyInventory->GetStandbyItemIndex();
-    SendRequestUse(byIndex, 0);
+    SendRequestUse(byIndex, 0, false);
 
     PlayBuffer(SOUND_CLICK01);
     g_MessageBox->SendEvent(pOwner, MSGBOX_EVENT_DESTROY);
@@ -2520,7 +2518,7 @@ CALLBACK_RESULT SEASON3B::CSystemMenuMsgBox::GameOverBtnDown(class CNewUIMessage
     {
         MUHelper::g_MuHelper.TriggerStop();
         LogOut = true;
-        SocketClient->ToGameServer()->SendLogOut(0);
+        SocketClient->ToGameServer()->SendLogOut(LogOutType::CloseGame);
         mu::log::Get("ui")->debug("0xF1 [SendRequestLogOut] 0");
     }
 
@@ -2551,7 +2549,7 @@ CALLBACK_RESULT SEASON3B::CSystemMenuMsgBox::ChooseServerBtnDown(class CNewUIMes
         MUHelper::g_MuHelper.TriggerStop();
         g_pNewUIMng->ResetActiveUIObj();
         LogOut = true;
-        SocketClient->ToGameServer()->SendLogOut(2);
+        SocketClient->ToGameServer()->SendLogOut(LogOutType::BackToServerSelection);
         mu::log::Get("ui")->debug("0xF1 [SendRequestLogOut] 2");
     }
 
@@ -2583,7 +2581,7 @@ CALLBACK_RESULT SEASON3B::CSystemMenuMsgBox::ChooseCharacterBtnDown(class CNewUI
         MUHelper::g_MuHelper.TriggerStop();
         g_pNewUIMng->ResetActiveUIObj();
         LogOut = true;
-        SocketClient->ToGameServer()->SendLogOut(1);
+        SocketClient->ToGameServer()->SendLogOut(LogOutType::BackToCharacterSelection);
         mu::log::Get("ui")->debug("0xF1 [SendRequestLogOut] 1");
     }
 
@@ -4735,7 +4733,7 @@ CALLBACK_RESULT SEASON3B::CZenReceiptMsgBoxLayout::ProcessOk(class CNewUIMessage
 
     if (iInputZen <= (int)CharacterMachine->Gold)
     {
-        SocketClient->ToGameServer()->SendVaultMoveMoneyRequest(0, iInputZen);
+        SocketClient->ToGameServer()->SendVaultMoveMoneyRequest(VaultMoneyMoveDirection::InventoryToVault, iInputZen);
     }
     else
     {
@@ -4811,7 +4809,7 @@ CALLBACK_RESULT SEASON3B::CZenPaymentMsgBoxLayout::ProcessOk(class CNewUIMessage
     {
         if (!g_pStorageInventory->IsStorageLocked() || g_pStorageInventory->IsCorrectPassword())
         {
-            SocketClient->ToGameServer()->SendVaultMoveMoneyRequest(1, iInputZen);
+            SocketClient->ToGameServer()->SendVaultMoveMoneyRequest(VaultMoneyMoveDirection::VaultToInventory, iInputZen);
         }
         else
         {

@@ -124,7 +124,7 @@ bool CNewUITrade::UpdateMouseEvent()
             CNewUIInventoryCtrl::GetPickedItem()->GetOwnerInventory() == m_pMyInvenCtrl && m_bMyConfirm)
         {
             m_bMyConfirm = false;
-            SocketClient->ToGameServer()->SendTradeButtonStateChange(m_bMyConfirm);
+            SocketClient->ToGameServer()->SendTradeButtonStateChange(TradeButtonState::Unchecked);
         }
 
         return false;
@@ -454,7 +454,7 @@ void CNewUITrade::SendRequestItemToTrade(ITEM* pItemObj, int nInvenIndex, int nT
     else
     {
         m_bMyConfirm = false;
-        SocketClient->ToGameServer()->SendTradeButtonStateChange(m_bMyConfirm);
+        SocketClient->ToGameServer()->SendTradeButtonStateChange(TradeButtonState::Unchecked);
 
         SendRequestEquipmentItem(STORAGE_TYPE::INVENTORY, nInvenIndex, pItemObj, STORAGE_TYPE::TRADE, nTradeIndex);
     }
@@ -478,7 +478,7 @@ void CNewUITrade::SendRequestMyGoldInput(int nInputGold)
         if (m_bMyConfirm)
         {
             m_bMyConfirm = false;
-            SocketClient->ToGameServer()->SendTradeButtonStateChange(m_bMyConfirm);
+            SocketClient->ToGameServer()->SendTradeButtonStateChange(TradeButtonState::Unchecked);
         }
 
         if (m_nMyTradeGold > 0)
@@ -552,7 +552,7 @@ void CNewUITrade::AlertTrade()
     m_bMyConfirm = !m_bMyConfirm;
 
     m_bTradeAlert = true;
-    SocketClient->ToGameServer()->SendTradeButtonStateChange(m_bMyConfirm);
+    SocketClient->ToGameServer()->SendTradeButtonStateChange(m_bMyConfirm ? TradeButtonState::Checked : TradeButtonState::Unchecked);
 }
 
 void CNewUITrade::GetYourID(wchar_t* pszYourID)

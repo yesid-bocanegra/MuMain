@@ -113,7 +113,7 @@ void CSysMenuWin::UpdateWhileActive(double dDeltaTick)
     {
         mu::log::Get("ui")->info("Menu - Join another server.");
         LogOut = true;
-        SocketClient->ToGameServer()->SendLogOut(2);
+        SocketClient->ToGameServer()->SendLogOut(LogOutType::BackToServerSelection);
         mu::log::Get("ui")->debug("0xF1 [SendRequestLogOut] 2");
 
         CUIMng& rUIMng = CUIMng::Instance();

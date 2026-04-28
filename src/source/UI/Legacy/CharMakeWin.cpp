@@ -368,7 +368,7 @@ void CCharMakeWin::RequestCreateCharacter()
     }
     else
     {
-        const std::uint8_t classByte = static_cast<std::uint8_t>((CharacterView.Class << 2) + CharacterView.Skin);
+        const auto classByte = static_cast<CharacterClassNumber>((CharacterView.Class << 2) + CharacterView.Skin);
         CurrentProtocolState = REQUEST_CREATE_CHARACTER;
         SocketClient->ToGameServer()->SendCreateCharacter(MU_C16(InputText[0]), classByte);
         rUIMng.HideWin(this);

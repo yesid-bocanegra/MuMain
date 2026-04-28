@@ -15,18 +15,20 @@
 #include "NewUIGuildMakeWindow.h"
 #include "NewUIButton.h"
 #include "GuildConstants.h"
+#include "Dotnet/PacketFunctions_ClientToServer_Enums.h"
 
 namespace SEASON3B
 {
 struct ServerMessageInfo
 {
-    BYTE s_byRelationShipType;
-    BYTE s_byRelationShipRequestType;
+    GuildRelationshipType s_byRelationShipType;
+    GuildRequestType s_byRelationShipRequestType;
     BYTE s_byTargetUserIndexH;
     BYTE s_byTargetUserIndexL;
 
     ServerMessageInfo()
-        : s_byRelationShipType(0), s_byRelationShipRequestType(0), s_byTargetUserIndexH(0), s_byTargetUserIndexL(0)
+        : s_byRelationShipType(GuildRelationshipType::Undefined), s_byRelationShipRequestType(GuildRequestType::Undefined),
+          s_byTargetUserIndexH(0), s_byTargetUserIndexL(0)
     {
     }
 };
@@ -153,8 +155,8 @@ public:
     const ServerMessageInfo& GetServerMessage();
 
 public:
-    void ReceiveGuildRelationShip(BYTE byRelationShipType, BYTE byRequestType, BYTE byTargetUserIndexH,
-                                  BYTE byTargetUserIndexL);
+    void ReceiveGuildRelationShip(GuildRelationshipType byRelationShipType, GuildRequestType byRequestType,
+                                  BYTE byTargetUserIndexH, BYTE byTargetUserIndexL);
 
 private:
     void LoadImages();
