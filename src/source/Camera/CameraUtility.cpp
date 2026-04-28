@@ -4,7 +4,7 @@
 #include "stdafx.h"
 #include "MuRenderer.h"
 #include "Camera/CameraUtility.h"
-#include "../Scenes/SceneCore.h"
+#include "SceneCore.h"
 #include "ZzzInterface.h"
 #include "ZzzOpenglUtil.h"
 #include "ZzzObject.h"
