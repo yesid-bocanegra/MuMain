@@ -3665,8 +3665,8 @@ void RenderObjects()
                         }
                         else if (gMapManager.WorldActive == WD_73NEW_LOGIN_SCENE)
                         {
-                            float fDistance_x = CameraPosition[0] - o->Position[0];
-                            float fDistance_y = CameraPosition[1] - o->Position[1];
+                            float fDistance_x = g_Camera.Position[0] - o->Position[0];
+                            float fDistance_y = g_Camera.Position[1] - o->Position[1];
                             float fDistance = sqrtf(fDistance_x * fDistance_x + fDistance_y * fDistance_y);
                             float fDis = 2000.0f;
 
@@ -3752,7 +3752,7 @@ void RenderObjects()
                 }
             }
 
-            if (ob->Visible || CameraTopViewEnable)
+            if (ob->Visible || g_Camera.TopViewEnable)
             {
                 OBJECT* o = ob->Head;
                 while (1)
@@ -3780,7 +3780,7 @@ void RenderObjects()
                                      (o->Type == 129 || o->Type == 98))
                                 ;
 
-                            else if (o->Visible || CameraTopViewEnable)
+                            else if (o->Visible || g_Camera.TopViewEnable)
                             {
                                 bool Success = false;
                                 if (gMapManager.WorldActive == WD_2DEVIAS && o->Type == 100)
@@ -3947,7 +3947,7 @@ void RenderObjects_AfterCharacter()
                 }
             }
 
-            if (ob->Visible || CameraTopViewEnable)
+            if (ob->Visible || g_Camera.TopViewEnable)
             {
                 OBJECT* o = ob->Head;
                 while (1)
@@ -3966,7 +3966,7 @@ void RenderObjects_AfterCharacter()
                                 ;
                             else if (IsDoppelGanger2() && (o->Type == 16 || o->Type == 67 || o->Type == 68))
                                 ;
-                            else if (o->Visible || CameraTopViewEnable)
+                            else if (o->Visible || g_Camera.TopViewEnable)
                             {
                                 bool Success = false;
                                 if (gMapManager.WorldActive == WD_2DEVIAS && o->Type == 100)

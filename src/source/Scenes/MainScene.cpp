@@ -31,7 +31,6 @@
 #include "Core/MuLogger.h"
 
 // External declarations
-extern float CameraAngle[3];
 extern HWND g_hWnd;
 extern float EarthQuake;
 extern int CheckSkill;
@@ -98,7 +97,7 @@ static void InitializeMainScene()
 
     CUIMng::Instance().CreateMainScene();
 
-    CameraAngle[2] = -45.f;
+    g_Camera.Angle[2] = -45.f;
 
     ClearInput();
     InputEnable = false;
@@ -165,11 +164,11 @@ static void InitializeSceneFrame()
  * - Interface movement and tournament interface updates
  *
  * @note Only processes input when not in top-view camera mode and loading is complete.
- * @note Skips processing if CameraTopViewEnable is true or LoadingWorld >= 30.
+ * @note Skips processing if g_Camera.TopViewEnable is true or LoadingWorld >= 30.
  */
 static void UpdateUIAndInput()
 {
-    if (CameraTopViewEnable || LoadingWorld >= 30)
+    if (g_Camera.TopViewEnable || LoadingWorld >= 30)
         return;
 
     if (MouseY >= (int)(480 - 48))
@@ -217,7 +216,7 @@ static void UpdateGameEntities()
 {
     MoveObjects();
 
-    if (!CameraTopViewEnable)
+    if (!g_Camera.TopViewEnable)
         MoveItems();
 
     if (RequireLeavesEffect())
@@ -297,7 +296,7 @@ static void SetupMainSceneViewport(int& outWidth, int& outHeight, BYTE& outByWat
 {
     outByWaterMap = 0;
 
-    if (CameraTopViewEnable == false)
+    if (g_Camera.TopViewEnable == false)
     {
         outHeight = 480 - 48;
     }
@@ -397,7 +396,7 @@ static void RenderGameWorld(BYTE& byWaterMap, int width, int height)
     {
         RenderTerrain(true);
     }
-    if (!CameraTopViewEnable)
+    if (!g_Camera.TopViewEnable)
         RenderItems();
 
     RenderFishs();
@@ -477,7 +476,7 @@ static void RenderMainSceneUI()
     BeginBitmap();
     RenderObjectDescription();
 
-    if (CameraTopViewEnable == false)
+    if (g_Camera.TopViewEnable == false)
     {
         RenderInterface(true);
     }
