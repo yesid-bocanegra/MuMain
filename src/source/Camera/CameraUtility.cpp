@@ -25,8 +25,6 @@ extern short g_shCameraLevel;
 extern float g_fSpecialHeight;
 extern float CameraDistanceTarget;
 extern float CameraDistance;
-extern float Camera3DFov;
-extern bool Camera3DRoll;
 
 /**
  * @brief Calculates camera view distance based on scene and world settings.

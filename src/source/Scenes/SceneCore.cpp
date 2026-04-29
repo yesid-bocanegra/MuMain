@@ -101,14 +101,12 @@ extern BOOL g_bIMEBlock;
 
 bool MoveMainCamera();
 
-// Legacy global variables (kept for backward compatibility)
+// Legacy distance globals — kept until World/ZzzLodTerrain.cpp migrates to
+// g_Camera.Distance / g_Camera.DistanceTarget. Camera3DFov/Roll and the
+// legacy g_CameraState wrapper struct were dropped: no live callers and the
+// new Camera framework's CameraState class supersedes both.
 float CameraDistanceTarget = 1000.f;
 float CameraDistance = 1000.f;
-float Camera3DFov = 0.f;
-bool Camera3DRoll = false;
-
-// Camera state structure instance (uses legacy variables via references)
-CameraState g_CameraState;
 
 extern int WaterTextureNumber;
 
