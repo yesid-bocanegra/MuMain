@@ -1781,7 +1781,7 @@ void CUIPhotoViewer::RenderPhotoCharacter()
     glViewport2(m_iPos_x * g_fScreenRate_x, m_iPos_y * g_fScreenRate_y, m_iWidth * g_fScreenRate_x,
                 141 * g_fScreenRate_y);
     gluPerspective2(1.f, (float)(m_iWidth * g_fScreenRate_x) / (float)(141 * g_fScreenRate_y), 2000,
-                    20000); // CameraViewNear,CameraViewFar);
+                    20000); // g_Camera.ViewNear, g_Camera.ViewFar
     mu::GetRenderer().SetMatrixMode(GL_MODELVIEW);
     mu::GetRenderer().PushMatrix();
     mu::GetRenderer().LoadIdentity();

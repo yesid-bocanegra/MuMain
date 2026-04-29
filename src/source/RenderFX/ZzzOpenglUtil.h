@@ -5,8 +5,9 @@
 // migration assume this transitive include path.
 #include "Camera/CameraState.h"
 
-extern float PerspectiveX;
-extern float PerspectiveY;
+// Camera state: use g_Camera.{PerspectiveX, PerspectiveY, TopViewEnable,
+// ViewNear, ViewFar, FOV, Position, Angle, Matrix, CustomDistance}.
+// Reachable via the Camera/CameraState.h include above.
 extern int OpenglWindowWidth;
 extern int OpenglWindowHeight;
 extern unsigned int WindowWidth;
@@ -16,14 +17,6 @@ extern double FPS;
 extern double FPS_AVG;
 extern float FPS_ANIMATION_FACTOR;
 extern double WorldTime;
-extern bool CameraTopViewEnable;
-extern float CameraViewNear;
-extern float CameraViewFar;
-extern float CameraFOV;
-extern vec3_t CameraPosition;
-extern vec3_t CameraAngle;
-extern float CameraMatrix[3][4];
-extern float g_fCameraCustomDistance;
 extern bool FogEnable;
 extern float FogDensity;
 extern float FogColor[4];

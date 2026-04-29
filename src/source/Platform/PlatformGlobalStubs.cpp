@@ -7,8 +7,9 @@
 
 #ifndef _WIN32
 
-// From ZzzOpenglUtil.cpp — referenced by Camera/CameraUtility.cpp
-float g_fCameraCustomDistance = 0.f;
+// PR #335 — g_fCameraCustomDistance was migrated to g_Camera.CustomDistance
+// (defined by CameraState::Reset() in Camera/CameraState.cpp). The stub is
+// no longer needed.
 
 // From ZzzLodTerrain.cpp — referenced by Camera/CameraUtility.cpp, Scenes/SceneCore.cpp
 float g_fSpecialHeight = 1200.f;

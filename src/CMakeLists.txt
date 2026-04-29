@@ -318,6 +318,12 @@ file(GLOB MU_RENDERFX_SOURCES CONFIGURE_DEPENDS "${MU_SOURCE_DIR}/RenderFX/*.cpp
 # On macOS, WGL stubs in PlatformCompat.h allow compilation; VSync init detects
 # "not available" and no-ops. The file provides essential rendering globals/functions.
 # [VS0-QUAL-BUILDCOMP-MACOS]
+# PR #335: ZzzOpenglUtil.cpp accesses g_Camera (defined in Camera/CameraState.cpp)
+# from inside gluPerspective2 / CreateScreenVector / Projection / TestDepthBuffer.
+# Test binaries link MURenderFX without MUGame, so the storage TU has to live
+# in MURenderFX for those links to resolve. Camera/CameraState.cpp depends only
+# on vec3_t (Core/mu_base_types.h) and is gameplay-free, so it's safe here.
+list(APPEND MU_RENDERFX_SOURCES "${MU_SOURCE_DIR}/Camera/CameraState.cpp")
 add_library(MURenderFX STATIC ${MU_RENDERFX_SOURCES})
 target_link_libraries(MURenderFX PRIVATE MUCore SDL3::SDL3-static)
 # Story 7.9.8: SDL_ttf for GPU text rendering (replaces GDI TextOut pipeline)
@@ -440,6 +446,9 @@ file(GLOB_RECURSE MU_GAME_SOURCES CONFIGURE_DEPENDS
   "${MU_SOURCE_DIR}/Translation/*.cpp"
   "${MU_SOURCE_DIR}/Camera/*.cpp"
 )
+# Camera/CameraState.cpp lives in MURenderFX (see above) — drop it from MUGame
+# to avoid a multiple-definition of g_Camera at link.
+list(REMOVE_ITEM MU_GAME_SOURCES "${MU_SOURCE_DIR}/Camera/CameraState.cpp")
 # Story 7.6.1: ZzzLodTerrain.cpp uses GL/glu.h — compat headers redirect to
 # macOS OpenGL framework. File provides terrain rendering used throughout game.
 add_library(MUGame STATIC ${MU_GAME_SOURCES})

@@ -101,12 +101,9 @@ extern BOOL g_bIMEBlock;
 
 bool MoveMainCamera();
 
-// Legacy distance globals — kept until World/ZzzLodTerrain.cpp migrates to
-// g_Camera.Distance / g_Camera.DistanceTarget. Camera3DFov/Roll and the
-// legacy g_CameraState wrapper struct were dropped: no live callers and the
-// new Camera framework's CameraState class supersedes both.
-float CameraDistanceTarget = 1000.f;
-float CameraDistance = 1000.f;
+// Camera state lives in g_Camera (Camera/CameraState.{h,cpp}) — initialised
+// to the same defaults (Distance / DistanceTarget = 1000.f) by
+// CameraState::Reset().
 
 extern int WaterTextureNumber;
 
