@@ -534,7 +534,7 @@ static void RenderDebugInfo()
     g_pRenderText->RenderText((int)DEBUG_TEXT_X, y, szLine);
     y += DEBUG_TEXT_LINE_HEIGHT;
 
-    mu_swprintf(szLine, L"Camera3D: %.1f %.1f:%.1f:%.1f", CameraFOV, CameraAngle[0], CameraAngle[1], CameraAngle[2]);
+    mu_swprintf(szLine, L"Camera3D: %.1f %.1f:%.1f:%.1f", g_Camera.FOV, g_Camera.Angle[0], g_Camera.Angle[1], g_Camera.Angle[2]);
     g_pRenderText->RenderText((int)DEBUG_TEXT_X, y, szLine);
     y += DEBUG_TEXT_LINE_HEIGHT;
 

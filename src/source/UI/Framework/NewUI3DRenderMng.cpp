@@ -116,7 +116,7 @@ bool SEASON3B::CNewUI3DCamera::Render()
     mu::GetRenderer().SetMatrixMode(GL_MODELVIEW);
     mu::GetRenderer().PushMatrix();
     mu::GetRenderer().LoadIdentity();
-    GetOpenGLMatrix(CameraMatrix);
+    GetOpenGLMatrix(g_Camera.Matrix);
     EnableDepthTest();
     EnableDepthMask();
     mu::GetRenderer().ClearDepthBuffer();
