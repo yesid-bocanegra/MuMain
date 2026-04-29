@@ -31,13 +31,66 @@ e2880fd2  refactor(packets): adopt typed packet enums at call-sites (PR #325)
 ebd0704e  refactor(camera): consolidate camera code under src/source/Camera/
 7e9dbdba  feat(camera): add modular camera architecture from main (PR #335)
 c453fac6  feat(ui,profiler): add NewUIComboBox + FrameProfiler from main (PR #335)
+ddba58d3  docs: add resumption notes for partial PR #325 + #335 port (this doc)
+197ff67d  fix(build): make Phase 2b camera framework compile on the SDL3 branch
 ```
 
-The user verified `d1bd1b09` + `e2880fd2` (Phase 1, PR #325) build and run.
-The three Phase-2 commits (`ebd0704e` + `7e9dbdba` + `c453fac6`) add the new
-framework files alongside the existing layout and should still build because
-no caller has been switched over yet — they form unreferenced static-library
-content until the migration in §3 lands.
+Phase 1 (`d1bd1b09` + `e2880fd2`) was build-and-run-verified. The three
+Phase-2 framework commits (`ebd0704e` + `7e9dbdba` + `c453fac6`) plus the
+build-fix (`197ff67d`) leave the branch building cleanly with the new Camera
+framework as unreferenced static-library content inside MUGame. The
+migration to actually consume `g_Camera` is what's described in §3 below.
+
+### 2.1 Build-fix shims introduced in `197ff67d`
+
+These are deliberate stop-gaps that need replacement when Phase 2c+ wires
+the camera framework through MuRenderer.
+
+**`src/source/Main/stdafx.h`** — grew an "upstream compat" block near the GL
+constant defines:
+
+- `inline constexpr int REFERENCE_WIDTH = 640;`
+- `inline constexpr int REFERENCE_HEIGHT = 480;`
+  These mirror `origin/main:src/source/stdafx.h:149` and are referenced
+  directly by `Camera/CameraProjection.cpp`. Real values, not stubs —
+  keep these.
+- Inline forwarders: `gluPerspective(...)` → `gluPerspective2(...)` and
+  `glViewport(...)` → `glViewport2(...)`. The branch's `ZzzOpenglUtil.h`
+  exposes the wrapped names; new Camera code uses the unwrapped names.
+  Forwarders should keep working long term; can drop once new files use
+  the wrapped names directly.
+- **No-op stubs** that future work must replace with MuRenderer calls
+  before the affected code paths become live:
+  - `glReadPixels` writes 1.0f to dst — `CameraProjection::TestDepthBuffer`
+    will always report "unoccluded" until a real MuRenderer-backed depth
+    read is wired in.
+  - `glGetFloatv` zeros 16 floats — `CameraProjection::GetOpenGLMatrix`
+    returns an all-zero matrix until a real MuRenderer-backed matrix
+    query is wired in.
+  - Immediate-mode draw stubs (`glPushMatrix`, `glPopMatrix`,
+    `glLoadIdentity`, `glRotatef`, `glLineWidth`, `glBegin`, `glEnd`,
+    `glEnable`, `glDisable`, `glIsEnabled`, `glBlendFunc`, `glColor4f`,
+    `glVertex2f`, `glVertex3f`, `glVertex3fv`, `glTexCoord2f`,
+    `glNormal3f`) — these no-op the FrustumRenderer / DefaultCamera
+    debug visualizers. They render nothing until replaced with
+    MuRenderer line / matrix-stack equivalents.
+
+  Search for `TODO(PR #335 wiring)` in `stdafx.h` to find the live ones
+  before declaring the camera port complete.
+
+**`src/source/Data/GameConfig.{h,cpp}` + `GameConfigConstants.h`** — added
+the `Get/SetZoom` API + `[Camera]/Zoom = 1100` ini section/key/default.
+This is permanent — `OrbitalCamera` persists its radius via this.
+
+**`src/source/Camera/*`** — local include-path patches for SDL-branch
+header layout (`_types.h` → `mu_base_types.h`, `_define.h` → `mu_define.h`,
+`GameConfig/GameConfig.h` → `GameConfig.h`). Keep these patches; they are
+not aspirational shims, they are the correct paths on this branch.
+
+**`src/CMakeLists.txt`** — added
+`-Wno-error=return-type-c-linkage` to the Clang relaxation list so
+`extern "C" CameraManager& CameraManager_Instance()` doesn't trip
+`-Werror`. Aligns with main's tolerance — keep.
 
 ## 3. PR #335 — what's left: the camera-globals migration
 
