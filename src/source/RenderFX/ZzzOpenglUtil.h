@@ -1,5 +1,10 @@
 #pragma once
 
+// Brings g_Camera into scope for every TU that includes ZzzOpenglUtil.h.
+// Matches origin/main's PR #335 layout — many call-sites for the camera
+// migration assume this transitive include path.
+#include "Camera/CameraState.h"
+
 extern float PerspectiveX;
 extern float PerspectiveY;
 extern int OpenglWindowWidth;

@@ -278,7 +278,7 @@ void CNewUIGoldBowmanLena::Render3D()
     mu::GetRenderer().SetMatrixMode(GL_MODELVIEW);
     mu::GetRenderer().PushMatrix();
     mu::GetRenderer().LoadIdentity();
-    GetOpenGLMatrix(CameraMatrix);
+    GetOpenGLMatrix(g_Camera.Matrix);
     EnableDepthTest();
     EnableDepthMask();
 
