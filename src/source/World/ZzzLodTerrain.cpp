@@ -69,8 +69,8 @@ const float g_fMinHeight = -500.f;
 const float g_fMaxHeight = 1000.f;
 
 extern short g_shCameraLevel;
-extern float CameraDistanceTarget;
-extern float CameraDistance;
+// (extern float g_Camera.DistanceTarget / g_Camera.Distance dropped — now g_Camera.{DistanceTarget,Distance})
+
 
 static float g_fFrustumRange = -40.f;
 
@@ -1966,7 +1966,7 @@ extern int GetScreenWidth();
 
 void CreateFrustrum2D(vec3_t Position)
 {
-    float Width = 0.0f, CameraViewFar = 0.0f, CameraViewNear = 0.0f, CameraViewTarget = 0.0f;
+    float Width = 0.0f, localFar = 0.0f, localNear = 0.0f, localTarget = 0.0f;
     float WidthFar = 0.0f, WidthNear = 0.0f;
 
     if (gMapManager.InBattleCastle() && SceneFlag == MAIN_SCENE)
@@ -1975,17 +1975,17 @@ void CreateFrustrum2D(vec3_t Position)
         if (battleCastle::InBattleCastle2(Hero->Object.Position) &&
             (Hero->Object.Position[0] < 17100.f || Hero->Object.Position[0] > 18300.f))
         {
-            CameraViewFar = 5100.f;                   // * 0.1f;
-            CameraViewNear = CameraViewFar * 0.19f;   // 0.22
-            CameraViewTarget = CameraViewFar * 0.47f; // 0.47
+            localFar = 5100.f;                   // * 0.1f;
+            localNear = localFar * 0.19f;   // 0.22
+            localTarget = localFar * 0.47f; // 0.47
             WidthFar = 2250.f * Width;                // 1140.f
             WidthNear = 540.f * Width;                // 540.f
         }
         else
         {
-            CameraViewFar = 3300.f;                   // * 0.1f;
-            CameraViewNear = CameraViewFar * 0.19f;   // 0.22
-            CameraViewTarget = CameraViewFar * 0.47f; // 0.47
+            localFar = 3300.f;                   // * 0.1f;
+            localNear = localFar * 0.19f;   // 0.22
+            localTarget = localFar * 0.47f; // 0.47
             WidthFar = 1300.f * Width;                // 1140.f
             WidthNear = 580.f * Width;                // 540.f
         }
@@ -1993,20 +1993,20 @@ void CreateFrustrum2D(vec3_t Position)
     else if (gMapManager.WorldActive == WD_62SANTA_TOWN)
     {
         Width = (float)GetScreenWidth() / 450.f * 1.0f;
-        CameraViewFar = 2400.f;
-        CameraViewNear = CameraViewFar * 0.19f;
-        CameraViewTarget = CameraViewFar * 0.47f;
-        CameraViewFar = 2650.f;
+        localFar = 2400.f;
+        localNear = localFar * 0.19f;
+        localTarget = localFar * 0.47f;
+        localFar = 2650.f;
         WidthFar = 1250.f * Width;
         WidthNear = 540.f * Width;
     }
     else if (gMapManager.IsPKField() || IsDoppelGanger2())
     {
         Width = (float)GetScreenWidth() / 500.f;
-        CameraViewFar = 1700.0f;
-        CameraViewNear = 55.0f;
-        CameraViewTarget = 830.0f;
-        CameraViewFar = 3300.f;
+        localFar = 1700.0f;
+        localNear = 55.0f;
+        localTarget = 830.0f;
+        localFar = 3300.f;
         WidthFar = 1900.f * Width;
         WidthNear = 600.f * Width;
     }
@@ -2014,7 +2014,7 @@ void CreateFrustrum2D(vec3_t Position)
     {
         static int CameraLevel;
 
-        if ((int)CameraDistanceTarget >= (int)CameraDistance)
+        if ((int)g_Camera.DistanceTarget >= (int)g_Camera.Distance)
             CameraLevel = g_shCameraLevel;
 
         switch (CameraLevel)
@@ -2041,71 +2041,71 @@ void CreateFrustrum2D(vec3_t Position)
             }
             else if (SceneFlag == CHARACTER_SCENE)
             {
-                CameraViewFar = 2000.f * 9.1f * 0.404998f;
+                localFar = 2000.f * 9.1f * 0.404998f;
             }
             else if (gMapManager.WorldActive == WD_39KANTURU_3RD)
             {
-                CameraViewFar = 2000.f * 10.0f * 0.115f;
+                localFar = 2000.f * 10.0f * 0.115f;
             }
             else
             {
-                CameraViewFar = 2400.f;
+                localFar = 2400.f;
             }
 
             if (SceneFlag == LOG_IN_SCENE)
             {
                 Width = (float)GetScreenWidth() / 640.f;
-                CameraViewFar = 2400.f * 17.0f * 13.0f;
-                CameraViewNear = 2400.f * 17.0f * 0.5f;
-                CameraViewTarget = 2400.f * 17.0f * 0.5f;
+                localFar = 2400.f * 17.0f * 13.0f;
+                localNear = 2400.f * 17.0f * 0.5f;
+                localTarget = 2400.f * 17.0f * 0.5f;
                 WidthFar = 5000.f * Width;
                 WidthNear = 300.f * Width;
             }
             else
             {
-                CameraViewNear = CameraViewFar * 0.19f;              // 0.22
-                CameraViewTarget = CameraViewFar * 0.47f;            // 0.47
-                WidthFar = 1190.f * Width * sqrtf(CameraFOV / 33.f); // 1140.f
-                WidthNear = 540.f * Width * sqrtf(CameraFOV / 33.f); // 540.f
+                localNear = localFar * 0.19f;              // 0.22
+                localTarget = localFar * 0.47f;            // 0.47
+                WidthFar = 1190.f * Width * sqrtf(g_Camera.FOV / 33.f); // 1140.f
+                WidthNear = 540.f * Width * sqrtf(g_Camera.FOV / 33.f); // 540.f
             }
             break;
         case 1:
             Width = (float)GetScreenWidth() / 500.f + 0.1f; // * 0.1f;
-            CameraViewFar = 2700.f;                         // * 0.1f;
-            CameraViewNear = CameraViewFar * 0.19f;         // 0.22
-            CameraViewTarget = CameraViewFar * 0.47f;       // 0.47
+            localFar = 2700.f;                         // * 0.1f;
+            localNear = localFar * 0.19f;         // 0.22
+            localTarget = localFar * 0.47f;       // 0.47
             WidthFar = 1200.f * Width;                      // 1140.f
             WidthNear = 540.f * Width;                      // 540.f
             break;
         case 2:
             Width = (float)GetScreenWidth() / 500.f + 0.1f; // * 0.1f;
-            CameraViewFar = 3000.f;                         // * 0.1f;
-            CameraViewNear = CameraViewFar * 0.19f;         // 0.22
-            CameraViewTarget = CameraViewFar * 0.47f;       // 0.47
+            localFar = 3000.f;                         // * 0.1f;
+            localNear = localFar * 0.19f;         // 0.22
+            localTarget = localFar * 0.47f;       // 0.47
             WidthFar = 1300.f * Width;                      // 1140.f
             WidthNear = 540.f * Width;                      // 540.f
             break;
         case 3:
             Width = (float)GetScreenWidth() / 500.f + 0.1f; // * 0.1f;
-            CameraViewFar = 3300.f;                         // * 0.1f;
-            CameraViewNear = CameraViewFar * 0.19f;         // 0.22
-            CameraViewTarget = CameraViewFar * 0.47f;       // 0.47
+            localFar = 3300.f;                         // * 0.1f;
+            localNear = localFar * 0.19f;         // 0.22
+            localTarget = localFar * 0.47f;       // 0.47
             WidthFar = 1500.f * Width;                      // 1140.f
             WidthNear = 580.f * Width;                      // 540.f
             break;
         case 4:
             Width = (float)GetScreenWidth() / 500.f + 0.1f; // * 0.1f;
-            CameraViewFar = 5100.f;                         // * 0.1f;
-            CameraViewNear = CameraViewFar * 0.19f;         // 0.22
-            CameraViewTarget = CameraViewFar * 0.47f;       // 0.47
+            localFar = 5100.f;                         // * 0.1f;
+            localNear = localFar * 0.19f;         // 0.22
+            localTarget = localFar * 0.47f;       // 0.47
             WidthFar = 2250.f * Width;                      // 1140.f
             WidthNear = 540.f * Width;                      // 540.f
             break;
         case 5:
             Width = (float)GetScreenWidth() / 500.f + 0.1f; // * 0.1f;
-            CameraViewFar = 3400.f;                         // * 0.1f;
-            CameraViewNear = CameraViewFar * 0.19f;         // 0.22
-            CameraViewTarget = CameraViewFar * 0.47f;       // 0.47
+            localFar = 3400.f;                         // * 0.1f;
+            localNear = localFar * 0.19f;         // 0.22
+            localTarget = localFar * 0.47f;       // 0.47
             WidthFar = 1600.f * Width;                      // 1140.f
             WidthNear = 660.f * Width;                      // 540.f
             break;
@@ -2113,23 +2113,23 @@ void CreateFrustrum2D(vec3_t Position)
     }
 
     vec3_t p[4];
-    Vector(-WidthFar, CameraViewFar - CameraViewTarget, 0.f, p[0]);
-    Vector(WidthFar, CameraViewFar - CameraViewTarget, 0.f, p[1]);
-    Vector(WidthNear, CameraViewNear - CameraViewTarget, 0.f, p[2]);
-    Vector(-WidthNear, CameraViewNear - CameraViewTarget, 0.f, p[3]);
+    Vector(-WidthFar, localFar - localTarget, 0.f, p[0]);
+    Vector(WidthFar, localFar - localTarget, 0.f, p[1]);
+    Vector(WidthNear, localNear - localTarget, 0.f, p[2]);
+    Vector(-WidthNear, localNear - localTarget, 0.f, p[3]);
     vec3_t Angle;
     float Matrix[3][4];
 
     if (gMapManager.WorldActive == WD_73NEW_LOGIN_SCENE)
     {
-        VectorScale(CameraAngle, -1.0f, Angle);
+        VectorScale(g_Camera.Angle, -1.0f, Angle);
         CCameraMove::GetInstancePtr()->SetFrustumAngle(89.5f);
         vec3_t _Temp = {CCameraMove::GetInstancePtr()->GetFrustumAngle(), 0.0f, 0.0f};
         VectorAdd(Angle, _Temp, Angle);
     }
     else
     {
-        Vector(0.f, 0.f, -CameraAngle[2], Angle);
+        Vector(0.f, 0.f, -g_Camera.Angle[2], Angle);
     }
 
     AngleMatrix(Angle, Matrix);
@@ -2162,8 +2162,8 @@ bool TestFrustrum2D(float x, float y, float Range)
 
 void CreateFrustrum(float xAspect, float yAspect, vec3_t position)
 {
-    const auto fovv = tanf(CameraFOV * Q_PI / 360.f);
-    float Distance = CameraViewFar;
+    const auto fovv = tanf(g_Camera.FOV * Q_PI / 360.f);
+    float Distance = g_Camera.ViewFar;
     float Width = fovv * Distance * xAspect + 100.f;
     float Height = fovv * Distance * yAspect + 100.f;
 
@@ -2184,7 +2184,7 @@ void CreateFrustrum(float xAspect, float yAspect, vec3_t position)
     {
         vec3_t t;
         VectorIRotate(Temp[i], Matrix, t);
-        VectorAdd(t, CameraPosition, FrustrumVertex[i]);
+        VectorAdd(t, g_Camera.Position, FrustrumVertex[i]);
         if (FrustrumMinX > FrustrumVertex[i][0])
             FrustrumMinX = FrustrumVertex[i][0];
         if (FrustrumMinY > FrustrumVertex[i][1])
@@ -2304,7 +2304,7 @@ void ResetAllFrustrum()
         CFrustrum* pData = iter->second;
         if (!pData)
             continue;
-        pData->SetEye(CameraPosition);
+        pData->SetEye(g_Camera.Position);
         pData->Reset();
     }
 }
@@ -2505,7 +2505,7 @@ void RenderTerrainBlock(float xf, float yf, int xi, int yi, bool EditFlag)
         float temp = xf;
         for (int j = 0; j < 4; j += lodi)
         {
-            if (TestFrustrum2D(xf + 0.5f, yf + 0.5f, 0.f) || CameraTopViewEnable)
+            if (TestFrustrum2D(xf + 0.5f, yf + 0.5f, 0.f) || g_Camera.TopViewEnable)
             {
                 RenderTerrainTile(xf, yf, xi + j, yi + i, lodf, lodi, EditFlag);
             }
@@ -2529,12 +2529,12 @@ void RenderTerrainFrustrum(bool EditFlag)
         xf = (float)xi;
         for (; xi <= FrustrumBoundMaxX; xi += 4, xf += 4.f)
         {
-            if (TestFrustrum2D(xf + 2.f, yf + 2.f, g_fFrustumRange) || CameraTopViewEnable)
+            if (TestFrustrum2D(xf + 2.f, yf + 2.f, g_fFrustumRange) || g_Camera.TopViewEnable)
             {
                 if (gMapManager.WorldActive == WD_73NEW_LOGIN_SCENE)
                 {
-                    float fDistance_x = CameraPosition[0] - xf / 0.01f;
-                    float fDistance_y = CameraPosition[1] - yf / 0.01f;
+                    float fDistance_x = g_Camera.Position[0] - xf / 0.01f;
+                    float fDistance_y = g_Camera.Position[1] - yf / 0.01f;
                     float fDistance = sqrtf(fDistance_x * fDistance_x + fDistance_y * fDistance_y);
 
                     if (fDistance > 5200.f)
@@ -2555,7 +2555,7 @@ void RenderTerrainBlock_After(float xf, float yf, int xi, int yi, bool EditFlag)
         float temp = xf;
         for (int j = 0; j < 4; j += lodi)
         {
-            if (TestFrustrum2D(xf + 0.5f, yf + 0.5f, 0.f) || CameraTopViewEnable)
+            if (TestFrustrum2D(xf + 0.5f, yf + 0.5f, 0.f) || g_Camera.TopViewEnable)
             {
                 RenderTerrainTile_After(xf, yf, xi + j, yi + i, lodf, lodi, EditFlag);
             }
@@ -2578,7 +2578,7 @@ void RenderTerrainFrustrum_After(bool EditFlag)
         xf = (float)xi;
         for (; xi <= FrustrumBoundMaxX; xi += 4, xf += 4.f)
         {
-            if (TestFrustrum2D(xf + 2.f, yf + 2.f, -80.f) || CameraTopViewEnable)
+            if (TestFrustrum2D(xf + 2.f, yf + 2.f, -80.f) || g_Camera.TopViewEnable)
             {
                 RenderTerrainBlock_After(xf, yf, xi, yi, EditFlag);
             }
@@ -2666,12 +2666,12 @@ void RenderSun()
     float Matrix[3][4];
     Angle[0] = 0.f;
     Angle[1] = 0.f;
-    Angle[2] = CameraAngle[2];
+    Angle[2] = g_Camera.Angle[2];
     AngleIMatrix(Angle, Matrix);
     vec3_t p, Position;
-    Vector(-900.f, CameraViewFar * 0.9f, 0.f, p);
+    Vector(-900.f, g_Camera.ViewFar * 0.9f, 0.f, p);
     VectorRotate(p, Matrix, Position);
-    VectorAdd(CameraPosition, Position, Sun.Position);
+    VectorAdd(g_Camera.Position, Position, Sun.Position);
     Sun.Position[2] = 550.f;
     Sun.Visible = TestDepthBuffer(Sun.Position);
     BeginSprite();
@@ -2686,7 +2686,7 @@ void RenderSky()
     float Matrix[3][4];
     Angle[0] = 0.f;
     Angle[1] = 0.f;
-    Angle[2] = CameraAngle[2];
+    Angle[2] = g_Camera.Angle[2];
     AngleIMatrix(Angle, Matrix);
     float Aspect = (float)(WindowWidth) / (float)(WindowWidth);
     float Width = 1780.f * Aspect;
@@ -2698,9 +2698,9 @@ void RenderSky()
 
     for (int i = 0; i <= Num; i++)
     {
-        Vector(((float)i - Num * 0.5f) * (Width / Num), CameraViewFar * 0.99f, 0.f, p);
+        Vector(((float)i - Num * 0.5f) * (Width / Num), g_Camera.ViewFar * 0.99f, 0.f, p);
         VectorRotate(p, Matrix, Position);
-        VectorAdd(CameraPosition, Position, Position);
+        VectorAdd(g_Camera.Position, Position, Position);
         RequestTerrainLight(Position[0], Position[1], LightTable[i]);
     }
 
@@ -2735,9 +2735,9 @@ void RenderSky()
         Vector(1.f, 1.f, 1.f, Light[2]);
         Vector(1.f, 1.f, 1.f, Light[3]);
 
-        Vector((x - Num * 0.5f + 0.5f) * (Width / Num), CameraViewFar * 0.9f, 0.f, p);
+        Vector((x - Num * 0.5f + 0.5f) * (Width / Num), g_Camera.ViewFar * 0.9f, 0.f, p);
         VectorRotate(p, Matrix, Position);
-        VectorAdd(CameraPosition, Position, Position);
+        VectorAdd(g_Camera.Position, Position, Position);
         Position[2] = 400.f;
         // RenderSpriteUV(BITMAP_SKY,Position,Width/Num,Height,UV,Light);
     }
