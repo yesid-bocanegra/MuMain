@@ -167,6 +167,7 @@ target_include_directories(MUCommon INTERFACE
   "${MU_SOURCE_DIR}/Audio"
   "${MU_SOURCE_DIR}/RenderFX"
   "${MU_SOURCE_DIR}/Camera"
+  "${MU_SOURCE_DIR}/Utilities"
   "${MU_SOURCE_DIR}/ThirdParty"
   "${MU_SOURCE_DIR}/Resources/Windows"
   "${MU_SOURCE_DIR}/Platform"
