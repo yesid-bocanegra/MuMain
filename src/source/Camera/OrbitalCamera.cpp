@@ -7,7 +7,7 @@
 #include <cmath>
 
 #include "UIControls.h"
-#include "GameConfig/GameConfig.h"
+#include "GameConfig.h"
 #include "CameraDebugLog.h"
 
 #ifndef M_PI

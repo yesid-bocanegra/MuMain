@@ -32,7 +32,7 @@ GameConfig::GameConfig()
       m_rememberMe(CfgDefaults::CfgDefaultRememberMe), m_languageSelection(CfgDefaults::CfgDefaultLanguage),
       m_encryptedUsername(CfgDefaults::CfgDefaultEncryptedUsername),
       m_encryptedPassword(CfgDefaults::CfgDefaultEncryptedPassword), m_serverIP(CfgDefaults::CfgDefaultServerIP),
-      m_serverPort(CfgDefaults::CfgDefaultServerPort)
+      m_serverPort(CfgDefaults::CfgDefaultServerPort), m_zoom(CfgDefaults::CfgDefaultCameraZoom)
 {
     // Cross-platform path: mu_get_app_dir() is defined in PlatformCompat.h
     // for both Windows (GetModuleFileNameW) and non-Windows (/proc/self/exe etc.)
@@ -84,6 +84,8 @@ void GameConfig::Load()
     // AC-4/AC-5: Validate and sanitize connection settings
     m_serverIP = GameConfigValidation::ValidateServerIP(rawServerIP, CfgDefaultServerIP);
     m_serverPort = GameConfigValidation::ValidateServerPort(rawServerPort, CfgDefaultServerPort);
+
+    m_zoom = ini.ReadInt(CfgSectionCamera, CfgKeyZoom, CfgDefaultCameraZoom);
 }
 
 void GameConfig::Save()
@@ -117,6 +119,8 @@ void GameConfig::Save()
 
     ini.WriteString(CfgSectionConnectionSettings, CfgKeyServerIP, m_serverIP);
     ini.WriteInt(CfgSectionConnectionSettings, CfgKeyServerPort, m_serverPort);
+
+    ini.WriteInt(CfgSectionCamera, CfgKeyZoom, m_zoom);
 
     ini.Save();
 }
@@ -195,6 +199,11 @@ void GameConfig::SetServerIP(const std::wstring& ip)
 void GameConfig::SetServerPort(int port)
 {
     m_serverPort = port;
+}
+
+void GameConfig::SetZoom(int zoom)
+{
+    m_zoom = zoom;
 }
 
 // Helper function to convert binary data to hex string

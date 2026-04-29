@@ -488,6 +488,9 @@ if(NOT MSVC)
     $<$<CXX_COMPILER_ID:Clang,AppleClang>:-Wno-error=c++11-narrowing>
     $<$<CXX_COMPILER_ID:Clang,AppleClang>:-Wno-error=writable-strings>
     $<$<CXX_COMPILER_ID:Clang,AppleClang>:-Wno-error=constant-conversion>
+    # PR #335 brings extern "C" entry points (CameraManager_Instance, etc.)
+    # that return C++ references — main builds without -Werror on this; align.
+    $<$<CXX_COMPILER_ID:Clang,AppleClang>:-Wno-error=return-type-c-linkage>
   )
   # -Wnontrivial-memcall is supported by Homebrew LLVM but not Apple Clang.
   # Probe at configure time so the flag doesn't cause -Werror=unknown-warning-option.

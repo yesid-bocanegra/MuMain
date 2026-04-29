@@ -38,6 +38,10 @@ inline constexpr wchar_t CfgKeyEncryptedPassword[] = L"EncryptedPassword";
 // Connection
 inline constexpr wchar_t CfgKeyServerIP[] = L"ServerIP";
 inline constexpr wchar_t CfgKeyServerPort[] = L"ServerPort";
+
+// Camera (PR #335)
+inline constexpr wchar_t CfgSectionCamera[] = L"Camera";
+inline constexpr wchar_t CfgKeyZoom[] = L"Zoom";
 } // namespace CfgKeys
 
 namespace CfgDefaults
@@ -64,4 +68,7 @@ inline constexpr wchar_t CfgDefaultEncryptedPassword[] = L"";
 
 inline constexpr wchar_t CfgDefaultServerIP[] = L"localhost";
 inline constexpr int CfgDefaultServerPort = 44405;
+
+// Camera (PR #335) — matches OrbitalCamera::DEFAULT_RADIUS
+inline constexpr int CfgDefaultCameraZoom = 1100;
 } // namespace CfgDefaults

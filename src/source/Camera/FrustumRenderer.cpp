@@ -4,7 +4,7 @@
 
 #include "FrustumRenderer.h"
 #include "CameraConfig.h"
-#include "_types.h"
+#include "mu_base_types.h"
 #include "mu_define.h"
 #include <cmath>
 #include <cstring>

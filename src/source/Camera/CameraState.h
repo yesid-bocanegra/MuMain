@@ -1,5 +1,5 @@
 #pragma once
-#include "_types.h"
+#include "mu_base_types.h"
 
 /**
  * @brief Encapsulates all camera state data

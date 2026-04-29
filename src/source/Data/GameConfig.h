@@ -112,6 +112,13 @@ public:
     void SetServerIP(const std::wstring& ip);
     void SetServerPort(int port);
 
+    // Camera (PR #335) — orbital camera zoom level, persisted between sessions.
+    int GetZoom() const
+    {
+        return m_zoom;
+    }
+    void SetZoom(int zoom);
+
     // Helpers
     static std::wstring BinaryToHex(const BYTE* data, DWORD size);
     static std::vector<BYTE> HexToBinary(const std::wstring& hex);
@@ -147,6 +154,8 @@ private:
 
     std::wstring m_serverIP;
     int m_serverPort;
+
+    int m_zoom;  // PR #335 — orbital camera zoom level
 
     std::wstring DecryptSetting(const std::wstring& hexInput);
     std::wstring EncryptSetting(const wchar_t* input);
