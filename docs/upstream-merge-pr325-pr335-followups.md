@@ -21,7 +21,7 @@ Two upstream PRs accumulated since merge-base:
 | PR | Subject | Merge commit | Status after this session |
 |---|---|---|---|
 | **#325** | packet-enums (sven-n) | `a8d8611f` | **Fully ported** ✅ |
-| **#335** | 3d-camera-rework (Mosch0512) | `f1ffa170` | **Wiring complete** ✅ — needs runtime smoke-test (§4.1). NewUIOptionWindow remaining commits (§4.2) still gated on Win32/wzAudio/ApplyResolution prerequisites. |
+| **#335** | 3d-camera-rework (Mosch0512) | `f1ffa170` | **Wiring complete + boot crash fixed** ✅ — needs runtime smoke-test (§4.1). NewUIOptionWindow remaining commits (§4.2) still gated on Win32/wzAudio/ApplyResolution prerequisites. |
 
 ## 2. Commits added this session (oldest → newest)
 
@@ -51,6 +51,8 @@ fe692ea2  docs: record §4.3 + §4.4 landed; §4.2 NewUIOptionWindow flagged as 
 a3259704  fix(ui): port volume + render slider math bugs from PR #335
 6ba472c8  docs: §4.2 partially landed — slider bugfixes ported, rest gated on prerequisites
 c2779c21  feat(camera): route MoveMainCamera through CameraManager (PR #335 §4.1)
+0adfe226  docs: §4.1 OrbitalCamera scene-wiring landed — needs runtime smoke-test
+67e39123  fix(camera): kill gluPerspective infinite recursion + localize the GL stubs
 ```
 
 Phase 1 (`d1bd1b09` + `e2880fd2`) was build-and-run-verified. Everything
@@ -60,51 +62,44 @@ ld macos-12.0-vs-Homebrew-26.0 warnings remain). Runtime behaviour through
 the new `g_Camera` path is **not yet verified** — see §6 for the testable
 checkpoint.
 
-### 2.1 Build-fix shims introduced in `197ff67d`
+### 2.1 Branch-side adjustments to PR #335 imports
 
-These are deliberate stop-gaps that need replacement when Phase 2c+ wires
-the camera framework through MuRenderer.
+These adjustments make upstream's flat-layout assumptions work on the SDL
+branch's reorganised tree. None of them are aspirational stubs that need
+replacement before declaring the port done — they are simply the correct
+shape on this branch. Keeping them here so a future re-merge of `Camera/*`
+from main knows what to redo.
 
-**`src/source/Main/stdafx.h`** — grew an "upstream compat" block near the GL
-constant defines:
+**`src/source/Main/stdafx.h`** — adds REFERENCE_WIDTH / REFERENCE_HEIGHT
+constants (mirroring `origin/main:src/source/stdafx.h:149`), referenced by
+`Camera/CameraProjection.cpp`. Real values, not stubs — keep these.
 
-- `inline constexpr int REFERENCE_WIDTH = 640;`
-- `inline constexpr int REFERENCE_HEIGHT = 480;`
-  These mirror `origin/main:src/source/stdafx.h:149` and are referenced
-  directly by `Camera/CameraProjection.cpp`. Real values, not stubs —
-  keep these.
-- Inline forwarders: `gluPerspective(...)` → `gluPerspective2(...)` and
-  `glViewport(...)` → `glViewport2(...)`. The branch's `ZzzOpenglUtil.h`
-  exposes the wrapped names; new Camera code uses the unwrapped names.
-  Forwarders should keep working long term; can drop once new files use
-  the wrapped names directly.
-- **No-op stubs** that future work must replace with MuRenderer calls
-  before the affected code paths become live:
-  - `glReadPixels` writes 1.0f to dst — `CameraProjection::TestDepthBuffer`
-    will always report "unoccluded" until a real MuRenderer-backed depth
-    read is wired in.
-  - `glGetFloatv` zeros 16 floats — `CameraProjection::GetOpenGLMatrix`
-    returns an all-zero matrix until a real MuRenderer-backed matrix
-    query is wired in.
-  - Immediate-mode draw stubs (`glPushMatrix`, `glPopMatrix`,
-    `glLoadIdentity`, `glRotatef`, `glLineWidth`, `glBegin`, `glEnd`,
-    `glEnable`, `glDisable`, `glIsEnabled`, `glBlendFunc`, `glColor4f`,
-    `glVertex2f`, `glVertex3f`, `glVertex3fv`, `glTexCoord2f`,
-    `glNormal3f`) — these no-op the FrustumRenderer / DefaultCamera
-    debug visualizers. They render nothing until replaced with
-    MuRenderer line / matrix-stack equivalents.
+> Earlier (`197ff67d`) this also held a block of GL function shims —
+> `gluPerspective` / `glViewport` forwarders plus no-op
+> `glReadPixels` / `glGetFloatv` / immediate-mode draw stubs. The
+> `gluPerspective` forwarder caused an infinite-recursion crash (it
+> exact-matched the float overload that `gluPerspective2` calls
+> internally, while the file-local `gluPerspective(double,…)` got
+> shadowed). `67e39123` removed the entire block from stdafx.h and
+> moved the genuinely-needed stubs to TU-locals — `Camera/CameraProjection.cpp`
+> calls the wrapped names (`gluPerspective2` / `glViewport2`) directly
+> and stubs its dead `TestDepthBuffer`/`GetOpenGLMatrix` bodies inline;
+> `Camera/DefaultCamera.cpp::HandleEditorMode` computes a Z-rotation
+> matrix directly instead of going through the GL matrix stack;
+> `UI/Framework/NewUIComboBox.cpp` carries an anonymous-namespace
+> set of no-op draw stubs (the widget itself is unreferenced until
+> the still-pending §4.2 wiring lands).
 
-  Search for `TODO(PR #335 wiring)` in `stdafx.h` to find the live ones
-  before declaring the camera port complete.
+**`src/source/Camera/*`** — local include-path patches for SDL-branch
+header layout (`_types.h` → `mu_base_types.h`, `_define.h` → `mu_define.h`,
+`GameConfig/GameConfig.h` → `GameConfig.h`, `gluPerspective` →
+`gluPerspective2`, `glViewport` → `glViewport2`). Keep these patches;
+they are not aspirational shims, they are the correct names on this
+branch.
 
 **`src/source/Data/GameConfig.{h,cpp}` + `GameConfigConstants.h`** — added
 the `Get/SetZoom` API + `[Camera]/Zoom = 1100` ini section/key/default.
 This is permanent — `OrbitalCamera` persists its radius via this.
-
-**`src/source/Camera/*`** — local include-path patches for SDL-branch
-header layout (`_types.h` → `mu_base_types.h`, `_define.h` → `mu_define.h`,
-`GameConfig/GameConfig.h` → `GameConfig.h`). Keep these patches; they are
-not aspirational shims, they are the correct paths on this branch.
 
 **`src/CMakeLists.txt`** — added
 `-Wno-error=return-type-c-linkage` to the Clang relaxation list so
@@ -336,16 +331,20 @@ every commit with `cmake --build out/build/macos-arm64`.
 After step 7, `grep -rE '\b(CameraPosition|CameraAngle|CameraMatrix|...|g_fCameraCustomDistance)\b'` across `src/source` returns only matches inside `g_Camera.X` field accesses or `state.X` parameter
 accesses inside `Camera/CameraProjection.cpp`.
 
-**Stub still owed.** `Camera/CameraProjection.cpp` calls
-`gluPerspective` / `glViewport` / `glReadPixels` / `glGetFloatv` plus the
-immediate-mode draw primitives that the SDL3 branch's `MuRenderer` no
-longer exposes. `stdafx.h` has inline forwarders/no-ops for all of these
-(see §2.1), so the camera framework compiles and links. The framework
-itself isn't called yet — `OrbitalCamera`, `CameraManager`,
-`FrustumRenderer` etc. exist but no scene routes through them. When that
-wiring lands the stubs in `stdafx.h` need to be replaced with
-MuRenderer-backed equivalents, otherwise the depth-buffer occlusion test
-will misbehave and the frustum debug viz won't draw.
+**Branch-specific name fixes** (landed in `67e39123`).
+`Camera/CameraProjection.cpp` calls `gluPerspective2` / `glViewport2`
+directly (the branch's MuRenderer-backed wrappers) instead of upstream's
+unwrapped names. Its dead `TestDepthBuffer`/`GetOpenGLMatrix` bodies are
+TU-local stubs. `Camera/DefaultCamera.cpp::HandleEditorMode` builds a
+direct Z-rotation matrix instead of going through `glPushMatrix /
+glLoadIdentity / glRotatef / GetOpenGLMatrix / glPopMatrix`.
+`UI/Framework/NewUIComboBox.cpp` carries TU-local no-op draw stubs (the
+widget is unreferenced — added by `c453fac6` as a prerequisite for the
+still-pending §4.2 resolution-selector wiring).
+
+These are deliberate, not aspirational stubs. Future re-merges of
+`Camera/*` from main will need the same name substitutions; everything
+else stays byte-identical.
 
 ## 4. PR #335 — what's still pending
 
@@ -390,14 +389,14 @@ the branch's signatures match main's post-cleanup form.
    acceptable. If any feels wrong, the right fix is per-scene config
    (`Camera/CameraConfig.h`) rather than reverting to per-map specials.
 
-The MuRenderer-stubbed GL calls in `stdafx.h` (`glReadPixels`,
-`glGetFloatv`, immediate-mode draw primitives — see §2.1) are now
-*reachable* through the camera framework. The depth-buffer occlusion
-test (`CameraProjection::TestDepthBuffer`) will always report
-"unoccluded" until it's rewired through MuRenderer; the
-`FrustumRenderer` debug viz will draw nothing. Neither blocks normal
-gameplay — those code paths are unused by the default and orbital
-cameras' main update loops — but they are TODOs for the editor tooling.
+After `67e39123`, the TU-local stubs replace the global stdafx.h block.
+`CameraProjection::TestDepthBuffer` still reports "unoccluded" and
+`CameraProjection::GetOpenGLMatrix` returns zero — both methods have
+no live callers on this branch (Default/Orbital cameras' main update
+loops never call them). When DevEditor exercises them, they should
+be ported to `MuRenderer::ReadPixels` / `MatrixStack::Top()`
+respectively. `FrustumRenderer` is `#ifdef _EDITOR`-gated so its
+no-op draw stubs are dead in the default `ENABLE_EDITOR=OFF` build.
 
 
 ### 4.2 NewUIOptionWindow merge — partially landed; rest needs hand-merge
