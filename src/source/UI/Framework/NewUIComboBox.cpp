@@ -17,6 +17,20 @@ using namespace SEASON3B;
 
 namespace
 {
+    // SDL3-branch port stubs for the immediate-mode GL drawing primitives that
+    // upstream's DrawSolidRect uses. The widget is currently unreferenced
+    // (added by c453fac6 as a prerequisite for the still-pending §4.2
+    // option-window resolution-selector wiring), so the no-op rectangles are
+    // invisible until both this file and the option-window merge land
+    // together — at which point DrawSolidRect needs to be ported to
+    // MuRenderer's draw API. Local to this TU so stdafx.h stays clean.
+    inline void glDisable(unsigned int) {}
+    inline void glEnable(unsigned int) {}
+    inline void glColor4f(float, float, float, float) {}
+    inline void glBegin(unsigned int) {}
+    inline void glEnd() {}
+    inline void glVertex2f(float, float) {}
+
     // Visual style for the combo widget. Tweaked to match the option window's
     // existing arrow-button look (see NewUIOptionWindow::RenderContents).
     constexpr float BG_BRIGHTNESS_IDLE     = 0.05f;

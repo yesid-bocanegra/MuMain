@@ -239,61 +239,6 @@ typedef unsigned int GLbitfield;
 inline constexpr int REFERENCE_WIDTH = 640;
 inline constexpr int REFERENCE_HEIGHT = 480;
 
-// Compatibility shims for raw GL entry points used by upstream's Camera/* code.
-// The SDL3 branch routes draws through MuRenderer and only exposes wrapped
-// helpers (gluPerspective2 / glViewport2) from ZzzOpenglUtil.h. Until the new
-// Camera framework is wired through MuRenderer in a follow-up commit, forward
-// the wrapped versions and no-op the depth/matrix reads so PR #335's files
-// compile unchanged.
-void gluPerspective2(float Fov, float Aspect, float ZNear, float ZFar);
-void glViewport2(int x, int y, int Width, int Height);
-inline void gluPerspective(float fov, float aspect, float zNear, float zFar)
-{
-    gluPerspective2(fov, aspect, zNear, zFar);
-}
-inline void glViewport(int x, int y, int width, int height)
-{
-    glViewport2(x, y, width, height);
-}
-// TODO(PR #335 wiring): replace with MuRenderer-backed depth read.
-// Returning 1.0f means TestDepthBuffer always reports "unoccluded" — fine
-// while the new camera framework has no live callers.
-inline void glReadPixels(int /*x*/, int /*y*/, int /*w*/, int /*h*/,
-                         unsigned int /*format*/, unsigned int /*type*/,
-                         void* dst)
-{
-    if (dst != nullptr) { *static_cast<float*>(dst) = 1.0f; }
-}
-// TODO(PR #335 wiring): replace with MuRenderer-backed matrix query.
-// Zeroing the destination keeps GetOpenGLMatrix deterministic until the new
-// camera framework picks up the live transform from CameraState.
-inline void glGetFloatv(unsigned int /*pname*/, float* dst)
-{
-    if (dst != nullptr) { for (int i = 0; i < 16; ++i) dst[i] = 0.0f; }
-}
-// Immediate-mode draw stubs used by the new FrustumRenderer / DefaultCamera
-// debug visualizers from PR #335. SDL3-branch rendering goes through
-// MuRenderer; these are no-ops so the camera framework compiles. The
-// frustum debug viz won't render until a future commit replaces these
-// with MuRenderer line / matrix-stack calls.
-inline void glPushMatrix() {}
-inline void glPopMatrix() {}
-inline void glLoadIdentity() {}
-inline void glRotatef(float, float, float, float) {}
-inline void glLineWidth(float) {}
-inline void glBegin(unsigned int) {}
-inline void glEnd() {}
-inline void glEnable(unsigned int) {}
-inline void glDisable(unsigned int) {}
-inline unsigned char glIsEnabled(unsigned int) { return 0; }
-inline void glBlendFunc(unsigned int, unsigned int) {}
-inline void glColor4f(float, float, float, float) {}
-inline void glVertex2f(float, float) {}
-inline void glVertex3f(float, float, float) {}
-inline void glVertex3fv(const float*) {}
-inline void glTexCoord2f(float, float) {}
-inline void glNormal3f(float, float, float) {}
-
 // client - base definitions
 #include "Core/Defined_Global.h"
 #define PBG_ADD_INGAMESHOPMSGBOX

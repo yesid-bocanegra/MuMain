@@ -753,13 +753,20 @@ void DefaultCamera::HandleEditorMode()
         // Phase 5: Only apply movement if Hero is valid
         if (IsHeroValid())
         {
-            // Apply rotation and movement
-            glPushMatrix();
-            glLoadIdentity();
-            glRotatef(-m_State.Angle[2], 0.f, 0.f, 1.f);
-            float Matrix[3][4];
-            CameraProjection::GetOpenGLMatrix(Matrix);
-            glPopMatrix();
+            // SDL3 branch port: the upstream code did this through the GL
+            // immediate-mode matrix stack (glPushMatrix / glLoadIdentity /
+            // glRotatef / GetOpenGLMatrix / glPopMatrix). The SDL3 GPU
+            // pipeline doesn't expose that stack, but the intent is just
+            // to rotate the input vector by -m_State.Angle[2] degrees
+            // around the Z axis — compute the matrix directly.
+            const float angleZ = -m_State.Angle[2] * Q_PI / 180.f;
+            const float c = cosf(angleZ);
+            const float s = sinf(angleZ);
+            float Matrix[3][4] = {
+                {  c,  -s, 0.f, 0.f },
+                {  s,   c, 0.f, 0.f },
+                { 0.f, 0.f, 1.f, 0.f },
+            };
             VectorRotate(p1, Matrix, p2);
             VectorAdd(Hero->Object.Position, p2, Hero->Object.Position);
         }

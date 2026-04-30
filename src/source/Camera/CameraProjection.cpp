@@ -18,8 +18,11 @@ static int s_ViewportHeight = 0;
 void CameraProjection::SetupPerspective(CameraState& state, float fov, float aspect,
                                           float zNear, float zFar)
 {
-    // Set up OpenGL perspective
-    gluPerspective(fov, aspect, zNear, zFar);
+    // Set up perspective. SDL3 branch routes this through gluPerspective2
+    // (RenderFX/ZzzOpenglUtil.cpp) which calls a file-local MuRenderer-backed
+    // implementation. Calling gluPerspective directly would resolve to a
+    // different overload (or, depending on global shims, recurse infinitely).
+    gluPerspective2(fov, aspect, zNear, zFar);
 
     // Use actual viewport dimensions (set by SetViewport) for screen center and
     // perspective. This accounts for the game viewport being narrower/shorter than
@@ -43,8 +46,9 @@ void CameraProjection::SetViewport(int x, int y, int width, int height)
     s_ViewportWidth = width;
     s_ViewportHeight = height;
 
-    // Set OpenGL viewport (Y coordinate is flipped)
-    glViewport(x, WindowHeight - (y + height), width, height);
+    // SDL3 branch routes viewport changes through MuRenderer via glViewport2
+    // (RenderFX/ZzzOpenglUtil.cpp). Y coordinate is flipped to bottom-origin.
+    glViewport2(x, WindowHeight - (y + height), width, height);
 }
 
 void CameraProjection::ScreenToWorldRay(const CameraState& state, int sx, int sy,
@@ -97,48 +101,26 @@ void CameraProjection::TransformPosition(const CameraState& state, const vec3_t 
     *outY = (int)(outWorldPosition[1] / state.PerspectiveY / -outWorldPosition[2]) + state.ScreenCenterYFlip;
 }
 
-bool CameraProjection::TestDepthBuffer(const CameraState& state, const vec3_t position)
+bool CameraProjection::TestDepthBuffer(const CameraState& /*state*/, const vec3_t /*position*/)
 {
-    vec3_t worldPosition;
-    int x, y;
-    TransformPosition(state, position, worldPosition, &x, &y);
-
-    // Check if within viewport
-    if (x < OpenglWindowX || y < OpenglWindowY ||
-        x >= OpenglWindowX + OpenglWindowWidth ||
-        y >= OpenglWindowY + OpenglWindowHeight)
-    {
-        return false;
-    }
-
-    // Read depth buffer
-    GLfloat depth;
-    glReadPixels(x, y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth);
-
-    // Expected window-space depth from a standard gluPerspective projection:
-    //   z_window = (f / (f - n)) * (1 + n / z_eye)        with z_eye < 0
-    // This evaluates to 0 at the near plane and 1 at the far plane. The
-    // earlier approximation (1 - n/-z + n/f) was off by n/f at the near plane,
-    // which can cause false occlusion for objects very close to the camera.
-    const float n = state.ViewNear;
-    const float f = state.ViewFar;
-    const float z_eye = worldPosition[2];  // negative for points in front of camera
-    const float expected = (f / (f - n)) * (1.0f + n / z_eye);
-
-    return (depth >= expected);
+    // SDL3 branch port-stub: the upstream implementation calls glReadPixels
+    // to sample the depth buffer, which the SDL3 GPU pipeline doesn't expose
+    // via raw GL. No live caller on this branch (Default/Orbital cameras'
+    // main update loops never reach this method), so returning "unoccluded"
+    // is the safe default until a future commit wires this through
+    // MuRenderer's depth-read path.
+    return true;
 }
 
 void CameraProjection::GetOpenGLMatrix(float outMatrix[3][4])
 {
-    float openglMatrix[16];
-    glGetFloatv(GL_MODELVIEW_MATRIX, openglMatrix);
-
-    // Convert from OpenGL 4×4 to our 3×4 format
+    // SDL3 branch port-stub: the upstream implementation reads
+    // GL_MODELVIEW_MATRIX via glGetFloatv. SDL3 GPU has no equivalent
+    // immediate-mode matrix stack — MatrixStack lives in
+    // RenderFX/MatrixStack.{cpp,h}. No live caller on this branch, so an
+    // identity-ish zero matrix is fine until a future commit wires this
+    // through MatrixStack's top.
     for (int i = 0; i < 3; i++)
-    {
         for (int j = 0; j < 4; j++)
-        {
-            outMatrix[i][j] = openglMatrix[j * 4 + i];
-        }
-    }
+            outMatrix[i][j] = 0.0f;
 }
