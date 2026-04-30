@@ -41,6 +41,9 @@ b14bf725  refactor(camera): migrate eight small users from legacy globals to g_C
 80c808bf  refactor(camera): migrate ZzzObject + MainScene + LoginScene to g_Camera (PR #335)
 0bd4bbde  refactor(camera): migrate ZzzLodTerrain to g_Camera (PR #335)
 c3a02c0f  refactor(camera): finish g_Camera migration — remove legacy globals (PR #335)
+c07a7813  docs: update PR #335 follow-ups — camera-globals migration done
+ccde5046  chore(upstream): port .gitignore + edge-of-map terrain fix from main (PR #335)
+00f48b68  fix(camera): port two upstream camera bug fixes (PR #335)
 ```
 
 Phase 1 (`d1bd1b09` + `e2880fd2`) was build-and-run-verified. Everything
@@ -412,17 +415,54 @@ the per-map `CameraViewFar = ...` lines from a handful of GM* files
 profile drives everything. This is gameplay-visible — verify each map
 still looks right before/after.
 
-### 4.6 Trivial cleanups
+### 4.6 Trivial cleanups — DONE ✅
 
-- **Macro.txt deletion** — main deletes `src/bin/Data/Macro.txt`. Need
-  to verify nothing on the branch still references it (the SDL3 input
-  rework may or may not still consume it).
-- **`.gitignore` additions** — main adds `docs/CODING_RULES.md` and
-  `docs/reviews/`. Trivial cherry-pick, no semantic impact.
-- **Edge-of-map terrain tile rendering** (`455f8034`) — clamps the
-  bound to `TERRAIN_SIZE - T` so terrain tiles at the map edge render.
-  Single-line fix in `ZzzLodTerrain.cpp` if the branch hasn't already
-  picked this up; check first.
+Landed in `ccde5046` and `00f48b68`:
+
+- ✅ `.gitignore` additions (`docs/CODING_RULES.md`, `docs/reviews/`).
+- ✅ Edge-of-map terrain rendering (`455f8034` — clamp to
+  `TERRAIN_SIZE - tileWidth` instead of `TERRAIN_SIZE_MASK - tileWidth`).
+- ✅ ScreenCenterYFlip bug fix (`b98d4518` — was `WindowWidth -
+  ScreenCenterY`, must be `WindowHeight - ScreenCenterY`).
+- ✅ Character aim tracks active camera yaw (`421e9d65` — replace the
+  hardcoded ±45 with `g_Camera.Angle[2]` in MoveHero's two screen-to-
+  world angle conversions).
+- ❌ **Skipped: Macro.txt deletion.** The branch still has six
+  SaveMacro / OpenMacro call sites in NewUICustomMessageBox /
+  ZzzInterface / CSMapServer / ZzzOpenData that read and write that
+  file at runtime, so deleting the data file would break the
+  macro-save UX on first launch.
+
+### 4.7 What's NOT pending — already absorbed by Phase 2b
+
+The `7e9dbdba` Phase-2b drop-in took `src/source/Camera/*` byte-identical
+from `origin/main`, which captures any PR #335 commit that only touches
+files in that directory. By inspection:
+
+```
+ancestor of a8d8611f AND only touches Camera/* + CullingConstants.h:
+  ae18846e  Restore item cull radius to legacy 400
+  d9a95d59  Match culling near plane to projection (20, was 500)
+  3456d902  Reverse SetCustom2DHull output to CW order
+  6e680004  Increase MAX_HULL_VERTICES to 16
+  bf28224b  Use named MAX_HULL_VERTICES for FrustrumX/Y capacity
+  92329c0d  Document why OrbitalCamera mount-offset baseline is fixed
+  ebbb5357  Make OrbitalCamera use its own MainScene config coherently
+  889eb9f0  Remove per-gameplay-map camera overrides
+  c9424fa7  Use exact gluPerspective depth formula in TestDepthBuffer
+  497cf506  Merge two anonymous namespace blocks in OrbitalCamera.cpp
+  b7d37f52  Name magic numbers in DefaultCamera position math
+  de08a2af  Apply zoom scale on activation
+  054f547f  Smooth hull-bisector expansion at very flat corners
+  4e1e6aac  Track aspect ratio in FrustumCache to invalidate on resize
+  f79031e2  Make Frustum 2D hull capacity consistent
+  f9ca71a7  Remove F8 in-camera free-fly mode (Camera/-only)
+  8861041f  Extend side view at wider aspects (CameraConfig.h portion only —
+            SceneManager.cpp portion is part of §4.3)
+```
+
+These are mentioned for completeness so a future session knows not to
+re-do them.
 
 ## 5. Reusable scripts from this session
 
