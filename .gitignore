@@ -55,3 +55,7 @@ graphify-out/
 
 # Semantic release (transient)
 node_modules/
+
+# Local-only docs (PR #335 — c71a8055)
+docs/CODING_RULES.md
+docs/reviews/

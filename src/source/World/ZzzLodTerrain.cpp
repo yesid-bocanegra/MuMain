@@ -2203,10 +2203,14 @@ void CreateFrustrum(float xAspect, float yAspect, vec3_t position)
     FrustrumBoundMaxY = (int)(FrustrumMaxY / TERRAIN_SCALE) / tileWidth * tileWidth + tileWidth;
     FrustrumBoundMinX = FrustrumBoundMinX < 0 ? 0 : FrustrumBoundMinX;
     FrustrumBoundMinY = FrustrumBoundMinY < 0 ? 0 : FrustrumBoundMinY;
+    // Clamp so the final 4×4 tile block fits in [TERRAIN_SIZE_MASK]. With
+    // tileWidth=4 this is TERRAIN_SIZE - tileWidth = 252; clamping to
+    // TERRAIN_SIZE_MASK - tileWidth (= 251) would leave tiles 252–255 at the
+    // high edge of the map permanently un-iterated. (origin/main 455f8034)
     FrustrumBoundMaxX =
-        FrustrumBoundMaxX > TERRAIN_SIZE_MASK - tileWidth ? TERRAIN_SIZE_MASK - tileWidth : FrustrumBoundMaxX;
+        FrustrumBoundMaxX > TERRAIN_SIZE - tileWidth ? TERRAIN_SIZE - tileWidth : FrustrumBoundMaxX;
     FrustrumBoundMaxY =
-        FrustrumBoundMaxY > TERRAIN_SIZE_MASK - tileWidth ? TERRAIN_SIZE_MASK - tileWidth : FrustrumBoundMaxY;
+        FrustrumBoundMaxY > TERRAIN_SIZE - tileWidth ? TERRAIN_SIZE - tileWidth : FrustrumBoundMaxY;
 
     FaceNormalize(FrustrumVertex[0], FrustrumVertex[1], FrustrumVertex[2], FrustrumFaceNormal[0]);
     FaceNormalize(FrustrumVertex[0], FrustrumVertex[2], FrustrumVertex[3], FrustrumFaceNormal[1]);
