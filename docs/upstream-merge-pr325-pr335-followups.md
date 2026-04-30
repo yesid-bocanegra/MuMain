@@ -21,7 +21,7 @@ Two upstream PRs accumulated since merge-base:
 | PR | Subject | Merge commit | Status after this session |
 |---|---|---|---|
 | **#325** | packet-enums (sven-n) | `a8d8611f` | **Fully ported** ✅ |
-| **#335** | 3d-camera-rework (Mosch0512) | `f1ffa170` | **Partially ported** — framework in, wiring pending |
+| **#335** | 3d-camera-rework (Mosch0512) | `f1ffa170` | **Camera-globals migration done** ✅ — DevEditor / option polish / overlay wiring still pending (§4) |
 
 ## 2. Commits added this session (oldest → newest)
 
@@ -33,13 +33,22 @@ ebd0704e  refactor(camera): consolidate camera code under src/source/Camera/
 c453fac6  feat(ui,profiler): add NewUIComboBox + FrameProfiler from main (PR #335)
 ddba58d3  docs: add resumption notes for partial PR #325 + #335 port (this doc)
 197ff67d  fix(build): make Phase 2b camera framework compile on the SDL3 branch
+fa71393a  docs: record Phase 2b build-fix shims and the eighth session commit
+68120dd0  feat(camera): port LoginScene waypoint offset corrections (PR #335)
+d4787dd8  refactor(camera): drop dead legacy CameraState wrapper + 3D-anaglyph globals (PR #335)
+b14bf725  refactor(camera): migrate eight small users from legacy globals to g_Camera (PR #335)
+56a72c76  refactor(camera): migrate ten more single-ref users to g_Camera (PR #335)
+80c808bf  refactor(camera): migrate ZzzObject + MainScene + LoginScene to g_Camera (PR #335)
+0bd4bbde  refactor(camera): migrate ZzzLodTerrain to g_Camera (PR #335)
+c3a02c0f  refactor(camera): finish g_Camera migration — remove legacy globals (PR #335)
 ```
 
-Phase 1 (`d1bd1b09` + `e2880fd2`) was build-and-run-verified. The three
-Phase-2 framework commits (`ebd0704e` + `7e9dbdba` + `c453fac6`) plus the
-build-fix (`197ff67d`) leave the branch building cleanly with the new Camera
-framework as unreferenced static-library content inside MUGame. The
-migration to actually consume `g_Camera` is what's described in §3 below.
+Phase 1 (`d1bd1b09` + `e2880fd2`) was build-and-run-verified. Everything
+from `ebd0704e` through `c3a02c0f` builds clean on macOS-arm64 (Main + all
+four test executables link green; only the pre-existing
+ld macos-12.0-vs-Homebrew-26.0 warnings remain). Runtime behaviour through
+the new `g_Camera` path is **not yet verified** — see §6 for the testable
+checkpoint.
 
 ### 2.1 Build-fix shims introduced in `197ff67d`
 
@@ -92,13 +101,17 @@ not aspirational shims, they are the correct paths on this branch.
 `extern "C" CameraManager& CameraManager_Instance()` doesn't trip
 `-Werror`. Aligns with main's tolerance — keep.
 
-## 3. PR #335 — what's left: the camera-globals migration
+## 3. PR #335 camera-globals migration — DONE ✅
 
-This is the next concrete chunk of work. PR #335 deletes 12 legacy camera
-globals and replaces them with fields on the new `g_Camera` instance
-(`CameraState`, defined in `src/source/Camera/CameraState.cpp`, declared in
-`Camera/CameraState.h` which is now pulled in by `RenderFX/ZzzOpenglUtil.h`
-on main).
+**Status: completed in commits `68120dd0` … `c3a02c0f`.** All twelve legacy
+camera globals are gone from the codebase, replaced with fields on the new
+`g_Camera` instance (`CameraState`, defined in
+`src/source/Camera/CameraState.cpp`, declared in `Camera/CameraState.h`
+which is now pulled in by `RenderFX/ZzzOpenglUtil.h`). The two sub-sections
+below are kept for historical context (the "before" snapshot of the work);
+§3.5 documents the actual sequence we landed.
+
+> If you're resuming and just want the next thing to do, skip to §4.
 
 ### 3.1 Globals to migrate (~210 references total)
 
@@ -258,45 +271,158 @@ GM* maps and effect files don't directly include ZzzOpenglUtil.h on the
 branch — verify each file's include chain when migrating, and add an
 explicit `#include "Camera/CameraState.h"` if needed.
 
-### 3.5 Recommended commit shape for the migration
+### 3.5 What actually landed (commit-by-commit)
 
-Build + smoke-test between each:
+The plan mostly held; we sequenced bottom-up (small users first) instead
+of top-down (foundation first) so the build stayed green at every step,
+which made each commit reviewable in isolation. Build was verified after
+every commit with `cmake --build out/build/macos-arm64`.
 
-1. **Foundation (one commit, will break build → triggers steps 2-5):**
-   - Take main's `RenderFX/ZzzOpenglUtil.h` (drops 8 externs, adds `Camera/CameraState.h` include)
-   - Take main's `RenderFX/ZzzOpenglUtil.cpp`
-   - Take main's `Camera/CameraMove.{cpp,h}` and `Camera/CameraUtility.{cpp,h}`
-   - Drop legacy global definitions from `Scenes/SceneCore.cpp:105-111`
-2. **Scenes:** the eight `Scenes/*.cpp` files
-3. **Render core:** `World/ZzzLodTerrain.{cpp,h}` (handle local-shadow rename),
-   `Gameplay/Characters/ZzzObject.cpp`,
-   `UI/Framework/NewUI3DRenderMng.{cpp,h}`
-4. **UI tail:** `UI/Legacy/UIWindows.cpp`, `UI/Legacy/CharMakeWin.cpp`,
-   `UI/Legacy/ZzzInterface.cpp`, smaller UI files
-5. **GM maps + effects:** four GM files + `SideHair`, `ZzzEffectPoint`,
-   `ZzzEffectFireLeave`
-6. **Polish stack** (multiple small commits): NewUIOptionWindow merge,
-   $details overlay edits (now that `Utilities/FrameProfiler.h` is in),
-   DevEditor port, slider-rounding fixes, build-info surfacing,
-   FrustumCache aspect tracking, etc.
+1. **`68120dd0` LoginScene waypoint offsets** — additive port of main's
+   `CameraMove.{cpp,h}` changes (LoginSceneCameraDefaults namespace,
+   `g_LoginScene{Offset,Angle}*` runtime globals, `ApplyLoginSceneOffset`
+   helper, `extern "C"` instance accessor). One conflict resolved: kept
+   branch's two-line formatting of the `CameraVector2 toTarget{...}`
+   declaration while inserting main's three new offset calls before it.
+2. **`d4787dd8` Drop dead 3D-anaglyph globals + legacy `struct CameraState`** —
+   removes `Camera3DFov`, `Camera3DRoll`, `g_CameraState`, and the legacy
+   `struct CameraState` from `Camera/CameraUtility.h` (no live callers
+   anywhere). `CameraDistance`/`Target` kept here pending §3.5 step 6.
+3. **`b14bf725` Migrate eight small users** — 1-2 references each in
+   `PersonalShopTitleImp`, `NewUIInGameShop`, `NewUIGoldBowmanLena`,
+   `NewUIRegistrationLuckyCoin`, `CharMakeWin`, `SideHair`,
+   `ZzzEffectPoint`, `ZzzEffectFireLeave`. The single architectural
+   move in this commit was adding `#include "Camera/CameraState.h"` to
+   `RenderFX/ZzzOpenglUtil.h` so every TU that already pulls in
+   `ZzzOpenglUtil.h` gets `g_Camera` transitively (matches main's layout).
+4. **`56a72c76` Migrate ten more single-ref users** — `ZzzInterface.cpp`,
+   four `GM*.cpp` (the `CameraPosition[1] + 400.f` cull check),
+   `NewUI3DRenderMng`, `UIWindows`, `SceneCommon`, `SceneManager`,
+   plus dropping a stale local `extern float CameraViewFar` in
+   `CharacterScene.cpp`.
+5. **`80c808bf` ZzzObject + MainScene + LoginScene** — 6/8/14 refs each.
+   Stale local externs (`extern float CameraAngle[3];` at the top of
+   MainScene + three more in LoginScene) deleted along with the migration.
+6. **`0bd4bbde` ZzzLodTerrain** — 26 refs across the heaviest user. The
+   local-shadow gotcha in `CreateFrustrum2D` (locals named
+   `CameraViewFar` / `Near` / `Target` shadow the globals inside a
+   178-line block) was handled by renaming those locals to
+   `localFar` / `localNear` / `localTarget` first, then bulk-substituting
+   only the genuine global references. The two local
+   `extern float CameraDistance{,Target};` lines at the top of the
+   file dropped at the same time.
+7. **`c3a02c0f` Final teardown** — the storage-owning translation units.
+   `RenderFX/ZzzOpenglUtil.cpp` (60 substitutions + remove the eleven
+   legacy storage definitions), `RenderFX/ZzzOpenglUtil.h` (drop ten
+   externs), `Camera/CameraUtility.cpp` (the file we forgot earlier — 59
+   substitutions + drop its top-of-file externs), `CameraUtility.h` (drop
+   the last two externs), `Scenes/SceneCore.cpp` (drop the two
+   `CameraDistance{,Target}` storage definitions),
+   `Platform/PlatformGlobalStubs.cpp` (drop the non-Win32
+   `g_fCameraCustomDistance` stub). Plus a CMake fix:
+   `Camera/CameraState.cpp` moved from MUGame to MURenderFX so the test
+   binaries (which link MURenderFX without MUGame) can resolve `g_Camera`.
 
-## 4. PR #335 — independent slices not yet ported
+After step 7, `grep -rE '\b(CameraPosition|CameraAngle|CameraMatrix|...|g_fCameraCustomDistance)\b'` across `src/source` returns only matches inside `g_Camera.X` field accesses or `state.X` parameter
+accesses inside `Camera/CameraProjection.cpp`.
 
-These don't depend on the §3 migration but were skipped this session for
-scope reasons. Tackle independently when convenient:
+**Stub still owed.** `Camera/CameraProjection.cpp` calls
+`gluPerspective` / `glViewport` / `glReadPixels` / `glGetFloatv` plus the
+immediate-mode draw primitives that the SDL3 branch's `MuRenderer` no
+longer exposes. `stdafx.h` has inline forwarders/no-ops for all of these
+(see §2.1), so the camera framework compiles and links. The framework
+itself isn't called yet — `OrbitalCamera`, `CameraManager`,
+`FrustumRenderer` etc. exist but no scene routes through them. When that
+wiring lands the stubs in `stdafx.h` need to be replaced with
+MuRenderer-backed equivalents, otherwise the depth-buffer occlusion test
+will misbehave and the frustum debug viz won't draw.
 
-- **DevEditor port:** `src/MuEditor/UI/DevEditor/DevEditorUI.{cpp,h}` (NEW
-  on main, 2 files) + edits to `MuEditorCore.{cpp,h}`,
-  `MuInputBlockerCore.cpp`, `MuEditorUI.{cpp,h}`. Builds only when
-  `ENABLE_EDITOR` is on.
-- **Macro.txt deletion:** main deletes `src/bin/Data/Macro.txt`. Verify
-  whether anything on the branch still references it before deleting.
-- **`.gitignore` additions** (main adds `docs/CODING_RULES.md` and
-  `docs/reviews/`) — trivial cherry-pick, no semantic impact.
-- **Per-pass timing in $details overlay:** wires
-  `Utilities/FrameProfiler.h` (already added in `c453fac6`) into the
-  scene-render loop. Touches `SceneManager.cpp` and a couple of other
-  scenes, so usually folds in with phase 2c step 6 above.
+## 4. PR #335 — what's still pending
+
+The big-rock migration (§3) is done. What remains is the polish stack
+and the actual *wiring* of the new architecture. None of these block
+each other — order is up to the next session.
+
+### 4.1 New camera framework is unused
+
+The 22-file Camera framework (`CameraManager`, `OrbitalCamera`,
+`DefaultCamera`, `FreeFlyCamera`, `Frustum`, `FrustumRenderer`,
+`CameraProjection`) compiles, links, and is ready — but **no scene calls
+into it yet**. The branch's existing `CCameraMove` / `CameraUtility::MoveMainCamera()`
+flow keeps driving the camera, with the legacy globals now backed by
+`g_Camera.X` storage.
+
+To activate the new architecture, scenes need to be migrated to call
+`CameraManager::Instance().GetActiveCamera()->Update()` etc. instead of
+the legacy flow. Main's PR #335 does this in `Scenes/MainScene.cpp`,
+`Scenes/CharacterScene.cpp`, `Scenes/LoginScene.cpp`. This is a real
+behaviour change — not just a refactor — so it deserves a careful commit
+of its own, with smoke-testing of all three scenes (login → char select →
+main world → orbital zoom) before declaring it done.
+
+When that wiring lands, the GL stubs in `Main/stdafx.h` flagged in §2.1
+(`glReadPixels`, `glGetFloatv`, immediate-mode draw primitives) need to
+be replaced with MuRenderer-backed calls — otherwise
+`CameraProjection::TestDepthBuffer` is permanently "unoccluded" and
+`FrustumRenderer` draws nothing.
+
+### 4.2 NewUIOptionWindow merge
+
+Main's PR #335 reworks the option window: rounded volume / render
+sliders, a `NewUIComboBox`-driven resolution dropdown processed before
+the checkboxes/sliders, a windowed-mode toggle that picks consistent
+window styles across entry points, and a HARDEN pass for option-window
+config. The branch already has its own SDL3-flavoured option-window
+edits (+432 LOC vs main's +528 LOC, both touching overlapping logic),
+so this is a real 3-way merge. The new `NewUIComboBox.{cpp,h}` is
+already in place from `c453fac6` and ready to be wired.
+
+Files to merge: `UI/Windows/NewUIOptionWindow.{cpp,h}` plus the
+upstream commits `ffc3e580`, `9d7d6b32`, `9f17a79c`, `a9b5b4dd`,
+`6732c1e9`, `316ef1fa`, `0c5fb402`, `e8b15d35`, `e94adadc`.
+
+### 4.3 $details overlay + per-pass timing
+
+Wires `Utilities/FrameProfiler.h` (already added in `c453fac6`) into
+the scene-render loop and the `$details` debug overlay. Upstream
+commits: `2362457a` (per-pass timing), `7e5f0d5a` (camera mode + scene
+visibility stats), `a0b7204c` (drop entity/triangle stats),
+`efb5a283` (fix overlay crash when iterating object arrays),
+`8861041f` (extend side view at wider aspects + surface build info).
+Touches `Scenes/SceneManager.cpp` and a few other scenes.
+
+### 4.4 DevEditor port (editor-only build)
+
+Adds `src/MuEditor/UI/DevEditor/DevEditorUI.{cpp,h}` (NEW on main, 2
+files) and edits `MuEditorCore.{cpp,h}`, `MuInputBlockerCore.cpp`,
+`MuEditorUI.{cpp,h}`. The new files exercise the camera framework's
+`extern "C"` accessors (`CameraManager_Instance`,
+`GetOrbitalCameraInstance`, etc.) — those are already in place from
+`7e9dbdba`. Only builds when `ENABLE_EDITOR=ON`. Upstream commits:
+`a31ed451`, `b1f49dcd`, `69e754f9`, `aba6d484`, plus the smaller
+follow-ups.
+
+### 4.5 Per-map camera-overrides cleanup
+
+Main's `889eb9f0` "Remove per-gameplay-map camera overrides" deletes
+the per-map `CameraViewFar = ...` lines from a handful of GM* files
+(`GM3rdChangeUp`, `GMBattleCastle`, `GMCrywolf1st`, `GMDoppelGanger2`,
+`GMEmpireGuardian1`, `GMHellas`, `GMSwampOfQuiet`, `GM_Kanturu_3rd`,
+`GM_Raklion`) so the unified camera config in `OrbitalCamera`'s default
+profile drives everything. This is gameplay-visible — verify each map
+still looks right before/after.
+
+### 4.6 Trivial cleanups
+
+- **Macro.txt deletion** — main deletes `src/bin/Data/Macro.txt`. Need
+  to verify nothing on the branch still references it (the SDL3 input
+  rework may or may not still consume it).
+- **`.gitignore` additions** — main adds `docs/CODING_RULES.md` and
+  `docs/reviews/`. Trivial cherry-pick, no semantic impact.
+- **Edge-of-map terrain tile rendering** (`455f8034`) — clamps the
+  bound to `TERRAIN_SIZE - T` so terrain tiles at the map edge render.
+  Single-line fix in `ZzzLodTerrain.cpp` if the branch hasn't already
+  picked this up; check first.
 
 ## 5. Reusable scripts from this session
 
