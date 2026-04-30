@@ -21,7 +21,7 @@ Two upstream PRs accumulated since merge-base:
 | PR | Subject | Merge commit | Status after this session |
 |---|---|---|---|
 | **#325** | packet-enums (sven-n) | `a8d8611f` | **Fully ported** ✅ |
-| **#335** | 3d-camera-rework (Mosch0512) | `f1ffa170` | **Camera-globals migration done** ✅ — DevEditor / option polish / overlay wiring still pending (§4) |
+| **#335** | 3d-camera-rework (Mosch0512) | `f1ffa170` | **Mostly ported** ✅ — only NewUIOptionWindow merge (§4.2) and OrbitalCamera scene-wiring (§4.1) still pending |
 
 ## 2. Commits added this session (oldest → newest)
 
@@ -44,6 +44,9 @@ c3a02c0f  refactor(camera): finish g_Camera migration — remove legacy globals 
 c07a7813  docs: update PR #335 follow-ups — camera-globals migration done
 ccde5046  chore(upstream): port .gitignore + edge-of-map terrain fix from main (PR #335)
 00f48b68  fix(camera): port two upstream camera bug fixes (PR #335)
+231e2f14  docs: record §4.6 trivial cleanups landed + §4.7 already-absorbed inventory
+955b71ca  feat(editor): port DevEditor camera tooling from main (PR #335 §4.4)
+8069156a  feat(overlay): port per-pass timing + build info to $details (PR #335 §4.3)
 ```
 
 Phase 1 (`d1bd1b09` + `e2880fd2`) was build-and-run-verified. Everything
@@ -369,41 +372,55 @@ be replaced with MuRenderer-backed calls — otherwise
 `CameraProjection::TestDepthBuffer` is permanently "unoccluded" and
 `FrustumRenderer` draws nothing.
 
-### 4.2 NewUIOptionWindow merge
+### 4.2 NewUIOptionWindow merge — STILL PENDING ❌
 
 Main's PR #335 reworks the option window: rounded volume / render
 sliders, a `NewUIComboBox`-driven resolution dropdown processed before
 the checkboxes/sliders, a windowed-mode toggle that picks consistent
 window styles across entry points, and a HARDEN pass for option-window
 config. The branch already has its own SDL3-flavoured option-window
-edits (+432 LOC vs main's +528 LOC, both touching overlapping logic),
+edits (+532 LOC vs main's +528 LOC, both touching overlapping logic),
 so this is a real 3-way merge. The new `NewUIComboBox.{cpp,h}` is
 already in place from `c453fac6` and ready to be wired.
+
+A 3-way merge of `UI/Windows/NewUIOptionWindow.{cpp,h}` produces only
+4 cpp + 1 h conflict regions, but each region spans a large
+reformat-collision body where branch and main both rewrote substantial
+chunks. **This needs a hand-merge by someone who understands both
+intents** — branch's SDL3 resolution/audio handling and main's polish
+are substantively different, not mechanical name-swaps.
 
 Files to merge: `UI/Windows/NewUIOptionWindow.{cpp,h}` plus the
 upstream commits `ffc3e580`, `9d7d6b32`, `9f17a79c`, `a9b5b4dd`,
 `6732c1e9`, `316ef1fa`, `0c5fb402`, `e8b15d35`, `e94adadc`.
 
-### 4.3 $details overlay + per-pass timing
+### 4.3 $details overlay + per-pass timing — DONE ✅
 
-Wires `Utilities/FrameProfiler.h` (already added in `c453fac6`) into
-the scene-render loop and the `$details` debug overlay. Upstream
-commits: `2362457a` (per-pass timing), `7e5f0d5a` (camera mode + scene
-visibility stats), `a0b7204c` (drop entity/triangle stats),
-`efb5a283` (fix overlay crash when iterating object arrays),
-`8861041f` (extend side view at wider aspects + surface build info).
-Touches `Scenes/SceneManager.cpp` and a few other scenes.
+Landed in `8069156a`. `MainScene.cpp` wraps the major render passes
+with `FRAME_PROFILE(...)` scopes; `SceneManager.cpp::RenderDebugInfo`
+gains a "Frame ms T:.. O:.. C:.. I:.. E:.." line driven by
+`FrameProfiler::AccumulatorMs` plus a "Build: ..." build-info line.
+Skipped the `7e5f0d5a` / `a0b7204c` / `efb5a283` add-then-remove
+chain since those netted out — we never added the noisy stats so we
+don't need to remove them or fix the crash they introduced.
 
-### 4.4 DevEditor port (editor-only build)
+### 4.4 DevEditor port (editor-only build) — DONE (port-wise) ✅, build-blocked ❌
 
-Adds `src/MuEditor/UI/DevEditor/DevEditorUI.{cpp,h}` (NEW on main, 2
-files) and edits `MuEditorCore.{cpp,h}`, `MuInputBlockerCore.cpp`,
-`MuEditorUI.{cpp,h}`. The new files exercise the camera framework's
-`extern "C"` accessors (`CameraManager_Instance`,
-`GetOrbitalCameraInstance`, etc.) — those are already in place from
-`7e9dbdba`. Only builds when `ENABLE_EDITOR=ON`. Upstream commits:
-`a31ed451`, `b1f49dcd`, `69e754f9`, `aba6d484`, plus the smaller
-follow-ups.
+Landed in `955b71ca` — DevEditor source files (DevEditorUI.{cpp,h} +
+edits to MuEditorCore.{cpp,h}, MuInputBlockerCore.cpp, MuEditorUI.{cpp,h})
+are byte-identical to origin/main and link in cleanly when the gate
+is open.
+
+**However, `ENABLE_EDITOR=ON` does not build successfully on this
+branch right now.** The editor build path goes through MUData's
+loaders (`Data/CommonDataSaver.{cpp,h,inl}`,
+`Data/Items/ItemDataLoader.cpp`) which still reference Win32-only
+APIs: `WIN32_FIND_DATAW`, `OutputDebugStringW`, `_snwprintf_s`,
+`FindClose`, `CompareFileTime`, `FILE_ATTRIBUTE_DIRECTORY`. That's a
+pre-existing SDL3-migration gap unrelated to PR #335; the DevEditor
+port itself adds no new platform dependencies. The editor build
+will start working once those Data/* loaders are ported to
+cross-platform filesystem APIs.
 
 ### 4.5 Per-map camera-overrides cleanup
 
