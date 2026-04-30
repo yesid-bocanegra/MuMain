@@ -178,7 +178,7 @@ void gluPerspective2(float Fov, float Aspect, float ZNear, float ZFar)
 
     ScreenCenterX = OpenglWindowX + OpenglWindowWidth / 2;
     ScreenCenterY = OpenglWindowY + OpenglWindowHeight / 2;
-    ScreenCenterYFlip = WindowWidth - ScreenCenterY;
+    ScreenCenterYFlip = WindowHeight - ScreenCenterY;  // PR #335 b98d4518: was WindowWidth (bug)
 
     float AspectY = (float)(WindowHeight) / (float)(OpenglWindowHeight);
     g_Camera.PerspectiveX = tanf(Fov * 0.5f * Q_PI / 180.f) / (float)(OpenglWindowWidth / 2) * Aspect;

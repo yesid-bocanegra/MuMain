@@ -7525,8 +7525,12 @@ void MoveHero()
     }
     else
     {
-        Angle = (int)(Hero->Object.Angle[2] + CreateAngle((float)HeroX, (float)HeroY, (float)MouseX, (float)MouseY)) +
-                360 - 45;
+        // PR #335 421e9d65: rotate screen-space cursor angle into world space by
+        // the active camera's yaw. The legacy -45 was DefaultCamera's default yaw,
+        // which silently broke for OrbitalCamera and any rotated DefaultCamera state.
+        Angle = (int)(Hero->Object.Angle[2] + CreateAngle((float)HeroX, (float)HeroY, (float)MouseX, (float)MouseY) +
+                      g_Camera.Angle[2]) +
+                360;
         Angle %= 360;
         if (Angle < 120)
             Angle = 120;
@@ -7606,7 +7610,12 @@ void MoveHero()
             Hero->AttackTime == 0)
         {
             StandTime = 0;
-            HeroAngle = -(int)(CreateAngle((float)MouseX, (float)MouseY, (float)HeroX, (float)HeroY)) + 360 + 45;
+            // PR #335 421e9d65: see paired comment in head-aim case above. CreateAngle
+            // args are swapped and the result is negated, so the camera-yaw correction
+            // appears with opposite sign in the sum.
+            HeroAngle = -(int)(CreateAngle((float)MouseX, (float)MouseY, (float)HeroX, (float)HeroY) +
+                               g_Camera.Angle[2]) +
+                        360;
             HeroAngle %= 360;
             BYTE Angle1 = ((BYTE)((o->Angle[2] + 22.5f) / 360.f * 8.f + 1.f) % 8);
             BYTE Angle2 = ((BYTE)(((float)HeroAngle + 22.5f) / 360.f * 8.f + 1.f) % 8);
