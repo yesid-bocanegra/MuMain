@@ -19,6 +19,7 @@
 #include "PartyManager.h"
 #include "CDirection.h"
 #include "w_PetProcess.h"
+#include "FrameProfiler.h"
 #include "ZzzInterface.h"
 #include "WSclient.h"
 #include "GOBoid.h"
@@ -372,32 +373,32 @@ static void RenderGameWorld(BYTE& byWaterMap, int width, int height)
         if (gMapManager.WorldActive == WD_39KANTURU_3RD)
         {
             if (!g_Direction.m_CKanturu.IsMayaScene())
-                RenderTerrain(false);
+                { FRAME_PROFILE(Terrain); RenderTerrain(false); }
         }
         else if (gMapManager.WorldActive != WD_10HEAVEN && gMapManager.WorldActive != -1)
         {
             if (gMapManager.IsPKField() || IsDoppelGanger2())
             {
-                RenderObjects();
+                FRAME_PROFILE(Objects); RenderObjects();
             }
             RenderTerrain(false);
         }
     }
 
     if (!gMapManager.IsPKField() && !IsDoppelGanger2())
-        RenderObjects();
+        { FRAME_PROFILE(Objects); RenderObjects(); }
 
     RenderEffectShadows();
     RenderBoids();
 
-    RenderCharactersClient();
+    { FRAME_PROFILE(Characters); RenderCharactersClient(); }
 
     if (EditFlag != EDIT_NONE)
     {
-        RenderTerrain(true);
+        FRAME_PROFILE(Terrain); RenderTerrain(true);
     }
     if (!g_Camera.TopViewEnable)
-        RenderItems();
+        { FRAME_PROFILE(Items); RenderItems(); }
 
     RenderFishs();
     RenderMount();
@@ -407,11 +408,14 @@ static void RenderGameWorld(BYTE& byWaterMap, int width, int height)
         ThePetProcess().RenderPets();
 
     RenderBoids(true);
-    RenderObjects_AfterCharacter();
+    { FRAME_PROFILE(Objects); RenderObjects_AfterCharacter(); }
 
     RenderJoints(byWaterMap);
-    RenderEffects();
-    RenderBlurs();
+    {
+        FRAME_PROFILE(Effects);
+        RenderEffects();
+        RenderBlurs();
+    }
     CheckSprites();
     BeginSprite();
 
