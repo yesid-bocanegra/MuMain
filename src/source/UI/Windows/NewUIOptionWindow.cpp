@@ -130,8 +130,11 @@ bool SEASON3B::CNewUIOptionWindow::UpdateMouseEvent()
             }
             else
             {
+                // PR #335 316ef1fa + ffc3e580: drop the +1 offset (so x=0 maps to
+                // level=0 cleanly) and round-to-nearest (so x=track-end maps to
+                // MAX without needing the cursor on the exact final pixel).
                 float fValue = (10.f * x) / 124.f;
-                m_iVolumeLevel = (int)fValue + 1;
+                m_iVolumeLevel = (int)(fValue + 0.5f);
             }
         }
 
@@ -145,8 +148,10 @@ bool SEASON3B::CNewUIOptionWindow::UpdateMouseEvent()
         if (SEASON3B::IsRepeat(VK_LBUTTON))
         {
             int x = MouseX - (m_Pos.x + 25);
+            // PR #335 ffc3e580: round-to-nearest so the slider reaches both ends
+            // without the cursor having to land exactly on the final pixel.
             float fValue = (5.f * x) / 141.f;
-            m_iRenderLevel = (int)fValue;
+            m_iRenderLevel = (int)(fValue + 0.5f);
         }
     }
 
