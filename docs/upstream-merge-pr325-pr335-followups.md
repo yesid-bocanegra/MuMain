@@ -21,7 +21,7 @@ Two upstream PRs accumulated since merge-base:
 | PR | Subject | Merge commit | Status after this session |
 |---|---|---|---|
 | **#325** | packet-enums (sven-n) | `a8d8611f` | **Fully ported** ✅ |
-| **#335** | 3d-camera-rework (Mosch0512) | `f1ffa170` | **Mostly ported** ✅ — only NewUIOptionWindow merge (§4.2) and OrbitalCamera scene-wiring (§4.1) still pending |
+| **#335** | 3d-camera-rework (Mosch0512) | `f1ffa170` | **Mostly ported** ✅ — slider bugfixes from §4.2 landed; rest of option-window polish + OrbitalCamera scene-wiring (§4.1) still pending |
 
 ## 2. Commits added this session (oldest → newest)
 
@@ -47,6 +47,8 @@ ccde5046  chore(upstream): port .gitignore + edge-of-map terrain fix from main (
 231e2f14  docs: record §4.6 trivial cleanups landed + §4.7 already-absorbed inventory
 955b71ca  feat(editor): port DevEditor camera tooling from main (PR #335 §4.4)
 8069156a  feat(overlay): port per-pass timing + build info to $details (PR #335 §4.3)
+fe692ea2  docs: record §4.3 + §4.4 landed; §4.2 NewUIOptionWindow flagged as needing hand-merge
+a3259704  fix(ui): port volume + render slider math bugs from PR #335
 ```
 
 Phase 1 (`d1bd1b09` + `e2880fd2`) was build-and-run-verified. Everything
@@ -372,27 +374,53 @@ be replaced with MuRenderer-backed calls — otherwise
 `CameraProjection::TestDepthBuffer` is permanently "unoccluded" and
 `FrustumRenderer` draws nothing.
 
-### 4.2 NewUIOptionWindow merge — STILL PENDING ❌
+### 4.2 NewUIOptionWindow merge — partially landed; rest needs hand-merge
 
-Main's PR #335 reworks the option window: rounded volume / render
-sliders, a `NewUIComboBox`-driven resolution dropdown processed before
-the checkboxes/sliders, a windowed-mode toggle that picks consistent
-window styles across entry points, and a HARDEN pass for option-window
-config. The branch already has its own SDL3-flavoured option-window
-edits (+532 LOC vs main's +528 LOC, both touching overlapping logic),
-so this is a real 3-way merge. The new `NewUIComboBox.{cpp,h}` is
-already in place from `c453fac6` and ready to be wired.
+After per-commit review, only the two slider math bugfixes port cleanly
+without dragging in main's flat-layout infrastructure. Those landed in
+`a3259704`:
 
-A 3-way merge of `UI/Windows/NewUIOptionWindow.{cpp,h}` produces only
-4 cpp + 1 h conflict regions, but each region spans a large
-reformat-collision body where branch and main both rewrote substantial
-chunks. **This needs a hand-merge by someone who understands both
-intents** — branch's SDL3 resolution/audio handling and main's polish
-are substantively different, not mechanical name-swaps.
+- ✅ `316ef1fa` — drop the `+ 1` offset so the volume slider can reach 0.
+- ✅ `ffc3e580` — round-to-nearest on volume + render-level so both
+  ends are reachable without pixel-perfect cursor placement.
 
-Files to merge: `UI/Windows/NewUIOptionWindow.{cpp,h}` plus the
-upstream commits `ffc3e580`, `9d7d6b32`, `9f17a79c`, `a9b5b4dd`,
-`6732c1e9`, `316ef1fa`, `0c5fb402`, `e8b15d35`, `e94adadc`.
+The remaining §4.2 commits all depend on infrastructure the branch
+doesn't have yet — porting any one of them requires implementing the
+prerequisite first:
+
+- ❌ `9d7d6b32` "Process resolution combo box before checkboxes/sliders"
+  — references `m_ResolutionCombo` (a NewUIComboBox member) that
+  doesn't exist on the branch yet. Needs the combo-box integration
+  (e8b15d35 prerequisite) first.
+- ❌ `9f17a79c` "Drop redundant font/system reinit in ApplyResolution"
+  — references an `ApplyResolution()` method that doesn't exist on
+  the branch.
+- ❌ `a9b5b4dd` "Use consistent windowed-mode style across all entry
+  points" — Win32 SDK code (`SetWindowLongPtr`, `WS_OVERLAPPEDWINDOW`,
+  etc.). The SDL3 branch routes window-style decisions through
+  SDLWindow.cpp; would need an SDL3-flavoured equivalent.
+- ❌ `6732c1e9` "Query desktop bit depth for exclusive fullscreen" —
+  Win32 `EnumDisplaySettings`. Same as above: branch goes through
+  SDL3.
+- ❌ `0c5fb402` "Harden option window and config" — multi-file rework
+  (NewUIChatInputBox.h, NewUIOptionWindow.cpp +236, NewUISystem.cpp,
+  UIControls.{cpp,h}, Winmain.cpp +65). Touches Winmain.cpp (gone on
+  branch — Main/MuMain.cpp now).
+- ❌ `e8b15d35` "Improve runtime resolution UX" — adds the
+  NewUIComboBox-driven resolution selector. Wires NewUIComboBox.{cpp,h}
+  (already in `c453fac6`) into the option window. Needs UIMng.cpp
+  hooks plus an ApplyResolution method.
+- ❌ `e94adadc` "Stabilize window handling and improve options/audio
+  UX" — adds music volume slider, splits sound/music volume,
+  initializes audio always. Branch has its own
+  m_iBGMVolumeLevel / m_iSFXVolumeLevel split (Story 5.4.1) that
+  conflicts with main's m_iVolumeLevel / m_iMusicLevel split, and
+  uses MuAudio (SDL3) instead of `wzAudio.h`. Needs careful merging
+  of the two audio architectures.
+
+The remaining commits are best ported as one focused PR by someone
+who can pair them with the branch's existing SDL3 window/audio
+plumbing.
 
 ### 4.3 $details overlay + per-pass timing — DONE ✅
 
