@@ -21,7 +21,7 @@ Two upstream PRs accumulated since merge-base:
 | PR | Subject | Merge commit | Status after this session |
 |---|---|---|---|
 | **#325** | packet-enums (sven-n) | `a8d8611f` | **Fully ported** ✅ |
-| **#335** | 3d-camera-rework (Mosch0512) | `f1ffa170` | **Mostly ported** ✅ — slider bugfixes from §4.2 landed; rest of option-window polish + OrbitalCamera scene-wiring (§4.1) still pending |
+| **#335** | 3d-camera-rework (Mosch0512) | `f1ffa170` | **Wiring complete** ✅ — needs runtime smoke-test (§4.1). NewUIOptionWindow remaining commits (§4.2) still gated on Win32/wzAudio/ApplyResolution prerequisites. |
 
 ## 2. Commits added this session (oldest → newest)
 
@@ -49,6 +49,8 @@ ccde5046  chore(upstream): port .gitignore + edge-of-map terrain fix from main (
 8069156a  feat(overlay): port per-pass timing + build info to $details (PR #335 §4.3)
 fe692ea2  docs: record §4.3 + §4.4 landed; §4.2 NewUIOptionWindow flagged as needing hand-merge
 a3259704  fix(ui): port volume + render slider math bugs from PR #335
+6ba472c8  docs: §4.2 partially landed — slider bugfixes ported, rest gated on prerequisites
+c2779c21  feat(camera): route MoveMainCamera through CameraManager (PR #335 §4.1)
 ```
 
 Phase 1 (`d1bd1b09` + `e2880fd2`) was build-and-run-verified. Everything
@@ -351,28 +353,52 @@ The big-rock migration (§3) is done. What remains is the polish stack
 and the actual *wiring* of the new architecture. None of these block
 each other — order is up to the next session.
 
-### 4.1 New camera framework is unused
+### 4.1 OrbitalCamera scene-wiring — DONE ✅ (needs runtime smoke-test)
 
-The 22-file Camera framework (`CameraManager`, `OrbitalCamera`,
-`DefaultCamera`, `FreeFlyCamera`, `Frustum`, `FrustumRenderer`,
-`CameraProjection`) compiles, links, and is ready — but **no scene calls
-into it yet**. The branch's existing `CCameraMove` / `CameraUtility::MoveMainCamera()`
-flow keeps driving the camera, with the legacy globals now backed by
-`g_Camera.X` storage.
+Landed in `c2779c21`. `Camera/CameraUtility.cpp` shrank from 417 lines
+to 28 — `MoveMainCamera()` now just handles the F9 mode toggle and
+delegates to `CameraManager::Instance().Update()`. The legacy in-file
+static helpers (`CalculateCameraViewFar`, `AdjustHeroHeight`,
+`CalculateCameraPosition`, `SetCameraAngle`,
+`UpdateCustomCameraDistance`, `UpdateCameraDistance`, `SetCameraFOV`,
+`HandleEditorMode`) all duplicated logic that already lives in
+`Camera/DefaultCamera.cpp` (and `Camera/OrbitalCamera.cpp` for orbital
+mode) — kept as dead code only because no scene was actually wired
+through CameraManager. With `MoveMainCamera()` now delegating, the
+five existing callers (MainScene, CharacterScene, LoginScene, plus the
+LoginScene re-entry path) flow through `DefaultCamera::Update()` /
+`OrbitalCamera::Update()` automatically.
 
-To activate the new architecture, scenes need to be migrated to call
-`CameraManager::Instance().GetActiveCamera()->Update()` etc. instead of
-the legacy flow. Main's PR #335 does this in `Scenes/MainScene.cpp`,
-`Scenes/CharacterScene.cpp`, `Scenes/LoginScene.cpp`. This is a real
-behaviour change — not just a refactor — so it deserves a careful commit
-of its own, with smoke-testing of all three scenes (login → char select →
-main world → orbital zoom) before declaring it done.
+`03caf434` and `2b806f8d` (drop unused `ICamera*` from RenderObjects /
+RenderTerrain) were already absorbed via the SDL reorg / Phase 2b —
+the branch's signatures match main's post-cleanup form.
 
-When that wiring lands, the GL stubs in `Main/stdafx.h` flagged in §2.1
-(`glReadPixels`, `glGetFloatv`, immediate-mode draw primitives) need to
-be replaced with MuRenderer-backed calls — otherwise
-`CameraProjection::TestDepthBuffer` is permanently "unoccluded" and
-`FrustumRenderer` draws nothing.
+**Smoke-test before declaring this fully shipped:**
+1. Login scene tour: camera should sweep through waypoints with
+   `LoginSceneCameraDefaults::OFFSET_*` corrections applied
+   (`68120dd0`).
+2. Character scene: camera should sit at the canonical character-pick
+   position (Pos 9758/18913/675, Angle -84.5/0/-75).
+3. Main scene: hero-follow camera at default zoom level should look
+   right; mouse wheel zooms 0–5.
+4. Press F9: camera cycles Default → Orbital. Orbital should orbit on
+   right-mouse-drag and zoom on wheel.
+5. Per-map ViewFar: visit BattleCastle, Home6thChar, PKField,
+   Doppelganger2 — these used to have hardcoded ViewFar overrides
+   (3000 / 3220 / 3700 / 3700) that `889eb9f0` deliberately removed.
+   The unified zoom-level scaling drives them now — verify they look
+   acceptable. If any feels wrong, the right fix is per-scene config
+   (`Camera/CameraConfig.h`) rather than reverting to per-map specials.
+
+The MuRenderer-stubbed GL calls in `stdafx.h` (`glReadPixels`,
+`glGetFloatv`, immediate-mode draw primitives — see §2.1) are now
+*reachable* through the camera framework. The depth-buffer occlusion
+test (`CameraProjection::TestDepthBuffer`) will always report
+"unoccluded" until it's rewired through MuRenderer; the
+`FrustumRenderer` debug viz will draw nothing. Neither blocks normal
+gameplay — those code paths are unused by the default and orbital
+cameras' main update loops — but they are TODOs for the editor tooling.
+
 
 ### 4.2 NewUIOptionWindow merge — partially landed; rest needs hand-merge
 
