@@ -381,15 +381,26 @@ bool NewRenderLogInScene(HDC hDC)
     Width = GetScreenWidth();
     mu::GetRenderer().SetClearColor(0.f, 0.f, 0.f, 1.f);
 
+    // Set ViewFar BEFORE BeginOpengl so the projection matrix covers the full
+    // render distance. ViewNear pushed out to preserve z-buffer precision —
+    // tour mode keeps Distance very large (TOUR_BASE_DISTANCE * level * 0.1)
+    // so a 1.0 near plane would collapse z resolution and the world would
+    // render as garbled depth. See origin/main:LoginScene.cpp.
+    g_Camera.ViewFar = LoginSceneCameraDefaults::RENDER_TERRAIN_DIST;
+    g_Camera.ViewNear = 100.f;
+
     BeginOpengl(0, 25, 640, 430);
-    CreateFrustrum((float)Width / (float)640, (float)Height / 480.f, pos);
+
+    // LoginScene doesn't call CreateFrustrum (DefaultCamera tour mode angles
+    // differ from legacy hardcoded values). Instead, reset iteration bounds
+    // to cover the full terrain so stale bounds from other scenes don't
+    // restrict the render loop.
+    ResetFrustrumBoundsFullTerrain();
+    (void)pos;  // pos is captured above for legacy callers, no longer needed here
 
     if (!CUIMng::Instance().m_CreditWin.IsShow())
     {
-        g_Camera.ViewFar = 330.f * CCameraMove::GetInstancePtr()->GetCurrentCameraDistanceLevel();
-
         RenderTerrain(false);
-        g_Camera.ViewFar = 7000.f;
         RenderCharactersClient();
         RenderMount();
         RenderObjects();

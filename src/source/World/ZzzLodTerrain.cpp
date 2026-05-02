@@ -2145,7 +2145,8 @@ void CreateFrustrum2D(vec3_t Position)
 
 bool TestFrustrum2D(float x, float y, float Range)
 {
-    if (SceneFlag == SERVER_LIST_SCENE || SceneFlag == WEBZEN_SCENE || SceneFlag == LOADING_SCENE)
+    if (SceneFlag == SERVER_LIST_SCENE || SceneFlag == WEBZEN_SCENE || SceneFlag == LOADING_SCENE
+        || SceneFlag == LOG_IN_SCENE)
         return true;
 
     int j = 3;
@@ -2224,6 +2225,15 @@ void CreateFrustrum(float xAspect, float yAspect, vec3_t position)
     FrustrumFaceD[4] = -DotProduct(FrustrumVertex[1], FrustrumFaceNormal[4]);
 
     CreateFrustrum2D(position);
+}
+
+void ResetFrustrumBoundsFullTerrain()
+{
+    constexpr int tileWidth = 4;
+    FrustrumBoundMinX = 0;
+    FrustrumBoundMinY = 0;
+    FrustrumBoundMaxX = TERRAIN_SIZE - tileWidth;
+    FrustrumBoundMaxY = TERRAIN_SIZE - tileWidth;
 }
 
 bool TestFrustrum(vec3_t Position, float Range)
