@@ -1,3 +1,17 @@
+## [1.3.0](https://github.com/yesid-bocanegra/MuMain/compare/v1.2.5...v1.3.0) (2026-09-21)
+
+### Features
+
+* **map-editor:** mesh-shaped selection/hover outline and placement preview ([74d48f6](https://github.com/yesid-bocanegra/MuMain/commit/74d48f6ef9c0f14163a3440030032401e8743b15))
+
+### Bug Fixes
+
+* **map-editor:** render object thumbnails correctly and fix O.Browse UAF crash ([2d09bd9](https://github.com/yesid-bocanegra/MuMain/commit/2d09bd9b63ce462f5ab594d8e613c9075f04b5d0))
+* **map-editor:** resolve review findings and add brush/selection feedback ([c3e5f47](https://github.com/yesid-bocanegra/MuMain/commit/c3e5f47f9e5cf15add857f9abe614629e06b5317)), closes [#526](https://github.com/yesid-bocanegra/MuMain/issues/526) [#526](https://github.com/yesid-bocanegra/MuMain/issues/526)
+* **map-editor:** use real SDL_GPU texture pointers for ImGui thumbnails ([e3b5336](https://github.com/yesid-bocanegra/MuMain/commit/e3b5336bc5352357aa919b4cb987b5cb90cf2fef))
+* **platform:** close the game window on the first X / Alt+F4 press ([6e795d3](https://github.com/yesid-bocanegra/MuMain/commit/6e795d38a493a34ed4d99c15921b5c4ad6d2c508)), closes [#535](https://github.com/yesid-bocanegra/MuMain/issues/535)
+* **render:** report SDL video driver and error on init failure ([#599](https://github.com/yesid-bocanegra/MuMain/issues/599)) ([dc75f7d](https://github.com/yesid-bocanegra/MuMain/commit/dc75f7de7e66a145c5df565457374a268334edbc))
+
 ## [1.2.5](https://github.com/yesid-bocanegra/MuMain/compare/v1.2.4...v1.2.5) (2026-09-02)
 
 ### Bug Fixes
