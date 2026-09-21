@@ -1,3 +1,9 @@
+## [1.4.0](https://github.com/yesid-bocanegra/MuMain/compare/v1.3.0...v1.4.0) (2026-09-21)
+
+### Features
+
+* add Wayland diagnostics capture harness ([#602](https://github.com/yesid-bocanegra/MuMain/issues/602)) ([2eff714](https://github.com/yesid-bocanegra/MuMain/commit/2eff714b286b6a11d09f3c563fe8d45704daa8c2))
+
 ## [1.3.0](https://github.com/yesid-bocanegra/MuMain/compare/v1.2.5...v1.3.0) (2026-09-21)
 
 ### Features
